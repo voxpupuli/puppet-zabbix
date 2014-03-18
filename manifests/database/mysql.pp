@@ -1,0 +1,4 @@
+#
+class zabbix::database::mysql () {
+  
+}

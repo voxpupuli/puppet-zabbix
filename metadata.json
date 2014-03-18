@@ -1,0 +1,18 @@
+{
+  "name": "wdijkerman-zabbix",
+  "version": "0.0.1",
+  "summary": "",
+  "author": "Werner Dijkerman",
+  "description": "",
+  "dependencies": [
+    {
+      "name": "puppetlabs/postgresql",
+      "version_requirement": "3.3.1"
+    }
+  ],
+  "types": [],
+  "checksums": {},
+  "source": "",
+  "project_page": "",
+  "license": ""
+}
