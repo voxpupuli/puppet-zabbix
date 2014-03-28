@@ -95,7 +95,7 @@ The following is an overview of todo actions:
 ##Release notes
 Version (Release date)
 
-0.0.2  (2014-03-18)
+0.0.2  (2014-03-28)
 
   * MySQL can be used as database back-end.
   * Services started at boot.
