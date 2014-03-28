@@ -279,9 +279,6 @@ class zabbix::proxy (
     'mysql': {
       $db = 'mysql'
     }
-    'sqlite','sqlite3': {
-      $db = 'sqlite3'
-    }
     default: {
       fail("Unrecognized database type for proxy: ${dbtype}")
     }
@@ -301,6 +298,7 @@ class zabbix::proxy (
 
   service { 'zabbix-proxy':
     ensure     => running,
+    enable     => true,
     hasstatus  => true,
     hasrestart => true,
     require    => [

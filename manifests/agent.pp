@@ -152,6 +152,7 @@ class zabbix::agent (
 
   service { 'zabbix-agent':
     ensure     => running,
+    enable     => true,
     hasstatus  => true,
     hasrestart => true,
     require    => Package['zabbix-agent'],

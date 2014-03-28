@@ -1,14 +1,30 @@
+# == Class: zabbix::database
+#
+#  This will determine if the database should be created or not.
+#
+#  Please note:
+#  This class will be called from zabbix::server or zabbix::proxy.
+#  No need for calling this class manually.
+#
+# === Authors
+#
+# Author Name: ikben@werner-dijkerman.nl
+#
+# === Copyright
+#
+# Copyright 2014 Werner Dijkerman
 #
 class zabbix::database(
-  $manage_database = undef,
-  $dbtype          = undef,
-  $zabbix_type     = undef,
-  $zabbix_version  = undef,
-  $db_name         = undef,
-  $db_user         = undef,
-  $db_pass         = undef,
+  $manage_database = '',
+  $dbtype          = '',
+  $zabbix_type     = '',
+  $zabbix_version  = '',
+  $db_name         = '',
+  $db_user         = '',
+  $db_pass         = '',
+  $db_host         = '',
 ) {
-
+  # If manage_database is true, we going to load the correct database class
   if $manage_database == true {
     case $dbtype {
       'postgresql': {
@@ -27,15 +43,12 @@ class zabbix::database(
           db_name        => $db_name,
           db_user        => $db_user,
           db_pass        => $db_pass,
+          db_host        => $db_host,
         }
-      }
-      'sqlite','sqlite3': {
-        #class { 'zabbix::database::mysql':
-        #}
       }
       default: {
         fail('Unrecognized database type for server.')
       }
-    }
+    } # END case $dbtype
   }
 }

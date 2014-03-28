@@ -1,10 +1,26 @@
+# == Class: zabbix::database::postgresql
+#
+#  This will install and load the sql files for the tables
+#  and other data which is needed for zabbix.
+#
+#  Please note:
+#  This class will be called from zabbix::database. No need for calling
+#  this class manually.
+#
+# === Authors
+#
+# Author Name: ikben@werner-dijkerman.nl
+#
+# === Copyright
+#
+# Copyright 2014 Werner Dijkerman
 #
 class zabbix::database::postgresql (
-  $zabbix_type    = undef,
-  $zabbix_version = undef,
-  $db_name        = undef,
-  $db_user        = undef,
-  $db_pass        = undef,
+  $zabbix_type    = '',
+  $zabbix_version = '',
+  $db_name        = '',
+  $db_user        = '',
+  $db_pass        = '',
 ) {
 
   # Creating database
@@ -31,9 +47,9 @@ class zabbix::database::postgresql (
   case $zabbix_type {
     'proxy': {
       exec { 'zabbix_proxy_create.sql':
-        command  => "cd /usr/share/doc/zabbix-proxy-pgsql-${zabbix_version}*/create && sudo -u postgres psql -h localhost -U ${db_user} -d ${db_name} -f schema.sql",
+        command  => "cd /usr/share/doc/zabbix-proxy-pgsql-${zabbix_version}*/create && sudo -u postgres psql -h localhost -U ${db_user} -d ${db_name} -f schema.sql && touch schema.done",
         path     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        unless   => "sudo -u postgres psql -h localhost -U ${db_user} -c '\\dt' | grep ${db_user} | wc -l",
+        unless   => "test -f /usr/share/doc/zabbix-server-pgsql-${zabbix_version}*/create/schema.done",
         provider => 'shell',
         require  => [
           Exec['update_pgpass'],

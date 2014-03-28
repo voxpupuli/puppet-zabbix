@@ -9,14 +9,23 @@
 #
 # === Parameters
 #
+# [*zabbix_url*]
+#   Url on which zabbix needs to be available. Will create an vhost in
+#   apache.
+#   Example: zabbix.example.com
+#
 # [*dbtype*]
 #   Type of database. Can use the following 3 databases:
 #   - postgresql
 #   - mysql
-#   - sqlite
 #
 # [*zabbix_version*]
 #   This is the zabbix version.
+#   Example: 2.2
+#
+# [*zabbix_timezone*]
+#   The current timezone for vhost configuration needed for the php timezone.
+#   Example: Europe/Amsterdam
 #
 # [*manage_database*]
 #   When true, it will configure the database and execute the sql scripts.
@@ -228,8 +237,10 @@
 # Copyright 2014 Werner Dijkerman
 #
 class zabbix::server (
+  $zabbix_url              = '',
   $dbtype                  = $zabbix::params::dbtype,
   $zabbix_version          = $zabbix::params::zabbix_version,
+  $zabbix_timezone         = $zabbix::params::zabbix_timezone,
   $manage_database         = $zabbix::params::manage_database,
   $nodeid                  = $zabbix::params::server_nodeid,
   $listenport              = $zabbix::params::server_listenport,
@@ -300,15 +311,10 @@ class zabbix::server (
   # use the correct db.
   case $dbtype {
     'postgresql': {
-      $db      = 'pgsql'
+      $db = 'pgsql'
     }
     'mysql': {
-      $db      = 'mysql'
-      $service = 'mysqld'
-      $class   = 'mysqld'
-    }
-    'sqlite','sqlite3': {
-      $db = 'sqlite3'
+      $db = 'mysql'
     }
     default: {
       fail('unrecognized database type for server.')
@@ -336,11 +342,13 @@ class zabbix::server (
     db_name         => $dbname,
     db_user         => $dbuser,
     db_pass         => $dbpassword,
+    db_host         => $dbhost,
     before          => Service['zabbix-server'],
   }
 
   service { 'zabbix-server':
     ensure     => running,
+    enable     => true,
     hasstatus  => true,
     hasrestart => true,
     require    => [
@@ -361,10 +369,63 @@ class zabbix::server (
     content => template('zabbix/zabbix_server.conf.erb'),
   }
 
+  file { '/etc/zabbix/web/zabbix.conf.php':
+    ensure  => present,
+    owner   => 'zabbix',
+    group   => 'zabbix',
+    mode    => '0644',
+    notify  => Service['zabbix-server'],
+    require => Package["zabbix-server-${db}"],
+    replace => true,
+    content => template('zabbix/web/zabbix.conf.php.erb'),
+  }
+
   file { $include_dir:
     ensure  => directory,
     owner   => 'zabbix',
     group   => 'zabbix',
     require => File['/etc/zabbix/zabbix_server.conf'],
   }
+
+
+  apache::vhost { $zabbix_url:
+    docroot         => '/usr/share/zabbix',
+    port            => '80',
+    directories     => [
+      { path     => '/usr/share/zabbix',
+        provider => 'directory',
+        allow    => 'from all',
+        order    => 'Allow,Deny',
+      },
+      { path     => '/usr/share/zabbix/conf',
+        provider => 'directory',
+        deny     => 'from all',
+        order    => 'Deny,Allow',
+      },
+      { path     => '/usr/share/zabbix/api',
+        provider => 'directory',
+        deny     => 'from all',
+        order    => 'Deny,Allow',
+      },
+      { path     => '/usr/share/zabbix/include',
+        provider => 'directory',
+        deny     => 'from all',
+        order    => 'Deny,Allow',
+      },
+      { path     => '/usr/share/zabbix/include/classes',
+        provider => 'directory',
+        deny     => 'from all',
+        order    => 'Deny,Allow',
+      },
+    ],
+    custom_fragment => "  php_value max_execution_time 300
+  php_value memory_limit 128M
+  php_value post_max_size 16M
+  php_value upload_max_filesize 2M
+  php_value max_input_time 300
+  # Set correct timezone.
+  php_value date.timezone ${zabbix_timezone}",
+    rewrites        => [ { rewrite_rule => ['^$ /index.php [L]'] } ],
+  }
+
 }

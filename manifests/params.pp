@@ -1,4 +1,4 @@
-# class: zabbix::server::params
+# class: zabbix::params
 #
 # this class manages zabbix server parameters
 #
@@ -14,6 +14,7 @@ class zabbix::params {
   # Zabbix specific params.
   $dbtype                         = 'postgresql'
   $zabbix_version                 = '2.2'
+  $zabbix_timezone                = 'Europe/Amsterdam'
   $manage_database                = true
 
   # Server specific params
@@ -168,5 +169,4 @@ class zabbix::params {
   $proxy_include                 = '/etc/zabbix/zabbix_proxy.conf.d/'
   $proxy_loadmodulepath          = '${libdir}/modules'
   $proxy_loadmodule              = undef
-
 }

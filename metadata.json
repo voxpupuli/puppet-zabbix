@@ -1,18 +1,58 @@
 {
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": "3.x"
+    }
+  ],
   "name": "wdijkerman-zabbix",
-  "version": "0.0.1",
-  "summary": "",
+  "version": "0.0.2",
+  "summary": "Installing and maintaining zabbix instances",
   "author": "Werner Dijkerman",
-  "description": "",
+  "description": "This module contains the classes for installing the following zabbix components:\n- zabbix-server\n- zabbix-agent\n- zabbix-proxy\n",
   "dependencies": [
     {
       "name": "puppetlabs/postgresql",
-      "version_requirement": "3.3.1"
-    }
+      "version_requirement": ">= 3.3.1"
+    },
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.1.0"
+    },
+    {"name":"puppetlabs-mysql","version_requirement":">= 2.0.0"},
+    {"name":"puppetlabs/mysql","version_requirement":"2.2.1"},
+    {"name":"puppetlabs/apache","version_requirement":">= 1.0.0"}
   ],
-  "types": [],
-  "checksums": {},
-  "source": "",
-  "project_page": "",
-  "license": ""
+  "types": [
+
+  ],
+  "checksums": {
+    "Modulefile": "f1040029a5122cddc02fbee3723e3c94",
+    "README.md": "33cc93d9bfcd974cb7513ac452a4edcf",
+    "manifests/agent.pp": "4b9e20e4d86d49e13b9ee6ee3736b3df",
+    "manifests/database/mysql.pp": "c5d90f285822b2b790d6c1aedd210c98",
+    "manifests/database/postgresql.pp": "baf24ef469617a0200982b1d2c99ee75",
+    "manifests/database.pp": "d5b96dd3bee6a2eaa36eeeb2b693d636",
+    "manifests/params.pp": "6e1da3a6b9c07d960cb9506c8efc9065",
+    "manifests/proxy.pp": "4320bb179fb1a3d67e9acd006f53b61f",
+    "manifests/repo.pp": "8eb93bd7878654835e56ce73c8924a60",
+    "manifests/server.pp": "e00fc9232146e369d967945becf43ed9",
+    "manifests/userparameters.pp": "84cabc269ccd3ede911dc6ca2b6d4f9a",
+    "templates/zabbix_agentd.conf.erb": "5fc2ec7acddb10cf3754445881c5b3d3",
+    "templates/zabbix_proxy.conf.erb": "20e413f6c1eb37fca640b62274071119",
+    "templates/zabbix_server.conf.erb": "ffb3fac8edcaf5fb8e1b8ec9de526dd7"
+  },
+  "source": "https://github.com/dj-wasabi/puppet-zabbix.git",
+  "project_page": "https://github.com/dj-wasabi/puppet-zabbix",
+  "license": "Apache Version 2.0",
+  "operatingsystem_support": [
+       {
+           "operatingsystem":"RedHat",
+           "operatingsystemrelease":[ "5.0", "6.0" ]
+       },
+       {
+           "operatingsystem":"CentOS",
+           "operatingsystemrelease":[ "5.0", "6.0" ]
+       }
+   ]
 }
