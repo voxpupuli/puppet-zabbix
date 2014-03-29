@@ -33,6 +33,11 @@ class { 'zabbix::server':
 }
 ```
 
+When installed succesfully, zabbix web interface will be accessable and you can login with the default credentials:
+Username: admin
+Password: zabbix
+
+
 ###zabbix-agent
 This will install the zabbix-agent. It will need at least 1 parameter to function, the name or ipaddress of the zabbix-server (or zabbix-proxy if this is used.). Default is 127.0.0.1, which only works for the zabbix agent when installed on the same host as zabbix-server (or zabbix-proxy).
 
