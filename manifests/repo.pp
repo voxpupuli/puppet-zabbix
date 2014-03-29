@@ -1,14 +1,18 @@
-# Class: zabbix::repo
+# == Class: zabbix::repo
 #
-# This class installed the Zabbix Repository
+#  This will install the yum repository used for installing zabbix
 #
-# Parameters:
+#  Please note:
+#  This class will be called from zabbix::server, zabbix::proxy and
+#  zabbix::agent. No need for calling this class manually.
 #
-# Actions:
+# === Authors
 #
-# Requires:
+# Author Name: ikben@werner-dijkerman.nl
 #
-# Sample Usage:
+# === Copyright
+#
+# Copyright 2014 Werner Dijkerman
 #
 class zabbix::repo(
   $zabbix_version = $zabbix::params::zabbix_version
