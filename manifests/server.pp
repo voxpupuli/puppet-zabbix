@@ -11,7 +11,7 @@
 #
 # [*zabbix_url*]
 #   Url on which zabbix needs to be available. Will create an vhost in
-#   apache.
+#   apache. Only needed when manage_vhost is set to true.
 #   Example: zabbix.example.com
 #
 # [*dbtype*]
@@ -29,6 +29,10 @@
 #
 # [*manage_database*]
 #   When true, it will configure the database and execute the sql scripts.
+#
+# [*manage_vhost*]
+#   When true, it will create an vhost for apache. The parameter zabbix_url
+#   has to be set.
 #
 # [*nodeid*]
 #   Unique nodeid in distributed setup.
@@ -242,6 +246,7 @@ class zabbix::server (
   $zabbix_version          = $zabbix::params::zabbix_version,
   $zabbix_timezone         = $zabbix::params::zabbix_timezone,
   $manage_database         = $zabbix::params::manage_database,
+  $manage_vhost            = $zabbix::params::manage_vhost,
   $nodeid                  = $zabbix::params::server_nodeid,
   $listenport              = $zabbix::params::server_listenport,
   $sourceip                = $zabbix::params::server_sourceip,
@@ -305,6 +310,10 @@ class zabbix::server (
   $loadmodulepath          = $zabbix::params::server_loadmodulepath,
   $loadmodule              = $zabbix::params::server_loadmodule,
   ) inherits zabbix::params {
+
+  # Check some stuff
+  validate_bool($manage_database)
+  validate_bool($manage_vhost)
 
   include zabbix::repo
 
@@ -387,45 +396,46 @@ class zabbix::server (
     require => File['/etc/zabbix/zabbix_server.conf'],
   }
 
-
-  apache::vhost { $zabbix_url:
-    docroot         => '/usr/share/zabbix',
-    port            => '80',
-    directories     => [
-      { path     => '/usr/share/zabbix',
-        provider => 'directory',
-        allow    => 'from all',
-        order    => 'Allow,Deny',
-      },
-      { path     => '/usr/share/zabbix/conf',
-        provider => 'directory',
-        deny     => 'from all',
-        order    => 'Deny,Allow',
-      },
-      { path     => '/usr/share/zabbix/api',
-        provider => 'directory',
-        deny     => 'from all',
-        order    => 'Deny,Allow',
-      },
-      { path     => '/usr/share/zabbix/include',
-        provider => 'directory',
-        deny     => 'from all',
-        order    => 'Deny,Allow',
-      },
-      { path     => '/usr/share/zabbix/include/classes',
-        provider => 'directory',
-        deny     => 'from all',
-        order    => 'Deny,Allow',
-      },
-    ],
-    custom_fragment => "  php_value max_execution_time 300
-  php_value memory_limit 128M
-  php_value post_max_size 16M
-  php_value upload_max_filesize 2M
-  php_value max_input_time 300
-  # Set correct timezone.
-  php_value date.timezone ${zabbix_timezone}",
-    rewrites        => [ { rewrite_rule => ['^$ /index.php [L]'] } ],
-  }
-
+  # Is set to true, it will create the apache vhost.
+  if $manage_vhost {
+    apache::vhost { $zabbix_url:
+      docroot         => '/usr/share/zabbix',
+      port            => '80',
+      directories     => [
+        { path     => '/usr/share/zabbix',
+          provider => 'directory',
+          allow    => 'from all',
+          order    => 'Allow,Deny',
+        },
+        { path     => '/usr/share/zabbix/conf',
+          provider => 'directory',
+          deny     => 'from all',
+          order    => 'Deny,Allow',
+        },
+        { path     => '/usr/share/zabbix/api',
+          provider => 'directory',
+          deny     => 'from all',
+          order    => 'Deny,Allow',
+        },
+        { path     => '/usr/share/zabbix/include',
+          provider => 'directory',
+          deny     => 'from all',
+          order    => 'Deny,Allow',
+        },
+        { path     => '/usr/share/zabbix/include/classes',
+          provider => 'directory',
+          deny     => 'from all',
+          order    => 'Deny,Allow',
+        },
+      ],
+      custom_fragment => "  php_value max_execution_time 300
+    php_value memory_limit 128M
+    php_value post_max_size 16M
+    php_value upload_max_filesize 2M
+    php_value max_input_time 300
+    # Set correct timezone.
+    php_value date.timezone ${zabbix_timezone}",
+      rewrites        => [ { rewrite_rule => ['^$ /index.php [L]'] } ],
+    }
+  } # END if $manage_vhost
 }

@@ -16,6 +16,7 @@ class zabbix::params {
   $zabbix_version                 = '2.2'
   $zabbix_timezone                = 'Europe/Amsterdam'
   $manage_database                = true
+  $manage_vhost                   = true
 
   # Server specific params
   $server_nodeid                  = '0'
