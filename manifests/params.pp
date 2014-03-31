@@ -142,8 +142,8 @@ class zabbix::params {
   $proxy_startpingers            = '1'
   $proxy_startdiscoverers        = '1'
   $proxy_starthttppollers        = '1'
-  $proxy_javagateway_host        = undef
-  $proxy_javagateway_port        = '10052'
+  $proxy_javagateway             = undef
+  $proxy_javagatewayport         = '10052'
   $proxy_startjavapollers        = '5'
   $proxy_startvmwarecollector    = '0'
   $proxy_vmwarefrequency         = '60'

@@ -192,13 +192,13 @@ StartHTTPPollers=<%= @starthttppollers %>
 #	IP address (or hostname) of Zabbix Java gateway.
 #	Only required if Java pollers are started.
 #
-<% if @javagateway_host and @javagateway_host != '' %>
-JavaGateway=<%= @javagateway_host %>
+<% if @javagateway and @javagateway != '' %>
+JavaGateway=<%= @javagateway %>
 
 ### Option: JavaGatewayPort
 #	Port that Zabbix Java gateway listens on.
 #
-JavaGatewayPort=<%= @javagateway_port %>
+JavaGatewayPort=<%= @javagatewayport %>
 
 ### Option: StartJavaPollers
 #	Number of pre-forked instances of Java pollers.
