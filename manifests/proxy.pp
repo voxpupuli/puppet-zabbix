@@ -21,6 +21,9 @@
 # [*manage_database*]
 #   When true, it will configure the database and execute the sql scripts.
 #
+# [*manage_firewall*]
+#   When true, it will create iptables rules.
+#
 # [*mode*]
 #   Proxy operating mode.
 #
@@ -211,6 +214,7 @@ class zabbix::proxy (
   $dbtype                  = $zabbix::params::dbtype,
   $zabbix_version          = $zabbix::params::zabbix_version,
   $manage_database         = $zabbix::params::manage_database,
+  $manage_firewall         = $zabbix::params::manage_firewall,
   $mode                    = $zabbix::params::proxy_mode,
   $zabbix_server_host      = $zabbix::params::proxy_zabbix_server_host,
   $zabbix_server_port      = $zabbix::params::proxy_zabbix_server_port,
@@ -269,7 +273,12 @@ class zabbix::proxy (
   $loadmodulepath          = $zabbix::params::proxy_loadmodulepath,
   $loadmodule              = $zabbix::params::proxy_loadmodule,
 ) inherits zabbix::params {
-  class {'zabbix::repo': }
+
+  # Check some if they are boolean
+  validate_bool($manage_database)
+  validate_bool($manage_firewall)
+
+  include zabbix::repo
 
   # Use the correct db.
   case $dbtype {
@@ -296,6 +305,7 @@ class zabbix::proxy (
     ensure  => present,
   }
 
+  # Controlling the 'zabbix-proxy' service
   service { 'zabbix-proxy':
     ensure     => running,
     enable     => true,
@@ -308,6 +318,8 @@ class zabbix::proxy (
     ],
   }
 
+  # if we want to manage the databases, we do
+  # some stuff. (for maintaining database only.)
   class { 'zabbix::database':
     manage_database => $manage_database,
     dbtype          => $dbtype,
@@ -319,6 +331,7 @@ class zabbix::proxy (
     before          => Service['zabbix-proxy'],
   }
 
+  # Configuring the zabbix-proxy configuration file
   file { '/etc/zabbix/zabbix_proxy.conf':
     notify  => Service['zabbix-proxy'],
     require => Package['zabbix-proxy'],
@@ -326,9 +339,19 @@ class zabbix::proxy (
     content => template('zabbix/zabbix_proxy.conf.erb'),
   }
 
+  # Include dir for specific zabbix-proxy checks.
   file { $include_dir:
     ensure  => directory,
     require => File['/etc/zabbix/zabbix_proxy.conf'],
   }
 
+  # Manage firewall
+  if $manage_firewall {
+    firewall { '151 zabbix-proxy':
+      dport  => $listenport,
+      proto  => 'tcp',
+      action => 'accept',
+      state  => ['NEW','RELATED', 'ESTABLISHED'],
+    }
+  }
 }

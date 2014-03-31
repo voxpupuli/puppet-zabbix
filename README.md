@@ -34,7 +34,9 @@ class { 'zabbix::server':
 ```
 
 When installed succesfully, zabbix web interface will be accessable and you can login with the default credentials:
+
 Username: admin
+
 Password: zabbix
 
 
@@ -99,6 +101,12 @@ The following is an overview of todo actions:
 
 ##Release notes
 Version (Release date)
+
+0.0.3  (2014-04-01)
+
+  * Added parameter: manage_vhost for creating vhost (Default: true)
+  * Adding manage_firewall for creating firewall rules
+  * 
 
 0.0.2  (2014-03-28)
 

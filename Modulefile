@@ -1,5 +1,5 @@
 name    'wdijkerman-zabbix'
-version '0.0.2'
+version '0.0.3'
 source 'https://github.com/dj-wasabi/puppet-zabbix.git'
 author 'Werner Dijkerman'
 license 'Apache Version 2.0'
@@ -8,13 +8,14 @@ description 'This module contains the classes for installing the following zabbi
 - zabbix-server
 - zabbix-agent
 - zabbix-proxy
+- zabbix-javagateway
 '
-project_page 'https://github.com/dj-wasabi/puppet-zabbix'
+project_page 'http://forge.puppetlabs.com/wdijkerman/zabbix'
 
 ## Add dependencies, if any:
 dependency 'puppetlabs/postgresql', '>= 3.0.0'
 dependency 'puppetlabs/stdlib', '>= 4.0.0'
 dependency 'puppetlabs/mysql', '>= 2.0.0'
-dependency 'puppetlabs-apache', '>= 1.0.0'
-#dependency 'puppetlabs/apache', '>= 1.0.0'
+dependency 'puppetlabs/apache', '>= 1.0.0'
+dependency 'puppetlabs/firewall', '>= 1.0.0'
 

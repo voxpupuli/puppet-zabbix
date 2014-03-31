@@ -11,12 +11,13 @@
 # sample usage:
 #
 class zabbix::params {
-  # Zabbix specific params.
+  # Zabbix overall params
   $dbtype                         = 'postgresql'
   $zabbix_version                 = '2.2'
   $zabbix_timezone                = 'Europe/Amsterdam'
   $manage_database                = true
   $manage_vhost                   = true
+  $manage_firewall                = false
 
   # Server specific params
   $server_nodeid                  = '0'
@@ -170,4 +171,10 @@ class zabbix::params {
   $proxy_include                 = '/etc/zabbix/zabbix_proxy.conf.d/'
   $proxy_loadmodulepath          = '${libdir}/modules'
   $proxy_loadmodule              = undef
+
+  # Java Gateway specific params
+  $javagateway_pidfile           = '/var/run/zabbix/zabbix_java.pid'
+  $javagateway_listenip          = '0.0.0.0'
+  $javagateway_listenport        = '10052'
+  $javagateway_startpollers      = '5'
 }

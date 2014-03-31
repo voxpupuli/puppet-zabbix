@@ -6,10 +6,10 @@
     }
   ],
   "name": "wdijkerman-zabbix",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "summary": "Installing and maintaining zabbix instances",
   "author": "Werner Dijkerman",
-  "description": "This module contains the classes for installing the following zabbix components:\n- zabbix-server\n- zabbix-agent\n- zabbix-proxy\n",
+  "description": "This module contains the classes for installing the following zabbix components:\n- zabbix-server\n- zabbix-agent\n- zabbix-proxy\n- zabbix-javagateway",
   "dependencies": [
     {
       "name": "puppetlabs/postgresql",
@@ -20,8 +20,8 @@
       "version_requirement": ">= 4.1.0"
     },
     {"name":"puppetlabs-mysql","version_requirement":">= 2.0.0"},
-    {"name":"puppetlabs/mysql","version_requirement":"2.2.1"},
-    {"name":"puppetlabs/apache","version_requirement":">= 1.0.0"}
+    {"name":"puppetlabs-apache","version_requirement":">= 1.0.0"},
+    {"name":"puppetlabs-firewall","version_requirement":">= 1.0.0"}
   ],
   "types": [
 
@@ -43,7 +43,7 @@
     "templates/zabbix_server.conf.erb": "ffb3fac8edcaf5fb8e1b8ec9de526dd7"
   },
   "source": "https://github.com/dj-wasabi/puppet-zabbix.git",
-  "project_page": "https://github.com/dj-wasabi/puppet-zabbix",
+  "project_page": "http://forge.puppetlabs.com/wdijkerman/zabbix",
   "license": "Apache Version 2.0",
   "operatingsystem_support": [
        {

@@ -34,6 +34,9 @@
 #   When true, it will create an vhost for apache. The parameter zabbix_url
 #   has to be set.
 #
+# [*manage_firewall*]
+#   When true, it will create iptables rules.
+#
 # [*nodeid*]
 #   Unique nodeid in distributed setup.
 #
@@ -247,6 +250,7 @@ class zabbix::server (
   $zabbix_timezone         = $zabbix::params::zabbix_timezone,
   $manage_database         = $zabbix::params::manage_database,
   $manage_vhost            = $zabbix::params::manage_vhost,
+  $manage_firewall         = $zabbix::params::manage_firewall,
   $nodeid                  = $zabbix::params::server_nodeid,
   $listenport              = $zabbix::params::server_listenport,
   $sourceip                = $zabbix::params::server_sourceip,
@@ -311,9 +315,10 @@ class zabbix::server (
   $loadmodule              = $zabbix::params::server_loadmodule,
   ) inherits zabbix::params {
 
-  # Check some stuff
+  # Check some if they are boolean
   validate_bool($manage_database)
   validate_bool($manage_vhost)
+  validate_bool($manage_firewall)
 
   include zabbix::repo
 
@@ -330,6 +335,7 @@ class zabbix::server (
     }
   }
 
+  # Installing the packages
   package { "zabbix-server-${db}":
     ensure  => present,
     require => Class['zabbix::repo'],
@@ -355,6 +361,7 @@ class zabbix::server (
     before          => Service['zabbix-server'],
   }
 
+  # Controlling the 'zabbix-server' service
   service { 'zabbix-server':
     ensure     => running,
     enable     => true,
@@ -367,6 +374,7 @@ class zabbix::server (
     ],
   }
 
+  # Configuring the zabbix-server configuration file
   file { '/etc/zabbix/zabbix_server.conf':
     ensure  => present,
     owner   => 'zabbix',
@@ -378,6 +386,7 @@ class zabbix::server (
     content => template('zabbix/zabbix_server.conf.erb'),
   }
 
+  # Webinterface config file
   file { '/etc/zabbix/web/zabbix.conf.php':
     ensure  => present,
     owner   => 'zabbix',
@@ -389,6 +398,7 @@ class zabbix::server (
     content => template('zabbix/web/zabbix.conf.php.erb'),
   }
 
+  # Include dir for specific zabbix-server checks.
   file { $include_dir:
     ensure  => directory,
     owner   => 'zabbix',
@@ -438,4 +448,15 @@ class zabbix::server (
       rewrites        => [ { rewrite_rule => ['^$ /index.php [L]'] } ],
     }
   } # END if $manage_vhost
+
+  # Manage firewall
+  if $manage_firewall {
+    firewall { '151 zabbix-server':
+      dport  => $listenport,
+      proto  => 'tcp',
+      action => 'accept',
+      state  => ['NEW','RELATED', 'ESTABLISHED'],
+    }
+  }
+
 }

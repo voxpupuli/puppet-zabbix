@@ -11,6 +11,9 @@
 # [*zabbix_version*]
 #   This is the zabbix version.
 #
+# [*manage_firewall*]
+#   When true, it will create iptables rules.
+#
 # [*pidfile*]
 #   Name of pid file.
 #
@@ -113,6 +116,7 @@
 #
 class zabbix::agent (
   $zabbix_version       = $zabbix::params::zabbix_version,
+  $manage_firewall      = $zabbix::params::manage_firewall,
   $pidfile              = $zabbix::params::agent_pidfile,
   $logfile              = $zabbix::params::agent_logfile,
   $logfilesize          = $zabbix::params::agent_logfilesize,
@@ -143,13 +147,18 @@ class zabbix::agent (
   $loadmodule           = $zabbix::params::agent_loadmodule,
   ) inherits zabbix::params {
 
+  # Check some if they are boolean
+  validate_bool($manage_firewall)
+
   include zabbix::repo
 
+  # Installing the package
   package { 'zabbix-agent':
     ensure  => present,
     require => Class['zabbix::repo'],
   }
 
+  # Controlling the 'zabbix-agent' service
   service { 'zabbix-agent':
     ensure     => running,
     enable     => true,
@@ -158,6 +167,7 @@ class zabbix::agent (
     require    => Package['zabbix-agent'],
   }
 
+  # Configuring the zabbix-agent configuration file
   file { '/etc/zabbix/zabbix_agentd.conf':
     ensure  => present,
     owner   => 'zabbix',
@@ -169,6 +179,7 @@ class zabbix::agent (
     content => template('zabbix/zabbix_agentd.conf.erb'),
   }
 
+  # Include dir for specific zabbix-agent checks.
   file { $include_dir:
     ensure  => directory,
     owner   => 'zabbix',
@@ -176,5 +187,16 @@ class zabbix::agent (
     recurse => true,
     purge   => true,
     require => File['/etc/zabbix/zabbix_agentd.conf'],
+  }
+
+  # Manage firewall
+  if $manage_firewall {
+    firewall { '150 zabbix-agent':
+      dport  => $listenport,
+      proto  => 'tcp',
+      action => 'accept',
+      source => "${server}/24",
+      state  => ['NEW','RELATED', 'ESTABLISHED'],
+    }
   }
 }
