@@ -10,8 +10,7 @@
   * [zabbix::userparameters, Installing the userparameter files](#userparameters)
 3. [Limitations](#limitations)
 4. [Todo](#todo)
-5. [Release notes](#release-notes)
-6. [Note](#note)
+5. [Note](#note)
 
 ##Description
 
@@ -23,7 +22,7 @@ This module contains the classes for installing and configuring the following za
 
 ##How to use
 ###zabbix-server
-This will install an basic zabbix-server instance. Default will postgresql used as database. (It also creates an db/user account and runs the necessary scripts if manage_database is true). 
+This will install an basic zabbix-server instance. 
 
 You will need to supply one parameter: zabbix_url. This is the url on which the zabbix instance will be available. In the example below, the zabbix webinterface will be: http://zabbix.example.com. 
 
@@ -39,6 +38,8 @@ Username: admin
 
 Password: zabbix
 
+#### manage_database
+When the parameter 'manage_database' is set to true (Which is default), it will create the database and loads the sql files. Default the postgresql will be used as backend, mentioned in the params.pp file. You'll have to include the postgresql (or mysql) module yourself, as this module will require it.
 
 ###zabbix-agent
 This will install the zabbix-agent. It will need at least 1 parameter to function, the name or ipaddress of the zabbix-server (or zabbix-proxy if this is used.). Default is 127.0.0.1, which only works for the zabbix agent when installed on the same host as zabbix-server (or zabbix-proxy).
@@ -50,12 +51,42 @@ class { 'zabbix::agent':
 ```
 
 ###zabbix-proxy
-This will install an zabbix-proxy instance. It will need at least 1 parameter to function, the name or ipaddress of the zabbix-server. Default is 127.0.0.1, which wouldn't work. Default will postgresql be used as database (It also creates an db/user account and runs the necessary scripts).
+This will install an zabbix-proxy instance. It will need at least 1 parameter to function, the name or ipaddress of the zabbix-server. Default is 127.0.0.1, which wouldn't work. Be aware, the zabbix::proxy can't be installed on the same server as zabbix::server. 
 
 ```ruby
 class { 'zabbix::proxy':
   zabbix_server_host => '192.168.1.1',
   zabbix_server_port => '10051',
+}
+```
+
+#### manage_database
+When the parameter 'manage_database' is set to true (Which is default), it will create the database and loads the sql files. Default the postgresql will be used as backend, mentioned in the params.pp file. You'll have to include the postgresql (or mysql) module yourself, as this module will require it.
+
+###zabbix-javagateway
+This will install the zabbix java gataway for checking jmx items. It can run without parameters.
+
+```ruby
+class { 'zabbix::javagateway': }
+```
+
+When using zabbix::javagateway, you'll need to add the 'javagateway' parameter and assign the correct ip address.
+
+Usage example for an zabbix::server:
+
+```ruby
+class { 'zabbix::server':
+  zabbix_url  => 'zabbix.example.com', 
+  javagateway => '192.168.1.2',
+}
+```
+
+Or with an zabbix::proxy:
+
+```ruby
+class { 'zabbix::proxy':
+  zabbix_server_host => '192.168.1.1', 
+  javagateway        => '192.168.1.2',
 }
 ```
 
@@ -88,8 +119,6 @@ It should work on other operating systems of the Red Hat family to.
 ##Todo
 The following is an overview of todo actions:
 
-  - Add parameter for manage_firewall and create if needed firewall rules.
-  - Create java gateway class
   - Create rpsec tests.
   - Support for other linux systems.
   - Better documentation.
@@ -98,30 +127,6 @@ The following is an overview of todo actions:
     - automatically assing templates to hosts
   - Please send me suggestions! 
 
-
-##Release notes
-Version (Release date)
-
-0.0.3  (2014-04-01)
-
-  * Added parameter: manage_vhost for creating vhost (Default: true)
-  * Adding manage_firewall for creating firewall rules
-  * 
-
-0.0.2  (2014-03-28)
-
-  * MySQL can be used as database back-end.
-  * Services started at boot.
-  * Vhost creation, need 1 parameter for zabbix-server: zabbix_url.
-  * Updated the readme.md
-
-0.0.1 (2014-03-18)
-
-  * Initial working version. Installing of the 
-    * zabbix-server
-    * zabbix-agent
-    * zabbix-proxy
-  * Possibility to add userparameters for the zabbix-agent.
 
 ##Note
 Not specified as required but for working correctly, the epel repository should be available for the 'fping'|'fping6' packages.
