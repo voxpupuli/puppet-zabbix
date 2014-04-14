@@ -18,6 +18,7 @@ class zabbix::params {
   $manage_database                = true
   $manage_vhost                   = true
   $manage_firewall                = false
+  $manage_repo                    = true
 
   # Server specific params
   $server_nodeid                  = '0'
@@ -28,10 +29,10 @@ class zabbix::params {
   $server_debuglevel              = '3'
   $server_pidfile                 = '/var/run/zabbix/zabbix_server.pid'
   $server_dbhost                  = 'localhost'
-  $server_dbname                  = 'zabbix_server'
+  $server_dbname                  = 'zabbix-server'
   $server_dbschema                = undef
-  $server_dbuser                  = 'zabbix_server'
-  $server_dbpassword              = 'zabbix_server'
+  $server_dbuser                  = 'zabbix-server'
+  $server_dbpassword              = 'zabbix-server'
   $server_dbsocket                = undef
   $server_dbport                  = undef
   $server_startpollers            = '5'
@@ -124,10 +125,10 @@ class zabbix::params {
   $proxy_debuglevel              = '3'
   $proxy_pidfile                 = '/var/run/zabbix/proxy_server.pid'
   $proxy_dbhost                  = 'localhost'
-  $proxy_dbname                  = 'zabbix_proxy'
+  $proxy_dbname                  = 'zabbix-proxy'
   $proxy_dbschema                = undef
-  $proxy_dbuser                  = 'zabbix_proxy'
-  $proxy_dbpassword              = 'zabbix_proxy'
+  $proxy_dbuser                  = 'zabbix-proxy'
+  $proxy_dbpassword              = 'zabbix-proxy'
   $proxy_dbsocket                = undef
   $proxy_dbport                  = undef
   $proxy_localbuffer             = '0'

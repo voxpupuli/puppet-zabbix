@@ -24,6 +24,9 @@
 # [*manage_firewall*]
 #   When true, it will create iptables rules.
 #
+# [*manage_repo*]
+#   When true, it will create repository for installing the proxy.
+#
 # [*mode*]
 #   Proxy operating mode.
 #
@@ -215,6 +218,7 @@ class zabbix::proxy (
   $zabbix_version          = $zabbix::params::zabbix_version,
   $manage_database         = $zabbix::params::manage_database,
   $manage_firewall         = $zabbix::params::manage_firewall,
+  $manage_repo             = $zabbix::params::manage_repo,
   $mode                    = $zabbix::params::proxy_mode,
   $zabbix_server_host      = $zabbix::params::proxy_zabbix_server_host,
   $zabbix_server_port      = $zabbix::params::proxy_zabbix_server_port,
@@ -277,8 +281,7 @@ class zabbix::proxy (
   # Check some if they are boolean
   validate_bool($manage_database)
   validate_bool($manage_firewall)
-
-  include zabbix::repo
+  validate_bool($manage_repo)
 
   # Use the correct db.
   case $dbtype {
@@ -293,17 +296,29 @@ class zabbix::proxy (
     }
   }
 
-  # Installing the packages
-  package { "zabbix-proxy-${db}":
-    ensure  => present,
-    require => Class['zabbix::repo'],
-  } ->
-  package { 'zabbix-proxy':
-    ensure  => present,
-  } ->
-  package { 'zabbix':
-    ensure  => present,
+  # Check if manage_repo is true.
+  if $manage_repo {
+    include zabbix::repo
+    Package["zabbix-proxy-${db}"] {require => Class['zabbix::repo']}
   }
+
+  case $::operatingsystem {
+    'redhat','centos','oraclelinux' : {
+      package { 'zabbix-proxy':
+        ensure  => present,
+      }
+      # Installing the packages
+      package { "zabbix-proxy-${db}":
+        ensure  => present,
+      }
+    } # END 'redhat','centos','oraclelinux'
+    default : {
+      # Installing the packages
+      package { "zabbix-proxy-${db}":
+        ensure  => present,
+      }
+    } # END default
+  } # END case $::operatingsystem
 
   # Controlling the 'zabbix-proxy' service
   service { 'zabbix-proxy':
@@ -328,13 +343,14 @@ class zabbix::proxy (
     db_name         => $dbname,
     db_user         => $dbuser,
     db_pass         => $dbpassword,
+    db_host         => $dbhost,
     before          => Service['zabbix-proxy'],
   }
 
   # Configuring the zabbix-proxy configuration file
   file { '/etc/zabbix/zabbix_proxy.conf':
     notify  => Service['zabbix-proxy'],
-    require => Package['zabbix-proxy'],
+    require => Package["zabbix-proxy-${db}"],
     replace => true,
     content => template('zabbix/zabbix_proxy.conf.erb'),
   }

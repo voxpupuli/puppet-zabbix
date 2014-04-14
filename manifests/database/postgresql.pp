@@ -23,13 +23,31 @@ class zabbix::database::postgresql (
   $db_pass        = '',
 ) {
 
+  case $::operatingsystem {
+    'centos','redhat','oraclelinux' : {
+      $zabbix_path   = "/usr/share/doc/zabbix-*-pgsql-${zabbix_version}*/create"
+      $postgres_home = '/var/lib/pgsql/'
+    }
+    'ubuntu' : {
+      $zabbix_path   = '/usr/share/zabbix-*-pgsql'
+      $postgres_home = '/var/lib/postgresql'
+    }
+  }
+
   # Creating database
   postgresql::server::db { $db_name:
     user     => $db_user,
     password => postgresql_password($db_user, $db_pass),
   }
 
-  file { '/var/lib/pgsql/.pgpass':
+  exec { 'update_pgpass':
+    command => "echo localhost:5432:${db_name}:${db_user}:${db_pass} >> ${postgres_home}/.pgpass",
+    path    => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+    unless  => "grep \"localhost:5432:${db_name}:${db_user}:${db_pass}\" ${postgres_home}/.pgpass",
+    require => File["${postgres_home}/.pgpass"],
+  }
+
+  file { "${postgres_home}/.pgpass":
     ensure  => present,
     mode    => '0600',
     owner   => 'postgres',
@@ -37,32 +55,25 @@ class zabbix::database::postgresql (
     require => Postgresql::Server::Db[$db_name],
   }
 
-  exec { 'update_pgpass':
-    command => "echo localhost:5432:${db_name}:${db_user}:${db_pass} >> /var/lib/pgsql/.pgpass",
-    path    => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-    unless  => "grep \"localhost:5432:${db_name}:${db_user}:${db_pass}\" /var/lib/pgsql/.pgpass",
-    require => File['/var/lib/pgsql/.pgpass'],
-  }
-
   case $zabbix_type {
     'proxy': {
       exec { 'zabbix_proxy_create.sql':
-        command  => "cd /usr/share/doc/zabbix-proxy-pgsql-${zabbix_version}*/create && sudo -u postgres psql -h localhost -U ${db_user} -d ${db_name} -f schema.sql && touch schema.done",
+        command  => "cd ${zabbix_path} && sudo -u postgres psql -h localhost -U ${db_user} -d ${db_name} -f schema.sql && touch schema.done",
         path     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        unless   => "test -f /usr/share/doc/zabbix-server-pgsql-${zabbix_version}*/create/schema.done",
+        unless   => "test -f ${zabbix_path}schema.done",
         provider => 'shell',
         require  => [
           Exec['update_pgpass'],
-          Package['zabbix-proxy'],
+          Package['zabbix-proxy-pgsql'],
         ],
         notify   => Service['zabbix-proxy'],
       }
     }
     'server': {
       exec { 'zabbix_server_create.sql':
-        command  => "cd /usr/share/doc/zabbix-server-pgsql-${zabbix_version}*/create && sudo -u postgres psql -h localhost -U ${db_user} -d ${db_name} -f schema.sql && touch schema.done",
+        command  => "cd ${zabbix_path} && sudo -u postgres psql -h localhost -U ${db_user} -d ${db_name} -f schema.sql && touch schema.done",
         path     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        unless   => "test -f /usr/share/doc/zabbix-server-pgsql-${zabbix_version}*/create/schema.done",
+        unless   => "test -f ${zabbix_path}/schema.done",
         provider => 'shell',
         require  => [
           Exec['update_pgpass'],
@@ -71,9 +82,9 @@ class zabbix::database::postgresql (
         notify   => Service['zabbix-server'],
       } ->
       exec { 'zabbix_server_images.sql':
-        command  => "cd /usr/share/doc/zabbix-server-pgsql-${zabbix_version}*/create && sudo -u postgres psql -h localhost -U ${db_user} -d ${db_name} -f images.sql && touch images.done",
+        command  => "cd ${zabbix_path} && sudo -u postgres psql -h localhost -U ${db_user} -d ${db_name} -f images.sql && touch images.done",
         path     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        unless   => "test -f /usr/share/doc/zabbix-server-pgsql-${zabbix_version}*/create/images.done",
+        unless   => "test -f ${zabbix_path}/images.done",
         provider => 'shell',
         require  => [
           Exec['update_pgpass'],
@@ -82,9 +93,9 @@ class zabbix::database::postgresql (
         notify   => Service['zabbix-server'],
       } ->
       exec { 'zabbix_server_data.sql':
-        command  => "cd /usr/share/doc/zabbix-server-pgsql-${zabbix_version}*/create && sudo -u postgres psql -h localhost -U ${db_user} -d ${db_name} -f data.sql && touch data.done",
+        command  => "cd ${zabbix_path} && sudo -u postgres psql -h localhost -U ${db_user} -d ${db_name} -f data.sql && touch data.done",
         path     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        unless   => "test -f /usr/share/doc/zabbix-server-pgsql-${zabbix_version}*/create/data.done",
+        unless   => "test -f ${zabbix_path}/data.done",
         provider => 'shell',
         require  => [
           Exec['update_pgpass'],

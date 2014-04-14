@@ -6,7 +6,7 @@
     }
   ],
   "name": "wdijkerman-zabbix",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "summary": "Installing and maintaining zabbix instances",
   "author": "Werner Dijkerman",
   "description": "This module contains the classes for installing the following zabbix components:\n- zabbix-server\n- zabbix-agent\n- zabbix-proxy\n- zabbix-javagateway",
@@ -48,6 +48,10 @@
   "operatingsystem_support": [
        {
            "operatingsystem":"RedHat",
+           "operatingsystemrelease":[ "5.0", "6.0" ]
+       },
+       {
+           "operatingsystem":"OracleLinux",
            "operatingsystemrelease":[ "5.0", "6.0" ]
        },
        {

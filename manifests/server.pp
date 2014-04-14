@@ -37,6 +37,9 @@
 # [*manage_firewall*]
 #   When true, it will create iptables rules.
 #
+# [*manage_repo*]
+#   When true, it will create repository for installing the server.
+#
 # [*nodeid*]
 #   Unique nodeid in distributed setup.
 #
@@ -251,6 +254,7 @@ class zabbix::server (
   $manage_database         = $zabbix::params::manage_database,
   $manage_vhost            = $zabbix::params::manage_vhost,
   $manage_firewall         = $zabbix::params::manage_firewall,
+  $manage_repo             = $zabbix::params::manage_repo,
   $nodeid                  = $zabbix::params::server_nodeid,
   $listenport              = $zabbix::params::server_listenport,
   $sourceip                = $zabbix::params::server_sourceip,
@@ -320,8 +324,6 @@ class zabbix::server (
   validate_bool($manage_vhost)
   validate_bool($manage_firewall)
 
-  include zabbix::repo
-
   # use the correct db.
   case $dbtype {
     'postgresql': {
@@ -335,18 +337,37 @@ class zabbix::server (
     }
   }
 
+  # Check if manage_repo is true.
+  if $manage_repo {
+    include zabbix::repo
+    Package["zabbix-server-${db}"] {require => Class['zabbix::repo']}
+  }
+
   # Installing the packages
   package { "zabbix-server-${db}":
     ensure  => present,
-    require => Class['zabbix::repo'],
-  } ->
-  package { "zabbix-web-${db}":
-    ensure  => present,
-  } ->
-  package { 'zabbix-web':
-    ensure  => present,
   }
 
+  case $::operatingsystem {
+    'ubuntu' : {
+      package { 'zabbix-frontend-php':
+        ensure  => present,
+        require => Package["zabbix-server-${db}"],
+        before  => File['/etc/zabbix/web/zabbix.conf.php'],
+      }
+    }
+    default : {
+      package { "zabbix-web-${db}":
+        ensure  => present,
+        require => Package["zabbix-server-${db}"],
+        before  => File['/etc/zabbix/web/zabbix.conf.php'],
+      } ->
+      package { 'zabbix-web':
+        ensure  => present,
+      }
+    }
+  }
+  
   # if we want to manage the databases, we do
   # some stuff. (for maintaining database only.)
   class { 'zabbix::database':
@@ -384,6 +405,7 @@ class zabbix::server (
     require => Package["zabbix-server-${db}"],
     replace => true,
     content => template('zabbix/zabbix_server.conf.erb'),
+#    before  => Package["zabbix-server-${db}"]
   }
 
   # Webinterface config file
@@ -393,7 +415,7 @@ class zabbix::server (
     group   => 'zabbix',
     mode    => '0644',
     notify  => Service['zabbix-server'],
-    require => Package["zabbix-server-${db}"],
+#    require => Package["zabbix-web-${db}"],
     replace => true,
     content => template('zabbix/web/zabbix.conf.php.erb'),
   }

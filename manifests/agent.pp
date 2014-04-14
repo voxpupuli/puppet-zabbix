@@ -14,6 +14,9 @@
 # [*manage_firewall*]
 #   When true, it will create iptables rules.
 #
+# [*manage_repo*]
+#   When true, it will create repository for installing the agent.
+#
 # [*pidfile*]
 #   Name of pid file.
 #
@@ -117,6 +120,7 @@
 class zabbix::agent (
   $zabbix_version       = $zabbix::params::zabbix_version,
   $manage_firewall      = $zabbix::params::manage_firewall,
+  $manage_repo          = $zabbix::params::manage_repo,
   $pidfile              = $zabbix::params::agent_pidfile,
   $logfile              = $zabbix::params::agent_logfile,
   $logfilesize          = $zabbix::params::agent_logfilesize,
@@ -149,13 +153,17 @@ class zabbix::agent (
 
   # Check some if they are boolean
   validate_bool($manage_firewall)
+  validate_bool($manage_repo)
 
-  include zabbix::repo
+  # Check if manage_repo is true.
+  if $manage_repo {
+    include zabbix::repo
+    Package['zabbix-agent'] {require => Class['zabbix::repo']}
+  }
 
   # Installing the package
   package { 'zabbix-agent':
     ensure  => present,
-    require => Class['zabbix::repo'],
   }
 
   # Controlling the 'zabbix-agent' service

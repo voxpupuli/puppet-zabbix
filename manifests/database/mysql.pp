@@ -24,6 +24,15 @@ class zabbix::database::mysql (
   $db_host        = '',
 ) {
 
+  case $::operatingsystem {
+    'centos','redhat','oraclelinux' : {
+      $zabbix_path = "/usr/share/doc/zabbix-*-mysql-${zabbix_version}*/create"
+    }
+    'ubuntu' : {
+      $zabbix_path = '/usr/share/zabbix-*-mysql'
+    }
+  }
+
   # Create the database
   mysql::db { $db_name:
     user     => $db_user,
@@ -36,35 +45,35 @@ class zabbix::database::mysql (
   case $zabbix_type {
     'proxy': {
       exec { 'zabbix_proxy_create.sql':
-        command  => "cd /usr/share/doc/zabbix-proxy-mysql-${zabbix_version}*/create && mysql -u ${db_user} -p${db_pass} -D ${db_name} < schema.sql && touch schema.done",
+        command  => "cd ${zabbix_path} && mysql -u ${db_user} -p${db_pass} -D ${db_name} < schema.sql && touch schema.done",
         path     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        unless   => "test -f /usr/share/doc/zabbix-server-mysql-${zabbix_version}*/create/schema.done",
+        unless   => "test -f ${zabbix_path}/schema.done",
         provider => 'shell',
-        require  => Package['zabbix-proxy'],
+        require  => Package['zabbix-proxy-mysql'],
         notify   => Service['zabbix-proxy'],
       }
     }
     'server': {
       exec { 'zabbix_server_create.sql':
-        command  => "cd /usr/share/doc/zabbix-server-mysql-${zabbix_version}*/create && mysql -u ${db_user} -p${db_pass} -D ${db_name} < schema.sql && touch schema.done",
+        command  => "cd ${zabbix_path} && mysql -u ${db_user} -p${db_pass} -D ${db_name} < schema.sql && touch schema.done",
         path     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        unless   => "test -f /usr/share/doc/zabbix-server-mysql-${zabbix_version}*/create/schema.done",
+        unless   => "test -f ${zabbix_path}/schema.done",
         provider => 'shell',
         require  => Package['zabbix-server-mysql'],
         notify   => Service['zabbix-server'],
       } ->
       exec { 'zabbix_server_images.sql':
-        command  => "cd /usr/share/doc/zabbix-server-mysql-${zabbix_version}*/create && mysql -u ${db_user} -p${db_pass} -D ${db_name} < images.sql && touch images.done",
+        command  => "cd ${zabbix_path} && mysql -u ${db_user} -p${db_pass} -D ${db_name} < images.sql && touch images.done",
         path     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        unless   => "test -f /usr/share/doc/zabbix-server-mysql-${zabbix_version}*/create/images.done",
+        unless   => "test -f ${zabbix_path}/images.done",
         provider => 'shell',
         require  => Package['zabbix-server-mysql'],
         notify   => Service['zabbix-server'],
       } ->
       exec { 'zabbix_server_data.sql':
-        command  => "cd /usr/share/doc/zabbix-server-mysql-${zabbix_version}*/create && mysql -u ${db_user} -p${db_pass} -D ${db_name} < data.sql && touch data.done",
+        command  => "cd ${zabbix_path} && mysql -u ${db_user} -p${db_pass} -D ${db_name} < data.sql && touch data.done",
         path     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        unless   => "test -f /usr/share/doc/zabbix-server-mysql-${zabbix_version}*/create/data.done",
+        unless   => "test -f ${zabbix_path}/data.done",
         provider => 'shell',
         require  => Package['zabbix-server-mysql'],
         notify   => Service['zabbix-server'],
@@ -73,5 +82,5 @@ class zabbix::database::mysql (
     default: {
       fail 'We do not work.'
     }
-  }
+  } # END case $zabbix_type 
 }
