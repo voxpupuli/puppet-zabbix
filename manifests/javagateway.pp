@@ -58,7 +58,7 @@ class zabbix::javagateway(
   validate_bool($manage_repo)
 
   if $::operatingsystem == 'debian' and $::operatingsystemrelease =~ /^6.*/ {
-    fail('We do not work on Debian 6. Please remove this class from your node configuration.')
+    fail('We do not work on Debian 6. Please remove class zabbix::javagateway from your node configuration.')
   }
 
   # Check if manage_repo is true.

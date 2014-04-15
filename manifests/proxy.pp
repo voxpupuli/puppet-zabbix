@@ -336,16 +336,20 @@ class zabbix::proxy (
 
   # if we want to manage the databases, we do
   # some stuff. (for maintaining database only.)
-  class { 'zabbix::database':
-    manage_database => $manage_database,
-    dbtype          => $dbtype,
-    zabbix_type     => 'proxy',
-    zabbix_version  => $zabbix_version,
-    db_name         => $dbname,
-    db_user         => $dbuser,
-    db_pass         => $dbpassword,
-    db_host         => $dbhost,
-    before          => Service['zabbix-proxy'],
+  if $::operatingsystem == 'debian' and $::operatingsystemrelease =~ /^6.*/ {
+    notify {'We do not work on Debian 6. Please do create the database and inserting basic configuration manually.': }
+  } else {
+    class { 'zabbix::database':
+      manage_database => $manage_database,
+      dbtype          => $dbtype,
+      zabbix_type     => 'proxy',
+      zabbix_version  => $zabbix_version,
+      db_name         => $dbname,
+      db_user         => $dbuser,
+      db_pass         => $dbpassword,
+      db_host         => $dbhost,
+      before          => Service['zabbix-proxy'],
+    }
   }
 
   # Configuring the zabbix-proxy configuration file
