@@ -349,7 +349,7 @@ class zabbix::server (
   }
 
   case $::operatingsystem {
-    'ubuntu' : {
+    'ubuntu', 'debian' : {
       package { 'zabbix-frontend-php':
         ensure  => present,
         require => Package["zabbix-server-${db}"],

@@ -306,6 +306,7 @@ class zabbix::proxy (
     'redhat','centos','oraclelinux' : {
       package { 'zabbix-proxy':
         ensure  => present,
+        require => Package["zabbix-proxy-${db}"]
       }
       # Installing the packages
       package { "zabbix-proxy-${db}":

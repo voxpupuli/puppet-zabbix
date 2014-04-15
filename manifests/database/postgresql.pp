@@ -28,7 +28,7 @@ class zabbix::database::postgresql (
       $zabbix_path   = "/usr/share/doc/zabbix-*-pgsql-${zabbix_version}*/create"
       $postgres_home = '/var/lib/pgsql/'
     }
-    'ubuntu' : {
+    'ubuntu','debian' : {
       $zabbix_path   = '/usr/share/zabbix-*-pgsql'
       $postgres_home = '/var/lib/postgresql'
     }
