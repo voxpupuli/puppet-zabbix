@@ -64,7 +64,6 @@ DBName=<%= @dbname %>
 #	schema name. used for ibm db2.
 #
 
-
 ### option: dbuser
 #	database user. ignored for sqlite.
 #
@@ -79,7 +78,6 @@ DBPassword=<%= @dbpassword %>
 ### option: dbsocket
 #	path to mysql socket.
 #
-
 
 ### option: dbport
 #	database port when not using local socket. ignored for sqlite.
@@ -123,14 +121,14 @@ StartDiscoverers=<%= @startdiscoverers %>
 #	number of pre-forked instances of http pollers.
 #
 StartHTTPPollers=<%= @starthttppollers %>
-
+<% if @zabbix_version == '2.2' %>
 ### option: starttimers
 #	number of pre-forked instances of timers.
 #	timers process time-based trigger functions and maintenance periods.
 #	only the first timer process handles the maintenance periods.
 #
 StartTimers=<%= @starttimers %>
-
+<% end %>
 ### option: javagateway
 #	ip address (or hostname) of zabbix java gateway.
 #	only required if java pollers are started.
@@ -148,6 +146,7 @@ JavaGatewayPort=<%= @javagatewayport %>
 StartJavaPollers=<%= @startjavapollers %>
 <% end %>
 
+<% if @zabbix_version == '2.2' %>
 ### option: startvmwarecollectors
 #	number of pre-forked vmware collector instances.
 #
@@ -164,6 +163,7 @@ VMwareFrequency=<%= @vmwarefrequency %>
 #	only used if vmware collectors are started.
 #
 VMwareCacheSize=<%= @vmwarecachesize %>
+<% end %>
 
 ### option: snmptrapperfile
 #	temporary file used for passing data from snmp trap daemon to the server.
@@ -239,12 +239,14 @@ TrendCacheSize=<%= @trendcachesize %>
 #
 HistoryTextCacheSize=<%= @historytextcachesize %>
 
+<% if @zabbix_version == '2.2' %>
 ### option: valuecachesize
 #	size of history value cache, in bytes.
 #	shared memory size for caching item history data requests
 #	setting to 0 disables value cache.
 #
 ValueCacheSize=<%= @valuecachesize %>
+<% end %>
 
 ### option: nodenoevents
 #	if set to '1' local events won't be sent to master node.
@@ -344,6 +346,7 @@ ProxyConfigFrequency=<%= @proxyconfigfrequency %>
 #
 ProxyDataFrequency=<%= @proxydatafrequency %>
 
+<% if @zabbix_version == '2.2' %>
 ### option: allowroot
 #	allow the server to run as 'root'. if disabled and the server is started by 'root', the server
 #	will try to switch to user 'zabbix' instead. has no effect if started under a regular user.
@@ -351,6 +354,7 @@ ProxyDataFrequency=<%= @proxydatafrequency %>
 #	1 - allow
 #
 AllowRoot=<%= @allowroot %>
+<% end %>
 
 ### option: include
 #	you may include individual files or all files in a directory in the configuration file.
@@ -359,12 +363,13 @@ AllowRoot=<%= @allowroot %>
 Include=<%= @include_dir %>
 
 ####### loadable modules #######
-
+<% if @zabbix_version == '2.2' %>
 ### option: loadmodulepath
 #	full path to location of server modules.
 #	default depends on compilation options.
 #
 LoadModulePath=<%= @loadmodulepath %>
+<% end %>
 
 ### option: loadmodule
 #	module to load at server startup. modules are used to extend functionality of the server.

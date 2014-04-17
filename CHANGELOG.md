@@ -4,6 +4,13 @@ Below an overview of all changes in the releases.
 
 Version (Release date)
 
+0.1.0  (2014-04-17)
+
+  * Added manage_repo parameter. If set to true, it will install the apt/yum repository.
+  * Updated module for support Ubuntu (12.x).
+  * Updated module for support Debian (6, 7).
+  * Updated module for support Oracle Linux (5, 6).
+
 0.0.3  (2014-03-31)
 
   * Added parameter: manage_vhost for creating vhost (Default: true)

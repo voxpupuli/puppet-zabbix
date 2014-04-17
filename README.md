@@ -8,7 +8,7 @@
   * [Installing the zabbix-agent](#zabbix-agent)
   * [Installing the zabbix-proxy](#zabbix-proxy)
   * [zabbix::userparameters, Installing the userparameter files](#userparameters)
-3. [Limitations](#limitations)
+3. [OS Support](#support)
 4. [Todo](#todo)
 5. [Note](#note)
 
@@ -109,12 +109,29 @@ zabbix::userparameters { 'mysql.conf':
 }
 ```
 
-##Limitations
-The module has only been tested on:
+##Support
+The module is only supported on:
 
-  * CentOS 6
+Zabbix 2.2:
 
-It should work on other operating systems of the Red Hat family to.
+  * CentOS 5.x, 6.x
+  * RedHat 5.x, 6.x
+  * OracleLinux 5.x, 6.x
+  * Ubuntu 12.04
+  * Debian 7
+
+Zabbix 2.0:
+
+  * CentOS 5.x, 6.x
+  * RedHat 5.x, 6.x
+  * OracleLinux 5.x, 6.x
+  * Ubuntu 12.04
+  * Debian 6, 7
+
+
+Zabbix 1.8 isn't supported (yet) with this module. Maybe in the near future.
+
+Ubuntu 10.4 is officially supported by zabbix for Zabbix 2.0. I did have some issues with making it work, probably in a future release it is supported with this module as well.
 
 ##Todo
 The following is an overview of todo actions:

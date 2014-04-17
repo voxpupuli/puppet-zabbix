@@ -205,6 +205,8 @@ JavaGatewayPort=<%= @javagatewayport %>
 #
 StartJavaPollers=<%= @startjavapollers %>
 <% end %>
+
+<% if @zabbix_version == '2.2' %>
 ### Option: StartVMwareCollectors
 #	Number of pre-forked vmware collector instances.
 #
@@ -221,6 +223,7 @@ VMwareFrequency=<%= @vmwarefrequency %>
 #	Only used if VMware collectors are started.
 #
 VMwareCacheSize=<%= @vmwarecachesize -%>M
+<% end %>
 
 ### Option: SNMPTrapperFile
 #	Temporary file used for passing data from SNMP trap daemon to the proxy.
@@ -333,6 +336,7 @@ LogSlowQueries=<%=  @loglowqueries %>
 #
 TmpDir=<%= @tmpdir %>
 
+<% if @zabbix_version == '2.2' %>
 ### Option: AllowRoot
 #	Allow the proxy to run as 'root'. If disabled and the proxy is started by 'root', the proxy
 #	will try to switch to user 'zabbix' instead. Has no effect if started under a regular user.
@@ -340,6 +344,7 @@ TmpDir=<%= @tmpdir %>
 #	1 - allow
 #
 AllowRoot=<%= @allowroot %>
+<% end %>
 
 ### Option: Include
 #	You may include individual files or all files in a directory in the configuration file.
@@ -349,11 +354,13 @@ Include=<%= @include_dir %>
 
 ####### LOADABLE MODULES #######
 
+<% if @zabbix_version == '2.2' %>
 ### Option: LoadModulePath
 #	Full path to location of proxy modules.
 #	Default depends on compilation options.
 #
 LoadModulePath=<%= @loadmodulepath %>
+<% end %>
 
 ### Option: LoadModule
 #	Module to load at proxy startup. Modules are used to extend functionality of the proxy.

@@ -212,12 +212,13 @@ UnsafeUserParameters=<%= @unsafeuserparameters %>
 # disabled. an configuration file should be placed on directory: <%= @include %>
 
 ####### LOADABLE MODULES #######
-
+<% if @zabbix_version == '2.2' %>
 ### Option: LoadModulePath
 #       Full path to location of agent modules.
 #       Default depends on compilation options.
 #
 LoadModulePath=<%= @loadmodulepath %>
+<% end %>
 
 ### Option: LoadModule
 #       Module to load at agent startup. Modules are used to extend functionality of the agent.
