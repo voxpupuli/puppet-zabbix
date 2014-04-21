@@ -7,9 +7,11 @@
   * [Installing the zabbix-server](#zabbix-server)
   * [Installing the zabbix-agent](#zabbix-agent)
   * [Installing the zabbix-proxy](#zabbix-proxy)
+  * [Installing the Java Gateway](#zabbix-javagateway)
   * [zabbix::userparameters, Installing the userparameter files](#userparameters)
 3. [OS Support](#support)
-4. [Todo](#todo)
+4. [Rspec](#rspec)
+5. [Todo](#todo)
 5. [Note](#note)
 
 ##Description
@@ -133,6 +135,10 @@ Zabbix 1.8 isn't supported (yet) with this module. Maybe in the near future.
 
 Ubuntu 10.4 is officially supported by zabbix for Zabbix 2.0. I did have some issues with making it work, probably in a future release it is supported with this module as well.
 
+##Rspec
+
+At the moment, only zabbix::agent has an rspec test. This is currently in progress, but first few basic things are tested.
+
 ##Todo
 The following is an overview of todo actions:
 
@@ -146,4 +152,6 @@ The following is an overview of todo actions:
 
 
 ##Note
-Not specified as required but for working correctly, the epel repository should be available for the 'fping'|'fping6' packages.
+
+*	Not specified as required but for working correctly, the epel repository should be available for the 'fping'|'fping6' packages.
+*	Make sure you have sudo installed and configured with: !requiretty.
