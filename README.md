@@ -21,6 +21,7 @@ This module contains the classes for installing and configuring the following za
   - zabbix-server
   - zabbix-agent
   - zabbix-proxy
+  - zabbix-javagateway
 
 ##How to use
 ###zabbix-server
@@ -36,7 +37,7 @@ class { 'zabbix::server':
 
 When installed succesfully, zabbix web interface will be accessable and you can login with the default credentials:
 
-Username: admin
+Username: Admin
 
 Password: zabbix
 
