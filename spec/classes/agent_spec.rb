@@ -80,8 +80,40 @@ describe 'zabbix::agent' do
 
   # Make sure we have set some vars in zabbix_agentd.conf file. 
   #TODO: A lot more vars has to be added. (Also for specific zabbix version?)
-  it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^Server=192.168.1.1$} }
-  it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^ServerActive=192.168.1.1$} }
+  context 'with pidfile => /var/run/zabbix/zabbix_agentd.pid' do
+    let(:params) { {:pidfile => '/var/run/zabbix/zabbix_agentd.pid'} }
+    it do
+      should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^PidFile=/var/run/zabbix/zabbix_agentd.pid$}
+    end
+  end
+
+  context 'with logfile => /var/run/zabbix/zabbix_agentd.pid' do
+    let(:params) { {:logfile => '/var/log/zabbix/zabbix_agentd.log'} }
+    it do
+      should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LogFile=/var/log/zabbix/zabbix_agentd.log$}
+    end
+  end
+
+  context 'with server => 192.168.1.1' do
+    let(:params) { {:server => '192.168.1.1'} }
+    it do
+      should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^Server=192.168.1.1$}
+    end
+  end
+
+  context 'with ServerActive => 192.168.1.1' do
+    let(:params) { {:serveractive => '192.168.1.1'} }
+    it do
+      should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^ServerActive=192.168.1.1$}
+    end
+  end
+
+  context 'with DebugLevel => 4' do
+    let(:params) { {:debuglevel => '4'} }
+    it do
+      should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^DebugLevel=4$}
+    end
+  end
 
   # So if manage_firewall is set to true, it should install
   # the firewall rule.
