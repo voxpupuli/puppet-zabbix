@@ -72,7 +72,7 @@ This will install the zabbix java gataway for checking jmx items. It can run wit
 class { 'zabbix::javagateway': }
 ```
 
-When using zabbix::javagateway, you'll need to add the 'javagateway' parameter and assign the correct ip address.
+When using zabbix::javagateway, you'll need to add the 'javagateway' parameter and assign the correct ip address for the zabbix::server or zabbix::proxy instance.
 
 Usage example for an zabbix::server:
 
