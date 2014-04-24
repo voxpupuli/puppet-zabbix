@@ -94,10 +94,52 @@ describe 'zabbix::agent' do
     end
   end
 
+  context 'with DebugLevel => 4' do
+    let(:params) { {:debuglevel => '4'} }
+    it do
+      should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^DebugLevel=4$}
+    end
+  end
+
+  context 'with logfilesize => 4' do
+    let(:params) { {:logfilesize => '4'} }
+    it do
+      should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LogFileSize=4$}
+    end
+  end
+
+  context 'with EnableRemoteCommands => 1' do
+    let(:params) { {:enableremotecommands => '1'} }
+    it do
+      should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^EnableRemoteCommands=1$}
+    end
+  end
+
+  context 'with LogRemoteCommands => 0' do
+    let(:params) { {:logremotecommands => '0'} }
+    it do
+      should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LogRemoteCommands=0$}
+    end
+  end
+
   context 'with server => 192.168.1.1' do
     let(:params) { {:server => '192.168.1.1'} }
     it do
       should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^Server=192.168.1.1$}
+    end
+  end
+
+  context 'with ListenPort => 192.168.1.1' do
+    let(:params) { {:listenport => '10050'} }
+    it do
+      should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^ListenPort=10050$}
+    end
+  end
+
+  context 'with StartAgents => 3' do
+    let(:params) { {:startagents => '3'} }
+    it do
+      should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^StartAgents=3$}
     end
   end
 
@@ -108,12 +150,76 @@ describe 'zabbix::agent' do
     end
   end
 
-  context 'with DebugLevel => 4' do
-    let(:params) { {:debuglevel => '4'} }
+  context 'with Hostname => 192.168.1.1' do
+    let(:params) { {:hostname => '10050'} }
     it do
-      should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^DebugLevel=4$}
+      should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^Hostname=10050$}
     end
   end
+
+  context 'with HostnameItem => system.hostname' do
+    let(:params) { {:hostnameitem => 'system.hostname'} }
+    it do
+      should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^HostnameItem=system.hostname$}
+    end
+  end
+
+  context 'with RefreshActiveChecks => 120' do
+    let(:params) { {:refreshactivechecks => '120'} }
+    it do
+      should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^RefreshActiveChecks=120$}
+    end
+  end
+  
+  context 'with BufferSend => 5' do
+    let(:params) { {:buffersend => '5'} }
+    it do
+      should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^BufferSend=5$}
+    end
+  end
+
+  context 'with BufferSize => 100' do
+    let(:params) { {:buffersize => '100'} }
+    it do
+      should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^BufferSize=100$}
+    end
+  end
+
+  context 'with Timeout => 30' do
+    let(:params) { {:timeout => '30'} }
+    it do
+      should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^Timeout=30$}
+    end
+  end
+
+  context 'with AllowRoot => 0' do
+    let(:params) { {:allowroot => '0'} }
+    it do
+      should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^AllowRoot=0$}
+    end
+  end
+
+  context 'with Include => /etc/zabbix/zabbix_agentd.d/' do
+    let(:params) { {:include_dir => '/etc/zabbix/zabbix_agentd.d/'} }
+    it do
+      should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^Include=/etc/zabbix/zabbix_agentd.d/$}
+    end
+  end
+
+  context 'with UnsafeUserParameters => 0' do
+    let(:params) { {:unsafeuserparameters => '0'} }
+    it do
+      should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^UnsafeUserParameters=0$}
+    end
+  end
+
+#  context 'with LoadModulePath => ${libdir}/modules' do
+#    let(:params) { {:loadmodulepath => '${libdir}/modules'} }
+#    it do
+#      should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LoadModulePath=${libdir}/modules$}
+#    end
+#  end
+
 
   # So if manage_firewall is set to true, it should install
   # the firewall rule.
