@@ -94,7 +94,9 @@ DBName=<%= @dbname %>
 ### Option: DBSchema
 #	Schema name. Used for IBM DB2.
 #
-
+<% if @dbschema %>
+DBSchema=<%= @dbschema %>
+<% end %>
 
 ### Option: DBUser
 #	Database user. Ignored for SQLite.
@@ -369,5 +371,5 @@ LoadModulePath=<%= @loadmodulepath %>
 #	It is allowed to include multiple LoadModule parameters.
 #
 <% if @loadmodule %>
-LoadModule = <%= loadmodule %>
+LoadModule=<%= @loadmodule %>
 <% end %>
