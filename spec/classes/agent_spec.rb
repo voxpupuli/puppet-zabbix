@@ -11,8 +11,6 @@ describe 'zabbix::agent' do
     end
 
     describe 'with repo' do
-      let(:facts) {{:operatingsystem => 'RedHat', :operatingsystemrelease => '6.5'}}
-
       # Make sure we have the zabbix::repo 
       it do 
         should contain_class('zabbix::repo').with({
@@ -29,7 +27,6 @@ describe 'zabbix::agent' do
   end
 
   context "when declaring manage_repo is false" do
-    let(:facts) {{:operatingsystem => 'RedHat', :operatingsystemrelease => '6.5'}}
     let :params do
       { :manage_repo => false }
     end
@@ -63,7 +60,7 @@ describe 'zabbix::agent' do
     'owner'   => 'zabbix',
     'group'   => 'zabbix',
     'recurse' => 'true',
-    'purge'   => 'true',
+    'purge'   => 'true'
     )
   }
 
@@ -74,12 +71,11 @@ describe 'zabbix::agent' do
     'group'   => 'zabbix',
     'mode'    => '0644',
     'notify'  => 'Service[zabbix-agent]',
-    'require' => 'Package[zabbix-agent]',
+    'require' => 'Package[zabbix-agent]'
     )
   }
 
   # Make sure we have set some vars in zabbix_agentd.conf file. 
-  #TODO: A lot more vars has to be added. (Also for specific zabbix version?)
   context 'with pidfile => /var/run/zabbix/zabbix_agentd.pid' do
     let(:params) { {:pidfile => '/var/run/zabbix/zabbix_agentd.pid'} }
     it do
@@ -129,13 +125,20 @@ describe 'zabbix::agent' do
     end
   end
 
-  context 'with ListenPort => 192.168.1.1' do
+  context 'with ListenPort => 10050' do
     let(:params) { {:listenport => '10050'} }
     it do
       should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^ListenPort=10050$}
     end
   end
 
+  context 'with listenip => 192.168.1.1' do
+    let(:params) { {:listenip => '192.168.1.1'} }
+    it do
+      should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^ListenIP=192.168.1.1$}
+    end
+  end
+  
   context 'with StartAgents => 3' do
     let(:params) { {:startagents => '3'} }
     it do
@@ -213,12 +216,12 @@ describe 'zabbix::agent' do
     end
   end
 
-#  context 'with LoadModulePath => ${libdir}/modules' do
-#    let(:params) { {:loadmodulepath => '${libdir}/modules'} }
-#    it do
-#      should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LoadModulePath=${libdir}/modules$}
-#    end
-#  end
+  context 'with LoadModulePath => ${libdir}/modules' do
+    let(:params) { {:loadmodulepath => '${libdir}/modules'} }
+    it do
+      should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LoadModulePath=\$\{libdir\}/modules$}
+    end
+  end
 
 
   # So if manage_firewall is set to true, it should install
@@ -242,4 +245,5 @@ describe 'zabbix::agent' do
     end
   end
 
+# END of file
 end
