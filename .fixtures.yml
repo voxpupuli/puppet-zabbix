@@ -4,5 +4,5 @@ fixtures:
     firewall: "git://github.com/puppetlabs/puppetlabs-firewall"
     stdlib: "git://github.com/puppetlabs/puppetlabs-stdlib.git"
     concat: "git://github.com/puppetlabs/puppetlabs-concat.git"
-  symlinks:
-    apache: "#{source_dir}"
+    postgresql: "git://github.com/puppetlabs/puppet-postgresql.git"
+    mysql: "git://github.com/puppetlabs/puppetlabs-mysql.git"
