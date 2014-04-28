@@ -138,21 +138,23 @@ Ubuntu 10.4 is officially supported by zabbix for Zabbix 2.0. I did have some is
 
 ##Rspec
 
-Currently in progress. At the moment only the agent has an basic rspec test. The rest will be in the near future. The goal is for all rspec test in version 0.1.1.
+Currently in progress. At the moment only the agent has an basic rspec test. The rest will be in the near future. The goal is for all rspec test in version 0.2.0.
 
 * agent_spec.rb
-At the moment, only zabbix::agent has an rspec test. A few basic things are tested, like the 'it should contain" package/service and some files. The test needs to be expanded with all parameters, so this will be done in the near future.
+* repo_spec.rb
+* proxy_spec.rb
+
 
 ##Todo
 The following is an overview of todo actions:
 
   - Create rpsec tests.
-  - Support for other linux systems.
   - Better documentation.
   - Use of the zabbix-api:
     - automatically creating hosts in the webinterface
     - automatically assing templates to hosts
-  - Please send me suggestions! 
+ 
+Please send me suggestions! 
 
 
 ##Note
