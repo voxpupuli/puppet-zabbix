@@ -26,9 +26,9 @@ class zabbix::database::postgresql (
   case $::operatingsystem {
     'centos','redhat','oraclelinux' : {
       $zabbix_path   = "/usr/share/doc/zabbix-*-pgsql-${zabbix_version}*/create"
-      $postgres_home = '/var/lib/pgsql/'
+      $postgres_home = '/var/lib/pgsql'
     }
-    'ubuntu','debian' : {
+    default : {
       $zabbix_path   = '/usr/share/zabbix-*-pgsql'
       $postgres_home = '/var/lib/postgresql'
     }
@@ -60,7 +60,7 @@ class zabbix::database::postgresql (
       exec { 'zabbix_proxy_create.sql':
         command  => "cd ${zabbix_path} && sudo -u postgres psql -h localhost -U ${db_user} -d ${db_name} -f schema.sql && touch schema.done",
         path     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        unless   => "test -f ${zabbix_path}schema.done",
+        unless   => "test -f ${zabbix_path}/schema.done",
         provider => 'shell',
         require  => [
           Exec['update_pgpass'],
