@@ -3,7 +3,8 @@ require 'spec_helper'
 describe 'zabbix::agent' do
   # Set some facts / params.
   let(:facts) {{:operatingsystem => 'RedHat', :operatingsystemrelease => '6.5'}}
-  let(:params) { {:server => '192.168.1.1', :serveractive => '192.168.1.1', :manage_repo => true, :zabbix_version => '2.2'} }
+  let(:node) { 'agent.example.com' }
+  let(:params) { {:server => '192.168.1.1', :serveractive => '192.168.1.1'} }
 
   context "when declaring manage_repo is true" do
     let(:params) {{ :manage_repo => true }}
@@ -26,7 +27,7 @@ describe 'zabbix::agent' do
   # Make sure package will be installed.
   it {should contain_package('zabbix-agent').with({
     :ensure => :present,
-    :name   => 'zabbix-agent',
+    :name   => 'zabbix-agent'
   })}
 
   # We need an zabbix-agent service.
