@@ -34,7 +34,7 @@ define zabbix::userparameters (
   $source  = '',
   $content = '',
 ) {
-  $include_dir = getvar('zabbix::agent_include')
+  $include_dir = getvar('zabbix::params::agent_include')
 
   if $source != '' {
     file { "${include_dir}/${name}.conf":
