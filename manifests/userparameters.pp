@@ -43,8 +43,6 @@ define zabbix::userparameters (
       group   => 'zabbix',
       mode    => '0755',
       source  => $source,
-      notify  => Service['zabbix-agent'],
-      require => Service['zabbix-agent'],
     }
   }
 
@@ -55,8 +53,6 @@ define zabbix::userparameters (
       group   => 'zabbix',
       mode    => '0755',
       content => $content,
-      notify  => Service['zabbix-agent'],
-      require => Service['zabbix-agent'],
     }
   }
 }
