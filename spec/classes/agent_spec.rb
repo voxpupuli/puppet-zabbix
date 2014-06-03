@@ -6,60 +6,28 @@ describe 'zabbix::agent' do
   let(:node) { 'agent.example.com' }
   let(:params) { {:server => '192.168.1.1', :serveractive => '192.168.1.1'} }
 
+  # Need the zabbix::repo?
   context "when declaring manage_repo is true" do
     let(:params) {{ :manage_repo => true }}
-    describe 'with repo' do
-      # Make sure we have the zabbix::repo 
-      it { should contain_class('zabbix::repo').with({
-          'zabbix_version' => '2.2',
-      })}
-      # Make sure we have 'required' the zabbix::repo module for the package.
-      it {should contain_package('zabbix-agent').with_require('Class[Zabbix::Repo]')}
+    it { should contain_class('zabbix::repo').with_zabbix_version('2.2') }
+    it { should contain_package('zabbix-agent').with_require('Class[Zabbix::Repo]')}
   end
 
   context "when declaring manage_repo is false" do
     let(:params) {{ :manage_repo => false }}
-    describe 'without repo' do
-        it { should_not contain_class('Zabbix::Repo') }
-    end
+    it { should_not contain_class('Zabbix::Repo') }
   end
 
-  # Make sure package will be installed.
-  it {should contain_package('zabbix-agent').with({
-    :ensure => :present,
-    :name   => 'zabbix-agent'
-  })}
+  # Make sure package will be installed, service running and ensure of directory.
+  it { should contain_package('zabbix-agent').with_ensure('present') }
+  it { should contain_package('zabbix-agent').with_name('zabbix-agent') }
 
-  # We need an zabbix-agent service.
-  it { should contain_service('zabbix-agent').with(
-    'name'       => 'zabbix-agent',
-    'ensure'     => 'running',
-    'enable'     => 'true',
-    'hasstatus'  => 'true',
-    'hasrestart' => 'true',
-    'require'    => 'Package[zabbix-agent]'
-  )}
+  it { should contain_service('zabbix-agent').with_ensure('running') }
+  it { should contain_service('zabbix-agent').with_name('zabbix-agent') }
 
-  # Include directory should be available.
-  it { should contain_file('/etc/zabbix/zabbix_agentd.d/').with(
-    'ensure'  => 'directory',
-    'owner'   => 'zabbix',
-    'group'   => 'zabbix',
-    'recurse' => 'true',
-    'purge'   => 'true'
-  )}
+  it { should contain_file('/etc/zabbix/zabbix_agentd.d').with_ensure('directory') }
 
-  # Make sure the confifuration file is present.
-  it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with(
-    'ensure'  => 'present',
-    'owner'   => 'zabbix',
-    'group'   => 'zabbix',
-    'mode'    => '0644',
-    'notify'  => 'Service[zabbix-agent]',
-    'require' => 'Package[zabbix-agent]'
-  )}
-
-  # Make sure we have set some vars in zabbix_agentd.conf file. 
+  # Configuration file
   context 'with pidfile => /var/run/zabbix/zabbix_agentd.pid' do
     let(:params) { {:pidfile => '/var/run/zabbix/zabbix_agentd.pid'} }
     it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^PidFile=/var/run/zabbix/zabbix_agentd.pid$}}
@@ -78,7 +46,6 @@ describe 'zabbix::agent' do
   context 'with logfilesize => 4' do
     let(:params) { {:logfilesize => '4'} }
     it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LogFileSize=4$}}
-    end
   end
 
   context 'with EnableRemoteCommands => 1' do
@@ -151,9 +118,9 @@ describe 'zabbix::agent' do
     it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^AllowRoot=0$}}
   end
 
-  context 'with Include => /etc/zabbix/zabbix_agentd.d/' do
-    let(:params) { {:include_dir => '/etc/zabbix/zabbix_agentd.d/'} }
-    it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^Include=/etc/zabbix/zabbix_agentd.d/$}}
+  context 'with Include => /etc/zabbix/zabbix_agentd.d' do
+    let(:params) { {:include_dir => '/etc/zabbix/zabbix_agentd.d'} }
+    it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^Include=/etc/zabbix/zabbix_agentd.d$}}
   end
 
   context 'with UnsafeUserParameters => 0' do
@@ -166,21 +133,15 @@ describe 'zabbix::agent' do
     it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LoadModulePath=\$\{libdir\}/modules$}}
   end
 
-  # So if manage_firewall is set to true, it should install
-  # the firewall rule.
+  # Firewall
   context "when declaring manage_firewall is true" do
     let(:params) {{ :manage_firewall => true }}
-    describe 'with firewall' do
-      it { should contain_firewall('150 zabbix-agent') }
-    end
+    it { should contain_firewall('150 zabbix-agent') }
   end
   
-  # If not, we don't want an firewall rule.
   context "when declaring manage_firewall is false" do
     let(:params) {{ :manage_firewall => false }}
-    describe 'without firewall' do
-      it { should_not contain_firewall('150 zabbix-agent') }
-    end
+    it { should_not contain_firewall('150 zabbix-agent') }
   end
-# END of file
+
 end

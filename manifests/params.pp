@@ -80,7 +80,7 @@ class zabbix::params {
   $server_proxyconfigfrequency    = '3600'
   $server_proxydatafrequency      = '1'
   $server_allowroot               = '0'
-  $server_include                 = '/etc/zabbix/zabbix_server.conf.d/'
+  $server_include                 = '/etc/zabbix/zabbix_server.conf.d'
   $server_loadmodulepath          = '${libdir}/modules'
   $server_loadmodule              = undef
 
@@ -108,7 +108,7 @@ class zabbix::params {
   $agent_allowroot                = '0'
   $agent_zabbix_alias             = undef
   $agent_timeout                  = '3'
-  $agent_include                  = '/etc/zabbix/zabbix_agentd.d/'
+  $agent_include                  = '/etc/zabbix/zabbix_agentd.d'
   $agent_unsafeuserparameters     = '0'
   $agent_userparameter            = undef
   $agent_loadmodulepath           = '${libdir}/modules'
@@ -169,7 +169,7 @@ class zabbix::params {
   $proxy_loglowqueries           = '0'
   $proxy_tmpdir                  = '/tmp'
   $proxy_allowroot               = '0'
-  $proxy_include                 = '/etc/zabbix/zabbix_proxy.conf.d/'
+  $proxy_include                 = '/etc/zabbix/zabbix_proxy.conf.d'
   $proxy_loadmodulepath          = '${libdir}/modules'
   $proxy_loadmodule              = undef
 
