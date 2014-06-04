@@ -339,7 +339,11 @@ class zabbix::server (
 
   # Check if manage_repo is true.
   if $manage_repo {
-    include zabbix::repo
+    if ! defined(Class['zabbix::repo']) {
+      class { 'zabbix::repo':
+        zabbix_version => $zabbix_version,
+      }
+    }
     Package["zabbix-server-${db}"] {require => Class['zabbix::repo']}
   }
 
@@ -360,14 +364,17 @@ class zabbix::server (
       package { "zabbix-web-${db}":
         ensure  => present,
         require => Package["zabbix-server-${db}"],
-        before  => File['/etc/zabbix/web/zabbix.conf.php'],
-      } ->
+        before  => [
+          File['/etc/zabbix/web/zabbix.conf.php'],
+          Package['zabbix-web']
+          ],
+      }
       package { 'zabbix-web':
-        ensure  => present,
+        ensure => present,
       }
     }
   }
-  
+
   # if we want to manage the databases, we do
   # some stuff. (for maintaining database only.)
   class { 'zabbix::database':
@@ -382,10 +389,15 @@ class zabbix::server (
     before          => Service['zabbix-server'],
   }
 
+  # Workaround for: The redhat provider can not handle attribute enable
+  # This is only happening when using an redhat family version 5.x.
+  if $::osfamily == 'redhat' and $::operatingsystemrelease !~ /^5.*/ {
+    Service['zabbix-server'] { enable     => true }
+  }
+
   # Controlling the 'zabbix-server' service
   service { 'zabbix-server':
     ensure     => running,
-    enable     => true,
     hasstatus  => true,
     hasrestart => true,
     require    => [
@@ -405,7 +417,6 @@ class zabbix::server (
     require => Package["zabbix-server-${db}"],
     replace => true,
     content => template('zabbix/zabbix_server.conf.erb'),
-#    before  => Package["zabbix-server-${db}"]
   }
 
   # Webinterface config file
@@ -415,7 +426,6 @@ class zabbix::server (
     group   => 'zabbix',
     mode    => '0644',
     notify  => Service['zabbix-server'],
-#    require => Package["zabbix-web-${db}"],
     replace => true,
     content => template('zabbix/web/zabbix.conf.php.erb'),
   }
@@ -430,6 +440,7 @@ class zabbix::server (
 
   # Is set to true, it will create the apache vhost.
   if $manage_vhost {
+    include apache
     apache::vhost { $zabbix_url:
       docroot         => '/usr/share/zabbix',
       port            => '80',
