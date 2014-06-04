@@ -336,7 +336,7 @@ describe 'zabbix::proxy' do
   end # END context 'On a RedHat OS' do
 
 
-  # Make sure we have set some vars in zabbix_agentd.conf file. This is configuration file is the same on all
+  # Make sure we have set some vars in zabbix_proxy.conf file. This is configuration file is the same on all
   # operating systems. So we aren't testing this for all opeating systems, just this one.
   context 'zabbix_proxy.conf configuration' do
     let(:facts) {{:operatingsystem => 'RedHat', :operatingsystemrelease => '6.5', :osfamily => 'RedHat',:fqdn => 'rspec.puppet.com'}}
