@@ -63,6 +63,7 @@ DBName=<%= @dbname %>
 ### option: dbschema
 #	schema name. used for ibm db2.
 #
+<% if @dbschema %>DBSchema=<%= @dbschema %><% end %>
 
 ### option: dbuser
 #	database user. ignored for sqlite.
@@ -78,10 +79,12 @@ DBPassword=<%= @dbpassword %>
 ### option: dbsocket
 #	path to mysql socket.
 #
+<% if @dbsocket %>DBSocket=<%= @dbsocket %><% end %>
 
 ### option: dbport
 #	database port when not using local socket. ignored for sqlite.
 #
+<% if @dbport %>DBPort=<%= @dbport %><% end %>
 
 ############ advanced parameters ################
 
