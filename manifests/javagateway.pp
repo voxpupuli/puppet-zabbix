@@ -51,19 +51,19 @@ class zabbix::javagateway(
   $listenip        = $zabbix::params::javagateway_listenip,
   $listenport      = $zabbix::params::javagateway_listenport,
   $startpollers    = $zabbix::params::javagateway_startpollers,
-) {
+) inherits zabbix::params  {
 
   # Check some if they are boolean
   validate_bool($manage_firewall)
   validate_bool($manage_repo)
 
-  if $::operatingsystem == 'debian' and $::operatingsystemrelease =~ /^6.*/ {
-    fail('We do not work on Debian 6. Please remove class zabbix::javagateway from your node configuration.')
-  }
-
   # Check if manage_repo is true.
   if $manage_repo {
-    include zabbix::repo
+    if ! defined(Class['zabbix::repo']) {
+      class { 'zabbix::repo':
+        zabbix_version => $zabbix_version,
+      }
+    }
     Package['zabbix-java-gateway'] {require => Class['zabbix::repo']}
   }
 
@@ -84,10 +84,15 @@ class zabbix::javagateway(
     content => template('zabbix/zabbix_java_gateway.conf.erb'),
   }
 
+  # Workaround for: The redhat provider can not handle attribute enable
+  # This is only happening when using an redhat family version 5.x.
+  if $::osfamily == 'redhat' and $::operatingsystemrelease !~ /^5.*/ {
+    Service['zabbix-java-gateway'] { enable     => true }
+  }
+
   # Controlling the 'zabbix-java-gateway' service
   service { 'zabbix-java-gateway':
     ensure     => running,
-    enable     => present,
     hasstatus  => true,
     hasrestart => true,
     require    => [

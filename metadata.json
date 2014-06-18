@@ -6,7 +6,7 @@
     }
   ],
   "name": "wdijkerman-zabbix",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "summary": "Installing and maintaining zabbix instances",
   "author": "Werner Dijkerman",
   "description": "This module contains the classes for installing the following zabbix components:\n- zabbix-server\n- zabbix-agent\n- zabbix-proxy\n- zabbix-javagateway",

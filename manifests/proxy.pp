@@ -298,7 +298,11 @@ class zabbix::proxy (
 
   # Check if manage_repo is true.
   if $manage_repo {
-    include zabbix::repo
+    if ! defined(Class['zabbix::repo']) {
+      class { 'zabbix::repo':
+        zabbix_version => $zabbix_version,
+      }
+    }
     Package["zabbix-proxy-${db}"] {require => Class['zabbix::repo']}
   }
 
@@ -321,10 +325,15 @@ class zabbix::proxy (
     } # END default
   } # END case $::operatingsystem
 
+  # Workaround for: The redhat provider can not handle attribute enable
+  # This is only happening when using an redhat family version 5.x.
+  if $::osfamily == 'redhat' and $::operatingsystemrelease !~ /^5.*/ {
+    Service['zabbix-proxy'] { enable     => true }
+  }
+
   # Controlling the 'zabbix-proxy' service
   service { 'zabbix-proxy':
     ensure     => running,
-    enable     => true,
     hasstatus  => true,
     hasrestart => true,
     require    => [
@@ -336,24 +345,24 @@ class zabbix::proxy (
 
   # if we want to manage the databases, we do
   # some stuff. (for maintaining database only.)
-  if $::operatingsystem == 'debian' and $::operatingsystemrelease =~ /^6.*/ {
-    notify {'We do not work on Debian 6. Please do create the database and inserting basic configuration manually.': }
-  } else {
-    class { 'zabbix::database':
-      manage_database => $manage_database,
-      dbtype          => $dbtype,
-      zabbix_type     => 'proxy',
-      zabbix_version  => $zabbix_version,
-      db_name         => $dbname,
-      db_user         => $dbuser,
-      db_pass         => $dbpassword,
-      db_host         => $dbhost,
-      before          => Service['zabbix-proxy'],
-    }
+  class { 'zabbix::database':
+    manage_database => $manage_database,
+    dbtype          => $dbtype,
+    zabbix_type     => 'proxy',
+    zabbix_version  => $zabbix_version,
+    db_name         => $dbname,
+    db_user         => $dbuser,
+    db_pass         => $dbpassword,
+    db_host         => $dbhost,
+    before          => Service['zabbix-proxy'],
   }
 
   # Configuring the zabbix-proxy configuration file
   file { '/etc/zabbix/zabbix_proxy.conf':
+    ensure  => present,
+    owner   => 'zabbix',
+    group   => 'zabbix',
+    mode    => '0644',
     notify  => Service['zabbix-proxy'],
     require => Package["zabbix-proxy-${db}"],
     replace => true,
