@@ -28,7 +28,7 @@ class zabbix::database::mysql (
     'centos','redhat','oraclelinux' : {
       $zabbix_path = "/usr/share/doc/zabbix-*-mysql-${zabbix_version}*/create"
     }
-    'ubuntu','debian' : {
+    default : {
       $zabbix_path = '/usr/share/zabbix-*-mysql'
     }
   }
@@ -82,5 +82,5 @@ class zabbix::database::mysql (
     default: {
       fail 'We do not work.'
     }
-  } # END case $zabbix_type 
+  } # END case $zabbix_type
 }
