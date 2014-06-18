@@ -4,6 +4,19 @@ Below an overview of all changes in the releases.
 
 Version (Release date)
 
+0.2.0  (2014-06-18)
+
+  * Added rspec test for zabbix::agent
+  * Added rspec test for zabbix::repo
+  * Added rspec test for zabbix::proxy
+  * Added rspec test for zabbix::server
+  * Added rspec test for zabbix::database{mysql,postgresql}
+  * Added rspec test for zabbix::userparameters
+  * Added rspec test for zabbix::javagateway
+  * zabbix::userparameters fixed via pull request github (By 'suff')  --> Thanks!
+  * Removed some documented settings
+  * nodeid wasn't working with zabbix_server.conf template
+
 0.1.0  (2014-04-17)
 
   * Added manage_repo parameter. If set to true, it will install the apt/yum repository.
