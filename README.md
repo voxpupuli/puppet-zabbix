@@ -12,7 +12,7 @@
 3. [OS Support](#support)
 4. [Rspec](#rspec)
 5. [Todo](#todo)
-6. [Contributors](#Contributors)
+6. [Contributors](#contributors)
 7. [Note](#note)
 
 ##Description
