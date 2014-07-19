@@ -63,6 +63,10 @@
            "operatingsystemrelease":[ "5.0", "6.0" ]
        },
        {
+            "operatingsystem":"XenServer",
+            "operatingsystemrelease":[ "6.0"]
+       },
+       {
            "operatingsystem":"Ubuntu",
            "operatingsystemrelease":[ "12.04" ]
        },
