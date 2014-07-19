@@ -4,6 +4,11 @@ Below an overview of all changes in the releases.
 
 Version (Release date)
 
+0.3.0  (2014-07-??)
+
+  * Added repository for scientific (Thanks to: gattebury)
+  * Added repository for Xenserver (Thanks to: sq4ind)
+
 0.2.0  (2014-06-18)
 
   * Added rspec test for zabbix::agent

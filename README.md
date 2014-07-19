@@ -12,7 +12,8 @@
 3. [OS Support](#support)
 4. [Rspec](#rspec)
 5. [Todo](#todo)
-5. [Note](#note)
+6. [Contributors](#Contributors)
+7. [Note](#note)
 
 ##Description
 
@@ -166,6 +167,12 @@ The following is an overview of todo actions:
     - automatically assing templates to hosts
  
 Please send me suggestions! 
+
+##Contributors
+The following have contributed to this puppet module:
+ * Suff
+ * gattebury
+ * sq4ind
 
 
 ##Note
