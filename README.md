@@ -174,6 +174,7 @@ The following have contributed to this puppet module:
  * gattebury
  * sq4ind
 
+Many thanks for this!
 
 ##Note
 
