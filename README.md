@@ -179,3 +179,4 @@ The following have contributed to this puppet module:
 
 *	Not specified as required but for working correctly, the epel repository should be available for the 'fping'|'fping6' packages.
 *	Make sure you have sudo installed and configured with: !requiretty.
+*   Make sure that selinux is permissive or disabled.
