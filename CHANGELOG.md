@@ -4,6 +4,10 @@ Below an overview of all changes in the releases.
 
 Version (Release date)
 
+0.3.1  (2014-08-01)
+
+  * Added support for Puppet Enterprise 3.2 and 3.3
+
 0.3.0  (2014-07-19)
 
   * Added repository for scientific (Thanks to: gattebury)

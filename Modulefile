@@ -1,9 +1,9 @@
 name    'wdijkerman-zabbix'
-version '0.3.0'
+version '0.3.1'
 source 'https://github.com/dj-wasabi/puppet-zabbix.git'
 author 'Werner Dijkerman'
 license 'Apache Version 2.0'
-summary 'Installing and maintaining zabbix instances'
+summary 'Installing and maintaining zabbix instances. Will install server, proxy, java-gateway and agent on RedHat/Debian/Ubuntu.'
 description 'This module contains the classes for installing the following zabbix components:
 - zabbix-server
 - zabbix-agent

@@ -132,6 +132,7 @@ Zabbix 2.0:
   * Ubuntu 12.04
   * Debian 6, 7
 
+This module is support on both the community as the Enterprise version of Puppet. 
 
 Zabbix 1.8 isn't supported (yet) with this module. Maybe in the near future.
 
