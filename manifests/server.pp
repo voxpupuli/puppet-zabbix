@@ -255,6 +255,9 @@ class zabbix::server (
   $manage_vhost            = $zabbix::params::manage_vhost,
   $manage_firewall         = $zabbix::params::manage_firewall,
   $manage_repo             = $zabbix::params::manage_repo,
+  $manage_resources        = $zabbix::params::manage_resources,
+  $zabbix_api_user         = $zabbix::params::server_api_user,
+  $zabbix_api_pass         = $zabbix::params::server_api_pass,
   $nodeid                  = $zabbix::params::server_nodeid,
   $listenport              = $zabbix::params::server_listenport,
   $sourceip                = $zabbix::params::server_sourceip,
@@ -323,6 +326,20 @@ class zabbix::server (
   validate_bool($manage_database)
   validate_bool($manage_vhost)
   validate_bool($manage_firewall)
+  validate_bool($manage_resources)
+
+
+  if $manage_resources {
+    package { 'zabbixapi':
+      ensure   => present,
+      provider => 'gem',
+    } ->
+    class { 'zabbix::resources::server': 
+      zabbix_url  => $zabbix_url,
+      zabbix_user => $zabbix_api_user,
+      zabbix_pass => $zabbix_api_pass,
+    }
+  }
 
   # use the correct db.
   case $dbtype {

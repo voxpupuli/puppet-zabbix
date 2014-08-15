@@ -19,8 +19,11 @@ class zabbix::params {
   $manage_vhost                   = true
   $manage_firewall                = false
   $manage_repo                    = true
+  $manage_resources               = false
 
   # Server specific params
+  $server_api_user                = 'Admin'
+  $server_api_pass                = 'zabbix'
   $server_nodeid                  = '0'
   $server_listenport              = '10051'
   $server_sourceip                = undef
@@ -85,6 +88,10 @@ class zabbix::params {
   $server_loadmodule              = undef
 
   # Agent specific params
+  $monitored_by_proxy             = undef
+  $agent_use_ip                   = true
+  $agent_zbx_group                = 'Linux servers'
+  $agent_zbx_templates            = [ 'Template OS Linux', 'Template App SSH Service' ]
   $agent_pidfile                  = '/var/run/zabbix/zabbix_agentd.pid'
   $agent_logfile                  = '/var/log/zabbix/zabbix_agentd.log'
   $agent_logfilesize              = '100'
@@ -115,6 +122,8 @@ class zabbix::params {
   $agent_loadmodule               = undef
 
   # Proxy specific params
+  $proxy_use_ip                  = true
+  $proxy_zbx_templates           = [ 'Template App Zabbix Proxy' ]
   $proxy_mode                    = '0'
   $proxy_zabbix_server_host      = undef
   $proxy_zabbix_server_port      = '10051'

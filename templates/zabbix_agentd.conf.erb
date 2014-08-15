@@ -78,8 +78,8 @@ ListenPort=<%= @listenport %>
 #       list of comma delimited ip addresses that the agent should listen on.
 #       first ip address is sent to zabbix server if connecting to it to retrieve list of active checks.
 #
-<% if @listenip -%>
-ListenIP=<%= @listenip %>
+<% if @listen_ip -%>
+ListenIP=<%= @listen_ip %>
 <% end -%>
 
 ### option: startagents

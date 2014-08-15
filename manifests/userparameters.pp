@@ -31,8 +31,9 @@
 # Copyright 2014 Werner Dijkerman
 #
 define zabbix::userparameters (
-  $source  = '',
-  $content = '',
+  $source   = '',
+  $content  = '',
+  $template = '',
 ) {
   $include_dir = $zabbix::agent::include_dir
 
@@ -53,6 +54,16 @@ define zabbix::userparameters (
       group   => 'zabbix',
       mode    => '0755',
       content => $content,
+    }
+  }
+
+  # If template is defined, it means we have an template in zabbix
+  # which needs to be loaded for this host. When exported resources is
+  # used/enabled, we do this automatically.
+  if $template != '' {
+    zabbix::resources::userparameters { "${hostname}_${name}":
+      hostname => $::fqdn,
+      template => $template,
     }
   }
 }

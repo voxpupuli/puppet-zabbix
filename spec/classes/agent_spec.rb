@@ -68,8 +68,8 @@ describe 'zabbix::agent' do
     it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^ListenPort=10050$}}
   end
 
-  context 'with listenip => 192.168.1.1' do
-    let(:params) { {:listenip => '192.168.1.1'} }
+  context 'with listen ip => 192.168.1.1' do
+    let(:params) { {:listen_ip => '192.168.1.1'} }
     it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^ListenIP=192.168.1.1$}}
   end
   
