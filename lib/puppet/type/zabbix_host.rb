@@ -6,15 +6,15 @@ Puppet::Type.newtype(:zabbix_host) do
   end
 
   newparam(:hostname, :namevar => true) do
-    desc 'An arbitrary name used as the identity of the resource.'
+      desc 'FQDN of the machine.'
   end
 
   newparam(:ipaddress) do
-    desc 'The DNS name or IP address of the machine running zabbix agent.'
+    desc 'The IP address of the machine running zabbix agent.'
   end
 
   newparam(:use_ip) do
-      desc 'Using ipadress instead of dns to connect.'
+      desc 'Using ipadress instead of dns to connect. Is used by the zabbix-api command.'
   end
 
   newparam(:port) do
@@ -34,15 +34,15 @@ Puppet::Type.newtype(:zabbix_host) do
   end
 
   newparam(:zabbix_url) do
-    desc 'Whether it is monitored by an proxy or not.'
+      desc 'The url on which the zabbix-api is available.'
   end
 
   newparam(:zabbix_user) do
-    desc 'Whether it is monitored by an proxy or not.'
+    desc 'Zabbix-api username.'
   end
 
   newparam(:zabbix_pass) do
-    desc 'Whether it is monitored by an proxy or not.'
+      desc 'Zabbix-api password.'
   end
 end
 
