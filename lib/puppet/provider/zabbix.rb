@@ -47,11 +47,6 @@ class Puppet::Provider::Zabbix < Puppet::Provider
       template_array = zbx.templates.get_ids_by_host( :hostids => [zbx.hosts.get_id(:host => host)] )
 
       template_array.include?("#{template_id}")
-      #if template_array.include?(template_id) == true
-      #    return true
-      #else
-      #    return false
-      #end
   end
 
   def self.is_a_number?(s)

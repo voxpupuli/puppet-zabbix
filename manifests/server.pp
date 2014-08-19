@@ -40,6 +40,18 @@
 # [*manage_repo*]
 #   When true, it will create repository for installing the server.
 #
+# [*manage_resouces*]
+#   When true, it will export resources to something like puppetdb.
+#   When set to true, you'll need to configure 'storeconfigs' to make
+#   this happen. Default is set to false, as not everyone has this
+#   enabled.
+#
+# [*zabbix_api_user*]
+#   Name of the user which the api should connect to. Default: Admin
+#
+# [*zabbix_api_pass*]
+#   Password of the user which connects to the api. Default: zabbix
+#
 # [*nodeid*]
 #   Unique nodeid in distributed setup.
 #
@@ -328,11 +340,21 @@ class zabbix::server (
   validate_bool($manage_firewall)
   validate_bool($manage_resources)
 
-
+  # So if manage_resources is set to true, we can send some data
+  # to the puppetdb. We will include an class, otherwise when it
+  # is set to false, you'll get warnings like this:
+  # "Warning: You cannot collect without storeconfigs being set"
   if $manage_resources {
+    if ! defined(Package['ruby-devel']) {
+      package { 'ruby-devel':
+        ensure => 'installed',
+      }
+    }
+
     package { 'zabbixapi':
-      ensure   => present,
+      ensure   => 'installed',
       provider => 'gem',
+      require  => Package['ruby-devel'],
     } ->
     class { 'zabbix::resources::server': 
       zabbix_url  => $zabbix_url,

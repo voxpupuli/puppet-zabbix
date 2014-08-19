@@ -27,6 +27,17 @@
 # [*manage_repo*]
 #   When true, it will create repository for installing the proxy.
 #
+# [*manage_resources*]
+#   When true, it will export resources so that the zabbix-server can create
+#   via the zabbix-api proxy.
+#
+# [*use_ip*]
+#   When true, when creating proxies via the zabbix-api, it will configure that
+#   connection should me made via ip, not fqdn.
+#
+# [*zbx_templates*]
+#   Template which will be added when proxy is configured.
+#
 # [*mode*]
 #   Proxy operating mode.
 #
@@ -300,6 +311,10 @@ class zabbix::proxy (
     $listen_ip = undef
   }
 
+  # So if manage_resources is set to true, we can send some data
+  # to the puppetdb. We will include an class, otherwise when it
+  # is set to false, you'll get warnings like this:
+  # "Warning: You cannot collect without storeconfigs being set"
   if $manage_resources {
     class { 'zabbix::resources::proxy':
       hostname  => $::fqdn,

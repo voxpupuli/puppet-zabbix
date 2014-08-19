@@ -27,8 +27,18 @@
 #   enabled.
 #
 # [*monitored_by_proxy*]
-#   When true and if 'manage_resources' is set to true, when puppet runs
-#   it will create via zabbix-api an host with this name.
+#   When this is monitored by an proxy, please fill in the name of this proxy.
+#   If the proxy is also installed via this module, please fill in the FQDN
+#
+# [*agent_use_ip*]
+#   When true, when creating hosts via the zabbix-api, it will configure that
+#   connection should me made via ip, not fqdn.
+#
+# [*zbx_group*]
+#   Name of thehostgroup where this host needs to be added.
+#
+# [*zbx_templates*]
+#   List of templates which will be added when host is configured.
 #
 # [*pidfile*]
 #   Name of pid file.

@@ -2,20 +2,16 @@
 
 ####Table of Contents
 
-1. [Description](#description)
-2. [How to use](#how-to-use)
-  * [Installing the zabbix-server](#zabbix-server)
-  * [Installing the zabbix-agent](#zabbix-agent)
-  * [Installing the zabbix-proxy](#zabbix-proxy)
-  * [Installing the Java Gateway](#zabbix-javagateway)
-  * [zabbix::userparameters, Installing the userparameter files](#userparameters)
-3. [OS Support](#support)
-4. [Rspec](#rspec)
-5. [Todo](#todo)
-6. [Contributors](#contributors)
-7. [Note](#note)
+1. [Overview](#overview)
+2. [Module Description - What the module does and why it is useful](#module-description)
+3. [Setup - The basics of getting started with the zabbix module](#setup)
+4. [Usage - Configuration options and additional functionality](#usage)
+5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
+6. [Limitations - OS compatibility, etc.](#limitations)
+7. [Development - Contributors](#contributors)
+8. [Some notes](#note)
 
-##Description
+##Overview
 
 This module contains the classes for installing and configuring the following zabbix components:
 
@@ -24,30 +20,53 @@ This module contains the classes for installing and configuring the following za
   - zabbix-proxy
   - zabbix-javagateway
 
-##How to use
+##Module Description
+When using this module, you can monitor your whole environment with zabbix. It can install the various zabbix components like the server and agent, but you will also be able to install specific "userparameter" file which zabbix can use for monitoring.  
+
+With the 0.4.0 release, you can - when you have configured exported resources - configure agents and proxies in the webinterface. So when you add an zabbix::agent to an host, it first install the agent onto the host. It will send some data to the puppetdb and when puppet runs on the zabbix-server it will create this new host via the zabbix-api.
+
+Be aware when you have a lot of hosts, it will increase the puppet runtime on the zabbix-server host. It will check via the zabbix-api if hosts exits and costs time. 
+
+This module make uses of this gem: https://github.com/express42/zabbixapi
+With this gem it is possible to create/update hosts/proxy in ruby easy. 
+
+##Setup
+As this puppet module contains specific components for zabbix, you'll need to specify which you want to install. Every zabbix component has his own zabbix:: class. Here you'll find each component.
+
 ###zabbix-server
 This will install an basic zabbix-server instance. 
 
-You will need to supply one parameter: zabbix_url. This is the url on which the zabbix instance will be available. In the example below, the zabbix webinterface will be: http://zabbix.example.com. 
+You will need to supply one parameter: zabbix_url. This is the url on which the zabbix instance will be available. With the example at "setup", the zabbix webinterface will be: http://zabbix.example.com. 
 
+When installed succesfully, zabbix web interface will be accessable and you can login with the default credentials:
+
+Username: Admin
+Password: zabbix
+
+###zabbix-agent
+This will install the zabbix-agent. It will need at least 1 parameter to function, the name or ipaddress of the zabbix-server (or zabbix-proxy if this is used.). Default is 127.0.0.1, which only works for the zabbix agent when installed on the same host as zabbix-server (or zabbix-proxy).
+
+###zabbix-proxy
+This will install an zabbix-proxy instance. It will need at least 1 parameter to function, the name or ipaddress of the zabbix-server. Default is 127.0.0.1, which wouldn't work. Be aware, the zabbix::proxy can't be installed on the same server as zabbix::server.
+
+###zabbix-javagateway
+This will install the zabbix java gataway for checking jmx items. It can run without any parameters.
+
+When using zabbix::javagateway, you'll need to add the 'javagateway' parameter and assign the correct ip address for the zabbix::server or zabbix::proxy instance.
+
+###userparameters
+You can use userparameter files (or specific entries) to install it into the agent.
+
+##Usage
+The following will provide an basic usage of the zabbix components.
+###zabbix-server
 ```ruby
 class { 'zabbix::server':
   zabbix_url => 'zabbix.example.com',
 }
 ```
 
-When installed succesfully, zabbix web interface will be accessable and you can login with the default credentials:
-
-Username: Admin
-
-Password: zabbix
-
-#### manage_database
-When the parameter 'manage_database' is set to true (Which is default), it will create the database and loads the sql files. Default the postgresql will be used as backend, mentioned in the params.pp file. You'll have to include the postgresql (or mysql) module yourself, as this module will require it.
-
 ###zabbix-agent
-This will install the zabbix-agent. It will need at least 1 parameter to function, the name or ipaddress of the zabbix-server (or zabbix-proxy if this is used.). Default is 127.0.0.1, which only works for the zabbix agent when installed on the same host as zabbix-server (or zabbix-proxy).
-
 ```ruby
 class { 'zabbix::agent':
   server => '192.168.1.1',
@@ -55,7 +74,6 @@ class { 'zabbix::agent':
 ```
 
 ###zabbix-proxy
-This will install an zabbix-proxy instance. It will need at least 1 parameter to function, the name or ipaddress of the zabbix-server. Default is 127.0.0.1, which wouldn't work. Be aware, the zabbix::proxy can't be installed on the same server as zabbix::server. 
 
 ```ruby
 class { 'zabbix::proxy':
@@ -63,18 +81,11 @@ class { 'zabbix::proxy':
   zabbix_server_port => '10051',
 }
 ```
-
-#### manage_database
-When the parameter 'manage_database' is set to true (Which is default), it will create the database and loads the sql files. Default the postgresql will be used as backend, mentioned in the params.pp file. You'll have to include the postgresql (or mysql) module yourself, as this module will require it.
-
 ###zabbix-javagateway
-This will install the zabbix java gataway for checking jmx items. It can run without parameters.
 
 ```ruby
 class { 'zabbix::javagateway': }
 ```
-
-When using zabbix::javagateway, you'll need to add the 'javagateway' parameter and assign the correct ip address for the zabbix::server or zabbix::proxy instance.
 
 Usage example for an zabbix::server:
 
@@ -93,10 +104,7 @@ class { 'zabbix::proxy':
   javagateway        => '192.168.1.2',
 }
 ```
-
-###userparameters
-You can use userparameter files (or specific entries) to install it into the agent.
-
+###zabbix-userparameters
 Using an 'source' file:
 
 ```ruby
@@ -113,61 +121,89 @@ zabbix::userparameters { 'mysql.conf':
 }
 ```
 
-##Support
-The module is only supported on:
+##Reference
+There are some overall parameters which exists on the classes (zabbix::server, zabbix::proxy, zabbix::agent & zabbix::javagateway):
+* `zabbix_version`: You can specifiy which zabbix release needs to be installed. Default is '2.2'. 
+* `manage_firewall`: Wheter you want to manage the firewall. If true (Which is default), iptables will be configured to allow communications to zabbix ports.
+* `manage_repo`:  If zabbix needs to be installed from the zabbix repositories (Default is true). When you have your own repositories, you'll set this to false. But you'll have to make sure that your repositorie is installed on the host.
+
+The following is only availabe for the following classes: zabbix::server, zabbix::proxy & zabbix::agent
+* `manage_resources`: As of release 0.4.0, when this parameter is set to true (Default is false) it make use of exported resources. You'll have an puppetdb configured before you can use this option. Information from the zabbix::agent, zabbix::proxy and zabbix::userparameters are able to export resources, which will be loaded on the zabbix::server.
+
+
+###zabbix-server
+* `zabbix_url`: This is the url on which Zabbix should be available. Please make sure that the entry exists in the DNS configuration.
+* `dbtype`: Which database is used for zabbix. Default is postgresql.
+* `manage_database`: When the parameter 'manage_database' is set to true (Which is default), it will create the database and loads the sql files. Default the postgresql will be used as backend, mentioned in the params.pp file. You'll have to include the postgresql (or mysql) module yourself, as this module will require it.
+* `zabbix_timezone`: On which timezone the machine is placed. This information is needed for the apache virtual host.
+* `manage_vhost`: Will create an apache virtual host. Default is true.
+* `zabbix_api_user`: Username of user in Zabbix which is able to create hosts and edit hosts via the zabbix-api. Default: Admin
+* `zabbix_api_pass`: Password for the user in Zabbix for zabbix-api usage. Default: zabbix
+
+There are some more zabbix specific parameters, please check them by opening the manifest file.
+
+###zabbix-agent
+* `server`: This is the ipaddress of the zabbix-server or zabbix-proxy.
+
+The following parameters is only needed when `manage_resources` is set to true:
+* `monitored_by_proxy`: When an agent is monitored via an proxy, enter the name of the proxy. The name is found in the webinterface via: Administration -> DM. If it isn't monitored by an proxy or `manage_resources` is false, this parameter can be empty.
+* `agent_use_ip`: Default is set to true. Zabbix server (or proxy) will connect to this host via ip instead of fqdn. When set to false, it will connect via fqdn.
+* `zbx_group`: Name of the hostgroup on which the agent will be installed. There can only be one hostgroup defined and should exists in the webinterface. Default: Linux servers
+* `zbx_templates`: Name of the templates which will be assigned when agent is installed. Default (Array): 'Template OS Linux', 'Template App SSH Service'
+
+There are some more zabbix specific parameters, please check them by opening the manifest file.
+
+###zabbix-proxy
+* `zabbix_server_host`: The ipaddress or fqdn of the zabbix server.  
+* `zabbix_server_port`: The port of the zabbix server. Default: 10051
+* `manage_database`: When the parameter 'manage_database' is set to true (Which is default), it will create the database and loads the sql files. Default the postgresql will be used as backend, mentioned in the params.pp file. You'll have to include the postgresql (or mysql) module yourself, as this module will require it.
+
+The following parameters is only needed when `manage_resources` is set to true:
+* `use_ip`: Default is set to true. 
+* `zbx_templates`: List of templates which are needed for the zabbix-proxy. Default: 'Template App Zabbix Proxy'
+* `mode`: Which kind of proxy it is. 0 -> active, 1 -> passive
+
+There are some more zabbix specific parameters, please check them by opening the manifest file.
+
+###zabbix-javagateway
+There are some zabbix specific parameters, please check them by opening the manifest file.
+
+###zabbix-userparameters
+
+* `source`: File which holds several userparameter entries.
+* `content`: When you have 1 userparameter entry which you want to install.
+* `template`: When you use exported resources (when manage_resources on other components is set to true) you'll can add the name of the template which correspondents with the 'content' or 'source' which you add. The template will be added to the host.
+
+##limitations
+The module is only supported on the following operating systems:
 
 Zabbix 2.2:
 
   * CentOS 5.x, 6.x
   * RedHat 5.x, 6.x
   * OracleLinux 5.x, 6.x
+  * Scientific Linux 5.x, 6.x
   * Ubuntu 12.04
   * Debian 7
+  * xenserver 6
 
 Zabbix 2.0:
 
   * CentOS 5.x, 6.x
   * RedHat 5.x, 6.x
   * OracleLinux 5.x, 6.x
+  * Scientific Linux 5.x, 6.x
   * Ubuntu 12.04
   * Debian 6, 7
+  * xenserver 6
 
-This module is support on both the community as the Enterprise version of Puppet. 
+This module is supported on both the community as the Enterprise version of Puppet. 
 
-Zabbix 1.8 isn't supported (yet) with this module. Maybe in the near future.
+Zabbix 1.8 isn't supported (yet) with this module. 
 
 Ubuntu 10.4 is officially supported by zabbix for Zabbix 2.0. I did have some issues with making it work, probably in a future release it is supported with this module as well.
 
-##Rspec
-
-Added with 0.2.0 rspec tests for the following:
-
-* agent_spec.rb
-* repo_spec.rb
-* server_spec.rb
-* proxy_spec.rb
-* database_spec.rb
-* javagateway_spec.rb
-* userparameters_spec.rb
-
-
-Probaly a litte bit to much tests:
-
-```bash
-Finished in 8 minutes 28 seconds
-515 examples, 0 failures
-```
-
-
-##Todo
-The following is an overview of todo actions:
-
-  - Better documentation.
-  - Use of the zabbix-api:
-    - automatically creating hosts in the webinterface
-    - automatically assing templates to hosts
- 
-Please send me suggestions! 
+Please be aware, that when manage_resources is enabled, it can increase an puppet run on the zabbix-server a lot when you have a lot of hosts. 
 
 ##Contributors
 The following have contributed to this puppet module:
@@ -182,3 +218,4 @@ Many thanks for this!
 *	Not specified as required but for working correctly, the epel repository should be available for the 'fping'|'fping6' packages.
 *	Make sure you have sudo installed and configured with: !requiretty.
 *   Make sure that selinux is permissive or disabled.
+*	Please be aware, that when `manage_resources` is enabled, it can increase an puppet run on the zabbix-server a lot when you have a lot of hosts. 

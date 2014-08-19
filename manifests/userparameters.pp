@@ -8,20 +8,32 @@
 # === Parameters
 #
 # [*source*]
-#   Module to load at server startup.
+#   File which holds several userparameter entries.
 #
 # [*content*]
-#   Module to load at server startup.
+#   When you have 1 userparameter entry which you want to install.
+#
+# [*template*]
+#   When you use exported resources (when manage_resources is set to true on other components) 
+#   you'll can add the name of the template which correspondents with the 'content' or
+#   'source' which you add. The template will be added to the host.
 #
 # === Example
 #
-#  zabbix::userparameters { 'mysql.conf':
+#  zabbix::userparameters { 'mysql':
 #    source => 'puppet:///modules/zabbix/mysqld.conf',
 #  }
 #
-#  zabbix::userparameters { 'mysql.conf':
+#  zabbix::userparameters { 'mysql':
 #    content => 'UserParameter=mysql.ping,mysqladmin -uroot ping | grep -c alive',
 #  }
+#
+#  Or when using exported resources (manage_resources is set to true)
+#  zabbix::userparameters { 'mysql':
+#    source   => 'puppet:///modules/zabbix/mysqld.conf',
+#    template => 'Template App MySQL',
+#  }
+#
 # === Authors
 #
 # Author Name: ikben@werner-dijkerman.nl
