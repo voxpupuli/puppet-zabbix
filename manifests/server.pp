@@ -345,16 +345,24 @@ class zabbix::server (
   # is set to false, you'll get warnings like this:
   # "Warning: You cannot collect without storeconfigs being set"
   if $manage_resources {
-    if ! defined(Package['ruby-devel']) {
-      package { 'ruby-devel':
-        ensure => 'installed',
+    if $::osfamily == "redhat" {
+      # With RedHat family members, the ruby-devel needs to be installed
+      # when using an "gem" provider. If this package is not defined
+      # we install it via this class.
+      if ! defined(Package['ruby-devel']) {
+        package { 'ruby-devel':
+          ensure => installed,
+        }
       }
+      Package['zabbixapi'] { require => Package['ruby-devel']}
     }
 
+    # Installing the zabbixapi gem package. We need this gem for
+    # communicating with the zabbix-api. This is way better then
+    # doing it ourself.
     package { 'zabbixapi':
       ensure   => 'installed',
       provider => 'gem',
-      require  => Package['ruby-devel'],
     } ->
     class { 'zabbix::resources::server': 
       zabbix_url  => $zabbix_url,
@@ -393,6 +401,9 @@ class zabbix::server (
 
   case $::operatingsystem {
     'ubuntu', 'debian' : {
+      package { "php5-${db}":
+        ensure => present,
+      } ->
       package { 'zabbix-frontend-php':
         ensure  => present,
         require => Package["zabbix-server-${db}"],
@@ -406,7 +417,7 @@ class zabbix::server (
         before  => [
           File['/etc/zabbix/web/zabbix.conf.php'],
           Package['zabbix-web']
-          ],
+        ],
       }
       package { 'zabbix-web':
         ensure => present,

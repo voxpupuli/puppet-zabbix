@@ -1,7 +1,7 @@
 class Puppet::Provider::Zabbix < Puppet::Provider
 
   def self.require_zabbix
-    require "zabbixapi"
+      require "zabbixapi"
   end
 
   def self.create_connection(zabbix_url,zabbix_user,zabbix_pass)
@@ -50,7 +50,7 @@ class Puppet::Provider::Zabbix < Puppet::Provider
   end
 
   def self.is_a_number?(s)
-    s.to_s.match(/\A[+-]?\d+?(\.\d+)?\Z/) == nil ? false : true
+      s.to_s.match(/\A[+-]?\d+?(\.\d+)?\Z/) == nil ? false : true
   end
 
 end

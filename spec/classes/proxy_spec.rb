@@ -70,6 +70,11 @@ describe 'zabbix::proxy' do
       it { should_not contain_class('Zabbix::Repo') }
     end # END context 'when declaring manage_repo is false'
 
+    context "when declaring manage_resources is true" do
+        let(:params) {{ :manage_resources => true }}
+        it { should contain_class('zabbix::resources::proxy') }
+    end
+
     # Include directory should be available.
     it { should contain_file('/etc/zabbix/zabbix_proxy.conf.d').with_ensure('directory') }
     it { should contain_file('/etc/zabbix/zabbix_proxy.conf.d').with_require('File[/etc/zabbix/zabbix_proxy.conf]') }
@@ -181,6 +186,11 @@ describe 'zabbix::proxy' do
       it { should_not contain_class('Zabbix::Repo') }
     end # END context 'when declaring manage_repo is false'
 
+    context "when declaring manage_resources is true" do
+        let(:params) {{ :manage_resources => true }}
+        it { should contain_class('zabbix::resources::proxy') }
+    end
+
     # Include directory should be available.
     it { should contain_file('/etc/zabbix/zabbix_proxy.conf.d').with_ensure('directory') }
     it { should contain_file('/etc/zabbix/zabbix_proxy.conf.d').with_require('File[/etc/zabbix/zabbix_proxy.conf]') }
@@ -290,6 +300,11 @@ describe 'zabbix::proxy' do
       let(:params) {{ :manage_repo => false }}
       it { should_not contain_class('Zabbix::Repo') }
     end # END context 'when declaring manage_repo is false'
+
+    context "when declaring manage_resources is true" do
+        let(:params) {{ :manage_resources => true }}
+        it { should contain_class('zabbix::resources::proxy') }
+    end
 
     # Include directory should be available.
     it { should contain_file('/etc/zabbix/zabbix_proxy.conf.d').with_ensure('directory') }

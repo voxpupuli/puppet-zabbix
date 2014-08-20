@@ -13,6 +13,11 @@ describe 'zabbix::agent' do
     it { should contain_package('zabbix-agent').with_require('Class[Zabbix::Repo]')}
   end
 
+  context "when declaring manage_resources is true" do
+    let(:params) {{ :manage_resources => true }}
+    it { should contain_class('zabbix::resources::agent') }
+  end
+
   context "when declaring manage_repo is false" do
     let(:params) {{ :manage_repo => false }}
     it { should_not contain_class('Zabbix::Repo') }
@@ -69,7 +74,7 @@ describe 'zabbix::agent' do
   end
 
   context 'with listen ip => 192.168.1.1' do
-    let(:params) { {:listen_ip => '192.168.1.1'} }
+    let(:params) { {:listenip => '192.168.1.1'} }
     it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^ListenIP=192.168.1.1$}}
   end
   

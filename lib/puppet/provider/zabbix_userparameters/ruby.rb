@@ -3,7 +3,6 @@ Puppet::Type.type(:zabbix_userparameters).provide(:ruby, :parent => Puppet::Prov
 
     def create
         zabbix_url = @resource[:zabbix_url]
-
         if zabbix_url != ''
             self.class.require_zabbix
         end
@@ -40,9 +39,7 @@ Puppet::Type.type(:zabbix_userparameters).provide(:ruby, :parent => Puppet::Prov
     end
 
     def destroy
-
         zabbix_url = @resource[:zabbix_url]
-
         if zabbix_url != ''
             self.class.require_zabbix
         end
