@@ -255,3 +255,11 @@ The reason I think this is basically a very specific incarnation of #6907 is bec
 ```
 
 After another puppet run, it will run succesfully.
+
+* On a Red Hat family server, the 2nd run will sometimes go into error: 
+
+```ruby
+Could not evaluate: Connection refused - connect(2)
+```
+
+When running puppet again (for 3rd time) everything goes fine.
