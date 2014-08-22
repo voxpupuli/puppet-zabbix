@@ -69,7 +69,7 @@
 #
 # [*listenip*]
 #   List of comma delimited ip addresses that the agent should listen on.
-#   You can also specify which network interface it should listen on. 
+#   You can also specify which network interface it should listen on.
 #
 #   Example:
 #   listenip => 'eth0',  or
@@ -206,7 +206,7 @@ class zabbix::agent (
   # is set to for example "eth1" or "bond0.73".
   if ($listenip =~ /^(eth|bond).*/) {
     $int_name = "ipaddress_${listenip}"
-    $listen_ip = inline_template("<%= scope.lookupvar(int_name) %>")
+    $listen_ip = inline_template('<%= scope.lookupvar(int_name) %>')
   } elsif is_ip_address($listenip) {
     $listen_ip = $listenip
   } else {

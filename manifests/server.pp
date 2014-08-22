@@ -345,7 +345,7 @@ class zabbix::server (
   # is set to false, you'll get warnings like this:
   # "Warning: You cannot collect without storeconfigs being set"
   if $manage_resources {
-    if $::osfamily == "redhat" {
+    if $::osfamily == 'redhat' {
       # With RedHat family members, the ruby-devel needs to be installed
       # when using an "gem" provider. If this package is not defined
       # we install it via this class.
@@ -364,7 +364,7 @@ class zabbix::server (
       ensure   => 'installed',
       provider => 'gem',
     } ->
-    class { 'zabbix::resources::server': 
+    class { 'zabbix::resources::server':
       zabbix_url  => $zabbix_url,
       zabbix_user => $zabbix_api_user,
       zabbix_pass => $zabbix_api_pass,

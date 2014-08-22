@@ -2,7 +2,7 @@
 #
 # This will create an resources into puppetdb
 # for automatically configuring agent into
-# zabbix front-end. 
+# zabbix front-end.
 #
 # === Requirements
 #

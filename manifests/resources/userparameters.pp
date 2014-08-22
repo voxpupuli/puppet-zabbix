@@ -2,7 +2,7 @@
 #
 # This will create an resources into puppetdb
 # for automatically configuring agent into
-# zabbix front-end. 
+# zabbix front-end.
 #
 # === Requirements
 #
@@ -16,7 +16,7 @@ define zabbix::resources::userparameters (
   $hostname,
   $template,
 ) {
-  
+
   @@zabbix_userparameters { "${hostname}_${name}":
     hostname    => $hostname,
     template    => $template,

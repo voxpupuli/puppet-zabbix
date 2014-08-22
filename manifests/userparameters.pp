@@ -14,7 +14,7 @@
 #   When you have 1 userparameter entry which you want to install.
 #
 # [*template*]
-#   When you use exported resources (when manage_resources is set to true on other components) 
+#   When you use exported resources (when manage_resources is set to true on other components)
 #   you'll can add the name of the template which correspondents with the 'content' or
 #   'source' which you add. The template will be added to the host.
 #

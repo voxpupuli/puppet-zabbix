@@ -304,7 +304,7 @@ class zabbix::proxy (
   # is set to for example "eth1" or "bond0.73".
   if ($listenip =~ /^(eth|bond).*/) {
     $int_name = "ipaddress_${listenip}"
-    $listen_ip = inline_template("<%= scope.lookupvar(int_name) %>")
+    $listen_ip = inline_template('<%= scope.lookupvar(int_name) %>')
   } elsif is_ip_address($listenip) {
     $listen_ip = $listenip
   } else {
