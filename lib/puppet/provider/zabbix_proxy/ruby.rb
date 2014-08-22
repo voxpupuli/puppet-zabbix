@@ -3,10 +3,14 @@ Puppet::Type.type(:zabbix_proxy).provide(:ruby, :parent => Puppet::Provider::Zab
 
     def create
         zabbix_url = @resource[:zabbix_url]
+
+        # Check if we have an zabbix_url. If so, we are about
+        # to run on the zabbix-server.
         if zabbix_url != ''
             self.class.require_zabbix
         end
 
+        # Set some vars
         host = @resource[:hostname]
         ipaddress = @resource[:ipaddress]
         use_ip = @resource[:use_ip]
@@ -57,14 +61,16 @@ Puppet::Type.type(:zabbix_proxy).provide(:ruby, :parent => Puppet::Provider::Zab
 
     def exists?
         zabbix_url = @resource[:zabbix_url]
+        
         if zabbix_url != ''
             self.class.require_zabbix
         end
+       
         host = @resource[:hostname]
         zabbix_user = @resource[:zabbix_user]
         zabbix_pass = @resource[:zabbix_pass]
 
-      self.class.check_proxy(host,zabbix_url,zabbix_user,zabbix_pass)
+        self.class.check_proxy(host,zabbix_url,zabbix_user,zabbix_pass)
     end
 
 end

@@ -5,11 +5,28 @@
 1. [Overview](#overview)
 2. [Module Description - What the module does and why it is useful](#module-description)
 3. [Setup - The basics of getting started with the zabbix module](#setup)
+ 	* [zabbix-server](#setup-zabbix-server)
+ 	* [zabbix-agent](#setup-zabbix-agent)
+ 	* [zabbix-proxy](#setup-zabbix-proxy)
+ 	* [zabbix-javagateway](#setup-zabbix-javagateway)
+ 	* [zabbix-userparameters](#setup-userparameters)
 4. [Usage - Configuration options and additional functionality](#usage)
+    * [zabbix-server](#usage-zabbix-server)
+    * [zabbix-agent](#usage-zabbix-agent)
+    * [zabbix-proxy](#usage-zabbix-proxy)
+    * [zabbix-javagateway](#usage-zabbix-javagateway)
+    * [zabbix-userparameters](#usage-zabbix-userparameters)
 5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
+    * [zabbix-server](#reference-zabbix-server)
+    * [zabbix-agent](#reference-zabbix-agent)
+    * [zabbix-proxy](#reference-zabbix-proxy)
+    * [zabbix-javagateway](#reference-zabbix-javagateway)
+    * [zabbix-userparameters](#reference-zabbix-userparameters)
 6. [Limitations - OS compatibility, etc.](#limitations)
 7. [Development - Contributors](#contributors)
-8. [Some notes](#note)
+8. [Notes](#note)
+    * [Some overall notes](#standard-usage)
+    * [When using exported resources | manage_resources is true](#when-using-exported-resources)
 
 ##Overview
 
@@ -33,7 +50,7 @@ With this gem it is possible to create/update hosts/proxy in ruby easy.
 ##Setup
 As this puppet module contains specific components for zabbix, you'll need to specify which you want to install. Every zabbix component has his own zabbix:: class. Here you'll find each component.
 
-###zabbix-server
+###Setup zabbix-server
 This will install an basic zabbix-server instance. 
 
 You will need to supply one parameter: zabbix_url. This is the url on which the zabbix instance will be available. With the example at "setup", the zabbix webinterface will be: http://zabbix.example.com. 
@@ -43,37 +60,37 @@ When installed succesfully, zabbix web interface will be accessable and you can 
 Username: Admin
 Password: zabbix
 
-###zabbix-agent
+###Setup zabbix-agent
 This will install the zabbix-agent. It will need at least 1 parameter to function, the name or ipaddress of the zabbix-server (or zabbix-proxy if this is used.). Default is 127.0.0.1, which only works for the zabbix agent when installed on the same host as zabbix-server (or zabbix-proxy).
 
-###zabbix-proxy
+###Setup zabbix-proxy
 This will install an zabbix-proxy instance. It will need at least 1 parameter to function, the name or ipaddress of the zabbix-server. Default is 127.0.0.1, which wouldn't work. Be aware, the zabbix::proxy can't be installed on the same server as zabbix::server.
 
-###zabbix-javagateway
+###Setup zabbix-javagateway
 This will install the zabbix java gataway for checking jmx items. It can run without any parameters.
 
 When using zabbix::javagateway, you'll need to add the 'javagateway' parameter and assign the correct ip address for the zabbix::server or zabbix::proxy instance.
 
-###userparameters
+###Setup userparameters
 You can use userparameter files (or specific entries) to install it into the agent.
 
 ##Usage
 The following will provide an basic usage of the zabbix components.
-###zabbix-server
+###Usage zabbix-server
 ```ruby
 class { 'zabbix::server':
   zabbix_url => 'zabbix.example.com',
 }
 ```
 
-###zabbix-agent
+###Usage zabbix-agent
 ```ruby
 class { 'zabbix::agent':
   server => '192.168.1.1',
 }
 ```
 
-###zabbix-proxy
+###Usage zabbix-proxy
 
 ```ruby
 class { 'zabbix::proxy':
@@ -81,7 +98,7 @@ class { 'zabbix::proxy':
   zabbix_server_port => '10051',
 }
 ```
-###zabbix-javagateway
+###Usage zabbix-javagateway
 
 ```ruby
 class { 'zabbix::javagateway': }
@@ -104,7 +121,7 @@ class { 'zabbix::proxy':
   javagateway        => '192.168.1.2',
 }
 ```
-###zabbix-userparameters
+###Usage zabbix-userparameters
 Using an 'source' file:
 
 ```ruby
@@ -131,7 +148,7 @@ The following is only availabe for the following classes: zabbix::server, zabbix
 * `manage_resources`: As of release 0.4.0, when this parameter is set to true (Default is false) it make use of exported resources. You'll have an puppetdb configured before you can use this option. Information from the zabbix::agent, zabbix::proxy and zabbix::userparameters are able to export resources, which will be loaded on the zabbix::server.
 
 
-###zabbix-server
+###Reference zabbix-server
 * `zabbix_url`: This is the url on which Zabbix should be available. Please make sure that the entry exists in the DNS configuration.
 * `dbtype`: Which database is used for zabbix. Default is postgresql.
 * `manage_database`: When the parameter 'manage_database' is set to true (Which is default), it will create the database and loads the sql files. Default the postgresql will be used as backend, mentioned in the params.pp file. You'll have to include the postgresql (or mysql) module yourself, as this module will require it.
@@ -142,7 +159,7 @@ The following is only availabe for the following classes: zabbix::server, zabbix
 
 There are some more zabbix specific parameters, please check them by opening the manifest file.
 
-###zabbix-agent
+###Reference zabbix-agent
 * `server`: This is the ipaddress of the zabbix-server or zabbix-proxy.
 
 The following parameters is only needed when `manage_resources` is set to true:
@@ -153,7 +170,7 @@ The following parameters is only needed when `manage_resources` is set to true:
 
 There are some more zabbix specific parameters, please check them by opening the manifest file.
 
-###zabbix-proxy
+###Reference zabbix-proxy
 * `zabbix_server_host`: The ipaddress or fqdn of the zabbix server.  
 * `zabbix_server_port`: The port of the zabbix server. Default: 10051
 * `manage_database`: When the parameter 'manage_database' is set to true (Which is default), it will create the database and loads the sql files. Default the postgresql will be used as backend, mentioned in the params.pp file. You'll have to include the postgresql (or mysql) module yourself, as this module will require it.
@@ -165,10 +182,10 @@ The following parameters is only needed when `manage_resources` is set to true:
 
 There are some more zabbix specific parameters, please check them by opening the manifest file.
 
-###zabbix-javagateway
+###Reference zabbix-javagateway
 There are some zabbix specific parameters, please check them by opening the manifest file.
 
-###zabbix-userparameters
+###Reference zabbix-userparameters
 
 * `source`: File which holds several userparameter entries.
 * `content`: When you have 1 userparameter entry which you want to install.
@@ -214,8 +231,27 @@ The following have contributed to this puppet module:
 Many thanks for this!
 
 ##Note
-
+###Standard usage
 *	Not specified as required but for working correctly, the epel repository should be available for the 'fping'|'fping6' packages.
 *	Make sure you have sudo installed and configured with: !requiretty.
 *   Make sure that selinux is permissive or disabled.
+
+
+###When using exported resources
 *	Please be aware, that when `manage_resources` is enabled, it can increase an puppet run on the zabbix-server a lot when you have a lot of hosts. 
+*	First run of puppet on the zabbix-server can result in this error:
+
+```ruby
+Error: Could not run Puppet configuration client: cannot load such file -- zabbixapi
+Error: Could not run: can't convert Puppet::Util::Log into Integer
+```
+
+See: http://comments.gmane.org/gmane.comp.sysutils.puppet.user/47508, comment:  Jeff McCune | 20 Nov 20:42 2012
+
+```quote 
+This specific issue is a chicken and egg problem where by a provider needs a gem, but the catalog run itself is the thing that provides the gem dependency. That is to say, even in Puppet 3.0 where we delay loading all of the providers until after pluginsync finishes, the catalog run hasn't yet installed the gem when the provider is loaded.
+
+The reason I think this is basically a very specific incarnation of #6907 is because that ticket is pretty specific from a product functionality perspective, "You should not have to run puppet twice to use a provider."
+```
+
+After another puppet run, it will run succesfully.
