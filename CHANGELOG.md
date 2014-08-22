@@ -8,7 +8,7 @@ Version (Release date)
 
   * Rewrote the readme.
   * Module can make use of "Exported resources" when `manage_resources` is set to true. The zabbix-server can automatically configure agents and directly monitor the agents. It will make use of the zabbix-api.
-  * Also possible for the listenip parameter to specificy an 'eth?|bond?' address. It will find out what ipaddress it is and uses this as the ListenIP in the zabbix configuration file.
+  * Also possible for the listenip parameter to specificy an 'eth?|bond?' option. It will find out what ipaddress it is and uses this as the ListenIP in the zabbix configuration file. Can be handy when having multiple network interfaces.
 
 0.3.1  (2014-08-01)
 
