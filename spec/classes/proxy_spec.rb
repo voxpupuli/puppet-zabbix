@@ -24,7 +24,7 @@ describe 'zabbix::proxy' do
       # Do stuff for POSTGRESQL database
       describe 'with dbtype as postgresql' do
         let(:params) {{ :dbtype => 'postgresql' }}
-        it { should contain_class('zabbix::repo').with_zabbix_version('2.2') }
+        it { should contain_class('zabbix::repo').with_zabbix_version('2.4') }
         it { should contain_package('zabbix-proxy-pgsql').with_require('Class[Zabbix::Repo]') }
 
         context 'when postgresql is dbtype' do
@@ -47,7 +47,7 @@ describe 'zabbix::proxy' do
       # Do stuff for MYSQL database
       describe 'with dbtype as mysql' do
         let(:params) {{ :dbtype => 'mysql' }}
-        it { should contain_class('zabbix::repo').with_zabbix_version('2.2') }
+        it { should contain_class('zabbix::repo').with_zabbix_version('2.4') }
         it { should contain_package('zabbix-proxy-mysql').with_require('Class[Zabbix::Repo]') }
 
         context 'when postgresql is dbtype' do
@@ -84,7 +84,7 @@ describe 'zabbix::proxy' do
       it { should contain_class('zabbix::database').with_manage_database('true')}
       it { should contain_class('zabbix::database').with_dbtype('postgresql')}
       it { should contain_class('zabbix::database').with_zabbix_type('proxy')}
-      it { should contain_class('zabbix::database').with_zabbix_version('2.2')}
+      it { should contain_class('zabbix::database').with_zabbix_version('2.4')}
       it { should contain_class('zabbix::database').with_db_name('zabbix-proxy')}
       it { should contain_class('zabbix::database').with_db_user('zabbix-proxy')}
       it { should contain_class('zabbix::database').with_db_pass('zabbix-proxy')}
@@ -96,7 +96,7 @@ describe 'zabbix::proxy' do
       it { should contain_class('zabbix::database').with_manage_database('true')}
       it { should contain_class('zabbix::database').with_dbtype('mysql')}
       it { should contain_class('zabbix::database').with_zabbix_type('proxy')}
-      it { should contain_class('zabbix::database').with_zabbix_version('2.2')}
+      it { should contain_class('zabbix::database').with_zabbix_version('2.4')}
       it { should contain_class('zabbix::database').with_db_name('zabbix-proxy')}
       it { should contain_class('zabbix::database').with_db_user('zabbix-proxy')}
       it { should contain_class('zabbix::database').with_db_pass('zabbix-proxy')}
@@ -138,7 +138,7 @@ describe 'zabbix::proxy' do
       # Do stuff for POSTGRESQL database
       describe 'with dbtype as postgresql' do
         let(:params) {{ :dbtype => 'postgresql' }}
-        it { should contain_class('zabbix::repo').with_zabbix_version('2.2') }
+        it { should contain_class('zabbix::repo').with_zabbix_version('2.4') }
         it { should contain_package('zabbix-proxy-pgsql').with_require('Class[Zabbix::Repo]') }
 
         context 'when postgresql is dbtype' do
@@ -200,7 +200,7 @@ describe 'zabbix::proxy' do
       it { should contain_class('zabbix::database').with_manage_database('true')}
       it { should contain_class('zabbix::database').with_dbtype('postgresql')}
       it { should contain_class('zabbix::database').with_zabbix_type('proxy')}
-      it { should contain_class('zabbix::database').with_zabbix_version('2.2')}
+      it { should contain_class('zabbix::database').with_zabbix_version('2.4')}
       it { should contain_class('zabbix::database').with_db_name('zabbix-proxy')}
       it { should contain_class('zabbix::database').with_db_user('zabbix-proxy')}
       it { should contain_class('zabbix::database').with_db_pass('zabbix-proxy')}
@@ -212,7 +212,7 @@ describe 'zabbix::proxy' do
 #      it { should contain_class('zabbix::database').with_manage_database('true')}
 #      it { should contain_class('zabbix::database').with_dbtype('mysql')}
 #      it { should contain_class('zabbix::database').with_zabbix_type('proxy')}
-#      it { should contain_class('zabbix::database').with_zabbix_version('2.2')}
+#      it { should contain_class('zabbix::database').with_zabbix_version('2.4')}
 #      it { should contain_class('zabbix::database').with_db_name('zabbix-proxy')}
 #      it { should contain_class('zabbix::database').with_db_user('zabbix-proxy')}
 #      it { should contain_class('zabbix::database').with_db_pass('zabbix-proxy')}
@@ -255,7 +255,7 @@ describe 'zabbix::proxy' do
       # Do stuff for POSTGRESQL database
       describe 'with dbtype as postgresql' do
         let(:params) {{ :dbtype => 'postgresql' }}
-        it { should contain_class('zabbix::repo').with_zabbix_version('2.2') }
+        it { should contain_class('zabbix::repo').with_zabbix_version('2.4') }
         it { should contain_package('zabbix-proxy-pgsql').with_require('Class[Zabbix::Repo]') }
 
         context 'when postgresql is dbtype' do
@@ -278,7 +278,7 @@ describe 'zabbix::proxy' do
       # Do stuff for MYSQL database
       describe 'with dbtype as mysql' do
         let(:params) {{ :dbtype => 'mysql' }}
-        it { should contain_class('zabbix::repo').with_zabbix_version('2.2') }
+        it { should contain_class('zabbix::repo').with_zabbix_version('2.4') }
         it { should contain_package('zabbix-proxy-mysql').with_require('Class[Zabbix::Repo]') }
 
         context 'when postgresql is dbtype' do
@@ -315,7 +315,7 @@ describe 'zabbix::proxy' do
       it { should contain_class('zabbix::database').with_manage_database('true')}
       it { should contain_class('zabbix::database').with_dbtype('postgresql')}
       it { should contain_class('zabbix::database').with_zabbix_type('proxy')}
-      it { should contain_class('zabbix::database').with_zabbix_version('2.2')}
+      it { should contain_class('zabbix::database').with_zabbix_version('2.4')}
       it { should contain_class('zabbix::database').with_db_name('zabbix-proxy')}
       it { should contain_class('zabbix::database').with_db_user('zabbix-proxy')}
       it { should contain_class('zabbix::database').with_db_pass('zabbix-proxy')}
@@ -327,7 +327,7 @@ describe 'zabbix::proxy' do
       it { should contain_class('zabbix::database').with_manage_database('true')}
       it { should contain_class('zabbix::database').with_dbtype('mysql')}
       it { should contain_class('zabbix::database').with_zabbix_type('proxy')}
-      it { should contain_class('zabbix::database').with_zabbix_version('2.2')}
+      it { should contain_class('zabbix::database').with_zabbix_version('2.4')}
       it { should contain_class('zabbix::database').with_db_name('zabbix-proxy')}
       it { should contain_class('zabbix::database').with_db_user('zabbix-proxy')}
       it { should contain_class('zabbix::database').with_db_pass('zabbix-proxy')}

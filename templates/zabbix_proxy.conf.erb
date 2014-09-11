@@ -208,7 +208,7 @@ JavaGatewayPort=<%= @javagatewayport %>
 StartJavaPollers=<%= @startjavapollers %>
 <% end %>
 
-<% if @zabbix_version == '2.2' %>
+<% if @zabbix_version == '2.2' or @zabbix_version == '2.4' %>
 ### Option: StartVMwareCollectors
 #	Number of pre-forked vmware collector instances.
 #
@@ -338,7 +338,7 @@ LogSlowQueries=<%=  @loglowqueries %>
 #
 TmpDir=<%= @tmpdir %>
 
-<% if @zabbix_version == '2.2' %>
+<% if @zabbix_version == '2.2' or @zabbix_version == '2.4' %>
 ### Option: AllowRoot
 #	Allow the proxy to run as 'root'. If disabled and the proxy is started by 'root', the proxy
 #	will try to switch to user 'zabbix' instead. Has no effect if started under a regular user.
@@ -356,7 +356,7 @@ Include=<%= @include_dir %>
 
 ####### LOADABLE MODULES #######
 
-<% if @zabbix_version == '2.2' %>
+<% if @zabbix_version == '2.2' or @zabbix_version == '2.4' %>
 ### Option: LoadModulePath
 #	Full path to location of proxy modules.
 #	Default depends on compilation options.

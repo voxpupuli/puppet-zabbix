@@ -124,7 +124,7 @@ StartDiscoverers=<%= @startdiscoverers %>
 #	number of pre-forked instances of http pollers.
 #
 StartHTTPPollers=<%= @starthttppollers %>
-<% if @zabbix_version == '2.2' %>
+<% if @zabbix_version == '2.2' or @zabbix_version == '2.4' %>
 ### option: starttimers
 #	number of pre-forked instances of timers.
 #	timers process time-based trigger functions and maintenance periods.
@@ -149,7 +149,7 @@ JavaGatewayPort=<%= @javagatewayport %>
 StartJavaPollers=<%= @startjavapollers %>
 <% end %>
 
-<% if @zabbix_version == '2.2' %>
+<% if @zabbix_version == '2.2' or @zabbix_version == '2.4' %>
 ### option: startvmwarecollectors
 #	number of pre-forked vmware collector instances.
 #
@@ -242,7 +242,7 @@ TrendCacheSize=<%= @trendcachesize %>
 #
 HistoryTextCacheSize=<%= @historytextcachesize %>
 
-<% if @zabbix_version == '2.2' %>
+<% if @zabbix_version == '2.2'  or @zabbix_version == '2.4' %>
 ### option: valuecachesize
 #	size of history value cache, in bytes.
 #	shared memory size for caching item history data requests
@@ -351,7 +351,7 @@ ProxyConfigFrequency=<%= @proxyconfigfrequency %>
 #
 ProxyDataFrequency=<%= @proxydatafrequency %>
 
-<% if @zabbix_version == '2.2' %>
+<% if @zabbix_version == '2.2'  or @zabbix_version == '2.4' %>
 ### option: allowroot
 #	allow the server to run as 'root'. if disabled and the server is started by 'root', the server
 #	will try to switch to user 'zabbix' instead. has no effect if started under a regular user.
@@ -368,7 +368,7 @@ AllowRoot=<%= @allowroot %>
 Include=<%= @include_dir %>
 
 ####### loadable modules #######
-<% if @zabbix_version == '2.2' %>
+<% if @zabbix_version == '2.2' or @zabbix_version == '2.4' %>
 ### option: loadmodulepath
 #	full path to location of server modules.
 #	default depends on compilation options.

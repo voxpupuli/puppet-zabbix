@@ -9,7 +9,7 @@ describe 'zabbix::agent' do
   # Need the zabbix::repo?
   context "when declaring manage_repo is true" do
     let(:params) {{ :manage_repo => true }}
-    it { should contain_class('zabbix::repo').with_zabbix_version('2.2') }
+    it { should contain_class('zabbix::repo').with_zabbix_version('2.4') }
     it { should contain_package('zabbix-agent').with_require('Class[Zabbix::Repo]')}
   end
 
