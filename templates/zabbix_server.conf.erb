@@ -3,13 +3,13 @@
 # visit http://www.zabbix.com
 
 ############ general parameters #################
-
+<% if @zabbix_version != '2.4' %>
 ### option: nodeid
 #	unique nodeid in distributed setup.
 #	0 - standalone server
 #
 NodeID=<%= @nodeid %>
-
+<% end %>
 ### option: listenport
 #	listen port for trapper.
 #
@@ -251,6 +251,7 @@ HistoryTextCacheSize=<%= @historytextcachesize %>
 ValueCacheSize=<%= @valuecachesize %>
 <% end %>
 
+<% if @zabbix_version != '2.4' %>
 ### option: nodenoevents
 #	if set to '1' local events won't be sent to master node.
 #	this won't impact ability of this node to propagate events from its child nodes.
@@ -262,6 +263,7 @@ NodeNoEvents=<%= @nodenoevents %>
 #	this won't impact ability of this node to propagate history from its child nodes.
 #
 NodeNoHistory=<%= @nodenohistory %>
+<% end %>
 
 ### option: timeout
 #	specifies how long we wait for agent, snmp device or external check (in seconds).

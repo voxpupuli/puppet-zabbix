@@ -194,6 +194,15 @@ There are some zabbix specific parameters, please check them by opening the mani
 ##limitations
 The module is only supported on the following operating systems:
 
+Zabbix 2.4:
+
+  * CentOS 6.x
+  * RedHat 6.x
+  * OracleLinux 6.x
+  * Scientific Linux 6.x
+  * Ubuntu 14.04
+  * Debian 7
+
 Zabbix 2.2:
 
   * CentOS 5.x, 6.x

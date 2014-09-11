@@ -349,8 +349,13 @@ describe 'zabbix::server' do
     end
 
     context 'with nodeid => 0' do
-      let(:params) { { :nodeid => '0'} }
+      let(:params) { { :nodeid => '0', :zabbix_version => '2.2'} }
       it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeID=0$}}
+    end
+
+    context 'with nodeid => 0' do
+      let(:params) { { :nodeid => '0', :zabbix_version => '2.4'} }
+      it { should_not contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeID=0$}}
     end
 
     context 'with listenport => 10051' do
@@ -549,13 +554,23 @@ describe 'zabbix::server' do
     end
 
     context 'with nodenoevents => 0' do
-      let(:params) { { :nodenoevents => '0' } }
+      let(:params) { { :nodenoevents => '0', :zabbix_version => '2.4' } }
       it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeNoEvents=0}}
     end
 
+    context 'with nodenoevents => 0' do
+      let(:params) { { :nodenoevents => '0', :zabbix_version => '2.4' } }
+      it { should_not contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeNoEvents=0}}
+    end
+
     context 'with nodenohistory => 0' do
-      let(:params) { { :nodenohistory => '0' } }
+      let(:params) { { :nodenohistory => '0',:zabbix_version => '2.2' } }
       it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeNoHistory=0}}
+    end
+
+    context 'with nodenohistory => 0' do
+      let(:params) { { :nodenohistory => '0', :zabbix_version => '2.4' } }
+      it { should_not contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeNoHistory=0}}
     end
 
     context 'with timeout => 3' do

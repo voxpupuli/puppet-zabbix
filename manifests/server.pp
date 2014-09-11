@@ -54,6 +54,7 @@
 #
 # [*nodeid*]
 #   Unique nodeid in distributed setup.
+#   (Deprecated since 2.4)
 #
 # [*listenport*]
 #   Listen port for trapper.
@@ -182,9 +183,11 @@
 #
 # [*nodenoevents*]
 #   If set to '1' local events won't be sent to master node.
+#   (Deprecated since 2.4)
 #
 # [*nodenohistory*]
 #   If set to '1' local history won't be sent to master node.
+#   (Deprecated since 2.4)
 #
 # [*timeout*]
 #   Specifies how long we wait for agent, snmp device or external check (in seconds).

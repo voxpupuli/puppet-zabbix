@@ -4,6 +4,11 @@ Below an overview of all changes in the releases.
 
 Version (Release date)
 
+0.4.1   (2014-09-11)
+
+  * Added support van Zabbix 2.4
+  * Added Ubuntu 14.04
+
 0.4.0   (2014-08-22)
 
   * Rewrote the readme.

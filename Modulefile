@@ -1,5 +1,5 @@
 name    'wdijkerman-zabbix'
-version '0.4.0'
+version '0.4.1'
 source 'https://github.com/dj-wasabi/puppet-zabbix.git'
 author 'Werner Dijkerman'
 license 'Apache Version 2.0'
