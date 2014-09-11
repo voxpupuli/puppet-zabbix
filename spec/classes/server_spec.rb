@@ -554,7 +554,7 @@ describe 'zabbix::server' do
     end
 
     context 'with nodenoevents => 0' do
-      let(:params) { { :nodenoevents => '0', :zabbix_version => '2.4' } }
+      let(:params) { { :nodenoevents => '0', :zabbix_version => '2.2' } }
       it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeNoEvents=0}}
     end
 
