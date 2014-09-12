@@ -1,4 +1,4 @@
-# == Class: zabbix::backuppc
+# == Class: zabbix::scripts::backuppc
 #
 #  This will install backuppc script used to monitor backuppc
 #
@@ -10,7 +10,7 @@
 #
 # Copyright 2014 Bertrand RETIF
 #
-class zabbix::backuppc () {
+class zabbix::scripts::backuppc () {
   
 # Installing zabbix-sender package
   package { 'zabbix-sender':
