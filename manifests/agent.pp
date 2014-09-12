@@ -4,7 +4,10 @@
 #
 # === Requirements
 #
-# No requirements.
+#  If 'manage_resources' is set to true, you'll need to configure
+#  storeconfigs/exported resources.
+#
+#  Otherwise no requirements.
 #
 # === Parameters
 #
@@ -16,6 +19,26 @@
 #
 # [*manage_repo*]
 #   When true, it will create repository for installing the agent.
+#
+# [*manage_resouces*]
+#   When true, it will export resources to something like puppetdb.
+#   When set to true, you'll need to configure 'storeconfigs' to make
+#   this happen. Default is set to false, as not everyone has this
+#   enabled.
+#
+# [*monitored_by_proxy*]
+#   When this is monitored by an proxy, please fill in the name of this proxy.
+#   If the proxy is also installed via this module, please fill in the FQDN
+#
+# [*agent_use_ip*]
+#   When true, when creating hosts via the zabbix-api, it will configure that
+#   connection should me made via ip, not fqdn.
+#
+# [*zbx_group*]
+#   Name of thehostgroup where this host needs to be added.
+#
+# [*zbx_templates*]
+#   List of templates which will be added when host is configured.
 #
 # [*pidfile*]
 #   Name of pid file.
@@ -39,13 +62,21 @@
 #   Enable logging of executed shell commands as warnings.
 #
 # [*server*]
-#   Llist of comma delimited ip addresses (or hostnames) of zabbix servers.
+#   List of comma delimited ip addresses (or hostnames) of zabbix servers.
 #
 # [*listenport*]
 #   Agent will listen on this port for connections from the server.
 #
 # [*listenip*]
 #   List of comma delimited ip addresses that the agent should listen on.
+#   You can also specify which network interface it should listen on.
+#
+#   Example:
+#   listenip => 'eth0',  or
+#   listenip => 'bond0.73',
+#
+#   It will find out which ip is configured for this ipaddress. Can be handy
+#   if more than 1 interface is on the server.
 #
 # [*startagents*]
 #   Number of pre-forked instances of zabbix_agentd that process passive checks.
@@ -104,9 +135,17 @@
 #
 # === Example
 #
+#  Basic installation:
 #  class { 'zabbix::agent':
 #    zabbix_version => '2.2',
 #    server         => '192.168.1.1',
+#  }
+#
+#  Exported resources:
+#  class { 'zabbix::agent':
+#    manage_resources   => true,
+#    monitored_by_proxy => 'my_proxy_host',
+#    server             => '192.168.1.1',
 #  }
 #
 # === Authors
@@ -121,6 +160,11 @@ class zabbix::agent (
   $zabbix_version       = $zabbix::params::zabbix_version,
   $manage_firewall      = $zabbix::params::manage_firewall,
   $manage_repo          = $zabbix::params::manage_repo,
+  $manage_resources     = $zabbix::params::manage_resources,
+  $monitored_by_proxy   = $zabbix::params::monitored_by_proxy,
+  $agent_use_ip         = $zabbix::params::agent_use_ip,
+  $zbx_group            = $zabbix::params::agent_zbx_group,
+  $zbx_templates        = $zabbix::params::agent_zbx_templates,
   $pidfile              = $zabbix::params::agent_pidfile,
   $logfile              = $zabbix::params::agent_logfile,
   $logfilesize          = $zabbix::params::agent_logfilesize,
@@ -154,6 +198,42 @@ class zabbix::agent (
   # Check some if they are boolean
   validate_bool($manage_firewall)
   validate_bool($manage_repo)
+  validate_bool($manage_resources)
+
+  # Find if listenip is set. If not, we can set to specific ip or
+  # to network name. If more than 1 interfaces are available, we
+  # can find the ipaddress of this specific interface if listenip
+  # is set to for example "eth1" or "bond0.73".
+  if ($listenip =~ /^(eth|bond).*/) {
+    $int_name = "ipaddress_${listenip}"
+    $listen_ip = inline_template('<%= scope.lookupvar(int_name) %>')
+  } elsif is_ip_address($listenip) {
+    $listen_ip = $listenip
+  } else {
+    $listen_ip = undef
+  }
+
+  # So if manage_resources is set to true, we can send some data
+  # to the puppetdb. We will include an class, otherwise when it
+  # is set to false, you'll get warnings like this:
+  # "Warning: You cannot collect without storeconfigs being set"
+  if $manage_resources {
+    if $monitored_by_proxy != ''{
+      $use_proxy = $monitored_by_proxy
+    } else {
+      $use_proxy = ''
+    }
+
+    class { 'zabbix::resources::agent':
+      hostname  => $::fqdn,
+      ipaddress => $listen_ip,
+      use_ip    => $agent_use_ip,
+      port      => $listenport,
+      group     => $zbx_group,
+      templates => $zbx_templates,
+      proxy     => $use_proxy,
+    }
+  }
 
   # Check if manage_repo is true.
   if $manage_repo {

@@ -4,6 +4,26 @@ Below an overview of all changes in the releases.
 
 Version (Release date)
 
+0.4.1   (2014-09-11)
+
+  * Added support van Zabbix 2.4
+  * Added Ubuntu 14.04
+
+0.4.0   (2014-08-22)
+
+  * Rewrote the readme.
+  * Module can make use of "Exported resources" when `manage_resources` is set to true. The zabbix-server can automatically configure agents and directly monitor the agents. It will make use of the zabbix-api.
+  * Also possible for the listenip parameter to specificy an 'eth?|bond?' option. It will find out what ipaddress it is and uses this as the ListenIP in the zabbix configuration file. Can be handy when having multiple network interfaces.
+
+0.3.1  (2014-08-01)
+
+  * Added support for Puppet Enterprise 3.2 and 3.3
+
+0.3.0  (2014-07-19)
+
+  * Added repository for scientific (Thanks to: gattebury)
+  * Added repository for Xenserver (Thanks to: sq4ind)
+
 0.2.0  (2014-06-18)
 
   * Added rspec test for zabbix::agent

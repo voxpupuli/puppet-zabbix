@@ -27,6 +27,17 @@
 # [*manage_repo*]
 #   When true, it will create repository for installing the proxy.
 #
+# [*manage_resources*]
+#   When true, it will export resources so that the zabbix-server can create
+#   via the zabbix-api proxy.
+#
+# [*use_ip*]
+#   When true, when creating proxies via the zabbix-api, it will configure that
+#   connection should me made via ip, not fqdn.
+#
+# [*zbx_templates*]
+#   Template which will be added when proxy is configured.
+#
 # [*mode*]
 #   Proxy operating mode.
 #
@@ -219,6 +230,9 @@ class zabbix::proxy (
   $manage_database         = $zabbix::params::manage_database,
   $manage_firewall         = $zabbix::params::manage_firewall,
   $manage_repo             = $zabbix::params::manage_repo,
+  $manage_resources        = $zabbix::params::manage_resources,
+  $use_ip                  = $zabbix::params::proxy_use_ip,
+  $zbx_templates           = $zabbix::params::proxy_zbx_templates,
   $mode                    = $zabbix::params::proxy_mode,
   $zabbix_server_host      = $zabbix::params::proxy_zabbix_server_host,
   $zabbix_server_port      = $zabbix::params::proxy_zabbix_server_port,
@@ -282,6 +296,39 @@ class zabbix::proxy (
   validate_bool($manage_database)
   validate_bool($manage_firewall)
   validate_bool($manage_repo)
+  validate_bool($manage_resources)
+
+  # Find if listenip is set. If not, we can set to specific ip or
+  # to network name. If more than 1 interfaces are available, we
+  # can find the ipaddress of this specific interface if listenip
+  # is set to for example "eth1" or "bond0.73".
+  if ($listenip =~ /^(eth|bond).*/) {
+    $int_name = "ipaddress_${listenip}"
+    $listen_ip = inline_template('<%= scope.lookupvar(int_name) %>')
+  } elsif is_ip_address($listenip) {
+    $listen_ip = $listenip
+  } else {
+    $listen_ip = undef
+  }
+
+  # So if manage_resources is set to true, we can send some data
+  # to the puppetdb. We will include an class, otherwise when it
+  # is set to false, you'll get warnings like this:
+  # "Warning: You cannot collect without storeconfigs being set"
+  if $manage_resources {
+    class { 'zabbix::resources::proxy':
+      hostname  => $::fqdn,
+      ipaddress => $listen_ip,
+      use_ip    => $use_ip,
+      mode      => $mode,
+      port      => $listenport,
+      templates => $zbx_templates,
+    }
+    zabbix::userparameters { 'Zabbix_Proxy':
+      template => 'Template App Zabbix Proxy',
+    }
+
+  }
 
   # Use the correct db.
   case $dbtype {

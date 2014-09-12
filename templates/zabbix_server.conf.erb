@@ -3,13 +3,13 @@
 # visit http://www.zabbix.com
 
 ############ general parameters #################
-
+<% if @zabbix_version != '2.4' %>
 ### option: nodeid
 #	unique nodeid in distributed setup.
 #	0 - standalone server
 #
 NodeID=<%= @nodeid %>
-
+<% end %>
 ### option: listenport
 #	listen port for trapper.
 #
@@ -124,7 +124,7 @@ StartDiscoverers=<%= @startdiscoverers %>
 #	number of pre-forked instances of http pollers.
 #
 StartHTTPPollers=<%= @starthttppollers %>
-<% if @zabbix_version == '2.2' %>
+<% if @zabbix_version == '2.2' or @zabbix_version == '2.4' %>
 ### option: starttimers
 #	number of pre-forked instances of timers.
 #	timers process time-based trigger functions and maintenance periods.
@@ -149,7 +149,7 @@ JavaGatewayPort=<%= @javagatewayport %>
 StartJavaPollers=<%= @startjavapollers %>
 <% end %>
 
-<% if @zabbix_version == '2.2' %>
+<% if @zabbix_version == '2.2' or @zabbix_version == '2.4' %>
 ### option: startvmwarecollectors
 #	number of pre-forked vmware collector instances.
 #
@@ -242,7 +242,7 @@ TrendCacheSize=<%= @trendcachesize %>
 #
 HistoryTextCacheSize=<%= @historytextcachesize %>
 
-<% if @zabbix_version == '2.2' %>
+<% if @zabbix_version == '2.2'  or @zabbix_version == '2.4' %>
 ### option: valuecachesize
 #	size of history value cache, in bytes.
 #	shared memory size for caching item history data requests
@@ -251,6 +251,7 @@ HistoryTextCacheSize=<%= @historytextcachesize %>
 ValueCacheSize=<%= @valuecachesize %>
 <% end %>
 
+<% if @zabbix_version != '2.4' %>
 ### option: nodenoevents
 #	if set to '1' local events won't be sent to master node.
 #	this won't impact ability of this node to propagate events from its child nodes.
@@ -262,6 +263,7 @@ NodeNoEvents=<%= @nodenoevents %>
 #	this won't impact ability of this node to propagate history from its child nodes.
 #
 NodeNoHistory=<%= @nodenohistory %>
+<% end %>
 
 ### option: timeout
 #	specifies how long we wait for agent, snmp device or external check (in seconds).
@@ -349,7 +351,7 @@ ProxyConfigFrequency=<%= @proxyconfigfrequency %>
 #
 ProxyDataFrequency=<%= @proxydatafrequency %>
 
-<% if @zabbix_version == '2.2' %>
+<% if @zabbix_version == '2.2'  or @zabbix_version == '2.4' %>
 ### option: allowroot
 #	allow the server to run as 'root'. if disabled and the server is started by 'root', the server
 #	will try to switch to user 'zabbix' instead. has no effect if started under a regular user.
@@ -366,7 +368,7 @@ AllowRoot=<%= @allowroot %>
 Include=<%= @include_dir %>
 
 ####### loadable modules #######
-<% if @zabbix_version == '2.2' %>
+<% if @zabbix_version == '2.2' or @zabbix_version == '2.4' %>
 ### option: loadmodulepath
 #	full path to location of server modules.
 #	default depends on compilation options.

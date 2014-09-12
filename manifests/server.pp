@@ -40,8 +40,21 @@
 # [*manage_repo*]
 #   When true, it will create repository for installing the server.
 #
+# [*manage_resouces*]
+#   When true, it will export resources to something like puppetdb.
+#   When set to true, you'll need to configure 'storeconfigs' to make
+#   this happen. Default is set to false, as not everyone has this
+#   enabled.
+#
+# [*zabbix_api_user*]
+#   Name of the user which the api should connect to. Default: Admin
+#
+# [*zabbix_api_pass*]
+#   Password of the user which connects to the api. Default: zabbix
+#
 # [*nodeid*]
 #   Unique nodeid in distributed setup.
+#   (Deprecated since 2.4)
 #
 # [*listenport*]
 #   Listen port for trapper.
@@ -170,9 +183,11 @@
 #
 # [*nodenoevents*]
 #   If set to '1' local events won't be sent to master node.
+#   (Deprecated since 2.4)
 #
 # [*nodenohistory*]
 #   If set to '1' local history won't be sent to master node.
+#   (Deprecated since 2.4)
 #
 # [*timeout*]
 #   Specifies how long we wait for agent, snmp device or external check (in seconds).
@@ -255,6 +270,9 @@ class zabbix::server (
   $manage_vhost            = $zabbix::params::manage_vhost,
   $manage_firewall         = $zabbix::params::manage_firewall,
   $manage_repo             = $zabbix::params::manage_repo,
+  $manage_resources        = $zabbix::params::manage_resources,
+  $zabbix_api_user         = $zabbix::params::server_api_user,
+  $zabbix_api_pass         = $zabbix::params::server_api_pass,
   $nodeid                  = $zabbix::params::server_nodeid,
   $listenport              = $zabbix::params::server_listenport,
   $sourceip                = $zabbix::params::server_sourceip,
@@ -323,6 +341,38 @@ class zabbix::server (
   validate_bool($manage_database)
   validate_bool($manage_vhost)
   validate_bool($manage_firewall)
+  validate_bool($manage_resources)
+
+  # So if manage_resources is set to true, we can send some data
+  # to the puppetdb. We will include an class, otherwise when it
+  # is set to false, you'll get warnings like this:
+  # "Warning: You cannot collect without storeconfigs being set"
+  if $manage_resources {
+    if $::osfamily == 'redhat' {
+      # With RedHat family members, the ruby-devel needs to be installed
+      # when using an "gem" provider. If this package is not defined
+      # we install it via this class.
+      if ! defined(Package['ruby-devel']) {
+        package { 'ruby-devel':
+          ensure => installed,
+        }
+      }
+      Package['zabbixapi'] { require => Package['ruby-devel']}
+    }
+
+    # Installing the zabbixapi gem package. We need this gem for
+    # communicating with the zabbix-api. This is way better then
+    # doing it ourself.
+    package { 'zabbixapi':
+      ensure   => 'installed',
+      provider => 'gem',
+    } ->
+    class { 'zabbix::resources::server':
+      zabbix_url  => $zabbix_url,
+      zabbix_user => $zabbix_api_user,
+      zabbix_pass => $zabbix_api_pass,
+    }
+  }
 
   # use the correct db.
   case $dbtype {
@@ -354,6 +404,9 @@ class zabbix::server (
 
   case $::operatingsystem {
     'ubuntu', 'debian' : {
+      package { "php5-${db}":
+        ensure => present,
+      } ->
       package { 'zabbix-frontend-php':
         ensure  => present,
         require => Package["zabbix-server-${db}"],
@@ -367,7 +420,7 @@ class zabbix::server (
         before  => [
           File['/etc/zabbix/web/zabbix.conf.php'],
           Package['zabbix-web']
-          ],
+        ],
       }
       package { 'zabbix-web':
         ensure => present,

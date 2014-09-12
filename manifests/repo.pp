@@ -67,6 +67,25 @@ class zabbix::repo(
       }
 
     } # END 'centos','redhat','oraclelinux'
+    'XenServer' : {
+      yumrepo { 'zabbix':
+        name     => "Zabbix_${majorrelease}_${::architecture}",
+        descr    => "Zabbix_${majorrelease}_${::architecture}",
+        baseurl  => "http://repo.zabbix.com/zabbix/${zabbix_version}/rhel/5/${::architecture}/",
+        gpgcheck => '1',
+        gpgkey   => 'http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX',
+        priority => '1',
+      }
+      yumrepo { 'zabbix-nonsupported':
+        name     => "Zabbix_nonsupported_${majorrelease}_${::architecture}",
+        descr    => "Zabbix_nonsupported_${majorrelease}_${::architecture}",
+        baseurl  => "http://repo.zabbix.com/non-supported/rhel/5/${::architecture}/",
+        gpgcheck => '1',
+        gpgkey   => 'http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX',
+        priority => '1',
+      }
+
+    } # END 'XenServer'
     'debian' : {
       apt::source { 'zabbix':
         location   => "http://repo.zabbix.com/zabbix/${zabbix_version}/debian/",

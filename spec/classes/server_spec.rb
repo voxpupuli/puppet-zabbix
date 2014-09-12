@@ -19,12 +19,12 @@ describe 'zabbix::server' do
     end
 
     context "when declaring manage_repo is true" do
-      let(:params) { { :manage_repo => true, :zabbix_version => '2.2' }}
+      let(:params) { { :manage_repo => true, :zabbix_version => '2.4' }}
 
       describe 'with dbtype as postgresql' do
         let(:params) {{ :dbtype => 'postgresql' }}
         # Make sure we have the zabbix::repo 
-        it { should contain_class('zabbix::repo').with_zabbix_version('2.2')}
+        it { should contain_class('zabbix::repo').with_zabbix_version('2.4')}
         it { should contain_package('zabbix-server-pgsql').with_require('Class[Zabbix::Repo]')}
 
         it { should contain_package('zabbix-server-pgsql').with_ensure('present') }
@@ -45,7 +45,7 @@ describe 'zabbix::server' do
       describe 'with dbtype as mysql' do
         let(:params) {{ :dbtype => 'mysql' }}
         # Make sure we have the zabbix::repo 
-        it { should contain_class('zabbix::repo').with_zabbix_version('2.2')}
+        it { should contain_class('zabbix::repo').with_zabbix_version('2.4')}
         it { should contain_package('zabbix-server-mysql').with_require('Class[Zabbix::Repo]')}
 
         it { should contain_package('zabbix-server-mysql').with_ensure('present') }
@@ -68,6 +68,11 @@ describe 'zabbix::server' do
       it { should_not contain_class('Zabbix::Repo') }
     end # END context 'when declaring manage_repo is false'
 
+    context "when declaring manage_resources is true" do
+        let(:params) {{ :manage_resources => true }}
+        it { should contain_class('zabbix::resources::server') }
+    end
+
     # Include directory should be available.
     it { should contain_file('/etc/zabbix/zabbix_server.conf.d').with_ensure('directory') }
     it { should contain_file('/etc/zabbix/zabbix_server.conf.d').with_require('File[/etc/zabbix/zabbix_server.conf]') }
@@ -77,7 +82,7 @@ describe 'zabbix::server' do
       it { should contain_class('zabbix::database').with_manage_database('true')}
       it { should contain_class('zabbix::database').with_dbtype('postgresql')}
       it { should contain_class('zabbix::database').with_zabbix_type('server')}
-      it { should contain_class('zabbix::database').with_zabbix_version('2.2')}
+      it { should contain_class('zabbix::database').with_zabbix_version('2.4')}
       it { should contain_class('zabbix::database').with_db_name('zabbix-server')}
       it { should contain_class('zabbix::database').with_db_user('zabbix-server')}
       it { should contain_class('zabbix::database').with_db_pass('zabbix-server')}
@@ -89,7 +94,7 @@ describe 'zabbix::server' do
       it { should contain_class('zabbix::database').with_manage_database('true')}
       it { should contain_class('zabbix::database').with_dbtype('mysql')}
       it { should contain_class('zabbix::database').with_zabbix_type('server')}
-      it { should contain_class('zabbix::database').with_zabbix_version('2.2')}
+      it { should contain_class('zabbix::database').with_zabbix_version('2.4')}
       it { should contain_class('zabbix::database').with_db_name('zabbix-server')}
       it { should contain_class('zabbix::database').with_db_user('zabbix-server')}
       it { should contain_class('zabbix::database').with_db_pass('zabbix-server')}
@@ -125,12 +130,12 @@ describe 'zabbix::server' do
     end
 
     context "when declaring manage_repo is true" do
-      let(:params) { { :manage_repo => true, :zabbix_version => '2.2' }}
+      let(:params) { { :manage_repo => true, :zabbix_version => '2.4' }}
 
       describe 'with dbtype as postgresql' do
         let(:params) {{ :dbtype => 'postgresql' }}
         # Make sure we have the zabbix::repo 
-        it { should contain_class('zabbix::repo').with_zabbix_version('2.2')}
+        it { should contain_class('zabbix::repo').with_zabbix_version('2.4')}
         it { should contain_package('zabbix-server-pgsql').with_require('Class[Zabbix::Repo]')}
 
         it { should contain_package('zabbix-server-pgsql').with_ensure('present') }
@@ -150,7 +155,7 @@ describe 'zabbix::server' do
       describe 'with dbtype as mysql' do
         let(:params) {{ :dbtype => 'mysql' }}
         # Make sure we have the zabbix::repo 
-        it { should contain_class('zabbix::repo').with_zabbix_version('2.2')}
+        it { should contain_class('zabbix::repo').with_zabbix_version('2.4')}
         it { should contain_package('zabbix-server-mysql').with_require('Class[Zabbix::Repo]')}
 
         it { should contain_package('zabbix-server-mysql').with_ensure('present') }
@@ -172,6 +177,11 @@ describe 'zabbix::server' do
       it { should_not contain_class('Zabbix::Repo') }
     end # END context 'when declaring manage_repo is false'
 
+    context "when declaring manage_resources is true" do
+        let(:params) {{ :manage_resources => true }}
+        it { should contain_class('zabbix::resources::server') }
+    end
+
     # Include directory should be available.
     it { should contain_file('/etc/zabbix/zabbix_server.conf.d').with_ensure('directory') }
     it { should contain_file('/etc/zabbix/zabbix_server.conf.d').with_require('File[/etc/zabbix/zabbix_server.conf]') }
@@ -181,7 +191,7 @@ describe 'zabbix::server' do
       it { should contain_class('zabbix::database').with_manage_database('true')}
       it { should contain_class('zabbix::database').with_dbtype('postgresql')}
       it { should contain_class('zabbix::database').with_zabbix_type('server')}
-      it { should contain_class('zabbix::database').with_zabbix_version('2.2')}
+      it { should contain_class('zabbix::database').with_zabbix_version('2.4')}
       it { should contain_class('zabbix::database').with_db_name('zabbix-server')}
       it { should contain_class('zabbix::database').with_db_user('zabbix-server')}
       it { should contain_class('zabbix::database').with_db_pass('zabbix-server')}
@@ -193,7 +203,7 @@ describe 'zabbix::server' do
       it { should contain_class('zabbix::database').with_manage_database('true')}
       it { should contain_class('zabbix::database').with_dbtype('mysql')}
       it { should contain_class('zabbix::database').with_zabbix_type('server')}
-      it { should contain_class('zabbix::database').with_zabbix_version('2.2')}
+      it { should contain_class('zabbix::database').with_zabbix_version('2.4')}
       it { should contain_class('zabbix::database').with_db_name('zabbix-server')}
       it { should contain_class('zabbix::database').with_db_user('zabbix-server')}
       it { should contain_class('zabbix::database').with_db_pass('zabbix-server')}
@@ -229,12 +239,12 @@ describe 'zabbix::server' do
     end
 
     context "when declaring manage_repo is true" do
-      let(:params) { { :manage_repo => true, :zabbix_version => '2.2' }}
+      let(:params) { { :manage_repo => true, :zabbix_version => '2.4' }}
 
       describe 'with dbtype as postgresql' do
         let(:params) {{ :dbtype => 'postgresql' }}
         # Make sure we have the zabbix::repo 
-        it { should contain_class('zabbix::repo').with_zabbix_version('2.2')}
+        it { should contain_class('zabbix::repo').with_zabbix_version('2.4')}
         it { should contain_package('zabbix-server-pgsql').with_require('Class[Zabbix::Repo]')}
 
         it { should contain_package('zabbix-server-pgsql').with_ensure('present') }
@@ -254,7 +264,7 @@ describe 'zabbix::server' do
       describe 'with dbtype as mysql' do
         let(:params) {{ :dbtype => 'mysql' }}
         # Make sure we have the zabbix::repo 
-        it { should contain_class('zabbix::repo').with_zabbix_version('2.2')}
+        it { should contain_class('zabbix::repo').with_zabbix_version('2.4')}
         it { should contain_package('zabbix-server-mysql').with_require('Class[Zabbix::Repo]')}
 
         it { should contain_package('zabbix-server-mysql').with_ensure('present') }
@@ -276,6 +286,11 @@ describe 'zabbix::server' do
       it { should_not contain_class('Zabbix::Repo') }
     end # END context 'when declaring manage_repo is false'
 
+    context "when declaring manage_resources is true" do
+        let(:params) {{ :manage_resources => true }}
+        it { should contain_class('zabbix::resources::server') }
+    end
+
     # Include directory should be available.
     it { should contain_file('/etc/zabbix/zabbix_server.conf.d').with_ensure('directory') }
     it { should contain_file('/etc/zabbix/zabbix_server.conf.d').with_require('File[/etc/zabbix/zabbix_server.conf]') }
@@ -285,7 +300,7 @@ describe 'zabbix::server' do
       it { should contain_class('zabbix::database').with_manage_database('true')}
       it { should contain_class('zabbix::database').with_dbtype('postgresql')}
       it { should contain_class('zabbix::database').with_zabbix_type('server')}
-      it { should contain_class('zabbix::database').with_zabbix_version('2.2')}
+      it { should contain_class('zabbix::database').with_zabbix_version('2.4')}
       it { should contain_class('zabbix::database').with_db_name('zabbix-server')}
       it { should contain_class('zabbix::database').with_db_user('zabbix-server')}
       it { should contain_class('zabbix::database').with_db_pass('zabbix-server')}
@@ -297,7 +312,7 @@ describe 'zabbix::server' do
       it { should contain_class('zabbix::database').with_manage_database('true')}
       it { should contain_class('zabbix::database').with_dbtype('mysql')}
       it { should contain_class('zabbix::database').with_zabbix_type('server')}
-      it { should contain_class('zabbix::database').with_zabbix_version('2.2')}
+      it { should contain_class('zabbix::database').with_zabbix_version('2.4')}
       it { should contain_class('zabbix::database').with_db_name('zabbix-server')}
       it { should contain_class('zabbix::database').with_db_user('zabbix-server')}
       it { should contain_class('zabbix::database').with_db_pass('zabbix-server')}
@@ -334,8 +349,13 @@ describe 'zabbix::server' do
     end
 
     context 'with nodeid => 0' do
-      let(:params) { { :nodeid => '0'} }
+      let(:params) { { :nodeid => '0', :zabbix_version => '2.2'} }
       it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeID=0$}}
+    end
+
+    context 'with nodeid => 0' do
+      let(:params) { { :nodeid => '0', :zabbix_version => '2.4'} }
+      it { should_not contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeID=0$}}
     end
 
     context 'with listenport => 10051' do
@@ -534,13 +554,23 @@ describe 'zabbix::server' do
     end
 
     context 'with nodenoevents => 0' do
-      let(:params) { { :nodenoevents => '0' } }
+      let(:params) { { :nodenoevents => '0', :zabbix_version => '2.2' } }
       it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeNoEvents=0}}
     end
 
+    context 'with nodenoevents => 0' do
+      let(:params) { { :nodenoevents => '0', :zabbix_version => '2.4' } }
+      it { should_not contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeNoEvents=0}}
+    end
+
     context 'with nodenohistory => 0' do
-      let(:params) { { :nodenohistory => '0' } }
+      let(:params) { { :nodenohistory => '0',:zabbix_version => '2.2' } }
       it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeNoHistory=0}}
+    end
+
+    context 'with nodenohistory => 0' do
+      let(:params) { { :nodenohistory => '0', :zabbix_version => '2.4' } }
+      it { should_not contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeNoHistory=0}}
     end
 
     context 'with timeout => 3' do
