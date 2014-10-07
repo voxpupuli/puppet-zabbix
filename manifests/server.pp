@@ -364,7 +364,7 @@ class zabbix::server (
     # communicating with the zabbix-api. This is way better then
     # doing it ourself.
     package { 'zabbixapi':
-      ensure   => 'installed',
+      ensure   => $zabbix_version,
       provider => 'gem',
     } ->
     class { 'zabbix::resources::server':
