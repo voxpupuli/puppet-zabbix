@@ -4,6 +4,13 @@ Below an overview of all changes in the releases.
 
 Version (Release date)
 
+0.?.?	(2014-10-??)
+
+  * zabbixapi gem is installed by version.
+  * Possibility to create SSL vhost. (As requested: https://github.com/dj-wasabi/puppet-zabbix/issues/8)
+  * 
+
+
 0.4.1   (2014-09-11)
 
   * Added support van Zabbix 2.4

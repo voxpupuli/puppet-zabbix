@@ -18,11 +18,12 @@ define zabbix::resources::userparameters (
 ) {
 
   @@zabbix_userparameters { "${hostname}_${name}":
-    hostname    => $hostname,
-    template    => $template,
-    zabbix_url  => '',
-    zabbix_user => '',
-    zabbix_pass => '',
+    hostname       => $hostname,
+    template       => $template,
+    zabbix_url     => '',
+    zabbix_user    => '',
+    zabbix_pass    => '',
+    apache_use_ssl => '',
   }
 
 }

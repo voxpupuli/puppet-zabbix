@@ -40,5 +40,9 @@ Puppet::Type.newtype(:zabbix_proxy) do
     newparam(:zabbix_pass) do
         desc 'Zabbix-api password.'
     end
+    
+    newparam(:apache_use_ssl) do
+        desc 'If apache is uses with ssl'
+    end
 
 end

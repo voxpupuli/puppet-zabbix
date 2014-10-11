@@ -271,6 +271,10 @@ class zabbix::server (
   $manage_firewall         = $zabbix::params::manage_firewall,
   $manage_repo             = $zabbix::params::manage_repo,
   $manage_resources        = $zabbix::params::manage_resources,
+  $apache_use_ssl          = $zabbix::params::apache_use_ssl,
+  $apache_ssl_cert         = $zabbix::params::apache_ssl_cert,
+  $apache_ssl_key          = $zabbix::params::apache_ssl_key,
+  $apache_ssl_cipher       = $zabbix::params::apache_ssl_cipher,
   $zabbix_api_user         = $zabbix::params::server_api_user,
   $zabbix_api_pass         = $zabbix::params::server_api_pass,
   $nodeid                  = $zabbix::params::server_nodeid,
@@ -342,6 +346,7 @@ class zabbix::server (
   validate_bool($manage_vhost)
   validate_bool($manage_firewall)
   validate_bool($manage_resources)
+  validate_bool($apache_use_ssl)
 
   # So if manage_resources is set to true, we can send some data
   # to the puppetdb. We will include an class, otherwise when it
@@ -368,9 +373,10 @@ class zabbix::server (
       provider => 'gem',
     } ->
     class { 'zabbix::resources::server':
-      zabbix_url  => $zabbix_url,
-      zabbix_user => $zabbix_api_user,
-      zabbix_pass => $zabbix_api_pass,
+      zabbix_url     => $zabbix_url,
+      zabbix_user    => $zabbix_api_user,
+      zabbix_pass    => $zabbix_api_pass,
+      apache_use_ssl => $apache_use_ssl,
     }
   }
 
@@ -494,9 +500,36 @@ class zabbix::server (
   # Is set to true, it will create the apache vhost.
   if $manage_vhost {
     include apache
+    # Check if we use ssl. If so, we also create an non ssl
+    # vhost for redirect traffic from non ssl to ssl site.
+    if $apache_use_ssl {
+      # Listen port
+      $apache_listen_port = '443'
+ 
+      # We create nonssl vhost for redirecting non ssl
+      # traffic to https.
+      apache::vhost { "${zabbix_url}_nonssl":
+        docroot        => '/usr/share/zabbix',
+        manage_docroot => false,
+        port           => '80',
+        servername     => $zabbix_url,
+        ssl            => false,
+        rewrites       => [
+          {
+            comment      => 'redirect all to https',
+            rewrite_cond => ['%{SERVER_PORT} !^443$'],
+            rewrite_rule => ["^/(.+)$ https://${zabbix_url}/\$1 [L,R]"],
+          }
+        ],
+      }
+    } else {
+      # So no ssl, so default port 80
+      $apache_listen_port = '80'
+    }
+
     apache::vhost { $zabbix_url:
       docroot         => '/usr/share/zabbix',
-      port            => '80',
+      port            => $apache_listen_port,
       directories     => [
         { path     => '/usr/share/zabbix',
           provider => 'directory',
@@ -532,6 +565,10 @@ class zabbix::server (
     # Set correct timezone.
     php_value date.timezone ${zabbix_timezone}",
       rewrites        => [ { rewrite_rule => ['^$ /index.php [L]'] } ],
+      ssl             => $apache_use_ssl,
+      ssl_cert        => $apache_ssl_cert,
+      ssl_key         => $apache_ssl_key,
+      ssl_cipher      => $apache_ssl_cipher,
     }
   } # END if $manage_vhost
 
