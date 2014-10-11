@@ -46,6 +46,22 @@
 #   this happen. Default is set to false, as not everyone has this
 #   enabled.
 #
+# [*apache_use_ssl*]
+#   Will create an ssl vhost. Also nonssl vhost will be created for redirect 
+#   nonssl to ssl vhost.
+#
+# [*apache_ssl_cert*]
+#   The location of the ssl certificate file. You'll need to make sure this 
+#   file is present on the system, this module will not install this file.
+#
+# [*apache_ssl_key*]
+#   The location of the ssl key file. You'll need to make sure this file is 
+#   present on the system, this module will not install this file.
+#
+# [*apache_ssl_cipher*]
+#   The ssl cipher used. Cipher is used from this website:
+#   https://wiki.mozilla.org/Security/Server_Side_TLS
+#
 # [*zabbix_api_user*]
 #   Name of the user which the api should connect to. Default: Admin
 #

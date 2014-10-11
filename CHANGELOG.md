@@ -4,11 +4,11 @@ Below an overview of all changes in the releases.
 
 Version (Release date)
 
-0.?.?	(2014-10-??)
+0.5.0	(2014-10-11)
 
   * zabbixapi gem is installed by version.
   * Possibility to create SSL vhost. (As requested: https://github.com/dj-wasabi/puppet-zabbix/issues/8)
-  * 
+  * Removed symlink in spec/fixtures/modules dir and updated .fixtures file for this.
 
 
 0.4.1   (2014-09-11)
