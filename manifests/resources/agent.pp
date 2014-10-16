@@ -24,14 +24,15 @@ class zabbix::resources::agent (
 ) {
 
   @@zabbix_host { $hostname:
-    ipaddress   => $ipaddress,
-    use_ip      => $use_ip,
-    port        => $port,
-    group       => $group,
-    templates   => $templates,
-    proxy       => $proxy,
-    zabbix_url  => '',
-    zabbix_user => '',
-    zabbix_pass => '',
+    ipaddress      => $ipaddress,
+    use_ip         => $use_ip,
+    port           => $port,
+    group          => $group,
+    templates      => $templates,
+    proxy          => $proxy,
+    zabbix_url     => '',
+    zabbix_user    => '',
+    zabbix_pass    => '',
+    apache_use_ssl => '',
   }
 }

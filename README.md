@@ -154,6 +154,10 @@ The following is only availabe for the following classes: zabbix::server, zabbix
 * `manage_database`: When the parameter 'manage_database' is set to true (Which is default), it will create the database and loads the sql files. Default the postgresql will be used as backend, mentioned in the params.pp file. You'll have to include the postgresql (or mysql) module yourself, as this module will require it.
 * `zabbix_timezone`: On which timezone the machine is placed. This information is needed for the apache virtual host.
 * `manage_vhost`: Will create an apache virtual host. Default is true.
+* `apache_use_ssl`: Will create an ssl vhost. Also nonssl vhost will be created for redirect nonssl to ssl vhost.
+* `apache_ssl_cert`: The location of the ssl certificate file. You'll need to make sure this file is present on the system, this module will not install this file.
+* `apache_ssl_key`: The location of the ssl key file. You'll need to make sure this file is present on the system, this module will not install this file.
+* `apache_ssl_cipher`: The ssl cipher used. Cipher is used from: https://wiki.mozilla.org/Security/Server_Side_TLS. 
 * `zabbix_api_user`: Username of user in Zabbix which is able to create hosts and edit hosts via the zabbix-api. Default: Admin
 * `zabbix_api_pass`: Password for the user in Zabbix for zabbix-api usage. Default: zabbix
 
