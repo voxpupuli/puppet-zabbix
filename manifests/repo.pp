@@ -19,7 +19,7 @@ class zabbix::repo(
 ) {
 
   # Figuring out which major release we have. Or which release name
-  # for debian/ununtu releases.
+  # for debian/ubuntu releases.
   case $::operatingsystemrelease {
     /^14.04/: {
       $majorrelease = '14'
