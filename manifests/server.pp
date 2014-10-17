@@ -62,6 +62,9 @@
 #   The ssl cipher used. Cipher is used from this website:
 #   https://wiki.mozilla.org/Security/Server_Side_TLS
 #
+# [*apache_ssl_chain*}
+#   The ssl chain file.
+#
 # [*zabbix_api_user*]
 #   Name of the user which the api should connect to. Default: Admin
 #
@@ -580,11 +583,12 @@ class zabbix::server (
     php_value max_input_time 300
     # Set correct timezone.
     php_value date.timezone ${zabbix_timezone}",
-      rewrites        => [ { rewrite_rule => ['^$ /index.php [L]'] } ],
-      ssl             => $apache_use_ssl,
-      ssl_cert        => $apache_ssl_cert,
-      ssl_key         => $apache_ssl_key,
-      ssl_cipher      => $apache_ssl_cipher,
+      rewrites   => [ { rewrite_rule    => ['^$ /index.php [L]'] } ],
+      ssl        => $apache_use_ssl,
+      ssl_cert   => $apache_ssl_cert,
+      ssl_key    => $apache_ssl_key,
+      ssl_cipher => $apache_ssl_cipher,
+      ssl_chain  => $apache_ssl_chain,
     }
   } # END if $manage_vhost
 
