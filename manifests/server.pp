@@ -294,6 +294,7 @@ class zabbix::server (
   $apache_ssl_cert         = $zabbix::params::apache_ssl_cert,
   $apache_ssl_key          = $zabbix::params::apache_ssl_key,
   $apache_ssl_cipher       = $zabbix::params::apache_ssl_cipher,
+  $apache_ssl_chain        = $zabbix::params::apache_ssl_chain,
   $zabbix_api_user         = $zabbix::params::server_api_user,
   $zabbix_api_pass         = $zabbix::params::server_api_pass,
   $nodeid                  = $zabbix::params::server_nodeid,
