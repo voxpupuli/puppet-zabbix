@@ -26,13 +26,13 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, :parent => Puppet::Provider::Zabb
     
     # Get the template ids.
     template_array = Array.new
-    if templates.kind_of?(Array) == true
-        for template in templates
-            template_id = self.class.get_template_id(zbx,template)
+    if templates.kind_of?(Array)
+        templates.each do |template|
+            template_id = self.class.get_template_id(zbx, template)
             template_array.push template_id
         end
     else
-        template_array.push templates
+        template_array.push self.class.get_template_id(zbx, templates)
     end
 
     # Check if we need to connect via ip or fqdn
@@ -43,7 +43,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, :parent => Puppet::Provider::Zabb
     end
  
     # Now we create the host
-    zbx.hosts.create_or_update(
+    hostid = zbx.hosts.create_or_update(
       :host => host,
       :interfaces => [
         {
@@ -58,6 +58,8 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, :parent => Puppet::Provider::Zabb
       :templates => template_array,
       :groups => [ :groupid => zbx.hostgroups.get_id(:name => hostgroup) ]
     )
+
+    zbx.templates.mass_add(:hosts_id => [hostid], :templates_id => template_array)
 
     if proxy != ''
         zbx.hosts.update(
@@ -78,8 +80,17 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, :parent => Puppet::Provider::Zabb
     zabbix_user = @resource[:zabbix_user]
     zabbix_pass = @resource[:zabbix_pass]
     apache_use_ssl = @resource[:apache_use_ssl]
+    templates = @resource[:templates]
 
-    self.class.check_host(host,zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
+    unless templates.kind_of?(Array)
+        templates = [templates]
+    end
+    res = Array.new
+    res.push(self.class.check_host(host,zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl))
+    templates.each do |template|
+        res.push(self.class.check_template_in_host(host,template,zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl))
+    end
+    res.all?
   end
 
   def destroy
