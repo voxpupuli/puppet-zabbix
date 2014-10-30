@@ -10,7 +10,7 @@
     }
   ],
   "name": "wdijkerman-zabbix",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "summary": "Installing and maintaining zabbix instances. Will install server, proxy, java-gateway and agent on RedHat/Debian/Ubuntu. Also support for exported resources for automatic configure hosts in webinterface.",
   "author": "Werner Dijkerman",
   "description": "This module contains the classes for installing the following zabbix components:\n- zabbix-server\n- zabbix-agent\n- zabbix-proxy\n- zabbix-javagateway",

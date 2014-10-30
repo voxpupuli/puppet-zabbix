@@ -4,11 +4,11 @@ Below an overview of all changes in the releases.
 
 Version (Release date)
 
-0.?.?	(2014-??-??)
+0.5.1	(2014-10-30)
 
   * Added apache_ssl_chain as parameter for zabbix::server
   * zabbix.conf.php.erb wrong zbx name (https://github.com/dj-wasabi/puppet-zabbix/issues/9)
-
+  * fix for host template management (Fixed by pull request: burtsev (Thanks!))
 
 0.5.0	(2014-10-11)
 

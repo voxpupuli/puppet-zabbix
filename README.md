@@ -241,6 +241,7 @@ The following have contributed to this puppet module:
  * Suff
  * gattebury
  * sq4ind
+ * nburtsev
 
 Many thanks for this!
 
