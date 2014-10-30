@@ -10,7 +10,7 @@ description 'This module contains the classes for installing the following zabbi
 - zabbix-proxy
 - zabbix-javagateway
 '
-project_page 'http://forge.puppetlabs.com/wdijkerman/zabbix'
+project_page 'https://github.com/dj-wasabi/puppet-zabbix'
 
 ## Add dependencies, if any:
 dependency 'puppetlabs/postgresql', '>= 3.0.0'

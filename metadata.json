@@ -28,7 +28,7 @@
     {"name":"puppetlabs/firewall","version_requirement":">= 1.0.0"}
   ],
   "source": "https://github.com/dj-wasabi/puppet-zabbix.git",
-  "project_page": "http://forge.puppetlabs.com/wdijkerman/zabbix",
+  "project_page": "https://github.com/dj-wasabi/puppet-zabbix",
   "license": "Apache Version 2.0",
   "operatingsystem_support": [
        {
