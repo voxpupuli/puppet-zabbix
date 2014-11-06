@@ -78,6 +78,14 @@ You can use userparameter files (or specific entries) to install it into the age
 The following will provide an basic usage of the zabbix components.
 ###Usage zabbix-server
 ```ruby
+class { 'apache':
+    mpm_module => 'prefork',
+}
+include apache::mod::php
+
+class { 'postgresql': }
+#class { 'mysql': }
+
 class { 'zabbix::server':
   zabbix_url => 'zabbix.example.com',
 }
@@ -93,6 +101,9 @@ class { 'zabbix::agent':
 ###Usage zabbix-proxy
 
 ```ruby
+class { 'postgresql': }
+#class { 'mysql': }
+
 class { 'zabbix::proxy':
   zabbix_server_host => '192.168.1.1',
   zabbix_server_port => '10051',
