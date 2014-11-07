@@ -338,6 +338,9 @@ class zabbix::proxy (
     'mysql': {
       $db = 'mysql'
     }
+    'sqlite': {
+      $db = 'sqlite3'
+    }
     default: {
       fail("Unrecognized database type for proxy: ${dbtype}")
     }

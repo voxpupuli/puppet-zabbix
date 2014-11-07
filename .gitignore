@@ -4,4 +4,5 @@ spec/fixtures
 .vagrant
 log
 .DS_Store
-
+.idea
+Gemfile.lock
