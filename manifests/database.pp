@@ -46,6 +46,9 @@ class zabbix::database(
           db_host        => $db_host,
         }
       }
+      'sqlite': {
+        class { 'zabbix::database::sqlite': }
+      }
       default: {
         fail('Unrecognized database type for server.')
       }

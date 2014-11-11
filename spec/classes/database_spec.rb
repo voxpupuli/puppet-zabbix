@@ -36,6 +36,17 @@ describe 'zabbix::database' do
         })
       end
     end # END context 'with dbtype = mysql'
+
+    #
+    # Tests for zabbix::proxy, dbtype = sqlite and manage_database = true
+    #
+    context 'with dbtype = sqlite' do
+      let(:params) { {:manage_database => true, :dbtype => 'sqlite'} }
+      it do
+        should contain_class('zabbix::database::sqlite')
+      end
+    end  # END context 'with dbtype = sqlite'
+
   end
 
   #
@@ -71,6 +82,17 @@ describe 'zabbix::database' do
         })
       end
     end # END context 'with dbtype = mysql'
+
+    #
+    # Tests for zabbix::proxy, dbtype = sqlite and manage_database = false
+    #
+    context 'with dbtype = sqlite' do
+      let(:params) { {:manage_database => false, :dbtype => 'sqlite'} }
+      it do
+        should_not contain_class('zabbix::database::sqlite')
+      end
+    end # END context 'with dbtype = sqlite'
+
   end
   
   #
