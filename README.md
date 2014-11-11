@@ -83,8 +83,8 @@ class { 'apache':
 }
 include apache::mod::php
 
-class { 'postgresql': }
-#class { 'mysql': }
+class { 'postgresql::server': }
+#class { 'mysql::server': }
 
 class { 'zabbix::server':
   zabbix_url => 'zabbix.example.com',
@@ -101,8 +101,8 @@ class { 'zabbix::agent':
 ###Usage zabbix-proxy
 
 ```ruby
-class { 'postgresql': }
-#class { 'mysql': }
+class { 'postgresql::server': }
+#class { 'mysql::server': }
 
 class { 'zabbix::proxy':
   zabbix_server_host => '192.168.1.1',
@@ -253,8 +253,11 @@ The following have contributed to this puppet module:
  * gattebury
  * sq4ind
  * nburtsev
+ * actionjack
 
 Many thanks for this!
+(If I have forgotten you, please let me know and put you in the list of fame. :-))
+
 
 ##Note
 ###Standard usage
