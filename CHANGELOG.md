@@ -4,12 +4,6 @@ Below an overview of all changes in the releases.
 
 Version (Release date)
 
-0.6.0   (2014-11-??)
-
-  * Add support for sqlite (by pull request: actionjack (Thanks!))
-  * Updated documentation for correct usage server and proxy (Thanks for noticing karolisc!)
-
-
 0.5.1	(2014-10-30)
 
   * Added apache_ssl_chain as parameter for zabbix::server
