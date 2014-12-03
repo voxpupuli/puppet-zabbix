@@ -21,6 +21,7 @@ class zabbix::database::postgresql (
   $db_name        = '',
   $db_user        = '',
   $db_pass        = '',
+  $db_host        = '',
 ) {
 
   case $::operatingsystem {
@@ -41,9 +42,9 @@ class zabbix::database::postgresql (
   }
 
   exec { 'update_pgpass':
-    command => "echo localhost:5432:${db_name}:${db_user}:${db_pass} >> ${postgres_home}/.pgpass",
+    command => "echo ${db_host}:5432:${db_name}:${db_user}:${db_pass} >> ${postgres_home}/.pgpass",
     path    => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-    unless  => "grep \"localhost:5432:${db_name}:${db_user}:${db_pass}\" ${postgres_home}/.pgpass",
+    unless  => "grep \"${db_host}:5432:${db_name}:${db_user}:${db_pass}\" ${postgres_home}/.pgpass",
     require => File["${postgres_home}/.pgpass"],
   }
 
@@ -58,7 +59,7 @@ class zabbix::database::postgresql (
   case $zabbix_type {
     'proxy': {
       exec { 'zabbix_proxy_create.sql':
-        command  => "cd ${zabbix_path} && sudo -u postgres psql -h localhost -U ${db_user} -d ${db_name} -f schema.sql && touch schema.done",
+        command  => "cd ${zabbix_path} && sudo -u postgres psql -h ${db_host} -U ${db_user} -d ${db_name} -f schema.sql && touch schema.done",
         path     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
         unless   => "test -f ${zabbix_path}/schema.done",
         provider => 'shell',
@@ -71,7 +72,7 @@ class zabbix::database::postgresql (
     }
     'server': {
       exec { 'zabbix_server_create.sql':
-        command  => "cd ${zabbix_path} && sudo -u postgres psql -h localhost -U ${db_user} -d ${db_name} -f schema.sql && touch schema.done",
+        command  => "cd ${zabbix_path} && sudo -u postgres psql -h ${db_host} -U ${db_user} -d ${db_name} -f schema.sql && touch schema.done",
         path     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
         unless   => "test -f ${zabbix_path}/schema.done",
         provider => 'shell',
@@ -82,7 +83,7 @@ class zabbix::database::postgresql (
         notify   => Service['zabbix-server'],
       } ->
       exec { 'zabbix_server_images.sql':
-        command  => "cd ${zabbix_path} && sudo -u postgres psql -h localhost -U ${db_user} -d ${db_name} -f images.sql && touch images.done",
+        command  => "cd ${zabbix_path} && sudo -u postgres psql -h ${db_host} -U ${db_user} -d ${db_name} -f images.sql && touch images.done",
         path     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
         unless   => "test -f ${zabbix_path}/images.done",
         provider => 'shell',
@@ -93,7 +94,7 @@ class zabbix::database::postgresql (
         notify   => Service['zabbix-server'],
       } ->
       exec { 'zabbix_server_data.sql':
-        command  => "cd ${zabbix_path} && sudo -u postgres psql -h localhost -U ${db_user} -d ${db_name} -f data.sql && touch data.done",
+        command  => "cd ${zabbix_path} && sudo -u postgres psql -h ${db_host} -U ${db_user} -d ${db_name} -f data.sql && touch data.done",
         path     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
         unless   => "test -f ${zabbix_path}/data.done",
         provider => 'shell',
