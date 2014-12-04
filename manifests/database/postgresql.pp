@@ -35,10 +35,12 @@ class zabbix::database::postgresql (
     }
   }
 
-  # Creating database
-  postgresql::server::db { $db_name:
-    user     => $db_user,
-    password => postgresql_password($db_user, $db_pass),
+  # If the database is meant to be on the same node as zabbix, then create it now.
+  if ($db_host == 'localhost') {
+    postgresql::server::db { $db_name:
+      user     => $db_user,
+      password => postgresql_password($db_user, $db_pass),
+    }
   }
 
   exec { 'update_pgpass':
@@ -53,7 +55,6 @@ class zabbix::database::postgresql (
     mode    => '0600',
     owner   => 'postgres',
     group   => 'postgres',
-    require => Postgresql::Server::Db[$db_name],
   }
 
   case $zabbix_type {
