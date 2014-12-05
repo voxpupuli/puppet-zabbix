@@ -37,9 +37,10 @@ class zabbix::database::postgresql (
 
   # If the database is meant to be on the same node as zabbix, then create it now.
   if ($db_host == 'localhost') {
-    postgresql::server::db { $db_name:
-      user     => $db_user,
-      password => postgresql_password($db_user, $db_pass),
+    class { 'zabbix::database::remotepostgresql':
+      dbname     => $db_name,
+      dbuser     => $db_user,
+      dbpassword => $db_pass,
     }
   }
 
