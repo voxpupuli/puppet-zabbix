@@ -287,7 +287,7 @@ class zabbix::agent (
       dport  => $listenport,
       proto  => 'tcp',
       action => 'accept',
-      source => "${server}/24",
+      source => "${server}",
       state  => ['NEW','RELATED', 'ESTABLISHED'],
     }
   }
