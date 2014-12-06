@@ -18,6 +18,7 @@
 #   Type of database. Can use the following 3 databases:
 #   - postgresql
 #   - mysql
+#   - sqlite
 #
 # [*zabbix_version*]
 #   This is the zabbix version.
@@ -407,6 +408,9 @@ class zabbix::server (
     }
     'mysql': {
       $db = 'mysql'
+    }
+    'sqlite': {
+      $db = 'sqlite3'
     }
     default: {
       fail('unrecognized database type for server.')
