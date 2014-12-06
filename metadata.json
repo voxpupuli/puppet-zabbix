@@ -2,7 +2,7 @@
   "requirements": [
     {
       "name": "pe",
-      "version_requirement": ">= 3.2.0 < 3.4.0"
+      "version_requirement": "3.x"
     },
     {
       "name": "puppet",
@@ -10,19 +10,13 @@
     }
   ],
   "name": "wdijkerman-zabbix",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "summary": "Installing and maintaining zabbix instances. Will install server, proxy, java-gateway and agent on RedHat/Debian/Ubuntu. Also support for exported resources for automatic configure hosts in webinterface.",
   "author": "Werner Dijkerman",
   "description": "This module contains the classes for installing the following zabbix components:\n- zabbix-server\n- zabbix-agent\n- zabbix-proxy\n- zabbix-javagateway",
   "dependencies": [
-    {
-      "name": "puppetlabs/postgresql",
-      "version_requirement": ">= 3.3.1"
-    },
-    {
-      "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.1.0"
-    },
+    {"name":"puppetlabs/postgresql","version_requirement": ">= 3.3.1"},
+    {"name":"puppetlabs/stdlib","version_requirement": ">= 4.1.0"},
     {"name":"puppetlabs/mysql","version_requirement":">= 2.0.0"},
     {"name":"puppetlabs/apache","version_requirement":">= 1.0.0"},
     {"name":"puppetlabs/firewall","version_requirement":">= 1.0.0"}
@@ -53,7 +47,7 @@
        },
        {
            "operatingsystem":"Ubuntu",
-           "operatingsystemrelease":[ "12.04" ]
+           "operatingsystemrelease":[ "12.04", "14.04" ]
        },
        {
            "operatingsystem":"Debian",

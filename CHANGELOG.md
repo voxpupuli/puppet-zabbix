@@ -4,11 +4,12 @@ Below an overview of all changes in the releases.
 
 Version (Release date)
 
-0.6.0   (2014-11-??)
+0.6.0   (2014-12-??)
 
   * Add support for sqlite (by pull request: actionjack (Thanks!))
   * Updated documentation for correct usage server and proxy (Thanks for noticing karolisc!)
-
+  * Don't assume db_host will be localhost in postgresql.pp #20 (By pull request: lucas42 (Thanks!))
+  * added class zabbix::userparameter for using userparameters define in Hiera or The Foreman
 
 0.5.1	(2014-10-30)
 

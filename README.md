@@ -73,6 +73,7 @@ When using zabbix::javagateway, you'll need to add the 'javagateway' parameter a
 
 ###Setup userparameters
 You can use userparameter files (or specific entries) to install it into the agent.
+Also added with the 0.6.0 release is an class zabbix::userparameter. This class can be used with Hiera or The Foreman when you want to install userparameter files.
 
 ##Usage
 The following will provide an basic usage of the zabbix components.
@@ -147,6 +148,13 @@ Or for example when you have just one entry:
 zabbix::userparameters { 'mysql.conf':
   content => 'UserParameter=mysql.ping,mysqladmin -uroot ping | grep -c alive',
 }
+```
+
+When you are using Hiera or The Foreman, you can use it like this:
+```yaml
+zabbix::userparameter::data:
+  MySQL:
+    content: UserParameter=mysql.ping,mysqladmin -uroot ping | grep -c alive
 ```
 
 ##Reference
@@ -254,6 +262,8 @@ The following have contributed to this puppet module:
  * sq4ind
  * nburtsev
  * actionjack
+ * karolisc
+ * lucas42
 
 Many thanks for this!
 (If I have forgotten you, please let me know and put you in the list of fame. :-))
