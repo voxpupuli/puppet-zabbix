@@ -10,6 +10,7 @@ Version (Release date)
   * Updated documentation for correct usage server and proxy (Thanks for noticing karolisc!)
   * Don't assume db_host will be localhost in postgresql.pp #20 (By pull request: lucas42 (Thanks!))
   * added class zabbix::userparameter for using userparameters define in Hiera or The Foreman
+  * Removed the '/24' in zabbix::agent for firewall.
 
 0.5.1	(2014-10-30)
 
