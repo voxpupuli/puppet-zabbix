@@ -4,7 +4,7 @@ Below an overview of all changes in the releases.
 
 Version (Release date)
 
-0.6.0   (2014-12-??)
+0.6.0   (2014-12-06)
 
   * Add support for sqlite (by pull request: actionjack (Thanks!))
   * Updated documentation for correct usage server and proxy (Thanks for noticing karolisc!)
