@@ -382,8 +382,9 @@ class zabbix::server (
       $ruby_devel_package = 'ruby-devel'
     } elsif $::osfamily == 'debian' {
       $ruby_devel_package = 'ruby-dev'
-    } else {
-      $ruby_devel_package = undef
+
+      # Debian also requires make to install zabbixapi
+      $make_package = 'make'
     }
     if ($ruby_devel_package != undef) {
       if ! defined(Package[$ruby_devel_package]) {
@@ -391,7 +392,16 @@ class zabbix::server (
           ensure => installed,
         }
       }
-      Package['zabbixapi'] { require => Package[$ruby_devel_package]}
+      if ($make_package != undef) {
+        if ! defined(Package[$make_package]) {
+          package { $make_package:
+            ensure => installed,
+          }
+        }
+        Package['zabbixapi'] { require => Package[$ruby_devel_package, $make_package]}
+      } else {
+        Package['zabbixapi'] { require => Package[$ruby_devel_package]}
+      }
     }
 
     # Installing the zabbixapi gem package. We need this gem for
