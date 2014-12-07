@@ -374,16 +374,34 @@ class zabbix::server (
   # is set to false, you'll get warnings like this:
   # "Warning: You cannot collect without storeconfigs being set"
   if $manage_resources {
+
+    # On some systems, certain gems (including the zabbixapi one) 
+    # require a ruby development package to be installed.  This
+    # class installs it, if it isn't already defined
     if $::osfamily == 'redhat' {
-      # With RedHat family members, the ruby-devel needs to be installed
-      # when using an "gem" provider. If this package is not defined
-      # we install it via this class.
-      if ! defined(Package['ruby-devel']) {
-        package { 'ruby-devel':
+      $ruby_devel_package = 'ruby-devel'
+    } elsif $::osfamily == 'debian' {
+      $ruby_devel_package = 'ruby-dev'
+
+      # Debian also requires make to install zabbixapi
+      $make_package = 'make'
+    }
+    if ($ruby_devel_package != undef) {
+      if ! defined(Package[$ruby_devel_package]) {
+        package { $ruby_devel_package:
           ensure => installed,
         }
       }
-      Package['zabbixapi'] { require => Package['ruby-devel']}
+      if ($make_package != undef) {
+        if ! defined(Package[$make_package]) {
+          package { $make_package:
+            ensure => installed,
+          }
+        }
+        Package['zabbixapi'] { require => Package[$ruby_devel_package, $make_package]}
+      } else {
+        Package['zabbixapi'] { require => Package[$ruby_devel_package]}
+      }
     }
 
     # Installing the zabbixapi gem package. We need this gem for
