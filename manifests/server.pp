@@ -18,7 +18,6 @@
 #   Type of database. Can use the following 3 databases:
 #   - postgresql
 #   - mysql
-#   - sqlite
 #
 # [*zabbix_version*]
 #   This is the zabbix version.
@@ -48,15 +47,15 @@
 #   enabled.
 #
 # [*apache_use_ssl*]
-#   Will create an ssl vhost. Also nonssl vhost will be created for redirect 
+#   Will create an ssl vhost. Also nonssl vhost will be created for redirect
 #   nonssl to ssl vhost.
 #
 # [*apache_ssl_cert*]
-#   The location of the ssl certificate file. You'll need to make sure this 
+#   The location of the ssl certificate file. You'll need to make sure this
 #   file is present on the system, this module will not install this file.
 #
 # [*apache_ssl_key*]
-#   The location of the ssl key file. You'll need to make sure this file is 
+#   The location of the ssl key file. You'll need to make sure this file is
 #   present on the system, this module will not install this file.
 #
 # [*apache_ssl_cipher*]
@@ -375,7 +374,7 @@ class zabbix::server (
   # "Warning: You cannot collect without storeconfigs being set"
   if $manage_resources {
 
-    # On some systems, certain gems (including the zabbixapi one) 
+    # On some systems, certain gems (including the zabbixapi one)
     # require a ruby development package to be installed.  This
     # class installs it, if it isn't already defined
     if $::osfamily == 'redhat' {
@@ -426,9 +425,6 @@ class zabbix::server (
     }
     'mysql': {
       $db = 'mysql'
-    }
-    'sqlite': {
-      $db = 'sqlite3'
     }
     default: {
       fail('unrecognized database type for server.')
@@ -547,7 +543,7 @@ class zabbix::server (
     if $apache_use_ssl {
       # Listen port
       $apache_listen_port = '443'
- 
+
       # We create nonssl vhost for redirecting non ssl
       # traffic to https.
       apache::vhost { "${zabbix_url}_nonssl":
@@ -606,12 +602,12 @@ class zabbix::server (
     php_value max_input_time 300
     # Set correct timezone.
     php_value date.timezone ${zabbix_timezone}",
-      rewrites   => [ { rewrite_rule    => ['^$ /index.php [L]'] } ],
-      ssl        => $apache_use_ssl,
-      ssl_cert   => $apache_ssl_cert,
-      ssl_key    => $apache_ssl_key,
-      ssl_cipher => $apache_ssl_cipher,
-      ssl_chain  => $apache_ssl_chain,
+      rewrites        => [ { rewrite_rule    => ['^$ /index.php [L]'] } ],
+      ssl             => $apache_use_ssl,
+      ssl_cert        => $apache_ssl_cert,
+      ssl_key         => $apache_ssl_key,
+      ssl_cipher      => $apache_ssl_cipher,
+      ssl_chain       => $apache_ssl_chain,
     }
   } # END if $manage_vhost
 

@@ -13,10 +13,10 @@
 # for loading this class manually.
 #
 class zabbix::resources::server (
-  $zabbix_url,
-  $zabbix_user,
-  $zabbix_pass,
-  $apache_use_ssl,
+  $zabbix_url     = undef,
+  $zabbix_user    = undef,
+  $zabbix_pass    = undef,
+  $apache_use_ssl = undef,
 ) {
 
   Zabbix_proxy <<| |>> {

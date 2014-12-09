@@ -13,12 +13,12 @@
 # for loading this class manually.
 
 class zabbix::resources::proxy (
-  $hostname,
-  $ipaddress,
-  $use_ip,
-  $mode,
-  $port,
-  $templates,
+  $hostname  = undef,
+  $ipaddress = undef,
+  $use_ip    = undef,
+  $mode      = undef,
+  $port      = undef,
+  $templates = undef,
 ) {
 
     @@zabbix_proxy { $hostname:

@@ -15,7 +15,7 @@
 # Copyright 2014 Werner Dijkerman
 #
 class zabbix::repo(
-  $zabbix_version
+  $zabbix_version = undef
 ) {
 
   # Figuring out which major release we have. Or which release name
@@ -44,6 +44,9 @@ class zabbix::repo(
     /^5.*/: {
       $majorrelease = '5'
       $debian       = 'lenny'
+    }
+    default: {
+      fail('This is an unsupported operating system.')
     }
   }
 
@@ -89,7 +92,7 @@ class zabbix::repo(
     'debian' : {
       if ($::architecture == 'armv6l') {
         apt::source { 'zabbix':
-          location    => "http://naizvoru.com/raspbian/zabbix",
+          location    => 'http://naizvoru.com/raspbian/zabbix',
           release     => $debian,
           repos       => 'main',
           key         => 'D54A213C80E871A7',

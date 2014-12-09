@@ -4,6 +4,11 @@ Below an overview of all changes in the releases.
 
 Version (Release date)
 
+0.6.1   (2014-12-09)
+
+  * Add repository for debian running on a raspberry pi
+  * fixed puppet-lint messages
+
 0.6.0   (2014-12-06)
 
   * Add support for sqlite (by pull request: actionjack (Thanks!))
