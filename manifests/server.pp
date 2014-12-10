@@ -47,15 +47,15 @@
 #   enabled.
 #
 # [*apache_use_ssl*]
-#   Will create an ssl vhost. Also nonssl vhost will be created for redirect 
+#   Will create an ssl vhost. Also nonssl vhost will be created for redirect
 #   nonssl to ssl vhost.
 #
 # [*apache_ssl_cert*]
-#   The location of the ssl certificate file. You'll need to make sure this 
+#   The location of the ssl certificate file. You'll need to make sure this
 #   file is present on the system, this module will not install this file.
 #
 # [*apache_ssl_key*]
-#   The location of the ssl key file. You'll need to make sure this file is 
+#   The location of the ssl key file. You'll need to make sure this file is
 #   present on the system, this module will not install this file.
 #
 # [*apache_ssl_cipher*]
@@ -373,16 +373,34 @@ class zabbix::server (
   # is set to false, you'll get warnings like this:
   # "Warning: You cannot collect without storeconfigs being set"
   if $manage_resources {
+
+    # On some systems, certain gems (including the zabbixapi one)
+    # require a ruby development package to be installed.  This
+    # class installs it, if it isn't already defined
     if $::osfamily == 'redhat' {
-      # With RedHat family members, the ruby-devel needs to be installed
-      # when using an "gem" provider. If this package is not defined
-      # we install it via this class.
-      if ! defined(Package['ruby-devel']) {
-        package { 'ruby-devel':
+      $ruby_devel_package = 'ruby-devel'
+    } elsif $::osfamily == 'debian' {
+      $ruby_devel_package = 'ruby-dev'
+
+      # Debian also requires make to install zabbixapi
+      $make_package = 'make'
+    }
+    if ($ruby_devel_package != undef) {
+      if ! defined(Package[$ruby_devel_package]) {
+        package { $ruby_devel_package:
           ensure => installed,
         }
       }
-      Package['zabbixapi'] { require => Package['ruby-devel']}
+      if ($make_package != undef) {
+        if ! defined(Package[$make_package]) {
+          package { $make_package:
+            ensure => installed,
+          }
+        }
+        Package['zabbixapi'] { require => Package[$ruby_devel_package, $make_package]}
+      } else {
+        Package['zabbixapi'] { require => Package[$ruby_devel_package]}
+      }
     }
 
     # Installing the zabbixapi gem package. We need this gem for
@@ -525,7 +543,7 @@ class zabbix::server (
     if $apache_use_ssl {
       # Listen port
       $apache_listen_port = '443'
- 
+
       # We create nonssl vhost for redirecting non ssl
       # traffic to https.
       apache::vhost { "${zabbix_url}_nonssl":
@@ -584,12 +602,12 @@ class zabbix::server (
     php_value max_input_time 300
     # Set correct timezone.
     php_value date.timezone ${zabbix_timezone}",
-      rewrites   => [ { rewrite_rule    => ['^$ /index.php [L]'] } ],
-      ssl        => $apache_use_ssl,
-      ssl_cert   => $apache_ssl_cert,
-      ssl_key    => $apache_ssl_key,
-      ssl_cipher => $apache_ssl_cipher,
-      ssl_chain  => $apache_ssl_chain,
+      rewrites        => [ { rewrite_rule    => ['^$ /index.php [L]'] } ],
+      ssl             => $apache_use_ssl,
+      ssl_cert        => $apache_ssl_cert,
+      ssl_key         => $apache_ssl_key,
+      ssl_cipher      => $apache_ssl_cipher,
+      ssl_chain       => $apache_ssl_chain,
     }
   } # END if $manage_vhost
 

@@ -4,6 +4,22 @@ Below an overview of all changes in the releases.
 
 Version (Release date)
 
+<<<<<<< HEAD
+=======
+0.6.1   (2014-12-09)
+
+  * Add repository for debian running on a raspberry pi
+  * fixed puppet-lint messages
+
+0.6.0   (2014-12-06)
+
+  * Add support for sqlite (by pull request: actionjack (Thanks!))
+  * Updated documentation for correct usage server and proxy (Thanks for noticing karolisc!)
+  * Don't assume db_host will be localhost in postgresql.pp #20 (By pull request: lucas42 (Thanks!))
+  * added class zabbix::userparameter for using userparameters define in Hiera or The Foreman
+  * Removed the '/24' in zabbix::agent for firewall.
+
+>>>>>>> upstream/master
 0.5.1	(2014-10-30)
 
   * Added apache_ssl_chain as parameter for zabbix::server

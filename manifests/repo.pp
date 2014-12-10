@@ -15,7 +15,7 @@
 # Copyright 2014 Werner Dijkerman
 #
 class zabbix::repo(
-  $zabbix_version
+  $zabbix_version = undef
 ) {
 
   # Figuring out which major release we have. Or which release name
@@ -44,6 +44,9 @@ class zabbix::repo(
     /^5.*/: {
       $majorrelease = '5'
       $debian       = 'lenny'
+    }
+    default: {
+      fail('This is an unsupported operating system.')
     }
   }
 
@@ -87,12 +90,23 @@ class zabbix::repo(
 
     } # END 'XenServer'
     'debian' : {
-      apt::source { 'zabbix':
-        location   => "http://repo.zabbix.com/zabbix/${zabbix_version}/debian/",
-        release    => $debian,
-        repos      => 'main',
-        key        => '79EA5ED4',
-        key_source => 'http://repo.zabbix.com/zabbix-official-repo.key',
+      if ($::architecture == 'armv6l') {
+        apt::source { 'zabbix':
+          location    => 'http://naizvoru.com/raspbian/zabbix',
+          release     => $debian,
+          repos       => 'main',
+          key         => 'D54A213C80E871A7',
+          key_source  => 'http://naizvoru.com/raspbian/zabbix/conf/boris@steki.net.gpg.key',
+          include_src => false,
+        }
+      } else {
+        apt::source { 'zabbix':
+          location   => "http://repo.zabbix.com/zabbix/${zabbix_version}/debian/",
+          release    => $debian,
+          repos      => 'main',
+          key        => '79EA5ED4',
+          key_source => 'http://repo.zabbix.com/zabbix-official-repo.key',
+        }
       }
     } # END 'debian'
     'ubuntu' : {
