@@ -54,7 +54,7 @@ define zabbix::userparameters (
       ensure  => present,
       owner   => 'zabbix',
       group   => 'zabbix',
-      mode    => '0755',
+      mode    => '0644',
       source  => $source,
     }
   }
@@ -64,7 +64,7 @@ define zabbix::userparameters (
       ensure  => present,
       owner   => 'zabbix',
       group   => 'zabbix',
-      mode    => '0755',
+      mode    => '0644',
       content => $content,
     }
   }
