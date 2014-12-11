@@ -4,6 +4,8 @@ Below an overview of all changes in the releases.
 
 Version (Release date)
 
+<<<<<<< HEAD
+=======
 0.6.1   (2014-12-09)
 
   * Add repository for debian running on a raspberry pi
@@ -17,6 +19,7 @@ Version (Release date)
   * added class zabbix::userparameter for using userparameters define in Hiera or The Foreman
   * Removed the '/24' in zabbix::agent for firewall.
 
+>>>>>>> upstream/master
 0.5.1	(2014-10-30)
 
   * Added apache_ssl_chain as parameter for zabbix::server

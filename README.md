@@ -84,8 +84,8 @@ class { 'apache':
 }
 include apache::mod::php
 
-class { 'postgresql::server': }
-#class { 'mysql::server': }
+class { 'postgresql': }
+#class { 'mysql': }
 
 class { 'zabbix::server':
   zabbix_url => 'zabbix.example.com',
@@ -102,8 +102,8 @@ class { 'zabbix::agent':
 ###Usage zabbix-proxy
 
 ```ruby
-class { 'postgresql::server': }
-#class { 'mysql::server': }
+class { 'postgresql': }
+#class { 'mysql': }
 
 class { 'zabbix::proxy':
   zabbix_server_host => '192.168.1.1',
@@ -137,7 +137,7 @@ class { 'zabbix::proxy':
 Using an 'source' file:
 
 ```ruby
-zabbix::userparameters { 'mysql.conf':
+zabbix::userparameters { 'mysql':
   source => 'puppet:///modules/zabbix/mysqld.conf',
 }
 ```
@@ -145,7 +145,7 @@ zabbix::userparameters { 'mysql.conf':
 Or for example when you have just one entry:
 
 ```ruby
-zabbix::userparameters { 'mysql.conf':
+zabbix::userparameters { 'mysql':
   content => 'UserParameter=mysql.ping,mysqladmin -uroot ping | grep -c alive',
 }
 ```
@@ -261,13 +261,14 @@ The following have contributed to this puppet module:
  * gattebury
  * sq4ind
  * nburtsev
+<<<<<<< HEAD
+=======
  * actionjack
  * karolisc
  * lucas42
+>>>>>>> upstream/master
 
 Many thanks for this!
-(If I have forgotten you, please let me know and put you in the list of fame. :-))
-
 
 ##Note
 ###Standard usage
