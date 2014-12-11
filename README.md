@@ -137,7 +137,7 @@ class { 'zabbix::proxy':
 Using an 'source' file:
 
 ```ruby
-zabbix::userparameters { 'mysql.conf':
+zabbix::userparameters { 'mysql':
   source => 'puppet:///modules/zabbix/mysqld.conf',
 }
 ```
@@ -145,7 +145,7 @@ zabbix::userparameters { 'mysql.conf':
 Or for example when you have just one entry:
 
 ```ruby
-zabbix::userparameters { 'mysql.conf':
+zabbix::userparameters { 'mysql':
   content => 'UserParameter=mysql.ping,mysqladmin -uroot ping | grep -c alive',
 }
 ```
