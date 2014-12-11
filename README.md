@@ -150,6 +150,14 @@ zabbix::userparameters { 'mysql':
 }
 ```
 
+Using an [LLD](https://www.zabbix.com/documentation/2.4/manual/discovery/low_level_discovery) 'script' file:
+
+```ruby
+zabbix::userparameters { 'lld_snort.sh':
+  script => 'puppet:///modules/zabbix/lld_snort.sh',
+}
+```
+
 When you are using Hiera or The Foreman, you can use it like this:
 ```yaml
 zabbix::userparameter::data:
@@ -213,6 +221,7 @@ There are some zabbix specific parameters, please check them by opening the mani
 
 * `source`: File which holds several userparameter entries.
 * `content`: When you have 1 userparameter entry which you want to install.
+* `script`: Low level discovery (LLD) script.
 * `template`: When you use exported resources (when manage_resources on other components is set to true) you'll can add the name of the template which correspondents with the 'content' or 'source' which you add. The template will be added to the host.
 
 ##limitations
