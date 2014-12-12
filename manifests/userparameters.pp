@@ -13,6 +13,9 @@
 # [*content*]
 #   When you have 1 userparameter entry which you want to install.
 #
+# [*script*]
+#   Low level discovery (LLD) script.
+#
 # [*template*]
 #   When you use exported resources (when manage_resources is set to true on other components)
 #   you'll can add the name of the template which correspondents with the 'content' or
@@ -45,6 +48,7 @@
 define zabbix::userparameters (
   $source   = '',
   $content  = '',
+  $script   = '',
   $template = '',
 ) {
   $include_dir = $zabbix::agent::include_dir
@@ -66,6 +70,16 @@ define zabbix::userparameters (
       group   => 'zabbix',
       mode    => '0644',
       content => $content,
+    }
+  }
+
+  if $script != '' {
+    file { "/usr/bin/${name}":
+      ensure  => present,
+      owner   => 'zabbix',
+      group   => 'zabbix',
+      mode    => '0755',
+      source => $script,
     }
   }
 
