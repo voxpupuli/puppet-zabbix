@@ -11,7 +11,7 @@
 #
 # [*data*]
 #  This is the data in YAML format
-# 
+#
 # == Example
 #
 # zabbix::userparameter::data:
