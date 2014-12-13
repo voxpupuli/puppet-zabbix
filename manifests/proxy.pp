@@ -302,13 +302,15 @@ class zabbix::proxy (
   # to network name. If more than 1 interfaces are available, we
   # can find the ipaddress of this specific interface if listenip
   # is set to for example "eth1" or "bond0.73".
-  if ($listenip =~ /^(eth|bond).*/) {
-    $int_name = "ipaddress_${listenip}"
-    $listen_ip = inline_template('<%= scope.lookupvar(int_name) %>')
-  } elsif is_ip_address($listenip) {
-    $listen_ip = $listenip
-  } else {
-    $listen_ip = undef
+  if ($listenip == defined) {
+    if ($listenip =~ /^(eth|bond).*/) {
+      $int_name = "ipaddress_${listenip}"
+      $listen_ip = inline_template('<%= scope.lookupvar(int_name) %>')
+    } elsif is_ip_address($listenip) {
+      $listen_ip = $listenip
+    } else {
+      $listen_ip = undef
+    }
   }
 
   # So if manage_resources is set to true, we can send some data
