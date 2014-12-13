@@ -11,6 +11,22 @@
 # sample usage:
 #
 class zabbix::params {
+  # It seems that ubuntu has an different fping path...
+  case $::operatingsystem {
+    'ubuntu': {
+        $server_fpinglocation     = '/usr/bin/fping'
+        $server_fping6location    = '/usr/bin/fping6'
+        $proxy_fpinglocation      = '/usr/bin/fping'
+        $proxy_fping6location     = '/usr/bin/fping6'
+    }
+    default: {
+        $server_fpinglocation     = '/usr/sbin/fping'
+        $server_fping6location    = '/usr/sbin/fping6'
+        $proxy_fpinglocation      = '/usr/sbin/fping'
+        $proxy_fping6location     = '/usr/sbin/fping6'
+    }
+  }
+
   # Zabbix overall params
   $dbtype                         = 'postgresql'
   $zabbix_version                 = '2.4'
@@ -80,8 +96,6 @@ class zabbix::params {
   $server_unreachabledelay        = '15'
   $server_alertscriptspath        = '/etc/zabbix/alertscripts'
   $server_externalscripts         = '/usr/lib/zabbix/externalscripts'
-  $server_fpinglocation           = '/usr/sbin/fping'
-  $server_fping6location          = '/usr/sbin/fping6'
   $server_sshkeylocation          = undef
   $server_logslowqueries          = '0'
   $server_tmpdir                  = '/tmp'
@@ -178,8 +192,6 @@ class zabbix::params {
   $proxy_unavaliabledelay        = '60'
   $proxy_unreachabedelay         = '15'
   $proxy_externalscripts         = '/usr/lib/zabbix/externalscripts'
-  $proxy_fpinglocation           = '/usr/sbin/fping'
-  $proxy_fping6location          = '/usr/sbin/fping6'
   $proxy_sshkeylocation          = undef
   $proxy_loglowqueries           = '0'
   $proxy_tmpdir                  = '/tmp'
