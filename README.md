@@ -79,10 +79,6 @@ Also added with the 0.6.0 release is an class zabbix::userparameter. This class 
 The following will provide an basic usage of the zabbix components.
 ###Usage zabbix-server
 ```ruby
-class { 'apache':
-    mpm_module => 'prefork',
-}
-include apache::mod::php
 
 class { 'postgresql::server': }
 #class { 'mysql::server': }
