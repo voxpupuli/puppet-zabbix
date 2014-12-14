@@ -45,8 +45,18 @@ class zabbix::repo(
       $majorrelease = '5'
       $debian       = 'lenny'
     }
+    # Debian unstable releases look something like "jessie/sid"
+    # In this case, just use the first bit as the version
+    /\/sid$/: {
+      # Zabbix repo doesn't yet support jessie, use wheezy instead
+      if ($::operatingsystemrelease == 'jessie/sid') {
+        $debian = 'wheezy'
+      } else {
+        $debian = regsubst($::operatingsystemrelease, '/sid$', '')
+      }
+    }
     default: {
-      fail('This is an unsupported operating system.')
+      fail("This is an unsupported operating system (${::operatingsystem} ${::operatingsystemrelease})")
     }
   }
 
