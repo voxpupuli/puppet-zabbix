@@ -137,7 +137,7 @@ class { 'zabbix::proxy':
 Using an 'source' file:
 
 ```ruby
-zabbix::userparameters { 'mysql.conf':
+zabbix::userparameters { 'mysql':
   source => 'puppet:///modules/zabbix/mysqld.conf',
 }
 ```
@@ -145,8 +145,16 @@ zabbix::userparameters { 'mysql.conf':
 Or for example when you have just one entry:
 
 ```ruby
-zabbix::userparameters { 'mysql.conf':
+zabbix::userparameters { 'mysql':
   content => 'UserParameter=mysql.ping,mysqladmin -uroot ping | grep -c alive',
+}
+```
+
+Using an [LLD](https://www.zabbix.com/documentation/2.4/manual/discovery/low_level_discovery) 'script' file:
+
+```ruby
+zabbix::userparameters { 'lld_snort.sh':
+  script => 'puppet:///modules/zabbix/lld_snort.sh',
 }
 ```
 
@@ -213,6 +221,7 @@ There are some zabbix specific parameters, please check them by opening the mani
 
 * `source`: File which holds several userparameter entries.
 * `content`: When you have 1 userparameter entry which you want to install.
+* `script`: Low level discovery (LLD) script.
 * `template`: When you use exported resources (when manage_resources on other components is set to true) you'll can add the name of the template which correspondents with the 'content' or 'source' which you add. The template will be added to the host.
 
 ##limitations
