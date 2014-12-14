@@ -75,10 +75,10 @@ define zabbix::userparameters (
 
   if $script != '' {
     file { "/usr/bin/${name}":
-      ensure  => present,
-      owner   => 'zabbix',
-      group   => 'zabbix',
-      mode    => '0755',
+      ensure => present,
+      owner  => 'zabbix',
+      group  => 'zabbix',
+      mode   => '0755',
       source => $script,
     }
   }
