@@ -52,39 +52,39 @@ PidFile=<%= @pidfile %>
 #	if set to localhost, socket is used for mysql.
 #	if set to empty string, socket is used for postgresql.
 #
-DBHost=<%= @dbhost %>
+DBHost=<%= @database_host %>
 
 ### option: dbname
 #	database name.
 #	for sqlite3 path to database file must be provided. dbuser and dbpassword are ignored.
 #
-DBName=<%= @dbname %>
+DBName=<%= @database_name %>
 
 ### option: dbschema
 #	schema name. used for ibm db2.
 #
-<% if @dbschema %>DBSchema=<%= @dbschema %><% end %>
+<% if @database_schema %>DBSchema=<%= @database_schema %><% end %>
 
 ### option: dbuser
 #	database user. ignored for sqlite.
 #
-DBUser=<%= @dbuser %>
+DBUser=<%= @database_user %>
 
 ### option: dbpassword
 #	database password. ignored for sqlite.
 #	comment this line if no password is used.
 #
-DBPassword=<%= @dbpassword %>
+DBPassword=<%= @database_password %>
 
 ### option: dbsocket
 #	path to mysql socket.
 #
-<% if @dbsocket %>DBSocket=<%= @dbsocket %><% end %>
+<% if @database_socket %>DBSocket=<%= @database_socket %><% end %>
 
 ### option: dbport
 #	database port when not using local socket. ignored for sqlite.
 #
-<% if @dbport %>DBPort=<%= @dbport %><% end %>
+<% if @database_port %>DBPort=<%= @database_port %><% end %>
 
 ############ advanced parameters ################
 

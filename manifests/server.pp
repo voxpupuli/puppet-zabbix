@@ -9,30 +9,14 @@
 #
 # === Parameters
 #
-# [*zabbix_url*]
-#   Url on which zabbix needs to be available. Will create an vhost in
-#   apache. Only needed when manage_vhost is set to true.
-#   Example: zabbix.example.com
-#
-# [*dbtype*]
-#   Type of database. Can use the following 3 databases:
+# [*database_ype*]
+#   Type of database. Can use the following 2 databases:
 #   - postgresql
 #   - mysql
 #
 # [*zabbix_version*]
 #   This is the zabbix version.
-#   Example: 2.2
-#
-# [*zabbix_timezone*]
-#   The current timezone for vhost configuration needed for the php timezone.
-#   Example: Europe/Amsterdam
-#
-# [*manage_database*]
-#   When true, it will configure the database and execute the sql scripts.
-#
-# [*manage_vhost*]
-#   When true, it will create an vhost for apache. The parameter zabbix_url
-#   has to be set.
+#   Example: 2.4
 #
 # [*manage_firewall*]
 #   When true, it will create iptables rules.
@@ -40,43 +24,12 @@
 # [*manage_repo*]
 #   When true, it will create repository for installing the server.
 #
-# [*manage_resouces*]
-#   When true, it will export resources to something like puppetdb.
-#   When set to true, you'll need to configure 'storeconfigs' to make
-#   this happen. Default is set to false, as not everyone has this
-#   enabled.
-#
-# [*apache_use_ssl*]
-#   Will create an ssl vhost. Also nonssl vhost will be created for redirect
-#   nonssl to ssl vhost.
-#
-# [*apache_ssl_cert*]
-#   The location of the ssl certificate file. You'll need to make sure this
-#   file is present on the system, this module will not install this file.
-#
-# [*apache_ssl_key*]
-#   The location of the ssl key file. You'll need to make sure this file is
-#   present on the system, this module will not install this file.
-#
-# [*apache_ssl_cipher*]
-#   The ssl cipher used. Cipher is used from this website:
-#   https://wiki.mozilla.org/Security/Server_Side_TLS
-#
-# [*apache_ssl_chain*}
-#   The ssl chain file.
-#
-# [*zabbix_api_user*]
-#   Name of the user which the api should connect to. Default: Admin
-#
-# [*zabbix_api_pass*]
-#   Password of the user which connects to the api. Default: zabbix
-#
 # [*nodeid*]
 #   Unique nodeid in distributed setup.
 #   (Deprecated since 2.4)
 #
 # [*listenport*]
-#   Listen port for trapper.
+#   Listen port for the zabbix-server. Default: 10051
 #
 # [*sourceip*]
 #   Source ip address for outgoing connections.
@@ -93,25 +46,25 @@
 # [*pidfile*]
 #   Name of pid file.
 #
-# [*dbhost*]
+# [*database_host*]
 #   Database host name.
 #
-# [*dbname*]
+# [*database_name*]
 #   Database name.
 #
-# [*dbschema*]
+# [*database_schema*]
 #   Schema name. used for ibm db2.
 #
-# [*dbuser*]
+# [*database_user*]
 #   Database user. ignored for sqlite.
 #
-# [*dbpassword*]
+# [*database_password*]
 #   Database password. ignored for sqlite.
 #
-# [*dbsocket*]
+# [*database_socket*]
 #   Path to mysql socket.
 #
-# [*dbport*]
+# [*database_port*]
 #   Database port when not using local socket. Ignored for sqlite.
 #
 # [*startpollers*]
@@ -163,7 +116,7 @@
 #   If 1, snmp trapper process is started.
 #
 # [*listenip*]
-#   List of comma delimited ip addresses that the trapper should listen on.
+#   List of comma delimited ip addresses that the zabbix-server should listen on.
 #
 # [*housekeepingfrequency*]
 #   How often zabbix will perform housekeeping procedure (in hours).
@@ -267,10 +220,26 @@
 #
 # === Example
 #
-#  class { 'zabbix::agent':
-#    zabbix_version => '2.2',
-#    server         => '192.168.1.1',
-#  }
+#   When running everything on a single node, please check
+#   documentation in init.pp
+#   The following is an example of an multiple host setup:
+#
+#   node 'wdpuppet03.dj-wasabi.local' {
+#     #class { 'postgresql::client': }
+#     class { 'mysql::client': }
+#     class { 'zabbix::server':
+#       zabbix_version => '2.4',
+#       database_host  => 'wdpuppet04.dj-wasabi.local',
+#       database_type  => 'mysql',
+#     }
+#   }
+#
+#   The setup of above shows an configuration which used mysql as database.
+#   It will require the database "client" classes, this is needed for executing
+#   the installation files.
+#
+#   When database_type = postgres, uncomment the postgresql::client class and change or
+#   remove the database_type parameter and comment the mysql::client class.
 #
 # === Authors
 #
@@ -281,22 +250,10 @@
 # Copyright 2014 Werner Dijkerman
 #
 class zabbix::server (
-  $zabbix_url              = '',
-  $dbtype                  = $zabbix::params::dbtype,
+  $database_type           = $zabbix::params::database_type,
   $zabbix_version          = $zabbix::params::zabbix_version,
-  $zabbix_timezone         = $zabbix::params::zabbix_timezone,
-  $manage_database         = $zabbix::params::manage_database,
-  $manage_vhost            = $zabbix::params::manage_vhost,
   $manage_firewall         = $zabbix::params::manage_firewall,
   $manage_repo             = $zabbix::params::manage_repo,
-  $manage_resources        = $zabbix::params::manage_resources,
-  $apache_use_ssl          = $zabbix::params::apache_use_ssl,
-  $apache_ssl_cert         = $zabbix::params::apache_ssl_cert,
-  $apache_ssl_key          = $zabbix::params::apache_ssl_key,
-  $apache_ssl_cipher       = $zabbix::params::apache_ssl_cipher,
-  $apache_ssl_chain        = $zabbix::params::apache_ssl_chain,
-  $zabbix_api_user         = $zabbix::params::server_api_user,
-  $zabbix_api_pass         = $zabbix::params::server_api_pass,
   $nodeid                  = $zabbix::params::server_nodeid,
   $listenport              = $zabbix::params::server_listenport,
   $sourceip                = $zabbix::params::server_sourceip,
@@ -304,13 +261,13 @@ class zabbix::server (
   $logfilesize             = $zabbix::params::server_logfilesize,
   $debuglevel              = $zabbix::params::server_debuglevel,
   $pidfile                 = $zabbix::params::server_pidfile,
-  $dbhost                  = $zabbix::params::server_dbhost,
-  $dbname                  = $zabbix::params::server_dbname,
-  $dbschema                = $zabbix::params::server_dbschema,
-  $dbuser                  = $zabbix::params::server_dbuser,
-  $dbpassword              = $zabbix::params::server_dbpassword,
-  $dbsocket                = $zabbix::params::server_dbsocket,
-  $dbport                  = $zabbix::params::server_dbport,
+  $database_host           = $zabbix::params::server_database_host,
+  $database_name           = $zabbix::params::server_database_name,
+  $database_schema         = $zabbix::params::server_database_schema,
+  $database_user           = $zabbix::params::server_database_user,
+  $database_password       = $zabbix::params::server_database_password,
+  $database_socket         = $zabbix::params::server_database_socket,
+  $database_port           = $zabbix::params::server_database_port,
   $startpollers            = $zabbix::params::server_startpollers,
   $startipmipollers        = $zabbix::params::server_startipmipollers,
   $startpollersunreachable = $zabbix::params::server_startpollersunreachable,
@@ -362,69 +319,37 @@ class zabbix::server (
   ) inherits zabbix::params {
 
   # Check some if they are boolean
-  validate_bool($manage_database)
-  validate_bool($manage_vhost)
   validate_bool($manage_firewall)
-  validate_bool($manage_resources)
-  validate_bool($apache_use_ssl)
+  validate_bool($manage_repo)
 
-  # So if manage_resources is set to true, we can send some data
-  # to the puppetdb. We will include an class, otherwise when it
-  # is set to false, you'll get warnings like this:
-  # "Warning: You cannot collect without storeconfigs being set"
-  if $manage_resources {
-
-    # On some systems, certain gems (including the zabbixapi one)
-    # require a ruby development package to be installed.  This
-    # class installs it, if it isn't already defined
-    if $::osfamily == 'redhat' {
-      $ruby_devel_package = 'ruby-devel'
-    } elsif $::osfamily == 'debian' {
-      $ruby_devel_package = 'ruby-dev'
-
-      # Debian also requires make to install zabbixapi
-      $make_package = 'make'
-    }
-    if ($ruby_devel_package != undef) {
-      if ! defined(Package[$ruby_devel_package]) {
-        package { $ruby_devel_package:
-          ensure => installed,
-        }
-      }
-      if ($make_package != undef) {
-        if ! defined(Package[$make_package]) {
-          package { $make_package:
-            ensure => installed,
-          }
-        }
-        Package['zabbixapi'] { require => Package[$ruby_devel_package, $make_package]}
-      } else {
-        Package['zabbixapi'] { require => Package[$ruby_devel_package]}
-      }
-    }
-
-    # Installing the zabbixapi gem package. We need this gem for
-    # communicating with the zabbix-api. This is way better then
-    # doing it ourself.
-    package { 'zabbixapi':
-      ensure   => "${zabbix_version}.0",
-      provider => 'gem',
-    } ->
-    class { 'zabbix::resources::server':
-      zabbix_url     => $zabbix_url,
-      zabbix_user    => $zabbix_api_user,
-      zabbix_pass    => $zabbix_api_pass,
-      apache_use_ssl => $apache_use_ssl,
-    }
-  }
-
-  # use the correct db.
-  case $dbtype {
+  # Get the correct database_type. We need this for installing the
+  # correct package and loading the sql files.
+  case $database_type {
     'postgresql': {
       $db = 'pgsql'
+      # Execute the postgresql scripts
+      class { 'zabbix::database::postgresql':
+        zabbix_type       => 'server',
+        zabbix_version    => $zabbix_version,
+        database_name     => $database_name,
+        database_user     => $database_user,
+        database_password => $database_password,
+        database_host     => $database_host,
+        require           => Package["zabbix-server-${db}"],
+      }
     }
     'mysql': {
       $db = 'mysql'
+      # Execute the mysql scripts
+      class { 'zabbix::database::mysql':
+        zabbix_type       => 'server',
+        zabbix_version    => $zabbix_version,
+        database_name     => $database_name,
+        database_user     => $database_user,
+        database_password => $database_password,
+        database_host     => $database_host,
+        require           => Package["zabbix-server-${db}"],
+      }
     }
     default: {
       fail('unrecognized database type for server.')
@@ -438,52 +363,12 @@ class zabbix::server (
         zabbix_version => $zabbix_version,
       }
     }
-    Package["zabbix-server-${db}"] {require => Class['zabbix::repo']}
   }
 
   # Installing the packages
   package { "zabbix-server-${db}":
     ensure  => present,
-  }
-
-  case $::operatingsystem {
-    'ubuntu', 'debian' : {
-      package { "php5-${db}":
-        ensure => present,
-      } ->
-      package { 'zabbix-frontend-php':
-        ensure  => present,
-        require => Package["zabbix-server-${db}"],
-        before  => File['/etc/zabbix/web/zabbix.conf.php'],
-      }
-    }
-    default : {
-      package { "zabbix-web-${db}":
-        ensure  => present,
-        require => Package["zabbix-server-${db}"],
-        before  => [
-          File['/etc/zabbix/web/zabbix.conf.php'],
-          Package['zabbix-web']
-        ],
-      }
-      package { 'zabbix-web':
-        ensure => present,
-      }
-    }
-  }
-
-  # if we want to manage the databases, we do
-  # some stuff. (for maintaining database only.)
-  class { 'zabbix::database':
-    manage_database => $manage_database,
-    dbtype          => $dbtype,
-    zabbix_type     => 'server',
-    zabbix_version  => $zabbix_version,
-    db_name         => $dbname,
-    db_user         => $dbuser,
-    db_pass         => $dbpassword,
-    db_host         => $dbhost,
-    before          => Service['zabbix-server'],
+    require => Class['zabbix::repo'],
   }
 
   # Workaround for: The redhat provider can not handle attribute enable
@@ -516,17 +401,6 @@ class zabbix::server (
     content => template('zabbix/zabbix_server.conf.erb'),
   }
 
-  # Webinterface config file
-  file { '/etc/zabbix/web/zabbix.conf.php':
-    ensure  => present,
-    owner   => 'zabbix',
-    group   => 'zabbix',
-    mode    => '0644',
-    notify  => Service['zabbix-server'],
-    replace => true,
-    content => template('zabbix/web/zabbix.conf.php.erb'),
-  }
-
   # Include dir for specific zabbix-server checks.
   file { $include_dir:
     ensure  => directory,
@@ -534,82 +408,6 @@ class zabbix::server (
     group   => 'zabbix',
     require => File['/etc/zabbix/zabbix_server.conf'],
   }
-
-  # Is set to true, it will create the apache vhost.
-  if $manage_vhost {
-    include apache
-    # Check if we use ssl. If so, we also create an non ssl
-    # vhost for redirect traffic from non ssl to ssl site.
-    if $apache_use_ssl {
-      # Listen port
-      $apache_listen_port = '443'
-
-      # We create nonssl vhost for redirecting non ssl
-      # traffic to https.
-      apache::vhost { "${zabbix_url}_nonssl":
-        docroot        => '/usr/share/zabbix',
-        manage_docroot => false,
-        port           => '80',
-        servername     => $zabbix_url,
-        ssl            => false,
-        rewrites       => [
-          {
-            comment      => 'redirect all to https',
-            rewrite_cond => ['%{SERVER_PORT} !^443$'],
-            rewrite_rule => ["^/(.+)$ https://${zabbix_url}/\$1 [L,R]"],
-          }
-        ],
-      }
-    } else {
-      # So no ssl, so default port 80
-      $apache_listen_port = '80'
-    }
-
-    apache::vhost { $zabbix_url:
-      docroot         => '/usr/share/zabbix',
-      port            => $apache_listen_port,
-      directories     => [
-        { path     => '/usr/share/zabbix',
-          provider => 'directory',
-          allow    => 'from all',
-          order    => 'Allow,Deny',
-        },
-        { path     => '/usr/share/zabbix/conf',
-          provider => 'directory',
-          deny     => 'from all',
-          order    => 'Deny,Allow',
-        },
-        { path     => '/usr/share/zabbix/api',
-          provider => 'directory',
-          deny     => 'from all',
-          order    => 'Deny,Allow',
-        },
-        { path     => '/usr/share/zabbix/include',
-          provider => 'directory',
-          deny     => 'from all',
-          order    => 'Deny,Allow',
-        },
-        { path     => '/usr/share/zabbix/include/classes',
-          provider => 'directory',
-          deny     => 'from all',
-          order    => 'Deny,Allow',
-        },
-      ],
-      custom_fragment => "  php_value max_execution_time 300
-    php_value memory_limit 128M
-    php_value post_max_size 16M
-    php_value upload_max_filesize 2M
-    php_value max_input_time 300
-    # Set correct timezone.
-    php_value date.timezone ${zabbix_timezone}",
-      rewrites        => [ { rewrite_rule    => ['^$ /index.php [L]'] } ],
-      ssl             => $apache_use_ssl,
-      ssl_cert        => $apache_ssl_cert,
-      ssl_key         => $apache_ssl_key,
-      ssl_cipher      => $apache_ssl_cipher,
-      ssl_chain       => $apache_ssl_chain,
-    }
-  } # END if $manage_vhost
 
   # Manage firewall
   if $manage_firewall {

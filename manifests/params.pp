@@ -27,17 +27,21 @@ class zabbix::params {
     }
   }
 
-  # Zabbix overall params
-  $dbtype                         = 'postgresql'
+  # Zabbix overall params. Is used by all components.
   $zabbix_version                 = '2.4'
   $zabbix_timezone                = 'Europe/Amsterdam'
+  $zabbix_server                  = 'localhost'
+  $zabbix_web                     = 'localhost'
+  $zabbix_server_ip               = '127.0.0.1'
+  $zabbix_front_ip                = '127.0.0.1'
   $manage_database                = true
   $manage_vhost                   = true
   $manage_firewall                = false
   $manage_repo                    = true
   $manage_resources               = false
+  $database_type                  = 'postgresql'
 
-  # Server specific params
+  # Zabbix-web
   $apache_use_ssl                 = false
   $apache_ssl_key                 = undef
   $apache_ssl_cert                = undef
@@ -47,6 +51,8 @@ class zabbix::params {
   $apache_ssl_chain               = undef
   $server_api_user                = 'Admin'
   $server_api_pass                = 'zabbix'
+
+  # Zabbix-server
   $server_nodeid                  = '0'
   $server_listenport              = '10051'
   $server_sourceip                = undef
@@ -54,13 +60,13 @@ class zabbix::params {
   $server_logfilesize             = '10'
   $server_debuglevel              = '3'
   $server_pidfile                 = '/var/run/zabbix/zabbix_server.pid'
-  $server_dbhost                  = 'localhost'
-  $server_dbname                  = 'zabbix-server'
-  $server_dbschema                = undef
-  $server_dbuser                  = 'zabbix-server'
-  $server_dbpassword              = 'zabbix-server'
-  $server_dbsocket                = undef
-  $server_dbport                  = undef
+  $server_database_host           = 'localhost'
+  $server_database_name           = 'zabbix-server'
+  $server_database_schema         = undef
+  $server_database_user           = 'zabbix-server'
+  $server_database_password       = 'zabbix-server'
+  $server_database_socket         = undef
+  $server_database_port           = undef
   $server_startpollers            = '5'
   $server_startipmipollers        = '0'
   $server_startpollersunreachable = '1'

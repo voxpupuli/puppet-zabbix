@@ -2,19 +2,19 @@
 // Zabbix GUI configuration file
 global $DB;
 
-$DB['TYPE']     = '<%= @dbtype.upcase %>';
-$DB['SERVER']   = '<%= @dbhost %>';
+$DB['TYPE']     = '<%= @database_type.upcase %>';
+$DB['SERVER']   = '<%= @database_host %>';
 $DB['PORT']     = '0';
-$DB['DATABASE'] = '<%= @dbname %>';
-$DB['USER']     = '<%= @dbuser %>';
-$DB['PASSWORD'] = '<%= @dbpassword %>';
+$DB['DATABASE'] = '<%= @database_name %>';
+$DB['USER']     = '<%= @database_user %>';
+$DB['PASSWORD'] = '<%= @database_password %>';
 
 // SCHEMA is relevant only for IBM_DB2 database
 $DB['SCHEMA'] = '';
 
-$ZBX_SERVER      = '<%= @fqdn %>';
-$ZBX_SERVER_PORT = '<%= @listenport %>';
-$ZBX_SERVER_NAME = '<%= @hostname %>';
+$ZBX_SERVER      = '<%= @zabbix_server %>';
+$ZBX_SERVER_PORT = '<%= @zabbix_listenport %>';
+$ZBX_SERVER_NAME = '<%= @zabbix_server %>';
 
 $IMAGE_FORMAT_DEFAULT = IMAGE_FORMAT_PNG;
 ?>
