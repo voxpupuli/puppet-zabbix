@@ -327,6 +327,7 @@ class zabbix::server (
   case $database_type {
     'postgresql': {
       $db = 'pgsql'
+
       # Execute the postgresql scripts
       class { 'zabbix::database::postgresql':
         zabbix_type       => 'server',
@@ -340,6 +341,7 @@ class zabbix::server (
     }
     'mysql': {
       $db = 'mysql'
+
       # Execute the mysql scripts
       class { 'zabbix::database::mysql':
         zabbix_type       => 'server',
