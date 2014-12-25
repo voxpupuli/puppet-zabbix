@@ -45,13 +45,25 @@ With the 0.4.0 release, you can - when you have configured exported resources - 
 Be aware when you have a lot of hosts, it will increase the puppet runtime on the zabbix-server host. It will check via the zabbix-api if hosts exits and costs time. 
 
 This module make uses of this gem: https://github.com/express42/zabbixapi
-With this gem it is possible to create/update hosts/proxy in ruby easy. 
+With this gem it is possible to create/update hosts/proxy in ruby easy.
+
+With release 1.0.0 the zabbix::server class is split into 3 classes:
+ - zabbix::web
+ - zabbix::server
+ - zabbix::database
+
+Now you can use 3 machines for each purpose. This is something for the bigger environments to spread the load. 
 
 ##Setup
 As this puppet module contains specific components for zabbix, you'll need to specify which you want to install. Every zabbix component has his own zabbix:: class. Here you'll find each component.
 
 ###Setup zabbix-server
-This will install an basic zabbix-server instance. 
+This will install an basic zabbix-server instance. You'll have to decide if you want to run everything on a single host or multiple hosts. When installing on a single host, the 'zabbix' class can be used. When you want to use more than 1 host, you'll need the following classes:
+  - zabbix::web
+  - zabbix::server
+  - zabbix::database
+
+You can see at "usage" in this documentation how all of this can be achieved.
 
 You will need to supply one parameter: zabbix_url. This is the url on which the zabbix instance will be available. With the example at "setup", the zabbix webinterface will be: http://zabbix.example.com. 
 
@@ -78,59 +90,195 @@ Also added with the 0.6.0 release is an class zabbix::userparameter. This class 
 ##Usage
 The following will provide an basic usage of the zabbix components.
 ###Usage zabbix-server
+
+The zabbix-server can be used in 2 ways:
+* one node setup
+* multiple node setup.
+
+The following is an example of an single node setup:
 ```ruby
-class { 'apache':
+node 'zabbix.example.com'
+  class { 'apache':
     mpm_module => 'prefork',
-}
-include apache::mod::php
+  }
+  include apache::mod::php
 
-class { 'postgresql::server': }
-#class { 'mysql::server': }
+  class { 'postgresql::server': }
+  #class { 'mysql::server': }
 
-class { 'zabbix::server':
-  zabbix_url => 'zabbix.example.com',
+  class { 'zabbix':
+    zabbix_url => 'zabbix.example.com',
+  }
 }
 ```
 
+The setup of above assumes you are using an PostgreSQL database. When you want to use the MySQL database, you'll need to do the following:
+* comment the 'postgresql::server' class
+* uncomment the 'mysql::server' class
+* Add the `database_type` parameter into the 'zabbix::server' class and use as value: mysql
+
+When using an multiple node setup, the following can be used:
+```ruby
+node 'server01.example.com' {
+# My ip: 192.168.20.11
+  class { 'apache':
+      mpm_module => 'prefork',
+  }
+  class { 'apache::mod::php': }
+  class { 'zabbix::web':
+    zabbix_url    => 'zabbix.dj-wasabi.nl',
+    zabbix_server => 'server02.example.com',
+    database_host => 'server03.example.com',
+    database_type => 'mysql',
+  }
+}
+
+node 'server02.example.com' {
+# My ip: 192.168.20.12
+  #class { 'postgresql::client': }
+  class { 'mysql::client': }
+  class { 'zabbix::server':
+    database_host  => 'server03.example.com',
+    database_type  => 'mysql',
+  }
+}
+
+node 'server03.example.com' {
+# My ip: 192.168.20.13
+  #class { 'postgresql::server':
+  #    listen_addresses => '192.168.20.13'
+  #  }
+    class { 'mysql::server':
+      override_options => {
+        'mysqld'       => {
+          'bind_address' => '192.168.20.13',
+        },
+      },
+    }
+  class { 'zabbix::database':
+    database_type    => 'mysql',
+    #zabbix_web_ip    => '192.168.20.12',
+    #zabbix_server_ip => '192.168.20.13',
+    zabbix_server    => 'server02.example.com',
+    zabbix_web       => 'server01.example.com',
+  }
+}
+```
+
+The setup of above assumes you are using an MySQL database. When you want to use the PostgreSQL database, you'll need to do the following:
+* Uncomment the postgresql* classes
+* remove/comment the mysql* classes
+* remove or change the `database_type` to 'postgresql'
+* uncomment both zabbix_*_ip parameters and comment the zabbix_server and zabbix_web parameter.
+
 ###Usage zabbix-agent
+
+Basic one way of setup, wheter it is monitored by zabbix-server or zabbix-proxy:
 ```ruby
 class { 'zabbix::agent':
-  server => '192.168.1.1',
+  server => '192.168.20.11',
 }
 ```
 
 ###Usage zabbix-proxy
 
-```ruby
-class { 'postgresql::server': }
-#class { 'mysql::server': }
+Like the zabbix-server, the zabbix-proxy can also be used in 2 ways:
+* single node
+* multiple node
 
-class { 'zabbix::proxy':
-  zabbix_server_host => '192.168.1.1',
-  zabbix_server_port => '10051',
+The following is an example of an single node setup:
+```ruby
+node 'proxy.example.com'
+  class { 'postgresql::server': }
+  #class { 'mysql::server': }
+
+  class { 'zabbix::proxy':
+    zabbix_server_host => '192.168.20.11',
+    zabbix_server_port => '10051',
+  }
 }
 ```
+
+The setup of above assumes you are using an PostgreSQL database. When you want to use the MySQL database, you'll need to do the following:
+* comment the 'postgresql::server' class
+* uncomment the 'mysql::server' class
+* Add the `database_type` parameter into the 'zabbix::proxy' class and use as value: mysql
+
+When using an multiple node setup, the following can be used:
+```ruby
+node 'server11.example.com' {
+# My ip: 192.168.30.11
+  #class { 'postgresql::client': }
+  class { 'mysql::client': }
+  class { 'zabbix::proxy':
+    zabbix_server_host => '192.168.20.11',
+    manage_database    => false,
+    database_host      => 'server12.example.com',
+    database_type      => 'mysql',
+  }
+}
+
+node 'server12.example.com' {
+# My ip: 192.168.30.12
+  #class { 'postgresql::server':
+  #    listen_addresses => '192.168.30.12'
+  #  }
+    class { 'mysql::server':
+      override_options => {
+        'mysqld'       => {
+          'bind_address' => '192.168.30.12',
+        },
+      },
+    }
+  class { 'zabbix::database':
+    database_type     => 'mysql',
+    zabbix_type       => 'proxy',
+    #zabbix_proxy_ip   => '192.168.30.11',
+    zabbix_proxy      => 'server11.example.com',
+    database_name     => 'zabbix-proxy',
+    database_user     => 'zabbix-proxy',
+    database_password => 'zabbix-proxy',
+  }
+}
+```
+
+The setup of above assumes you are using an MySQL database. When you want to use the PostgreSQL database,
+you'll need to do the following:
+* Uncomment the postgresql* classes
+* remove/comment the mysql* classes
+* remove or change the `database_type` to 'postgresql'
+* uncomment both zabbix_proxy_ip parameter and comment the zabbix_proxy.
+
 ###Usage zabbix-javagateway
 
-```ruby
-class { 'zabbix::javagateway': }
-```
-
-Usage example for an zabbix::server:
+The zabbix-javagateway can be used with an zabbix-server or zabbix-proxy. You'll need to install it on an server. (Can be together with zabbix-server or zabbix-proxy, you can even install it on a sperate machine.). The following example shows you to use it on a seperate machine.
 
 ```ruby
-class { 'zabbix::server':
-  zabbix_url  => 'zabbix.example.com', 
-  javagateway => '192.168.1.2',
+node server05.example.com {
+# My ip: 192.168.20.15
+  class { 'zabbix::javagateway': }
 }
 ```
 
-Or with an zabbix::proxy:
+When installed on seperate machine, the zabbix::server configuration should be updated by adding the `javagateway` parameter.
 
 ```ruby
-class { 'zabbix::proxy':
-  zabbix_server_host => '192.168.1.1', 
-  javagateway        => '192.168.1.2',
+node server01.example.com {
+  class { 'zabbix::server':
+    zabbix_url  => 'zabbix.example.com', 
+    javagateway => '192.168.20.15',
+  }
+}
+```
+
+Or when using with an zabbix-proxy:
+
+```ruby
+node server11.example.com {
+  class { 'zabbix::proxy':
+    zabbix_server_host => '192.168.20.11', 
+    javagateway        => '192.168.20.15',
+  }
 }
 ```
 ###Usage zabbix-userparameters
@@ -166,19 +314,22 @@ zabbix::userparameter::data:
 ```
 
 ##Reference
-There are some overall parameters which exists on the classes (zabbix::server, zabbix::proxy, zabbix::agent & zabbix::javagateway):
-* `zabbix_version`: You can specifiy which zabbix release needs to be installed. Default is '2.2'. 
+There are some overall parameters which exists on all of the classes:
+* `zabbix_version`: You can specifiy which zabbix release needs to be installed. Default is '2.4'. 
 * `manage_firewall`: Wheter you want to manage the firewall. If true (Which is default), iptables will be configured to allow communications to zabbix ports.
 * `manage_repo`:  If zabbix needs to be installed from the zabbix repositories (Default is true). When you have your own repositories, you'll set this to false. But you'll have to make sure that your repositorie is installed on the host.
 
 The following is only availabe for the following classes: zabbix::server, zabbix::proxy & zabbix::agent
 * `manage_resources`: As of release 0.4.0, when this parameter is set to true (Default is false) it make use of exported resources. You'll have an puppetdb configured before you can use this option. Information from the zabbix::agent, zabbix::proxy and zabbix::userparameters are able to export resources, which will be loaded on the zabbix::server.
-
-
-###Reference zabbix-server
-* `zabbix_url`: This is the url on which Zabbix should be available. Please make sure that the entry exists in the DNS configuration.
-* `dbtype`: Which database is used for zabbix. Default is postgresql.
+* `database_type`: Which database is used for zabbix. Default is postgresql.
 * `manage_database`: When the parameter 'manage_database' is set to true (Which is default), it will create the database and loads the sql files. Default the postgresql will be used as backend, mentioned in the params.pp file. You'll have to include the postgresql (or mysql) module yourself, as this module will require it.
+
+
+###Reference zabbix (init.pp)
+This is the class for installing everything on a single host and thus all parameters described earlier and those below can be used with this class.
+
+###Reference zabbix-web
+* `zabbix_url`: This is the url on which Zabbix should be available. Please make sure that the entry exists in the DNS configuration.
 * `zabbix_timezone`: On which timezone the machine is placed. This information is needed for the apache virtual host.
 * `manage_vhost`: Will create an apache virtual host. Default is true.
 * `apache_use_ssl`: Will create an ssl vhost. Also nonssl vhost will be created for redirect nonssl to ssl vhost.
@@ -188,6 +339,10 @@ The following is only availabe for the following classes: zabbix::server, zabbix
 * `apache_ssl_chain`: The ssl_chain file. You'll need to make sure this file is present on the system, this module will not install this file.
 * `zabbix_api_user`: Username of user in Zabbix which is able to create hosts and edit hosts via the zabbix-api. Default: Admin
 * `zabbix_api_pass`: Password for the user in Zabbix for zabbix-api usage. Default: zabbix
+
+There are some more zabbix specific parameters, please check them by opening the manifest file.
+
+###Reference zabbix-server
 
 There are some more zabbix specific parameters, please check them by opening the manifest file.
 
@@ -204,8 +359,6 @@ There are some more zabbix specific parameters, please check them by opening the
 
 ###Reference zabbix-proxy
 * `zabbix_server_host`: The ipaddress or fqdn of the zabbix server.  
-* `zabbix_server_port`: The port of the zabbix server. Default: 10051
-* `manage_database`: When the parameter 'manage_database' is set to true (Which is default), it will create the database and loads the sql files. Default the postgresql will be used as backend, mentioned in the params.pp file. You'll have to include the postgresql (or mysql) module yourself, as this module will require it.
 
 The following parameters is only needed when `manage_resources` is set to true:
 * `use_ip`: Default is set to true. 

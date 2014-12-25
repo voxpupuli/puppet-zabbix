@@ -233,11 +233,6 @@
 #  node 'wdpuppet03.dj-wasabi.local' {
 #    #class { 'postgresql::client': }
 #    class { 'mysql::client': }
-#    #class { 'zabbix::server':
-#    #  zabbix_version => '2.4',
-#    #  database_host  => 'wdpuppet04.dj-wasabi.local',
-#    #  database_type  => 'mysql',
-#    #}
 #    class { 'zabbix::proxy':
 #      zabbix_server_host => '192.168.1.1',
 #      manage_database    => false,
