@@ -18,6 +18,10 @@
 # [*zabbix_version*]
 #   This is the zabbix version.
 #
+# [*zabbix_package_state*]
+#   The state of the package that needs to be installed: present or latest.
+#   Default: present
+#
 # [*manage_database*]
 #   When true, it will configure the database and execute the sql scripts.
 #
@@ -279,6 +283,7 @@
 class zabbix::proxy (
   $database_type           = $zabbix::params::database_type,
   $zabbix_version          = $zabbix::params::zabbix_version,
+  $zabbix_package_state    = $zabbix::params::zabbix_package_state,
   $manage_database         = $zabbix::params::manage_database,
   $manage_firewall         = $zabbix::params::manage_firewall,
   $manage_repo             = $zabbix::params::manage_repo,
@@ -438,18 +443,18 @@ class zabbix::proxy (
   case $::operatingsystem {
     'redhat','centos','oraclelinux' : {
       package { 'zabbix-proxy':
-        ensure  => present,
+        ensure  => $zabbix_package_state,
         require => Package["zabbix-proxy-${db}"]
       }
       # Installing the packages
       package { "zabbix-proxy-${db}":
-        ensure  => present,
+        ensure  => $zabbix_package_state,
       }
     } # END 'redhat','centos','oraclelinux'
     default : {
       # Installing the packages
       package { "zabbix-proxy-${db}":
-        ensure  => present,
+        ensure  => $zabbix_package_state,
       }
     } # END default
   } # END case $::operatingsystem

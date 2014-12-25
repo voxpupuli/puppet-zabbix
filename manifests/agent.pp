@@ -14,6 +14,10 @@
 # [*zabbix_version*]
 #   This is the zabbix version.
 #
+# [*zabbix_package_state*]
+#   The state of the package that needs to be installed: present or latest.
+#   Default: present
+#
 # [*manage_firewall*]
 #   When true, it will create iptables rules.
 #
@@ -158,6 +162,7 @@
 #
 class zabbix::agent (
   $zabbix_version       = $zabbix::params::zabbix_version,
+  $zabbix_package_state = $zabbix::params::zabbix_package_state,
   $manage_firewall      = $zabbix::params::manage_firewall,
   $manage_repo          = $zabbix::params::manage_repo,
   $manage_resources     = $zabbix::params::manage_resources,
@@ -249,7 +254,7 @@ class zabbix::agent (
 
   # Installing the package
   package { 'zabbix-agent':
-    ensure  => present,
+    ensure  => $zabbix_package_state,
   }
 
   # Controlling the 'zabbix-agent' service

@@ -18,6 +18,10 @@
 #   This is the zabbix version.
 #   Example: 2.4
 #
+# [*zabbix_package_state*]
+#   The state of the package that needs to be installed: present or latest.
+#   Default: present
+#
 # [*manage_firewall*]
 #   When true, it will create iptables rules.
 #
@@ -252,6 +256,7 @@
 class zabbix::server (
   $database_type           = $zabbix::params::database_type,
   $zabbix_version          = $zabbix::params::zabbix_version,
+  $zabbix_package_state    = $zabbix::params::zabbix_package_state,
   $manage_firewall         = $zabbix::params::manage_firewall,
   $manage_repo             = $zabbix::params::manage_repo,
   $nodeid                  = $zabbix::params::server_nodeid,
@@ -369,7 +374,7 @@ class zabbix::server (
 
   # Installing the packages
   package { "zabbix-server-${db}":
-    ensure  => present,
+    ensure  => $zabbix_package_state,
     require => Class['zabbix::repo'],
   }
 

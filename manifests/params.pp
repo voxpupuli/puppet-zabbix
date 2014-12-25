@@ -36,6 +36,7 @@ class zabbix::params {
   $zabbix_server_ip               = '127.0.0.1'
   $zabbix_web_ip                  = '127.0.0.1'
   $zabbix_proxy_ip                = '127.0.0.1'
+  $zabbix_package_state           = 'present'
   $manage_database                = true
   $manage_vhost                   = true
   $manage_firewall                = false

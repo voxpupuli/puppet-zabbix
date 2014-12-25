@@ -27,6 +27,10 @@
 #   The current timezone for vhost configuration needed for the php timezone.
 #   Example: Europe/Amsterdam
 #
+# [*zabbix_package_state*]
+#   The state of the package that needs to be installed: present or latest.
+#   Default: present
+#
 # [*manage_vhost*]
 #   When true, it will create an vhost for apache. The parameter zabbix_url
 #   has to be set.
@@ -125,6 +129,7 @@ class zabbix::web (
   $database_type           = $zabbix::params::database_type,
   $zabbix_version          = $zabbix::params::zabbix_version,
   $zabbix_timezone         = $zabbix::params::zabbix_timezone,
+  $zabbix_package_state    = $zabbix::params::zabbix_package_state,
   $manage_vhost            = $zabbix::params::manage_vhost,
   $manage_repo             = $zabbix::params::manage_repo,
   $manage_resources        = $zabbix::params::manage_resources,
@@ -224,13 +229,13 @@ class zabbix::web (
         ensure => present,
       } ->
       package { 'zabbix-frontend-php':
-        ensure  => present,
+        ensure  => $zabbix_package_state,
         before  => File['/etc/zabbix/web/zabbix.conf.php'],
       }
     }
     default : {
       package { "zabbix-web-${db}":
-        ensure  => present,
+        ensure  => $zabbix_package_state,
         before  => [
           File['/etc/zabbix/web/zabbix.conf.php'],
           Package['zabbix-web']
@@ -238,7 +243,7 @@ class zabbix::web (
         require => Class['zabbix::repo'],
       }
       package { 'zabbix-web':
-        ensure => present,
+        ensure => $zabbix_package_state,
       }
     }
   } # END case $::operatingsystem
