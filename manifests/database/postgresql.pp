@@ -53,7 +53,7 @@ class zabbix::database::postgresql (
   case $zabbix_type {
     'proxy': {
       exec { 'zabbix_proxy_create.sql':
-        command  => "cd ${zabbix_path} && sudo -u postgres psql -h ${database_host} -U ${database_user} -d ${database_name} -f schema.sql && touch /etc/zabbix/.schema.done",
+        command  => "cd ${zabbix_path} && psql -h ${database_host} -U ${database_user} -d ${database_name} -f schema.sql && touch /etc/zabbix/.schema.done",
         path     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
         unless   => 'test -f /etc/zabbix/.schema.done',
         provider => 'shell',

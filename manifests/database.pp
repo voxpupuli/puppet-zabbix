@@ -37,6 +37,15 @@
 #   This parameter is used when database_type = postgresql. Default:
 #   127.0.0.1
 #
+# [*zabbix_proxy*]
+#   This is the FQDN for the host running zabbix-proxy. This parameter
+#   is used when database_type = mysql. Default: localhost
+#
+# [*zabbix_proxy_ip*]
+#   This is the actual ip address of the host running zabbix-proxy
+#   This parameter is used when database_type = postgresql. Default:
+#   127.0.0.1
+#
 # [*manage_database*]
 #   When set to true, it will create the database and will load
 #   the sql files for basic setup. Otherwise you should do this manually.
@@ -104,6 +113,8 @@ class zabbix::database(
   $zabbix_web_ip     = $zabbix::params::zabbix_web_ip,
   $zabbix_server     = $zabbix::params::zabbix_server,
   $zabbix_server_ip  = $zabbix::params::zabbix_server_ip,
+  $zabbix_proxy      = $zabbix::params::zabbix_proxy,
+  $zabbix_proxy_ip   = $zabbix::params::zabbix_proxy_ip,
   $manage_database   = $zabbix::params::manage_database,
   $database_type     = $zabbix::params::database_type,
   $database_name     = $zabbix::params::server_database_name,
@@ -111,7 +122,9 @@ class zabbix::database(
   $database_password = $zabbix::params::server_database_password,
   $database_host     = $zabbix::params::server_database_host,
 ) inherits zabbix::params {
-  # So lets create the databases.
+
+  # So lets create the databases and load all files. This can only be
+  # happen when manage_database is set to true (Default).
   if $manage_database == true {
     case $database_type {
       'postgresql': {
@@ -123,7 +136,7 @@ class zabbix::database(
           require  => Class['postgresql::server'],
         }
 
-        # When every component has its on server, we have to allow those servers
+        # When every component has its own server, we have to allow those servers to
         # access the database from the network. Postgresl allows this via the
         # pg_hba.conf file. As this file only accepts ip addresses, the ip address
         # of server and web has to be supplied as an parameter.
@@ -146,16 +159,46 @@ class zabbix::database(
             auth_method => 'md5',
           }
         } # END if $zabbix_web_ip != $zabbix_server_ip
+
+        # This is some specific action for the zabbix-proxy. This is due to better
+        # parameter naming.
+        if $zabbix_type == 'proxy' {
+          postgresql::server::pg_hba_rule { 'allow zabbix-proxy to access database':
+            description => 'Open up postgresql for access from zabbix-proxy',
+            type        => 'host',
+            database    => $database_name,
+            user        => $database_user,
+            address     => "${zabbix_proxy_ip}/32",
+            auth_method => 'md5',
+          }
+        } # END if $zabbix_type == 'proxy'
       }
       'mysql': {
         # This is the MySQL part.
-        # Create the MySQL database
-        mysql::db { $database_name:
-          user     => $database_user,
-          password => $database_password,
-          host     => $zabbix_server,
-          grant    => ['all'],
-          require  => Class['mysql::server']
+
+        # First we check what kind of zabbix component it is. We have to use clear names
+        # as it may be confusing when you need to fill in the zabbix-proxy name into the
+        # zabbix_server parameter. These are 2 different things. So we need to use an
+        # if statement for this.
+        if $zabbix_type == 'server' {
+          mysql::db { $database_name:
+            user     => $database_user,
+            password => $database_password,
+            host     => $zabbix_server,
+            grant    => ['all'],
+            require  => Class['mysql::server']
+          }
+        }
+
+        # And the proxy part.
+        if $zabbix_type == 'proxy' {
+          mysql::db { $database_name:
+            user     => $database_user,
+            password => $database_password,
+            host     => $zabbix_proxy,
+            grant    => ['all'],
+            require  => Class['mysql::server']
+          }
         }
 
         # When the zabbix web and zabbix database aren't running on the same host, some
@@ -189,6 +232,6 @@ class zabbix::database(
       default: {
         fail('Unrecognized database type for server.')
       }
-    } # END case $dbtype
+    } # END case $database_type
   }
 }

@@ -1,6 +1,5 @@
 # This is a configuration file for Zabbix Proxy process
-# To get more information about Zabbix,
-# visit http://www.zabbix.com
+# To get more information about Zabbix,_# visit http://www.zabbix.com
 
 ############ GENERAL PARAMETERS #################
 
@@ -82,32 +81,32 @@ PidFile=<%= @pidfile %>
 #	If set to localhost, socket is used for MySQL.
 #	If set to empty string, socket is used for PostgreSQL.
 #
-DBHost=<%= @dbhost %>
+DBHost=<%= @database_host %>
 
 ### Option: DBName
 #	Database name.
 #	For SQLite3 path to database file must be provided. DBUser and DBPassword are ignored.
 #	Warning: do not attempt to use the same database Zabbix server is using.
 #
-DBName=<%= @dbname %>
+DBName=<%= @database_name %>
 
 ### Option: DBSchema
 #	Schema name. Used for IBM DB2.
 #
-<% if @dbschema %>
-DBSchema=<%= @dbschema %>
+<% if @database_schema %>
+DBSchema=<%= @database_schema %>
 <% end %>
 
 ### Option: DBUser
 #	Database user. Ignored for SQLite.
 #
-DBUser=<%= @dbuser %>
+DBUser=<%= @database_user %>
 
 ### Option: DBPassword
 #	Database password. Ignored for SQLite.
 #	Comment this line if no password is used.
 #
-DBPassword=<%= @dbpassword %>
+DBPassword=<%= @database_password %>
 
 ### Option: DBSocket
 #	Path to MySQL socket.
