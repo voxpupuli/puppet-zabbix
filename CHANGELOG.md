@@ -4,9 +4,25 @@ Below an overview of all changes in the releases.
 
 Version (Release date)
 
+1.0.0   (2014-12-??)
+
+  * Split Zabbix Server Class into Components. See the documentation `readme.md` for more information.
+  * Renamed some parameters. Mostly the database parameters, from `db` to `database_`
+  * Changed the paths for the <sqlfile>.done files to /etc/zabbix/. This makes upgrading zabbix components a lot easier.
+  * Added zabbix_package_state parameter. You can choose present or latest.
+  * Included the puppetlabs/ruby for development packages when installing the zabbixapi gem.
+  * Add support for low level discovery(LLD) scripts #27 (By pull request: karolisc (Thanks!))
+  * Remove execute bit from .conf files #26 (By pull request: karolisc (Thanks!))
+  * Wrong name in zabbix::userparameters resource example. #25 (By pull request: karolisc (Thanks!))
+  * Fix for: Module fails with future parser enabled #29
+  * Fix for: Wrong fping path on Ubuntu 14.04 #28
+  * fixed puppet-lint message in userparameter.pp
+  * Add support for debian sid (just use wheezy package) #30 (By pull request: lucas42 (Thanks!))
+  * Fox for: Update apache_ssl_cipher list #31 (And by pull request: karolisc (Thanks!))
+
 0.6.1   (2014-12-09)
 
-  * Add repository for debian running on a raspberry pi
+  * Add repository for debian running on a raspberry pi (By pull request: lucas42 (Thanks!))
   * fixed puppet-lint messages
 
 0.6.0   (2014-12-06)

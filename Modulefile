@@ -1,5 +1,5 @@
 name    'wdijkerman-zabbix'
-version '0.6.1'
+version '1.0.0'
 source 'https://github.com/dj-wasabi/puppet-zabbix.git'
 author 'Werner Dijkerman'
 license 'Apache Version 2.0'
@@ -18,4 +18,5 @@ dependency 'puppetlabs/stdlib', '>= 4.0.0'
 dependency 'puppetlabs/mysql', '>= 2.0.0'
 dependency 'puppetlabs/apache', '>= 1.0.0'
 dependency 'puppetlabs/firewall', '>= 1.0.0'
+dependency 'puppetlabs/ruby', '>= 0.4.0'
 
