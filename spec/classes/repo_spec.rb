@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'zabbix::repo' do
   # Set some facts / params.
   
-  # Testing the Deviab: 6, ZBX: 2.0
+  # Testing the Debian: 6, ZBX: 2.0
   context "on a Debian OS" do
     let(:params) { {:zabbix_version => '2.0'} }
     let :facts do
@@ -18,7 +18,7 @@ describe 'zabbix::repo' do
     it { should contain_apt__source('zabbix').with_release('squeeze') }
   end
 
-  # Testing the Deviab: 7, ZBX: 2.0
+  # Testing the Debian: 7, ZBX: 2.0
   context "on a Debian OS" do
     let(:params) { {:zabbix_version => '2.0'} }
     let :facts do
@@ -33,7 +33,7 @@ describe 'zabbix::repo' do
     it { should contain_apt__source('zabbix').with_release('wheezy') }
   end
 
-  # Testing the Deviab: 7, ZBX: 2.2
+  # Testing the Debian: 7, ZBX: 2.2
   context "on a Debian OS" do
     let(:params) { {:zabbix_version => '2.2'} }
     let :facts do

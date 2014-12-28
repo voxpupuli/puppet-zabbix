@@ -49,7 +49,7 @@
 #
 class zabbix::javagateway(
   $zabbix_version       = $zabbix::params::zabbix_version,
-  $zabbix_package_state = $zabbix::params::zabbix_package_state
+  $zabbix_package_state = $zabbix::params::zabbix_package_state,
   $manage_firewall      = $zabbix::params::manage_firewall,
   $manage_repo          = $zabbix::params::manage_repo,
   $pidfile              = $zabbix::params::javagateway_pidfile,

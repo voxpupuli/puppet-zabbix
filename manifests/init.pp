@@ -185,10 +185,8 @@ class zabbix (
   class { 'zabbix::server':
     database_type           => $database_type,
     zabbix_version          => $zabbix_version,
-    manage_database         => $manage_database,
     manage_firewall         => $manage_firewall,
     manage_repo             => $manage_repo,
-    manage_resources        => $manage_resources,
     nodeid                  => $nodeid,
     listenport              => $listenport,
     sourceip                => $sourceip,

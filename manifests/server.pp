@@ -4,8 +4,6 @@
 #
 # === Requirements
 #
-# When 'manage_database' is set to true, the corresponding database class
-# in 'dbtype' should be required.
 #
 # === Parameters
 #

@@ -141,7 +141,7 @@ class zabbix::database(
         # pg_hba.conf file. As this file only accepts ip addresses, the ip address
         # of server and web has to be supplied as an parameter.
         if $zabbix_web_ip != $zabbix_server_ip {
-          postgresql::server::pg_hba_rule { 'allow zabbix-serber to access database':
+          postgresql::server::pg_hba_rule { 'Allow zabbix-server to access database':
             description => 'Open up postgresql for access from zabbix-server',
             type        => 'host',
             database    => $database_name,
@@ -163,7 +163,7 @@ class zabbix::database(
         # This is some specific action for the zabbix-proxy. This is due to better
         # parameter naming.
         if $zabbix_type == 'proxy' {
-          postgresql::server::pg_hba_rule { 'allow zabbix-proxy to access database':
+          postgresql::server::pg_hba_rule { 'Allow zabbix-proxy to access database':
             description => 'Open up postgresql for access from zabbix-proxy',
             type        => 'host',
             database    => $database_name,

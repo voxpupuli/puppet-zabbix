@@ -1,10 +1,21 @@
 require 'spec_helper'
 
 describe 'zabbix::agent' do
-  # Set some facts / params.
-  let(:facts) {{:operatingsystem => 'RedHat', :operatingsystemrelease => '6.5'}}
   let(:node) { 'agent.example.com' }
   let(:params) { {:server => '192.168.1.1', :serveractive => '192.168.1.1'} }
+
+  # Running an RedHat OS.
+  context 'On a RedHat OS' do
+    let :facts do
+      {
+        :osfamily               => 'RedHat',
+        :operatingsystem        => 'RedHat',
+        :operatingsystemrelease => '6.5',
+        :architecture           => 'x86_64',
+        :lsbdistid              => 'RedHat',
+        :concat_basedir         => '/tmp'
+      }
+    end
 
   # Need the zabbix::repo?
   context "when declaring manage_repo is true" do
@@ -73,11 +84,6 @@ describe 'zabbix::agent' do
     it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^ListenPort=10050$}}
   end
 
-  context 'with listen ip => 192.168.1.1' do
-    let(:params) { {:listenip => '192.168.1.1'} }
-    it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^ListenIP=192.168.1.1$}}
-  end
-  
   context 'with StartAgents => 3' do
     let(:params) { {:startagents => '3'} }
     it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^StartAgents=3$}}
@@ -148,5 +154,5 @@ describe 'zabbix::agent' do
     let(:params) {{ :manage_firewall => false }}
     it { should_not contain_firewall('150 zabbix-agent') }
   end
-
+  end
 end
