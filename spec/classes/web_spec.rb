@@ -37,6 +37,17 @@ describe 'zabbix::web' do
       it { should_not contain_class('Zabbix::Repo') }
     end
 
+    describe "when manage_resources is true" do
+        let(:params) {{ :manage_resources => true }}
+        it { should contain_class('zabbix::resources::web') }
+        it { should include_class('ruby::dev') }
+    end
+    
+    describe "when manage_resources is false" do
+        let(:params) {{ :manage_resources => false}}
+        it { should_not contain_class('zabbix::resources::web') }
+    end
+
     it { should contain_apache__vhost('zabbix.example.com').with_name('zabbix.example.com') }
 
     context 'with database_type => postgresql' do

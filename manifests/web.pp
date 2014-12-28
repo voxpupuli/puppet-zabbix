@@ -169,35 +169,7 @@ class zabbix::web (
   # is set to false, you'll get warnings like this:
   # "Warning: You cannot collect without storeconfigs being set"
   if $manage_resources {
-
-    # On some systems, certain gems (including the zabbixapi one)
-    # require a ruby development package to be installed.  This
-    # class installs it, if it isn't already defined
-    if $::osfamily == 'redhat' {
-      $ruby_devel_package = 'ruby-devel'
-    } elsif $::osfamily == 'debian' {
-      $ruby_devel_package = 'ruby-dev'
-
-      # Debian also requires make to install zabbixapi
-      $make_package = 'make'
-    }
-    if ($ruby_devel_package != undef) {
-      if ! defined(Package[$ruby_devel_package]) {
-        package { $ruby_devel_package:
-          ensure => installed,
-        }
-      }
-      if ($make_package != undef) {
-        if ! defined(Package[$make_package]) {
-          package { $make_package:
-            ensure => installed,
-          }
-        }
-        Package['zabbixapi'] { require => Package[$ruby_devel_package, $make_package]}
-      } else {
-        Package['zabbixapi'] { require => Package[$ruby_devel_package]}
-      }
-    }
+    include ruby::dev
 
     # Installing the zabbixapi gem package. We need this gem for
     # communicating with the zabbix-api. This is way better then
@@ -205,8 +177,9 @@ class zabbix::web (
     package { 'zabbixapi':
       ensure   => "${zabbix_version}.0",
       provider => 'gem',
+      require  => Class['ruby::dev'],
     } ->
-    class { 'zabbix::resources::server':
+    class { 'zabbix::resources::web':
       zabbix_url     => $zabbix_url,
       zabbix_user    => $zabbix_api_user,
       zabbix_pass    => $zabbix_api_pass,

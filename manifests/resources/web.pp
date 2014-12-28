@@ -12,7 +12,7 @@
 # will be loaded from 'zabbix::server'. So no need
 # for loading this class manually.
 #
-class zabbix::resources::server (
+class zabbix::resources::web (
   $zabbix_url     = undef,
   $zabbix_user    = undef,
   $zabbix_pass    = undef,
