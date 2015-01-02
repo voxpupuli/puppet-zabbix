@@ -4,7 +4,7 @@ Below an overview of all changes in the releases.
 
 Version (Release date)
 
-1.0.0   (2014-12-??)
+1.0.0   (2015-01-02)
 
   * Split Zabbix Server Class into Components. See the documentation `readme.md` for more information.
   * Renamed some parameters. Mostly the database parameters, from `db` to `database_`
