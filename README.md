@@ -3,28 +3,29 @@
 ####Table of Contents
 
 1. [Overview](#overview)
-2. [Module Description - What the module does and why it is useful](#module-description)
-3. [Setup - The basics of getting started with the zabbix module](#setup)
+2. [Upgrade from 0.x.x to 1.x.x](#upgrade)
+3. [Module Description - What the module does and why it is useful](#module-description)
+4. [Setup - The basics of getting started with the zabbix module](#setup)
  	* [zabbix-server](#setup-zabbix-server)
  	* [zabbix-agent](#setup-zabbix-agent)
  	* [zabbix-proxy](#setup-zabbix-proxy)
  	* [zabbix-javagateway](#setup-zabbix-javagateway)
  	* [zabbix-userparameters](#setup-userparameters)
-4. [Usage - Configuration options and additional functionality](#usage)
+5. [Usage - Configuration options and additional functionality](#usage)
     * [zabbix-server](#usage-zabbix-server)
     * [zabbix-agent](#usage-zabbix-agent)
     * [zabbix-proxy](#usage-zabbix-proxy)
     * [zabbix-javagateway](#usage-zabbix-javagateway)
     * [zabbix-userparameters](#usage-zabbix-userparameters)
-5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
+6. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
     * [zabbix-server](#reference-zabbix-server)
     * [zabbix-agent](#reference-zabbix-agent)
     * [zabbix-proxy](#reference-zabbix-proxy)
     * [zabbix-javagateway](#reference-zabbix-javagateway)
     * [zabbix-userparameters](#reference-zabbix-userparameters)
-6. [Limitations - OS compatibility, etc.](#limitations)
-7. [Development - Contributors](#contributors)
-8. [Notes](#note)
+7. [Limitations - OS compatibility, etc.](#limitations)
+8. [Development - Contributors](#contributors)
+9. [Notes](#note)
     * [Some overall notes](#standard-usage)
     * [When using exported resources | manage_resources is true](#when-using-exported-resources)
 
@@ -47,12 +48,35 @@ Be aware when you have a lot of hosts, it will increase the puppet runtime on th
 This module make uses of this gem: https://github.com/express42/zabbixapi
 With this gem it is possible to create/update hosts/proxy in ruby easy.
 
+##Upgrade
 With release 1.0.0 the zabbix::server class is split into 3 classes:
  - zabbix::web
  - zabbix::server
  - zabbix::database
 
-Now you can use 3 machines for each purpose. This is something for the bigger environments to spread the load. 
+Now you can use 3 machines for each purpose. This is something for the bigger environments to spread the load.
+
+When upgrading from 0.x.x to 1.x.x, be aware of the following changes:
+  - Choose the correct zabbix setup for your environment *:
+    - Single node
+    - Multi node
+  - Path changes for the database ".done" file. Create the following files in /etc/zabbix/:
+    - /etc/zabbix/.schema.done
+    - /etc/zabbix/.images.done
+    - /etc/zabbix/.data.done
+  - Rename of the following parameters:
+    - dbtype --> database_type
+    - dbhost --> database_host
+    - dbuser --> database_user
+    - dbpass --> database_password
+    - dbschema --> database_schema
+    - dbname --> database_name
+    - dbsocket --> database_socket
+    - dbport --> database_port
+
+\* check [this](#usage-zabbix-server) document/paragraph how to setup your environment. There were multiple changes to make this work (Like moving parameters to other (new) classes).
+
+In case I missed something, please let me know and will update this document.
 
 ##Setup
 As this puppet module contains specific components for zabbix, you'll need to specify which you want to install. Every zabbix component has his own zabbix:: class. Here you'll find each component.
@@ -107,7 +131,8 @@ node 'zabbix.example.com'
   #class { 'mysql::server': }
 
   class { 'zabbix':
-    zabbix_url => 'zabbix.example.com',
+    zabbix_url    => 'zabbix.example.com',
+    #database_type => 'mysql',
   }
 }
 ```
@@ -115,7 +140,7 @@ node 'zabbix.example.com'
 The setup of above assumes you are using an PostgreSQL database. When you want to use the MySQL database, you'll need to do the following:
 * comment the 'postgresql::server' class
 * uncomment the 'mysql::server' class
-* Add the `database_type` parameter into the 'zabbix::server' class and use as value: mysql
+* Uncomment the database_type parameter in the zabbix class (Or make sure that it is set to 'mysql').
 
 When using an multiple node setup, the following can be used:
 ```ruby
@@ -168,7 +193,7 @@ node 'server03.example.com' {
 The setup of above assumes you are using an MySQL database. When you want to use the PostgreSQL database, you'll need to do the following:
 * Uncomment the postgresql* classes
 * remove/comment the mysql* classes
-* remove or change the `database_type` to 'postgresql'
+* remove or change the `database_type` parameter to 'postgresql'
 * uncomment both zabbix_*_ip parameters and comment the zabbix_server and zabbix_web parameter.
 
 ###Usage zabbix-agent
@@ -195,6 +220,7 @@ node 'proxy.example.com'
   class { 'zabbix::proxy':
     zabbix_server_host => '192.168.20.11',
     zabbix_server_port => '10051',
+    #database_type      => 'mysql',
   }
 }
 ```
@@ -202,7 +228,7 @@ node 'proxy.example.com'
 The setup of above assumes you are using an PostgreSQL database. When you want to use the MySQL database, you'll need to do the following:
 * comment the 'postgresql::server' class
 * uncomment the 'mysql::server' class
-* Add the `database_type` parameter into the 'zabbix::proxy' class and use as value: mysql
+* Uncomment the database_type parameter in the zabbix class (Or make sure that it is set to 'mysql').
 
 When using an multiple node setup, the following can be used:
 ```ruby
