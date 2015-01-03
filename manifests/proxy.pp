@@ -42,6 +42,9 @@
 # [*zbx_templates*]
 #   Template which will be added when proxy is configured.
 #
+# [*proxy_configfile_path*]
+#   Proxy config file path defaults to /etc/zabbix/zabbix_proxy.conf
+#
 # [*mode*]
 #   Proxy operating mode.
 #
@@ -292,6 +295,7 @@ class zabbix::proxy (
   $zabbix_proxy_ip         = $zabbix::params::zabbix_proxy_ip,
   $use_ip                  = $zabbix::params::proxy_use_ip,
   $zbx_templates           = $zabbix::params::proxy_zbx_templates,
+  $proxy_configfile_path   = $zabbix::params::proxy_configfile_path,
   $mode                    = $zabbix::params::proxy_mode,
   $zabbix_server_host      = $zabbix::params::proxy_zabbix_server_host,
   $zabbix_server_port      = $zabbix::params::proxy_zabbix_server_port,
@@ -495,7 +499,7 @@ class zabbix::proxy (
   }
 
   # Configuring the zabbix-proxy configuration file
-  file { '/etc/zabbix/zabbix_proxy.conf':
+  file { $proxy_configfile_path:
     ensure  => present,
     owner   => 'zabbix',
     group   => 'zabbix',
@@ -509,7 +513,7 @@ class zabbix::proxy (
   # Include dir for specific zabbix-proxy checks.
   file { $include_dir:
     ensure  => directory,
-    require => File['/etc/zabbix/zabbix_proxy.conf'],
+    require => File[$proxy_configfile_path],
   }
 
   # Manage firewall
