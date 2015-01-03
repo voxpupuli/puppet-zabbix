@@ -47,6 +47,7 @@ class zabbix::params {
   $apache_ssl_chain               = undef
   $server_api_user                = 'Admin'
   $server_api_pass                = 'zabbix'
+  $server_config                  = '/etc/zabbix/zabbix_server.conf' 
   $server_nodeid                  = '0'
   $server_listenport              = '10051'
   $server_sourceip                = undef
@@ -110,6 +111,7 @@ class zabbix::params {
 
   # Agent specific params
   $monitored_by_proxy             = undef
+  $agent_config                   = '/etc/zabbix/zabbix_agentd.conf'
   $agent_use_ip                   = true
   $agent_zbx_group                = 'Linux servers'
   $agent_zbx_templates            = [ 'Template OS Linux', 'Template App SSH Service' ]
@@ -143,6 +145,7 @@ class zabbix::params {
   $agent_loadmodule               = undef
 
   # Proxy specific params
+  $proxy_config                  = '/etc/zabbix/zabbix_proxy.conf'
   $proxy_use_ip                  = true
   $proxy_zbx_templates           = [ 'Template App Zabbix Proxy' ]
   $proxy_mode                    = '0'

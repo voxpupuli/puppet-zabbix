@@ -71,6 +71,9 @@
 # [*zabbix_api_pass*]
 #   Password of the user which connects to the api. Default: zabbix
 #
+# [*server_config*]
+#   Zabbix Server Config Path
+#
 # [*nodeid*]
 #   Unique nodeid in distributed setup.
 #   (Deprecated since 2.4)
@@ -297,6 +300,7 @@ class zabbix::server (
   $apache_ssl_chain        = $zabbix::params::apache_ssl_chain,
   $zabbix_api_user         = $zabbix::params::server_api_user,
   $zabbix_api_pass         = $zabbix::params::server_api_pass,
+  $server_config           = $zabbix::params::server_config,
   $nodeid                  = $zabbix::params::server_nodeid,
   $listenport              = $zabbix::params::server_listenport,
   $sourceip                = $zabbix::params::server_sourceip,
@@ -500,12 +504,12 @@ class zabbix::server (
     require    => [
       Package["zabbix-server-${db}"],
       File[$include_dir],
-      File['/etc/zabbix/zabbix_server.conf']
+      File[$server_config]
     ],
   }
 
   # Configuring the zabbix-server configuration file
-  file { '/etc/zabbix/zabbix_server.conf':
+  file { '$server_config':
     ensure  => present,
     owner   => 'zabbix',
     group   => 'zabbix',
@@ -532,7 +536,7 @@ class zabbix::server (
     ensure  => directory,
     owner   => 'zabbix',
     group   => 'zabbix',
-    require => File['/etc/zabbix/zabbix_server.conf'],
+    require => File[$server_config],
   }
 
   # Is set to true, it will create the apache vhost.

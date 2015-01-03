@@ -30,6 +30,9 @@
 #   When this is monitored by an proxy, please fill in the name of this proxy.
 #   If the proxy is also installed via this module, please fill in the FQDN
 #
+# [*agent_config*]
+#   Zabbix Agent config path.
+#
 # [*agent_use_ip*]
 #   When true, when creating hosts via the zabbix-api, it will configure that
 #   connection should me made via ip, not fqdn.
@@ -162,6 +165,7 @@ class zabbix::agent (
   $manage_repo          = $zabbix::params::manage_repo,
   $manage_resources     = $zabbix::params::manage_resources,
   $monitored_by_proxy   = $zabbix::params::monitored_by_proxy,
+  $agent_config         = $zabbix::params::agent_config,
   $agent_use_ip         = $zabbix::params::agent_use_ip,
   $zbx_group            = $zabbix::params::agent_zbx_group,
   $zbx_templates        = $zabbix::params::agent_zbx_templates,
@@ -262,7 +266,7 @@ class zabbix::agent (
   }
 
   # Configuring the zabbix-agent configuration file
-  file { '/etc/zabbix/zabbix_agentd.conf':
+  file { $agent_config:
     ensure  => present,
     owner   => 'zabbix',
     group   => 'zabbix',
@@ -280,7 +284,7 @@ class zabbix::agent (
     group   => 'zabbix',
     recurse => true,
     purge   => true,
-    require => File['/etc/zabbix/zabbix_agentd.conf'],
+    require => File[$agent_config],
   }
 
   # Manage firewall

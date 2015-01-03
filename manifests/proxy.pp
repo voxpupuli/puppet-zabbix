@@ -31,6 +31,9 @@
 #   When true, it will export resources so that the zabbix-server can create
 #   via the zabbix-api proxy.
 #
+# [*proxy_config*]
+#   Zabbix Proxy config path.
+#
 # [*use_ip*]
 #   When true, when creating proxies via the zabbix-api, it will configure that
 #   connection should me made via ip, not fqdn.
@@ -231,6 +234,7 @@ class zabbix::proxy (
   $manage_firewall         = $zabbix::params::manage_firewall,
   $manage_repo             = $zabbix::params::manage_repo,
   $manage_resources        = $zabbix::params::manage_resources,
+  $proxy_config            = $zabbix::params::proxy_config,
   $use_ip                  = $zabbix::params::proxy_use_ip,
   $zbx_templates           = $zabbix::params::proxy_zbx_templates,
   $mode                    = $zabbix::params::proxy_mode,
@@ -391,7 +395,7 @@ class zabbix::proxy (
     require    => [
       Package["zabbix-proxy-${db}"],
       File[$include_dir],
-      File['/etc/zabbix/zabbix_proxy.conf']
+      File[$proxy_config]
     ],
   }
 
@@ -410,7 +414,7 @@ class zabbix::proxy (
   }
 
   # Configuring the zabbix-proxy configuration file
-  file { '/etc/zabbix/zabbix_proxy.conf':
+  file { $proxy_config:
     ensure  => present,
     owner   => 'zabbix',
     group   => 'zabbix',
@@ -424,7 +428,7 @@ class zabbix::proxy (
   # Include dir for specific zabbix-proxy checks.
   file { $include_dir:
     ensure  => directory,
-    require => File['/etc/zabbix/zabbix_proxy.conf'],
+    require => File[$proxy_config],
   }
 
   # Manage firewall
