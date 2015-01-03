@@ -477,7 +477,7 @@ class zabbix::proxy (
     require    => [
       Package["zabbix-proxy-${db}"],
       File[$include_dir],
-      File['/etc/zabbix/zabbix_proxy.conf']
+      File[$proxy_configfile_path]
     ],
   }
 

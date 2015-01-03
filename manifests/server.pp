@@ -394,7 +394,7 @@ class zabbix::server (
     require    => [
       Package["zabbix-server-${db}"],
       File[$include_dir],
-      File['/etc/zabbix/zabbix_server.conf']
+      File[$server_configfile_path]
     ],
   }
 
