@@ -26,6 +26,9 @@
 # [*manage_repo*]
 #   When true, it will create repository for installing the server.
 #
+# [*server_configfile_path*]
+#   Server config file path defaults to /etc/zabbix/zabbix_server.conf
+#
 # [*nodeid*]
 #   Unique nodeid in distributed setup.
 #   (Deprecated since 2.4)
@@ -257,6 +260,7 @@ class zabbix::server (
   $zabbix_package_state    = $zabbix::params::zabbix_package_state,
   $manage_firewall         = $zabbix::params::manage_firewall,
   $manage_repo             = $zabbix::params::manage_repo,
+  $server_configfile_path  = $zabbix::params::server_configfile_path,
   $nodeid                  = $zabbix::params::server_nodeid,
   $listenport              = $zabbix::params::server_listenport,
   $sourceip                = $zabbix::params::server_sourceip,
@@ -390,12 +394,12 @@ class zabbix::server (
     require    => [
       Package["zabbix-server-${db}"],
       File[$include_dir],
-      File['/etc/zabbix/zabbix_server.conf']
+      File[$server_configfile_path]
     ],
   }
 
   # Configuring the zabbix-server configuration file
-  file { '/etc/zabbix/zabbix_server.conf':
+  file { $server_configfile_path:
     ensure  => present,
     owner   => 'zabbix',
     group   => 'zabbix',
@@ -411,7 +415,7 @@ class zabbix::server (
     ensure  => directory,
     owner   => 'zabbix',
     group   => 'zabbix',
-    require => File['/etc/zabbix/zabbix_server.conf'],
+    require => File[$server_configfile_path],
   }
 
   # Manage firewall

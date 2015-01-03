@@ -56,6 +56,7 @@ class zabbix::params {
   $server_api_pass                = 'zabbix'
 
   # Zabbix-server
+  $server_configfile_path         = '/etc/zabbix/zabbix_server.conf'
   $server_nodeid                  = '0'
   $server_listenport              = '10051'
   $server_sourceip                = undef
@@ -118,6 +119,7 @@ class zabbix::params {
   $server_loadmodule              = undef
 
   # Agent specific params
+  $agent_configfile_path          = '/etc/zabbix/zabbix_agent.conf'
   $monitored_by_proxy             = undef
   $agent_use_ip                   = true
   $agent_zbx_group                = 'Linux servers'
@@ -152,6 +154,7 @@ class zabbix::params {
   $agent_loadmodule               = undef
 
   # Proxy specific params
+  $proxy_configfile_path         = '/etc/zabbix/zabbix_proxy.conf'
   $proxy_use_ip                  = true
   $proxy_zbx_templates           = [ 'Template App Zabbix Proxy' ]
   $proxy_mode                    = '0'
