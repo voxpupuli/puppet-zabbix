@@ -7,7 +7,7 @@
 #
 # === Parameters
 #
-# [*database_ype*]
+# [*database_type*]
 #   Type of database. Can use the following 2 databases:
 #   - postgresql
 #   - mysql
@@ -261,6 +261,7 @@ class zabbix::server (
   $manage_firewall         = $zabbix::params::manage_firewall,
   $manage_repo             = $zabbix::params::manage_repo,
   $server_configfile_path  = $zabbix::params::server_configfile_path,
+  $server_service_name     = $zabbix::params::server_service_name,
   $nodeid                  = $zabbix::params::server_nodeid,
   $listenport              = $zabbix::params::server_listenport,
   $sourceip                = $zabbix::params::server_sourceip,
@@ -268,6 +269,7 @@ class zabbix::server (
   $logfilesize             = $zabbix::params::server_logfilesize,
   $debuglevel              = $zabbix::params::server_debuglevel,
   $pidfile                 = $zabbix::params::server_pidfile,
+  $database_schema_path    = $zabbix::params::database_schema_path,
   $database_host           = $zabbix::params::server_database_host,
   $database_name           = $zabbix::params::server_database_name,
   $database_schema         = $zabbix::params::server_database_schema,
@@ -337,13 +339,14 @@ class zabbix::server (
 
       # Execute the postgresql scripts
       class { 'zabbix::database::postgresql':
-        zabbix_type       => 'server',
-        zabbix_version    => $zabbix_version,
-        database_name     => $database_name,
-        database_user     => $database_user,
-        database_password => $database_password,
-        database_host     => $database_host,
-        require           => Package["zabbix-server-${db}"],
+        zabbix_type           => 'server',
+        zabbix_version        => $zabbix_version,
+        database_schema_path  => $database_schema_path,
+        database_name         => $database_name,
+        database_user         => $database_user,
+        database_password     => $database_password,
+        database_host         => $database_host,
+        require               => Package["zabbix-server-${db}"],
       }
     }
     'mysql': {
@@ -351,13 +354,14 @@ class zabbix::server (
 
       # Execute the mysql scripts
       class { 'zabbix::database::mysql':
-        zabbix_type       => 'server',
-        zabbix_version    => $zabbix_version,
-        database_name     => $database_name,
-        database_user     => $database_user,
-        database_password => $database_password,
-        database_host     => $database_host,
-        require           => Package["zabbix-server-${db}"],
+        zabbix_type           => 'server',
+        zabbix_version        => $zabbix_version,
+        database_schema_path  => $database_schema_path,
+        database_name         => $database_name,
+        database_user         => $database_user,
+        database_password     => $database_password,
+        database_host         => $database_host,
+        require               => Package["zabbix-server-${db}"],
       }
     }
     default: {
@@ -383,7 +387,7 @@ class zabbix::server (
   # Workaround for: The redhat provider can not handle attribute enable
   # This is only happening when using an redhat family version 5.x.
   if $::osfamily == 'redhat' and $::operatingsystemrelease !~ /^5.*/ {
-    Service['zabbix-server'] { enable     => true }
+    Service[$server_service_name] { enable     => true }
   }
 
   # Controlling the 'zabbix-server' service
@@ -404,7 +408,7 @@ class zabbix::server (
     owner   => 'zabbix',
     group   => 'zabbix',
     mode    => '0640',
-    notify  => Service['zabbix-server'],
+    notify  => Service[$server_service_name],
     require => Package["zabbix-server-${db}"],
     replace => true,
     content => template('zabbix/zabbix_server.conf.erb'),
