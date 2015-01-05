@@ -24,8 +24,7 @@ class zabbix::database::mysql (
   $database_password    = '',
   $database_host        = '',
 ) {
-  
-  # Allow to customize the path to the Database Schema, 
+# Allow to customize the path to the Database Schema,
   if ! $database_schema_path {
     case $::operatingsystem {
       'centos','redhat','oraclelinux' : {

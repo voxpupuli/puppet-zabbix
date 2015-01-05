@@ -305,7 +305,7 @@ class zabbix::proxy (
   $logfile                 = $zabbix::params::proxy_logfile,
   $logfilesize             = $zabbix::params::proxy_logfilesize,
   $debuglevel              = $zabbix::params::proxy_debuglevel,
-  $pidfile                 = $zabbix::params::proxy_pidfile, 
+  $pidfile                 = $zabbix::params::proxy_pidfile,
   $database_schema_path    = $zabbix::params::database_schema_path,
   $database_host           = $zabbix::params::proxy_database_host,
   $database_name           = $zabbix::params::proxy_database_name,
@@ -406,7 +406,7 @@ class zabbix::proxy (
       class { 'zabbix::database::postgresql':
         zabbix_type           => 'proxy',
         zabbix_version        => $zabbix_version,
-        database_schema_path  => $database_schema_path, 
+        database_schema_path  => $database_schema_path,
         database_name         => $database_name,
         database_user         => $database_user,
         database_password     => $database_password,
