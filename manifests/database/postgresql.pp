@@ -16,24 +16,28 @@
 # Copyright 2014 Werner Dijkerman
 #
 class zabbix::database::postgresql (
-  $zabbix_type        = '',
-  $zabbix_version     = '',
-  $database_name      = '',
-  $database_user      = '',
-  $database_password  = '',
-  $database_host      = '',
+  $zabbix_type          = '',
+  $zabbix_version       = '',
+  $database_schema_path = '',
+  $database_name        = '',
+  $database_user        = '',
+  $database_password    = '',
+  $database_host        = '',
 ) {
-
-  case $::operatingsystem {
-    'centos','redhat','oraclelinux' : {
-      $zabbix_path   = "/usr/share/doc/zabbix-*-pgsql-${zabbix_version}*/create"
-      $postgres_home = '/var/lib/pgsql'
+# Allow to customize the path to the Database Schema,
+  if ! $database_schema_path {
+    case $::operatingsystem {
+      'centos','redhat','oraclelinux' : {
+            $schema_path   = "/usr/share/doc/zabbix-*-pgsql-${zabbix_version}*/create"
+          }
+        default : {
+            $schema_path   = '/usr/share/zabbix-*-pgsql'
+      }
     }
-    default : {
-      $zabbix_path   = '/usr/share/zabbix-*-pgsql'
-      $postgres_home = '/var/lib/postgresql'
-    }
+  }else {
+      $schema_path = $database_schema_path
   }
+
 
   exec { 'update_pgpass':
     command => "echo ${database_host}:5432:${database_name}:${database_user}:${database_password} >> /root/.pgpass",
@@ -53,7 +57,7 @@ class zabbix::database::postgresql (
   case $zabbix_type {
     'proxy': {
       exec { 'zabbix_proxy_create.sql':
-        command  => "cd ${zabbix_path} && psql -h ${database_host} -U ${database_user} -d ${database_name} -f schema.sql && touch /etc/zabbix/.schema.done",
+        command  => "cd ${schema_path} && psql -h ${database_host} -U ${database_user} -d ${database_name} -f schema.sql && touch /etc/zabbix/.schema.done",
         path     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
         unless   => 'test -f /etc/zabbix/.schema.done',
         provider => 'shell',
@@ -64,7 +68,7 @@ class zabbix::database::postgresql (
     }
     'server': {
       exec { 'zabbix_server_create.sql':
-        command  => "cd ${zabbix_path} && psql -h ${database_host} -U ${database_user} -d ${database_name} -f schema.sql && touch /etc/zabbix/.schema.done",
+        command  => "cd ${schema_path} && psql -h ${database_host} -U ${database_user} -d ${database_name} -f schema.sql && touch /etc/zabbix/.schema.done",
         path     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
         unless   => 'test -f /etc/zabbix/.schema.done',
         provider => 'shell',
@@ -73,7 +77,7 @@ class zabbix::database::postgresql (
         ],
       } ->
       exec { 'zabbix_server_images.sql':
-        command  => "cd ${zabbix_path} && psql -h ${database_host} -U ${database_user} -d ${database_name} -f images.sql && touch /etc/zabbix/.images.done",
+        command  => "cd ${schema_path} && psql -h ${database_host} -U ${database_user} -d ${database_name} -f images.sql && touch /etc/zabbix/.images.done",
         path     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
         unless   => 'test -f /etc/zabbix/.images.done',
         provider => 'shell',
@@ -82,7 +86,7 @@ class zabbix::database::postgresql (
         ],
       } ->
       exec { 'zabbix_server_data.sql':
-        command  => "cd ${zabbix_path} && psql -h ${database_host} -U ${database_user} -d ${database_name} -f data.sql && touch /etc/zabbix/.data.done",
+        command  => "cd ${schema_path} && psql -h ${database_host} -U ${database_user} -d ${database_name} -f data.sql && touch /etc/zabbix/.data.done",
         path     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
         unless   => 'test -f /etc/zabbix/.data.done',
         provider => 'shell',

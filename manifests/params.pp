@@ -43,6 +43,7 @@ class zabbix::params {
   $manage_repo                    = true
   $manage_resources               = false
   $database_type                  = 'postgresql'
+  $database_schema_path           = false
 
   # Zabbix-web
   $apache_use_ssl                 = false
@@ -56,6 +57,7 @@ class zabbix::params {
   $server_api_pass                = 'zabbix'
 
   # Zabbix-server
+  $server_service_name            = 'zabbix-server'
   $server_configfile_path         = '/etc/zabbix/zabbix_server.conf'
   $server_nodeid                  = '0'
   $server_listenport              = '10051'
@@ -154,6 +156,7 @@ class zabbix::params {
   $agent_loadmodule               = undef
 
   # Proxy specific params
+  $proxy_service_name            = 'zabbix-proxy'
   $proxy_configfile_path         = '/etc/zabbix/zabbix_proxy.conf'
   $proxy_use_ip                  = true
   $proxy_zbx_templates           = [ 'Template App Zabbix Proxy' ]

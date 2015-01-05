@@ -107,20 +107,21 @@
 # Copyright 2014 Werner Dijkerman
 #
 class zabbix::database(
-  $zabbix_type       = 'server',
-  $zabbix_version    = $zabbix::params::zabbix_version,
-  $zabbix_web        = $zabbix::params::zabbix_web,
-  $zabbix_web_ip     = $zabbix::params::zabbix_web_ip,
-  $zabbix_server     = $zabbix::params::zabbix_server,
-  $zabbix_server_ip  = $zabbix::params::zabbix_server_ip,
-  $zabbix_proxy      = $zabbix::params::zabbix_proxy,
-  $zabbix_proxy_ip   = $zabbix::params::zabbix_proxy_ip,
-  $manage_database   = $zabbix::params::manage_database,
-  $database_type     = $zabbix::params::database_type,
-  $database_name     = $zabbix::params::server_database_name,
-  $database_user     = $zabbix::params::server_database_user,
-  $database_password = $zabbix::params::server_database_password,
-  $database_host     = $zabbix::params::server_database_host,
+  $zabbix_type          = 'server',
+  $zabbix_version       = $zabbix::params::zabbix_version,
+  $zabbix_web           = $zabbix::params::zabbix_web,
+  $zabbix_web_ip        = $zabbix::params::zabbix_web_ip,
+  $zabbix_server        = $zabbix::params::zabbix_server,
+  $zabbix_server_ip     = $zabbix::params::zabbix_server_ip,
+  $zabbix_proxy         = $zabbix::params::zabbix_proxy,
+  $zabbix_proxy_ip      = $zabbix::params::zabbix_proxy_ip,
+  $manage_database      = $zabbix::params::manage_database,
+  $database_type        = $zabbix::params::database_type,
+  $database_schema_path = $zabbix::params::database_schema_path,
+  $database_name        = $zabbix::params::server_database_name,
+  $database_user        = $zabbix::params::server_database_user,
+  $database_password    = $zabbix::params::server_database_password,
+  $database_host        = $zabbix::params::server_database_host,
 ) inherits zabbix::params {
 
   # So lets create the databases and load all files. This can only be

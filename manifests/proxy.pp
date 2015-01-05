@@ -296,6 +296,7 @@ class zabbix::proxy (
   $use_ip                  = $zabbix::params::proxy_use_ip,
   $zbx_templates           = $zabbix::params::proxy_zbx_templates,
   $proxy_configfile_path   = $zabbix::params::proxy_configfile_path,
+  $proxy_service_name      = $zabbix::params::proxy_service_name,
   $mode                    = $zabbix::params::proxy_mode,
   $zabbix_server_host      = $zabbix::params::proxy_zabbix_server_host,
   $zabbix_server_port      = $zabbix::params::proxy_zabbix_server_port,
@@ -305,6 +306,7 @@ class zabbix::proxy (
   $logfilesize             = $zabbix::params::proxy_logfilesize,
   $debuglevel              = $zabbix::params::proxy_debuglevel,
   $pidfile                 = $zabbix::params::proxy_pidfile,
+  $database_schema_path    = $zabbix::params::database_schema_path,
   $database_host           = $zabbix::params::proxy_database_host,
   $database_name           = $zabbix::params::proxy_database_name,
   $database_schema         = $zabbix::params::proxy_database_schema,
@@ -402,13 +404,14 @@ class zabbix::proxy (
 
       # Execute the postgresql scripts
       class { 'zabbix::database::postgresql':
-        zabbix_type       => 'proxy',
-        zabbix_version    => $zabbix_version,
-        database_name     => $database_name,
-        database_user     => $database_user,
-        database_password => $database_password,
-        database_host     => $database_host,
-        require           => Package["zabbix-proxy-${db}"],
+        zabbix_type           => 'proxy',
+        zabbix_version        => $zabbix_version,
+        database_schema_path  => $database_schema_path,
+        database_name         => $database_name,
+        database_user         => $database_user,
+        database_password     => $database_password,
+        database_host         => $database_host,
+        require               => Package["zabbix-proxy-${db}"],
       }
     }
     'mysql': {
@@ -416,13 +419,14 @@ class zabbix::proxy (
 
       # Execute the mysqll scripts
       class { 'zabbix::database::mysql':
-        zabbix_type       => 'proxy',
-        zabbix_version    => $zabbix_version,
-        database_name     => $database_name,
-        database_user     => $database_user,
-        database_password => $database_password,
-        database_host     => $database_host,
-        require           => Package["zabbix-proxy-${db}"],
+        zabbix_type           => 'proxy',
+        zabbix_version        => $zabbix_version,
+        database_schema_path  => $database_schema_path,
+        database_name         => $database_name,
+        database_user         => $database_user,
+        database_password     => $database_password,
+        database_host         => $database_host,
+        require               => Package["zabbix-proxy-${db}"],
       }
     }
     'sqlite': {
@@ -466,11 +470,11 @@ class zabbix::proxy (
   # Workaround for: The redhat provider can not handle attribute enable
   # This is only happening when using an redhat family version 5.x.
   if $::osfamily == 'redhat' and $::operatingsystemrelease !~ /^5.*/ {
-    Service['zabbix-proxy'] { enable     => true }
+    Service[$proxy_service_name] { enable     => true }
   }
 
   # Controlling the 'zabbix-proxy' service
-  service { 'zabbix-proxy':
+  service { $proxy_service_name:
     ensure     => running,
     hasstatus  => true,
     hasrestart => true,
@@ -494,7 +498,7 @@ class zabbix::proxy (
       database_host     => $database_host,
       zabbix_proxy      => $zabbix_proxy,
       zabbix_proxy_ip   => $zabbix_proxy_ip,
-      before            => Service['zabbix-proxy'],
+      before            => Service[$proxy_service_name],
     }
   }
 
@@ -504,7 +508,7 @@ class zabbix::proxy (
     owner   => 'zabbix',
     group   => 'zabbix',
     mode    => '0644',
-    notify  => Service['zabbix-proxy'],
+    notify  => Service[$proxy_service_name],
     require => Package["zabbix-proxy-${db}"],
     replace => true,
     content => template('zabbix/zabbix_proxy.conf.erb'),
