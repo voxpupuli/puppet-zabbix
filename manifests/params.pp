@@ -59,6 +59,8 @@ class zabbix::params {
   # Zabbix-server
   $server_service_name            = 'zabbix-server'
   $server_configfile_path         = '/etc/zabbix/zabbix_server.conf'
+  $server_config_owner            = 'zabbix'
+  $server_config_group            = 'zabbix'
   $server_nodeid                  = '0'
   $server_listenport              = '10051'
   $server_sourceip                = undef
