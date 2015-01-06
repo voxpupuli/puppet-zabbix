@@ -261,6 +261,8 @@ class zabbix::server (
   $manage_firewall         = $zabbix::params::manage_firewall,
   $manage_repo             = $zabbix::params::manage_repo,
   $server_configfile_path  = $zabbix::params::server_configfile_path,
+  $server_config_owner     = $zabbix::params::server_config_owner,
+  $server_config_group     = $zabbix::params::server_config_group,
   $server_service_name     = $zabbix::params::server_service_name,
   $nodeid                  = $zabbix::params::server_nodeid,
   $listenport              = $zabbix::params::server_listenport,
@@ -405,8 +407,8 @@ class zabbix::server (
   # Configuring the zabbix-server configuration file
   file { $server_configfile_path:
     ensure  => present,
-    owner   => 'zabbix',
-    group   => 'zabbix',
+    owner   => $server_config_owner,
+    group   => $server_config_group,
     mode    => '0640',
     notify  => Service[$server_service_name],
     require => Package["zabbix-server-${db}"],
@@ -417,8 +419,8 @@ class zabbix::server (
   # Include dir for specific zabbix-server checks.
   file { $include_dir:
     ensure  => directory,
-    owner   => 'zabbix',
-    group   => 'zabbix',
+    owner   => $server_config_owner,
+    group   => $server_config_group,
     require => File[$server_configfile_path],
   }
 
