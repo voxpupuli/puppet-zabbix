@@ -1,0 +1,19 @@
+language: ruby
+cache: bundler
+
+rvm:
+  - 1.8.7
+  - 1.9.3
+  - 2.0.0
+
+script: "bundle exec rake rspec"
+
+env:
+  matrix:
+    - PUPPET_GEM_VERSION="~> 2.7.0"
+    - PUPPET_GEM_VERSION="~> 3.7.3"
+
+notifications:
+  email:
+    on_failure: change
+    on_success: never
