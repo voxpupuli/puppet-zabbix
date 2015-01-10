@@ -248,11 +248,7 @@ class zabbix::agent (
 
   # Check if manage_repo is true.
   if $manage_repo {
-    if ! defined(Class['zabbix::repo']) {
-      class { 'zabbix::repo':
-        zabbix_version => $zabbix_version,
-      }
-    }
+    include zabbix::repo
     Package['zabbix-agent'] {require => Class['zabbix::repo']}
   }
 

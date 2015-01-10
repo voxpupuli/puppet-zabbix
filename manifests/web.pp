@@ -35,9 +35,6 @@
 #   When true, it will create an vhost for apache. The parameter zabbix_url
 #   has to be set.
 #
-# [*manage_repo*]
-#   When true, it will create repository for installing the server.
-#
 # [*manage_resouces*]
 #   When true, it will export resources to something like puppetdb.
 #   When set to true, you'll need to configure 'storeconfigs' to make
@@ -131,7 +128,6 @@ class zabbix::web (
   $zabbix_timezone         = $zabbix::params::zabbix_timezone,
   $zabbix_package_state    = $zabbix::params::zabbix_package_state,
   $manage_vhost            = $zabbix::params::manage_vhost,
-  $manage_repo             = $zabbix::params::manage_repo,
   $manage_resources        = $zabbix::params::manage_resources,
   $apache_use_ssl          = $zabbix::params::apache_use_ssl,
   $apache_ssl_cert         = $zabbix::params::apache_ssl_cert,
@@ -150,6 +146,8 @@ class zabbix::web (
   $zabbix_server           = $zabbix::params::zabbix_server,
   $zabbix_listenport       = $zabbix::params::server_listenport,
 ) inherits zabbix::params {
+
+  include zabbix::repo
 
   # use the correct db.
   case $database_type {
@@ -186,15 +184,6 @@ class zabbix::web (
       apache_use_ssl => $apache_use_ssl,
     }
   }
-
-  # Check if manage_repo is true.
-  if $manage_repo {
-    if ! defined(Class['zabbix::repo']) {
-      class { 'zabbix::repo':
-        zabbix_version => $zabbix_version,
-      }
-    }
-  } # END if $manage_repo
 
   case $::operatingsystem {
     'ubuntu', 'debian' : {

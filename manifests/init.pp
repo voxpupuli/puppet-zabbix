@@ -71,6 +71,7 @@
 # Copyright 2014 Werner Dijkerman
 #
 class zabbix (
+
   $zabbix_url              = '',
   $zabbix_version          = $zabbix::params::zabbix_version,
   $zabbix_timezone         = $zabbix::params::zabbix_timezone,
@@ -161,7 +162,6 @@ class zabbix (
     zabbix_version    => $zabbix_version,
     zabbix_timezone   => $zabbix_timezone,
     manage_vhost      => $manage_vhost,
-    manage_repo       => $manage_repo,
     manage_resources  => $manage_resources,
     apache_use_ssl    => $apache_use_ssl,
     apache_ssl_cert   => $apache_ssl_cert,
@@ -186,7 +186,6 @@ class zabbix (
     database_type           => $database_type,
     zabbix_version          => $zabbix_version,
     manage_firewall         => $manage_firewall,
-    manage_repo             => $manage_repo,
     nodeid                  => $nodeid,
     listenport              => $listenport,
     sourceip                => $sourceip,
@@ -254,7 +253,6 @@ class zabbix (
 
   class { 'zabbix::database':
     zabbix_type       => 'server',
-    zabbix_version    => $zabbix_version,
     zabbix_web        => $zabbix_web,
     zabbix_server     => $zabbix_server,
     zabbix_web_ip     => $zabbix_web_ip,
@@ -265,5 +263,10 @@ class zabbix (
     database_user     => $database_user,
     database_password => $database_password,
     database_host     => $database_host,
+    require           => Class['zabbix::repo'],
   }
+
+  # includeing here as the class must, at a minimum, be defined.
+  include zabbix::repo
+
 }

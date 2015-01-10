@@ -43,7 +43,7 @@ When using this module, you can monitor your whole environment with zabbix. It c
 
 With the 0.4.0 release, you can - when you have configured exported resources - configure agents and proxies in the webinterface. So when you add an zabbix::agent to an host, it first install the agent onto the host. It will send some data to the puppetdb and when puppet runs on the zabbix-server it will create this new host via the zabbix-api.
 
-Be aware when you have a lot of hosts, it will increase the puppet runtime on the zabbix-server host. It will check via the zabbix-api if hosts exits and costs time. 
+Be aware when you have a lot of hosts, it will increase the puppet runtime on the zabbix-server host. It will check via the zabbix-api if hosts exits and costs time.
 
 This module make uses of this gem: https://github.com/express42/zabbixapi
 With this gem it is possible to create/update hosts/proxy in ruby easy.
@@ -89,7 +89,7 @@ This will install an basic zabbix-server instance. You'll have to decide if you 
 
 You can see at "usage" in this documentation how all of this can be achieved.
 
-You will need to supply one parameter: zabbix_url. This is the url on which the zabbix instance will be available. With the example at "setup", the zabbix webinterface will be: http://zabbix.example.com. 
+You will need to supply one parameter: zabbix_url. This is the url on which the zabbix instance will be available. With the example at "setup", the zabbix webinterface will be: http://zabbix.example.com.
 
 When installed succesfully, zabbix web interface will be accessable and you can login with the default credentials:
 
@@ -291,7 +291,7 @@ When installed on seperate machine, the zabbix::server configuration should be u
 ```ruby
 node server01.example.com {
   class { 'zabbix::server':
-    zabbix_url  => 'zabbix.example.com', 
+    zabbix_url  => 'zabbix.example.com',
     javagateway => '192.168.20.15',
   }
 }
@@ -302,7 +302,7 @@ Or when using with an zabbix-proxy:
 ```ruby
 node server11.example.com {
   class { 'zabbix::proxy':
-    zabbix_server_host => '192.168.20.11', 
+    zabbix_server_host => '192.168.20.11',
     javagateway        => '192.168.20.15',
   }
 }
@@ -341,9 +341,28 @@ zabbix::userparameter::data:
 
 ##Reference
 There are some overall parameters which exists on all of the classes:
-* `zabbix_version`: You can specifiy which zabbix release needs to be installed. Default is '2.4'. 
+* `zabbix_version`: You can specify which zabbix release needs to be installed. Default is '2.4'.
+  ```ruby
+  # sepcify the version and pass it to each class that uses the parameter
+  $zabbix_vesion = '2.2'
+
+  class { 'zabbix::repo':
+    zabbix_version => $zabbix_version,
+  }
+
+  class { 'zabbix':
+    zabbix_version => $zabbix_version,
+  }
+  ```
+
 * `manage_firewall`: Wheter you want to manage the firewall. If true (Which is default), iptables will be configured to allow communications to zabbix ports.
 * `manage_repo`:  If zabbix needs to be installed from the zabbix repositories (Default is true). When you have your own repositories, you'll set this to false. But you'll have to make sure that your repositorie is installed on the host.
+  ```ruby
+  class { 'zabbix::repo':
+    manage_repo => false,
+  }
+  ```
+
 
 The following is only availabe for the following classes: zabbix::server, zabbix::proxy & zabbix::agent
 * `manage_resources`: As of release 0.4.0, when this parameter is set to true (Default is false) it make use of exported resources. You'll have an puppetdb configured before you can use this option. Information from the zabbix::agent, zabbix::proxy and zabbix::userparameters are able to export resources, which will be loaded on the zabbix::server.
@@ -361,7 +380,7 @@ This is the class for installing everything on a single host and thus all parame
 * `apache_use_ssl`: Will create an ssl vhost. Also nonssl vhost will be created for redirect nonssl to ssl vhost.
 * `apache_ssl_cert`: The location of the ssl certificate file. You'll need to make sure this file is present on the system, this module will not install this file.
 * `apache_ssl_key`: The location of the ssl key file. You'll need to make sure this file is present on the system, this module will not install this file.
-* `apache_ssl_cipher`: The ssl cipher used. Cipher is used from: https://wiki.mozilla.org/Security/Server_Side_TLS. 
+* `apache_ssl_cipher`: The ssl cipher used. Cipher is used from: https://wiki.mozilla.org/Security/Server_Side_TLS.
 * `apache_ssl_chain`: The ssl_chain file. You'll need to make sure this file is present on the system, this module will not install this file.
 * `zabbix_api_user`: Username of user in Zabbix which is able to create hosts and edit hosts via the zabbix-api. Default: Admin
 * `zabbix_api_pass`: Password for the user in Zabbix for zabbix-api usage. Default: zabbix
@@ -387,7 +406,7 @@ There are some more zabbix specific parameters, please check them by opening the
 * `zabbix_server_host`: The ipaddress or fqdn of the zabbix server.  
 
 The following parameters is only needed when `manage_resources` is set to true:
-* `use_ip`: Default is set to true. 
+* `use_ip`: Default is set to true.
 * `zbx_templates`: List of templates which are needed for the zabbix-proxy. Default: 'Template App Zabbix Proxy'
 * `mode`: Which kind of proxy it is. 0 -> active, 1 -> passive
 
@@ -435,13 +454,13 @@ Zabbix 2.0:
   * Debian 6, 7
   * xenserver 6
 
-This module is supported on both the community as the Enterprise version of Puppet. 
+This module is supported on both the community as the Enterprise version of Puppet.
 
-Zabbix 1.8 isn't supported (yet) with this module. 
+Zabbix 1.8 isn't supported (yet) with this module.
 
 Ubuntu 10.4 is officially supported by zabbix for Zabbix 2.0. I did have some issues with making it work, probably in a future release it is supported with this module as well.
 
-Please be aware, that when manage_resources is enabled, it can increase an puppet run on the zabbix-server a lot when you have a lot of hosts. 
+Please be aware, that when manage_resources is enabled, it can increase an puppet run on the zabbix-server a lot when you have a lot of hosts.
 
 ##Contributors
 The following have contributed to this puppet module:
@@ -465,7 +484,7 @@ Many thanks for this!
 
 
 ###When using exported resources
-*	Please be aware, that when `manage_resources` is enabled, it can increase an puppet run on the zabbix-server a lot when you have a lot of hosts. 
+*	Please be aware, that when `manage_resources` is enabled, it can increase an puppet run on the zabbix-server a lot when you have a lot of hosts.
 *	First run of puppet on the zabbix-server can result in this error:
 
 ```ruby
@@ -475,7 +494,7 @@ Error: Could not run: can't convert Puppet::Util::Log into Integer
 
 See: http://comments.gmane.org/gmane.comp.sysutils.puppet.user/47508, comment:  Jeff McCune | 20 Nov 20:42 2012
 
-```quote 
+```quote
 This specific issue is a chicken and egg problem where by a provider needs a gem, but the catalog run itself is the thing that provides the gem dependency. That is to say, even in Puppet 3.0 where we delay loading all of the providers until after pluginsync finishes, the catalog run hasn't yet installed the gem when the provider is loaded.
 
 The reason I think this is basically a very specific incarnation of #6907 is because that ticket is pretty specific from a product functionality perspective, "You should not have to run puppet twice to use a provider."
@@ -483,7 +502,7 @@ The reason I think this is basically a very specific incarnation of #6907 is bec
 
 After another puppet run, it will run succesfully.
 
-* On a Red Hat family server, the 2nd run will sometimes go into error: 
+* On a Red Hat family server, the 2nd run will sometimes go into error:
 
 ```ruby
 Could not evaluate: Connection refused - connect(2)

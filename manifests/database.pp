@@ -15,9 +15,6 @@
 #   The type of zabbix which is used: server or proxy.
 #   This will determine what sql files will be loaded into database.
 #
-# [*zabbix_version*]
-#   This is the zabbix version. Default: 2.4
-#
 # [*zabbix_web*]
 #   This is the hostname of the server which is running the
 #   zabbix-web package. This parameter is used when database_type =
@@ -108,7 +105,6 @@
 #
 class zabbix::database(
   $zabbix_type          = 'server',
-  $zabbix_version       = $zabbix::params::zabbix_version,
   $zabbix_web           = $zabbix::params::zabbix_web,
   $zabbix_web_ip        = $zabbix::params::zabbix_web_ip,
   $zabbix_server        = $zabbix::params::zabbix_server,
