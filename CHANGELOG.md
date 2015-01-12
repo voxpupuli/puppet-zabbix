@@ -4,6 +4,13 @@ Below an overview of all changes in the releases.
 
 Version (Release date)
 
+1.0.1   (2015-01-12)
+
+  * remove hardcoded config file paths for server, proxy and agent #34 (By pull request: f0 (Thanks!))
+  * ZABBIX proxy and ZABBIX server service names are now customizable / Allow changing the path to the database schema files #35 (By pull request: f0 (Thanks!))
+  * allow custom owner and group for zabbix server config, #36 (By pull request: f0 (Thanks!))
+  * Fixed some puppet-lint messages (Was using old puppet-lint version)
+
 1.0.0   (2015-01-02)
 
   * Split Zabbix Server Class into Components. See the documentation `readme.md` for more information.

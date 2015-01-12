@@ -292,12 +292,12 @@ class zabbix::web (
         },
       ],
       custom_fragment => "  php_value max_execution_time 300
-    php_value memory_limit 128M
-    php_value post_max_size 16M
-    php_value upload_max_filesize 2M
-    php_value max_input_time 300
-    # Set correct timezone.
-    php_value date.timezone ${zabbix_timezone}",
+      php_value memory_limit 128M
+      php_value post_max_size 16M
+      php_value upload_max_filesize 2M
+      php_value max_input_time 300
+      # Set correct timezone.
+      php_value date.timezone ${zabbix_timezone}",
       rewrites        => [ { rewrite_rule    => ['^$ /index.php [L]'] } ],
       ssl             => $apache_use_ssl,
       ssl_cert        => $apache_ssl_cert,
