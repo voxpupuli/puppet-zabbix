@@ -202,8 +202,8 @@ class zabbix::web (
         ensure => present,
       } ->
       package { 'zabbix-frontend-php':
-        ensure  => $zabbix_package_state,
-        before  => File['/etc/zabbix/web/zabbix.conf.php'],
+        ensure => $zabbix_package_state,
+        before => File['/etc/zabbix/web/zabbix.conf.php'],
       }
     }
     default : {
