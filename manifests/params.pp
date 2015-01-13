@@ -123,7 +123,7 @@ class zabbix::params {
   $server_loadmodule              = undef
 
   # Agent specific params
-  $agent_configfile_path          = '/etc/zabbix/zabbix_agent.conf'
+  $agent_configfile_path          = '/etc/zabbix/zabbix_agentd.conf'
   $monitored_by_proxy             = undef
   $agent_use_ip                   = true
   $agent_zbx_group                = 'Linux servers'
