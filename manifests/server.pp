@@ -389,6 +389,7 @@ class zabbix::server (
       Package["zabbix-server-${db}"],
       File[$include_dir],
       File[$server_configfile_path]
+      Class["zabbix::database::${database_type}"]
     ],
   }
 
