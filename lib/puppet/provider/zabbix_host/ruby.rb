@@ -41,6 +41,11 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, :parent => Puppet::Provider::Zabb
     else
         use_ip = 0
     end
+
+    # When using DNS you still have to send a value for ip
+    if ipaddress.nil? and use_ip == 0
+      ipaddress = ''
+    end
  
     # Now we create the host
     hostid = zbx.hosts.create_or_update(
