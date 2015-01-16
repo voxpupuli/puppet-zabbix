@@ -404,14 +404,14 @@ class zabbix::proxy (
 
       # Execute the postgresql scripts
       class { 'zabbix::database::postgresql':
-        zabbix_type           => 'proxy',
-        zabbix_version        => $zabbix_version,
-        database_schema_path  => $database_schema_path,
-        database_name         => $database_name,
-        database_user         => $database_user,
-        database_password     => $database_password,
-        database_host         => $database_host,
-        require               => Package["zabbix-proxy-${db}"],
+        zabbix_type          => 'proxy',
+        zabbix_version       => $zabbix_version,
+        database_schema_path => $database_schema_path,
+        database_name        => $database_name,
+        database_user        => $database_user,
+        database_password    => $database_password,
+        database_host        => $database_host,
+        require              => Package["zabbix-proxy-${db}"],
       }
     }
     'mysql': {
@@ -419,14 +419,14 @@ class zabbix::proxy (
 
       # Execute the mysqll scripts
       class { 'zabbix::database::mysql':
-        zabbix_type           => 'proxy',
-        zabbix_version        => $zabbix_version,
-        database_schema_path  => $database_schema_path,
-        database_name         => $database_name,
-        database_user         => $database_user,
-        database_password     => $database_password,
-        database_host         => $database_host,
-        require               => Package["zabbix-proxy-${db}"],
+        zabbix_type          => 'proxy',
+        zabbix_version       => $zabbix_version,
+        database_schema_path => $database_schema_path,
+        database_name        => $database_name,
+        database_user        => $database_user,
+        database_password    => $database_password,
+        database_host        => $database_host,
+        require              => Package["zabbix-proxy-${db}"],
       }
     }
     'sqlite': {
