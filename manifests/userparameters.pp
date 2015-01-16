@@ -55,11 +55,11 @@ define zabbix::userparameters (
 
   if $source != '' {
     file { "${include_dir}/${name}.conf":
-      ensure  => present,
-      owner   => 'zabbix',
-      group   => 'zabbix',
-      mode    => '0644',
-      source  => $source,
+      ensure => present,
+      owner  => 'zabbix',
+      group  => 'zabbix',
+      mode   => '0644',
+      source => $source,
     }
   }
 

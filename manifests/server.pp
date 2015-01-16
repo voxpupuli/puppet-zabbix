@@ -338,14 +338,14 @@ class zabbix::server (
 
       # Execute the postgresql scripts
       class { 'zabbix::database::postgresql':
-        zabbix_type           => 'server',
-        zabbix_version        => $zabbix_version,
-        database_schema_path  => $database_schema_path,
-        database_name         => $database_name,
-        database_user         => $database_user,
-        database_password     => $database_password,
-        database_host         => $database_host,
-        require               => Package["zabbix-server-${db}"],
+        zabbix_type          => 'server',
+        zabbix_version       => $zabbix_version,
+        database_schema_path => $database_schema_path,
+        database_name        => $database_name,
+        database_user        => $database_user,
+        database_password    => $database_password,
+        database_host        => $database_host,
+        require              => Package["zabbix-server-${db}"],
       }
     }
     'mysql': {
@@ -353,14 +353,14 @@ class zabbix::server (
 
       # Execute the mysql scripts
       class { 'zabbix::database::mysql':
-        zabbix_type           => 'server',
-        zabbix_version        => $zabbix_version,
-        database_schema_path  => $database_schema_path,
-        database_name         => $database_name,
-        database_user         => $database_user,
-        database_password     => $database_password,
-        database_host         => $database_host,
-        require               => Package["zabbix-server-${db}"],
+        zabbix_type          => 'server',
+        zabbix_version       => $zabbix_version,
+        database_schema_path => $database_schema_path,
+        database_name        => $database_name,
+        database_user        => $database_user,
+        database_password    => $database_password,
+        database_host        => $database_host,
+        require              => Package["zabbix-server-${db}"],
       }
     }
     default: {

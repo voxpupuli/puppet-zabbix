@@ -471,6 +471,7 @@ The following have contributed to this puppet module:
  * actionjack
  * karolisc
  * lucas42
+ * f0
 
 Many thanks for this!
 (If I have forgotten you, please let me know and put you in the list of fame. :-))
