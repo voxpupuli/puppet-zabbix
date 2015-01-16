@@ -23,9 +23,6 @@
 # [*manage_firewall*]
 #   When true, it will create iptables rules.
 #
-# [*manage_repo*]
-#   When true, it will create repository for installing the server.
-#
 # [*server_configfile_path*]
 #   Server config file path defaults to /etc/zabbix/zabbix_server.conf
 #
@@ -259,7 +256,6 @@ class zabbix::server (
   $zabbix_version          = $zabbix::params::zabbix_version,
   $zabbix_package_state    = $zabbix::params::zabbix_package_state,
   $manage_firewall         = $zabbix::params::manage_firewall,
-  $manage_repo             = $zabbix::params::manage_repo,
   $server_configfile_path  = $zabbix::params::server_configfile_path,
   $server_config_owner     = $zabbix::params::server_config_owner,
   $server_config_group     = $zabbix::params::server_config_group,
@@ -329,9 +325,10 @@ class zabbix::server (
   $loadmodule              = $zabbix::params::server_loadmodule,
   ) inherits zabbix::params {
 
+  include zabbix::repo
+  
   # Check some if they are boolean
   validate_bool($manage_firewall)
-  validate_bool($manage_repo)
 
   # Get the correct database_type. We need this for installing the
   # correct package and loading the sql files.
@@ -371,15 +368,6 @@ class zabbix::server (
     }
   }
 
-  # Check if manage_repo is true.
-  if $manage_repo {
-    if ! defined(Class['zabbix::repo']) {
-      class { 'zabbix::repo':
-        zabbix_version => $zabbix_version,
-      }
-    }
-  }
-
   # Installing the packages
   package { "zabbix-server-${db}":
     ensure  => $zabbix_package_state,
@@ -400,7 +388,8 @@ class zabbix::server (
     require    => [
       Package["zabbix-server-${db}"],
       File[$include_dir],
-      File[$server_configfile_path]
+      File[$server_configfile_path],
+      Class["zabbix::database::${database_type}"]
     ],
   }
 

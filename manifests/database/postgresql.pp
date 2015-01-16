@@ -17,7 +17,7 @@
 #
 class zabbix::database::postgresql (
   $zabbix_type          = '',
-  $zabbix_version       = '',
+  $zabbix_version       = $zabbix::params::zabbix_version,
   $database_schema_path = '',
   $database_name        = '',
   $database_user        = '',

@@ -5,7 +5,8 @@ require 'puppetlabs_spec_helper/rake_tasks'
 
 desc "Run all RSpec code examples"
 RSpec::Core::RakeTask.new(:rspec) do |t|
-  t.rspec_opts = File.read("spec/spec.opts").chomp || ""
+  #t.rspec_opts = File.read("spec/spec.opts").chomp || ""
+  t.rspec_opts = ['--color', '--format', 'documentation']
 end
 
 SPEC_SUITES = (Dir.entries('spec') - ['.', '..','fixtures']).select {|e| File.directory? "spec/#{e}" }
@@ -14,7 +15,8 @@ namespace :rspec do
     desc "Run #{suite} RSpec code examples"
     RSpec::Core::RakeTask.new(suite) do |t|
       t.pattern = "spec/#{suite}/**/*_spec.rb"
-      t.rspec_opts = File.read("spec/spec.opts").chomp || ""
+      #t.rspec_opts = File.read("spec/spec.opts").chomp || ""
+      t.rspec_opts = ['--color', '--format', 'documentation']
     end
   end
 end

@@ -69,10 +69,10 @@ class zabbix::params {
   $server_debuglevel              = '3'
   $server_pidfile                 = '/var/run/zabbix/zabbix_server.pid'
   $server_database_host           = 'localhost'
-  $server_database_name           = 'zabbix-server'
+  $server_database_name           = 'zabbix_server'
   $server_database_schema         = undef
-  $server_database_user           = 'zabbix-server'
-  $server_database_password       = 'zabbix-server'
+  $server_database_user           = 'zabbix_server'
+  $server_database_password       = 'zabbix_server'
   $server_database_socket         = undef
   $server_database_port           = undef
   $server_startpollers            = '5'
