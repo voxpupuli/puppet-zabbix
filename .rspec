@@ -1,0 +1,6 @@
+--color
+--format
+progress
+--backtrace
+ --deprecation-out
+ /dev/null
