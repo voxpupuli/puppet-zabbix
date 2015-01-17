@@ -47,6 +47,12 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, :parent => Puppet::Provider::Zabb
       ipaddress = ''
     end
  
+    # First check if we have an correct hostgroup and if not, we raise an error.
+    search_hostgroup = zbx.hostgroups.get_id(:name => hostgroup)
+    if search_hostgroup.nil?
+        raise Puppet::Error, "The hostgroup (" + hostgroup + ") does not exist in zabbix. Please use the correct one."
+    end
+
     # Now we create the host
     hostid = zbx.hosts.create_or_update(
       :host => host,
@@ -61,7 +67,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, :parent => Puppet::Provider::Zabb
         }
       ],
       :templates => template_array,
-      :groups => [ :groupid => zbx.hostgroups.get_id(:name => hostgroup) ]
+      :groups => [ :groupid => search_hostgroup ]
     )
 
     zbx.templates.mass_add(:hosts_id => [hostid], :templates_id => template_array)
