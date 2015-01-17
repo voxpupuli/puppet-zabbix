@@ -1,10 +1,21 @@
 require 'spec_helper'
 
 describe 'zabbix::agent' do
-  # Set some facts / params.
-  let(:facts) {{:operatingsystem => 'RedHat', :operatingsystemrelease => '6.5'}}
   let(:node) { 'agent.example.com' }
-  let(:params) { {:server => '192.168.1.1', :serveractive => '192.168.1.1'} }
+  let(:params) { {:server => '192.168.1.1', :serveractive => '192.168.1.1', :agent_configfile_path => '/etc/zabbix/zabbix_agentd.conf'} }
+
+  # Running an RedHat OS.
+  context 'On a RedHat OS' do
+    let :facts do
+      {
+        :osfamily               => 'RedHat',
+        :operatingsystem        => 'RedHat',
+        :operatingsystemrelease => '6.5',
+        :architecture           => 'x86_64',
+        :lsbdistid              => 'RedHat',
+        :concat_basedir         => '/tmp'
+      }
+    end
 
   # Need the zabbix::repo?
   context "when declaring manage_repo is true" do
@@ -34,108 +45,103 @@ describe 'zabbix::agent' do
 
   # Configuration file
   context 'with pidfile => /var/run/zabbix/zabbix_agentd.pid' do
-    let(:params) { {:pidfile => '/var/run/zabbix/zabbix_agentd.pid'} }
-    it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^PidFile=/var/run/zabbix/zabbix_agentd.pid$}}
+      let(:params) { {:pidfile => '/var/run/zabbix/zabbix_agentd.pid', :agent_configfile_path => '/etc/zabbix/zabbix_agentd.conf'} }
+      it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^PidFile=/var/run/zabbix/zabbix_agentd.pid$}}
   end
 
   context 'with logfile => /var/run/zabbix/zabbix_agentd.pid' do
-    let(:params) { {:logfile => '/var/log/zabbix/zabbix_agentd.log'} }
-    it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LogFile=/var/log/zabbix/zabbix_agentd.log$}}
+      let(:params) { {:logfile => '/var/log/zabbix/zabbix_agentd.log', :agent_configfile_path => '/etc/zabbix/zabbix_agentd.conf'} }
+      it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LogFile=/var/log/zabbix/zabbix_agentd.log$}}
   end
 
   context 'with DebugLevel => 4' do
-    let(:params) { {:debuglevel => '4'} }
-    it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^DebugLevel=4$}}
+      let(:params) { {:debuglevel => '4', :agent_configfile_path => '/etc/zabbix/zabbix_agentd.conf'} }
+      it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^DebugLevel=4$}}
   end
 
   context 'with logfilesize => 4' do
-    let(:params) { {:logfilesize => '4'} }
-    it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LogFileSize=4$}}
+      let(:params) { {:logfilesize => '4', :agent_configfile_path => '/etc/zabbix/zabbix_agentd.conf'} }
+      it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LogFileSize=4$}}
   end
 
   context 'with EnableRemoteCommands => 1' do
-    let(:params) { {:enableremotecommands => '1'} }
-    it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^EnableRemoteCommands=1$}}
+      let(:params) { {:enableremotecommands => '1', :agent_configfile_path => '/etc/zabbix/zabbix_agentd.conf'} }
+      it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^EnableRemoteCommands=1$}}
   end
 
   context 'with LogRemoteCommands => 0' do
-    let(:params) { {:logremotecommands => '0'} }
-    it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LogRemoteCommands=0$}}
+      let(:params) { {:logremotecommands => '0', :agent_configfile_path => '/etc/zabbix/zabbix_agentd.conf'} }
+      it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LogRemoteCommands=0$}}
   end
 
   context 'with server => 192.168.1.1' do
-    let(:params) { {:server => '192.168.1.1'} }
-    it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^Server=192.168.1.1$}}
+      let(:params) { {:server => '192.168.1.1', :agent_configfile_path => '/etc/zabbix/zabbix_agentd.conf'} }
+      it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^Server=192.168.1.1$}}
   end
 
   context 'with ListenPort => 10050' do
-    let(:params) { {:listenport => '10050'} }
-    it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^ListenPort=10050$}}
+      let(:params) { {:listenport => '10050', :agent_configfile_path => '/etc/zabbix/zabbix_agentd.conf'} }
+      it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^ListenPort=10050$}}
   end
 
-  context 'with listen ip => 192.168.1.1' do
-    let(:params) { {:listenip => '192.168.1.1'} }
-    it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^ListenIP=192.168.1.1$}}
-  end
-  
   context 'with StartAgents => 3' do
-    let(:params) { {:startagents => '3'} }
-    it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^StartAgents=3$}}
+      let(:params) { {:startagents => '3', :agent_configfile_path => '/etc/zabbix/zabbix_agentd.conf'} }
+      it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^StartAgents=3$}}
   end
 
   context 'with ServerActive => 192.168.1.1' do
-    let(:params) { {:serveractive => '192.168.1.1'} }
-    it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^ServerActive=192.168.1.1$}}
+      let(:params) { {:serveractive => '192.168.1.1', :agent_configfile_path => '/etc/zabbix/zabbix_agentd.conf'} }
+      it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^ServerActive=192.168.1.1$}}
   end
 
   context 'with Hostname => 192.168.1.1' do
-    let(:params) { {:hostname => '10050'} }
-    it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^Hostname=10050$}}
+      let(:params) { {:hostname => '10050', :agent_configfile_path => '/etc/zabbix/zabbix_agentd.conf'} }
+      it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^Hostname=10050$}}
   end
 
   context 'with HostnameItem => system.hostname' do
-    let(:params) { {:hostnameitem => 'system.hostname'} }
-    it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^HostnameItem=system.hostname$}}
+      let(:params) { {:hostnameitem => 'system.hostname', :agent_configfile_path => '/etc/zabbix/zabbix_agentd.conf'} }
+      it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^HostnameItem=system.hostname$}}
   end
 
   context 'with RefreshActiveChecks => 120' do
-    let(:params) { {:refreshactivechecks => '120'} }
-    it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^RefreshActiveChecks=120$}}
+      let(:params) { {:refreshactivechecks => '120', :agent_configfile_path => '/etc/zabbix/zabbix_agentd.conf'} }
+      it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^RefreshActiveChecks=120$}}
   end
   
   context 'with BufferSend => 5' do
-    let(:params) { {:buffersend => '5'} }
-    it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^BufferSend=5$}}
+      let(:params) { {:buffersend => '5', :agent_configfile_path => '/etc/zabbix/zabbix_agentd.conf'} }
+      it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^BufferSend=5$}}
   end
 
   context 'with BufferSize => 100' do
-    let(:params) { {:buffersize => '100'} }
-    it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^BufferSize=100$}}
+      let(:params) { {:buffersize => '100', :agent_configfile_path => '/etc/zabbix/zabbix_agentd.conf'} }
+      it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^BufferSize=100$}}
   end
 
   context 'with Timeout => 30' do
-    let(:params) { {:timeout => '30'} }
-    it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^Timeout=30$}}
+      let(:params) { {:timeout => '30', :agent_configfile_path => '/etc/zabbix/zabbix_agentd.conf'} }
+      it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^Timeout=30$}}
   end
 
   context 'with AllowRoot => 0' do
-    let(:params) { {:allowroot => '0'} }
-    it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^AllowRoot=0$}}
+      let(:params) { {:allowroot => '0', :agent_configfile_path => '/etc/zabbix/zabbix_agentd.conf'} }
+      it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^AllowRoot=0$}}
   end
 
   context 'with Include => /etc/zabbix/zabbix_agentd.d' do
-    let(:params) { {:include_dir => '/etc/zabbix/zabbix_agentd.d'} }
-    it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^Include=/etc/zabbix/zabbix_agentd.d$}}
+      let(:params) { {:include_dir => '/etc/zabbix/zabbix_agentd.d', :agent_configfile_path => '/etc/zabbix/zabbix_agentd.conf'} }
+      it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^Include=/etc/zabbix/zabbix_agentd.d$}}
   end
 
   context 'with UnsafeUserParameters => 0' do
-    let(:params) { {:unsafeuserparameters => '0'} }
-    it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^UnsafeUserParameters=0$}}
+      let(:params) { {:unsafeuserparameters => '0', :agent_configfile_path => '/etc/zabbix/zabbix_agentd.conf'} }
+      it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^UnsafeUserParameters=0$}}
   end
 
   context 'with LoadModulePath => ${libdir}/modules' do
-    let(:params) { {:loadmodulepath => '${libdir}/modules'} }
-    it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LoadModulePath=\$\{libdir\}/modules$}}
+      let(:params) { {:loadmodulepath => '${libdir}/modules', :agent_configfile_path => '/etc/zabbix/zabbix_agentd.conf'} }
+      it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LoadModulePath=\$\{libdir\}/modules$}}
   end
 
   # Firewall
@@ -148,5 +154,5 @@ describe 'zabbix::agent' do
     let(:params) {{ :manage_firewall => false }}
     it { should_not contain_firewall('150 zabbix-agent') }
   end
-
+  end
 end

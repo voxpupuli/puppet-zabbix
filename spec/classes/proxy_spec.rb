@@ -2,242 +2,10 @@ require 'spec_helper'
 
 describe 'zabbix::proxy' do
   # Set some facts / params.
-  let(:params) { {:zabbix_server_host => '192.168.1.1'} }
+  let(:params) { {:zabbix_server_host => '192.168.1.1', :zabbix_version => '2.4'} }
   let(:node) { 'rspec.puppet.com' }
 
-  # Running an Debian OS.
-  context 'On a Debian OS' do
-    # Set some facts first.
-    let :facts do
-      {
-        :osfamily               => 'Debian',
-        :operatingsystem        => 'Debian',
-        :operatingsystemrelease => '6',
-        :architecture           => 'x86_64',
-        :lsbdistid              => 'Debian'
-      }
-    end
-
-    context "when declaring manage_repo is true" do
-      let(:params) {{ :manage_repo => true }}
-
-      # Do stuff for POSTGRESQL database
-      describe 'with dbtype as postgresql' do
-        let(:params) {{ :dbtype => 'postgresql' }}
-        it { should contain_class('zabbix::repo').with_zabbix_version('2.4') }
-        it { should contain_package('zabbix-proxy-pgsql').with_require('Class[Zabbix::Repo]') }
-
-        context 'when postgresql is dbtype' do
-          let(:params) {{ :dbtype => 'postgresql' }}
-          it { should contain_package('zabbix-proxy-pgsql').with_ensure('present') }
-          it { should contain_package('zabbix-proxy-pgsql').with_name('zabbix-proxy-pgsql') }
-        end # END context 'when postgresql is dbtype'        
-
-        context 'and configure file' do
-          let(:params) {{ :dbtype => 'postgresql' }}
-          it { should contain_service('zabbix-proxy').with_require(['Package[zabbix-proxy-pgsql]','File[/etc/zabbix/zabbix_proxy.conf.d]','File[/etc/zabbix/zabbix_proxy.conf]']) }
-        end
-
-        context 'and configure file' do
-          let(:params) {{ :dbtype => 'postgresql' }}
-          it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_require('Package[zabbix-proxy-pgsql]') }
-        end
-      end # END describe 'with dbtype as postgresql'
-
-      # Do stuff for MYSQL database
-      describe 'with dbtype as mysql' do
-        let(:params) {{ :dbtype => 'mysql' }}
-        it { should contain_class('zabbix::repo').with_zabbix_version('2.4') }
-        it { should contain_package('zabbix-proxy-mysql').with_require('Class[Zabbix::Repo]') }
-
-        context 'when postgresql is dbtype' do
-          it { should contain_package('zabbix-proxy-mysql').with_ensure('present') }
-          it { should contain_package('zabbix-proxy-mysql').with_name('zabbix-proxy-mysql') }
-        end # END context 'when postgresql is dbtype'        
-
-        context 'and configure file' do
-          it { should contain_service('zabbix-proxy').with_require(['Package[zabbix-proxy-mysql]','File[/etc/zabbix/zabbix_proxy.conf.d]','File[/etc/zabbix/zabbix_proxy.conf]']) }
-        end
-
-        context 'and configure file' do
-          it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_require('Package[zabbix-proxy-mysql]') }
-        end
-      end # END describe 'with dbtype as mysql'
-    end # END context "when declaring manage_repo is true"
-
-    context 'when declaring manage_repo is false' do
-      let(:params) {{ :manage_repo => false }}
-      it { should_not contain_class('Zabbix::Repo') }
-    end # END context 'when declaring manage_repo is false'
-
-    context "when declaring manage_resources is true" do
-        let(:params) {{ :manage_resources => true }}
-        it { should contain_class('zabbix::resources::proxy') }
-    end
-
-    # Include directory should be available.
-    it { should contain_file('/etc/zabbix/zabbix_proxy.conf.d').with_ensure('directory') }
-    it { should contain_file('/etc/zabbix/zabbix_proxy.conf.d').with_require('File[/etc/zabbix/zabbix_proxy.conf]') }
-
-    context 'with zabbix::database class' do
-      let(:params) {{ :dbtype => 'postgresql', :manage_database => true }}
-      it { should contain_class('zabbix::database').with_manage_database('true')}
-      it { should contain_class('zabbix::database').with_dbtype('postgresql')}
-      it { should contain_class('zabbix::database').with_zabbix_type('proxy')}
-      it { should contain_class('zabbix::database').with_zabbix_version('2.4')}
-      it { should contain_class('zabbix::database').with_db_name('zabbix-proxy')}
-      it { should contain_class('zabbix::database').with_db_user('zabbix-proxy')}
-      it { should contain_class('zabbix::database').with_db_pass('zabbix-proxy')}
-      it { should contain_class('zabbix::database').with_db_host('localhost')}
-    end
-
-    context 'with zabbix::database class' do
-      let(:params) {{ :dbtype => 'mysql', :manage_database => true }}
-      it { should contain_class('zabbix::database').with_manage_database('true')}
-      it { should contain_class('zabbix::database').with_dbtype('mysql')}
-      it { should contain_class('zabbix::database').with_zabbix_type('proxy')}
-      it { should contain_class('zabbix::database').with_zabbix_version('2.4')}
-      it { should contain_class('zabbix::database').with_db_name('zabbix-proxy')}
-      it { should contain_class('zabbix::database').with_db_user('zabbix-proxy')}
-      it { should contain_class('zabbix::database').with_db_pass('zabbix-proxy')}
-      it { should contain_class('zabbix::database').with_db_host('localhost')}
-    end
-
-    context 'with zabbix::database class' do
-      let(:params) {{ :manage_database => false }}
-      it { should contain_class('zabbix::database').with_manage_database('false')}
-    end
-
-    context "when declaring manage_firewall is true" do
-      let(:params) {{ :manage_firewall => true }}
-      it { should contain_firewall('151 zabbix-proxy') }
-    end
-
-    context "when declaring manage_firewall is false" do
-      let(:params) {{ :manage_firewall => false }}
-      it { should_not contain_firewall('151 zabbix-proxy') }
-    end
-  end # END context 'On a Debian OS' do
-
-# Running an Debian OS.
-  context 'On a Debian OS' do
-    # Set some facts first.
-    let :facts do
-      {
-        :osfamily               => 'Ubuntu',
-        :operatingsystem        => 'Ubuntu',
-        :operatingsystemrelease => '12.04',
-        :architecture           => 'x86_64',
-        :lsbdistid              => 'Ubuntu'
-      }
-    end
-
-    context "when declaring manage_repo is true" do
-      let(:params) {{ :manage_repo => true }}
-
-      # Do stuff for POSTGRESQL database
-      describe 'with dbtype as postgresql' do
-        let(:params) {{ :dbtype => 'postgresql' }}
-        it { should contain_class('zabbix::repo').with_zabbix_version('2.4') }
-        it { should contain_package('zabbix-proxy-pgsql').with_require('Class[Zabbix::Repo]') }
-
-        context 'when postgresql is dbtype' do
-          let(:params) {{ :dbtype => 'postgresql' }}
-          it { should contain_package('zabbix-proxy-pgsql').with_ensure('present') }
-          it { should contain_package('zabbix-proxy-pgsql').with_name('zabbix-proxy-pgsql') }
-        end # END context 'when postgresql is dbtype'        
-
-        context 'and configure file' do
-          let(:params) {{ :dbtype => 'postgresql' }}
-          it { should contain_service('zabbix-proxy').with_require(['Package[zabbix-proxy-pgsql]','File[/etc/zabbix/zabbix_proxy.conf.d]','File[/etc/zabbix/zabbix_proxy.conf]']) }
-        end
-
-        context 'and configure file' do
-          let(:params) {{ :dbtype => 'postgresql' }}
-          it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_require('Package[zabbix-proxy-pgsql]') }
-        end
-      end # END describe 'with dbtype as postgresql'
-
-# The following is disable. It seems that MySQL puppet module isn't supported on Ubuntu.
-#
-#      # Do stuff for MYSQL database
-#      describe 'with dbtype as mysql' do
-#        let(:params) {{ :dbtype => 'mysql' }}
-#        it { should contain_class('zabbix::repo').with_zabbix_version('2.2') }
-#        it { should contain_package('zabbix-proxy-mysql').with_require('Class[Zabbix::Repo]') }
-#
-#        context 'when postgresql is dbtype' do
-#          it { should contain_package('zabbix-proxy-mysql').with_ensure('present') }
-#          it { should contain_package('zabbix-proxy-mysql').with_name('zabbix-proxy-mysql') }
-#        end # END context 'when postgresql is dbtype'        
-#
-#        context 'and configure file' do
-#          it { should contain_service('zabbix-proxy').with_require(['Package[zabbix-proxy-mysql]','File[/etc/zabbix/zabbix_proxy.conf.d]','File[/etc/zabbix/zabbix_proxy.conf]']) }
-#        end
-#
-#        context 'and configure file' do
-#          it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_require('Package[zabbix-proxy-mysql]') }
-#        end
-#      end # END describe 'with dbtype as mysql'
-    end # END context "when declaring manage_repo is true"
-
-    context 'when declaring manage_repo is false' do
-      let(:params) {{ :manage_repo => false }}
-      it { should_not contain_class('Zabbix::Repo') }
-    end # END context 'when declaring manage_repo is false'
-
-    context "when declaring manage_resources is true" do
-        let(:params) {{ :manage_resources => true }}
-        it { should contain_class('zabbix::resources::proxy') }
-    end
-
-    # Include directory should be available.
-    it { should contain_file('/etc/zabbix/zabbix_proxy.conf.d').with_ensure('directory') }
-    it { should contain_file('/etc/zabbix/zabbix_proxy.conf.d').with_require('File[/etc/zabbix/zabbix_proxy.conf]') }
-
-    context 'with zabbix::database class' do
-      let(:params) {{ :dbtype => 'postgresql', :manage_database => true }}
-      it { should contain_class('zabbix::database').with_manage_database('true')}
-      it { should contain_class('zabbix::database').with_dbtype('postgresql')}
-      it { should contain_class('zabbix::database').with_zabbix_type('proxy')}
-      it { should contain_class('zabbix::database').with_zabbix_version('2.4')}
-      it { should contain_class('zabbix::database').with_db_name('zabbix-proxy')}
-      it { should contain_class('zabbix::database').with_db_user('zabbix-proxy')}
-      it { should contain_class('zabbix::database').with_db_pass('zabbix-proxy')}
-      it { should contain_class('zabbix::database').with_db_host('localhost')}
-    end
-
-#    context 'with zabbix::database class' do
-#      let(:params) {{ :dbtype => 'mysql', :manage_database => true }}
-#      it { should contain_class('zabbix::database').with_manage_database('true')}
-#      it { should contain_class('zabbix::database').with_dbtype('mysql')}
-#      it { should contain_class('zabbix::database').with_zabbix_type('proxy')}
-#      it { should contain_class('zabbix::database').with_zabbix_version('2.4')}
-#      it { should contain_class('zabbix::database').with_db_name('zabbix-proxy')}
-#      it { should contain_class('zabbix::database').with_db_user('zabbix-proxy')}
-#      it { should contain_class('zabbix::database').with_db_pass('zabbix-proxy')}
-#      it { should contain_class('zabbix::database').with_db_host('localhost')}
-#    end
-
-    context 'with zabbix::database class' do
-      let(:params) {{ :manage_database => false }}
-      it { should contain_class('zabbix::database').with_manage_database('false')}
-    end
-
-    context "when declaring manage_firewall is true" do
-      let(:params) {{ :manage_firewall => true }}
-      it { should contain_firewall('151 zabbix-proxy') }
-    end
-
-    context "when declaring manage_firewall is false" do
-      let(:params) {{ :manage_firewall => false }}
-      it { should_not contain_firewall('151 zabbix-proxy') }
-    end
-  end # END context 'On a Ubuntu OS' do
-
-
-# Running an Debian OS.
-  context 'On a Debian OS' do
+  context 'On a RedHat OS' do
     # Set some facts first.
     let :facts do
       {
@@ -245,98 +13,80 @@ describe 'zabbix::proxy' do
         :operatingsystem        => 'RedHat',
         :operatingsystemrelease => '6.5',
         :architecture           => 'x86_64',
-        :lsbdistid              => 'RedHat'
+        :lsbdistid              => 'RedHat',
+        :concat_basedir         => '/tmp'
       }
     end
 
-    context "when declaring manage_repo is true" do
-      let(:params) {{ :manage_repo => true }}
-
-      # Do stuff for POSTGRESQL database
-      describe 'with dbtype as postgresql' do
-        let(:params) {{ :dbtype => 'postgresql' }}
+    describe "when manage_repo is true" do
+        let(:params) {{ :manage_repo => true }}
         it { should contain_class('zabbix::repo').with_zabbix_version('2.4') }
         it { should contain_package('zabbix-proxy-pgsql').with_require('Class[Zabbix::Repo]') }
+    end
 
-        context 'when postgresql is dbtype' do
-          let(:params) {{ :dbtype => 'postgresql' }}
-          it { should contain_package('zabbix-proxy-pgsql').with_ensure('present') }
-          it { should contain_package('zabbix-proxy-pgsql').with_name('zabbix-proxy-pgsql') }
-        end # END context 'when postgresql is dbtype'        
+    describe "when databaste_type is postgresql" do
+        let(:params) {{ :database_type => 'postgresql' }}
+        it { should contain_package('zabbix-proxy-pgsql').with_ensure('present') }
+        it { should contain_package('zabbix-proxy-pgsql').with_ensure('present') }
+        it { should contain_package('zabbix-proxy-pgsql').with_name('zabbix-proxy-pgsql') }
+        it { should contain_service('zabbix-proxy').with_require(['Package[zabbix-proxy-pgsql]','File[/etc/zabbix/zabbix_proxy.conf.d]','File[/etc/zabbix/zabbix_proxy.conf]']) }
+        it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_require('Package[zabbix-proxy-pgsql]') }
+    end
 
-        context 'and configure file' do
-          let(:params) {{ :dbtype => 'postgresql' }}
-          it { should contain_service('zabbix-proxy').with_require(['Package[zabbix-proxy-pgsql]','File[/etc/zabbix/zabbix_proxy.conf.d]','File[/etc/zabbix/zabbix_proxy.conf]']) }
-        end
+    describe "when databaste_type is mysql" do
+        let(:params) {{ :database_type => 'mysql' }}
+        it { should contain_package('zabbix-proxy-mysql').with_ensure('present') }
+        it { should contain_package('zabbix-proxy-mysql').with_ensure('present') }
+        it { should contain_package('zabbix-proxy-mysql').with_name('zabbix-proxy-mysql') }
+        it { should contain_service('zabbix-proxy').with_require(['Package[zabbix-proxy-mysql]','File[/etc/zabbix/zabbix_proxy.conf.d]','File[/etc/zabbix/zabbix_proxy.conf]']) }
+        it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_require('Package[zabbix-proxy-mysql]') }
+    end
 
-        context 'and configure file' do
-          let(:params) {{ :dbtype => 'postgresql' }}
-          it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_require('Package[zabbix-proxy-pgsql]') }
-        end
-      end # END describe 'with dbtype as postgresql'
-
-      # Do stuff for MYSQL database
-      describe 'with dbtype as mysql' do
-        let(:params) {{ :dbtype => 'mysql' }}
-        it { should contain_class('zabbix::repo').with_zabbix_version('2.4') }
-        it { should contain_package('zabbix-proxy-mysql').with_require('Class[Zabbix::Repo]') }
-
-        context 'when postgresql is dbtype' do
-          it { should contain_package('zabbix-proxy-mysql').with_ensure('present') }
-          it { should contain_package('zabbix-proxy-mysql').with_name('zabbix-proxy-mysql') }
-        end # END context 'when postgresql is dbtype'        
-
-        context 'and configure file' do
-          it { should contain_service('zabbix-proxy').with_require(['Package[zabbix-proxy-mysql]','File[/etc/zabbix/zabbix_proxy.conf.d]','File[/etc/zabbix/zabbix_proxy.conf]']) }
-        end
-
-        context 'and configure file' do
-          it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_require('Package[zabbix-proxy-mysql]') }
-        end
-      end # END describe 'with dbtype as mysql'
-    end # END context "when declaring manage_repo is true"
-
-    context 'when declaring manage_repo is false' do
-      let(:params) {{ :manage_repo => false }}
-      it { should_not contain_class('Zabbix::Repo') }
-    end # END context 'when declaring manage_repo is false'
-
-    context "when declaring manage_resources is true" do
+    describe "when databaste_type is mysql" do
         let(:params) {{ :manage_resources => true }}
         it { should contain_class('zabbix::resources::proxy') }
     end
 
-    # Include directory should be available.
+    describe "whem manage_repo is true" do
+        let(:params) {{ :manage_repo => true }}
+        it { should contain_class('Zabbix::Repo') }
+    end
+
     it { should contain_file('/etc/zabbix/zabbix_proxy.conf.d').with_ensure('directory') }
     it { should contain_file('/etc/zabbix/zabbix_proxy.conf.d').with_require('File[/etc/zabbix/zabbix_proxy.conf]') }
-
-    context 'with zabbix::database class' do
-      let(:params) {{ :dbtype => 'postgresql', :manage_database => true }}
-      it { should contain_class('zabbix::database').with_manage_database('true')}
-      it { should contain_class('zabbix::database').with_dbtype('postgresql')}
-      it { should contain_class('zabbix::database').with_zabbix_type('proxy')}
-      it { should contain_class('zabbix::database').with_zabbix_version('2.4')}
-      it { should contain_class('zabbix::database').with_db_name('zabbix-proxy')}
-      it { should contain_class('zabbix::database').with_db_user('zabbix-proxy')}
-      it { should contain_class('zabbix::database').with_db_pass('zabbix-proxy')}
-      it { should contain_class('zabbix::database').with_db_host('localhost')}
+  
+  
+    context 'with zabbix::database::postgresql class' do
+      let(:params) {{ :database_type => 'postgresql', :manage_database => true }}
+      it { should contain_class('zabbix::database::postgresql').with_zabbix_type('proxy')}
+      it { should contain_class('zabbix::database::postgresql').with_zabbix_version('2.4')}
+      it { should contain_class('zabbix::database::postgresql').with_database_name('zabbix-proxy')}
+      it { should contain_class('zabbix::database::postgresql').with_database_user('zabbix-proxy')}
+      it { should contain_class('zabbix::database::postgresql').with_database_password('zabbix-proxy')}
+      it { should contain_class('zabbix::database::postgresql').with_database_host('localhost')}
     end
 
-    context 'with zabbix::database class' do
-      let(:params) {{ :dbtype => 'mysql', :manage_database => true }}
-      it { should contain_class('zabbix::database').with_manage_database('true')}
-      it { should contain_class('zabbix::database').with_dbtype('mysql')}
-      it { should contain_class('zabbix::database').with_zabbix_type('proxy')}
-      it { should contain_class('zabbix::database').with_zabbix_version('2.4')}
-      it { should contain_class('zabbix::database').with_db_name('zabbix-proxy')}
-      it { should contain_class('zabbix::database').with_db_user('zabbix-proxy')}
-      it { should contain_class('zabbix::database').with_db_pass('zabbix-proxy')}
-      it { should contain_class('zabbix::database').with_db_host('localhost')}
+  
+    context 'with zabbix::database::mysql class' do
+      let(:params) {{ :database_type => 'mysql', :manage_database => true }}
+      it { should contain_class('zabbix::database::mysql').with_zabbix_type('proxy')}
+      it { should contain_class('zabbix::database::mysql').with_zabbix_version('2.4')}
+      it { should contain_class('zabbix::database::mysql').with_database_name('zabbix-proxy')}
+      it { should contain_class('zabbix::database::mysql').with_database_user('zabbix-proxy')}
+      it { should contain_class('zabbix::database::mysql').with_database_password('zabbix-proxy')}
+      it { should contain_class('zabbix::database::mysql').with_database_host('localhost')}
     end
 
-    context 'with zabbix::database class' do
-      let(:params) {{ :manage_database => false }}
-      it { should contain_class('zabbix::database').with_manage_database('false')}
+    context 'when manage_database is true' do
+      let(:params) {{ :manage_database => true }}
+      it { should contain_class('zabbix::database').with_zabbix_type('proxy')}
+      it { should contain_class('zabbix::database').with_database_type('postgresql')}
+      it { should contain_class('zabbix::database').with_database_name('zabbix-proxy')}
+      it { should contain_class('zabbix::database').with_database_user('zabbix-proxy')}
+      it { should contain_class('zabbix::database').with_database_password('zabbix-proxy')}
+      it { should contain_class('zabbix::database').with_database_host('localhost')}
+      it { should contain_class('zabbix::database').with_zabbix_proxy('localhost')}
+      it { should contain_class('zabbix::database').with_zabbix_proxy_ip('127.0.0.1')}
     end
 
     context "when declaring manage_firewall is true" do
@@ -348,13 +98,10 @@ describe 'zabbix::proxy' do
       let(:params) {{ :manage_firewall => false }}
       it { should_not contain_firewall('151 zabbix-proxy') }
     end
-  end # END context 'On a RedHat OS' do
 
 
   # Make sure we have set some vars in zabbix_proxy.conf file. This is configuration file is the same on all
   # operating systems. So we aren't testing this for all opeating systems, just this one.
-  context 'zabbix_proxy.conf configuration' do
-    let(:facts) {{:operatingsystem => 'RedHat', :operatingsystemrelease => '6.5', :osfamily => 'RedHat',:fqdn => 'rspec.puppet.com'}}
 
     context 'with mode => 0' do
       let(:params) { {:mode => '0'} }
@@ -405,28 +152,28 @@ describe 'zabbix::proxy' do
       it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^PidFile=/var/run/zabbix/proxy_server.pid$}}
     end   
 
-    context 'with dbhost => localhost' do
-      let(:params) { {:dbhost => 'localhost'} }
+    context 'with database_host => localhost' do
+      let(:params) { {:database_host => 'localhost'} }
       it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^DBHost=localhost$}}
     end   
 
-    context 'with dbname => zabbix-proxy' do
-      let(:params) { {:dbname => 'zabbix-proxy'} }
+    context 'with database_name => zabbix-proxy' do
+      let(:params) { {:database_name => 'zabbix-proxy'} }
       it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^DBName=zabbix-proxy$}}
     end   
 
-    context 'with dbschema => zabbix-proxy' do
-      let(:params) { {:dbschema => 'zabbix-proxy'} }
+    context 'with database_schema => zabbix-proxy' do
+      let(:params) { {:database_schema => 'zabbix-proxy'} }
       it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^DBSchema=zabbix-proxy$}}
     end   
 
-    context 'with dbuser => zabbix-proxy' do
-      let(:params) { {:dbuser => 'zabbix-proxy'} }
+    context 'with database_user => zabbix-proxy' do
+      let(:params) { {:database_user => 'zabbix-proxy'} }
       it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^DBUser=zabbix-proxy$}}
     end   
 
-    context 'with dbpassword => zabbix-proxy' do
-      let(:params) { {:dbpassword => 'zabbix-proxy'} }
+    context 'with database_password => zabbix-proxy' do
+      let(:params) { {:database_password => 'zabbix-proxy'} }
       it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^DBPassword=zabbix-proxy$}}
     end   
 
@@ -642,4 +389,4 @@ describe 'zabbix::proxy' do
   end # END context 'zabbix_proxy.conf configuration'
 
 end
-# END OF FILE
+

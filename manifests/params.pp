@@ -27,17 +27,25 @@ class zabbix::params {
     }
   }
 
-  # Zabbix overall params
-  $dbtype                         = 'postgresql'
+  # Zabbix overall params. Is used by all components.
   $zabbix_version                 = '2.4'
   $zabbix_timezone                = 'Europe/Amsterdam'
+  $zabbix_server                  = 'localhost'
+  $zabbix_web                     = 'localhost'
+  $zabbix_proxy                   = 'localhost'
+  $zabbix_server_ip               = '127.0.0.1'
+  $zabbix_web_ip                  = '127.0.0.1'
+  $zabbix_proxy_ip                = '127.0.0.1'
+  $zabbix_package_state           = 'present'
   $manage_database                = true
   $manage_vhost                   = true
   $manage_firewall                = false
   $manage_repo                    = true
   $manage_resources               = false
+  $database_type                  = 'postgresql'
+  $database_schema_path           = false
 
-  # Server specific params
+  # Zabbix-web
   $apache_use_ssl                 = false
   $apache_ssl_key                 = undef
   $apache_ssl_cert                = undef
@@ -47,6 +55,12 @@ class zabbix::params {
   $apache_ssl_chain               = undef
   $server_api_user                = 'Admin'
   $server_api_pass                = 'zabbix'
+
+  # Zabbix-server
+  $server_service_name            = 'zabbix-server'
+  $server_configfile_path         = '/etc/zabbix/zabbix_server.conf'
+  $server_config_owner            = 'zabbix'
+  $server_config_group            = 'zabbix'
   $server_nodeid                  = '0'
   $server_listenport              = '10051'
   $server_sourceip                = undef
@@ -54,13 +68,13 @@ class zabbix::params {
   $server_logfilesize             = '10'
   $server_debuglevel              = '3'
   $server_pidfile                 = '/var/run/zabbix/zabbix_server.pid'
-  $server_dbhost                  = 'localhost'
-  $server_dbname                  = 'zabbix-server'
-  $server_dbschema                = undef
-  $server_dbuser                  = 'zabbix-server'
-  $server_dbpassword              = 'zabbix-server'
-  $server_dbsocket                = undef
-  $server_dbport                  = undef
+  $server_database_host           = 'localhost'
+  $server_database_name           = 'zabbix_server'
+  $server_database_schema         = undef
+  $server_database_user           = 'zabbix_server'
+  $server_database_password       = 'zabbix_server'
+  $server_database_socket         = undef
+  $server_database_port           = undef
   $server_startpollers            = '5'
   $server_startipmipollers        = '0'
   $server_startpollersunreachable = '1'
@@ -109,6 +123,7 @@ class zabbix::params {
   $server_loadmodule              = undef
 
   # Agent specific params
+  $agent_configfile_path          = '/etc/zabbix/zabbix_agentd.conf'
   $monitored_by_proxy             = undef
   $agent_use_ip                   = true
   $agent_zbx_group                = 'Linux servers'
@@ -143,6 +158,8 @@ class zabbix::params {
   $agent_loadmodule               = undef
 
   # Proxy specific params
+  $proxy_service_name            = 'zabbix-proxy'
+  $proxy_configfile_path         = '/etc/zabbix/zabbix_proxy.conf'
   $proxy_use_ip                  = true
   $proxy_zbx_templates           = [ 'Template App Zabbix Proxy' ]
   $proxy_mode                    = '0'
@@ -154,13 +171,13 @@ class zabbix::params {
   $proxy_logfilesize             = '10'
   $proxy_debuglevel              = '3'
   $proxy_pidfile                 = '/var/run/zabbix/proxy_server.pid'
-  $proxy_dbhost                  = 'localhost'
-  $proxy_dbname                  = 'zabbix-proxy'
-  $proxy_dbschema                = undef
-  $proxy_dbuser                  = 'zabbix-proxy'
-  $proxy_dbpassword              = 'zabbix-proxy'
-  $proxy_dbsocket                = undef
-  $proxy_dbport                  = undef
+  $proxy_database_host           = 'localhost'
+  $proxy_database_name           = 'zabbix-proxy'
+  $proxy_database_schema         = undef
+  $proxy_database_user           = 'zabbix-proxy'
+  $proxy_database_password       = 'zabbix-proxy'
+  $proxy_database_socket         = undef
+  $proxy_database_port           = undef
   $proxy_localbuffer             = '0'
   $proxy_offlinebuffer           = '1'
   $proxy_heartbeatfrequency      = '60'

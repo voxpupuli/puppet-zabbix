@@ -14,6 +14,10 @@
 # [*zabbix_version*]
 #   This is the zabbix version.
 #
+# [*zabbix_package_state*]
+#   The state of the package that needs to be installed: present or latest.
+#   Default: present
+#
 # [*manage_firewall*]
 #   When true, it will create iptables rules.
 #
@@ -39,6 +43,9 @@
 #
 # [*zbx_templates*]
 #   List of templates which will be added when host is configured.
+#
+# [*agent_configfile_path*]
+#   Agent config file path defaults to /etc/zabbix/zabbix_agentd.conf
 #
 # [*pidfile*]
 #   Name of pid file.
@@ -157,42 +164,44 @@
 # Copyright 2014 Werner Dijkerman
 #
 class zabbix::agent (
-  $zabbix_version       = $zabbix::params::zabbix_version,
-  $manage_firewall      = $zabbix::params::manage_firewall,
-  $manage_repo          = $zabbix::params::manage_repo,
-  $manage_resources     = $zabbix::params::manage_resources,
-  $monitored_by_proxy   = $zabbix::params::monitored_by_proxy,
-  $agent_use_ip         = $zabbix::params::agent_use_ip,
-  $zbx_group            = $zabbix::params::agent_zbx_group,
-  $zbx_templates        = $zabbix::params::agent_zbx_templates,
-  $pidfile              = $zabbix::params::agent_pidfile,
-  $logfile              = $zabbix::params::agent_logfile,
-  $logfilesize          = $zabbix::params::agent_logfilesize,
-  $debuglevel           = $zabbix::params::agent_debuglevel,
-  $sourceip             = $zabbix::params::agent_sourceip,
-  $enableremotecommands = $zabbix::params::agent_enableremotecommands,
-  $logremotecommands    = $zabbix::params::agent_logremotecommands,
-  $server               = $zabbix::params::agent_server,
-  $listenport           = $zabbix::params::agent_listenport,
-  $listenip             = $zabbix::params::agent_listenip,
-  $startagents          = $zabbix::params::agent_startagents,
-  $serveractive         = $zabbix::params::agent_serveractive,
-  $hostname             = $zabbix::params::agent_hostname,
-  $hostnameitem         = $zabbix::params::agent_hostnameitem,
-  $hostmetadata         = $zabbix::params::agent_hostmetadata,
-  $hostmetadataitem     = $zabbix::params::agent_hostmetadataitem,
-  $refreshactivechecks  = $zabbix::params::agent_refreshactivechecks,
-  $buffersend           = $zabbix::params::agent_buffersend,
-  $buffersize           = $zabbix::params::agent_buffersize,
-  $maxlinespersecond    = $zabbix::params::agent_maxlinespersecond,
-  $allowroot            = $zabbix::params::agent_allowroot,
-  $zabbix_alias         = $zabbix::params::agent_zabbix_alias,
-  $timeout              = $zabbix::params::agent_timeout,
-  $include_dir          = $zabbix::params::agent_include,
-  $unsafeuserparameters = $zabbix::params::agent_unsafeuserparameters,
-  $userparameter        = $zabbix::params::agent_userparameter,
-  $loadmodulepath       = $zabbix::params::agent_loadmodulepath,
-  $loadmodule           = $zabbix::params::agent_loadmodule,
+  $zabbix_version        = $zabbix::params::zabbix_version,
+  $zabbix_package_state  = $zabbix::params::zabbix_package_state,
+  $manage_firewall       = $zabbix::params::manage_firewall,
+  $manage_repo           = $zabbix::params::manage_repo,
+  $manage_resources      = $zabbix::params::manage_resources,
+  $monitored_by_proxy    = $zabbix::params::monitored_by_proxy,
+  $agent_use_ip          = $zabbix::params::agent_use_ip,
+  $zbx_group             = $zabbix::params::agent_zbx_group,
+  $zbx_templates         = $zabbix::params::agent_zbx_templates,
+  $agent_configfile_path = $zabbix::params::agent_configfile_path,
+  $pidfile               = $zabbix::params::agent_pidfile,
+  $logfile               = $zabbix::params::agent_logfile,
+  $logfilesize           = $zabbix::params::agent_logfilesize,
+  $debuglevel            = $zabbix::params::agent_debuglevel,
+  $sourceip              = $zabbix::params::agent_sourceip,
+  $enableremotecommands  = $zabbix::params::agent_enableremotecommands,
+  $logremotecommands     = $zabbix::params::agent_logremotecommands,
+  $server                = $zabbix::params::agent_server,
+  $listenport            = $zabbix::params::agent_listenport,
+  $listenip              = $zabbix::params::agent_listenip,
+  $startagents           = $zabbix::params::agent_startagents,
+  $serveractive          = $zabbix::params::agent_serveractive,
+  $hostname              = $zabbix::params::agent_hostname,
+  $hostnameitem          = $zabbix::params::agent_hostnameitem,
+  $hostmetadata          = $zabbix::params::agent_hostmetadata,
+  $hostmetadataitem      = $zabbix::params::agent_hostmetadataitem,
+  $refreshactivechecks   = $zabbix::params::agent_refreshactivechecks,
+  $buffersend            = $zabbix::params::agent_buffersend,
+  $buffersize            = $zabbix::params::agent_buffersize,
+  $maxlinespersecond     = $zabbix::params::agent_maxlinespersecond,
+  $allowroot             = $zabbix::params::agent_allowroot,
+  $zabbix_alias          = $zabbix::params::agent_zabbix_alias,
+  $timeout               = $zabbix::params::agent_timeout,
+  $include_dir           = $zabbix::params::agent_include,
+  $unsafeuserparameters  = $zabbix::params::agent_unsafeuserparameters,
+  $userparameter         = $zabbix::params::agent_userparameter,
+  $loadmodulepath        = $zabbix::params::agent_loadmodulepath,
+  $loadmodule            = $zabbix::params::agent_loadmodule,
   ) inherits zabbix::params {
 
   # Check some if they are boolean
@@ -239,17 +248,13 @@ class zabbix::agent (
 
   # Check if manage_repo is true.
   if $manage_repo {
-    if ! defined(Class['zabbix::repo']) {
-      class { 'zabbix::repo':
-        zabbix_version => $zabbix_version,
-      }
-    }
+    include zabbix::repo
     Package['zabbix-agent'] {require => Class['zabbix::repo']}
   }
 
   # Installing the package
   package { 'zabbix-agent':
-    ensure  => present,
+    ensure  => $zabbix_package_state,
   }
 
   # Controlling the 'zabbix-agent' service
@@ -262,7 +267,7 @@ class zabbix::agent (
   }
 
   # Configuring the zabbix-agent configuration file
-  file { '/etc/zabbix/zabbix_agentd.conf':
+  file { $agent_configfile_path:
     ensure  => present,
     owner   => 'zabbix',
     group   => 'zabbix',
@@ -280,7 +285,7 @@ class zabbix::agent (
     group   => 'zabbix',
     recurse => true,
     purge   => true,
-    require => File['/etc/zabbix/zabbix_agentd.conf'],
+    require => File[$agent_configfile_path],
   }
 
   # Manage firewall

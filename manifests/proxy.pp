@@ -1,15 +1,15 @@
 # == Class: zabbix::proxy
 #
-#  This will install and configure the zabbix-agent deamon
+#  This will install and configure the zabbix-proxy deamon
 #
 # === Requirements
 #
 # When 'manage_database' is set to true, the corresponding database class
-# in 'dbtype' should be required.
+# in 'database_type' should be required.
 #
 # === Parameters
 #
-# [*dbtype*]
+# [*database_type*]
 #   Type of database. Can use the following 3 databases:
 #   - postgresql
 #   - mysql
@@ -17,6 +17,10 @@
 #
 # [*zabbix_version*]
 #   This is the zabbix version.
+#
+# [*zabbix_package_state*]
+#   The state of the package that needs to be installed: present or latest.
+#   Default: present
 #
 # [*manage_database*]
 #   When true, it will configure the database and execute the sql scripts.
@@ -37,6 +41,9 @@
 #
 # [*zbx_templates*]
 #   Template which will be added when proxy is configured.
+#
+# [*proxy_configfile_path*]
+#   Proxy config file path defaults to /etc/zabbix/zabbix_proxy.conf
 #
 # [*mode*]
 #   Proxy operating mode.
@@ -65,25 +72,25 @@
 # [*pidfile*]
 #   Name of pid file.
 #
-# [*dbhost*]
+# [*database_host*]
 #   Database host name.
 #
-# [*dbname*]
+# [*database_name*]
 #   Database name.
 #
-# [*dbschema*]
+# [*database_schema*]
 #   Schema name. used for ibm db2.
 #
-# [*dbuser*]
+# [*database_user*]
 #   Database user. ignored for sqlite.
 #
-# [*dbpassword*]
+# [*database_password*]
 #   Database password. ignored for sqlite.
 #
-# [*dbsocket*]
+# [*database_socket*]
 #   Path to mysql socket.
 #
-# [*dbport*]
+# [*database_port*]
 #   Database port when not using local socket. Ignored for sqlite.
 #
 # [*localbuffer*]
@@ -211,10 +218,62 @@
 #
 # === Example
 #
+#  When you want to run everything on one machine, you can use the following
+#  example:
 #  class { 'zabbix::proxy':
 #    zabbix_server_host => '192.168.1.1',
 #    zabbix_server_port => '10051',
 #  }
+#
+#  When you want to use mysql:
+#  class { 'zabbix::proxy':
+#    zabbix_server_host => '192.168.1.1',
+#    zabbix_server_port => '10051',
+#    database_type      => 'mysql',
+#  }
+#
+#  The zabbix::proxy can also be split like the server into 2 servers:
+#  - zabbix::proxy
+#  - zabbix::database
+#
+#  The following is an example of running the proxy on 2 servers:
+#  node 'wdpuppet03.dj-wasabi.local' {
+#    #class { 'postgresql::client': }
+#    class { 'mysql::client': }
+#    class { 'zabbix::proxy':
+#      zabbix_server_host => '192.168.1.1',
+#      manage_database    => false,
+#      database_host      => 'wdpuppet04.dj-wasabi.local',
+#      database_type      => 'mysql',
+#    }
+#  }
+#
+#  node 'wdpuppet04.dj-wasabi.local' {
+#    #class { 'postgresql::server':
+#    #    listen_addresses => '192.168.20.14'
+#    #  }
+#      class { 'mysql::server':
+#        override_options => {
+#          'mysqld'       => {
+#            'bind_address' => '192.168.20.14',
+#          },
+#        },
+#      }
+#    class { 'zabbix::database':
+#      database_type     => 'mysql',
+#      zabbix_type       => 'proxy',
+#      #zabbix_proxy_ip   => '192.168.20.13',
+#      zabbix_proxy      => 'wdpuppet03.dj-wasabi.local',
+#      database_name     => 'zabbix-proxy',
+#      database_user     => 'zabbix-proxy',
+#      database_password => 'zabbix-proxy',
+#    }
+#  }
+#
+#  The example of above is running the proxy with an mysql backend. When
+#  you want to use postgresql, you'll need to uncomment the postgresql class
+#  and the zabbix_proxy_ip and comment the mysql class, database_type and the
+#  zabbix_proxy parameters.
 #
 # === Authors
 #
@@ -225,14 +284,19 @@
 # Copyright 2014 Werner Dijkerman
 #
 class zabbix::proxy (
-  $dbtype                  = $zabbix::params::dbtype,
+  $database_type           = $zabbix::params::database_type,
   $zabbix_version          = $zabbix::params::zabbix_version,
+  $zabbix_package_state    = $zabbix::params::zabbix_package_state,
   $manage_database         = $zabbix::params::manage_database,
   $manage_firewall         = $zabbix::params::manage_firewall,
   $manage_repo             = $zabbix::params::manage_repo,
   $manage_resources        = $zabbix::params::manage_resources,
+  $zabbix_proxy            = $zabbix::params::zabbix_proxy,
+  $zabbix_proxy_ip         = $zabbix::params::zabbix_proxy_ip,
   $use_ip                  = $zabbix::params::proxy_use_ip,
   $zbx_templates           = $zabbix::params::proxy_zbx_templates,
+  $proxy_configfile_path   = $zabbix::params::proxy_configfile_path,
+  $proxy_service_name      = $zabbix::params::proxy_service_name,
   $mode                    = $zabbix::params::proxy_mode,
   $zabbix_server_host      = $zabbix::params::proxy_zabbix_server_host,
   $zabbix_server_port      = $zabbix::params::proxy_zabbix_server_port,
@@ -242,13 +306,14 @@ class zabbix::proxy (
   $logfilesize             = $zabbix::params::proxy_logfilesize,
   $debuglevel              = $zabbix::params::proxy_debuglevel,
   $pidfile                 = $zabbix::params::proxy_pidfile,
-  $dbhost                  = $zabbix::params::proxy_dbhost,
-  $dbname                  = $zabbix::params::proxy_dbname,
-  $dbschema                = $zabbix::params::proxy_dbschema,
-  $dbuser                  = $zabbix::params::proxy_dbuser,
-  $dbpassword              = $zabbix::params::proxy_dbpassword,
-  $dbsocket                = $zabbix::params::proxy_dbsocket,
-  $dbport                  = $zabbix::params::proxy_dbport,
+  $database_schema_path    = $zabbix::params::database_schema_path,
+  $database_host           = $zabbix::params::proxy_database_host,
+  $database_name           = $zabbix::params::proxy_database_name,
+  $database_schema         = $zabbix::params::proxy_database_schema,
+  $database_user           = $zabbix::params::proxy_database_user,
+  $database_password       = $zabbix::params::proxy_database_password,
+  $database_socket         = $zabbix::params::proxy_database_socket,
+  $database_port           = $zabbix::params::proxy_database_port,
   $localbuffer             = $zabbix::params::proxy_localbuffer,
   $offlinebuffer           = $zabbix::params::proxy_offlinebuffer,
   $heartbeatfrequency      = $zabbix::params::proxy_heartbeatfrequency,
@@ -329,50 +394,71 @@ class zabbix::proxy (
     zabbix::userparameters { 'Zabbix_Proxy':
       template => 'Template App Zabbix Proxy',
     }
-
   }
 
-  # Use the correct db.
-  case $dbtype {
+  # Get the correct database_type. We need this for installing the
+  # correct package and loading the sql files.
+  case $database_type {
     'postgresql': {
       $db = 'pgsql'
+
+      # Execute the postgresql scripts
+      class { 'zabbix::database::postgresql':
+        zabbix_type          => 'proxy',
+        zabbix_version       => $zabbix_version,
+        database_schema_path => $database_schema_path,
+        database_name        => $database_name,
+        database_user        => $database_user,
+        database_password    => $database_password,
+        database_host        => $database_host,
+        require              => Package["zabbix-proxy-${db}"],
+      }
     }
     'mysql': {
       $db = 'mysql'
+
+      # Execute the mysqll scripts
+      class { 'zabbix::database::mysql':
+        zabbix_type          => 'proxy',
+        zabbix_version       => $zabbix_version,
+        database_schema_path => $database_schema_path,
+        database_name        => $database_name,
+        database_user        => $database_user,
+        database_password    => $database_password,
+        database_host        => $database_host,
+        require              => Package["zabbix-proxy-${db}"],
+      }
     }
     'sqlite': {
       $db = 'sqlite3'
     }
     default: {
-      fail("Unrecognized database type for proxy: ${dbtype}")
+      fail("Unrecognized database type for proxy: ${database_type}")
     }
   }
 
   # Check if manage_repo is true.
   if $manage_repo {
-    if ! defined(Class['zabbix::repo']) {
-      class { 'zabbix::repo':
-        zabbix_version => $zabbix_version,
-      }
-    }
+    include zabbix::repo
     Package["zabbix-proxy-${db}"] {require => Class['zabbix::repo']}
   }
 
+  # Now we are going to install the correct packages.
   case $::operatingsystem {
     'redhat','centos','oraclelinux' : {
       package { 'zabbix-proxy':
-        ensure  => present,
+        ensure  => $zabbix_package_state,
         require => Package["zabbix-proxy-${db}"]
       }
       # Installing the packages
       package { "zabbix-proxy-${db}":
-        ensure  => present,
+        ensure  => $zabbix_package_state,
       }
     } # END 'redhat','centos','oraclelinux'
     default : {
       # Installing the packages
       package { "zabbix-proxy-${db}":
-        ensure  => present,
+        ensure  => $zabbix_package_state,
       }
     } # END default
   } # END case $::operatingsystem
@@ -380,42 +466,44 @@ class zabbix::proxy (
   # Workaround for: The redhat provider can not handle attribute enable
   # This is only happening when using an redhat family version 5.x.
   if $::osfamily == 'redhat' and $::operatingsystemrelease !~ /^5.*/ {
-    Service['zabbix-proxy'] { enable     => true }
+    Service[$proxy_service_name] { enable     => true }
   }
 
   # Controlling the 'zabbix-proxy' service
-  service { 'zabbix-proxy':
+  service { $proxy_service_name:
     ensure     => running,
     hasstatus  => true,
     hasrestart => true,
     require    => [
       Package["zabbix-proxy-${db}"],
       File[$include_dir],
-      File['/etc/zabbix/zabbix_proxy.conf']
+      File[$proxy_configfile_path]
     ],
   }
 
   # if we want to manage the databases, we do
   # some stuff. (for maintaining database only.)
-  class { 'zabbix::database':
-    manage_database => $manage_database,
-    dbtype          => $dbtype,
-    zabbix_type     => 'proxy',
-    zabbix_version  => $zabbix_version,
-    db_name         => $dbname,
-    db_user         => $dbuser,
-    db_pass         => $dbpassword,
-    db_host         => $dbhost,
-    before          => Service['zabbix-proxy'],
+  if $manage_database == true {
+    class { 'zabbix::database':
+      database_type     => $database_type,
+      zabbix_type       => 'proxy',
+      database_name     => $database_name,
+      database_user     => $database_user,
+      database_password => $database_password,
+      database_host     => $database_host,
+      zabbix_proxy      => $zabbix_proxy,
+      zabbix_proxy_ip   => $zabbix_proxy_ip,
+      before            => Service[$proxy_service_name],
+    }
   }
 
   # Configuring the zabbix-proxy configuration file
-  file { '/etc/zabbix/zabbix_proxy.conf':
+  file { $proxy_configfile_path:
     ensure  => present,
     owner   => 'zabbix',
     group   => 'zabbix',
     mode    => '0644',
-    notify  => Service['zabbix-proxy'],
+    notify  => Service[$proxy_service_name],
     require => Package["zabbix-proxy-${db}"],
     replace => true,
     content => template('zabbix/zabbix_proxy.conf.erb'),
@@ -424,7 +512,7 @@ class zabbix::proxy (
   # Include dir for specific zabbix-proxy checks.
   file { $include_dir:
     ensure  => directory,
-    require => File['/etc/zabbix/zabbix_proxy.conf'],
+    require => File[$proxy_configfile_path],
   }
 
   # Manage firewall

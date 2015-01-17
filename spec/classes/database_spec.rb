@@ -1,1154 +1,254 @@
 require 'spec_helper'
 
 describe 'zabbix::database' do
-  let(:facts) {{:osfamily => 'redhat', :operatingsystem => 'RedHat', :operatingsystemrelease => '6.5'}}
+  # Set some facts / params.
+  let(:node) { 'rspec.puppet.com' }
 
-  context 'zabbix::proxy - with manage_database is true' do
-    #
-    # Tests for zabbix::proxy, dbtype = postgresql and manage_database = true
-    #
-    context 'with dbtype = postgresql' do
-      let(:params) { {:manage_database => true, :dbtype => 'postgresql', :db_name => 'zabbix-proxy', :db_user => 'zabbix-proxy', :db_pass => 'zabbix-proxy', :zabbix_type => 'proxy', :zabbix_version => '2.2'} }
-      it do 
-        should contain_class('zabbix::database::postgresql').with({
-          'zabbix_version' => '2.2',
-          'zabbix_type'    => 'proxy',
-          'db_name'        => 'zabbix-proxy',
-          'db_user'        => 'zabbix-proxy',
-          'db_pass'        => 'zabbix-proxy'
-        })
-      end
-    end # END context "with dbtype = postgresql"
+  # Running an RedHat OS.
+  context 'On a RedHat OS' do
+    let :facts do
+      {
+        :osfamily                  => 'RedHat',
+        :operatingsystem           => 'RedHat',
+        :operatingsystemrelease    => '6.5',
+        :operatingsystemmajrelease => '6',
+        :architecture              => 'x86_64',
+        :lsbdistid                 => 'RedHat',
+        :concat_basedir            => '/tmp'
+      }
+    end
 
-    #
-    # Tests for zabbix::proxy, dbtype = mysql and manage_database = true
-    #
-    context 'with dbtype = mysql' do
-      let(:params) { {:manage_database => true, :dbtype => 'mysql', :db_name => 'zabbix-proxy', :db_user => 'zabbix-proxy', :db_pass => 'zabbix-proxy', :db_host => 'localhost', :zabbix_type => 'proxy', :zabbix_version => '2.2'} }
-      it do 
-        should contain_class('zabbix::database::mysql').with({
-          'zabbix_version' => '2.2',
-          'zabbix_type'    => 'proxy',
-          'db_name'        => 'zabbix-proxy',
-          'db_user'        => 'zabbix-proxy',
-          'db_pass'        => 'zabbix-proxy',
-          'db_host'        => 'localhost'
-        })
-      end
-    end # END context 'with dbtype = mysql'
+    describe "database_type is postgresql, zabbix_type is server and is multiple host setup" do
+        let :params do
+            {
+                :database_type    => 'postgresql',
+                :database_name    => 'zabbix-server',
+                :database_user    => 'zabbix-server',
+                :zabbix_type      => 'server',
+                :zabbix_web_ip    => '127.0.0.2',
+                :zabbix_server_ip => '127.0.0.1',
+            }
+        end
+        it { should contain_postgresql__server__db('zabbix-server').with_name('zabbix-server') }
+        it { should contain_postgresql__server__db('zabbix-server').with_user('zabbix-server') }
+        
+        it { should contain_postgresql__server__pg_hba_rule('Allow zabbix-server to access database').with_database('zabbix-server') }
+        it { should contain_postgresql__server__pg_hba_rule('Allow zabbix-server to access database').with_user('zabbix-server') }
+        it { should contain_postgresql__server__pg_hba_rule('Allow zabbix-server to access database').with_address('127.0.0.1/32') }
 
-    #
-    # Tests for zabbix::proxy, dbtype = sqlite and manage_database = true
-    #
-    context 'with dbtype = sqlite' do
-      let(:params) { {:manage_database => true, :dbtype => 'sqlite'} }
-      it do
-        should contain_class('zabbix::database::sqlite')
-      end
-    end  # END context 'with dbtype = sqlite'
+        it { should contain_postgresql__server__pg_hba_rule('Allow zabbix-web to access database').with_database('zabbix-server') }
+        it { should contain_postgresql__server__pg_hba_rule('Allow zabbix-web to access database').with_user('zabbix-server') }
+        it { should contain_postgresql__server__pg_hba_rule('Allow zabbix-web to access database').with_address('127.0.0.2/32') }
+    end
 
+    describe "database_type is postgresql, zabbix_type is server and is single node setup" do
+        let :params do
+            {
+                :database_type    => 'postgresql',
+                :database_name    => 'zabbix-server',
+                :database_user    => 'zabbix-server',
+                :zabbix_type      => 'server',
+                :zabbix_web_ip    => '127.0.0.1',
+                :zabbix_server_ip => '127.0.0.1'
+            }
+        end
+        it { should contain_postgresql__server__db('zabbix-server').with_name('zabbix-server') }
+        it { should contain_postgresql__server__db('zabbix-server').with_user('zabbix-server') }
+        
+        it { should_not contain_postgresql__server__pg_hba_rule('Allow zabbix-server to access database').with_database('zabbix-server') }
+        it { should_not contain_postgresql__server__pg_hba_rule('Allow zabbix-server to access database').with_user('zabbix-server') }
+        it { should_not contain_postgresql__server__pg_hba_rule('Allow zabbix-server to access database').with_address('127.0.0.1/32') }
+
+        it { should_not contain_postgresql__server__pg_hba_rule('Allow zabbix-web to access database').with_database('zabbix-server') }
+        it { should_not contain_postgresql__server__pg_hba_rule('Allow zabbix-web to access database').with_user('zabbix-server') }
+        it { should_not contain_postgresql__server__pg_hba_rule('Allow zabbix-web to access database').with_address('127.0.0.2/32') }
+    end
+
+    describe "database_type is postgresql, zabbix_type is proxy" do
+        let :params do
+            {
+                :database_type   => 'postgresql',
+                :database_name   => 'zabbix-proxy',
+                :database_user   => 'zabbix-proxy',
+                :zabbix_type     => 'proxy',
+                :zabbix_proxy_ip => '127.0.0.1'
+            }
+        end
+        it { should contain_postgresql__server__pg_hba_rule('Allow zabbix-proxy to access database').with_database('zabbix-proxy') }
+        it { should contain_postgresql__server__pg_hba_rule('Allow zabbix-proxy to access database').with_user('zabbix-proxy') }
+        it { should contain_postgresql__server__pg_hba_rule('Allow zabbix-proxy to access database').with_address('127.0.0.1/32') }
+    end
+
+    describe "database_type is mysql, zabbix_type is server and is multiple host setup" do
+        let :params do
+            {
+                :database_type    => 'mysql',
+                :database_name    => 'zabbix-server',
+                :database_user    => 'zabbix-server',
+                :zabbix_type      => 'server',
+                :zabbix_web       => 'node1.example.com',
+                :zabbix_server    => 'node0.example.com'
+            }
+        end
+        it { should contain_mysql__db('zabbix-server').with_name('zabbix-server') }
+        it { should contain_mysql__db('zabbix-server').with_user('zabbix-server') }
+        it { should contain_mysql__db('zabbix-server').with_host('node0.example.com') }
+
+        it { should contain_mysql_user('zabbix-server@node1.example.com').with_name('zabbix-server@node1.example.com') }
+        it { should contain_mysql_grant('zabbix-server@node1.example.com/zabbix-server.*').with_name('zabbix-server@node1.example.com/zabbix-server.*') }
+        it { should contain_mysql_grant('zabbix-server@node1.example.com/zabbix-server.*').with_table('zabbix-server.*') }
+        it { should contain_mysql_grant('zabbix-server@node1.example.com/zabbix-server.*').with_user('zabbix-server@node1.example.com') }
+    end
+
+    describe "database_type is mysql, zabbix_type is server and is multiple host setup" do
+        let :params do
+            {
+                :database_type    => 'mysql',
+                :database_name    => 'zabbix-server',
+                :database_user    => 'zabbix-server',
+                :zabbix_type      => 'server',
+                :zabbix_web       => 'node0.example.com',
+                :zabbix_server    => 'node0.example.com'
+            }
+        end
+        it { should contain_mysql__db('zabbix-server').with_name('zabbix-server') }
+        it { should contain_mysql__db('zabbix-server').with_user('zabbix-server') }
+        it { should contain_mysql__db('zabbix-server').with_host('node0.example.com') }
+
+        it { should_not contain_mysql_user('zabbix-server@node1.example.com').with_name('zabbix-server@node1.example.com') }
+        it { should_not contain_mysql_grant('zabbix-server@node1.example.com/zabbix-server.*').with_name('zabbix-server@node1.example.com/zabbix-server.*') }
+        it { should_not contain_mysql_grant('zabbix-server@node1.example.com/zabbix-server.*').with_table('zabbix-server.*') }
+        it { should_not contain_mysql_grant('zabbix-server@node1.example.com/zabbix-server.*').with_user('zabbix-server@node1.example.com') }
+    end
+
+    describe "database_type is mysql, zabbix_type is proxy" do
+        let :params do
+            {
+                :database_type => 'mysql',
+                :database_name => 'zabbix-proxy',
+                :database_user => 'zabbix-proxy',
+                :zabbix_type   => 'proxy',
+                :zabbix_proxy  => 'node0.example.com'
+            }
+        end
+        it { should contain_mysql__db('zabbix-proxy').with_name('zabbix-proxy') }
+    end
+
+    describe "database_type is mysql, zabbix_type is proxy" do
+        let :params do
+            {
+                :database_type    => 'sqlite',
+                :database_name    => 'zabbix-server',
+                :database_user    => 'zabbix-server',
+                :zabbix_type      => 'proxy',
+                :zabbix_web       => 'node1.example.com',
+                :zabbix_server    => 'node0.example.com'
+            }
+        end
+        it { should contain_class('zabbix::database::sqlite') }
+    end
   end
+end
 
-  #
-  # Tests for zabbix::proxy, dbtype = postgresql and manage_database = false
-  #
-  context 'zabbix::proxy - with manage_database is false' do
-    context 'with dbtype = postgresql' do
-      let(:params) { {:manage_database => false, :dbtype => 'postgresql'} }
-      it do 
-        should_not contain_class('zabbix::database::postgresql').with({
-          'zabbix_version' => '2.2',
-          'zabbix_type'    => 'proxy',
-          'db_name'        => 'zabbix-proxy',
-          'db_user'        => 'zabbix-proxy',
-          'db_pass'        => 'zabbix-proxy'
-        })
-      end
-    end # END context "with dbtype = postgresql"
+describe 'zabbix::database::postgresql' do
+  # Set some facts / params.
+  let(:node) { 'rspec.puppet.com' }
 
-    #
-    # Tests for zabbix::proxy, dbtype = mysql and manage_database = false
-    #
-    context 'with dbtype = mysql' do
-      let(:params) { {:manage_database => false, :dbtype => 'mysql'} }
-      it do 
-        should_not contain_class('zabbix::database::mysql').with({
-          'zabbix_version' => '2.2',
-          'zabbix_type'    => 'proxy',
-          'db_name'        => 'zabbix-proxy',
-          'db_user'        => 'zabbix-proxy',
-          'db_pass'        => 'zabbix-proxy',
-          'db_host'        => 'localhost'
-        })
-      end
-    end # END context 'with dbtype = mysql'
+  # Running an RedHat OS.
+  context 'On a RedHat OS' do
+    let :facts do
+      {
+        :osfamily                  => 'RedHat',
+        :operatingsystem           => 'RedHat',
+        :operatingsystemrelease    => '6.5',
+        :operatingsystemmajrelease => '6',
+        :architecture              => 'x86_64',
+        :lsbdistid                 => 'RedHat',
+        :concat_basedir            => '/tmp'
+      }
+    end
 
-    #
-    # Tests for zabbix::proxy, dbtype = sqlite and manage_database = false
-    #
-    context 'with dbtype = sqlite' do
-      let(:params) { {:manage_database => false, :dbtype => 'sqlite'} }
-      it do
-        should_not contain_class('zabbix::database::sqlite')
-      end
-    end # END context 'with dbtype = sqlite'
+    describe "when zabbix_type is server" do
+        let :params do
+            {
+                :database_name     => 'zabbix-server',
+                :database_user     => 'zabbix-server',
+                :database_password => 'zabbix-server',
+                :database_host     => 'node01.example.com',
+                :zabbix_type       => 'server',
+                :zabbix_version    => '2.4'
+            }
+        end
+        it { should contain_exec('update_pgpass').with_command('echo node01.example.com:5432:zabbix-server:zabbix-server:zabbix-server >> /root/.pgpass') }
+        it { should contain_exec('zabbix_server_create.sql').with_command('cd /usr/share/doc/zabbix-*-pgsql-2.4*/create && psql -h node01.example.com -U zabbix-server -d zabbix-server -f schema.sql && touch /etc/zabbix/.schema.done') }
+        it { should contain_exec('zabbix_server_images.sql').with_command('cd /usr/share/doc/zabbix-*-pgsql-2.4*/create && psql -h node01.example.com -U zabbix-server -d zabbix-server -f images.sql && touch /etc/zabbix/.images.done') }
+        it { should contain_exec('zabbix_server_data.sql').with_command('cd /usr/share/doc/zabbix-*-pgsql-2.4*/create && psql -h node01.example.com -U zabbix-server -d zabbix-server -f data.sql && touch /etc/zabbix/.data.done') }
+    end
 
-  end
-  
-  #
-  # Tests for zabbix::server, dbtype = postgresql and manage_database = true
-  #
-  context 'zabbix::server - with manage_database is true' do
-    context 'with dbtype = postgresql' do
-      let(:params) { {:manage_database => true, :dbtype => 'postgresql', :db_name => 'zabbix-server', :db_user => 'zabbix-server', :db_pass => 'zabbix-server', :zabbix_type => 'server', :zabbix_version => '2.2'} }
-      it do 
-        should contain_class('zabbix::database::postgresql').with({
-          'zabbix_version' => '2.2',
-          'zabbix_type'    => 'server',
-          'db_name'        => 'zabbix-server',
-          'db_user'        => 'zabbix-server',
-          'db_pass'        => 'zabbix-server',
-        })
-      end
-    end # END context "with dbtype = postgresql"
+    describe "when zabbix_type is proxy" do
+        let :params do
+            {
+                :database_name     => 'zabbix-proxy',
+                :database_user     => 'zabbix-proxy',
+                :database_password => 'zabbix-proxy',
+                :database_host     => 'node01.example.com',
+                :zabbix_type       => 'proxy',
+                :zabbix_version    => '2.4'
+            }
+        end
+        it { should contain_exec('update_pgpass').with_command('echo node01.example.com:5432:zabbix-proxy:zabbix-proxy:zabbix-proxy >> /root/.pgpass') }
+        it { should contain_exec('zabbix_proxy_create.sql').with_command('cd /usr/share/doc/zabbix-*-pgsql-2.4*/create && psql -h node01.example.com -U zabbix-proxy -d zabbix-proxy -f schema.sql && touch /etc/zabbix/.schema.done') }
+    end
 
-    #
-    # Tests for zabbix::server, dbtype = mysql and manage_database = true
-    #
-    context 'with dbtype = mysql' do
-      let(:params) { {:manage_database => true, :dbtype => 'mysql', :db_name => 'zabbix-server', :db_user => 'zabbix-server', :db_pass => 'zabbix-server', :db_host => 'localhost', :zabbix_type => 'server', :zabbix_version => '2.2'} }
-      it do 
-        should contain_class('zabbix::database::mysql').with({
-          'zabbix_version' => '2.2',
-          'zabbix_type'    => 'server',
-          'db_name'        => 'zabbix-server',
-          'db_user'        => 'zabbix-server',
-          'db_pass'        => 'zabbix-server',
-          'db_host'        => 'localhost'
-        })
-      end
-    end # END context 'with dbtype = mysql'
-  end
-
-  #
-  # Tests for zabbix::server, dbtype = postgresql and manage_database = false
-  #  
-  context 'zabbix::server - with manage_database is true' do
-    context 'with dbtype = postgresql' do
-      let(:params) { {:manage_database => false, :dbtype => 'postgresql'} }
-      it do 
-        should_not contain_class('zabbix::database::postgresql').with({
-          'zabbix_version' => '2.2',
-          'zabbix_type'    => 'server',
-          'db_name'        => 'zabbix-server',
-          'db_user'        => 'zabbix-server',
-          'db_pass'        => 'zabbix-server',
-        })
-      end
-    end # END context "with dbtype = postgresql"
-
-    #
-    # Tests for zabbix::server, dbtype = mysql and manage_database = false
-    #
-    context 'with dbtype = mysql' do
-      let(:params) { {:manage_database => false, :dbtype => 'mysql'} }
-      it do 
-        should_not contain_class('zabbix::database::mysql').with({
-          'zabbix_version' => '2.2',
-          'zabbix_type'    => 'server',
-          'db_name'        => 'zabbix-server',
-          'db_user'        => 'zabbix-servery',
-          'db_pass'        => 'zabbix-server',
-          'db_host'        => 'localhost'
-        })
-      end
-    end # END context 'with dbtype = mysql'
   end
 end
 
 describe 'zabbix::database::mysql' do
-  #
-  # Tests for RHEL  6, zabbix_version 2.0
-  #   
+  # Set some facts / params.
+  let(:node) { 'rspec.puppet.com' }
+
+  # Running an RedHat OS.
   context 'On a RedHat OS' do
-    #
-    # Tests for RHEL 6.5, zabbix-proxy
-    #  
-    context 'with zabbix_type is proxy' do
-      let(:facts) {{:osfamily => 'redhat', :operatingsystem => 'RedHat', :operatingsystemrelease => '6.5'}}
-      let(:params) { {:zabbix_type => 'proxy', :zabbix_version => '2.0', :db_name => 'zabbix-proxy', :db_user => 'zabbix-proxy', :db_pass => 'zabbix-proxy', :db_host => 'localhost'} }
-    
-      it do should contain_exec('zabbix_proxy_create.sql').with(
-          'command'  => 'cd /usr/share/doc/zabbix-*-mysql-2.0*/create && mysql -u zabbix-proxy -pzabbix-proxy -D zabbix-proxy < schema.sql && touch schema.done',
-          'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          'unless'   => 'test -f /usr/share/doc/zabbix-*-mysql-2.0*/create/schema.done',
-          'provider' => 'shell',
-          'require'  => 'Package[zabbix-proxy-mysql]',
-          'notify'   => 'Service[zabbix-proxy]'
-      ) end
-    end # END context 'with zabbix_type is proxy'
-    #
-    # Tests for RHEL 6.5, zabbix-server
-    # 
-    context 'with zabbix_type is server' do
-      let(:facts) {{:osfamily => 'redhat', :operatingsystem => 'RedHat', :operatingsystemrelease => '6.5'}}
-      let(:params) { {:zabbix_type => 'server', :zabbix_version => '2.0', :db_name => 'zabbix-server', :db_user => 'zabbix-server', :db_pass => 'zabbix-server', :db_host => 'localhost'} }
-    
-      it do should contain_exec('zabbix_server_create.sql').with(
-          'command'  => 'cd /usr/share/doc/zabbix-*-mysql-2.0*/create && mysql -u zabbix-server -pzabbix-server -D zabbix-server < schema.sql && touch schema.done',
-          'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          'unless'   => 'test -f /usr/share/doc/zabbix-*-mysql-2.0*/create/schema.done',
-          'provider' => 'shell',
-          'require'  => 'Package[zabbix-server-mysql]',
-          'notify'   => 'Service[zabbix-server]'
-      ) end
-      it do should contain_exec('zabbix_server_images.sql').with(
-          'command'  => 'cd /usr/share/doc/zabbix-*-mysql-2.0*/create && mysql -u zabbix-server -pzabbix-server -D zabbix-server < images.sql && touch images.done',
-          'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          'unless'   => 'test -f /usr/share/doc/zabbix-*-mysql-2.0*/create/images.done',
-          'provider' => 'shell',
-          'require'  => 'Package[zabbix-server-mysql]',
-          'notify'   => 'Service[zabbix-server]'
-      ) end
-      it do should contain_exec('zabbix_server_data.sql').with(
-          'command'  => 'cd /usr/share/doc/zabbix-*-mysql-2.0*/create && mysql -u zabbix-server -pzabbix-server -D zabbix-server < data.sql && touch data.done',
-          'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          'unless'   => 'test -f /usr/share/doc/zabbix-*-mysql-2.0*/create/data.done',
-          'provider' => 'shell',
-          'require'  => 'Package[zabbix-server-mysql]',
-          'notify'   => 'Service[zabbix-server]'
-      ) end    
-    end # END context 'with zabbix_type is server'
-  end # END context 'On a RedHat OS' do
+    let :facts do
+      {
+        :osfamily                  => 'RedHat',
+        :operatingsystem           => 'RedHat',
+        :operatingsystemrelease    => '6.5',
+        :operatingsystemmajrelease => '6',
+        :architecture              => 'x86_64',
+        :lsbdistid                 => 'RedHat',
+        :concat_basedir            => '/tmp'
+      }
+    end
 
-  #
-  # Tests for RHEL  6, zabbix_version 2.0
-  #   
-  context 'On a RedHat OS' do
-    #
-    # Tests for RHEL 6.5, zabbix-proxy
-    #  
-    context 'with zabbix_type is proxy' do
-      let(:facts) {{:osfamily => 'redhat', :operatingsystem => 'RedHat', :operatingsystemrelease => '6.5'}}
-      let(:params) { {:zabbix_type => 'proxy', :zabbix_version => '2.2', :db_name => 'zabbix-proxy', :db_user => 'zabbix-proxy', :db_pass => 'zabbix-proxy', :db_host => 'localhost'} }
-    
-      it do should contain_exec('zabbix_proxy_create.sql').with(
-          'command'  => 'cd /usr/share/doc/zabbix-*-mysql-2.2*/create && mysql -u zabbix-proxy -pzabbix-proxy -D zabbix-proxy < schema.sql && touch schema.done',
-          'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          'unless'   => 'test -f /usr/share/doc/zabbix-*-mysql-2.2*/create/schema.done',
-          'provider' => 'shell',
-          'require'  => 'Package[zabbix-proxy-mysql]',
-          'notify'   => 'Service[zabbix-proxy]'
-      ) end
-    end # END context 'with zabbix_type is proxy'
-    #
-    # Tests for RHEL 6.5, zabbix-server
-    # 
-    context 'with zabbix_type is server' do
-      let(:facts) {{:osfamily => 'redhat', :operatingsystem => 'RedHat', :operatingsystemrelease => '6.5'}}
-      let(:params) { {:zabbix_type => 'server', :zabbix_version => '2.2', :db_name => 'zabbix-server', :db_user => 'zabbix-server', :db_pass => 'zabbix-server', :db_host => 'localhost'} }
-    
-      it do should contain_exec('zabbix_server_create.sql').with(
-          'command'  => 'cd /usr/share/doc/zabbix-*-mysql-2.2*/create && mysql -u zabbix-server -pzabbix-server -D zabbix-server < schema.sql && touch schema.done',
-          'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          'unless'   => 'test -f /usr/share/doc/zabbix-*-mysql-2.2*/create/schema.done',
-          'provider' => 'shell',
-          'require'  => 'Package[zabbix-server-mysql]',
-          'notify'   => 'Service[zabbix-server]'
-      ) end
-      it do should contain_exec('zabbix_server_images.sql').with(
-          'command'  => 'cd /usr/share/doc/zabbix-*-mysql-2.2*/create && mysql -u zabbix-server -pzabbix-server -D zabbix-server < images.sql && touch images.done',
-          'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          'unless'   => 'test -f /usr/share/doc/zabbix-*-mysql-2.2*/create/images.done',
-          'provider' => 'shell',
-          'require'  => 'Package[zabbix-server-mysql]',
-          'notify'   => 'Service[zabbix-server]'
-      ) end
-      it do should contain_exec('zabbix_server_data.sql').with(
-          'command'  => 'cd /usr/share/doc/zabbix-*-mysql-2.2*/create && mysql -u zabbix-server -pzabbix-server -D zabbix-server < data.sql && touch data.done',
-          'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          'unless'   => 'test -f /usr/share/doc/zabbix-*-mysql-2.2*/create/data.done',
-          'provider' => 'shell',
-          'require'  => 'Package[zabbix-server-mysql]',
-          'notify'   => 'Service[zabbix-server]'
-      ) end    
-    end # END context 'with zabbix_type is server'
-  end # END context 'On a RedHat OS' do
+    describe "when zabbix_type is server" do
+        let :params do
+            {
+                :database_name     => 'zabbix-server',
+                :database_user     => 'zabbix-server',
+                :database_password => 'zabbix-server',
+                :database_host     => 'node01.example.com',
+                :zabbix_type       => 'server',
+                :zabbix_version    => '2.4'
+            }
+        end
+        it { should contain_exec('zabbix_server_create.sql').with_command('cd /usr/share/doc/zabbix-*-mysql-2.4*/create && mysql -h node01.example.com -u zabbix-server -pzabbix-server -D zabbix-server < schema.sql && touch /etc/zabbix/.schema.done') }
+        it { should contain_exec('zabbix_server_images.sql').with_command('cd /usr/share/doc/zabbix-*-mysql-2.4*/create && mysql -h node01.example.com -u zabbix-server -pzabbix-server -D zabbix-server < images.sql && touch /etc/zabbix/.images.done') }
+        it { should contain_exec('zabbix_server_data.sql').with_command('cd /usr/share/doc/zabbix-*-mysql-2.4*/create && mysql -h node01.example.com -u zabbix-server -pzabbix-server -D zabbix-server < data.sql && touch /etc/zabbix/.data.done') }
+    end
 
-  
-  #
-  # Tests for RHEL  5, zabbix_version 2.0
-  #   
-  context 'On a RedHat OS' do
-    #
-    # Tests for RHEL 5.5, zabbix-proxy
-    #  
-    context 'with zabbix_type is proxy' do
-      let(:facts) {{:osfamily => 'redhat', :operatingsystem => 'RedHat', :operatingsystemrelease => '5.5'}}
-      let(:params) { {:zabbix_type => 'proxy', :zabbix_version => '2.0', :db_name => 'zabbix-proxy', :db_user => 'zabbix-proxy', :db_pass => 'zabbix-proxy', :db_host => 'localhost'} }
-    
-      it do should contain_exec('zabbix_proxy_create.sql').with(
-          'command'  => 'cd /usr/share/doc/zabbix-*-mysql-2.0*/create && mysql -u zabbix-proxy -pzabbix-proxy -D zabbix-proxy < schema.sql && touch schema.done',
-          'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          'unless'   => 'test -f /usr/share/doc/zabbix-*-mysql-2.0*/create/schema.done',
-          'provider' => 'shell',
-          'require'  => 'Package[zabbix-proxy-mysql]',
-          'notify'   => 'Service[zabbix-proxy]'
-      ) end
-    end # END context 'with zabbix_type is proxy'
-    #
-    # Tests for RHEL 5.5, zabbix-server
-    # 
-    context 'with zabbix_type is server' do
-      let(:facts) {{:osfamily => 'redhat', :operatingsystem => 'RedHat', :operatingsystemrelease => '5.5'}}
-      let(:params) { {:zabbix_type => 'server', :zabbix_version => '2.0', :db_name => 'zabbix-server', :db_user => 'zabbix-server', :db_pass => 'zabbix-server', :db_host => 'localhost'} }
-    
-      it do should contain_exec('zabbix_server_create.sql').with(
-          'command'  => 'cd /usr/share/doc/zabbix-*-mysql-2.0*/create && mysql -u zabbix-server -pzabbix-server -D zabbix-server < schema.sql && touch schema.done',
-          'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          'unless'   => 'test -f /usr/share/doc/zabbix-*-mysql-2.0*/create/schema.done',
-          'provider' => 'shell',
-          'require'  => 'Package[zabbix-server-mysql]',
-          'notify'   => 'Service[zabbix-server]'
-      ) end
-      it do should contain_exec('zabbix_server_images.sql').with(
-          'command'  => 'cd /usr/share/doc/zabbix-*-mysql-2.0*/create && mysql -u zabbix-server -pzabbix-server -D zabbix-server < images.sql && touch images.done',
-          'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          'unless'   => 'test -f /usr/share/doc/zabbix-*-mysql-2.0*/create/images.done',
-          'provider' => 'shell',
-          'require'  => 'Package[zabbix-server-mysql]',
-          'notify'   => 'Service[zabbix-server]'
-      ) end
-      it do should contain_exec('zabbix_server_data.sql').with(
-          'command'  => 'cd /usr/share/doc/zabbix-*-mysql-2.0*/create && mysql -u zabbix-server -pzabbix-server -D zabbix-server < data.sql && touch data.done',
-          'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          'unless'   => 'test -f /usr/share/doc/zabbix-*-mysql-2.0*/create/data.done',
-          'provider' => 'shell',
-          'require'  => 'Package[zabbix-server-mysql]',
-          'notify'   => 'Service[zabbix-server]'
-      ) end    
-    end # END context 'with zabbix_type is server'
-  end # END context 'On a RedHat OS' do
-
-  #
-  # Tests for RHEL  5, zabbix_version 2.2
-  #   
-  context 'On a RedHat OS' do
-    #
-    # Tests for RHEL 5.5, zabbix-proxy
-    #  
-    context 'with zabbix_type is proxy' do
-      let(:facts) {{:osfamily => 'redhat', :operatingsystem => 'RedHat', :operatingsystemrelease => '5.5'}}
-      let(:params) { {:zabbix_type => 'proxy', :zabbix_version => '2.2', :db_name => 'zabbix-proxy', :db_user => 'zabbix-proxy', :db_pass => 'zabbix-proxy', :db_host => 'localhost'} }
-    
-      it do should contain_exec('zabbix_proxy_create.sql').with(
-          'command'  => 'cd /usr/share/doc/zabbix-*-mysql-2.2*/create && mysql -u zabbix-proxy -pzabbix-proxy -D zabbix-proxy < schema.sql && touch schema.done',
-          'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          'unless'   => 'test -f /usr/share/doc/zabbix-*-mysql-2.2*/create/schema.done',
-          'provider' => 'shell',
-          'require'  => 'Package[zabbix-proxy-mysql]',
-          'notify'   => 'Service[zabbix-proxy]'
-      ) end
-    end # END context 'with zabbix_type is proxy'
-    #
-    # Tests for RHEL 6.5, zabbix-server
-    # 
-    context 'with zabbix_type is server' do
-      let(:facts) {{:osfamily => 'redhat', :operatingsystem => 'RedHat', :operatingsystemrelease => '5.5'}}
-      let(:params) { {:zabbix_type => 'server', :zabbix_version => '2.2', :db_name => 'zabbix-server', :db_user => 'zabbix-server', :db_pass => 'zabbix-server', :db_host => 'localhost'} }
-    
-      it do should contain_exec('zabbix_server_create.sql').with(
-          'command'  => 'cd /usr/share/doc/zabbix-*-mysql-2.2*/create && mysql -u zabbix-server -pzabbix-server -D zabbix-server < schema.sql && touch schema.done',
-          'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          'unless'   => 'test -f /usr/share/doc/zabbix-*-mysql-2.2*/create/schema.done',
-          'provider' => 'shell',
-          'require'  => 'Package[zabbix-server-mysql]',
-          'notify'   => 'Service[zabbix-server]'
-      ) end
-      it do should contain_exec('zabbix_server_images.sql').with(
-          'command'  => 'cd /usr/share/doc/zabbix-*-mysql-2.2*/create && mysql -u zabbix-server -pzabbix-server -D zabbix-server < images.sql && touch images.done',
-          'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          'unless'   => 'test -f /usr/share/doc/zabbix-*-mysql-2.2*/create/images.done',
-          'provider' => 'shell',
-          'require'  => 'Package[zabbix-server-mysql]',
-          'notify'   => 'Service[zabbix-server]'
-      ) end
-      it do should contain_exec('zabbix_server_data.sql').with(
-          'command'  => 'cd /usr/share/doc/zabbix-*-mysql-2.2*/create && mysql -u zabbix-server -pzabbix-server -D zabbix-server < data.sql && touch data.done',
-          'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          'unless'   => 'test -f /usr/share/doc/zabbix-*-mysql-2.2*/create/data.done',
-          'provider' => 'shell',
-          'require'  => 'Package[zabbix-server-mysql]',
-          'notify'   => 'Service[zabbix-server]'
-      ) end    
-    end # END context 'with zabbix_type is server'
-  end # END context 'On a RedHat OS' do
-
-  #
-  # Tests for DEBIAN  6, zabbix_version 2.0
-  #   
-  context 'On a Debian OS' do
-    #
-    # Tests for Debian 6, zabbix-proxy
-    #  
-    context 'with zabbix_type is proxy' do
-      let(:facts) {{:osfamily => 'debian', :operatingsystem => 'debian', :operatingsystemrelease => '6.0'}}
-      let(:params) { {:zabbix_type => 'proxy', :zabbix_version => '2.0', :db_name => 'zabbix-proxy', :db_user => 'zabbix-proxy', :db_pass => 'zabbix-proxy', :db_host => 'localhost'} }
-    
-      it do should contain_exec('zabbix_proxy_create.sql').with(
-          'command'  => 'cd /usr/share/zabbix-*-mysql && mysql -u zabbix-proxy -pzabbix-proxy -D zabbix-proxy < schema.sql && touch schema.done',
-          'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          'unless'   => 'test -f /usr/share/zabbix-*-mysql/schema.done',
-          'provider' => 'shell',
-          'require'  => 'Package[zabbix-proxy-mysql]',
-          'notify'   => 'Service[zabbix-proxy]'
-      ) end
-    end # END context 'with zabbix_type is proxy'
-    #
-    # Tests for Debian 6, zabbix-server
-    # 
-    context 'with zabbix_type is server' do
-      let(:facts) {{:osfamily => 'debian', :operatingsystem => 'debian', :operatingsystemrelease => '6.0'}}
-      let(:params) { {:zabbix_type => 'server', :zabbix_version => '2.0', :db_name => 'zabbix-server', :db_user => 'zabbix-server', :db_pass => 'zabbix-server', :db_host => 'localhost'} }
-    
-      it do should contain_exec('zabbix_server_create.sql').with(
-          'command'  => 'cd /usr/share/zabbix-*-mysql && mysql -u zabbix-server -pzabbix-server -D zabbix-server < schema.sql && touch schema.done',
-          'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          'unless'   => 'test -f /usr/share/zabbix-*-mysql/schema.done',
-          'provider' => 'shell',
-          'require'  => 'Package[zabbix-server-mysql]',
-          'notify'   => 'Service[zabbix-server]'
-      ) end
-      it do should contain_exec('zabbix_server_images.sql').with(
-          'command'  => 'cd /usr/share/zabbix-*-mysql && mysql -u zabbix-server -pzabbix-server -D zabbix-server < images.sql && touch images.done',
-          'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          'unless'   => 'test -f /usr/share/zabbix-*-mysql/images.done',
-          'provider' => 'shell',
-          'require'  => 'Package[zabbix-server-mysql]',
-          'notify'   => 'Service[zabbix-server]'
-      ) end
-      it do should contain_exec('zabbix_server_data.sql').with(
-          'command'  => 'cd /usr/share/zabbix-*-mysql && mysql -u zabbix-server -pzabbix-server -D zabbix-server < data.sql && touch data.done',
-          'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          'unless'   => 'test -f /usr/share/zabbix-*-mysql/data.done',
-          'provider' => 'shell',
-          'require'  => 'Package[zabbix-server-mysql]',
-          'notify'   => 'Service[zabbix-server]'
-      ) end    
-    end # END context 'with zabbix_type is server'
-  end # context 'On a Debian OS' do
-
-  #
-  # Tests for DEBIAN  7, zabbix_version 2.0
-  #   
-  context 'On a Debian OS' do
-    #
-    # Tests for Debian 7, zabbix-proxy
-    #  
-    context 'with zabbix_type is proxy' do
-      let(:facts) {{:osfamily => 'debian', :operatingsystem => 'debian', :operatingsystemrelease => '7.0'}}
-      let(:params) { {:zabbix_type => 'proxy', :zabbix_version => '2.0', :db_name => 'zabbix-proxy', :db_user => 'zabbix-proxy', :db_pass => 'zabbix-proxy', :db_host => 'localhost'} }
-    
-      it do should contain_exec('zabbix_proxy_create.sql').with(
-          'command'  => 'cd /usr/share/zabbix-*-mysql && mysql -u zabbix-proxy -pzabbix-proxy -D zabbix-proxy < schema.sql && touch schema.done',
-          'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          'unless'   => 'test -f /usr/share/zabbix-*-mysql/schema.done',
-          'provider' => 'shell',
-          'require'  => 'Package[zabbix-proxy-mysql]',
-          'notify'   => 'Service[zabbix-proxy]'
-      ) end
-    end # END context 'with zabbix_type is proxy'
-    #
-    # Tests for Debian 7, zabbix-server
-    # 
-    context 'with zabbix_type is server' do
-      let(:facts) {{:osfamily => 'debian', :operatingsystem => 'debian', :operatingsystemrelease => '7.0'}}
-      let(:params) { {:zabbix_type => 'server', :zabbix_version => '2.0', :db_name => 'zabbix-server', :db_user => 'zabbix-server', :db_pass => 'zabbix-server', :db_host => 'localhost'} }
-    
-      it do should contain_exec('zabbix_server_create.sql').with(
-          'command'  => 'cd /usr/share/zabbix-*-mysql && mysql -u zabbix-server -pzabbix-server -D zabbix-server < schema.sql && touch schema.done',
-          'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          'unless'   => 'test -f /usr/share/zabbix-*-mysql/schema.done',
-          'provider' => 'shell',
-          'require'  => 'Package[zabbix-server-mysql]',
-          'notify'   => 'Service[zabbix-server]'
-      ) end
-      it do should contain_exec('zabbix_server_images.sql').with(
-          'command'  => 'cd /usr/share/zabbix-*-mysql && mysql -u zabbix-server -pzabbix-server -D zabbix-server < images.sql && touch images.done',
-          'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          'unless'   => 'test -f /usr/share/zabbix-*-mysql/images.done',
-          'provider' => 'shell',
-          'require'  => 'Package[zabbix-server-mysql]',
-          'notify'   => 'Service[zabbix-server]'
-      ) end
-      it do should contain_exec('zabbix_server_data.sql').with(
-          'command'  => 'cd /usr/share/zabbix-*-mysql && mysql -u zabbix-server -pzabbix-server -D zabbix-server < data.sql && touch data.done',
-          'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          'unless'   => 'test -f /usr/share/zabbix-*-mysql/data.done',
-          'provider' => 'shell',
-          'require'  => 'Package[zabbix-server-mysql]',
-          'notify'   => 'Service[zabbix-server]'
-      ) end    
-    end # END context 'with zabbix_type is server'
-  end # context 'On a Debian OS' do
-
-  #
-  # Tests for DEBIAN  7, zabbix_version 2.2
-  #   
-  context 'On a Debian OS' do
-    #
-    # Tests for Debian 7, zabbix-proxy
-    #  
-    context 'with zabbix_type is proxy' do
-      let(:facts) {{:osfamily => 'debian', :operatingsystem => 'debian', :operatingsystemrelease => '7.0'}}
-      let(:params) { {:zabbix_type => 'proxy', :zabbix_version => '2.2', :db_name => 'zabbix-proxy', :db_user => 'zabbix-proxy', :db_pass => 'zabbix-proxy', :db_host => 'localhost'} }
-    
-      it do should contain_exec('zabbix_proxy_create.sql').with(
-          'command'  => 'cd /usr/share/zabbix-*-mysql && mysql -u zabbix-proxy -pzabbix-proxy -D zabbix-proxy < schema.sql && touch schema.done',
-          'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          'unless'   => 'test -f /usr/share/zabbix-*-mysql/schema.done',
-          'provider' => 'shell',
-          'require'  => 'Package[zabbix-proxy-mysql]',
-          'notify'   => 'Service[zabbix-proxy]'
-      ) end
-    end # END context 'with zabbix_type is proxy'
-    #
-    # Tests for Debian 7, zabbix-server
-    # 
-    context 'with zabbix_type is server' do
-      let(:facts) {{:osfamily => 'debian', :operatingsystem => 'debian', :operatingsystemrelease => '7.0'}}
-      let(:params) { {:zabbix_type => 'server', :zabbix_version => '2.2', :db_name => 'zabbix-server', :db_user => 'zabbix-server', :db_pass => 'zabbix-server', :db_host => 'localhost'} }
-    
-      it do should contain_exec('zabbix_server_create.sql').with(
-          'command'  => 'cd /usr/share/zabbix-*-mysql && mysql -u zabbix-server -pzabbix-server -D zabbix-server < schema.sql && touch schema.done',
-          'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          'unless'   => 'test -f /usr/share/zabbix-*-mysql/schema.done',
-          'provider' => 'shell',
-          'require'  => 'Package[zabbix-server-mysql]',
-          'notify'   => 'Service[zabbix-server]'
-      ) end
-      it do should contain_exec('zabbix_server_images.sql').with(
-          'command'  => 'cd /usr/share/zabbix-*-mysql && mysql -u zabbix-server -pzabbix-server -D zabbix-server < images.sql && touch images.done',
-          'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          'unless'   => 'test -f /usr/share/zabbix-*-mysql/images.done',
-          'provider' => 'shell',
-          'require'  => 'Package[zabbix-server-mysql]',
-          'notify'   => 'Service[zabbix-server]'
-      ) end
-      it do should contain_exec('zabbix_server_data.sql').with(
-          'command'  => 'cd /usr/share/zabbix-*-mysql && mysql -u zabbix-server -pzabbix-server -D zabbix-server < data.sql && touch data.done',
-          'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-          'unless'   => 'test -f /usr/share/zabbix-*-mysql/data.done',
-          'provider' => 'shell',
-          'require'  => 'Package[zabbix-server-mysql]',
-          'notify'   => 'Service[zabbix-server]'
-      ) end    
-    end # END context 'with zabbix_type is server'
-  end # END context 'On a Debian OS' do
-end # END describe 'zabbix::database::mysql'
-
-
-describe 'zabbix::database::postgresql' do
-  #
-  # Tests for RHEL  6, zabbix_version 2.0
-  #   
-  context 'On a RedHat OS' do
-    #
-    # Tests for RHEL 6.5, zabbix-proxy
-    #  
-    context 'with zabbix_type is proxy' do
-      let(:facts) {{:osfamily => 'redhat', :operatingsystem => 'RedHat', :operatingsystemrelease => '6.5'}}
-      let(:params) { {:zabbix_type => 'proxy', :zabbix_version => '2.0', :db_name => 'zabbix-proxy', :db_user => 'zabbix-proxy', :db_pass => 'zabbix-proxy'} }
-
-      it do should contain_file('/var/lib/pgsql/.pgpass').with(
-        'ensure'  => 'present',
-        'mode'    => '0600',
-        'owner'   => 'postgres',
-        'group'   => 'postgres',
-        'require' => 'Postgresql::Server::Db[zabbix-proxy]'
-        )
-      end 
-
-      it do should contain_exec('update_pgpass').with(
-        'command' => 'echo localhost:5432:zabbix-proxy:zabbix-proxy:zabbix-proxy >> /var/lib/pgsql/.pgpass',
-        'path'    => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'  => 'grep "localhost:5432:zabbix-proxy:zabbix-proxy:zabbix-proxy" /var/lib/pgsql/.pgpass',
-        'require'  => 'File[/var/lib/pgsql/.pgpass]'
-      ) end
-            
-      it do should contain_exec('zabbix_proxy_create.sql').with(
-        'command'  => 'cd /usr/share/doc/zabbix-*-pgsql-2.0*/create && sudo -u postgres psql -h localhost -U zabbix-proxy -d zabbix-proxy -f schema.sql && touch schema.done',
-        'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'   => 'test -f /usr/share/doc/zabbix-*-pgsql-2.0*/create/schema.done',
-        'provider' => 'shell',
-        'require'  => ['Exec[update_pgpass]','Package[zabbix-proxy-pgsql]'],
-        'notify'   => 'Service[zabbix-proxy]'
-      ) end
-    end # END context 'with zabbix_type is proxy'
-    #
-    # Tests for RHEL 6.5, zabbix-server
-    # 
-    context 'with zabbix_type is server' do
-      let(:facts) {{:osfamily => 'redhat', :operatingsystem => 'RedHat', :operatingsystemrelease => '6.5'}}
-      let(:params) { {:zabbix_type => 'server', :zabbix_version => '2.0', :db_name => 'zabbix-server', :db_user => 'zabbix-server', :db_pass => 'zabbix-server'} }
-
-      it do should contain_file('/var/lib/pgsql/.pgpass').with(
-        'ensure'  => 'present',
-        'mode'    => '0600',
-        'owner'   => 'postgres',
-        'group'   => 'postgres',
-        'require' => 'Postgresql::Server::Db[zabbix-server]'
-        )
-      end 
-
-      it do should contain_exec('update_pgpass').with(
-        'command' => 'echo localhost:5432:zabbix-server:zabbix-server:zabbix-server >> /var/lib/pgsql/.pgpass',
-        'path'    => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'  => 'grep "localhost:5432:zabbix-server:zabbix-server:zabbix-server" /var/lib/pgsql/.pgpass',
-        'require'  => 'File[/var/lib/pgsql/.pgpass]'
-      ) end
-    
-      it do should contain_exec('zabbix_server_create.sql').with(
-        'command'  => 'cd /usr/share/doc/zabbix-*-pgsql-2.0*/create && sudo -u postgres psql -h localhost -U zabbix-server -d zabbix-server -f schema.sql && touch schema.done',
-        'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'   => 'test -f /usr/share/doc/zabbix-*-pgsql-2.0*/create/schema.done',
-        'provider' => 'shell',
-        'require'  => ['Exec[update_pgpass]','Package[zabbix-server-pgsql]'],
-        'notify'   => 'Service[zabbix-server]'
-      ) end
-      it do should contain_exec('zabbix_server_images.sql').with(
-        'command'  => 'cd /usr/share/doc/zabbix-*-pgsql-2.0*/create && sudo -u postgres psql -h localhost -U zabbix-server -d zabbix-server -f images.sql && touch images.done',
-        'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'   => 'test -f /usr/share/doc/zabbix-*-pgsql-2.0*/create/images.done',
-        'provider' => 'shell',
-        'require'  => ['Exec[update_pgpass]','Package[zabbix-server-pgsql]'],
-        'notify'   => 'Service[zabbix-server]'
-      ) end
-      it do should contain_exec('zabbix_server_data.sql').with(
-        'command'  => 'cd /usr/share/doc/zabbix-*-pgsql-2.0*/create && sudo -u postgres psql -h localhost -U zabbix-server -d zabbix-server -f data.sql && touch data.done',
-        'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'   => 'test -f /usr/share/doc/zabbix-*-pgsql-2.0*/create/data.done',
-        'provider' => 'shell',
-        'require'  => ['Exec[update_pgpass]','Package[zabbix-server-pgsql]'],
-        'notify'   => 'Service[zabbix-server]'
-      ) end    
-    end # END context 'with zabbix_type is server'
-  end # END context 'On a RedHat OS' do
-
-  #
-  # Tests for RHEL  6, zabbix_version 2.2
-  #   
-  context 'On a RedHat OS' do
-    #
-    # Tests for RHEL 6.5, zabbix-proxy
-    #  
-    context 'with zabbix_type is proxy' do
-      let(:facts) {{:osfamily => 'redhat', :operatingsystem => 'RedHat', :operatingsystemrelease => '6.5'}}
-      let(:params) { {:zabbix_type => 'proxy', :zabbix_version => '2.2', :db_name => 'zabbix-proxy', :db_user => 'zabbix-proxy', :db_pass => 'zabbix-proxy'} }
-
-      it do should contain_file('/var/lib/pgsql/.pgpass').with(
-        'ensure'  => 'present',
-        'mode'    => '0600',
-        'owner'   => 'postgres',
-        'group'   => 'postgres',
-        'require' => 'Postgresql::Server::Db[zabbix-proxy]'
-        )
-      end 
-
-      it do should contain_exec('update_pgpass').with(
-        'command' => 'echo localhost:5432:zabbix-proxy:zabbix-proxy:zabbix-proxy >> /var/lib/pgsql/.pgpass',
-        'path'    => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'  => 'grep "localhost:5432:zabbix-proxy:zabbix-proxy:zabbix-proxy" /var/lib/pgsql/.pgpass',
-        'require'  => 'File[/var/lib/pgsql/.pgpass]'
-      ) end
-    
-      it do should contain_exec('zabbix_proxy_create.sql').with(
-        'command'  => 'cd /usr/share/doc/zabbix-*-pgsql-2.2*/create && sudo -u postgres psql -h localhost -U zabbix-proxy -d zabbix-proxy -f schema.sql && touch schema.done',
-        'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'   => 'test -f /usr/share/doc/zabbix-*-pgsql-2.2*/create/schema.done',
-        'provider' => 'shell',
-        'require'  => ['Exec[update_pgpass]','Package[zabbix-proxy-pgsql]'],
-        'notify'   => 'Service[zabbix-proxy]'
-      ) end
-    end # END context 'with zabbix_type is proxy'
-    #
-    # Tests for RHEL 6.5, zabbix-server
-    # 
-    context 'with zabbix_type is server' do
-      let(:facts) {{:osfamily => 'redhat', :operatingsystem => 'RedHat', :operatingsystemrelease => '6.5'}}
-      let(:params) { {:zabbix_type => 'server', :zabbix_version => '2.2', :db_name => 'zabbix-server', :db_user => 'zabbix-server', :db_pass => 'zabbix-server'} }
-
-      it do should contain_file('/var/lib/pgsql/.pgpass').with(
-        'ensure'  => 'present',
-        'mode'    => '0600',
-        'owner'   => 'postgres',
-        'group'   => 'postgres',
-        'require' => 'Postgresql::Server::Db[zabbix-server]'
-        )
-      end 
-
-      it do should contain_exec('update_pgpass').with(
-        'command' => 'echo localhost:5432:zabbix-server:zabbix-server:zabbix-server >> /var/lib/pgsql/.pgpass',
-        'path'    => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'  => 'grep "localhost:5432:zabbix-server:zabbix-server:zabbix-server" /var/lib/pgsql/.pgpass',
-        'require'  => 'File[/var/lib/pgsql/.pgpass]'
-      ) end
-    
-      it do should contain_exec('zabbix_server_create.sql').with(
-        'command'  => 'cd /usr/share/doc/zabbix-*-pgsql-2.2*/create && sudo -u postgres psql -h localhost -U zabbix-server -d zabbix-server -f schema.sql && touch schema.done',
-        'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'   => 'test -f /usr/share/doc/zabbix-*-pgsql-2.2*/create/schema.done',
-        'provider' => 'shell',
-        'require'  => ['Exec[update_pgpass]','Package[zabbix-server-pgsql]'],
-        'notify'   => 'Service[zabbix-server]'
-      ) end
-      it do should contain_exec('zabbix_server_images.sql').with(
-        'command'  => 'cd /usr/share/doc/zabbix-*-pgsql-2.2*/create && sudo -u postgres psql -h localhost -U zabbix-server -d zabbix-server -f images.sql && touch images.done',
-        'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'   => 'test -f /usr/share/doc/zabbix-*-pgsql-2.2*/create/images.done',
-        'provider' => 'shell',
-        'require'  => ['Exec[update_pgpass]','Package[zabbix-server-pgsql]'],
-        'notify'   => 'Service[zabbix-server]'
-      ) end
-      it do should contain_exec('zabbix_server_data.sql').with(
-        'command'  => 'cd /usr/share/doc/zabbix-*-pgsql-2.2*/create && sudo -u postgres psql -h localhost -U zabbix-server -d zabbix-server -f data.sql && touch data.done',
-        'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'   => 'test -f /usr/share/doc/zabbix-*-pgsql-2.2*/create/data.done',
-        'provider' => 'shell',
-        'require'  => ['Exec[update_pgpass]','Package[zabbix-server-pgsql]'],
-        'notify'   => 'Service[zabbix-server]'
-      ) end    
-    end # END context 'with zabbix_type is server'
-  end # END context 'On a RedHat OS' do
-
-  
-  #
-  # Tests for RHEL  5, zabbix_version 2.0
-  #   
-  context 'On a RedHat OS' do
-    #
-    # Tests for RHEL 5.5, zabbix-proxy
-    #  
-    context 'with zabbix_type is proxy' do
-      let(:facts) {{:osfamily => 'redhat', :operatingsystem => 'RedHat', :operatingsystemrelease => '5.5'}}
-      let(:params) { {:zabbix_type => 'proxy', :zabbix_version => '2.0', :db_name => 'zabbix-proxy', :db_user => 'zabbix-proxy', :db_pass => 'zabbix-proxy'} }
-
-      it do should contain_file('/var/lib/pgsql/.pgpass').with(
-        'ensure'  => 'present',
-        'mode'    => '0600',
-        'owner'   => 'postgres',
-        'group'   => 'postgres',
-        'require' => 'Postgresql::Server::Db[zabbix-proxy]'
-        )
-      end 
-
-      it do should contain_exec('update_pgpass').with(
-        'command' => 'echo localhost:5432:zabbix-proxy:zabbix-proxy:zabbix-proxy >> /var/lib/pgsql/.pgpass',
-        'path'    => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'  => 'grep "localhost:5432:zabbix-proxy:zabbix-proxy:zabbix-proxy" /var/lib/pgsql/.pgpass',
-        'require'  => 'File[/var/lib/pgsql/.pgpass]'
-      ) end
-    
-      it do should contain_exec('zabbix_proxy_create.sql').with(
-        'command'  => 'cd /usr/share/doc/zabbix-*-pgsql-2.0*/create && sudo -u postgres psql -h localhost -U zabbix-proxy -d zabbix-proxy -f schema.sql && touch schema.done',
-        'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'   => 'test -f /usr/share/doc/zabbix-*-pgsql-2.0*/create/schema.done',
-        'provider' => 'shell',
-        'require'  => ['Exec[update_pgpass]','Package[zabbix-proxy-pgsql]'],
-        'notify'   => 'Service[zabbix-proxy]'
-      ) end
-    end # END context 'with zabbix_type is proxy'
-    #
-    # Tests for RHEL 5.5, zabbix-server
-    # 
-    context 'with zabbix_type is server' do
-      let(:facts) {{:osfamily => 'redhat', :operatingsystem => 'RedHat', :operatingsystemrelease => '5.5'}}
-      let(:params) { {:zabbix_type => 'server', :zabbix_version => '2.0', :db_name => 'zabbix-server', :db_user => 'zabbix-server', :db_pass => 'zabbix-server'} }
-
-      it do should contain_file('/var/lib/pgsql/.pgpass').with(
-        'ensure'  => 'present',
-        'mode'    => '0600',
-        'owner'   => 'postgres',
-        'group'   => 'postgres',
-        'require' => 'Postgresql::Server::Db[zabbix-server]'
-        )
-      end 
-
-      it do should contain_exec('update_pgpass').with(
-        'command' => 'echo localhost:5432:zabbix-server:zabbix-server:zabbix-server >> /var/lib/pgsql/.pgpass',
-        'path'    => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'  => 'grep "localhost:5432:zabbix-server:zabbix-server:zabbix-server" /var/lib/pgsql/.pgpass',
-        'require'  => 'File[/var/lib/pgsql/.pgpass]'
-      ) end
-    
-      it do should contain_exec('zabbix_server_create.sql').with(
-        'command'  => 'cd /usr/share/doc/zabbix-*-pgsql-2.0*/create && sudo -u postgres psql -h localhost -U zabbix-server -d zabbix-server -f schema.sql && touch schema.done',
-        'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'   => 'test -f /usr/share/doc/zabbix-*-pgsql-2.0*/create/schema.done',
-        'provider' => 'shell',
-        'require'  => ['Exec[update_pgpass]','Package[zabbix-server-pgsql]'],
-        'notify'   => 'Service[zabbix-server]'
-      ) end
-      it do should contain_exec('zabbix_server_images.sql').with(
-        'command'  => 'cd /usr/share/doc/zabbix-*-pgsql-2.0*/create && sudo -u postgres psql -h localhost -U zabbix-server -d zabbix-server -f images.sql && touch images.done',
-        'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'   => 'test -f /usr/share/doc/zabbix-*-pgsql-2.0*/create/images.done',
-        'provider' => 'shell',
-        'require'  => ['Exec[update_pgpass]','Package[zabbix-server-pgsql]'],
-        'notify'   => 'Service[zabbix-server]'
-      ) end
-      it do should contain_exec('zabbix_server_data.sql').with(
-        'command'  => 'cd /usr/share/doc/zabbix-*-pgsql-2.0*/create && sudo -u postgres psql -h localhost -U zabbix-server -d zabbix-server -f data.sql && touch data.done',
-        'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'   => 'test -f /usr/share/doc/zabbix-*-pgsql-2.0*/create/data.done',
-        'provider' => 'shell',
-        'require'  => ['Exec[update_pgpass]','Package[zabbix-server-pgsql]'],
-        'notify'   => 'Service[zabbix-server]'
-      ) end    
-    end # END context 'with zabbix_type is server'
-  end # END context 'On a RedHat OS' do
-
-  #
-  # Tests for RHEL  5, zabbix_version 2.2
-  #   
-  context 'On a RedHat OS' do
-    #
-    # Tests for RHEL 5.5, zabbix-proxy
-    #  
-    context 'with zabbix_type is proxy' do
-      let(:facts) {{:osfamily => 'redhat', :operatingsystem => 'RedHat', :operatingsystemrelease => '5.5'}}
-      let(:params) { {:zabbix_type => 'proxy', :zabbix_version => '2.2', :db_name => 'zabbix-proxy', :db_user => 'zabbix-proxy', :db_pass => 'zabbix-proxy'} }
-
-      it do should contain_file('/var/lib/pgsql/.pgpass').with(
-        'ensure'  => 'present',
-        'mode'    => '0600',
-        'owner'   => 'postgres',
-        'group'   => 'postgres',
-        'require' => 'Postgresql::Server::Db[zabbix-proxy]'
-        )
-      end 
-
-      it do should contain_exec('update_pgpass').with(
-        'command' => 'echo localhost:5432:zabbix-proxy:zabbix-proxy:zabbix-proxy >> /var/lib/pgsql/.pgpass',
-        'path'    => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'  => 'grep "localhost:5432:zabbix-proxy:zabbix-proxy:zabbix-proxy" /var/lib/pgsql/.pgpass',
-        'require'  => 'File[/var/lib/pgsql/.pgpass]'
-      ) end
-    
-      it do should contain_exec('zabbix_proxy_create.sql').with(
-        'command'  => 'cd /usr/share/doc/zabbix-*-pgsql-2.2*/create && sudo -u postgres psql -h localhost -U zabbix-proxy -d zabbix-proxy -f schema.sql && touch schema.done',
-        'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'   => 'test -f /usr/share/doc/zabbix-*-pgsql-2.2*/create/schema.done',
-        'provider' => 'shell',
-        'require'  => ['Exec[update_pgpass]','Package[zabbix-proxy-pgsql]'],
-        'notify'   => 'Service[zabbix-proxy]'
-      ) end
-    end # END context 'with zabbix_type is proxy'
-    #
-    # Tests for RHEL 5.5, zabbix-server
-    # 
-    context 'with zabbix_type is server' do
-      let(:facts) {{:osfamily => 'redhat', :operatingsystem => 'RedHat', :operatingsystemrelease => '5.5'}}
-      let(:params) { {:zabbix_type => 'server', :zabbix_version => '2.2', :db_name => 'zabbix-server', :db_user => 'zabbix-server', :db_pass => 'zabbix-server'} }
-
-      it do should contain_file('/var/lib/pgsql/.pgpass').with(
-        'ensure'  => 'present',
-        'mode'    => '0600',
-        'owner'   => 'postgres',
-        'group'   => 'postgres',
-        'require' => 'Postgresql::Server::Db[zabbix-server]'
-        )
-      end 
-
-      it do should contain_exec('update_pgpass').with(
-        'command' => 'echo localhost:5432:zabbix-server:zabbix-server:zabbix-server >> /var/lib/pgsql/.pgpass',
-        'path'    => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'  => 'grep "localhost:5432:zabbix-server:zabbix-server:zabbix-server" /var/lib/pgsql/.pgpass',
-        'require'  => 'File[/var/lib/pgsql/.pgpass]'
-      ) end
-    
-      it do should contain_exec('zabbix_server_create.sql').with(
-        'command'  => 'cd /usr/share/doc/zabbix-*-pgsql-2.2*/create && sudo -u postgres psql -h localhost -U zabbix-server -d zabbix-server -f schema.sql && touch schema.done',
-        'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'   => 'test -f /usr/share/doc/zabbix-*-pgsql-2.2*/create/schema.done',
-        'provider' => 'shell',
-        'require'  => ['Exec[update_pgpass]','Package[zabbix-server-pgsql]'],
-        'notify'   => 'Service[zabbix-server]'
-      ) end
-      it do should contain_exec('zabbix_server_images.sql').with(
-        'command'  => 'cd /usr/share/doc/zabbix-*-pgsql-2.2*/create && sudo -u postgres psql -h localhost -U zabbix-server -d zabbix-server -f images.sql && touch images.done',
-        'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'   => 'test -f /usr/share/doc/zabbix-*-pgsql-2.2*/create/images.done',
-        'provider' => 'shell',
-        'require'  => ['Exec[update_pgpass]','Package[zabbix-server-pgsql]'],
-        'notify'   => 'Service[zabbix-server]'
-      ) end
-      it do should contain_exec('zabbix_server_data.sql').with(
-        'command'  => 'cd /usr/share/doc/zabbix-*-pgsql-2.2*/create && sudo -u postgres psql -h localhost -U zabbix-server -d zabbix-server -f data.sql && touch data.done',
-        'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'   => 'test -f /usr/share/doc/zabbix-*-pgsql-2.2*/create/data.done',
-        'provider' => 'shell',
-        'require'  => ['Exec[update_pgpass]','Package[zabbix-server-pgsql]'],
-        'notify'   => 'Service[zabbix-server]'
-      ) end    
-    end # END context 'with zabbix_type is server'
-  end # END context 'On a RedHat OS' do
-
-  #
-  # Tests for DEBIAN  6, zabbix_version 2.0
-  #   
-  context 'On a Debian OS' do
-    #
-    # Tests for Debian 6, zabbix-proxy
-    #  
-    context 'with zabbix_type is proxy' do
-      let(:facts) {{:osfamily => 'debian', :operatingsystem => 'debian', :operatingsystemrelease => '6.0'}}
-      let(:params) { {:zabbix_type => 'proxy', :zabbix_version => '2.0', :db_name => 'zabbix-proxy', :db_user => 'zabbix-proxy', :db_pass => 'zabbix-proxy'} }
-
-      it do should contain_file('/var/lib/postgresql/.pgpass').with(
-        'ensure'  => 'present',
-        'mode'    => '0600',
-        'owner'   => 'postgres',
-        'group'   => 'postgres',
-        'require' => 'Postgresql::Server::Db[zabbix-proxy]'
-        )
-      end 
-
-      it do should contain_exec('update_pgpass').with(
-        'command' => 'echo localhost:5432:zabbix-proxy:zabbix-proxy:zabbix-proxy >> /var/lib/postgresql/.pgpass',
-        'path'    => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'  => 'grep "localhost:5432:zabbix-proxy:zabbix-proxy:zabbix-proxy" /var/lib/postgresql/.pgpass',
-        'require'  => 'File[/var/lib/postgresql/.pgpass]'
-      ) end
-    
-      it do should contain_exec('zabbix_proxy_create.sql').with(
-        'command'  => 'cd /usr/share/zabbix-*-pgsql && sudo -u postgres psql -h localhost -U zabbix-proxy -d zabbix-proxy -f schema.sql && touch schema.done',
-        'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'   => 'test -f /usr/share/zabbix-*-pgsql/schema.done',
-        'provider' => 'shell',
-        'require'  => ['Exec[update_pgpass]','Package[zabbix-proxy-pgsql]'],
-        'notify'   => 'Service[zabbix-proxy]'
-      ) end
-    end # END context 'with zabbix_type is proxy'
-    #
-    # Tests for Debian 6, zabbix-server
-    # 
-    context 'with zabbix_type is server' do
-      let(:facts) {{:osfamily => 'debian', :operatingsystem => 'debian', :operatingsystemrelease => '6.0'}}
-      let(:params) { {:zabbix_type => 'server', :zabbix_version => '2.0', :db_name => 'zabbix-server', :db_user => 'zabbix-server', :db_pass => 'zabbix-server'} }
-
-      it do should contain_file('/var/lib/postgresql/.pgpass').with(
-        'ensure'  => 'present',
-        'mode'    => '0600',
-        'owner'   => 'postgres',
-        'group'   => 'postgres',
-        'require' => 'Postgresql::Server::Db[zabbix-server]'
-        )
-      end 
-
-      it do should contain_exec('update_pgpass').with(
-        'command' => 'echo localhost:5432:zabbix-server:zabbix-server:zabbix-server >> /var/lib/postgresql/.pgpass',
-        'path'    => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'  => 'grep "localhost:5432:zabbix-server:zabbix-server:zabbix-server" /var/lib/postgresql/.pgpass',
-        'require'  => 'File[/var/lib/postgresql/.pgpass]'
-      ) end
-    
-      it do should contain_exec('zabbix_server_create.sql').with(
-        'command'  => 'cd /usr/share/zabbix-*-pgsql && sudo -u postgres psql -h localhost -U zabbix-server -d zabbix-server -f schema.sql && touch schema.done',
-        'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'   => 'test -f /usr/share/zabbix-*-pgsql/schema.done',
-        'provider' => 'shell',
-        'require'  => ['Exec[update_pgpass]','Package[zabbix-server-pgsql]'],
-        'notify'   => 'Service[zabbix-server]'
-      ) end
-      it do should contain_exec('zabbix_server_images.sql').with(
-        'command'  => 'cd /usr/share/zabbix-*-pgsql && sudo -u postgres psql -h localhost -U zabbix-server -d zabbix-server -f images.sql && touch images.done',
-        'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'   => 'test -f /usr/share/zabbix-*-pgsql/images.done',
-        'provider' => 'shell',
-        'require'  => ['Exec[update_pgpass]','Package[zabbix-server-pgsql]'],
-        'notify'   => 'Service[zabbix-server]'
-      ) end
-      it do should contain_exec('zabbix_server_data.sql').with(
-        'command'  => 'cd /usr/share/zabbix-*-pgsql && sudo -u postgres psql -h localhost -U zabbix-server -d zabbix-server -f data.sql && touch data.done',
-        'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'   => 'test -f /usr/share/zabbix-*-pgsql/data.done',
-        'provider' => 'shell',
-        'require'  => ['Exec[update_pgpass]','Package[zabbix-server-pgsql]'],
-        'notify'   => 'Service[zabbix-server]'
-      ) end    
-    end # END context 'with zabbix_type is server'
-  end # context 'On a Debian OS' do
-
-  #
-  # Tests for DEBIAN  7, zabbix_version 2.0
-  #   
-  context 'On a Debian OS' do
-    #
-    # Tests for Debian 7, zabbix-proxy
-    #  
-    context 'with zabbix_type is proxy' do
-      let(:facts) {{:osfamily => 'debian', :operatingsystem => 'debian', :operatingsystemrelease => '7.0'}}
-      let(:params) { {:zabbix_type => 'proxy', :zabbix_version => '2.0', :db_name => 'zabbix-proxy', :db_user => 'zabbix-proxy', :db_pass => 'zabbix-proxy'} }
-
-      it do should contain_file('/var/lib/postgresql/.pgpass').with(
-        'ensure'  => 'present',
-        'mode'    => '0600',
-        'owner'   => 'postgres',
-        'group'   => 'postgres',
-        'require' => 'Postgresql::Server::Db[zabbix-proxy]'
-        )
-      end 
-
-      it do should contain_exec('update_pgpass').with(
-        'command' => 'echo localhost:5432:zabbix-proxy:zabbix-proxy:zabbix-proxy >> /var/lib/postgresql/.pgpass',
-        'path'    => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'  => 'grep "localhost:5432:zabbix-proxy:zabbix-proxy:zabbix-proxy" /var/lib/postgresql/.pgpass',
-        'require'  => 'File[/var/lib/postgresql/.pgpass]'
-      ) end
-    
-      it do should contain_exec('zabbix_proxy_create.sql').with(
-        'command'  => 'cd /usr/share/zabbix-*-pgsql && sudo -u postgres psql -h localhost -U zabbix-proxy -d zabbix-proxy -f schema.sql && touch schema.done',
-        'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'   => 'test -f /usr/share/zabbix-*-pgsql/schema.done',
-        'provider' => 'shell',
-        'require'  => ['Exec[update_pgpass]','Package[zabbix-proxy-pgsql]'],
-        'notify'   => 'Service[zabbix-proxy]'
-      ) end
-    end # END context 'with zabbix_type is proxy'
-    #
-    # Tests for Debian 7, zabbix-server
-    # 
-    context 'with zabbix_type is server' do
-      let(:facts) {{:osfamily => 'debian', :operatingsystem => 'debian', :operatingsystemrelease => '7.0'}}
-      let(:params) { {:zabbix_type => 'server', :zabbix_version => '2.0', :db_name => 'zabbix-server', :db_user => 'zabbix-server', :db_pass => 'zabbix-server'} }
-
-      it do should contain_file('/var/lib/postgresql/.pgpass').with(
-        'ensure'  => 'present',
-        'mode'    => '0600',
-        'owner'   => 'postgres',
-        'group'   => 'postgres',
-        'require' => 'Postgresql::Server::Db[zabbix-server]'
-        )
-      end 
-
-      it do should contain_exec('update_pgpass').with(
-        'command' => 'echo localhost:5432:zabbix-server:zabbix-server:zabbix-server >> /var/lib/postgresql/.pgpass',
-        'path'    => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'  => 'grep "localhost:5432:zabbix-server:zabbix-server:zabbix-server" /var/lib/postgresql/.pgpass',
-        'require'  => 'File[/var/lib/postgresql/.pgpass]'
-      ) end
-        
-      it do should contain_exec('zabbix_server_create.sql').with(
-        'command'  => 'cd /usr/share/zabbix-*-pgsql && sudo -u postgres psql -h localhost -U zabbix-server -d zabbix-server -f schema.sql && touch schema.done',
-        'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'   => 'test -f /usr/share/zabbix-*-pgsql/schema.done',
-        'provider' => 'shell',
-        'require'  => ['Exec[update_pgpass]','Package[zabbix-server-pgsql]'],
-        'notify'   => 'Service[zabbix-server]'
-      ) end
-      it do should contain_exec('zabbix_server_images.sql').with(
-        'command'  => 'cd /usr/share/zabbix-*-pgsql && sudo -u postgres psql -h localhost -U zabbix-server -d zabbix-server -f images.sql && touch images.done',
-        'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'   => 'test -f /usr/share/zabbix-*-pgsql/images.done',
-        'provider' => 'shell',
-        'require'  => ['Exec[update_pgpass]','Package[zabbix-server-pgsql]'],
-        'notify'   => 'Service[zabbix-server]'
-      ) end
-      it do should contain_exec('zabbix_server_data.sql').with(
-        'command'  => 'cd /usr/share/zabbix-*-pgsql && sudo -u postgres psql -h localhost -U zabbix-server -d zabbix-server -f data.sql && touch data.done',
-        'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'   => 'test -f /usr/share/zabbix-*-pgsql/data.done',
-        'provider' => 'shell',
-        'require'  => ['Exec[update_pgpass]','Package[zabbix-server-pgsql]'],
-        'notify'   => 'Service[zabbix-server]'
-      ) end    
-    end # END context 'with zabbix_type is server'
-  end # context 'On a Debian OS' do
-
-  #
-  # Tests for DEBIAN  7, zabbix_version 2.2
-  #   
-  context 'On a Debian OS' do
-    #
-    # Tests for Debian 7, zabbix-proxy
-    #  
-    context 'with zabbix_type is proxy' do
-      let(:facts) {{:osfamily => 'debian', :operatingsystem => 'debian', :operatingsystemrelease => '7.0'}}
-      let(:params) { {:zabbix_type => 'proxy', :zabbix_version => '2.2', :db_name => 'zabbix-proxy', :db_user => 'zabbix-proxy', :db_pass => 'zabbix-proxy'} }
-
-      it do should contain_file('/var/lib/postgresql/.pgpass').with(
-        'ensure'  => 'present',
-        'mode'    => '0600',
-        'owner'   => 'postgres',
-        'group'   => 'postgres',
-        'require' => 'Postgresql::Server::Db[zabbix-proxy]'
-        )
-      end 
-
-      it do should contain_exec('update_pgpass').with(
-        'command' => 'echo localhost:5432:zabbix-proxy:zabbix-proxy:zabbix-proxy >> /var/lib/postgresql/.pgpass',
-        'path'    => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'  => 'grep "localhost:5432:zabbix-proxy:zabbix-proxy:zabbix-proxy" /var/lib/postgresql/.pgpass',
-        'require'  => 'File[/var/lib/postgresql/.pgpass]'
-      ) end
-    
-      it do should contain_exec('zabbix_proxy_create.sql').with(
-        'command'  => 'cd /usr/share/zabbix-*-pgsql && sudo -u postgres psql -h localhost -U zabbix-proxy -d zabbix-proxy -f schema.sql && touch schema.done',
-        'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'   => 'test -f /usr/share/zabbix-*-pgsql/schema.done',
-        'provider' => 'shell',
-        'require'  => ['Exec[update_pgpass]','Package[zabbix-proxy-pgsql]'],
-        'notify'   => 'Service[zabbix-proxy]'
-      ) end
-    end # END context 'with zabbix_type is proxy'
-    #
-    # Tests for Debian 7, zabbix-server
-    # 
-    context 'with zabbix_type is server' do
-      let(:facts) {{:osfamily => 'debian', :operatingsystem => 'debian', :operatingsystemrelease => '7.0'}}
-      let(:params) { {:zabbix_type => 'server', :zabbix_version => '2.2', :db_name => 'zabbix-server', :db_user => 'zabbix-server', :db_pass => 'zabbix-server'} }
-
-      it do should contain_file('/var/lib/postgresql/.pgpass').with(
-        'ensure'  => 'present',
-        'mode'    => '0600',
-        'owner'   => 'postgres',
-        'group'   => 'postgres',
-        'require' => 'Postgresql::Server::Db[zabbix-server]'
-        )
-      end 
-
-      it do should contain_exec('update_pgpass').with(
-        'command' => 'echo localhost:5432:zabbix-server:zabbix-server:zabbix-server >> /var/lib/postgresql/.pgpass',
-        'path'    => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'  => 'grep "localhost:5432:zabbix-server:zabbix-server:zabbix-server" /var/lib/postgresql/.pgpass',
-        'require'  => 'File[/var/lib/postgresql/.pgpass]'
-      ) end
-        
-      it do should contain_exec('zabbix_server_create.sql').with(
-        'command'  => 'cd /usr/share/zabbix-*-pgsql && sudo -u postgres psql -h localhost -U zabbix-server -d zabbix-server -f schema.sql && touch schema.done',
-        'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'   => 'test -f /usr/share/zabbix-*-pgsql/schema.done',
-        'provider' => 'shell',
-        'require'  => ['Exec[update_pgpass]','Package[zabbix-server-pgsql]'],
-        'notify'   => 'Service[zabbix-server]'
-      ) end
-      it do should contain_exec('zabbix_server_images.sql').with(
-        'command'  => 'cd /usr/share/zabbix-*-pgsql && sudo -u postgres psql -h localhost -U zabbix-server -d zabbix-server -f images.sql && touch images.done',
-        'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'   => 'test -f /usr/share/zabbix-*-pgsql/images.done',
-        'provider' => 'shell',
-        'require'  => ['Exec[update_pgpass]','Package[zabbix-server-pgsql]'],
-        'notify'   => 'Service[zabbix-server]'
-      ) end
-      it do should contain_exec('zabbix_server_data.sql').with(
-        'command'  => 'cd /usr/share/zabbix-*-pgsql && sudo -u postgres psql -h localhost -U zabbix-server -d zabbix-server -f data.sql && touch data.done',
-        'path'     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        'unless'   => 'test -f /usr/share/zabbix-*-pgsql/data.done',
-        'provider' => 'shell',
-        'require'  => ['Exec[update_pgpass]','Package[zabbix-server-pgsql]'],
-        'notify'   => 'Service[zabbix-server]'
-      ) end    
-    end # END context 'with zabbix_type is server'
-  end # END context 'On a Debian OS' do
-end # END describe 'zabbix::database::mysql'
+    describe "when zabbix_type is proxy" do
+        let :params do
+            {
+                :database_name     => 'zabbix-proxy',
+                :database_user     => 'zabbix-proxy',
+                :database_password => 'zabbix-proxy',
+                :database_host     => 'node01.example.com',
+                :zabbix_type       => 'proxy',
+                :zabbix_version    => '2.4'
+            }
+        end
+        it { should contain_exec('zabbix_proxy_create.sql').with_command('cd /usr/share/doc/zabbix-*-mysql-2.4*/create && mysql -h node01.example.com -u zabbix-proxy -pzabbix-proxy -D zabbix-proxy < schema.sql && touch /etc/zabbix/.schema.done') }
+    end
+  end
+end

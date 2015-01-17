@@ -11,6 +11,10 @@
 # [*zabbix_version*]
 #   This is the zabbix version.
 #
+# [*zabbix_package_state*]
+#   The state of the package that needs to be installed: present or latest.
+#   Default: present
+#
 # [*manage_firewall*]
 #   When true, it will create iptables rules.
 #
@@ -44,13 +48,14 @@
 # Copyright 2014 Werner Dijkerman
 #
 class zabbix::javagateway(
-  $zabbix_version  = $zabbix::params::zabbix_version,
-  $manage_firewall = $zabbix::params::manage_firewall,
-  $manage_repo     = $zabbix::params::manage_repo,
-  $pidfile         = $zabbix::params::javagateway_pidfile,
-  $listenip        = $zabbix::params::javagateway_listenip,
-  $listenport      = $zabbix::params::javagateway_listenport,
-  $startpollers    = $zabbix::params::javagateway_startpollers,
+  $zabbix_version       = $zabbix::params::zabbix_version,
+  $zabbix_package_state = $zabbix::params::zabbix_package_state,
+  $manage_firewall      = $zabbix::params::manage_firewall,
+  $manage_repo          = $zabbix::params::manage_repo,
+  $pidfile              = $zabbix::params::javagateway_pidfile,
+  $listenip             = $zabbix::params::javagateway_listenip,
+  $listenport           = $zabbix::params::javagateway_listenport,
+  $startpollers         = $zabbix::params::javagateway_startpollers,
 ) inherits zabbix::params  {
 
   # Check some if they are boolean
@@ -59,17 +64,13 @@ class zabbix::javagateway(
 
   # Check if manage_repo is true.
   if $manage_repo {
-    if ! defined(Class['zabbix::repo']) {
-      class { 'zabbix::repo':
-        zabbix_version => $zabbix_version,
-      }
-    }
+    include zabbix::repo
     Package['zabbix-java-gateway'] {require => Class['zabbix::repo']}
   }
 
   # Installing the package
   package { 'zabbix-java-gateway':
-    ensure  => present,
+    ensure  => $zabbix_package_state,
   }
 
   # Configuring the zabbix-javagateway configuration file

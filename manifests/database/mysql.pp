@@ -16,38 +16,34 @@
 # Copyright 2014 Werner Dijkerman
 #
 class zabbix::database::mysql (
-  $zabbix_type    = '',
-  $zabbix_version = '',
-  $db_name        = '',
-  $db_user        = '',
-  $db_pass        = '',
-  $db_host        = '',
+  $zabbix_type          = '',
+  $zabbix_version       = $zabbix::params::zabbix_version,
+  $database_schema_path = '',
+  $database_name        = '',
+  $database_user        = '',
+  $database_password    = '',
+  $database_host        = '',
 ) {
-
-  case $::operatingsystem {
-    'centos','redhat','oraclelinux' : {
-      $zabbix_path = "/usr/share/doc/zabbix-*-mysql-${zabbix_version}*/create"
+# Allow to customize the path to the Database Schema,
+  if ! $database_schema_path {
+    case $::operatingsystem {
+      'centos','redhat','oraclelinux' : {
+            $schema_path   = "/usr/share/doc/zabbix-*-mysql-${zabbix_version}*/create"
+          }
+        default : {
+          $schema_path   = '/usr/share/zabbix-*-mysql'
+      }
     }
-    default : {
-      $zabbix_path = '/usr/share/zabbix-*-mysql'
-    }
+  }else {
+      $schema_path = $database_schema_path
   }
-
-  # Create the database
-  mysql::db { $db_name:
-    user     => $db_user,
-    password => $db_pass,
-    host     => $db_host,
-    grant    => ['all'],
-  }
-
   # Loading the sql files.
   case $zabbix_type {
     'proxy': {
       exec { 'zabbix_proxy_create.sql':
-        command  => "cd ${zabbix_path} && mysql -u ${db_user} -p${db_pass} -D ${db_name} < schema.sql && touch schema.done",
+        command  => "cd ${schema_path} && mysql -h ${database_host} -u ${database_user} -p${database_password} -D ${database_name} < schema.sql && touch /etc/zabbix/.schema.done",
         path     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        unless   => "test -f ${zabbix_path}/schema.done",
+        unless   => 'test -f /etc/zabbix/.schema.done',
         provider => 'shell',
         require  => Package['zabbix-proxy-mysql'],
         notify   => Service['zabbix-proxy'],
@@ -55,28 +51,22 @@ class zabbix::database::mysql (
     }
     'server': {
       exec { 'zabbix_server_create.sql':
-        command  => "cd ${zabbix_path} && mysql -u ${db_user} -p${db_pass} -D ${db_name} < schema.sql && touch schema.done",
+        command  => "cd ${schema_path} && mysql -h ${database_host} -u ${database_user} -p${database_password} -D ${database_name} < schema.sql && touch /etc/zabbix/.schema.done",
         path     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        unless   => "test -f ${zabbix_path}/schema.done",
+        unless   => 'test -f /etc/zabbix/.schema.done',
         provider => 'shell',
-        require  => Package['zabbix-server-mysql'],
-        notify   => Service['zabbix-server'],
       } ->
       exec { 'zabbix_server_images.sql':
-        command  => "cd ${zabbix_path} && mysql -u ${db_user} -p${db_pass} -D ${db_name} < images.sql && touch images.done",
+        command  => "cd ${schema_path} && mysql -h ${database_host} -u ${database_user} -p${database_password} -D ${database_name} < images.sql && touch /etc/zabbix/.images.done",
         path     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        unless   => "test -f ${zabbix_path}/images.done",
+        unless   => 'test -f /etc/zabbix/.images.done',
         provider => 'shell',
-        require  => Package['zabbix-server-mysql'],
-        notify   => Service['zabbix-server'],
       } ->
       exec { 'zabbix_server_data.sql':
-        command  => "cd ${zabbix_path} && mysql -u ${db_user} -p${db_pass} -D ${db_name} < data.sql && touch data.done",
+        command  => "cd ${schema_path} && mysql -h ${database_host} -u ${database_user} -p${database_password} -D ${database_name} < data.sql && touch /etc/zabbix/.data.done",
         path     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        unless   => "test -f ${zabbix_path}/data.done",
+        unless   => 'test -f /etc/zabbix/.data.done',
         provider => 'shell',
-        require  => Package['zabbix-server-mysql'],
-        notify   => Service['zabbix-server'],
       }
     }
     default: {
