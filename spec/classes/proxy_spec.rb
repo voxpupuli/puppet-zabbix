@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'zabbix::proxy' do
   # Set some facts / params.
-  let(:params) { {:zabbix_server_host => '192.168.1.1'} }
+  let(:params) { {:zabbix_server_host => '192.168.1.1', :zabbix_version => '2.4'} }
   let(:node) { 'rspec.puppet.com' }
 
   context 'On a RedHat OS' do
@@ -46,7 +46,12 @@ describe 'zabbix::proxy' do
         let(:params) {{ :manage_resources => true }}
         it { should contain_class('zabbix::resources::proxy') }
     end
-    it { should contain_class('Zabbix::Repo') }
+
+    describe "whem manage_repo is true" do
+        let(:params) {{ :manage_repo => true }}
+        it { should contain_class('Zabbix::Repo') }
+    end
+
     it { should contain_file('/etc/zabbix/zabbix_proxy.conf.d').with_ensure('directory') }
     it { should contain_file('/etc/zabbix/zabbix_proxy.conf.d').with_require('File[/etc/zabbix/zabbix_proxy.conf]') }
   
@@ -75,7 +80,6 @@ describe 'zabbix::proxy' do
     context 'when manage_database is true' do
       let(:params) {{ :manage_database => true }}
       it { should contain_class('zabbix::database').with_zabbix_type('proxy')}
-      it { should contain_class('zabbix::database').with_zabbix_version('2.4')}
       it { should contain_class('zabbix::database').with_database_type('postgresql')}
       it { should contain_class('zabbix::database').with_database_name('zabbix-proxy')}
       it { should contain_class('zabbix::database').with_database_user('zabbix-proxy')}

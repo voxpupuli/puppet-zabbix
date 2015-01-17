@@ -2,10 +2,11 @@ require 'spec_helper'
 
 describe 'zabbix::repo' do
   # Set some facts / params.
+#  let(:params) { {:manage_repo => true} }
   
   # Testing the Debian: 6, ZBX: 2.0
   context "on a Debian OS" do
-    let(:params) { {:zabbix_version => '2.0'} }
+    let(:params) { {:zabbix_version => '2.0', :manage_repo => true} }
     let :facts do
       {
         :operatingsystem        => 'Debian',
@@ -20,7 +21,7 @@ describe 'zabbix::repo' do
 
   # Testing the Debian: 7, ZBX: 2.0
   context "on a Debian OS" do
-    let(:params) { {:zabbix_version => '2.0'} }
+    let(:params) { {:zabbix_version => '2.0', :manage_repo => true} }
     let :facts do
       {
         :operatingsystem        => 'Debian',
@@ -35,7 +36,7 @@ describe 'zabbix::repo' do
 
   # Testing the Debian: 7, ZBX: 2.2
   context "on a Debian OS" do
-    let(:params) { {:zabbix_version => '2.2'} }
+    let(:params) { {:zabbix_version => '2.2', :manage_repo => true} }
     let :facts do
       {
         :operatingsystem        => 'Debian',
@@ -50,7 +51,7 @@ describe 'zabbix::repo' do
 
   # Testing the Ubuntu: 12.04, ZBX: 2.0
   context "on a Ubuntu OS" do
-    let(:params) { {:zabbix_version => '2.0'} }
+    let(:params) { {:zabbix_version => '2.0', :manage_repo => true} }
     let :facts do
       {
         :operatingsystem        => 'Ubuntu',
@@ -65,7 +66,7 @@ describe 'zabbix::repo' do
 
   # Testing the Ubuntu: 12.04, ZBX: 2.2
   context "on a Ubuntu OS" do
-    let(:params) { {:zabbix_version => '2.2'} }
+    let(:params) { {:zabbix_version => '2.2', :manage_repo => true} }
     let :facts do
       {
         :operatingsystem        => 'Ubuntu',
@@ -80,7 +81,7 @@ describe 'zabbix::repo' do
 
   # Testing the RHEL: 5, ZBX: 2.0
   context "on a RedHat OS" do
-    let(:params) { {:zabbix_version => '2.0'} }
+    let(:params) { {:zabbix_version => '2.0', :manage_repo => true} }
     let :facts do
       {
         :operatingsystem        => 'RedHat',
@@ -99,7 +100,7 @@ describe 'zabbix::repo' do
 
   # Testing the RHEL: 6, ZBX: 2.0
   context "on a RedHat OS" do
-    let(:params) { {:zabbix_version => '2.0'} }
+    let(:params) { {:zabbix_version => '2.0', :manage_repo => true} }
     let :facts do
       {
         :operatingsystem        => 'RedHat',
@@ -118,7 +119,7 @@ describe 'zabbix::repo' do
 
   # Testing the RHEL: 6, ZBX: 2.2
   context "on a RedHat OS" do
-    let(:params) { {:zabbix_version => '2.2'} }
+    let(:params) { {:zabbix_version => '2.2', :manage_repo => true} }
     let :facts do
       {
         :operatingsystem        => 'RedHat',

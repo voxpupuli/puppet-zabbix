@@ -487,7 +487,6 @@ class zabbix::proxy (
     class { 'zabbix::database':
       database_type     => $database_type,
       zabbix_type       => 'proxy',
-      zabbix_version    => $zabbix_version,
       database_name     => $database_name,
       database_user     => $database_user,
       database_password => $database_password,

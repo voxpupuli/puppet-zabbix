@@ -32,15 +32,12 @@ describe 'zabbix::web' do
 
     it { should contain_file('/etc/zabbix/web/zabbix.conf.php')}
 
-    context 'when declaring manage_repo is false' do
-      let(:params) {{ :manage_repo => false }}
-      it { should_not contain_class('Zabbix::Repo') }
-    end
-
     describe "when manage_resources is true" do
         let(:params) {{ :manage_resources => true }}
         it { should contain_class('zabbix::resources::web') }
-        it { should include_class('ruby::dev') }
+        
+        it { should contain_package('zabbixapi').that_requires('Class[ruby::dev]') }
+        it { should contain_class('ruby::dev') }
     end
     
     describe "when manage_resources is false" do
