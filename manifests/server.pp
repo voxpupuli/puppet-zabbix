@@ -381,7 +381,7 @@ class zabbix::server (
   }
 
   # Controlling the 'zabbix-server' service
-  service { 'zabbix-server':
+  service { $server_service_name:
     ensure     => running,
     hasstatus  => true,
     hasrestart => true,
