@@ -2,5 +2,5 @@
 --format
 progress
 --backtrace
- --deprecation-out
- /dev/null
+--deprecation-out
+/dev/null
