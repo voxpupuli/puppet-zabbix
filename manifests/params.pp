@@ -44,6 +44,7 @@ class zabbix::params {
   $manage_resources               = false
   $database_type                  = 'postgresql'
   $database_schema_path           = false
+  $database_path                  = '/usr/sbin'
 
   # Zabbix-web
   $apache_use_ssl                 = false

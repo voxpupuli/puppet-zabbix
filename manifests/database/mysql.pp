@@ -23,6 +23,7 @@ class zabbix::database::mysql (
   $database_user        = '',
   $database_password    = '',
   $database_host        = '',
+  $database_path        = $zabbix::params::database_path,
 ) {
 # Allow to customize the path to the Database Schema,
   if ! $database_schema_path {
@@ -42,7 +43,7 @@ class zabbix::database::mysql (
     'proxy': {
       exec { 'zabbix_proxy_create.sql':
         command  => "cd ${schema_path} && mysql -h '${database_host}' -u '${database_user}' -p'${database_password}' -D '${database_name}' < schema.sql && touch /etc/zabbix/.schema.done",
-        path     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+        path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
         unless   => 'test -f /etc/zabbix/.schema.done',
         provider => 'shell',
         require  => Package['zabbix-proxy-mysql'],
@@ -52,19 +53,19 @@ class zabbix::database::mysql (
     'server': {
       exec { 'zabbix_server_create.sql':
         command  => "cd ${schema_path} && mysql -h '${database_host}' -u '${database_user}' -p'${database_password}' -D '${database_name}' < schema.sql && touch /etc/zabbix/.schema.done",
-        path     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+        path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
         unless   => 'test -f /etc/zabbix/.schema.done',
         provider => 'shell',
       } ->
       exec { 'zabbix_server_images.sql':
         command  => "cd ${schema_path} && mysql -h '${database_host}' -u '${database_user}' -p'${database_password}' -D '${database_name}' < images.sql && touch /etc/zabbix/.images.done",
-        path     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+        path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
         unless   => 'test -f /etc/zabbix/.images.done',
         provider => 'shell',
       } ->
       exec { 'zabbix_server_data.sql':
         command  => "cd ${schema_path} && mysql -h '${database_host}' -u '${database_user}' -p'${database_password}' -D '${database_name}' < data.sql && touch /etc/zabbix/.data.done",
-        path     => '/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+        path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
         unless   => 'test -f /etc/zabbix/.data.done',
         provider => 'shell',
       }

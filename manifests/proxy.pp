@@ -15,6 +15,12 @@
 #   - mysql
 #   - sqlite
 #
+# [*database_path*]
+#  When database binaries are not found on the default path:
+#  /bin:/usr/bin:/usr/local/sbin:/usr/local/bin
+#  you can use this parameter to add the database_path to the above mentiond
+#  path.
+#
 # [*zabbix_version*]
 #   This is the zabbix version.
 #
@@ -285,6 +291,7 @@
 #
 class zabbix::proxy (
   $database_type           = $zabbix::params::database_type,
+  $database_path           = $zabbix::params::database_path,
   $zabbix_version          = $zabbix::params::zabbix_version,
   $zabbix_package_state    = $zabbix::params::zabbix_package_state,
   $manage_database         = $zabbix::params::manage_database,
@@ -411,6 +418,7 @@ class zabbix::proxy (
         database_user        => $database_user,
         database_password    => $database_password,
         database_host        => $database_host,
+        database_path        => $database_path,
         require              => Package["zabbix-proxy-${db}"],
       }
     }
@@ -426,6 +434,7 @@ class zabbix::proxy (
         database_user        => $database_user,
         database_password    => $database_password,
         database_host        => $database_host,
+        database_path        => $database_path,
         require              => Package["zabbix-proxy-${db}"],
       }
     }
