@@ -388,6 +388,7 @@ This is the class for installing everything on a single host and thus all parame
 There are some more zabbix specific parameters, please check them by opening the manifest file.
 
 ###Reference zabbix-server
+* `database_path`: When database binaries are not in $PATH, you can use this parameter to append `database_path` to $PATH
 
 There are some more zabbix specific parameters, please check them by opening the manifest file.
 
@@ -403,7 +404,8 @@ The following parameters is only needed when `manage_resources` is set to true:
 There are some more zabbix specific parameters, please check them by opening the manifest file.
 
 ###Reference zabbix-proxy
-* `zabbix_server_host`: The ipaddress or fqdn of the zabbix server.  
+* `zabbix_server_host`: The ipaddress or fqdn of the zabbix server.
+* `database_path`: When database binaries are not in $PATH, you can use this parameter to append `database_path` to $PATH
 
 The following parameters is only needed when `manage_resources` is set to true:
 * `use_ip`: Default is set to true.
@@ -472,6 +474,8 @@ The following have contributed to this puppet module:
  * karolisc
  * lucas42
  * f0
+ * mmerfort
+ * genebean
 
 Many thanks for this!
 (If I have forgotten you, please let me know and put you in the list of fame. :-))
