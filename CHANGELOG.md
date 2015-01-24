@@ -4,6 +4,17 @@ Below an overview of all changes in the releases.
 
 Version (Release date)
 
+1.1.0   (2015-01-24)
+
+  * Fix name of agent config file in params.pp #39 ((By pull request: mmerfort (Thanks!))
+  * Unable to create host with zabbixapi - Invalid params #37 ((By pull request: genebean (Thanks!))
+  * setting manage_repo to false breaks server install #38 ((By pull request: genebean (Thanks!))
+  * listenip statement didn't work with 'eth' addresses" manifests/agent.pp
+  * fix for rpsec tests to work with latest version.
+  * Fix for: (mysql and postgresql) must be quotted as it contains special characters
+  * Fix for: allow setting location of psql #44
+  * Fix for the last identation error in manifests/web.pp.
+
 1.0.1   (2015-01-12)
 
   * remove hardcoded config file paths for server, proxy and agent #34 (By pull request: f0 (Thanks!))
