@@ -60,6 +60,9 @@
 # [*zabbix_server_port*]
 #   Port on which the server is listening.
 #
+# [*hostname*]
+#  Hostname for the proxy. Default is $::fqdn or this parameter.
+#
 # [*listenport*]
 #   Listen port for trapper.
 #
