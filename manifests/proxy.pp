@@ -307,6 +307,7 @@ class zabbix::proxy (
   $mode                    = $zabbix::params::proxy_mode,
   $zabbix_server_host      = $zabbix::params::proxy_zabbix_server_host,
   $zabbix_server_port      = $zabbix::params::proxy_zabbix_server_port,
+  $hostname                = $zabbix::params::proxy_hostname,
   $listenport              = $zabbix::params::proxy_listenport,
   $sourceip                = $zabbix::params::proxy_sourceip,
   $logfile                 = $zabbix::params::proxy_logfile,
@@ -391,7 +392,7 @@ class zabbix::proxy (
   # "Warning: You cannot collect without storeconfigs being set"
   if $manage_resources {
     class { 'zabbix::resources::proxy':
-      hostname  => $::fqdn,
+      hostname  => $hostname,
       ipaddress => $listen_ip,
       use_ip    => $use_ip,
       mode      => $mode,

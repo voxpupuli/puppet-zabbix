@@ -159,6 +159,7 @@ class zabbix::params {
   $agent_loadmodule               = undef
 
   # Proxy specific params
+  $proxy_hostname                = $::fqdn
   $proxy_service_name            = 'zabbix-proxy'
   $proxy_configfile_path         = '/etc/zabbix/zabbix_proxy.conf'
   $proxy_use_ip                  = true
