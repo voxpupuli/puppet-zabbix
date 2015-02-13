@@ -347,7 +347,7 @@ class zabbix::proxy (
   $snmptrapper             = $zabbix::params::proxy_snmptrapper,
   $listenip                = $zabbix::params::proxy_listenip,
   $housekeepingfrequency   = $zabbix::params::proxy_housekeepingfrequency,
-  $casesize                = $zabbix::params::proxy_casesize,
+  $cachesize               = $zabbix::params::proxy_cachesize,
   $startdbsyncers          = $zabbix::params::proxy_startdbsyncers,
   $historycachesize        = $zabbix::params::proxy_historycachesize,
   $historytextcachesize    = $zabbix::params::proxy_historytextcachesize,
