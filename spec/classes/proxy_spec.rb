@@ -287,8 +287,8 @@ describe 'zabbix::proxy' do
       it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^HousekeepingFrequency=1$}}
     end 
     
-    context 'with casesize => 8' do
-      let(:params) { {:casesize => '8'} }
+    context 'with cachesize => 8' do
+      let(:params) { {:cachesize => '8'} }
       it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^CacheSize=8M$}}
     end 
     

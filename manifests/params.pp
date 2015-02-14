@@ -202,7 +202,7 @@ class zabbix::params {
   $proxy_snmptrapper             = '0'
   $proxy_listenip                = undef
   $proxy_housekeepingfrequency   = '1'
-  $proxy_casesize                = '8'
+  $proxy_cashesize               = '8'
   $proxy_startdbsyncers          = '4'
   $proxy_historycachesize        = '8'
   $proxy_historytextcachesize    = '16'
