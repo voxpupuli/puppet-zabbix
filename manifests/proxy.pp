@@ -169,7 +169,7 @@
 #   How often Zabbix will perform housekeeping procedure (in hours).
 #
 # [*cachesize*]
-#   Size of configuration cache, in bytes.
+#   Size of configuration cache, in MB.
 #
 # [*startdbsyncers*]
 #   Number of pre-forked instances of db syncers.
