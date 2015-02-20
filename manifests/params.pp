@@ -174,7 +174,7 @@ class zabbix::params {
   $proxy_debuglevel              = '3'
   $proxy_pidfile                 = '/var/run/zabbix/proxy_server.pid'
   $proxy_database_host           = 'localhost'
-  $proxy_database_name           = 'zabbix-proxy'
+  $proxy_database_name           = 'zabbix_proxy'
   $proxy_database_schema         = undef
   $proxy_database_user           = 'zabbix-proxy'
   $proxy_database_password       = 'zabbix-proxy'
