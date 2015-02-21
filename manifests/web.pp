@@ -174,7 +174,7 @@ class zabbix::web (
     # doing it ourself.
     package { 'zabbixapi':
       ensure   => "${zabbix_version}.0",
-      provider => 'gem',
+      provider => $::puppetgem,
       require  => Class['ruby::dev'],
     } ->
     class { 'zabbix::resources::web':
@@ -297,6 +297,7 @@ class zabbix::web (
       ssl_key         => $apache_ssl_key,
       ssl_cipher      => $apache_ssl_cipher,
       ssl_chain       => $apache_ssl_chain,
+      require         => File['/etc/zabbix/web/zabbix.conf.php'],
     }
   } # END if $manage_vhost
 }
