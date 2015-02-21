@@ -55,11 +55,11 @@ define zabbix::userparameters (
 
   if $source != '' {
     file { "${include_dir}/${name}.conf":
-      ensure => present,
-      owner  => 'zabbix',
-      group  => 'zabbix',
-      mode   => '0644',
-      source => $source,
+      ensure  => present,
+      owner   => 'zabbix',
+      group   => 'zabbix',
+      mode    => '0644',
+      source  => $source,
       notify  => Service['zabbix-agent'],
       require => Package['zabbix-agent'],
     }
@@ -79,11 +79,11 @@ define zabbix::userparameters (
 
   if $script != '' {
     file { "/usr/bin/${name}":
-      ensure => present,
-      owner  => 'zabbix',
-      group  => 'zabbix',
-      mode   => '0755',
-      source => $script,
+      ensure  => present,
+      owner   => 'zabbix',
+      group   => 'zabbix',
+      mode    => '0755',
+      source  => $script,
       notify  => Service['zabbix-agent'],
       require => Package['zabbix-agent'],
     }
