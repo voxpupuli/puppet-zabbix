@@ -60,7 +60,7 @@ describe 'zabbix::proxy' do
       let(:params) {{ :database_type => 'postgresql', :manage_database => true }}
       it { should contain_class('zabbix::database::postgresql').with_zabbix_type('proxy')}
       it { should contain_class('zabbix::database::postgresql').with_zabbix_version('2.4')}
-      it { should contain_class('zabbix::database::postgresql').with_database_name('zabbix-proxy')}
+      it { should contain_class('zabbix::database::postgresql').with_database_name('zabbix_proxy')}
       it { should contain_class('zabbix::database::postgresql').with_database_user('zabbix-proxy')}
       it { should contain_class('zabbix::database::postgresql').with_database_password('zabbix-proxy')}
       it { should contain_class('zabbix::database::postgresql').with_database_host('localhost')}
@@ -71,7 +71,7 @@ describe 'zabbix::proxy' do
       let(:params) {{ :database_type => 'mysql', :manage_database => true }}
       it { should contain_class('zabbix::database::mysql').with_zabbix_type('proxy')}
       it { should contain_class('zabbix::database::mysql').with_zabbix_version('2.4')}
-      it { should contain_class('zabbix::database::mysql').with_database_name('zabbix-proxy')}
+      it { should contain_class('zabbix::database::mysql').with_database_name('zabbix_proxy')}
       it { should contain_class('zabbix::database::mysql').with_database_user('zabbix-proxy')}
       it { should contain_class('zabbix::database::mysql').with_database_password('zabbix-proxy')}
       it { should contain_class('zabbix::database::mysql').with_database_host('localhost')}
@@ -81,7 +81,7 @@ describe 'zabbix::proxy' do
       let(:params) {{ :manage_database => true }}
       it { should contain_class('zabbix::database').with_zabbix_type('proxy')}
       it { should contain_class('zabbix::database').with_database_type('postgresql')}
-      it { should contain_class('zabbix::database').with_database_name('zabbix-proxy')}
+      it { should contain_class('zabbix::database').with_database_name('zabbix_proxy')}
       it { should contain_class('zabbix::database').with_database_user('zabbix-proxy')}
       it { should contain_class('zabbix::database').with_database_password('zabbix-proxy')}
       it { should contain_class('zabbix::database').with_database_host('localhost')}
