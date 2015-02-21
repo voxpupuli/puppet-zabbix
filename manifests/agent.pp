@@ -287,6 +287,7 @@ class zabbix::agent (
     group   => 'zabbix',
     recurse => true,
     purge   => true,
+    notify  => Service['zabbix-agent'],
     require => File[$agent_configfile_path],
   }
 
