@@ -1,6 +1,6 @@
 {
   "name": "wdijkerman-zabbix",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "summary": "Installing and maintaining zabbix. Will install server, proxy, java-gateway and agent on RedHat/Debian/Ubuntu (Incl. exported resources).",
   "author": "Werner Dijkerman",
   "dependencies": [
@@ -9,7 +9,8 @@
     {"name":"puppetlabs/mysql","version_requirement":">= 2.0.0"},
     {"name":"puppetlabs/apache","version_requirement":">= 1.0.0"},
     {"name":"puppetlabs/firewall","version_requirement":">= 1.0.0"},
-    {"name":"puppetlabs/ruby","version_requirement":">= 0.4.0"}
+    {"name":"puppetlabs/ruby","version_requirement":">= 0.4.0"},
+    {"name":"puppetlabs/pe_gem","version_requirement":">= 0.1.0"}
   ],
   "source": "https://github.com/dj-wasabi/puppet-zabbix.git",
   "project_page": "https://github.com/dj-wasabi/puppet-zabbix",
@@ -21,10 +22,10 @@
     { "name": "puppet", "version_requirement": "3.x" }
   ],
   "operatingsystem_support": [
-    { "operatingsystem":"RedHat", "operatingsystemrelease": [ "5.0", "6.0" ] },
-    { "operatingsystem":"OracleLinux", "operatingsystemrelease": [ "5.0", "6.0" ] },
-    { "operatingsystem":"Scientific", "operatingsystemrelease": [ "5.0", "6.0" ] },                                           
-    { "operatingsystem":"CentOS", "operatingsystemrelease": [ "5.0", "6.0" ] },
+    { "operatingsystem":"RedHat", "operatingsystemrelease": [ "5.0", "6.0", "7.0" ] },
+    { "operatingsystem":"OracleLinux", "operatingsystemrelease": [ "5.0", "6.0", "7.0" ] },
+    { "operatingsystem":"Scientific", "operatingsystemrelease": [ "5.0", "6.0, "7.0"" ] },                                           
+    { "operatingsystem":"CentOS", "operatingsystemrelease": [ "5.0", "6.0", "7.0" ] },
     { "operatingsystem":"XenServer", "operatingsystemrelease": [ "6.0"] },
     { "operatingsystem":"Ubuntu", "operatingsystemrelease": [ "12.04", "14.04" ] },
     { "operatingsystem":"Debian", "operatingsystemrelease": [ "6.0", "7.0" ]  }
