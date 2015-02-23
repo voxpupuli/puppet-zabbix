@@ -506,7 +506,10 @@ class zabbix::proxy (
       database_host     => $database_host,
       zabbix_proxy      => $zabbix_proxy,
       zabbix_proxy_ip   => $zabbix_proxy_ip,
-      before            => Service[$proxy_service_name],
+      before            => [
+        Service[$proxy_service_name],
+        Class["zabbix::database::${database_type}"],
+      ]
     }
   }
 
