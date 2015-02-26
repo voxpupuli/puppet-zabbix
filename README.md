@@ -429,10 +429,10 @@ The module is only supported on the following operating systems:
 
 Zabbix 2.4:
 
-  * CentOS 6.x
-  * RedHat 6.x
-  * OracleLinux 6.x
-  * Scientific Linux 6.x
+  * CentOS 6.x, 7.x
+  * RedHat 6.x, 7.x
+  * OracleLinux 6.x, 7.x
+  * Scientific Linux 6.x, 7.x
   * Ubuntu 14.04
   * Debian 7
 
@@ -476,6 +476,10 @@ The following have contributed to this puppet module:
  * f0
  * mmerfort
  * genebean
+ * meganuke19
+ * fredprod
+ * JvdW
+ * rleemorlang
 
 Many thanks for this!
 (If I have forgotten you, please let me know and put you in the list of fame. :-))
