@@ -4,11 +4,22 @@ Below an overview of all changes in the releases.
 
 Version (Release date)
 
+1.2.0   (2015-02-26)
+
+  * Support for RedHat/CentOS/OracleLinux 7
+  * Fixed bug with listenip & add lxc interface #46 (By pull request: meganuke19 (Thanks!))
+  * Bad syntax in manifests/proxy.pp #50 (By pull request: fredprod (Thanks!))
+  * Fix agent listenip #52 (By pull request: JvdW (Thanks!))
+  * Fix in params.pp with default parameter of zabbix proxy for ubuntu #56 (By pull request: fredprod (Thanks!))
+  * notify zabbix-agent service when userparameters change #57 (By pull request: rleemorlang (Thanks!))
+  * Fix for: "Cannot Load Such File -- zabbixapi" despite installation #54
+  * Fix for correct order, so 1 puppet run installs the proxy
+
 1.1.0   (2015-01-24)
 
-  * Fix name of agent config file in params.pp #39 ((By pull request: mmerfort (Thanks!))
-  * Unable to create host with zabbixapi - Invalid params #37 ((By pull request: genebean (Thanks!))
-  * setting manage_repo to false breaks server install #38 ((By pull request: genebean (Thanks!))
+  * Fix name of agent config file in params.pp #39 (By pull request: mmerfort (Thanks!))
+  * Unable to create host with zabbixapi - Invalid params #37 (By pull request: genebean (Thanks!))
+  * setting manage_repo to false breaks server install #38 (By pull request: genebean (Thanks!))
   * listenip statement didn't work with 'eth' addresses" manifests/agent.pp
   * fix for rpsec tests to work with latest version.
   * Fix for: (mysql and postgresql) must be quotted as it contains special characters
