@@ -103,7 +103,7 @@ This will install the zabbix-agent. It will need at least 1 parameter to functio
 This will install an zabbix-proxy instance. It will need at least 1 parameter to function, the name or ipaddress of the zabbix-server. Default is 127.0.0.1, which wouldn't work. Be aware, the zabbix::proxy can't be installed on the same server as zabbix::server.
 
 ###Setup zabbix-javagateway
-This will install the zabbix java gataway for checking jmx items. It can run without any parameters.
+This will install the zabbix java gateway for checking jmx items. It can run without any parameters.
 
 When using zabbix::javagateway, you'll need to add the 'javagateway' parameter and assign the correct ip address for the zabbix::server or zabbix::proxy instance.
 
