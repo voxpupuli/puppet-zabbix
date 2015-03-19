@@ -267,7 +267,9 @@ class zabbix (
     require           => Class['zabbix::repo'],
   }
 
-  # includeing here as the class must, at a minimum, be defined.
-  include zabbix::repo
+  class {
+    'zabbix::repo':
+      manage_repo => $manage_repo,
+  }
 
 }
