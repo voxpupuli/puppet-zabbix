@@ -83,7 +83,6 @@ class zabbix (
   $manage_database         = $zabbix::params::manage_database,
   $manage_vhost            = $zabbix::params::manage_vhost,
   $manage_firewall         = $zabbix::params::manage_firewall,
-  $manage_repo             = $zabbix::params::manage_repo,
   $manage_resources        = $zabbix::params::manage_resources,
   $apache_use_ssl          = $zabbix::params::apache_use_ssl,
   $apache_ssl_cert         = $zabbix::params::apache_ssl_cert,
