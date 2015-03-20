@@ -116,7 +116,7 @@ class zabbix::repo(
             location    => 'http://naizvoru.com/raspbian/zabbix',
             release     => $debian,
             repos       => 'main',
-            key         => 'D54A213C80E871A7',
+            key         => 'BC274A7EA7FD5DD267C9A18FD54A213C80E871A7',
             key_source  => 'http://naizvoru.com/raspbian/zabbix/conf/boris@steki.net.gpg.key',
             include_src => false,
           }
@@ -125,7 +125,7 @@ class zabbix::repo(
             location   => "http://repo.zabbix.com/zabbix/${zabbix_version}/debian/",
             release    => $debian,
             repos      => 'main',
-            key        => '79EA5ED4',
+            key        => 'FBABD5FB20255ECAB22EE194D13D58E479EA5ED4',
             key_source => 'http://repo.zabbix.com/zabbix-official-repo.key',
           }
         }
@@ -135,7 +135,7 @@ class zabbix::repo(
           location   => "http://repo.zabbix.com/zabbix/${zabbix_version}/ubuntu/",
           release    => $ubuntu,
           repos      => 'main',
-          key        => '79EA5ED4',
+          key        => 'FBABD5FB20255ECAB22EE194D13D58E479EA5ED4',
           key_source => 'http://repo.zabbix.com/zabbix-official-repo.key',
         }
       } # END 'ubuntu'
