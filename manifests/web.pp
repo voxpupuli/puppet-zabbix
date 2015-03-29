@@ -250,36 +250,25 @@ class zabbix::web (
       $apache_listen_port = '80'
     }
 
+    # Check which version of Apache we're using
+    if versioncmp($::apache::apache_version, '2.4') >= 0 {
+      $directory_allow = { 'require' => 'all granted', }
+      $directory_deny = { 'require' => 'all denied', }
+    } else {
+      $directory_allow = { 'allow' => 'from all', 'order' => 'Allow,Deny', }
+      $directory_deny = { 'deny' => 'from all', 'order' => 'Deny,Allow', }
+    }
+
     apache::vhost { $zabbix_url:
-      docroot         => '/usr/share/zabbix',
-      port            => $apache_listen_port,
-      directories     => [
-        { path     => '/usr/share/zabbix',
-          provider => 'directory',
-          allow    => 'from all',
-          order    => 'Allow,Deny',
-        },
-        { path     => '/usr/share/zabbix/conf',
-          provider => 'directory',
-          deny     => 'from all',
-          order    => 'Deny,Allow',
-        },
-        { path     => '/usr/share/zabbix/api',
-          provider => 'directory',
-          deny     => 'from all',
-          order    => 'Deny,Allow',
-        },
-        { path     => '/usr/share/zabbix/include',
-          provider => 'directory',
-          deny     => 'from all',
-          order    => 'Deny,Allow',
-        },
-        { path     => '/usr/share/zabbix/include/classes',
-          provider => 'directory',
-          deny     => 'from all',
-          order    => 'Deny,Allow',
-        },
-      ],
+      docroot     => '/usr/share/zabbix',
+      port        => $apache_listen_port,
+      directories => [
+        merge({ path => '/usr/share/zabbix', provider => 'directory', }, $directory_allow),
+        merge({ path => '/usr/share/zabbix/conf', provider => 'directory', }, $directory_deny),
+        merge({ path => '/usr/share/zabbix/api', provider => 'directory', }, $directory_deny),
+        merge({ path => '/usr/share/zabbix/include', provider => 'directory', }, $directory_deny),
+        merge({ path => '/usr/share/zabbix/include/classes', provider => 'directory', }, $directory_deny),
+      ,
       custom_fragment => "
    php_value max_execution_time 300
    php_value memory_limit 128M
