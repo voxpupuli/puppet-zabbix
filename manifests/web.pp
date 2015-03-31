@@ -265,16 +265,11 @@ class zabbix::web (
       docroot         => '/usr/share/zabbix',
       port            => $apache_listen_port,
       directories     => [
-        merge({ path            => '/usr/share/zabbix',
- provider        => 'directory', }, $directory_allow),
-        merge({ path            => '/usr/share/zabbix/conf',
- provider        => 'directory', }, $directory_deny),
-        merge({ path            => '/usr/share/zabbix/api',
- provider        => 'directory', }, $directory_deny),
-        merge({ path            => '/usr/share/zabbix/include',
- provider        => 'directory', }, $directory_deny),
-        merge({ path            => '/usr/share/zabbix/include/classes',
- provider        => 'directory', }, $directory_deny),
+        merge({ path            => '/usr/share/zabbix', provider        => 'directory', }, $directory_allow),
+        merge({ path            => '/usr/share/zabbix/conf', provider        => 'directory', }, $directory_deny),
+        merge({ path            => '/usr/share/zabbix/api', provider        => 'directory', }, $directory_deny),
+        merge({ path            => '/usr/share/zabbix/include', provider        => 'directory', }, $directory_deny),
+        merge({ path            => '/usr/share/zabbix/include/classes', provider        => 'directory', }, $directory_deny),
       ],
       custom_fragment => "
    php_value max_execution_time 300
