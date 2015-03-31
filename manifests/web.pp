@@ -153,9 +153,11 @@ class zabbix::web (
   case $database_type {
     'postgresql': {
       $db = 'pgsql'
+      $database_port = '5432'
     }
     'mysql': {
       $db = 'mysql'
+      $database_port = '3306'
     }
     default: {
       fail('unrecognized database type for server.')
@@ -260,9 +262,9 @@ class zabbix::web (
     }
 
     apache::vhost { $zabbix_url:
-      docroot     => '/usr/share/zabbix',
-      port        => $apache_listen_port,
-      directories => [
+      docroot        => '/usr/share/zabbix',
+      port           => $apache_listen_port,
+      directories    => [
         merge({ path => '/usr/share/zabbix', provider => 'directory', }, $directory_allow),
         merge({ path => '/usr/share/zabbix/conf', provider => 'directory', }, $directory_deny),
         merge({ path => '/usr/share/zabbix/api', provider => 'directory', }, $directory_deny),
