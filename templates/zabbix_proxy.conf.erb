@@ -27,7 +27,7 @@ ServerPort=<%= @zabbix_server_port %>
 #	Unique, case sensitive Proxy name. Make sure the Proxy name is known to the server!
 #	Value is acquired from HostnameItem if undefined.
 #
-Hostname=<%= @fqdn %>
+Hostname=<%= @hostname %>
 
 ### Option: HostnameItem
 #	Item used for generating Hostname if it is undefined.
@@ -242,7 +242,7 @@ StartSNMPTrapper=<%= @snmptrapper %>
 #	Trapper will listen on all network interfaces if this parameter is missing.
 #
 <% if @listenip %>
-ListenIp=<%= @listenip %>
+ListenIP=<%= @listenip %>
 <% end %>
 
 ### Option: HousekeepingFrequency
@@ -252,10 +252,10 @@ ListenIp=<%= @listenip %>
 HousekeepingFrequency=<%= @housekeepingfrequency %>
 
 ### Option: CacheSize
-#	Size of configuration cache, in bytes.
+#	Size of configuration cache, in MB.
 #	Shared memory size, for storing hosts and items data.
 #
-CacheSize=<%= @casesize -%>M
+CacheSize=<%= @cachesize -%>M
 
 ### Option: StartDBSyncers
 #	Number of pre-forked instances of DB Syncers

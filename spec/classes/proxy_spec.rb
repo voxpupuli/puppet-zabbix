@@ -60,7 +60,7 @@ describe 'zabbix::proxy' do
       let(:params) {{ :database_type => 'postgresql', :manage_database => true }}
       it { should contain_class('zabbix::database::postgresql').with_zabbix_type('proxy')}
       it { should contain_class('zabbix::database::postgresql').with_zabbix_version('2.4')}
-      it { should contain_class('zabbix::database::postgresql').with_database_name('zabbix-proxy')}
+      it { should contain_class('zabbix::database::postgresql').with_database_name('zabbix_proxy')}
       it { should contain_class('zabbix::database::postgresql').with_database_user('zabbix-proxy')}
       it { should contain_class('zabbix::database::postgresql').with_database_password('zabbix-proxy')}
       it { should contain_class('zabbix::database::postgresql').with_database_host('localhost')}
@@ -71,7 +71,7 @@ describe 'zabbix::proxy' do
       let(:params) {{ :database_type => 'mysql', :manage_database => true }}
       it { should contain_class('zabbix::database::mysql').with_zabbix_type('proxy')}
       it { should contain_class('zabbix::database::mysql').with_zabbix_version('2.4')}
-      it { should contain_class('zabbix::database::mysql').with_database_name('zabbix-proxy')}
+      it { should contain_class('zabbix::database::mysql').with_database_name('zabbix_proxy')}
       it { should contain_class('zabbix::database::mysql').with_database_user('zabbix-proxy')}
       it { should contain_class('zabbix::database::mysql').with_database_password('zabbix-proxy')}
       it { should contain_class('zabbix::database::mysql').with_database_host('localhost')}
@@ -81,7 +81,7 @@ describe 'zabbix::proxy' do
       let(:params) {{ :manage_database => true }}
       it { should contain_class('zabbix::database').with_zabbix_type('proxy')}
       it { should contain_class('zabbix::database').with_database_type('postgresql')}
-      it { should contain_class('zabbix::database').with_database_name('zabbix-proxy')}
+      it { should contain_class('zabbix::database').with_database_name('zabbix_proxy')}
       it { should contain_class('zabbix::database').with_database_user('zabbix-proxy')}
       it { should contain_class('zabbix::database').with_database_password('zabbix-proxy')}
       it { should contain_class('zabbix::database').with_database_host('localhost')}
@@ -279,7 +279,7 @@ describe 'zabbix::proxy' do
 
     context 'with listenip => 192.168.1.1' do
       let(:params) { {:listenip => '192.168.1.1'} }
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^ListenIp=192.168.1.1$}}
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^ListenIP=192.168.1.1$}}
     end 
         
     context 'with housekeepingfrequency => 1' do
@@ -287,8 +287,8 @@ describe 'zabbix::proxy' do
       it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^HousekeepingFrequency=1$}}
     end 
     
-    context 'with casesize => 8' do
-      let(:params) { {:casesize => '8'} }
+    context 'with cachesize => 8' do
+      let(:params) { {:cachesize => '8'} }
       it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^CacheSize=8M$}}
     end 
     

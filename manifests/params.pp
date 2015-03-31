@@ -44,6 +44,7 @@ class zabbix::params {
   $manage_resources               = false
   $database_type                  = 'postgresql'
   $database_schema_path           = false
+  $database_path                  = '/usr/sbin'
 
   # Zabbix-web
   $apache_use_ssl                 = false
@@ -158,6 +159,7 @@ class zabbix::params {
   $agent_loadmodule               = undef
 
   # Proxy specific params
+  $proxy_hostname                = $::fqdn
   $proxy_service_name            = 'zabbix-proxy'
   $proxy_configfile_path         = '/etc/zabbix/zabbix_proxy.conf'
   $proxy_use_ip                  = true
@@ -167,12 +169,12 @@ class zabbix::params {
   $proxy_zabbix_server_port      = '10051'
   $proxy_listenport              = '10051'
   $proxy_sourceip                = undef
-  $proxy_logfile                 = '/var/log/zabbix/proxy_server.log'
+  $proxy_logfile                 = '/var/log/zabbix/zabbix_proxy.log'
   $proxy_logfilesize             = '10'
   $proxy_debuglevel              = '3'
-  $proxy_pidfile                 = '/var/run/zabbix/proxy_server.pid'
+  $proxy_pidfile                 = '/var/run/zabbix/zabbix_proxy.pid'
   $proxy_database_host           = 'localhost'
-  $proxy_database_name           = 'zabbix-proxy'
+  $proxy_database_name           = 'zabbix_proxy'
   $proxy_database_schema         = undef
   $proxy_database_user           = 'zabbix-proxy'
   $proxy_database_password       = 'zabbix-proxy'
@@ -200,7 +202,7 @@ class zabbix::params {
   $proxy_snmptrapper             = '0'
   $proxy_listenip                = undef
   $proxy_housekeepingfrequency   = '1'
-  $proxy_casesize                = '8'
+  $proxy_cachesize               = '8'
   $proxy_startdbsyncers          = '4'
   $proxy_historycachesize        = '8'
   $proxy_historytextcachesize    = '16'

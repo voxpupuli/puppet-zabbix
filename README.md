@@ -103,7 +103,7 @@ This will install the zabbix-agent. It will need at least 1 parameter to functio
 This will install an zabbix-proxy instance. It will need at least 1 parameter to function, the name or ipaddress of the zabbix-server. Default is 127.0.0.1, which wouldn't work. Be aware, the zabbix::proxy can't be installed on the same server as zabbix::server.
 
 ###Setup zabbix-javagateway
-This will install the zabbix java gataway for checking jmx items. It can run without any parameters.
+This will install the zabbix java gateway for checking jmx items. It can run without any parameters.
 
 When using zabbix::javagateway, you'll need to add the 'javagateway' parameter and assign the correct ip address for the zabbix::server or zabbix::proxy instance.
 
@@ -388,6 +388,7 @@ This is the class for installing everything on a single host and thus all parame
 There are some more zabbix specific parameters, please check them by opening the manifest file.
 
 ###Reference zabbix-server
+* `database_path`: When database binaries are not in $PATH, you can use this parameter to append `database_path` to $PATH
 
 There are some more zabbix specific parameters, please check them by opening the manifest file.
 
@@ -403,7 +404,8 @@ The following parameters is only needed when `manage_resources` is set to true:
 There are some more zabbix specific parameters, please check them by opening the manifest file.
 
 ###Reference zabbix-proxy
-* `zabbix_server_host`: The ipaddress or fqdn of the zabbix server.  
+* `zabbix_server_host`: The ipaddress or fqdn of the zabbix server.
+* `database_path`: When database binaries are not in $PATH, you can use this parameter to append `database_path` to $PATH
 
 The following parameters is only needed when `manage_resources` is set to true:
 * `use_ip`: Default is set to true.
@@ -427,10 +429,10 @@ The module is only supported on the following operating systems:
 
 Zabbix 2.4:
 
-  * CentOS 6.x
-  * RedHat 6.x
-  * OracleLinux 6.x
-  * Scientific Linux 6.x
+  * CentOS 6.x, 7.x
+  * RedHat 6.x, 7.x
+  * OracleLinux 6.x, 7.x
+  * Scientific Linux 6.x, 7.x
   * Ubuntu 14.04
   * Debian 7
 
@@ -472,6 +474,12 @@ The following have contributed to this puppet module:
  * karolisc
  * lucas42
  * f0
+ * mmerfort
+ * genebean
+ * meganuke19
+ * fredprod
+ * JvdW
+ * rleemorlang
 
 Many thanks for this!
 (If I have forgotten you, please let me know and put you in the list of fame. :-))

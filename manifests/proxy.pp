@@ -15,6 +15,12 @@
 #   - mysql
 #   - sqlite
 #
+# [*database_path*]
+#  When database binaries are not found on the default path:
+#  /bin:/usr/bin:/usr/local/sbin:/usr/local/bin
+#  you can use this parameter to add the database_path to the above mentiond
+#  path.
+#
 # [*zabbix_version*]
 #   This is the zabbix version.
 #
@@ -53,6 +59,9 @@
 #
 # [*zabbix_server_port*]
 #   Port on which the server is listening.
+#
+# [*hostname*]
+#  Hostname for the proxy. Default is $::fqdn or this parameter.
 #
 # [*listenport*]
 #   Listen port for trapper.
@@ -160,7 +169,7 @@
 #   How often Zabbix will perform housekeeping procedure (in hours).
 #
 # [*cachesize*]
-#   Size of configuration cache, in bytes.
+#   Size of configuration cache, in MB.
 #
 # [*startdbsyncers*]
 #   Number of pre-forked instances of db syncers.
@@ -285,6 +294,7 @@
 #
 class zabbix::proxy (
   $database_type           = $zabbix::params::database_type,
+  $database_path           = $zabbix::params::database_path,
   $zabbix_version          = $zabbix::params::zabbix_version,
   $zabbix_package_state    = $zabbix::params::zabbix_package_state,
   $manage_database         = $zabbix::params::manage_database,
@@ -300,6 +310,7 @@ class zabbix::proxy (
   $mode                    = $zabbix::params::proxy_mode,
   $zabbix_server_host      = $zabbix::params::proxy_zabbix_server_host,
   $zabbix_server_port      = $zabbix::params::proxy_zabbix_server_port,
+  $hostname                = $zabbix::params::proxy_hostname,
   $listenport              = $zabbix::params::proxy_listenport,
   $sourceip                = $zabbix::params::proxy_sourceip,
   $logfile                 = $zabbix::params::proxy_logfile,
@@ -336,7 +347,7 @@ class zabbix::proxy (
   $snmptrapper             = $zabbix::params::proxy_snmptrapper,
   $listenip                = $zabbix::params::proxy_listenip,
   $housekeepingfrequency   = $zabbix::params::proxy_housekeepingfrequency,
-  $casesize                = $zabbix::params::proxy_casesize,
+  $cachesize               = $zabbix::params::proxy_cachesize,
   $startdbsyncers          = $zabbix::params::proxy_startdbsyncers,
   $historycachesize        = $zabbix::params::proxy_historycachesize,
   $historytextcachesize    = $zabbix::params::proxy_historytextcachesize,
@@ -367,7 +378,7 @@ class zabbix::proxy (
   # to network name. If more than 1 interfaces are available, we
   # can find the ipaddress of this specific interface if listenip
   # is set to for example "eth1" or "bond0.73".
-  if ($listenip == defined) {
+  if ($listenip != undef) {
     if ($listenip =~ /^(eth|bond).*/) {
       $int_name = "ipaddress_${listenip}"
       $listen_ip = inline_template('<%= scope.lookupvar(int_name) %>')
@@ -384,7 +395,7 @@ class zabbix::proxy (
   # "Warning: You cannot collect without storeconfigs being set"
   if $manage_resources {
     class { 'zabbix::resources::proxy':
-      hostname  => $::fqdn,
+      hostname  => $hostname,
       ipaddress => $listen_ip,
       use_ip    => $use_ip,
       mode      => $mode,
@@ -411,6 +422,7 @@ class zabbix::proxy (
         database_user        => $database_user,
         database_password    => $database_password,
         database_host        => $database_host,
+        database_path        => $database_path,
         require              => Package["zabbix-proxy-${db}"],
       }
     }
@@ -426,6 +438,7 @@ class zabbix::proxy (
         database_user        => $database_user,
         database_password    => $database_password,
         database_host        => $database_host,
+        database_path        => $database_path,
         require              => Package["zabbix-proxy-${db}"],
       }
     }
@@ -493,7 +506,10 @@ class zabbix::proxy (
       database_host     => $database_host,
       zabbix_proxy      => $zabbix_proxy,
       zabbix_proxy_ip   => $zabbix_proxy_ip,
-      before            => Service[$proxy_service_name],
+      before            => [
+        Service[$proxy_service_name],
+        Class["zabbix::database::${database_type}"],
+      ]
     }
   }
 

@@ -213,15 +213,17 @@ class zabbix::agent (
   # to network name. If more than 1 interfaces are available, we
   # can find the ipaddress of this specific interface if listenip
   # is set to for example "eth1" or "bond0.73".
-  if ($listenip == defined) {
-    if ($listenip =~ /^(eth|bond).*/) {
+  if ($listenip != undef) {
+    if ($listenip =~ /^(eth|bond|lxc).*/) {
       $int_name = "ipaddress_${listenip}"
       $listen_ip = inline_template('<%= scope.lookupvar(int_name) %>')
     } elsif is_ip_address($listenip) {
       $listen_ip = $listenip
     } else {
-      $listen_ip = undef
+      $listen_ip = $::ipaddress
     }
+  } else {
+    $listen_ip = $::ipaddress
   }
 
   # So if manage_resources is set to true, we can send some data
@@ -285,6 +287,7 @@ class zabbix::agent (
     group   => 'zabbix',
     recurse => true,
     purge   => true,
+    notify  => Service['zabbix-agent'],
     require => File[$agent_configfile_path],
   }
 

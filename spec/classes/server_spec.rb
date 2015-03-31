@@ -223,7 +223,7 @@ describe 'zabbix::server' do
 
     context 'with listenip => 192.168.1.1' do
       let(:params) { { :listenip => '192.168.1.1' } }
-      it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^ListenIp=192.168.1.1}}
+      it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^ListenIP=192.168.1.1}}
     end
 
     context 'with housekeepingfrequency => 1' do

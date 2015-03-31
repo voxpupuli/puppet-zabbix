@@ -174,7 +174,7 @@ class zabbix::web (
     # doing it ourself.
     package { 'zabbixapi':
       ensure   => "${zabbix_version}.0",
-      provider => 'gem',
+      provider => $::puppetgem,
       require  => Class['ruby::dev'],
     } ->
     class { 'zabbix::resources::web':
@@ -241,7 +241,7 @@ class zabbix::web (
           {
             comment      => 'redirect all to https',
             rewrite_cond => ['%{SERVER_PORT} !^443$'],
-            rewrite_rule => ["^/(.+)$ https://${zabbix_url}/\$1 [L,R]"],
+            rewrite_rule => ["^/(.*)$ https://${zabbix_url}/\$1 [L,R]"],
           }
         ],
       }
@@ -250,49 +250,44 @@ class zabbix::web (
       $apache_listen_port = '80'
     }
 
+    # Check which version of Apache we're using
+    if versioncmp($::apache::apache_version, '2.4') >= 0 {
+      $directory_allow = { 'require' => 'all granted', }
+      $directory_deny = { 'require' => 'all denied', }
+    } else {
+      $directory_allow = { 'allow' => 'from all', 'order' => 'Allow,Deny', }
+      $directory_deny = { 'deny' => 'from all', 'order' => 'Deny,Allow', }
+    }
+
     apache::vhost { $zabbix_url:
-      docroot         => '/usr/share/zabbix',
-      port            => $apache_listen_port,
-      directories     => [
-        { path     => '/usr/share/zabbix',
-          provider => 'directory',
-          allow    => 'from all',
-          order    => 'Allow,Deny',
-        },
-        { path     => '/usr/share/zabbix/conf',
-          provider => 'directory',
-          deny     => 'from all',
-          order    => 'Deny,Allow',
-        },
-        { path     => '/usr/share/zabbix/api',
-          provider => 'directory',
-          deny     => 'from all',
-          order    => 'Deny,Allow',
-        },
-        { path     => '/usr/share/zabbix/include',
-          provider => 'directory',
-          deny     => 'from all',
-          order    => 'Deny,Allow',
-        },
-        { path     => '/usr/share/zabbix/include/classes',
-          provider => 'directory',
-          deny     => 'from all',
-          order    => 'Deny,Allow',
-        },
+      docroot     => '/usr/share/zabbix',
+      port        => $apache_listen_port,
+      directories => [
+        merge({ path => '/usr/share/zabbix', provider => 'directory', }, $directory_allow),
+        merge({ path => '/usr/share/zabbix/conf', provider => 'directory', }, $directory_deny),
+        merge({ path => '/usr/share/zabbix/api', provider => 'directory', }, $directory_deny),
+        merge({ path => '/usr/share/zabbix/include', provider => 'directory', }, $directory_deny),
+        merge({ path => '/usr/share/zabbix/include/classes', provider => 'directory', }, $directory_deny),
       ],
-      custom_fragment => "  php_value max_execution_time 300
-      php_value memory_limit 128M
-      php_value post_max_size 16M
-      php_value upload_max_filesize 2M
-      php_value max_input_time 300
-      # Set correct timezone.
-      php_value date.timezone ${zabbix_timezone}",
-      rewrites        => [ { rewrite_rule    => ['^$ /index.php [L]'] } ],
+      custom_fragment => "
+   php_value max_execution_time 300
+   php_value memory_limit 128M
+   php_value post_max_size 16M
+   php_value upload_max_filesize 2M
+   php_value max_input_time 300
+   php_value always_populate_raw_post_data -1
+   # Set correct timezone
+   php_value date.timezone ${zabbix_timezone}",
+      rewrites        => [
+        {
+          rewrite_rule => ['^$ /index.php [L]'] }
+      ],
       ssl             => $apache_use_ssl,
       ssl_cert        => $apache_ssl_cert,
       ssl_key         => $apache_ssl_key,
       ssl_cipher      => $apache_ssl_cipher,
       ssl_chain       => $apache_ssl_chain,
+      require         => File['/etc/zabbix/web/zabbix.conf.php'],
     }
   } # END if $manage_vhost
 }
