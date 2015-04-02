@@ -4,7 +4,13 @@ global $DB;
 
 $DB['TYPE']     = '<%= @database_type.upcase %>';
 $DB['SERVER']   = '<%= @database_host %>';
+<% if @database_port -%>
+$DB['PORT']     = '<%= @database_port %>';
+<% elsif @db_port -%>
+$DB['PORT']     = '<%= @db_port %>';
+<% else -%>
 $DB['PORT']     = '0';
+<% end -%>
 $DB['DATABASE'] = '<%= @database_name %>';
 $DB['USER']     = '<%= @database_user %>';
 $DB['PASSWORD'] = '<%= @database_password %>';

@@ -153,9 +153,11 @@ class zabbix::web (
   case $database_type {
     'postgresql': {
       $db = 'pgsql'
+      $db_port = '5432'
     }
     'mysql': {
       $db = 'mysql'
+      $db_port = '3306'
     }
     default: {
       fail('unrecognized database type for server.')
