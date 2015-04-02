@@ -267,9 +267,4 @@ class zabbix (
     require           => Class['zabbix::repo'],
   }
 
-  class {
-    'zabbix::repo':
-      manage_repo => $manage_repo,
-  }
-
 }
