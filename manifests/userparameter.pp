@@ -29,7 +29,8 @@
 #
 
 class zabbix::userparameter (
-  $data = '',
+  $data = {},
 ) {
+  validate_hash($data)
   create_resources('zabbix::userparameters', $data)
 }
