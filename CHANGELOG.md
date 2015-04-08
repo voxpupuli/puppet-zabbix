@@ -4,7 +4,7 @@ Below an overview of all changes in the releases.
 
 Version (Release date)
 
-1.3.0   (2015-04-??)
+1.3.0   (2015-04-08)
 
   * bugfix for vhosts in apache 2.4 #67 (By pull request: ju5t (Thanks!))
   * Update apt key to full 40characters #66 (By pull request: exptom (Thanks!))
