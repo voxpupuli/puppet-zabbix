@@ -480,6 +480,13 @@ The following have contributed to this puppet module:
  * fredprod
  * JvdW
  * rleemorlang
+ * genebean
+ * exptom
+ * sbaryakov
+ * roidelapluie
+ * andresvia
+ * ju5t
+ * elricsfate
 
 Many thanks for this!
 (If I have forgotten you, please let me know and put you in the list of fame. :-))

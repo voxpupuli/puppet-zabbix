@@ -4,6 +4,17 @@ Below an overview of all changes in the releases.
 
 Version (Release date)
 
+1.3.0   (2015-04-??)
+
+  * bugfix for vhosts in apache 2.4 #67 (By pull request: ju5t (Thanks!))
+  * Update apt key to full 40characters #66 (By pull request: exptom (Thanks!))
+  * rename ListenIp => ListenIP (By pull request: sbaryakov (Thanks!))
+  * Fix manage_repo parameter on the zabbix class (By pull request: roidelapluie (Thanks!))
+  * minor typo (By pull request: andresvia (Thanks!))
+  * better default parameter for userparameter (By pull request: sbaryakov (Thanks!))
+  * Fix for: Multi-node Setup: Web class does not properly configure database port #69
+  * Fix for: Zabbix-proxy install database population #62
+
 1.2.0   (2015-02-26)
 
   * Support for RedHat/CentOS/OracleLinux 7
@@ -13,7 +24,7 @@ Version (Release date)
   * Fix in params.pp with default parameter of zabbix proxy for ubuntu #56 (By pull request: fredprod (Thanks!))
   * notify zabbix-agent service when userparameters change #57 (By pull request: rleemorlang (Thanks!))
   * Fix for: "Cannot Load Such File -- zabbixapi" despite installation #54
-  * Fix for correct order, so 1 puppet run installs the proxy
+  * Fix for: correct order, so 1 puppet run installs the proxy
 
 1.1.0   (2015-01-24)
 
@@ -21,10 +32,10 @@ Version (Release date)
   * Unable to create host with zabbixapi - Invalid params #37 (By pull request: genebean (Thanks!))
   * setting manage_repo to false breaks server install #38 (By pull request: genebean (Thanks!))
   * listenip statement didn't work with 'eth' addresses" manifests/agent.pp
-  * fix for rpsec tests to work with latest version.
+  * Fix for: rpsec tests to work with latest version.
   * Fix for: (mysql and postgresql) must be quotted as it contains special characters
   * Fix for: allow setting location of psql #44
-  * Fix for the last identation error in manifests/web.pp.
+  * Fix: for the last identation error in manifests/web.pp.
 
 1.0.1   (2015-01-12)
 
