@@ -35,7 +35,7 @@
 #   When true, it will create an vhost for apache. The parameter zabbix_url
 #   has to be set.
 #
-# [*manage_resouces*]
+# [*manage_resources*]
 #   When true, it will export resources to something like puppetdb.
 #   When set to true, you'll need to configure 'storeconfigs' to make
 #   this happen. Default is set to false, as not everyone has this

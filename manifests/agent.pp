@@ -24,7 +24,7 @@
 # [*manage_repo*]
 #   When true, it will create repository for installing the agent.
 #
-# [*manage_resouces*]
+# [*manage_resources*]
 #   When true, it will export resources to something like puppetdb.
 #   When set to true, you'll need to configure 'storeconfigs' to make
 #   this happen. Default is set to false, as not everyone has this
