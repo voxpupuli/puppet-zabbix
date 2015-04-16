@@ -153,6 +153,7 @@ class zabbix::params {
   $agent_zabbix_alias             = undef
   $agent_timeout                  = '3'
   $agent_include                  = '/etc/zabbix/zabbix_agentd.d'
+  $agent_include_purge            = true,
   $agent_unsafeuserparameters     = '0'
   $agent_userparameter            = undef
   $agent_loadmodulepath           = '/usr/lib/modules'
