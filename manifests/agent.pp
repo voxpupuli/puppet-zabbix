@@ -198,6 +198,7 @@ class zabbix::agent (
   $zabbix_alias          = $zabbix::params::agent_zabbix_alias,
   $timeout               = $zabbix::params::agent_timeout,
   $include_dir           = $zabbix::params::agent_include,
+  $include_dir_purge     = $zabbix::params::agent_include_purge,
   $unsafeuserparameters  = $zabbix::params::agent_unsafeuserparameters,
   $userparameter         = $zabbix::params::agent_userparameter,
   $loadmodulepath        = $zabbix::params::agent_loadmodulepath,
@@ -286,7 +287,7 @@ class zabbix::agent (
     owner   => 'zabbix',
     group   => 'zabbix',
     recurse => true,
-    purge   => true,
+    purge   => $include_dir_purge,
     notify  => Service['zabbix-agent'],
     require => File[$agent_configfile_path],
   }
