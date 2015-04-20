@@ -141,7 +141,7 @@ class zabbix::params {
   $agent_listenip                 = undef
   $agent_startagents              = '3'
   $agent_serveractive             = '127.0.0.1'
-  $agent_hostname                 = $::fqdn
+  $agent_hostname                 = undef
   $agent_hostnameitem             = 'system.hostname'
   $agent_hostmetadata             = undef
   $agent_hostmetadataitem         = undef

@@ -106,15 +106,17 @@ ServerActive=<%= @serveractive %>
 #       required for active checks and must match hostname as configured on the server.
 #       value is acquired from hostnameitem if undefined.
 #
-
+<% if @hostname -%>
 Hostname=<%= @hostname %>
+<% end -%>
 
-
-### option: hostnameitem
+## option: hostnameitem
 #       item used for generating hostname if it is undefined.
 #       ignored if hostname is defined.
 #
+<% if !@hostname -%>
 HostnameItem=<%= @hostnameitem %>
+<% end -%>
 
 ### option: hostmetadata
 #	optional parameter that defines host metadata.
