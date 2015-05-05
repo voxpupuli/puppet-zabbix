@@ -423,6 +423,7 @@ There are some zabbix specific parameters, please check them by opening the mani
 * `content`: When you have 1 userparameter entry which you want to install.
 * `script`: Low level discovery (LLD) script.
 * `template`: When you use exported resources (when manage_resources on other components is set to true) you'll can add the name of the template which correspondents with the 'content' or 'source' which you add. The template will be added to the host.
+* `script_dir`: When `script` is used, this parameter can provide the directly where this script needs to be placed. Default: '/usr/bin'
 
 ##limitations
 The module is only supported on the following operating systems:

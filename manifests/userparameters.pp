@@ -21,6 +21,10 @@
 #   you'll can add the name of the template which correspondents with the 'content' or
 #   'source' which you add. The template will be added to the host.
 #
+# [*script_dir*]
+#   When 'script' is used, this parameter can provide the directly where this script needs to 
+#   be placed. Default: '/usr/bin'
+#
 # === Example
 #
 #  zabbix::userparameters { 'mysql':
@@ -46,10 +50,11 @@
 # Copyright 2014 Werner Dijkerman
 #
 define zabbix::userparameters (
-  $source   = '',
-  $content  = '',
-  $script   = '',
-  $template = '',
+  $source     = '',
+  $content    = '',
+  $script     = '',
+  $template   = '',
+  $script_dir = '/usr/bin',
 ) {
   $include_dir = $zabbix::agent::include_dir
 
@@ -78,7 +83,7 @@ define zabbix::userparameters (
   }
 
   if $script != '' {
-    file { "/usr/bin/${name}":
+    file { "${script_dir}/${name}":
       ensure  => present,
       owner   => 'zabbix',
       group   => 'zabbix',
