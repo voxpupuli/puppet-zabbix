@@ -355,7 +355,7 @@ There are some overall parameters which exists on all of the classes:
   }
   ```
 
-* `manage_firewall`: Wheter you want to manage the firewall. If true (Which is default), iptables will be configured to allow communications to zabbix ports.
+* `manage_firewall`: Wheter you want to manage the firewall. If true, iptables will be configured to allow communications to zabbix ports. (Default: False)
 * `manage_repo`:  If zabbix needs to be installed from the zabbix repositories (Default is true). When you have your own repositories, you'll set this to false. But you'll have to make sure that your repositorie is installed on the host.
   ```ruby
   class { 'zabbix::repo':
