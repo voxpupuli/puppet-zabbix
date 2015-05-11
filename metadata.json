@@ -10,7 +10,7 @@
     {"name":"puppetlabs/apache","version_requirement":">= 1.0.0"},
     {"name":"puppetlabs/firewall","version_requirement":">= 1.0.0"},
     {"name":"puppetlabs/ruby","version_requirement":">= 0.4.0"},
-    {"name":"puppetlabs/pe_gem","version_requirement":">= 0.1.0"}
+    {"name":"puppetlabs/pe_gem","version_requirement":">= 0.1.0"},
     {"name":"puppetlabs/apt","version_requirement":">= 1.8.0"}
   ],
   "source": "https://github.com/dj-wasabi/puppet-zabbix.git",
