@@ -4,6 +4,17 @@ Below an overview of all changes in the releases.
 
 Version (Release date)
 
+1.4.0   (2015-05-18)
+
+  * Adding "apt" as dependency.
+  * Adding 'script_dir' parameter for userparameters define.
+  * Fix documentation: iptables is set to false (not true).
+  * Fix illegal comma separated argument list #81 (By pull request: IceBear2k (Thanks!))
+  * Fixes #80 setting Hostname and HostnameItem causes a warning on agentd s... #82 (By pull request: f0 (Thanks!))
+  * Allow to not purge include dir. #79 (By pull request: altvnk (Thanks!))
+  * Correct typo in 'manage_resources' documentation. #77 (By pull request: rnelson0 (Thanks!))
+  * Added zabbix_hostgroup #87 (By pull request: hkumarmk (Thanks!))
+
 1.3.0   (2015-04-08)
 
   * bugfix for vhosts in apache 2.4 #67 (By pull request: ju5t (Thanks!))
