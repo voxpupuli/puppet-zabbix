@@ -58,7 +58,7 @@ class zabbix::database::postgresql (
   case $zabbix_type {
     'proxy': {
       exec { 'zabbix_proxy_create.sql':
-        command  => "cd ${schema_path} && psql -h '${database_host}' -U '${database_user}' -d '${database_name}' -f schema.sql && touch /etc/zabbix/.schema.done",
+        command  => "cd ${schema_path} && if [ -f schema.sql.gz ]; then gunzip schema.sql.gz ; fi && psql -h '${database_host}' -U '${database_user}' -d '${database_name}' -f schema.sql && touch /etc/zabbix/.schema.done",
         path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
         unless   => 'test -f /etc/zabbix/.schema.done',
         provider => 'shell',
@@ -69,7 +69,7 @@ class zabbix::database::postgresql (
     }
     'server': {
       exec { 'zabbix_server_create.sql':
-        command  => "cd ${schema_path} && psql -h '${database_host}' -U '${database_user}' -d '${database_name}' -f schema.sql && touch /etc/zabbix/.schema.done",
+        command  => "cd ${schema_path} && if [ -f schema.sql.gz ]; then gunzip schema.sql.gz ; fi && psql -h '${database_host}' -U '${database_user}' -d '${database_name}' -f schema.sql && touch /etc/zabbix/.schema.done",
         path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
         unless   => 'test -f /etc/zabbix/.schema.done',
         provider => 'shell',
@@ -78,7 +78,7 @@ class zabbix::database::postgresql (
         ],
       } ->
       exec { 'zabbix_server_images.sql':
-        command  => "cd ${schema_path} && psql -h '${database_host}' -U '${database_user}' -d '${database_name}' -f images.sql && touch /etc/zabbix/.images.done",
+        command  => "cd ${schema_path} && if [ -f images.sql.gz ]; then gunzip images.sql.gz ; fi && psql -h '${database_host}' -U '${database_user}' -d '${database_name}' -f images.sql && touch /etc/zabbix/.images.done",
         path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
         unless   => 'test -f /etc/zabbix/.images.done',
         provider => 'shell',
@@ -87,7 +87,7 @@ class zabbix::database::postgresql (
         ],
       } ->
       exec { 'zabbix_server_data.sql':
-        command  => "cd ${schema_path} && psql -h '${database_host}' -U '${database_user}' -d '${database_name}' -f data.sql && touch /etc/zabbix/.data.done",
+        command  => "cd ${schema_path} && if [ -f data.sql.gz ]; then gunzip data.sql.gz ; fi && psql -h '${database_host}' -U '${database_user}' -d '${database_name}' -f data.sql && touch /etc/zabbix/.data.done",
         path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
         unless   => 'test -f /etc/zabbix/.data.done',
         provider => 'shell',
