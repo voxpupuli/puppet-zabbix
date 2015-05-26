@@ -28,23 +28,29 @@ class zabbix::params {
   }
 
   # Zabbix overall params. Is used by all components.
-  $zabbix_version                 = '2.4'
-  $zabbix_timezone                = 'Europe/Amsterdam'
-  $zabbix_server                  = 'localhost'
-  $zabbix_web                     = 'localhost'
-  $zabbix_proxy                   = 'localhost'
-  $zabbix_server_ip               = '127.0.0.1'
-  $zabbix_web_ip                  = '127.0.0.1'
-  $zabbix_proxy_ip                = '127.0.0.1'
-  $zabbix_package_state           = 'present'
-  $manage_database                = true
-  $manage_vhost                   = true
-  $manage_firewall                = false
-  $manage_repo                    = true
-  $manage_resources               = false
-  $database_type                  = 'postgresql'
-  $database_schema_path           = false
-  $database_path                  = '/usr/sbin'
+  $zabbix_version                           = '2.4'
+  $zabbix_timezone                          = 'Europe/Amsterdam'
+  $zabbix_server                            = 'localhost'
+  $zabbix_web                               = 'localhost'
+  $zabbix_proxy                             = 'localhost'
+  $zabbix_server_ip                         = '127.0.0.1'
+  $zabbix_web_ip                            = '127.0.0.1'
+  $zabbix_proxy_ip                          = '127.0.0.1'
+  $zabbix_package_state                     = 'present'
+  $manage_database                          = true
+  $manage_vhost                             = true
+  $manage_firewall                          = false
+  $manage_repo                              = true
+  $manage_resources                         = false
+  $database_type                            = 'postgresql'
+  $database_schema_path                     = false
+  $database_path                            = '/usr/sbin'
+  $apache_php_max_execution_time            = '300'
+  $apache_php_memory_limit                  = '128M'
+  $apache_php_post_max_size                 = '16M'
+  $apache_php_upload_max_filesize           = '2M'
+  $apache_php_max_input_time                = '300'
+  $apache_php_always_populate_raw_post_data = '-1'
 
   # Zabbix-web
   $apache_use_ssl                 = false
