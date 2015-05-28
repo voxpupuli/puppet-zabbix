@@ -26,7 +26,7 @@
 class zabbix::repo(
   $manage_repo    = $zabbix::params::manage_repo,
   $zabbix_version = $zabbix::params::zabbix_version,
-) {
+) inherits zabbix::params {
 
   if ($manage_repo) {
     # Figuring out which major release we have. Or which release name
