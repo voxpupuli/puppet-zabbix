@@ -164,7 +164,7 @@ class zabbix::params {
   $agent_userparameter            = undef
   $agent_loadmodulepath           = '/usr/lib/modules'
   $agent_loadmodule               = undef
-
+  $apache_status                  = false
   # Proxy specific params
   $proxy_hostname                = $::fqdn
   $proxy_service_name            = 'zabbix-proxy'
