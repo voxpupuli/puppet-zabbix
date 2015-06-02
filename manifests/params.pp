@@ -134,6 +134,7 @@ class zabbix::params {
   $monitored_by_proxy             = undef
   $agent_use_ip                   = true
   $agent_zbx_group                = 'Linux servers'
+  $agent_zbx_group_create         = true
   $agent_zbx_templates            = [ 'Template OS Linux', 'Template App SSH Service' ]
   $agent_pidfile                  = '/var/run/zabbix/zabbix_agentd.pid'
   $agent_logfile                  = '/var/log/zabbix/zabbix_agentd.log'
