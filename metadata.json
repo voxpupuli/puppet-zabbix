@@ -1,10 +1,10 @@
 {
   "name": "wdijkerman-zabbix",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "summary": "Installing and maintaining zabbix. Will install server, proxy, java-gateway and agent on RedHat/Debian/Ubuntu (Incl. exported resources).",
   "author": "Werner Dijkerman",
   "dependencies": [
-    {"name":"puppetlabs/postgresql","version_requirement":">= 3.3.0"},
+    {"name":"puppetlabs/postgresql","version_requirement":">= 4.0.0"},
     {"name":"puppetlabs/stdlib","version_requirement":">= 4.1.0"},
     {"name":"puppetlabs/mysql","version_requirement":">= 2.0.0"},
     {"name":"puppetlabs/apache","version_requirement":">= 1.0.0"},

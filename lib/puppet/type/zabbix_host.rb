@@ -25,6 +25,10 @@ Puppet::Type.newtype(:zabbix_host) do
     desc 'Name of the hostgroup.'
   end
 
+  newparam(:group_create) do
+    desc 'Create hostgroup if missing.'
+  end
+
   newparam(:templates) do
     desc 'List of templates which should be loaded for this host.'
   end
