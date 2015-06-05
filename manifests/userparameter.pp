@@ -29,7 +29,7 @@
 #
 
 class zabbix::userparameter (
-  $data = {},
+  $data = hiera_hash('zabbix::userparameter::data', {})
 ) {
   validate_hash($data)
   create_resources('zabbix::userparameters', $data)
