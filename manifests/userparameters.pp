@@ -16,6 +16,9 @@
 # [*script*]
 #   Low level discovery (LLD) script.
 #
+# [*script_ext*]
+#   The script extention. Should be started with the dot. Like: .sh .bat .py
+#
 # [*template*]
 #   When you use exported resources (when manage_resources is set to true on other components)
 #   you'll can add the name of the template which correspondents with the 'content' or
@@ -53,6 +56,7 @@ define zabbix::userparameters (
   $source     = '',
   $content    = '',
   $script     = '',
+  $script_ext = '',
   $template   = '',
   $script_dir = '/usr/bin',
 ) {
@@ -83,7 +87,7 @@ define zabbix::userparameters (
   }
 
   if $script != '' {
-    file { "${script_dir}/${name}":
+    file { "${script_dir}/${name}${script_ext}":
       ensure  => present,
       owner   => 'zabbix',
       group   => 'zabbix',
