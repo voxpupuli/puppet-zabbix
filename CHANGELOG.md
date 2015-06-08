@@ -4,6 +4,19 @@ Below an overview of all changes in the releases.
 
 Version (Release date)
 
+1.5.0   (2015-06-08)
+
+  * Fix for: Inherting params #93
+  * Fix for: new postgresql instance #91; Also update metadata for postgresl module version
+  * Fix for: Need to overide php_values #89
+  * 2nd fix for: Zabbix-proxy install database population #62. Also for postgresql now.
+  * Added support to Amazon Linux with epel 6. #96 (By pull request: Wprosdocimo (Thanks!))
+  * import templates and create hostgroup if missing #95 (By pull request: 1n (Thanks!))
+  * Added Support For Zapache monitoring script #94 (By pull request: elricsfate (Thanks!))
+  * merge of hiera hashes from entire hierarchy #98 (By pull request: szemlyanoy (Thanks!))
+  * Added property script_ext for: File extensions of Userparameters scripts #97
+  * Updated documentation in README.md
+
 1.4.0   (2015-05-18)
 
   * Adding "apt" as dependency.
