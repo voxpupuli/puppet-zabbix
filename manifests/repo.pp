@@ -26,7 +26,7 @@
 class zabbix::repo(
   $manage_repo    = $zabbix::params::manage_repo,
   $zabbix_version = $zabbix::params::zabbix_version,
-) {
+) inherits zabbix::params {
 
   if ($manage_repo) {
     # Figuring out which major release we have. Or which release name
@@ -66,13 +66,17 @@ class zabbix::repo(
           $debian = regsubst($::operatingsystemrelease, '/sid$', '')
         }
       }
+      # Amazon Linux using epel 6
+      /^20??.??/: {
+        $majorrelease = '6'
+      }
       default: {
         fail("This is an unsupported operating system (${::operatingsystem} ${::operatingsystemrelease})")
       }
     }
 
     case $::operatingsystem {
-      'centos','scientific','redhat','oraclelinux' : {
+      'centos','scientific','redhat','oraclelinux','amazon' : {
         yumrepo { 'zabbix':
           name     => "Zabbix_${majorrelease}_${::architecture}",
           descr    => "Zabbix_${majorrelease}_${::architecture}",

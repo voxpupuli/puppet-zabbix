@@ -14,6 +14,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, :parent => Puppet::Provider::Zabb
     use_ip = @resource[:use_ip]
     port = @resource[:port]
     hostgroup = @resource[:group]
+    hostgroup_create = @resource[:group_create]
     templates = @resource[:templates]
     proxy = @resource[:proxy]
     zabbix_url = @resource[:zabbix_url]
@@ -46,10 +47,19 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, :parent => Puppet::Provider::Zabb
     if ipaddress.nil? and use_ip == 0
       ipaddress = ''
     end
+
+    if hostgroup_create == true
+        hostgroup_create = 1
+    else
+        hostgroup_create = 0
+    end
  
     # First check if we have an correct hostgroup and if not, we raise an error.
     search_hostgroup = zbx.hostgroups.get_id(:name => hostgroup)
-    if search_hostgroup.nil?
+    if search_hostgroup.nil? and hostgroup_create == 1
+        zbx.hostgroups.create(:name => hostgroup)
+        search_hostgroup = zbx.hostgroups.get_id(:name => hostgroup)
+    elsif search_hostgroup.nil? and hostgroup_create == 0
         raise Puppet::Error, "The hostgroup (" + hostgroup + ") does not exist in zabbix. Please use the correct one."
     end
 

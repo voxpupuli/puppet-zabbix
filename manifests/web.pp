@@ -35,7 +35,7 @@
 #   When true, it will create an vhost for apache. The parameter zabbix_url
 #   has to be set.
 #
-# [*manage_resouces*]
+# [*manage_resources*]
 #   When true, it will export resources to something like puppetdb.
 #   When set to true, you'll need to configure 'storeconfigs' to make
 #   this happen. Default is set to false, as not everyone has this
@@ -59,6 +59,12 @@
 #
 # [*apache_ssl_chain*}
 #   The ssl chain file.
+#
+# [*apache_listenport*}
+#   The port for the apache vhost.
+#
+# [*apache_listenport_ssl*}
+#   The port for the apache SSL vhost.
 #
 # [*zabbix_api_user*]
 #   Name of the user which the api should connect to. Default: Admin
@@ -94,6 +100,24 @@
 # [*zabbix_listenport*]
 #   The port on which the zabbix-server is listening. Default: 10051
 #
+# [*apache_php_max_execution_time*]
+#   Max execution time for php. Default: 300
+#
+# [*apache_php_memory_limit*]
+#   PHP memory size limit. Default: 128M
+#
+# [*apache_php_post_max_size*]
+#   PHP maximum post size data. Default: 16M
+#
+# [*apache_php_upload_max_filesize*]
+#   PHP maximum upload filesize. Default: 2M
+#
+# [*apache_php_max_input_time*]
+#   Max input time for php. Default: 300
+#
+# [*apache_php_always_populate_raw_post_data*]
+#   Default: -1
+#
 # === Example
 #
 #   When running everything on a single node, please check
@@ -122,29 +146,38 @@
 # Copyright 2014 Werner Dijkerman
 #
 class zabbix::web (
-  $zabbix_url              = '',
-  $database_type           = $zabbix::params::database_type,
-  $zabbix_version          = $zabbix::params::zabbix_version,
-  $zabbix_timezone         = $zabbix::params::zabbix_timezone,
-  $zabbix_package_state    = $zabbix::params::zabbix_package_state,
-  $manage_vhost            = $zabbix::params::manage_vhost,
-  $manage_resources        = $zabbix::params::manage_resources,
-  $apache_use_ssl          = $zabbix::params::apache_use_ssl,
-  $apache_ssl_cert         = $zabbix::params::apache_ssl_cert,
-  $apache_ssl_key          = $zabbix::params::apache_ssl_key,
-  $apache_ssl_cipher       = $zabbix::params::apache_ssl_cipher,
-  $apache_ssl_chain        = $zabbix::params::apache_ssl_chain,
-  $zabbix_api_user         = $zabbix::params::server_api_user,
-  $zabbix_api_pass         = $zabbix::params::server_api_pass,
-  $database_host           = $zabbix::params::server_database_host,
-  $database_name           = $zabbix::params::server_database_name,
-  $database_schema         = $zabbix::params::server_database_schema,
-  $database_user           = $zabbix::params::server_database_user,
-  $database_password       = $zabbix::params::server_database_password,
-  $database_socket         = $zabbix::params::server_database_socket,
-  $database_port           = $zabbix::params::server_database_port,
-  $zabbix_server           = $zabbix::params::zabbix_server,
-  $zabbix_listenport       = $zabbix::params::server_listenport,
+  $zabbix_url                               = '',
+  $database_type                            = $zabbix::params::database_type,
+  $zabbix_version                           = $zabbix::params::zabbix_version,
+  $zabbix_timezone                          = $zabbix::params::zabbix_timezone,
+  $zabbix_package_state                     = $zabbix::params::zabbix_package_state,
+  $manage_vhost                             = $zabbix::params::manage_vhost,
+  $manage_resources                         = $zabbix::params::manage_resources,
+  $apache_use_ssl                           = $zabbix::params::apache_use_ssl,
+  $apache_ssl_cert                          = $zabbix::params::apache_ssl_cert,
+  $apache_ssl_key                           = $zabbix::params::apache_ssl_key,
+  $apache_ssl_cipher                        = $zabbix::params::apache_ssl_cipher,
+  $apache_ssl_chain                         = $zabbix::params::apache_ssl_chain,
+  $apache_listen_ip                         = $zabbix::params::apache_listen_ip,
+  $apache_listenport                        = $zabbix::params::apache_listenport,
+  $apache_listenport_ssl                    = $zabbix::params::apache_listenport_ssl,
+  $zabbix_api_user                          = $zabbix::params::server_api_user,
+  $zabbix_api_pass                          = $zabbix::params::server_api_pass,
+  $database_host                            = $zabbix::params::server_database_host,
+  $database_name                            = $zabbix::params::server_database_name,
+  $database_schema                          = $zabbix::params::server_database_schema,
+  $database_user                            = $zabbix::params::server_database_user,
+  $database_password                        = $zabbix::params::server_database_password,
+  $database_socket                          = $zabbix::params::server_database_socket,
+  $database_port                            = $zabbix::params::server_database_port,
+  $zabbix_server                            = $zabbix::params::zabbix_server,
+  $zabbix_listenport                        = $zabbix::params::server_listenport,
+  $apache_php_max_execution_time            = $zabbix::params::apache_php_max_execution_time,
+  $apache_php_memory_limit                  = $zabbix::params::apache_php_memory_limit,
+  $apache_php_post_max_size                 = $zabbix::params::apache_php_post_max_size,
+  $apache_php_upload_max_filesize           = $zabbix::params::apache_php_upload_max_filesize,
+  $apache_php_max_input_time                = $zabbix::params::apache_php_max_input_time,
+  $apache_php_always_populate_raw_post_data = $zabbix::params::apache_php_always_populate_raw_post_data,
 ) inherits zabbix::params {
 
   include zabbix::repo
@@ -153,9 +186,11 @@ class zabbix::web (
   case $database_type {
     'postgresql': {
       $db = 'pgsql'
+      $db_port = '5432'
     }
     'mysql': {
       $db = 'mysql'
+      $db_port = '3306'
     }
     default: {
       fail('unrecognized database type for server.')
@@ -227,14 +262,14 @@ class zabbix::web (
     # vhost for redirect traffic from non ssl to ssl site.
     if $apache_use_ssl {
       # Listen port
-      $apache_listen_port = '443'
+      $apache_listen_port = $apache_listenport_ssl
 
       # We create nonssl vhost for redirecting non ssl
       # traffic to https.
       apache::vhost { "${zabbix_url}_nonssl":
         docroot        => '/usr/share/zabbix',
         manage_docroot => false,
-        port           => '80',
+        port           => $apache_listenport,
         servername     => $zabbix_url,
         ssl            => false,
         rewrites       => [
@@ -247,7 +282,7 @@ class zabbix::web (
       }
     } else {
       # So no ssl, so default port 80
-      $apache_listen_port = '80'
+      $apache_listen_port = $apache_listenport
     }
 
     # Check which version of Apache we're using
@@ -260,22 +295,39 @@ class zabbix::web (
     }
 
     apache::vhost { $zabbix_url:
-      docroot     => '/usr/share/zabbix',
-      port        => $apache_listen_port,
-      directories => [
-        merge({ path => '/usr/share/zabbix', provider => 'directory', }, $directory_allow),
-        merge({ path => '/usr/share/zabbix/conf', provider => 'directory', }, $directory_deny),
-        merge({ path => '/usr/share/zabbix/api', provider => 'directory', }, $directory_deny),
-        merge({ path => '/usr/share/zabbix/include', provider => 'directory', }, $directory_deny),
-        merge({ path => '/usr/share/zabbix/include/classes', provider => 'directory', }, $directory_deny),
+      docroot         => '/usr/share/zabbix',
+      ip              => $apache_listen_ip,
+      port            => $apache_listen_port,
+      add_listen      => true,
+      directories     => [
+        merge({
+          path     => '/usr/share/zabbix',
+          provider => 'directory',
+        }, $directory_allow),
+        merge({
+          path     => '/usr/share/zabbix/conf',
+          provider => 'directory',
+        }, $directory_deny),
+        merge({
+          path     => '/usr/share/zabbix/api',
+          provider => 'directory',
+        }, $directory_deny),
+        merge({
+          path     => '/usr/share/zabbix/include',
+          provider => 'directory',
+        }, $directory_deny),
+        merge({
+          path     => '/usr/share/zabbix/include/classes',
+          provider => 'directory',
+        }, $directory_deny),
       ],
       custom_fragment => "
-   php_value max_execution_time 300
-   php_value memory_limit 128M
-   php_value post_max_size 16M
-   php_value upload_max_filesize 2M
-   php_value max_input_time 300
-   php_value always_populate_raw_post_data -1
+   php_value max_execution_time ${apache_php_max_execution_time}
+   php_value memory_limit ${apache_php_memory_limit}
+   php_value post_max_size ${apache_php_post_max_size}
+   php_value upload_max_filesize ${apache_php_upload_max_filesize}
+   php_value max_input_time ${apache_php_max_input_time}
+   php_value always_populate_raw_post_data ${apache_php_always_populate_raw_post_data}
    # Set correct timezone
    php_value date.timezone ${zabbix_timezone}",
       rewrites        => [

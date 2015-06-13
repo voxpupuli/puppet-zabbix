@@ -10,19 +10,22 @@
  	* [zabbix-agent](#setup-zabbix-agent)
  	* [zabbix-proxy](#setup-zabbix-proxy)
  	* [zabbix-javagateway](#setup-zabbix-javagateway)
- 	* [zabbix-userparameters](#setup-userparameters)
+        * [zabbix-userparameters](#setup-userparameters)
+ 	* [zabbix-template](#setup-template)
 5. [Usage - Configuration options and additional functionality](#usage)
     * [zabbix-server](#usage-zabbix-server)
     * [zabbix-agent](#usage-zabbix-agent)
     * [zabbix-proxy](#usage-zabbix-proxy)
     * [zabbix-javagateway](#usage-zabbix-javagateway)
     * [zabbix-userparameters](#usage-zabbix-userparameters)
+    * [zabbix-template](#usage-zabbix-template)
 6. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
     * [zabbix-server](#reference-zabbix-server)
     * [zabbix-agent](#reference-zabbix-agent)
     * [zabbix-proxy](#reference-zabbix-proxy)
     * [zabbix-javagateway](#reference-zabbix-javagateway)
     * [zabbix-userparameters](#reference-zabbix-userparameters)
+    * [zabbix-template](#reference-zabbix-template)
 7. [Limitations - OS compatibility, etc.](#limitations)
 8. [Development - Contributors](#contributors)
 9. [Notes](#note)
@@ -110,6 +113,9 @@ When using zabbix::javagateway, you'll need to add the 'javagateway' parameter a
 ###Setup userparameters
 You can use userparameter files (or specific entries) to install it into the agent.
 Also added with the 0.6.0 release is an class zabbix::userparameter. This class can be used with Hiera or The Foreman when you want to install userparameter files.
+
+###Setup template
+You can upload and install Zabbix Templates automatically via the Zabbix API. With this, you Zabbix templates are always up2date.
 
 ##Usage
 The following will provide an basic usage of the zabbix components.
@@ -339,6 +345,15 @@ zabbix::userparameter::data:
     content: UserParameter=mysql.ping,mysqladmin -uroot ping | grep -c alive
 ```
 
+###Usage zabbix-template
+
+You can instal the MySQL template xml via the next example:
+```ruby
+zabbix::template { 'Template App MySQL':
+  templ_source => 'puppet:///modules/zabbix/MySQL.xml'
+}
+```
+
 ##Reference
 There are some overall parameters which exists on all of the classes:
 * `zabbix_version`: You can specify which zabbix release needs to be installed. Default is '2.4'.
@@ -355,7 +370,7 @@ There are some overall parameters which exists on all of the classes:
   }
   ```
 
-* `manage_firewall`: Wheter you want to manage the firewall. If true (Which is default), iptables will be configured to allow communications to zabbix ports.
+* `manage_firewall`: Wheter you want to manage the firewall. If true, iptables will be configured to allow communications to zabbix ports. (Default: False)
 * `manage_repo`:  If zabbix needs to be installed from the zabbix repositories (Default is true). When you have your own repositories, you'll set this to false. But you'll have to make sure that your repositorie is installed on the host.
   ```ruby
   class { 'zabbix::repo':
@@ -364,7 +379,7 @@ There are some overall parameters which exists on all of the classes:
   ```
 
 
-The following is only availabe for the following classes: zabbix::server, zabbix::proxy & zabbix::agent
+The following is only availabe for the following classes: zabbix::web, zabbix::proxy & zabbix::agent
 * `manage_resources`: As of release 0.4.0, when this parameter is set to true (Default is false) it make use of exported resources. You'll have an puppetdb configured before you can use this option. Information from the zabbix::agent, zabbix::proxy and zabbix::userparameters are able to export resources, which will be loaded on the zabbix::server.
 * `database_type`: Which database is used for zabbix. Default is postgresql.
 * `manage_database`: When the parameter 'manage_database' is set to true (Which is default), it will create the database and loads the sql files. Default the postgresql will be used as backend, mentioned in the params.pp file. You'll have to include the postgresql (or mysql) module yourself, as this module will require it.
@@ -382,6 +397,11 @@ This is the class for installing everything on a single host and thus all parame
 * `apache_ssl_key`: The location of the ssl key file. You'll need to make sure this file is present on the system, this module will not install this file.
 * `apache_ssl_cipher`: The ssl cipher used. Cipher is used from: https://wiki.mozilla.org/Security/Server_Side_TLS.
 * `apache_ssl_chain`: The ssl_chain file. You'll need to make sure this file is present on the system, this module will not install this file.
+* `apache_php_max_execution_time`: Max execution time for php.
+* `apache_php_memory_limit`: PHP memory size limit.
+* `apache_php_upload_max_filesize`: HP maximum upload filesize.
+* `apache_php_max_input_time`: Max input time for php.
+* `apache_php_always_populate_raw_post_data`: Default: -1
 * `zabbix_api_user`: Username of user in Zabbix which is able to create hosts and edit hosts via the zabbix-api. Default: Admin
 * `zabbix_api_pass`: Password for the user in Zabbix for zabbix-api usage. Default: zabbix
 
@@ -422,7 +442,14 @@ There are some zabbix specific parameters, please check them by opening the mani
 * `source`: File which holds several userparameter entries.
 * `content`: When you have 1 userparameter entry which you want to install.
 * `script`: Low level discovery (LLD) script.
+* `script_dir`:  The script extention. Should be started with the dot. Like: .sh .bat .py
 * `template`: When you use exported resources (when manage_resources on other components is set to true) you'll can add the name of the template which correspondents with the 'content' or 'source' which you add. The template will be added to the host.
+* `script_dir`: When `script` is used, this parameter can provide the directly where this script needs to be placed. Default: '/usr/bin'
+
+###Reference zabbix-template
+
+* `templ_name`: The name of the template. This name will be found in the Web interface.
+* `templ_source`: The location of the XML file wich needs to be imported.
 
 ##limitations
 The module is only supported on the following operating systems:
@@ -430,6 +457,7 @@ The module is only supported on the following operating systems:
 Zabbix 2.4:
 
   * CentOS 6.x, 7.x
+  * Amazon 6.x, 7.x
   * RedHat 6.x, 7.x
   * OracleLinux 6.x, 7.x
   * Scientific Linux 6.x, 7.x
@@ -480,6 +508,21 @@ The following have contributed to this puppet module:
  * fredprod
  * JvdW
  * rleemorlang
+ * genebean
+ * exptom
+ * sbaryakov
+ * roidelapluie
+ * andresvia
+ * ju5t
+ * elricsfate
+ * IceBear2k
+ * altvnk
+ * rnelson0 
+ * hkumarmk
+ * Wprosdocimo
+ * 1n
+ * szemlyanoy
+ * Wprosdocimo
 
 Many thanks for this!
 (If I have forgotten you, please let me know and put you in the list of fame. :-))

@@ -24,7 +24,7 @@
 # [*manage_repo*]
 #   When true, it will create repository for installing the agent.
 #
-# [*manage_resouces*]
+# [*manage_resources*]
 #   When true, it will export resources to something like puppetdb.
 #   When set to true, you'll need to configure 'storeconfigs' to make
 #   this happen. Default is set to false, as not everyone has this
@@ -172,6 +172,7 @@ class zabbix::agent (
   $monitored_by_proxy    = $zabbix::params::monitored_by_proxy,
   $agent_use_ip          = $zabbix::params::agent_use_ip,
   $zbx_group             = $zabbix::params::agent_zbx_group,
+  $zbx_group_create      = $zabbix::params::agent_zbx_group_create,
   $zbx_templates         = $zabbix::params::agent_zbx_templates,
   $agent_configfile_path = $zabbix::params::agent_configfile_path,
   $pidfile               = $zabbix::params::agent_pidfile,
@@ -198,6 +199,7 @@ class zabbix::agent (
   $zabbix_alias          = $zabbix::params::agent_zabbix_alias,
   $timeout               = $zabbix::params::agent_timeout,
   $include_dir           = $zabbix::params::agent_include,
+  $include_dir_purge     = $zabbix::params::agent_include_purge,
   $unsafeuserparameters  = $zabbix::params::agent_unsafeuserparameters,
   $userparameter         = $zabbix::params::agent_userparameter,
   $loadmodulepath        = $zabbix::params::agent_loadmodulepath,
@@ -238,13 +240,14 @@ class zabbix::agent (
     }
 
     class { 'zabbix::resources::agent':
-      hostname  => $::fqdn,
-      ipaddress => $listen_ip,
-      use_ip    => $agent_use_ip,
-      port      => $listenport,
-      group     => $zbx_group,
-      templates => $zbx_templates,
-      proxy     => $use_proxy,
+      hostname     => $::fqdn,
+      ipaddress    => $listen_ip,
+      use_ip       => $agent_use_ip,
+      port         => $listenport,
+      group        => $zbx_group,
+      group_create => $zbx_group_create,
+      templates    => $zbx_templates,
+      proxy        => $use_proxy,
     }
   }
 
@@ -286,7 +289,7 @@ class zabbix::agent (
     owner   => 'zabbix',
     group   => 'zabbix',
     recurse => true,
-    purge   => true,
+    purge   => $include_dir_purge,
     notify  => Service['zabbix-agent'],
     require => File[$agent_configfile_path],
   }

@@ -4,6 +4,41 @@ Below an overview of all changes in the releases.
 
 Version (Release date)
 
+1.5.0   (2015-06-08)
+
+  * Fix for: Inherting params #93
+  * Fix for: new postgresql instance #91; Also update metadata for postgresl module version
+  * Fix for: Need to overide php_values #89
+  * 2nd fix for: Zabbix-proxy install database population #62. Also for postgresql now.
+  * Added support to Amazon Linux with epel 6. #96 (By pull request: Wprosdocimo (Thanks!))
+  * import templates and create hostgroup if missing #95 (By pull request: 1n (Thanks!))
+  * Added Support For Zapache monitoring script #94 (By pull request: elricsfate (Thanks!))
+  * merge of hiera hashes from entire hierarchy #98 (By pull request: szemlyanoy (Thanks!))
+  * Added property script_ext for: File extensions of Userparameters scripts #97
+  * Updated documentation in README.md
+
+1.4.0   (2015-05-18)
+
+  * Adding "apt" as dependency.
+  * Adding 'script_dir' parameter for userparameters define.
+  * Fix documentation: iptables is set to false (not true).
+  * Fix illegal comma separated argument list #81 (By pull request: IceBear2k (Thanks!))
+  * Fixes #80 setting Hostname and HostnameItem causes a warning on agentd s... #82 (By pull request: f0 (Thanks!))
+  * Allow to not purge include dir. #79 (By pull request: altvnk (Thanks!))
+  * Correct typo in 'manage_resources' documentation. #77 (By pull request: rnelson0 (Thanks!))
+  * Added zabbix_hostgroup #87 (By pull request: hkumarmk (Thanks!))
+
+1.3.0   (2015-04-08)
+
+  * bugfix for vhosts in apache 2.4 #67 (By pull request: ju5t (Thanks!))
+  * Update apt key to full 40characters #66 (By pull request: exptom (Thanks!))
+  * rename ListenIp => ListenIP (By pull request: sbaryakov (Thanks!))
+  * Fix manage_repo parameter on the zabbix class (By pull request: roidelapluie (Thanks!))
+  * minor typo (By pull request: andresvia (Thanks!))
+  * better default parameter for userparameter (By pull request: sbaryakov (Thanks!))
+  * Fix for: Multi-node Setup: Web class does not properly configure database port #69
+  * Fix for: Zabbix-proxy install database population #62
+
 1.2.0   (2015-02-26)
 
   * Support for RedHat/CentOS/OracleLinux 7
@@ -13,7 +48,7 @@ Version (Release date)
   * Fix in params.pp with default parameter of zabbix proxy for ubuntu #56 (By pull request: fredprod (Thanks!))
   * notify zabbix-agent service when userparameters change #57 (By pull request: rleemorlang (Thanks!))
   * Fix for: "Cannot Load Such File -- zabbixapi" despite installation #54
-  * Fix for correct order, so 1 puppet run installs the proxy
+  * Fix for: correct order, so 1 puppet run installs the proxy
 
 1.1.0   (2015-01-24)
 
@@ -21,10 +56,10 @@ Version (Release date)
   * Unable to create host with zabbixapi - Invalid params #37 (By pull request: genebean (Thanks!))
   * setting manage_repo to false breaks server install #38 (By pull request: genebean (Thanks!))
   * listenip statement didn't work with 'eth' addresses" manifests/agent.pp
-  * fix for rpsec tests to work with latest version.
+  * Fix for: rpsec tests to work with latest version.
   * Fix for: (mysql and postgresql) must be quotted as it contains special characters
   * Fix for: allow setting location of psql #44
-  * Fix for the last identation error in manifests/web.pp.
+  * Fix: for the last identation error in manifests/web.pp.
 
 1.0.1   (2015-01-12)
 

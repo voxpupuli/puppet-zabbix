@@ -28,23 +28,29 @@ class zabbix::params {
   }
 
   # Zabbix overall params. Is used by all components.
-  $zabbix_version                 = '2.4'
-  $zabbix_timezone                = 'Europe/Amsterdam'
-  $zabbix_server                  = 'localhost'
-  $zabbix_web                     = 'localhost'
-  $zabbix_proxy                   = 'localhost'
-  $zabbix_server_ip               = '127.0.0.1'
-  $zabbix_web_ip                  = '127.0.0.1'
-  $zabbix_proxy_ip                = '127.0.0.1'
-  $zabbix_package_state           = 'present'
-  $manage_database                = true
-  $manage_vhost                   = true
-  $manage_firewall                = false
-  $manage_repo                    = true
-  $manage_resources               = false
-  $database_type                  = 'postgresql'
-  $database_schema_path           = false
-  $database_path                  = '/usr/sbin'
+  $zabbix_version                           = '2.4'
+  $zabbix_timezone                          = 'Europe/Amsterdam'
+  $zabbix_server                            = 'localhost'
+  $zabbix_web                               = 'localhost'
+  $zabbix_proxy                             = 'localhost'
+  $zabbix_server_ip                         = '127.0.0.1'
+  $zabbix_web_ip                            = '127.0.0.1'
+  $zabbix_proxy_ip                          = '127.0.0.1'
+  $zabbix_package_state                     = 'present'
+  $manage_database                          = true
+  $manage_vhost                             = true
+  $manage_firewall                          = false
+  $manage_repo                              = true
+  $manage_resources                         = false
+  $database_type                            = 'postgresql'
+  $database_schema_path                     = false
+  $database_path                            = '/usr/sbin'
+  $apache_php_max_execution_time            = '300'
+  $apache_php_memory_limit                  = '128M'
+  $apache_php_post_max_size                 = '16M'
+  $apache_php_upload_max_filesize           = '2M'
+  $apache_php_max_input_time                = '300'
+  $apache_php_always_populate_raw_post_data = '-1'
 
   # Zabbix-web
   $apache_use_ssl                 = false
@@ -54,6 +60,9 @@ class zabbix::params {
   # This should be the most current and provide a higher level of security. (Security above everything else)
   $apache_ssl_cipher              = 'ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!3DES:!MD5:!PSK'
   $apache_ssl_chain               = undef
+  $apache_listen_ip               = undef
+  $apache_listenport              = '80'
+  $apache_listenport_ssl          = '443'
   $server_api_user                = 'Admin'
   $server_api_pass                = 'zabbix'
 
@@ -128,6 +137,7 @@ class zabbix::params {
   $monitored_by_proxy             = undef
   $agent_use_ip                   = true
   $agent_zbx_group                = 'Linux servers'
+  $agent_zbx_group_create         = true
   $agent_zbx_templates            = [ 'Template OS Linux', 'Template App SSH Service' ]
   $agent_pidfile                  = '/var/run/zabbix/zabbix_agentd.pid'
   $agent_logfile                  = '/var/log/zabbix/zabbix_agentd.log'
@@ -141,7 +151,7 @@ class zabbix::params {
   $agent_listenip                 = undef
   $agent_startagents              = '3'
   $agent_serveractive             = '127.0.0.1'
-  $agent_hostname                 = $::fqdn
+  $agent_hostname                 = undef
   $agent_hostnameitem             = 'system.hostname'
   $agent_hostmetadata             = undef
   $agent_hostmetadataitem         = undef
@@ -153,11 +163,12 @@ class zabbix::params {
   $agent_zabbix_alias             = undef
   $agent_timeout                  = '3'
   $agent_include                  = '/etc/zabbix/zabbix_agentd.d'
+  $agent_include_purge            = true
   $agent_unsafeuserparameters     = '0'
   $agent_userparameter            = undef
   $agent_loadmodulepath           = '/usr/lib/modules'
   $agent_loadmodule               = undef
-
+  $apache_status                  = false
   # Proxy specific params
   $proxy_hostname                = $::fqdn
   $proxy_service_name            = 'zabbix-proxy'

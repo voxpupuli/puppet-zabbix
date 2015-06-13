@@ -61,6 +61,32 @@ class Puppet::Provider::Zabbix < Puppet::Provider
         template_array.include?("#{template_id}")
     end
 
+    def self.check_template_exist(template,template_source,zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
+        begin
+            zbx = create_connection(zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
+            zbx.templates.get_id( :host => template )
+        rescue Puppet::ExecutionFailure => e
+            false
+        end
+    end
+
+    def self.check_template_is_equal(template,template_source,zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
+        begin
+            zbx = create_connection(zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
+            exported = zbx.configurations.export(
+                :format => "xml",
+                :options => {
+                    :templates => [zbx.templates.get_id(:host => template)]
+                }
+            )
+            exported_clean = exported.gsub(/>\s*/, ">").gsub(/\s*</, "<").gsub(/<date>.*<\/date>/,"DATEWASHERE")
+            template_source_clean = template_source.gsub(/>\s*/, ">").gsub(/\s*</, "<").gsub(/<date>.*<\/date>/,"DATEWASHERE")
+            exported_clean.eql? template_source_clean
+        rescue Puppet::ExecutionFailure => e
+            false
+        end
+    end
+
     # Is it an number?
     def self.is_a_number?(s)
         s.to_s.match(/\A[+-]?\d+?(\.\d+)?\Z/) == nil ? false : true
