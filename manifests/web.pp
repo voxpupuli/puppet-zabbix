@@ -60,6 +60,12 @@
 # [*apache_ssl_chain*}
 #   The ssl chain file.
 #
+# [*apache_listenport*}
+#   The port for the apache vhost.
+#
+# [*apache_listenport_ssl*}
+#   The port for the apache SSL vhost.
+#
 # [*zabbix_api_user*]
 #   Name of the user which the api should connect to. Default: Admin
 #
@@ -152,6 +158,9 @@ class zabbix::web (
   $apache_ssl_key                           = $zabbix::params::apache_ssl_key,
   $apache_ssl_cipher                        = $zabbix::params::apache_ssl_cipher,
   $apache_ssl_chain                         = $zabbix::params::apache_ssl_chain,
+  $apache_listen_ip                         = $zabbix::params::apache_listen_ip,
+  $apache_listenport                        = $zabbix::params::apache_listenport,
+  $apache_listenport_ssl                    = $zabbix::params::apache_listenport_ssl,
   $zabbix_api_user                          = $zabbix::params::server_api_user,
   $zabbix_api_pass                          = $zabbix::params::server_api_pass,
   $database_host                            = $zabbix::params::server_database_host,
@@ -253,14 +262,14 @@ class zabbix::web (
     # vhost for redirect traffic from non ssl to ssl site.
     if $apache_use_ssl {
       # Listen port
-      $apache_listen_port = '443'
+      $apache_listen_port = $apache_listenport_ssl
 
       # We create nonssl vhost for redirecting non ssl
       # traffic to https.
       apache::vhost { "${zabbix_url}_nonssl":
         docroot        => '/usr/share/zabbix',
         manage_docroot => false,
-        port           => '80',
+        port           => $apache_listenport,
         servername     => $zabbix_url,
         ssl            => false,
         rewrites       => [
@@ -273,7 +282,7 @@ class zabbix::web (
       }
     } else {
       # So no ssl, so default port 80
-      $apache_listen_port = '80'
+      $apache_listen_port = $apache_listenport
     }
 
     # Check which version of Apache we're using
@@ -287,7 +296,9 @@ class zabbix::web (
 
     apache::vhost { $zabbix_url:
       docroot         => '/usr/share/zabbix',
+      ip              => $apache_listen_ip,
       port            => $apache_listen_port,
+      add_listen      => true,
       directories     => [
         merge({
           path     => '/usr/share/zabbix',
