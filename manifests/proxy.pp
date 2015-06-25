@@ -340,7 +340,7 @@ class zabbix::proxy (
   $javagateway             = $zabbix::params::proxy_javagateway,
   $javagatewayport         = $zabbix::params::proxy_javagatewayport,
   $startjavapollers        = $zabbix::params::proxy_startjavapollers,
-  $startvmwarecollector    = $zabbix::params::proxy_startvmwarecollector,
+  $startvmwarecollectors   = $zabbix::params::proxy_startvmwarecollectors,
   $vmwarefrequency         = $zabbix::params::proxy_vmwarefrequency,
   $vmwarecachesize         = $zabbix::params::proxy_vmwarecachesize,
   $snmptrapperfile         = $zabbix::params::proxy_snmptrapperfile,
