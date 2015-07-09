@@ -206,7 +206,7 @@ class zabbix::params {
   $proxy_javagateway             = undef
   $proxy_javagatewayport         = '10052'
   $proxy_startjavapollers        = '5'
-  $proxy_startvmwarecollector    = '0'
+  $proxy_startvmwarecollectors   = '0'
   $proxy_vmwarefrequency         = '60'
   $proxy_vmwarecachesize         = '8'
   $proxy_snmptrapperfile         = '/tmp/zabbix_traps.tmp'
