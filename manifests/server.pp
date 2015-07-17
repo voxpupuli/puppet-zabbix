@@ -332,7 +332,10 @@ class zabbix::server (
   $loadmodule              = $zabbix::params::server_loadmodule,
   ) inherits zabbix::params {
 
-  include zabbix::repo
+  class { 'zabbix::repo':
+    zabbix_version => $zabbix_version,
+    manage_repo    => $manage_repo,
+  }
   
   # Check some if they are boolean
   validate_bool($manage_firewall)
