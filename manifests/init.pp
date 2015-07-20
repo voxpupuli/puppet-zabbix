@@ -205,6 +205,7 @@ class zabbix (
     database_path           => $database_path,
     zabbix_version          => $zabbix_version,
     manage_firewall         => $manage_firewall,
+    manage_repo             => $manage_repo,
     nodeid                  => $nodeid,
     listenport              => $listenport,
     sourceip                => $sourceip,
