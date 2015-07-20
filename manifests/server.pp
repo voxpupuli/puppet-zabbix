@@ -22,6 +22,9 @@
 #   This is the zabbix version.
 #   Example: 2.4
 #
+# [*manage_repo*]
+#   When true (default) this module will manage the Zabbix repository
+#
 # [*zabbix_package_state*]
 #   The state of the package that needs to be installed: present or latest.
 #   Default: present
@@ -263,6 +266,7 @@ class zabbix::server (
   $zabbix_version          = $zabbix::params::zabbix_version,
   $zabbix_package_state    = $zabbix::params::zabbix_package_state,
   $manage_firewall         = $zabbix::params::manage_firewall,
+  $manage_repo             = $zabbix::params::manage_repo,
   $server_configfile_path  = $zabbix::params::server_configfile_path,
   $server_config_owner     = $zabbix::params::server_config_owner,
   $server_config_group     = $zabbix::params::server_config_group,
@@ -336,7 +340,7 @@ class zabbix::server (
     zabbix_version => $zabbix_version,
     manage_repo    => $manage_repo,
   }
-  
+
   # Check some if they are boolean
   validate_bool($manage_firewall)
 
