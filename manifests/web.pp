@@ -19,6 +19,9 @@
 #   - postgresql
 #   - mysql
 #
+# [*manage_repo*]
+#   When true, it will create repository for installing the webinterface.
+#
 # [*zabbix_version*]
 #   This is the zabbix version.
 #   Example: 2.4
@@ -148,6 +151,7 @@
 class zabbix::web (
   $zabbix_url                               = '',
   $database_type                            = $zabbix::params::database_type,
+  $manage_repo                              = $zabbix::params::manage_repo,
   $zabbix_version                           = $zabbix::params::zabbix_version,
   $zabbix_timezone                          = $zabbix::params::zabbix_timezone,
   $zabbix_package_state                     = $zabbix::params::zabbix_package_state,
@@ -180,7 +184,13 @@ class zabbix::web (
   $apache_php_always_populate_raw_post_data = $zabbix::params::apache_php_always_populate_raw_post_data,
 ) inherits zabbix::params {
 
-  include zabbix::repo
+  # Only include the repo class if it has not yet been included
+  unless defined(Class['Zabbix::Repo']) {
+    class { 'zabbix::repo':
+      manage_repo    => $manage_repo,
+      zabbix_version => $zabbix_version,
+    }
+  }
 
   # use the correct db.
   case $database_type {

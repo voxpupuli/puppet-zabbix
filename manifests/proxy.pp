@@ -450,10 +450,15 @@ class zabbix::proxy (
     }
   }
 
-  # Check if manage_repo is true.
-  if $manage_repo {
-    include zabbix::repo
-    Package["zabbix-proxy-${db}"] {require => Class['zabbix::repo']}
+  # Only include the repo class if it has not yet been included
+  unless defind(Class['Zabbix::Repo']) {
+    class { 'zabbix::repo':
+      manage_repo    => $manage_repo,
+      zabbix_version => $zabbix_version,
+    }
+    Package["zabbix-proxy-${db}"] {
+      require => Class['zabbix::repo']
+    }
   }
 
   # Now we are going to install the correct packages.
