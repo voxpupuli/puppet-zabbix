@@ -336,9 +336,12 @@ class zabbix::server (
   $loadmodule              = $zabbix::params::server_loadmodule,
   ) inherits zabbix::params {
 
-  class { 'zabbix::repo':
-    zabbix_version => $zabbix_version,
-    manage_repo    => $manage_repo,
+  # Only include the repo class if it has not yet been included
+  unless defined(Class['Zabbix::Repo']) {
+    class { 'zabbix::repo':
+      zabbix_version => $zabbix_version,
+      manage_repo    => $manage_repo,
+    }
   }
 
   # Check some if they are boolean
