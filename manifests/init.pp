@@ -168,6 +168,7 @@ class zabbix (
   class { 'zabbix::web':
     zabbix_url                               => $zabbix_url,
     database_type                            => $database_type,
+    manage_repo                              => $manage_repo,
     zabbix_version                           => $zabbix_version,
     zabbix_timezone                          => $zabbix_timezone,
     manage_vhost                             => $manage_vhost,
@@ -205,6 +206,7 @@ class zabbix (
     database_path           => $database_path,
     zabbix_version          => $zabbix_version,
     manage_firewall         => $manage_firewall,
+    manage_repo             => $manage_repo,
     nodeid                  => $nodeid,
     listenport              => $listenport,
     sourceip                => $sourceip,
