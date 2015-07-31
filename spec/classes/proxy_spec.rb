@@ -252,8 +252,8 @@ describe 'zabbix::proxy' do
       it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartJavaPollers=5$}}
     end   
 
-    context 'with startvmwarecollector => 0' do
-      let(:params) { {:startvmwarecollector => '0'} }
+    context 'with startvmwarecollectors => 0' do
+      let(:params) { {:startvmwarecollectors => '0'} }
       it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartVMwareCollectors=0$}}
     end   
 

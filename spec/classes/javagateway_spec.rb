@@ -22,11 +22,6 @@ describe 'zabbix::javagateway' do
       it { should contain_class('Zabbix::Repo') }
     end
 
-    context 'when declaring manage_repo is false' do
-      let(:params) {{ :manage_repo => false }}
-      it { should_not contain_class('Zabbix::Repo') }
-    end
-
     it { should contain_file('/etc/zabbix/zabbix_java_gateway.conf')}
     it { should contain_service('zabbix-java-gateway')}
 

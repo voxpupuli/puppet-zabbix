@@ -12,7 +12,8 @@ describe 'zabbix::repo' do
         :operatingsystem        => 'Debian',
         :operatingsystemrelease => '6',
         :architecture           => 'x86_64',
-        :lsbdistid              => 'Debian'
+        :lsbdistid              => 'Debian',
+        :osfamily               => 'Debian'
       }
     end
     it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.0/debian/') }
@@ -27,7 +28,8 @@ describe 'zabbix::repo' do
         :operatingsystem        => 'Debian',
         :operatingsystemrelease => '7',
         :architecture           => 'x86_64',
-        :lsbdistid              => 'Debian'
+        :lsbdistid              => 'Debian',
+        :osfamily               => 'Debian'
       }
     end
     it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.0/debian/') }
@@ -42,7 +44,8 @@ describe 'zabbix::repo' do
         :operatingsystem        => 'Debian',
         :operatingsystemrelease => '7',
         :architecture           => 'x86_64',
-        :lsbdistid              => 'Debian'
+        :lsbdistid              => 'Debian',
+        :osfamily               => 'Debian'
       }
     end
     it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.2/debian/') }
@@ -57,7 +60,8 @@ describe 'zabbix::repo' do
         :operatingsystem        => 'Ubuntu',
         :operatingsystemrelease => '12.04',
         :architecture           => 'x86_64',
-        :lsbdistid              => 'Ubuntu'
+        :lsbdistid              => 'Ubuntu',
+        :osfamily               => 'Debian'
       }
     end
     it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.0/ubuntu/') }
@@ -72,7 +76,8 @@ describe 'zabbix::repo' do
         :operatingsystem        => 'Ubuntu',
         :operatingsystemrelease => '12.04',
         :architecture           => 'x86_64',
-        :lsbdistid              => 'Ubuntu'
+        :lsbdistid              => 'Ubuntu',
+        :osfamily               => 'Debian'
       }
     end
     it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.2/ubuntu/') }
