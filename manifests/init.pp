@@ -115,6 +115,8 @@ class zabbix (
   $database_password                        = $zabbix::params::server_database_password,
   $database_socket                          = $zabbix::params::server_database_socket,
   $database_port                            = $zabbix::params::server_database_port,
+  $database_charset                         = $zabbix::params::server_database_charset,
+  $database_collate                         = $zabbix::params::server_database_collate,
   $startpollers                             = $zabbix::params::server_startpollers,
   $startipmipollers                         = $zabbix::params::server_startipmipollers,
   $startpollersunreachable                  = $zabbix::params::server_startpollersunreachable,
@@ -284,6 +286,8 @@ class zabbix (
     database_user     => $database_user,
     database_password => $database_password,
     database_host     => $database_host,
+    database_charset  => $database_charset,
+    database_collate  => $database_collate,
     require           => Class['zabbix::repo'],
   }
 

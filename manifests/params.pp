@@ -85,6 +85,8 @@ class zabbix::params {
   $server_database_password       = 'zabbix_server'
   $server_database_socket         = undef
   $server_database_port           = undef
+  $server_database_charset        = 'utf8'
+  $server_database_collate        = 'utf8_general_ci'
   $server_startpollers            = '5'
   $server_startipmipollers        = '0'
   $server_startpollersunreachable = '1'
