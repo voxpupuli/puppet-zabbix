@@ -257,14 +257,12 @@ class zabbix::agent (
       manage_repo    => $manage_repo,
       zabbix_version => $zabbix_version,
     }
-    Package['zabbix-agent'] {
-      require => Class['zabbix::repo']
-    }
   }
 
   # Installing the package
   package { 'zabbix-agent':
     ensure  => $zabbix_package_state,
+    require => Class['zabbix::repo'],
   }
 
   # Controlling the 'zabbix-agent' service
