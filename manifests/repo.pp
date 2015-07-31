@@ -117,36 +117,38 @@ class zabbix::repo(
       'debian' : {
         if ($::architecture == 'armv6l') {
           apt::source { 'zabbix':
-            location    => 'http://naizvoru.com/raspbian/zabbix',
-            release     => $debian,
-            repos       => 'main',
-            key         => {
-              'id'      => 'BC274A7EA7FD5DD267C9A18FD54A213C80E871A7',
-              'source'  => 'http://naizvoru.com/raspbian/zabbix/conf/boris@steki.net.gpg.key'
+            location => 'http://naizvoru.com/raspbian/zabbix',
+            release  => $debian,
+            repos    => 'main',
+            key      => {
+              'id'     => 'BC274A7EA7FD5DD267C9A18FD54A213C80E871A7',
+              'source' => 'http://naizvoru.com/raspbian/zabbix/conf/boris@steki.net.gpg.key'
             },
-            include     => { 'src' => false }
+            include  => {
+              'src' => false,
+            }
           }
         } else {
           apt::source { 'zabbix':
-            location   => "http://repo.zabbix.com/zabbix/${zabbix_version}/debian/",
-            release    => $debian,
-            repos      => 'main',
-            key         => {
-              'id'      => 'FBABD5FB20255ECAB22EE194D13D58E479EA5ED4',
-              'source'  => 'http://repo.zabbix.com/zabbix-official-repo.key'
+            location => "http://repo.zabbix.com/zabbix/${zabbix_version}/debian/",
+            release  => $debian,
+            repos    => 'main',
+            key      => {
+              'id'     => 'FBABD5FB20255ECAB22EE194D13D58E479EA5ED4',
+              'source' => 'http://repo.zabbix.com/zabbix-official-repo.key'
             },
           }
         }
       } # END 'debian'
       'ubuntu' : {
         apt::source { 'zabbix':
-          location   => "http://repo.zabbix.com/zabbix/${zabbix_version}/ubuntu/",
-          release    => $ubuntu,
-          repos      => 'main',
-            key         => {
-              'id'      => 'FBABD5FB20255ECAB22EE194D13D58E479EA5ED4',
-              'source'  => 'http://repo.zabbix.com/zabbix-official-repo.key'
-            },
+          location => "http://repo.zabbix.com/zabbix/${zabbix_version}/ubuntu/",
+          release  => $ubuntu,
+          repos    => 'main',
+          key      => {
+            'id'     => 'FBABD5FB20255ECAB22EE194D13D58E479EA5ED4',
+            'source' => 'http://repo.zabbix.com/zabbix-official-repo.key'
+          },
         }
       } # END 'ubuntu'
       default : {
