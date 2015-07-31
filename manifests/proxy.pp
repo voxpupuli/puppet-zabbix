@@ -451,7 +451,7 @@ class zabbix::proxy (
   }
 
   # Only include the repo class if it has not yet been included
-  unless defind(Class['Zabbix::Repo']) {
+  unless defined(Class['Zabbix::Repo']) {
     class { 'zabbix::repo':
       manage_repo    => $manage_repo,
       zabbix_version => $zabbix_version,
