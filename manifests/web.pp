@@ -232,28 +232,45 @@ class zabbix::web (
 
   case $::operatingsystem {
     'ubuntu', 'debian' : {
+      case $::operatingsystemmajrelease {
+        '8' : {
+          $zabbix_web_package = 'zabbix-frontend-php'
+        }
+        default : {
+          $zabbix_web_package = 'zabbix-frontend-php'
+        }
+      }
       package { "php5-${db}":
-        ensure => present,
-      } ->
-      package { 'zabbix-frontend-php':
         ensure => $zabbix_package_state,
-        before => File['/etc/zabbix/web/zabbix.conf.php'],
+        before => [
+          Package[$zabbix_web_package],
+          File['/etc/zabbix/web/zabbix.conf.php'],
+        ]
       }
     }
     default : {
+      $zabbix_web_package = 'zabbix-web'
+
       package { "zabbix-web-${db}":
         ensure  => $zabbix_package_state,
-        before  => [
-          File['/etc/zabbix/web/zabbix.conf.php'],
-          Package['zabbix-web']
-        ],
+        before  => Package[$zabbix_web_package],
         require => Class['zabbix::repo'],
-      }
-      package { 'zabbix-web':
-        ensure => $zabbix_package_state,
       }
     }
   } # END case $::operatingsystem
+
+  file { '/etc/zabbix/web':
+    ensure  => directory,
+    owner   => 'root',
+    group   => 'root',
+    require => Package[$zabbix_web_package]
+  }
+
+  package { $zabbix_web_package:
+    ensure  => $zabbix_package_state,
+    before  => File['/etc/zabbix/web/zabbix.conf.php'],
+    require => Class['zabbix::repo'],
+  }
 
   # Webinterface config file
   file { '/etc/zabbix/web/zabbix.conf.php':
@@ -349,7 +366,7 @@ class zabbix::web (
       ssl_key         => $apache_ssl_key,
       ssl_cipher      => $apache_ssl_cipher,
       ssl_chain       => $apache_ssl_chain,
-      require         => File['/etc/zabbix/web/zabbix.conf.php'],
+      require         => Package[$zabbix_web_package],
     }
   } # END if $manage_vhost
 }

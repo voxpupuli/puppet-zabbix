@@ -44,6 +44,10 @@ class zabbix::repo(
         $majorrelease = '10'
         $ubuntu       = 'lucid'
       }
+      /^8.*/: {
+        $majorrelease = '8'
+        $debian       = 'jessie'
+      }
       /^7.*/: {
         $majorrelease = '7'
         $debian       = 'wheezy'
