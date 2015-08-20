@@ -261,8 +261,9 @@ class zabbix::web (
 
   file { '/etc/zabbix/web':
     ensure  => directory,
-    owner   => 'root',
-    group   => 'root',
+    owner   => 'zabbix',
+    group   => 'zabbix',
+    mode    => '0755',
     require => Package[$zabbix_web_package]
   }
 
