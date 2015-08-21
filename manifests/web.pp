@@ -218,6 +218,19 @@ class zabbix::web (
   if $manage_resources {
     include ruby::dev
 
+    # Determine correct zabbixapi version.
+    case $zabbix_version {
+      '2.2' : {
+        $zabbixapi_version = '2.2.2'
+      }
+      '2.4' : {
+        $zabbixapi_version = '2.4.4'
+      }
+      default : {
+        $zabbixapi_version = '2.4.4'
+      }
+    }
+
     # Installing the zabbixapi gem package. We need this gem for
     # communicating with the zabbix-api. This is way better then
     # doing it ourself.
@@ -228,7 +241,7 @@ class zabbix::web (
       mode   => '0755',
     } ->
     package { 'zabbixapi':
-      ensure   => "${zabbix_version}.0",
+      ensure   => $zabbixapi_version,
       provider => $::puppetgem,
       require  => Class['ruby::dev'],
     } ->
