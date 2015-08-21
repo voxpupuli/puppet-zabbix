@@ -347,6 +347,10 @@ zabbix::userparameter::data:
 
 ###Usage zabbix-template
 
+With the 'zabbix::template' define, you can install Zabbix templates via the API. You'll have to make sure you store the XML file somewere on your puppet server or in your module.
+
+Please be aware that you can only make use of this feature when you have configured the module to make use of exported resources.
+
 You can instal the MySQL template xml via the next example:
 ```ruby
 zabbix::template { 'Template App MySQL':
@@ -404,6 +408,7 @@ This is the class for installing everything on a single host and thus all parame
 * `apache_php_always_populate_raw_post_data`: Default: -1
 * `zabbix_api_user`: Username of user in Zabbix which is able to create hosts and edit hosts via the zabbix-api. Default: Admin
 * `zabbix_api_pass`: Password for the user in Zabbix for zabbix-api usage. Default: zabbix
+* `zabbix_template_dir`: The directory where all templates are stored before uploading via API
 
 There are some more zabbix specific parameters, please check them by opening the manifest file.
 
@@ -523,6 +528,10 @@ The following have contributed to this puppet module:
  * 1n
  * szemlyanoy
  * Wprosdocimo
+ * sgnl05
+ * hmn
+ * BcTpe4HbIu
+ * mschuett
 
 Many thanks for this!
 (If I have forgotten you, please let me know and put you in the list of fame. :-))
@@ -536,6 +545,9 @@ Many thanks for this!
 
 
 ###When using exported resources
+
+At the moment of writing, the puppet run will fail one or more times when `manage_resources` is set to true when you install an fresh Zabbix server. It is an issue and I'm aware of it. Don't know yet how to solve this, but someone suggested to try puppet stages and for know I haven't made it work yet.
+
 *	Please be aware, that when `manage_resources` is enabled, it can increase an puppet run on the zabbix-server a lot when you have a lot of hosts.
 *	First run of puppet on the zabbix-server can result in this error:
 

@@ -4,6 +4,19 @@ Below an overview of all changes in the releases.
 
 Version (Release date)
 
+1.6.0   (2015-08-21)
+
+  * Pass manage_repo and zabbix_repo to repo.pp and prevent double include #110 (By pull request: mmerfort (Thanks!))
+  * Add "eno" to interface name matching #104 (By pull request: sgnl05 (Thanks!))
+  * use the new puppetlabs-apt version 2.x module #103 (By pull request: hmn (Thanks!))
+  * Fix name startvmwarecollector -> startvmwarecollectors #102 (By pull request: BcTpe4HbIu (Thanks!))
+  * Custom apache IP and port #99 (By pull request: mschuett (Thanks!))
+  * Feature Request: add charset/collate option during a mysql db resource creation #107
+  * Added support Debian 8
+  * Fixed some rpsec tests
+  * Fixed some puppet-lint identation warnings
+  * Updated the zabbixapi gem install with recent versions
+
 1.5.0   (2015-06-08)
 
   * Fix for: Inherting params #93
