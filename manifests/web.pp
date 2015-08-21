@@ -30,6 +30,9 @@
 #   The current timezone for vhost configuration needed for the php timezone.
 #   Example: Europe/Amsterdam
 #
+# [*zabbix_template_dir*]
+#   The directory where all templates are stored before uploading via API
+#
 # [*zabbix_package_state*]
 #   The state of the package that needs to be installed: present or latest.
 #   Default: present
@@ -155,6 +158,7 @@ class zabbix::web (
   $zabbix_version                           = $zabbix::params::zabbix_version,
   $zabbix_timezone                          = $zabbix::params::zabbix_timezone,
   $zabbix_package_state                     = $zabbix::params::zabbix_package_state,
+  $zabbix_template_dir                      = $zabbix::params::zabbix_template_dir,
   $manage_vhost                             = $zabbix::params::manage_vhost,
   $manage_resources                         = $zabbix::params::manage_resources,
   $apache_use_ssl                           = $zabbix::params::apache_use_ssl,
@@ -217,6 +221,12 @@ class zabbix::web (
     # Installing the zabbixapi gem package. We need this gem for
     # communicating with the zabbix-api. This is way better then
     # doing it ourself.
+    file { $zabbix_template_dir:
+      ensure => directory,
+      owner  => 'zabbix',
+      group  => 'zabbix',
+      mode   => '0755',
+    } ->
     package { 'zabbixapi':
       ensure   => "${zabbix_version}.0",
       provider => $::puppetgem,

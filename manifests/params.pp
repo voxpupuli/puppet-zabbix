@@ -37,6 +37,7 @@ class zabbix::params {
   $zabbix_web_ip                            = '127.0.0.1'
   $zabbix_proxy_ip                          = '127.0.0.1'
   $zabbix_package_state                     = 'present'
+  $zabbix_template_dir                      = '/etc/zabbix/imported_templates'
   $manage_database                          = true
   $manage_vhost                             = true
   $manage_firewall                          = false

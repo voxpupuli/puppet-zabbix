@@ -19,6 +19,14 @@ Puppet::Type.type(:zabbix_template).provide(:ruby, :parent => Puppet::Provider::
     # Connect to zabbix api
     zbx = self.class.create_connection(zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
 
+    # Opening the file, so we can place it as an long string into an variable. The ZabbixAPI
+    # needs the content of the file, not location of the file.
+    file = File.open(template_source)
+    template_contents = ""
+    file.each {|line|
+          template_contents << line
+    }
+
     zbx.configurations.import(
       :format => "xml",
       :rules => {
@@ -69,7 +77,7 @@ Puppet::Type.type(:zabbix_template).provide(:ruby, :parent => Puppet::Provider::
             :updateExisting => true
           }
       },
-      :source => template_source
+      :source => template_contents
     )
   end
 
