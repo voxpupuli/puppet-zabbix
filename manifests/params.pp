@@ -37,6 +37,7 @@ class zabbix::params {
   $zabbix_web_ip                            = '127.0.0.1'
   $zabbix_proxy_ip                          = '127.0.0.1'
   $zabbix_package_state                     = 'present'
+  $zabbix_template_dir                      = '/etc/zabbix/imported_templates'
   $manage_database                          = true
   $manage_vhost                             = true
   $manage_firewall                          = false
@@ -85,6 +86,8 @@ class zabbix::params {
   $server_database_password       = 'zabbix_server'
   $server_database_socket         = undef
   $server_database_port           = undef
+  $server_database_charset        = 'utf8'
+  $server_database_collate        = 'utf8_general_ci'
   $server_startpollers            = '5'
   $server_startipmipollers        = '0'
   $server_startpollersunreachable = '1'
@@ -206,7 +209,7 @@ class zabbix::params {
   $proxy_javagateway             = undef
   $proxy_javagatewayport         = '10052'
   $proxy_startjavapollers        = '5'
-  $proxy_startvmwarecollector    = '0'
+  $proxy_startvmwarecollectors   = '0'
   $proxy_vmwarefrequency         = '60'
   $proxy_vmwarecachesize         = '8'
   $proxy_snmptrapperfile         = '/tmp/zabbix_traps.tmp'

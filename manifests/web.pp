@@ -19,6 +19,9 @@
 #   - postgresql
 #   - mysql
 #
+# [*manage_repo*]
+#   When true, it will create repository for installing the webinterface.
+#
 # [*zabbix_version*]
 #   This is the zabbix version.
 #   Example: 2.4
@@ -26,6 +29,9 @@
 # [*zabbix_timezone*]
 #   The current timezone for vhost configuration needed for the php timezone.
 #   Example: Europe/Amsterdam
+#
+# [*zabbix_template_dir*]
+#   The directory where all templates are stored before uploading via API
 #
 # [*zabbix_package_state*]
 #   The state of the package that needs to be installed: present or latest.
@@ -148,9 +154,11 @@
 class zabbix::web (
   $zabbix_url                               = '',
   $database_type                            = $zabbix::params::database_type,
+  $manage_repo                              = $zabbix::params::manage_repo,
   $zabbix_version                           = $zabbix::params::zabbix_version,
   $zabbix_timezone                          = $zabbix::params::zabbix_timezone,
   $zabbix_package_state                     = $zabbix::params::zabbix_package_state,
+  $zabbix_template_dir                      = $zabbix::params::zabbix_template_dir,
   $manage_vhost                             = $zabbix::params::manage_vhost,
   $manage_resources                         = $zabbix::params::manage_resources,
   $apache_use_ssl                           = $zabbix::params::apache_use_ssl,
@@ -180,7 +188,13 @@ class zabbix::web (
   $apache_php_always_populate_raw_post_data = $zabbix::params::apache_php_always_populate_raw_post_data,
 ) inherits zabbix::params {
 
-  include zabbix::repo
+  # Only include the repo class if it has not yet been included
+  unless defined(Class['Zabbix::Repo']) {
+    class { 'zabbix::repo':
+      manage_repo    => $manage_repo,
+      zabbix_version => $zabbix_version,
+    }
+  }
 
   # use the correct db.
   case $database_type {
@@ -204,11 +218,30 @@ class zabbix::web (
   if $manage_resources {
     include ruby::dev
 
+    # Determine correct zabbixapi version.
+    case $zabbix_version {
+      '2.2' : {
+        $zabbixapi_version = '2.2.2'
+      }
+      '2.4' : {
+        $zabbixapi_version = '2.4.4'
+      }
+      default : {
+        $zabbixapi_version = '2.4.4'
+      }
+    }
+
     # Installing the zabbixapi gem package. We need this gem for
     # communicating with the zabbix-api. This is way better then
     # doing it ourself.
+    file { $zabbix_template_dir:
+      ensure => directory,
+      owner  => 'zabbix',
+      group  => 'zabbix',
+      mode   => '0755',
+    } ->
     package { 'zabbixapi':
-      ensure   => "${zabbix_version}.0",
+      ensure   => $zabbixapi_version,
       provider => $::puppetgem,
       require  => Class['ruby::dev'],
     } ->
@@ -222,28 +255,46 @@ class zabbix::web (
 
   case $::operatingsystem {
     'ubuntu', 'debian' : {
+      case $::operatingsystemmajrelease {
+        '8' : {
+          $zabbix_web_package = 'zabbix-frontend-php'
+        }
+        default : {
+          $zabbix_web_package = 'zabbix-frontend-php'
+        }
+      }
       package { "php5-${db}":
-        ensure => present,
-      } ->
-      package { 'zabbix-frontend-php':
         ensure => $zabbix_package_state,
-        before => File['/etc/zabbix/web/zabbix.conf.php'],
+        before => [
+          Package[$zabbix_web_package],
+          File['/etc/zabbix/web/zabbix.conf.php'],
+        ]
       }
     }
     default : {
+      $zabbix_web_package = 'zabbix-web'
+
       package { "zabbix-web-${db}":
         ensure  => $zabbix_package_state,
-        before  => [
-          File['/etc/zabbix/web/zabbix.conf.php'],
-          Package['zabbix-web']
-        ],
+        before  => Package[$zabbix_web_package],
         require => Class['zabbix::repo'],
-      }
-      package { 'zabbix-web':
-        ensure => $zabbix_package_state,
       }
     }
   } # END case $::operatingsystem
+
+  file { '/etc/zabbix/web':
+    ensure  => directory,
+    owner   => 'zabbix',
+    group   => 'zabbix',
+    mode    => '0755',
+    require => Package[$zabbix_web_package]
+  }
+
+  package { $zabbix_web_package:
+    ensure  => $zabbix_package_state,
+    before  => File['/etc/zabbix/web/zabbix.conf.php'],
+    require => Class['zabbix::repo'],
+  }
 
   # Webinterface config file
   file { '/etc/zabbix/web/zabbix.conf.php':
@@ -339,7 +390,7 @@ class zabbix::web (
       ssl_key         => $apache_ssl_key,
       ssl_cipher      => $apache_ssl_cipher,
       ssl_chain       => $apache_ssl_chain,
-      require         => File['/etc/zabbix/web/zabbix.conf.php'],
+      require         => Package[$zabbix_web_package],
     }
   } # END if $manage_vhost
 }

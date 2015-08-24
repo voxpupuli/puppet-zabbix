@@ -29,11 +29,6 @@ describe 'zabbix::agent' do
     it { should contain_class('zabbix::resources::agent') }
   end
 
-  context "when declaring manage_repo is false" do
-    let(:params) {{ :manage_repo => false }}
-    it { should_not contain_class('Zabbix::Repo') }
-  end
-
   # Make sure package will be installed, service running and ensure of directory.
   it { should contain_package('zabbix-agent').with_ensure('present') }
   it { should contain_package('zabbix-agent').with_name('zabbix-agent') }
