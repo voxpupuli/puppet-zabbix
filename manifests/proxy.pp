@@ -359,7 +359,7 @@ class zabbix::proxy (
   $externalscripts         = $zabbix::params::proxy_externalscripts,
   $fpinglocation           = $zabbix::params::proxy_fpinglocation,
   $fping6location          = $zabbix::params::proxy_fping6location,
-  $sshkeylocation          = $zabbix::params::proxy_sshkeylocationundef,
+  $sshkeylocation          = $zabbix::params::proxy_sshkeylocation,
   $loglowqueries           = $zabbix::params::proxy_loglowqueries,
   $tmpdir                  = $zabbix::params::proxy_tmpdir,
   $allowroot               = $zabbix::params::proxy_allowroot,
