@@ -134,7 +134,8 @@ class zabbix::params {
   $server_include                 = '/etc/zabbix/zabbix_server.conf.d'
   $server_loadmodulepath          = '/usr/lib/modules'
   $server_loadmodule              = undef
-
+  $server_templatedir             = '/etc/zabbix/imported_templates'
+  
   # Agent specific params
   $agent_configfile_path          = '/etc/zabbix/zabbix_agentd.conf'
   $monitored_by_proxy             = undef
