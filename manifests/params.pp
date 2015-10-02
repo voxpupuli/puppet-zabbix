@@ -19,6 +19,12 @@ class zabbix::params {
         $proxy_fpinglocation      = '/usr/bin/fping'
         $proxy_fping6location     = '/usr/bin/fping6'
     }
+    'debian': {
+        $server_fpinglocation     = '/usr/bin/fping'
+        $server_fping6location    = '/usr/bin/fping6'
+        $proxy_fpinglocation      = '/usr/bin/fping'
+        $proxy_fping6location     = '/usr/bin/fping6'
+    }
     default: {
         $server_fpinglocation     = '/usr/sbin/fping'
         $server_fping6location    = '/usr/sbin/fping6'
