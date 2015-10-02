@@ -80,7 +80,7 @@ class zabbix::repo(
     }
 
     case $::operatingsystem {
-      'centos','scientific','redhat','oraclelinux','amazon' : {
+      'centos','scientific','redhat','oraclelinux','amazon','CloudLinux' : {
         yumrepo { 'zabbix':
           name     => "Zabbix_${majorrelease}_${::architecture}",
           descr    => "Zabbix_${majorrelease}_${::architecture}",
