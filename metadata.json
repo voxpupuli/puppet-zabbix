@@ -28,8 +28,11 @@
     { "operatingsystem":"OracleLinux", "operatingsystemrelease": [ "5.0", "6.0", "7.0" ] },
     { "operatingsystem":"Scientific", "operatingsystemrelease": [ "5.0", "6.0", "7.0" ] },
     { "operatingsystem":"CentOS", "operatingsystemrelease": [ "5.0", "6.0", "7.0" ] },
+   { "operatingsystem":"CloudLinux", "operatingsystemrelease": [ "5.0", "6.0", "7.0" ] },
     { "operatingsystem":"XenServer", "operatingsystemrelease": [ "6.0"] },
     { "operatingsystem":"Ubuntu", "operatingsystemrelease": [ "12.04", "14.04" ] },
-    { "operatingsystem":"Debian", "operatingsystemrelease": [ "6.0", "7.0", "8.0" ]  }
+    { "operatingsystem":"Debian", "operatingsystemrelease": [ "6.0", "7.0", "8.0" ]  },
+    { "operatingsystem":"PSBM", "operatingsystemrelease": [ "5.0" ]  },
+    { "operatingsystem":"PCS", "operatingsystemrelease": [ "6.0" ]  }
    ]
 }
