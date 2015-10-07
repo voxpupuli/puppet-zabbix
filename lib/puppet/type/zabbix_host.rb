@@ -52,5 +52,9 @@ Puppet::Type.newtype(:zabbix_host) do
   newparam(:apache_use_ssl) do
       desc 'If apache is uses with ssl'
   end
+  
+  newparam(:zabbix_server) do
+      desc 'Zabbix server hostname'
+  end
 end
 
