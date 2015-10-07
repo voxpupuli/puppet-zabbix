@@ -367,6 +367,16 @@ AllowRoot=<%= @allowroot %>
 #
 Include=<%= @include_dir %>
 
+### option: SSLCertLocation
+#       location of SSL client certificate files for client authentication.
+#
+SSLCertLocation=<%= @sslcertlocation_dir %>
+
+### option: SSLKeyLocation
+#       location of SSL private key files for client authentication.
+#
+SSLKeyLocation=<%= @sslkeylocation_dir %>
+
 ####### loadable modules #######
 <% if @zabbix_version == '2.2' or @zabbix_version == '2.4' %>
 ### option: loadmodulepath
