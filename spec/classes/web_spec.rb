@@ -103,7 +103,6 @@ describe 'zabbix::web' do
         :operatingsystem        => 'debian',
         :operatingsystemrelease => '6.0',
         :architecture           => 'x86_64',
-        :lsbdistid              => 'debian',
         :concat_basedir         => '/tmp'
       }
     end
