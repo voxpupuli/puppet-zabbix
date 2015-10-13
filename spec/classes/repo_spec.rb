@@ -90,8 +90,8 @@ describe 'zabbix::repo' do
         :osfamily               => 'RedHat'
       }
     end
-    it { should contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/2.0/rhel/\$releasever/\$basearch/') }
-    it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/\$releasever/\$basearch/') }
+    it { should contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/2.0/rhel/$releasever/$basearch/') }
+    it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/$releasever/$basearch/') }
   end
 
   # Testing the RHEL: 6, ZBX: 2.0
@@ -106,8 +106,8 @@ describe 'zabbix::repo' do
         :$majorrelease          => '6'
       }
     end
-    it { should contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/2.0/rhel/\$releasever/\$basearch/') }
-    it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/\$releasever/\$basearch/') }
+    it { should contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/2.0/rhel/$releasever/$basearch/') }
+    it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/$releasever/$basearch/') }
   end
 
   # Testing the RHEL: 6, ZBX: 2.2
@@ -122,7 +122,7 @@ describe 'zabbix::repo' do
         :$majorrelease          => '6'
       }
     end
-    it { should contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/2.2/rhel/\$releasever/\$basearch/') }
-    it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/\$releasever/\$basearch/') }
+    it { should contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/2.2/rhel/$releasever/$basearch/') }
+    it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/$releasever/$basearch/') }
   end
 end
