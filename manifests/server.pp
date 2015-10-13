@@ -229,6 +229,12 @@
 # [*loadmodule*]
 #   Module to load at server startup.
 #
+# [*sslcertlocation_dir*]
+#   Location of SSL client certificate files for client authentication.
+# 
+# [*sslkeylocation_dir*]
+#   Location of SSL private key files for client authentication. 
+#
 # === Example
 #
 #   When running everything on a single node, please check
@@ -334,7 +340,10 @@ class zabbix::server (
   $include_dir             = $zabbix::params::server_include,
   $loadmodulepath          = $zabbix::params::server_loadmodulepath,
   $loadmodule              = $zabbix::params::server_loadmodule,
-  ) inherits zabbix::params {
+  $sslcertlocation_dir     = $zabbix::params::server_sslcertlocation,
+  $sslkeylocation_dir      = $zabbix::params::server_sslkeylocation,
+
+) inherits zabbix::params {
 
   # Only include the repo class if it has not yet been included
   unless defined(Class['Zabbix::Repo']) {

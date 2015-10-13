@@ -140,6 +140,9 @@ class zabbix::params {
   $server_include                 = '/etc/zabbix/zabbix_server.conf.d'
   $server_loadmodulepath          = '/usr/lib/modules'
   $server_loadmodule              = undef
+  $server_sslcertlocation         = '/usr/lib/zabbix/ssl/certs'
+  $server_sslkeylocation          = '/usr/lib/zabbix/ssl/keys'
+
 
   # Agent specific params
   $agent_configfile_path          = '/etc/zabbix/zabbix_agentd.conf'
