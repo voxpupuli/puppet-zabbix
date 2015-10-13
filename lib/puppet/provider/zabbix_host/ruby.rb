@@ -21,7 +21,14 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, :parent => Puppet::Provider::Zabb
     zabbix_user = @resource[:zabbix_user]
     zabbix_pass = @resource[:zabbix_pass]
     apache_use_ssl = @resource[:apache_use_ssl]
+    zabbix_server = @resource[:zabbix_server]
 
+    # Compare zabbix_server and zabbix_url, if that different return from def
+    unless zabbix_server == zabbix_url
+      Puppet.debug "Zabbix: Used another zabbix_server: #{zabbix_server}"
+      return
+    end
+    
     # Connect to zabbix api
     zbx = self.class.create_connection(zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
     
