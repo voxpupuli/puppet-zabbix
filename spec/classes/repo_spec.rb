@@ -17,7 +17,6 @@ describe 'zabbix::repo' do
       }
     end
     it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.0/debian/') }
-    it { should contain_apt__source('zabbix').with_release('squeeze') }
   end
 
   # Testing the Debian: 7, ZBX: 2.0
@@ -33,7 +32,6 @@ describe 'zabbix::repo' do
       }
     end
     it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.0/debian/') }
-    it { should contain_apt__source('zabbix').with_release('wheezy') }
   end
 
   # Testing the Debian: 7, ZBX: 2.2
@@ -49,7 +47,6 @@ describe 'zabbix::repo' do
       }
     end
     it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.2/debian/') }
-    it { should contain_apt__source('zabbix').with_release('wheezy') }
   end
 
   # Testing the Ubuntu: 12.04, ZBX: 2.0
@@ -65,7 +62,6 @@ describe 'zabbix::repo' do
       }
     end
     it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.0/ubuntu/') }
-    it { should contain_apt__source('zabbix').with_release('precise') }
   end
 
   # Testing the Ubuntu: 12.04, ZBX: 2.2
@@ -81,7 +77,6 @@ describe 'zabbix::repo' do
       }
     end
     it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.2/ubuntu/') }
-    it { should contain_apt__source('zabbix').with_release('precise') }
   end
 
   # Testing the RHEL: 5, ZBX: 2.0
@@ -92,15 +87,11 @@ describe 'zabbix::repo' do
         :operatingsystem        => 'RedHat',
         :operatingsystemrelease => '5',
         :architecture           => 'x86_64',
+        :osfamily               => 'RedHat'
       }
     end
-    it { should contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/2.0/rhel/5/x86_64/') }
-    it { should contain_yumrepo('zabbix').with_name('Zabbix_5_x86_64') }
-    it { should contain_yumrepo('zabbix').with_descr('Zabbix_5_x86_64') }
-
-    it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/5/x86_64/') }
-    it { should contain_yumrepo('zabbix-nonsupported').with_name('Zabbix_nonsupported_5_x86_64') }
-    it { should contain_yumrepo('zabbix-nonsupported').with_descr('Zabbix_nonsupported_5_x86_64') }
+    it { should contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/2.0/rhel/5/\$basearch/') }
+    it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/5/\$basearch/') }
   end
 
   # Testing the RHEL: 6, ZBX: 2.0
@@ -111,15 +102,12 @@ describe 'zabbix::repo' do
         :operatingsystem        => 'RedHat',
         :operatingsystemrelease => '6',
         :architecture           => 'x86_64',
+        :osfamily               => 'RedHat',
+        :$majorrelease          => '6'
       }
     end
-    it { should contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/2.0/rhel/6/x86_64/') }
-    it { should contain_yumrepo('zabbix').with_name('Zabbix_6_x86_64') }
-    it { should contain_yumrepo('zabbix').with_descr('Zabbix_6_x86_64') }
-
-    it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/6/x86_64/') }
-    it { should contain_yumrepo('zabbix-nonsupported').with_name('Zabbix_nonsupported_6_x86_64') }
-    it { should contain_yumrepo('zabbix-nonsupported').with_descr('Zabbix_nonsupported_6_x86_64') }
+    it { should contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/2.0/rhel/6/\$basearch/') }
+    it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/6/\$basearch/') }
   end
 
   # Testing the RHEL: 6, ZBX: 2.2
@@ -130,14 +118,11 @@ describe 'zabbix::repo' do
         :operatingsystem        => 'RedHat',
         :operatingsystemrelease => '6',
         :architecture           => 'x86_64',
+        :osfamily               => 'RedHat',
+        :$majorrelease          => '6'
       }
     end
-    it { should contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/2.2/rhel/6/x86_64/') }
-    it { should contain_yumrepo('zabbix').with_name('Zabbix_6_x86_64') }
-    it { should contain_yumrepo('zabbix').with_descr('Zabbix_6_x86_64') }
-
-    it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/6/x86_64/') }
-    it { should contain_yumrepo('zabbix-nonsupported').with_name('Zabbix_nonsupported_6_x86_64') }
-    it { should contain_yumrepo('zabbix-nonsupported').with_descr('Zabbix_nonsupported_6_x86_64') }
+    it { should contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/2.2/rhel/6/\$basearch/') }
+    it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/6/\$basearch/') }
   end
 end
