@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'zabbix::repo' do
   # Set some facts / params.
 #  let(:params) { {:manage_repo => true} }
-  
+
   # Testing the Debian: 6, ZBX: 2.0
   context "on a Debian OS" do
     let(:params) { {:zabbix_version => '2.0', :manage_repo => true} }
@@ -11,7 +11,7 @@ describe 'zabbix::repo' do
       {
         :operatingsystem        => 'Debian',
         :operatingsystemrelease => '6',
-        :$majorrelease          => '6',
+        :lsbdistcodename        => 'squeeze',
         :architecture           => 'x86_64',
         :lsbdistid              => 'Debian',
         :osfamily               => 'Debian'
@@ -27,7 +27,7 @@ describe 'zabbix::repo' do
       {
         :operatingsystem        => 'Debian',
         :operatingsystemrelease => '7',
-        :$majorrelease          => '7',
+        :lsbdistcodename        => 'wheezy',
         :architecture           => 'x86_64',
         :lsbdistid              => 'Debian',
         :osfamily               => 'Debian'
@@ -43,7 +43,7 @@ describe 'zabbix::repo' do
       {
         :operatingsystem        => 'Debian',
         :operatingsystemrelease => '7',
-        :$majorrelease          => '7',
+        :lsbdistcodename        => 'wheezy',
         :architecture           => 'x86_64',
         :lsbdistid              => 'Debian',
         :osfamily               => 'Debian'
@@ -59,7 +59,7 @@ describe 'zabbix::repo' do
       {
         :operatingsystem        => 'Ubuntu',
         :operatingsystemrelease => '12.04',
-        :$majorrelease          => '12',
+        :lsbdistcodename        => 'Precise',
         :architecture           => 'x86_64',
         :lsbdistid              => 'Ubuntu',
         :osfamily               => 'Debian'
@@ -75,7 +75,7 @@ describe 'zabbix::repo' do
       {
         :operatingsystem        => 'Ubuntu',
         :operatingsystemrelease => '12.04',
-        :$majorrelease          => '12',
+        :lsbdistcodename        => 'Precise',
         :architecture           => 'x86_64',
         :lsbdistid              => 'Ubuntu',
         :osfamily               => 'Debian'
