@@ -11,7 +11,9 @@ describe 'zabbix::repo' do
       {
         :operatingsystem        => 'Debian',
         :operatingsystemrelease => '6',
+        :$majorrelease          => '6',
         :architecture           => 'x86_64',
+        :lsbdistid              => 'Debian',
         :osfamily               => 'Debian'
       }
     end
@@ -25,7 +27,9 @@ describe 'zabbix::repo' do
       {
         :operatingsystem        => 'Debian',
         :operatingsystemrelease => '7',
+        :$majorrelease          => '7',
         :architecture           => 'x86_64',
+        :lsbdistid              => 'Debian',
         :osfamily               => 'Debian'
       }
     end
@@ -39,7 +43,9 @@ describe 'zabbix::repo' do
       {
         :operatingsystem        => 'Debian',
         :operatingsystemrelease => '7',
+        :$majorrelease          => '7',
         :architecture           => 'x86_64',
+        :lsbdistid              => 'Debian',
         :osfamily               => 'Debian'
       }
     end
@@ -53,7 +59,9 @@ describe 'zabbix::repo' do
       {
         :operatingsystem        => 'Ubuntu',
         :operatingsystemrelease => '12.04',
+        :$majorrelease          => '12',
         :architecture           => 'x86_64',
+        :lsbdistid              => 'Ubuntu',
         :osfamily               => 'Debian'
       }
     end
@@ -67,7 +75,9 @@ describe 'zabbix::repo' do
       {
         :operatingsystem        => 'Ubuntu',
         :operatingsystemrelease => '12.04',
+        :$majorrelease          => '12',
         :architecture           => 'x86_64',
+        :lsbdistid              => 'Ubuntu',
         :osfamily               => 'Debian'
       }
     end
