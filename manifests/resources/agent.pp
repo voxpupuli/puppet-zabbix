@@ -37,5 +37,6 @@ class zabbix::resources::agent (
     zabbix_user    => '',
     zabbix_pass    => '',
     apache_use_ssl => '',
+    zabbix_server  => $zabbix_server,
   }
 }
