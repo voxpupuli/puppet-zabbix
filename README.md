@@ -1,5 +1,9 @@
 #puppet-zabbix
 
+Continuous Integration status:
+
+![alt Codeship](https://codeship.com/projects/893516d0-4e8c-0133-d194-4e8e1c03c7f2/status?branch=master)
+
 ####Table of Contents
 
 1. [Overview](#overview)
