@@ -152,7 +152,7 @@
 # Copyright 2014 Werner Dijkerman
 #
 class zabbix::web (
-  $zabbix_url                               = '',
+  $zabbix_url                               = $zabbix::params::zabbix_url,
   $database_type                            = $zabbix::params::database_type,
   $manage_repo                              = $zabbix::params::manage_repo,
   $zabbix_version                           = $zabbix::params::zabbix_version,
