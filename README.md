@@ -503,6 +503,7 @@ Please be aware, that when manage_resources is enabled, it can increase an puppe
 
 ##Contributors
 The following have contributed to this puppet module:
+
  * Suff
  * gattebury
  * sq4ind
@@ -536,6 +537,11 @@ The following have contributed to this puppet module:
  * hmn
  * BcTpe4HbIu
  * mschuett
+ * claflico
+ * bastelfreak
+ * Oyabi
+ * akostetskiy
+ * DjxDeaf
 
 Many thanks for this!
 (If I have forgotten you, please let me know and put you in the list of fame. :-))

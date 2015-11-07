@@ -4,6 +4,16 @@ Below an overview of all changes in the releases.
 
 Version (Release date)
 
+1.7.0   (2015-11-07)
+
+  * misspelled parameter path #116 (By pull request: karolisc (Thanks!))
+  * Update template.pp #121 (By pull request: claflico (Thanks!))
+  * add support for CloudLinux #122 (By pull request: bastelfreak (Thanks!))
+  * Fping wrong path in debian #124  (By pull request: Oyabi (Thanks!))
+  * refactoring of repo.pp #126  (By pull request: bastelfreak (Thanks!))
+  * Added supporting new Zabbix params #128 (By pull request: akostetskiy (Thanks!))
+  * Generalise the zabbix_url #129 (By pull request: DjxDeaf (Thanks!))
+
 1.6.0   (2015-08-21)
 
   * Pass manage_repo and zabbix_repo to repo.pp and prevent double include #110 (By pull request: mmerfort (Thanks!))
