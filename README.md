@@ -542,6 +542,7 @@ The following have contributed to this puppet module:
  * Oyabi
  * akostetskiy
  * DjxDeaf
+ * tcatut
 
 Many thanks for this!
 (If I have forgotten you, please let me know and put you in the list of fame. :-))

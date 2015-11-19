@@ -28,8 +28,10 @@
 # Copyright 2014 Werner Dijkerman
 #
 
-class zabbix::userparameter {
-  $data = hiera_hash('zabbix::userparameter::data', {})
-  validate_hash($data)
-  create_resources('zabbix::userparameters', $data)
+class zabbix::userparameter (
+  $data = {},
+) {
+  $_data = hiera_hash('zabbix::userparameter::data', $data)
+  validate_hash($_data)
+  create_resources('zabbix::userparameters', $_data)
 }
