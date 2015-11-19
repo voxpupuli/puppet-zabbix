@@ -344,10 +344,24 @@ zabbix::userparameters { 'lld_snort.sh':
 
 When you are using Hiera or The Foreman, you can use it like this:
 ```yaml
-zabbix::userparameter::data:
-  MySQL:
-    content: UserParameter=mysql.ping,mysqladmin -uroot ping | grep -c alive
+---
+classes:
+  zabbix::userparameter:
+    data:
+      mongo:
+        source: puppet:///modules/zabbix/mongo.conf
 ```
+
+Content of the mongo.conf:
+```
+UserParameter=mongo.coll.count[*],echo "db.setSlaveOk();db.getCollection('$1').count()" | /opt/mongo/bin/mongo processor | sed -n 3p
+UserParameter=mongo.db.queries,echo "db.currentOp().inprog.length" | /opt/mongo/bin/mongo processor | sed -n 3p
+```
+
+Screenshot from The Foreman (With thanks to "inspired-geek" )
+![image](https://cloud.githubusercontent.com/assets/1792014/10131286/d0477bd4-65d7-11e5-88cb-e7f81e421ef3.png)
+
+When running the puppet-agent command, it will install the mongo.conf file on the host.
 
 ###Usage zabbix-template
 
@@ -470,7 +484,7 @@ Zabbix 2.4:
   * RedHat 6.x, 7.x
   * OracleLinux 6.x, 7.x
   * Scientific Linux 6.x, 7.x
-  * Ubuntu 14.04
+  * Ubuntu 12.04 14.04
   * Debian 7
 
 Zabbix 2.2:
@@ -543,6 +557,7 @@ The following have contributed to this puppet module:
  * akostetskiy
  * DjxDeaf
  * tcatut
+ * inspired-geek
 
 Many thanks for this!
 (If I have forgotten you, please let me know and put you in the list of fame. :-))
