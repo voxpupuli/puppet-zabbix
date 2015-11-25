@@ -124,6 +124,9 @@
 # [*apache_php_always_populate_raw_post_data*]
 #   Default: -1
 #
+# [*apache_php_max_input_vars*]
+#   Max amount of vars for GET/POST requests
+#
 # === Example
 #
 #   When running everything on a single node, please check
@@ -186,6 +189,7 @@ class zabbix::web (
   $apache_php_upload_max_filesize           = $zabbix::params::apache_php_upload_max_filesize,
   $apache_php_max_input_time                = $zabbix::params::apache_php_max_input_time,
   $apache_php_always_populate_raw_post_data = $zabbix::params::apache_php_always_populate_raw_post_data,
+  $apache_php_max_input_vars                = $zabbix::params::apache_php_max_input_vars,
 ) inherits zabbix::params {
 
   # Only include the repo class if it has not yet been included
@@ -379,6 +383,7 @@ class zabbix::web (
    php_value upload_max_filesize ${apache_php_upload_max_filesize}
    php_value max_input_time ${apache_php_max_input_time}
    php_value always_populate_raw_post_data ${apache_php_always_populate_raw_post_data}
+   php_value max_input_vars ${apache_php_max_input_vars}
    # Set correct timezone
    php_value date.timezone ${zabbix_timezone}",
       rewrites        => [

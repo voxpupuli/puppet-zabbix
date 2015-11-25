@@ -58,6 +58,7 @@ class zabbix::params {
   $apache_php_upload_max_filesize           = '2M'
   $apache_php_max_input_time                = '300'
   $apache_php_always_populate_raw_post_data = '-1'
+  $apache_php_max_input_vars                = 1000,
 
   # Zabbix-web
   $apache_use_ssl                 = false
