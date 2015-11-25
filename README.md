@@ -465,7 +465,7 @@ There are some zabbix specific parameters, please check them by opening the mani
 * `source`: File which holds several userparameter entries.
 * `content`: When you have 1 userparameter entry which you want to install.
 * `script`: Low level discovery (LLD) script.
-* `script_dir`:  The script extention. Should be started with the dot. Like: .sh .bat .py
+* `script_ext`:  The script extention. Should be started with the dot. Like: .sh .bat .py
 * `template`: When you use exported resources (when manage_resources on other components is set to true) you'll can add the name of the template which correspondents with the 'content' or 'source' which you add. The template will be added to the host.
 * `script_dir`: When `script` is used, this parameter can provide the directly where this script needs to be placed. Default: '/usr/bin'
 
