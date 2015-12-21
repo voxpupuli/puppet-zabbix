@@ -36,6 +36,10 @@ class zabbix::repo(
         $majorrelease = '6'
         $reponame     = $majorrelease
       }
+      'oraclelinux':  {
+        $majorrelease = "${::operatingsystemmajrelease}"
+        $reponame     = $majorrelease
+      }
       default: {
         $majorrelease = '$releasever'
         $reponame     = $::operatingsystemmajrelease
