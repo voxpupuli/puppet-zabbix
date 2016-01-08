@@ -262,8 +262,8 @@ describe 'zabbix::proxy' do
       it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^VMwareFrequency=60$}}
     end   
 
-    context 'with vmwarecachesize => 8' do
-      let(:params) { {:vmwarecachesize => '8'} }
+    context 'with vmwarecachesize => 8M' do
+      let(:params) { {:vmwarecachesize => '8M'} }
       it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^VMwareCacheSize=8M$}}
     end 
     
@@ -287,8 +287,8 @@ describe 'zabbix::proxy' do
       it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^HousekeepingFrequency=1$}}
     end 
     
-    context 'with cachesize => 8' do
-      let(:params) { {:cachesize => '8'} }
+    context 'with cachesize => 8M' do
+      let(:params) { {:cachesize => '8M'} }
       it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^CacheSize=8M$}}
     end 
     
@@ -297,13 +297,13 @@ describe 'zabbix::proxy' do
       it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartDBSyncers=4$}}
     end 
 
-    context 'with historycachesize => 16' do
-      let(:params) { {:historycachesize => '16'} }
+    context 'with historycachesize => 16M' do
+      let(:params) { {:historycachesize => '16M'} }
       it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^HistoryCacheSize=16M$}}
     end   
   
-    context 'with historytextcachesize => 8' do
-      let(:params) { {:historytextcachesize => '8'} }
+    context 'with historytextcachesize => 8M' do
+      let(:params) { {:historytextcachesize => '8M'} }
       it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^HistoryTextCacheSize=8M$}}
     end 
     
