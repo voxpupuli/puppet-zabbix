@@ -429,7 +429,7 @@ class zabbix::proxy (
     'mysql': {
       $db = 'mysql'
 
-      # Execute the mysqll scripts
+      # Execute the mysql scripts
       class { 'zabbix::database::mysql':
         zabbix_type          => 'proxy',
         zabbix_version       => $zabbix_version,
