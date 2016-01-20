@@ -163,7 +163,7 @@ class zabbix::params {
   $agent_listenport               = '10050'
   $agent_listenip                 = undef
   $agent_startagents              = '3'
-  $agent_serveractive             = '127.0.0.1'
+  $agent_serveractive             = undef
   $agent_hostname                 = undef
   $agent_hostnameitem             = 'system.hostname'
   $agent_hostmetadata             = undef
