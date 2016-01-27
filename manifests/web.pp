@@ -112,6 +112,15 @@
 # [*apache_php_always_populate_raw_post_data*]
 #   Default: -1
 #
+# [*ldap_cacert*]
+#  Set location of ca_cert used by LDAP authentication.
+#
+# [*ldap_clientcrt*]
+#  Set location of client cert used by LDAP authentication.
+#
+# [*ldap_clientkey*]
+# Set location of client key used by LDAP authentication.
+#
 # === Example
 #
 #   When running everything on a single node, please check
@@ -169,6 +178,9 @@ class zabbix::web (
   $apache_php_upload_max_filesize           = $zabbix::params::apache_php_upload_max_filesize,
   $apache_php_max_input_time                = $zabbix::params::apache_php_max_input_time,
   $apache_php_always_populate_raw_post_data = $zabbix::params::apache_php_always_populate_raw_post_data,
+  $ldap_cacert                              = $zabbix::params::ldap_cacert,
+  $ldap_clientcert                          = $zabbix::params::ldap_clientcert,
+  $ldap_clientkey                           = $zabbix::params::ldap_clientkey,
 ) inherits zabbix::params {
 
   include zabbix::repo

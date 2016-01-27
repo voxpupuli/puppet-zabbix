@@ -384,8 +384,10 @@ This is the class for installing everything on a single host and thus all parame
 * `apache_ssl_chain`: The ssl_chain file. You'll need to make sure this file is present on the system, this module will not install this file.
 * `zabbix_api_user`: Username of user in Zabbix which is able to create hosts and edit hosts via the zabbix-api. Default: Admin
 * `zabbix_api_pass`: Password for the user in Zabbix for zabbix-api usage. Default: zabbix
-
+* `ldap_cacert`: The location of the CA Cert to be used for Zabbix LDAP authentication. The module will not install this file so it must be present on the system. 
+* `ldap_clientcrt`: The location of the Client Cert to be used for Zabbix LDAP authentication. The module will not install this file so it must be present on the system. 
 There are some more zabbix specific parameters, please check them by opening the manifest file.
+* `ldap_clientkey`: The location of the Client Key to be used for Zabbix LDAP authentication. The module will not install this file so it must be present on the system. 
 
 ###Reference zabbix-server
 * `database_path`: When database binaries are not in $PATH, you can use this parameter to append `database_path` to $PATH

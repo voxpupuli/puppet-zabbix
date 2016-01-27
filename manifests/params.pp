@@ -62,6 +62,9 @@ class zabbix::params {
   $apache_ssl_chain               = undef
   $server_api_user                = 'Admin'
   $server_api_pass                = 'zabbix'
+  $ldap_cacert                    = undef
+  $ldap_clientcrt                 = undef
+  $ldap_clientkey                 = undef
 
   # Zabbix-server
   $server_service_name            = 'zabbix-server'
