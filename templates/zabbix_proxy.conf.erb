@@ -211,7 +211,7 @@ StartJavaPollers=<%= @startjavapollers %>
 ### Option: StartVMwareCollectors
 #	Number of pre-forked vmware collector instances.
 #
-StartVMwareCollectors=<%= @startvmwarecollector %>
+StartVMwareCollectors=<%= @startvmwarecollectors %>
 
 ### Option: VMwareFrequency
 #	How often Zabbix will connect to VMware service to obtain a new data.
@@ -223,7 +223,7 @@ VMwareFrequency=<%= @vmwarefrequency %>
 #	Shared memory size for storing VMware data.
 #	Only used if VMware collectors are started.
 #
-VMwareCacheSize=<%= @vmwarecachesize -%>M
+VMwareCacheSize=<%= @vmwarecachesize -%>
 <% end %>
 
 ### Option: SNMPTrapperFile
@@ -255,7 +255,7 @@ HousekeepingFrequency=<%= @housekeepingfrequency %>
 #	Size of configuration cache, in MB.
 #	Shared memory size, for storing hosts and items data.
 #
-CacheSize=<%= @cachesize -%>M
+CacheSize=<%= @cachesize -%>
 
 ### Option: StartDBSyncers
 #	Number of pre-forked instances of DB Syncers
@@ -266,13 +266,13 @@ StartDBSyncers=<%= @startdbsyncers %>
 #	Size of history cache, in bytes.
 #	Shared memory size for storing history data.
 #
-HistoryCacheSize=<%= @historycachesize -%>M
+HistoryCacheSize=<%= @historycachesize -%>
 
 ### Option: HistoryTextCacheSize
 #	Size of text history cache, in bytes.
 #	Shared memory size for storing character, text or log history data.
 #
-HistoryTextCacheSize=<%= @historytextcachesize -%>M
+HistoryTextCacheSize=<%= @historytextcachesize -%>
 
 ### Option: Timeout
 #	Specifies how long we wait for agent, SNMP device or external check (in seconds).

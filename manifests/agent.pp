@@ -172,6 +172,7 @@ class zabbix::agent (
   $monitored_by_proxy    = $zabbix::params::monitored_by_proxy,
   $agent_use_ip          = $zabbix::params::agent_use_ip,
   $zbx_group             = $zabbix::params::agent_zbx_group,
+  $zbx_group_create      = $zabbix::params::agent_zbx_group_create,
   $zbx_templates         = $zabbix::params::agent_zbx_templates,
   $agent_configfile_path = $zabbix::params::agent_configfile_path,
   $pidfile               = $zabbix::params::agent_pidfile,
@@ -215,16 +216,14 @@ class zabbix::agent (
   # can find the ipaddress of this specific interface if listenip
   # is set to for example "eth1" or "bond0.73".
   if ($listenip != undef) {
-    if ($listenip =~ /^(eth|bond|lxc).*/) {
+    if ($listenip =~ /^(eth|bond|lxc|eno|tap|tun).*/) {
       $int_name = "ipaddress_${listenip}"
       $listen_ip = inline_template('<%= scope.lookupvar(int_name) %>')
-    } elsif is_ip_address($listenip) {
+    } elsif is_ip_address($listenip) or $listenip == '*' {
       $listen_ip = $listenip
     } else {
       $listen_ip = $::ipaddress
     }
-  } else {
-    $listen_ip = $::ipaddress
   }
 
   # So if manage_resources is set to true, we can send some data
@@ -239,25 +238,29 @@ class zabbix::agent (
     }
 
     class { 'zabbix::resources::agent':
-      hostname  => $::fqdn,
-      ipaddress => $listen_ip,
-      use_ip    => $agent_use_ip,
-      port      => $listenport,
-      group     => $zbx_group,
-      templates => $zbx_templates,
-      proxy     => $use_proxy,
+      hostname     => $::fqdn,
+      ipaddress    => $listen_ip,
+      use_ip       => $agent_use_ip,
+      port         => $listenport,
+      group        => $zbx_group,
+      group_create => $zbx_group_create,
+      templates    => $zbx_templates,
+      proxy        => $use_proxy,
     }
   }
 
-  # Check if manage_repo is true.
-  if $manage_repo {
-    include zabbix::repo
-    Package['zabbix-agent'] {require => Class['zabbix::repo']}
+  # Only include the repo class if it has not yet been included
+  unless defined(Class['Zabbix::Repo']) {
+    class {'zabbix::repo':
+      manage_repo    => $manage_repo,
+      zabbix_version => $zabbix_version,
+    }
   }
 
   # Installing the package
   package { 'zabbix-agent':
     ensure  => $zabbix_package_state,
+    require => Class['zabbix::repo'],
   }
 
   # Controlling the 'zabbix-agent' service

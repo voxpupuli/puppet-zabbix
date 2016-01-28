@@ -19,6 +19,9 @@
 #   - postgresql
 #   - mysql
 #
+# [*manage_repo*]
+#   When true, it will create repository for installing the webinterface.
+#
 # [*zabbix_version*]
 #   This is the zabbix version.
 #   Example: 2.4
@@ -26,6 +29,9 @@
 # [*zabbix_timezone*]
 #   The current timezone for vhost configuration needed for the php timezone.
 #   Example: Europe/Amsterdam
+#
+# [*zabbix_template_dir*]
+#   The directory where all templates are stored before uploading via API
 #
 # [*zabbix_package_state*]
 #   The state of the package that needs to be installed: present or latest.
@@ -59,6 +65,12 @@
 #
 # [*apache_ssl_chain*}
 #   The ssl chain file.
+#
+# [*apache_listenport*}
+#   The port for the apache vhost.
+#
+# [*apache_listenport_ssl*}
+#   The port for the apache SSL vhost.
 #
 # [*zabbix_api_user*]
 #   Name of the user which the api should connect to. Default: Admin
@@ -112,6 +124,7 @@
 # [*apache_php_always_populate_raw_post_data*]
 #   Default: -1
 #
+<<<<<<< HEAD
 # [*ldap_cacert*]
 #  Set location of ca_cert used by LDAP authentication.
 #
@@ -120,6 +133,10 @@
 #
 # [*ldap_clientkey*]
 # Set location of client key used by LDAP authentication.
+=======
+# [*apache_php_max_input_vars*]
+#   Max amount of vars for GET/POST requests
+>>>>>>> d6290d3d22211cdf333f84b0a0469609836a4333
 #
 # === Example
 #
@@ -149,11 +166,13 @@
 # Copyright 2014 Werner Dijkerman
 #
 class zabbix::web (
-  $zabbix_url                               = '',
+  $zabbix_url                               = $zabbix::params::zabbix_url,
   $database_type                            = $zabbix::params::database_type,
+  $manage_repo                              = $zabbix::params::manage_repo,
   $zabbix_version                           = $zabbix::params::zabbix_version,
   $zabbix_timezone                          = $zabbix::params::zabbix_timezone,
   $zabbix_package_state                     = $zabbix::params::zabbix_package_state,
+  $zabbix_template_dir                      = $zabbix::params::zabbix_template_dir,
   $manage_vhost                             = $zabbix::params::manage_vhost,
   $manage_resources                         = $zabbix::params::manage_resources,
   $apache_use_ssl                           = $zabbix::params::apache_use_ssl,
@@ -161,6 +180,9 @@ class zabbix::web (
   $apache_ssl_key                           = $zabbix::params::apache_ssl_key,
   $apache_ssl_cipher                        = $zabbix::params::apache_ssl_cipher,
   $apache_ssl_chain                         = $zabbix::params::apache_ssl_chain,
+  $apache_listen_ip                         = $zabbix::params::apache_listen_ip,
+  $apache_listenport                        = $zabbix::params::apache_listenport,
+  $apache_listenport_ssl                    = $zabbix::params::apache_listenport_ssl,
   $zabbix_api_user                          = $zabbix::params::server_api_user,
   $zabbix_api_pass                          = $zabbix::params::server_api_pass,
   $database_host                            = $zabbix::params::server_database_host,
@@ -178,12 +200,19 @@ class zabbix::web (
   $apache_php_upload_max_filesize           = $zabbix::params::apache_php_upload_max_filesize,
   $apache_php_max_input_time                = $zabbix::params::apache_php_max_input_time,
   $apache_php_always_populate_raw_post_data = $zabbix::params::apache_php_always_populate_raw_post_data,
+  $apache_php_max_input_vars                = $zabbix::params::apache_php_max_input_vars,
   $ldap_cacert                              = $zabbix::params::ldap_cacert,
   $ldap_clientcert                          = $zabbix::params::ldap_clientcert,
   $ldap_clientkey                           = $zabbix::params::ldap_clientkey,
 ) inherits zabbix::params {
 
-  include zabbix::repo
+  # Only include the repo class if it has not yet been included
+  unless defined(Class['Zabbix::Repo']) {
+    class { 'zabbix::repo':
+      manage_repo    => $manage_repo,
+      zabbix_version => $zabbix_version,
+    }
+  }
 
   # use the correct db.
   case $database_type {
@@ -207,11 +236,30 @@ class zabbix::web (
   if $manage_resources {
     include ruby::dev
 
+    # Determine correct zabbixapi version.
+    case $zabbix_version {
+      '2.2' : {
+        $zabbixapi_version = '2.2.2'
+      }
+      '2.4' : {
+        $zabbixapi_version = '2.4.4'
+      }
+      default : {
+        $zabbixapi_version = '2.4.4'
+      }
+    }
+
     # Installing the zabbixapi gem package. We need this gem for
     # communicating with the zabbix-api. This is way better then
     # doing it ourself.
+    file { $zabbix_template_dir:
+      ensure => directory,
+      owner  => 'zabbix',
+      group  => 'zabbix',
+      mode   => '0755',
+    } ->
     package { 'zabbixapi':
-      ensure   => "${zabbix_version}.0",
+      ensure   => $zabbixapi_version,
       provider => $::puppetgem,
       require  => Class['ruby::dev'],
     } ->
@@ -225,28 +273,46 @@ class zabbix::web (
 
   case $::operatingsystem {
     'ubuntu', 'debian' : {
+      case $::operatingsystemmajrelease {
+        '8' : {
+          $zabbix_web_package = 'zabbix-frontend-php'
+        }
+        default : {
+          $zabbix_web_package = 'zabbix-frontend-php'
+        }
+      }
       package { "php5-${db}":
-        ensure => present,
-      } ->
-      package { 'zabbix-frontend-php':
         ensure => $zabbix_package_state,
-        before => File['/etc/zabbix/web/zabbix.conf.php'],
+        before => [
+          Package[$zabbix_web_package],
+          File['/etc/zabbix/web/zabbix.conf.php'],
+        ]
       }
     }
     default : {
+      $zabbix_web_package = 'zabbix-web'
+
       package { "zabbix-web-${db}":
         ensure  => $zabbix_package_state,
-        before  => [
-          File['/etc/zabbix/web/zabbix.conf.php'],
-          Package['zabbix-web']
-        ],
+        before  => Package[$zabbix_web_package],
         require => Class['zabbix::repo'],
-      }
-      package { 'zabbix-web':
-        ensure => $zabbix_package_state,
       }
     }
   } # END case $::operatingsystem
+
+  file { '/etc/zabbix/web':
+    ensure  => directory,
+    owner   => 'zabbix',
+    group   => 'zabbix',
+    mode    => '0755',
+    require => Package[$zabbix_web_package]
+  }
+
+  package { $zabbix_web_package:
+    ensure  => $zabbix_package_state,
+    before  => File['/etc/zabbix/web/zabbix.conf.php'],
+    require => Class['zabbix::repo'],
+  }
 
   # Webinterface config file
   file { '/etc/zabbix/web/zabbix.conf.php':
@@ -265,14 +331,14 @@ class zabbix::web (
     # vhost for redirect traffic from non ssl to ssl site.
     if $apache_use_ssl {
       # Listen port
-      $apache_listen_port = '443'
+      $apache_listen_port = $apache_listenport_ssl
 
       # We create nonssl vhost for redirecting non ssl
       # traffic to https.
       apache::vhost { "${zabbix_url}_nonssl":
         docroot        => '/usr/share/zabbix',
         manage_docroot => false,
-        port           => '80',
+        port           => $apache_listenport,
         servername     => $zabbix_url,
         ssl            => false,
         rewrites       => [
@@ -285,7 +351,7 @@ class zabbix::web (
       }
     } else {
       # So no ssl, so default port 80
-      $apache_listen_port = '80'
+      $apache_listen_port = $apache_listenport
     }
 
     # Check which version of Apache we're using
@@ -299,7 +365,9 @@ class zabbix::web (
 
     apache::vhost { $zabbix_url:
       docroot         => '/usr/share/zabbix',
+      ip              => $apache_listen_ip,
       port            => $apache_listen_port,
+      add_listen      => true,
       directories     => [
         merge({
           path     => '/usr/share/zabbix',
@@ -329,6 +397,7 @@ class zabbix::web (
    php_value upload_max_filesize ${apache_php_upload_max_filesize}
    php_value max_input_time ${apache_php_max_input_time}
    php_value always_populate_raw_post_data ${apache_php_always_populate_raw_post_data}
+   php_value max_input_vars ${apache_php_max_input_vars}
    # Set correct timezone
    php_value date.timezone ${zabbix_timezone}",
       rewrites        => [
@@ -340,7 +409,7 @@ class zabbix::web (
       ssl_key         => $apache_ssl_key,
       ssl_cipher      => $apache_ssl_cipher,
       ssl_chain       => $apache_ssl_chain,
-      require         => File['/etc/zabbix/web/zabbix.conf.php'],
+      require         => Package[$zabbix_web_package],
     }
   } # END if $manage_vhost
 }

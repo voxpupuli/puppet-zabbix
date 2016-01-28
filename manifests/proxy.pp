@@ -340,7 +340,7 @@ class zabbix::proxy (
   $javagateway             = $zabbix::params::proxy_javagateway,
   $javagatewayport         = $zabbix::params::proxy_javagatewayport,
   $startjavapollers        = $zabbix::params::proxy_startjavapollers,
-  $startvmwarecollector    = $zabbix::params::proxy_startvmwarecollector,
+  $startvmwarecollectors   = $zabbix::params::proxy_startvmwarecollectors,
   $vmwarefrequency         = $zabbix::params::proxy_vmwarefrequency,
   $vmwarecachesize         = $zabbix::params::proxy_vmwarecachesize,
   $snmptrapperfile         = $zabbix::params::proxy_snmptrapperfile,
@@ -359,7 +359,7 @@ class zabbix::proxy (
   $externalscripts         = $zabbix::params::proxy_externalscripts,
   $fpinglocation           = $zabbix::params::proxy_fpinglocation,
   $fping6location          = $zabbix::params::proxy_fping6location,
-  $sshkeylocation          = $zabbix::params::proxy_sshkeylocationundef,
+  $sshkeylocation          = $zabbix::params::proxy_sshkeylocation,
   $loglowqueries           = $zabbix::params::proxy_loglowqueries,
   $tmpdir                  = $zabbix::params::proxy_tmpdir,
   $allowroot               = $zabbix::params::proxy_allowroot,
@@ -429,7 +429,7 @@ class zabbix::proxy (
     'mysql': {
       $db = 'mysql'
 
-      # Execute the mysqll scripts
+      # Execute the mysql scripts
       class { 'zabbix::database::mysql':
         zabbix_type          => 'proxy',
         zabbix_version       => $zabbix_version,
@@ -450,10 +450,15 @@ class zabbix::proxy (
     }
   }
 
-  # Check if manage_repo is true.
-  if $manage_repo {
-    include zabbix::repo
-    Package["zabbix-proxy-${db}"] {require => Class['zabbix::repo']}
+  # Only include the repo class if it has not yet been included
+  unless defined(Class['Zabbix::Repo']) {
+    class { 'zabbix::repo':
+      manage_repo    => $manage_repo,
+      zabbix_version => $zabbix_version,
+    }
+    Package["zabbix-proxy-${db}"] {
+      require => Class['zabbix::repo']
+    }
   }
 
   # Now we are going to install the correct packages.

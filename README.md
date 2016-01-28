@@ -1,5 +1,9 @@
 #puppet-zabbix
 
+Continuous Integration status:
+
+![alt Codeship](https://codeship.com/projects/893516d0-4e8c-0133-d194-4e8e1c03c7f2/status?branch=master)
+
 ####Table of Contents
 
 1. [Overview](#overview)
@@ -10,19 +14,22 @@
  	* [zabbix-agent](#setup-zabbix-agent)
  	* [zabbix-proxy](#setup-zabbix-proxy)
  	* [zabbix-javagateway](#setup-zabbix-javagateway)
- 	* [zabbix-userparameters](#setup-userparameters)
+        * [zabbix-userparameters](#setup-userparameters)
+ 	* [zabbix-template](#setup-template)
 5. [Usage - Configuration options and additional functionality](#usage)
     * [zabbix-server](#usage-zabbix-server)
     * [zabbix-agent](#usage-zabbix-agent)
     * [zabbix-proxy](#usage-zabbix-proxy)
     * [zabbix-javagateway](#usage-zabbix-javagateway)
     * [zabbix-userparameters](#usage-zabbix-userparameters)
+    * [zabbix-template](#usage-zabbix-template)
 6. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
     * [zabbix-server](#reference-zabbix-server)
     * [zabbix-agent](#reference-zabbix-agent)
     * [zabbix-proxy](#reference-zabbix-proxy)
     * [zabbix-javagateway](#reference-zabbix-javagateway)
     * [zabbix-userparameters](#reference-zabbix-userparameters)
+    * [zabbix-template](#reference-zabbix-template)
 7. [Limitations - OS compatibility, etc.](#limitations)
 8. [Development - Contributors](#contributors)
 9. [Notes](#note)
@@ -110,6 +117,9 @@ When using zabbix::javagateway, you'll need to add the 'javagateway' parameter a
 ###Setup userparameters
 You can use userparameter files (or specific entries) to install it into the agent.
 Also added with the 0.6.0 release is an class zabbix::userparameter. This class can be used with Hiera or The Foreman when you want to install userparameter files.
+
+###Setup template
+You can upload and install Zabbix Templates automatically via the Zabbix API. With this, you Zabbix templates are always up2date.
 
 ##Usage
 The following will provide an basic usage of the zabbix components.
@@ -334,9 +344,36 @@ zabbix::userparameters { 'lld_snort.sh':
 
 When you are using Hiera or The Foreman, you can use it like this:
 ```yaml
-zabbix::userparameter::data:
-  MySQL:
-    content: UserParameter=mysql.ping,mysqladmin -uroot ping | grep -c alive
+---
+classes:
+  zabbix::userparameter:
+    data:
+      mongo:
+        source: puppet:///modules/zabbix/mongo.conf
+```
+
+Content of the mongo.conf:
+```
+UserParameter=mongo.coll.count[*],echo "db.setSlaveOk();db.getCollection('$1').count()" | /opt/mongo/bin/mongo processor | sed -n 3p
+UserParameter=mongo.db.queries,echo "db.currentOp().inprog.length" | /opt/mongo/bin/mongo processor | sed -n 3p
+```
+
+Screenshot from The Foreman (With thanks to "inspired-geek" )
+![image](https://cloud.githubusercontent.com/assets/1792014/10131286/d0477bd4-65d7-11e5-88cb-e7f81e421ef3.png)
+
+When running the puppet-agent command, it will install the mongo.conf file on the host.
+
+###Usage zabbix-template
+
+With the 'zabbix::template' define, you can install Zabbix templates via the API. You'll have to make sure you store the XML file somewere on your puppet server or in your module.
+
+Please be aware that you can only make use of this feature when you have configured the module to make use of exported resources.
+
+You can instal the MySQL template xml via the next example:
+```ruby
+zabbix::template { 'Template App MySQL':
+  templ_source => 'puppet:///modules/zabbix/MySQL.xml'
+}
 ```
 
 ##Reference
@@ -382,12 +419,19 @@ This is the class for installing everything on a single host and thus all parame
 * `apache_ssl_key`: The location of the ssl key file. You'll need to make sure this file is present on the system, this module will not install this file.
 * `apache_ssl_cipher`: The ssl cipher used. Cipher is used from: https://wiki.mozilla.org/Security/Server_Side_TLS.
 * `apache_ssl_chain`: The ssl_chain file. You'll need to make sure this file is present on the system, this module will not install this file.
+* `apache_php_max_execution_time`: Max execution time for php.
+* `apache_php_memory_limit`: PHP memory size limit.
+* `apache_php_upload_max_filesize`: HP maximum upload filesize.
+* `apache_php_max_input_time`: Max input time for php.
+* `apache_php_always_populate_raw_post_data`: Default: -1
 * `zabbix_api_user`: Username of user in Zabbix which is able to create hosts and edit hosts via the zabbix-api. Default: Admin
 * `zabbix_api_pass`: Password for the user in Zabbix for zabbix-api usage. Default: zabbix
+* `zabbix_template_dir`: The directory where all templates are stored before uploading via API
 * `ldap_cacert`: The location of the CA Cert to be used for Zabbix LDAP authentication. The module will not install this file so it must be present on the system. 
 * `ldap_clientcrt`: The location of the Client Cert to be used for Zabbix LDAP authentication. The module will not install this file so it must be present on the system. 
-There are some more zabbix specific parameters, please check them by opening the manifest file.
 * `ldap_clientkey`: The location of the Client Key to be used for Zabbix LDAP authentication. The module will not install this file so it must be present on the system. 
+
+There are some more zabbix specific parameters, please check them by opening the manifest file.
 
 ###Reference zabbix-server
 * `database_path`: When database binaries are not in $PATH, you can use this parameter to append `database_path` to $PATH
@@ -424,8 +468,14 @@ There are some zabbix specific parameters, please check them by opening the mani
 * `source`: File which holds several userparameter entries.
 * `content`: When you have 1 userparameter entry which you want to install.
 * `script`: Low level discovery (LLD) script.
+* `script_ext`:  The script extention. Should be started with the dot. Like: .sh .bat .py
 * `template`: When you use exported resources (when manage_resources on other components is set to true) you'll can add the name of the template which correspondents with the 'content' or 'source' which you add. The template will be added to the host.
 * `script_dir`: When `script` is used, this parameter can provide the directly where this script needs to be placed. Default: '/usr/bin'
+
+###Reference zabbix-template
+
+* `templ_name`: The name of the template. This name will be found in the Web interface.
+* `templ_source`: The location of the XML file wich needs to be imported.
 
 ##limitations
 The module is only supported on the following operating systems:
@@ -433,10 +483,11 @@ The module is only supported on the following operating systems:
 Zabbix 2.4:
 
   * CentOS 6.x, 7.x
+  * Amazon 6.x, 7.x
   * RedHat 6.x, 7.x
   * OracleLinux 6.x, 7.x
   * Scientific Linux 6.x, 7.x
-  * Ubuntu 14.04
+  * Ubuntu 12.04 14.04
   * Debian 7
 
 Zabbix 2.2:
@@ -469,6 +520,7 @@ Please be aware, that when manage_resources is enabled, it can increase an puppe
 
 ##Contributors
 The following have contributed to this puppet module:
+
  * Suff
  * gattebury
  * sq4ind
@@ -494,6 +546,21 @@ The following have contributed to this puppet module:
  * altvnk
  * rnelson0 
  * hkumarmk
+ * Wprosdocimo
+ * 1n
+ * szemlyanoy
+ * Wprosdocimo
+ * sgnl05
+ * hmn
+ * BcTpe4HbIu
+ * mschuett
+ * claflico
+ * bastelfreak
+ * Oyabi
+ * akostetskiy
+ * DjxDeaf
+ * tcatut
+ * inspired-geek
 
 Many thanks for this!
 (If I have forgotten you, please let me know and put you in the list of fame. :-))
@@ -507,6 +574,9 @@ Many thanks for this!
 
 
 ###When using exported resources
+
+At the moment of writing, the puppet run will fail one or more times when `manage_resources` is set to true when you install an fresh Zabbix server. It is an issue and I'm aware of it. Don't know yet how to solve this, but someone suggested to try puppet stages and for know I haven't made it work yet.
+
 *	Please be aware, that when `manage_resources` is enabled, it can increase an puppet run on the zabbix-server a lot when you have a lot of hosts.
 *	First run of puppet on the zabbix-server can result in this error:
 

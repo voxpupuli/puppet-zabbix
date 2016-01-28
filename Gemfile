@@ -1,9 +1,9 @@
 source ENV['GEM_SOURCE'] || "https://rubygems.org"
 
 group :development, :test do
-  gem 'rake',                    :require => false
-  gem 'rspec-puppet',            :require => false
-  gem 'puppetlabs_spec_helper',  :require => false
+  gem 'rake',                    :require => true
+  gem 'rspec-puppet',            :require => true
+  gem 'puppetlabs_spec_helper',  :require => true
   gem 'serverspec',              :require => false
   gem 'puppet-lint',             :require => false
   gem 'beaker',                  :require => false
@@ -18,8 +18,4 @@ else
   gem 'facter', :require => false
 end
 
-if puppetversion = ENV['PUPPET_GEM_VERSION']
-  gem 'puppet', puppetversion, :require => false
-else
-  gem 'puppet', :require => false
-end
+gem 'puppet', '<4.0.0', :require => false

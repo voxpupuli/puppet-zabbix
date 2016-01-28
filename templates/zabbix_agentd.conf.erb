@@ -37,7 +37,7 @@ DebugLevel=<%= @debuglevel %>
 #       source ip address for outgoing connections.
 #
 <% if @sourceip -%>
-sourceip=<%= @sourceip %>
+SourceIP=<%= @sourceip %>
 <% end -%>
 
 ### option: enableremotecommands
@@ -98,8 +98,9 @@ StartAgents=<%= @startagents %>
 #       if this parameter is not specified, active checks are disabled.
 #       example: serveractive=127.0.0.1:20051,zabbix.domain,[::1]:30051,::1,[12fc::1]
 #
+<% if @serveractive -%>
 ServerActive=<%= @serveractive %>
-
+<% end -%>
 
 ### option: hostname
 #       unique, case sensitive hostname.

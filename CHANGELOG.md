@@ -4,6 +4,42 @@ Below an overview of all changes in the releases.
 
 Version (Release date)
 
+1.7.0   (2015-11-07)
+
+  * misspelled parameter path #116 (By pull request: karolisc (Thanks!))
+  * Update template.pp #121 (By pull request: claflico (Thanks!))
+  * add support for CloudLinux #122 (By pull request: bastelfreak (Thanks!))
+  * Fping wrong path in debian #124  (By pull request: Oyabi (Thanks!))
+  * refactoring of repo.pp #126  (By pull request: bastelfreak (Thanks!))
+  * Added supporting new Zabbix params #128 (By pull request: akostetskiy (Thanks!))
+  * Generalise the zabbix_url #129 (By pull request: DjxDeaf (Thanks!))
+
+1.6.0   (2015-08-21)
+
+  * Pass manage_repo and zabbix_repo to repo.pp and prevent double include #110 (By pull request: mmerfort (Thanks!))
+  * Add "eno" to interface name matching #104 (By pull request: sgnl05 (Thanks!))
+  * use the new puppetlabs-apt version 2.x module #103 (By pull request: hmn (Thanks!))
+  * Fix name startvmwarecollector -> startvmwarecollectors #102 (By pull request: BcTpe4HbIu (Thanks!))
+  * Custom apache IP and port #99 (By pull request: mschuett (Thanks!))
+  * Feature Request: add charset/collate option during a mysql db resource creation #107
+  * Added support Debian 8
+  * Fixed some rpsec tests
+  * Fixed some puppet-lint identation warnings
+  * Updated the zabbixapi gem install with recent versions
+
+1.5.0   (2015-06-08)
+
+  * Fix for: Inherting params #93
+  * Fix for: new postgresql instance #91; Also update metadata for postgresl module version
+  * Fix for: Need to overide php_values #89
+  * 2nd fix for: Zabbix-proxy install database population #62. Also for postgresql now.
+  * Added support to Amazon Linux with epel 6. #96 (By pull request: Wprosdocimo (Thanks!))
+  * import templates and create hostgroup if missing #95 (By pull request: 1n (Thanks!))
+  * Added Support For Zapache monitoring script #94 (By pull request: elricsfate (Thanks!))
+  * merge of hiera hashes from entire hierarchy #98 (By pull request: szemlyanoy (Thanks!))
+  * Added property script_ext for: File extensions of Userparameters scripts #97
+  * Updated documentation in README.md
+
 1.4.0   (2015-05-18)
 
   * Adding "apt" as dependency.

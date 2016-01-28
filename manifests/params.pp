@@ -19,6 +19,12 @@ class zabbix::params {
         $proxy_fpinglocation      = '/usr/bin/fping'
         $proxy_fping6location     = '/usr/bin/fping6'
     }
+    'debian': {
+        $server_fpinglocation     = '/usr/bin/fping'
+        $server_fping6location    = '/usr/bin/fping6'
+        $proxy_fpinglocation      = '/usr/bin/fping'
+        $proxy_fping6location     = '/usr/bin/fping6'
+    }
     default: {
         $server_fpinglocation     = '/usr/sbin/fping'
         $server_fping6location    = '/usr/sbin/fping6'
@@ -37,6 +43,7 @@ class zabbix::params {
   $zabbix_web_ip                            = '127.0.0.1'
   $zabbix_proxy_ip                          = '127.0.0.1'
   $zabbix_package_state                     = 'present'
+  $zabbix_template_dir                      = '/etc/zabbix/imported_templates'
   $manage_database                          = true
   $manage_vhost                             = true
   $manage_firewall                          = false
@@ -51,6 +58,7 @@ class zabbix::params {
   $apache_php_upload_max_filesize           = '2M'
   $apache_php_max_input_time                = '300'
   $apache_php_always_populate_raw_post_data = '-1'
+  $apache_php_max_input_vars                = 1000
 
   # Zabbix-web
   $apache_use_ssl                 = false
@@ -60,6 +68,9 @@ class zabbix::params {
   # This should be the most current and provide a higher level of security. (Security above everything else)
   $apache_ssl_cipher              = 'ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!3DES:!MD5:!PSK'
   $apache_ssl_chain               = undef
+  $apache_listen_ip               = undef
+  $apache_listenport              = '80'
+  $apache_listenport_ssl          = '443'
   $server_api_user                = 'Admin'
   $server_api_pass                = 'zabbix'
   $ldap_cacert                    = undef
@@ -85,6 +96,8 @@ class zabbix::params {
   $server_database_password       = 'zabbix_server'
   $server_database_socket         = undef
   $server_database_port           = undef
+  $server_database_charset        = 'utf8'
+  $server_database_collate        = 'utf8_general_ci'
   $server_startpollers            = '5'
   $server_startipmipollers        = '0'
   $server_startpollersunreachable = '1'
@@ -131,12 +144,16 @@ class zabbix::params {
   $server_include                 = '/etc/zabbix/zabbix_server.conf.d'
   $server_loadmodulepath          = '/usr/lib/modules'
   $server_loadmodule              = undef
+  $server_sslcertlocation         = '/usr/lib/zabbix/ssl/certs'
+  $server_sslkeylocation          = '/usr/lib/zabbix/ssl/keys'
+
 
   # Agent specific params
   $agent_configfile_path          = '/etc/zabbix/zabbix_agentd.conf'
   $monitored_by_proxy             = undef
   $agent_use_ip                   = true
   $agent_zbx_group                = 'Linux servers'
+  $agent_zbx_group_create         = true
   $agent_zbx_templates            = [ 'Template OS Linux', 'Template App SSH Service' ]
   $agent_pidfile                  = '/var/run/zabbix/zabbix_agentd.pid'
   $agent_logfile                  = '/var/log/zabbix/zabbix_agentd.log'
@@ -149,7 +166,7 @@ class zabbix::params {
   $agent_listenport               = '10050'
   $agent_listenip                 = undef
   $agent_startagents              = '3'
-  $agent_serveractive             = '127.0.0.1'
+  $agent_serveractive             = undef
   $agent_hostname                 = undef
   $agent_hostnameitem             = 'system.hostname'
   $agent_hostmetadata             = undef
@@ -167,7 +184,7 @@ class zabbix::params {
   $agent_userparameter            = undef
   $agent_loadmodulepath           = '/usr/lib/modules'
   $agent_loadmodule               = undef
-
+  $apache_status                  = false
   # Proxy specific params
   $proxy_hostname                = $::fqdn
   $proxy_service_name            = 'zabbix-proxy'
@@ -205,17 +222,17 @@ class zabbix::params {
   $proxy_javagateway             = undef
   $proxy_javagatewayport         = '10052'
   $proxy_startjavapollers        = '5'
-  $proxy_startvmwarecollector    = '0'
+  $proxy_startvmwarecollectors   = '0'
   $proxy_vmwarefrequency         = '60'
-  $proxy_vmwarecachesize         = '8'
+  $proxy_vmwarecachesize         = '8M'
   $proxy_snmptrapperfile         = '/tmp/zabbix_traps.tmp'
   $proxy_snmptrapper             = '0'
   $proxy_listenip                = undef
   $proxy_housekeepingfrequency   = '1'
-  $proxy_cachesize               = '8'
+  $proxy_cachesize               = '8M'
   $proxy_startdbsyncers          = '4'
-  $proxy_historycachesize        = '8'
-  $proxy_historytextcachesize    = '16'
+  $proxy_historycachesize        = '8M'
+  $proxy_historytextcachesize    = '16M'
   $proxy_timeout                 = '3'
   $proxy_trappertimeout          = '300'
   $proxy_unreachableperiod       = '45'

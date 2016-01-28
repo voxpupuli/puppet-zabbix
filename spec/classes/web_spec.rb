@@ -102,6 +102,7 @@ describe 'zabbix::web' do
         :osfamily               => 'debian',
         :operatingsystem        => 'debian',
         :operatingsystemrelease => '6.0',
+        :lsbdistcodename        => 'squeeze',
         :architecture           => 'x86_64',
         :lsbdistid              => 'debian',
         :concat_basedir         => '/tmp'

@@ -22,6 +22,9 @@
 #   This is the zabbix version.
 #   Example: 2.4
 #
+# [*manage_repo*]
+#   When true (default) this module will manage the Zabbix repository
+#
 # [*zabbix_package_state*]
 #   The state of the package that needs to be installed: present or latest.
 #   Default: present
@@ -226,6 +229,12 @@
 # [*loadmodule*]
 #   Module to load at server startup.
 #
+# [*sslcertlocation_dir*]
+#   Location of SSL client certificate files for client authentication.
+# 
+# [*sslkeylocation_dir*]
+#   Location of SSL private key files for client authentication. 
+#
 # === Example
 #
 #   When running everything on a single node, please check
@@ -263,6 +272,7 @@ class zabbix::server (
   $zabbix_version          = $zabbix::params::zabbix_version,
   $zabbix_package_state    = $zabbix::params::zabbix_package_state,
   $manage_firewall         = $zabbix::params::manage_firewall,
+  $manage_repo             = $zabbix::params::manage_repo,
   $server_configfile_path  = $zabbix::params::server_configfile_path,
   $server_config_owner     = $zabbix::params::server_config_owner,
   $server_config_group     = $zabbix::params::server_config_group,
@@ -330,10 +340,19 @@ class zabbix::server (
   $include_dir             = $zabbix::params::server_include,
   $loadmodulepath          = $zabbix::params::server_loadmodulepath,
   $loadmodule              = $zabbix::params::server_loadmodule,
-  ) inherits zabbix::params {
+  $sslcertlocation_dir     = $zabbix::params::server_sslcertlocation,
+  $sslkeylocation_dir      = $zabbix::params::server_sslkeylocation,
 
-  include zabbix::repo
-  
+) inherits zabbix::params {
+
+  # Only include the repo class if it has not yet been included
+  unless defined(Class['Zabbix::Repo']) {
+    class { 'zabbix::repo':
+      zabbix_version => $zabbix_version,
+      manage_repo    => $manage_repo,
+    }
+  }
+
   # Check some if they are boolean
   validate_bool($manage_firewall)
 
