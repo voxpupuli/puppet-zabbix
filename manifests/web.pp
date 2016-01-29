@@ -124,7 +124,9 @@
 # [*apache_php_always_populate_raw_post_data*]
 #   Default: -1
 #
-<<<<<<< HEAD
+# [*apache_php_max_input_vars*]
+#   Max amount of vars for GET/POST requests
+#
 # [*ldap_cacert*]
 #  Set location of ca_cert used by LDAP authentication.
 #
@@ -133,10 +135,6 @@
 #
 # [*ldap_clientkey*]
 # Set location of client key used by LDAP authentication.
-=======
-# [*apache_php_max_input_vars*]
-#   Max amount of vars for GET/POST requests
->>>>>>> d6290d3d22211cdf333f84b0a0469609836a4333
 #
 # === Example
 #
