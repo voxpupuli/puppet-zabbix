@@ -409,44 +409,46 @@ class zabbix::proxy (
 
   # Get the correct database_type. We need this for installing the
   # correct package and loading the sql files.
-  case $database_type {
-    'postgresql': {
-      $db = 'pgsql'
+  if $manage_database == true {
+    case $database_type {
+      'postgresql': {
+        $db = 'pgsql'
 
-      # Execute the postgresql scripts
-      class { 'zabbix::database::postgresql':
-        zabbix_type          => 'proxy',
-        zabbix_version       => $zabbix_version,
-        database_schema_path => $database_schema_path,
-        database_name        => $database_name,
-        database_user        => $database_user,
-        database_password    => $database_password,
-        database_host        => $database_host,
-        database_path        => $database_path,
-        require              => Package["zabbix-proxy-${db}"],
+        # Execute the postgresql scripts
+        class { 'zabbix::database::postgresql':
+          zabbix_type          => 'proxy',
+          zabbix_version       => $zabbix_version,
+          database_schema_path => $database_schema_path,
+          database_name        => $database_name,
+          database_user        => $database_user,
+          database_password    => $database_password,
+          database_host        => $database_host,
+          database_path        => $database_path,
+          require              => Package["zabbix-proxy-${db}"],
+        }
       }
-    }
-    'mysql': {
-      $db = 'mysql'
+      'mysql': {
+        $db = 'mysql'
 
-      # Execute the mysql scripts
-      class { 'zabbix::database::mysql':
-        zabbix_type          => 'proxy',
-        zabbix_version       => $zabbix_version,
-        database_schema_path => $database_schema_path,
-        database_name        => $database_name,
-        database_user        => $database_user,
-        database_password    => $database_password,
-        database_host        => $database_host,
-        database_path        => $database_path,
-        require              => Package["zabbix-proxy-${db}"],
+        # Execute the mysql scripts
+        class { 'zabbix::database::mysql':
+          zabbix_type          => 'proxy',
+          zabbix_version       => $zabbix_version,
+          database_schema_path => $database_schema_path,
+          database_name        => $database_name,
+          database_user        => $database_user,
+          database_password    => $database_password,
+          database_host        => $database_host,
+          database_path        => $database_path,
+          require              => Package["zabbix-proxy-${db}"],
+        }
       }
-    }
-    'sqlite': {
-      $db = 'sqlite3'
-    }
-    default: {
-      fail("Unrecognized database type for proxy: ${database_type}")
+      'sqlite': {
+        $db = 'sqlite3'
+      }
+      default: {
+        fail("Unrecognized database type for proxy: ${database_type}")
+      }
     }
   }
 
