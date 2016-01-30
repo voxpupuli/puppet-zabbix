@@ -7,15 +7,17 @@ Continuous Integration status:
 ####Table of Contents
 
 1. [Overview](#overview)
-2. [Upgrade from 0.x.x to 1.x.x](#upgrade)
+2. [Upgrade](#upgrade)
+    * [to 1.0.0] (#100)
+    * [to 2.0.0] (#200)
 3. [Module Description - What the module does and why it is useful](#module-description)
 4. [Setup - The basics of getting started with the zabbix module](#setup)
- 	* [zabbix-server](#setup-zabbix-server)
- 	* [zabbix-agent](#setup-zabbix-agent)
- 	* [zabbix-proxy](#setup-zabbix-proxy)
- 	* [zabbix-javagateway](#setup-zabbix-javagateway)
-        * [zabbix-userparameters](#setup-userparameters)
- 	* [zabbix-template](#setup-template)
+    * [zabbix-server](#setup-zabbix-server)
+    * [zabbix-agent](#setup-zabbix-agent)
+    * [zabbix-proxy](#setup-zabbix-proxy)
+    * [zabbix-javagateway](#setup-zabbix-javagateway)
+    * [zabbix-userparameters](#setup-userparameters)
+    * [zabbix-template](#setup-template)
 5. [Usage - Configuration options and additional functionality](#usage)
     * [zabbix-server](#usage-zabbix-server)
     * [zabbix-agent](#usage-zabbix-agent)
@@ -56,14 +58,17 @@ This module make uses of this gem: https://github.com/express42/zabbixapi
 With this gem it is possible to create/update hosts/proxy in ruby easy.
 
 ##Upgrade
+###1.0.0
 With release 1.0.0 the zabbix::server class is split into 3 classes:
- - zabbix::web
- - zabbix::server
- - zabbix::database
+
+  - zabbix::web
+  - zabbix::server
+  - zabbix::database
 
 Now you can use 3 machines for each purpose. This is something for the bigger environments to spread the load.
 
 When upgrading from 0.x.x to 1.x.x, be aware of the following changes:
+
   - Choose the correct zabbix setup for your environment *:
     - Single node
     - Multi node
@@ -84,6 +89,18 @@ When upgrading from 0.x.x to 1.x.x, be aware of the following changes:
 \* check [this](#usage-zabbix-server) document/paragraph how to setup your environment. There were multiple changes to make this work (Like moving parameters to other (new) classes).
 
 In case I missed something, please let me know and will update this document.
+
+###2.0.0
+Altough this is an major update, there is only one small change that we need to discuss and is specifically for the Zabbix Proxy.
+
+The following properties for the zabbix::proxy needs to have the sizes:
+
+  * vmwarecachesize
+  * cachesize
+  * historycachesize
+  * historytextcachesize
+
+Before 2.0.0 these could be used with an single integer, as in the template was hardcoded the 'M'. With release 2.0.0 you'll have to use the correct full size like: 8M, 16M or 2G.
 
 ##Setup
 As this puppet module contains specific components for zabbix, you'll need to specify which you want to install. Every zabbix component has his own zabbix:: class. Here you'll find each component.
@@ -558,6 +575,10 @@ The following have contributed to this puppet module:
  * DjxDeaf
  * tcatut
  * inspired-geek
+ * ekohl
+ * z3rogate
+ * mkrakowitzer
+ * eander210
 
 Many thanks for this!
 (If I have forgotten you, please let me know and put you in the list of fame. :-))
