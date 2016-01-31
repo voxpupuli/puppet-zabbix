@@ -4,7 +4,9 @@ fixtures:
     apt: "git://github.com/puppetlabs/puppetlabs-apt.git"
     firewall: "git://github.com/puppetlabs/puppetlabs-firewall"
     stdlib: "git://github.com/puppetlabs/puppetlabs-stdlib.git"
-    concat: "git://github.com/puppetlabs/puppetlabs-concat.git"
+    concat:
+      repo: "git://github.com/puppetlabs/puppetlabs-concat.git"
+      ref: "1.2.5"
     postgresql: "git://github.com/puppetlabs/puppet-postgresql.git"
     mysql: "git://github.com/puppetlabs/puppetlabs-mysql.git"
     ruby: "git://github.com/puppetlabs/puppetlabs-ruby.git"
