@@ -4,7 +4,7 @@ Below an overview of all changes in the releases.
 
 Version (Release date)
 
-2.0.0   (2016-01-??)
+2.0.0   (2016-01-31)
 
   * wdijkerman-zabbix works with puppet 4
   * Fix for: Server and Proxy templates are inconsistent #144
