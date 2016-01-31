@@ -4,6 +4,26 @@ Below an overview of all changes in the releases.
 
 Version (Release date)
 
+2.0.0   (2016-01-??)
+
+  * wdijkerman-zabbix works with puppet 4
+  * Fix for: Server and Proxy templates are inconsistent #144
+  * fixed SSL server template options for 2.2 #141 (By pull request: IceBear2k (Thanks!))
+  * fix syntax error #139 (By pull request: mkrakowitzer (Thanks!))
+  * Allow agent to listen on * #138 (By pull request: ekohl (Thanks!))
+  * enable apache_php_max_input_vars #137 (By pull request: bastelfreak (Thanks!))
+  * Fix typo in zabbix-userparameters reference #136 (By pull request: sgnl05 (Thanks!))
+  * Listen on all IPs #133 (By pull request: z3rogate (Thanks!))
+  * tap0 or tun0 (OpenVPN interfaces) interface as listenip #132 (By pull request: z3rogate (Thanks!))
+  * fixed typo for comment mysql #145 (By pull request: eander210 (Thanks!))
+  * Updated the listen_ip for proxy so it same as for agent.
+  * allow serveractive to be optional #146 (By pull request: ericsysmin (Thanks!))
+  * Allow agent_serveractive value to be blank #147 (By pull request: ericsysmin (Thanks!))
+  * Added support for adding LDAP certificate location to Zabbix Web. Upd… #150 (By pull request: elricsfate (Thanks!))
+  * Added zabbix_template_host type #154 (By pull request: hkumarmk (Thanks!))
+  * Type to manage zabbix application #155 (By pull request: hkumarmk (Thanks!))
+
+
 1.7.0   (2015-11-07)
 
   * misspelled parameter path #116 (By pull request: karolisc (Thanks!))
