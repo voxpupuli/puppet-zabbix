@@ -15,11 +15,6 @@ Puppet::Type.type(:zabbix_application).provide(:ruby, :parent => Puppet::Provide
     return @template_id ||= zbx.templates.get_id(:host => @resource[:template])
   end
 
-  def monhostid
-    zbx = connect
-    return zbx.templates.get_id(:host => 'mon1')
-  end
-
   def create
     zbx = connect
     zbx.applications.create(
