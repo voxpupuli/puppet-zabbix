@@ -37,7 +37,7 @@ class zabbix::repo(
         $reponame     = $majorrelease
       }
       'oraclelinux':  {
-        $majorrelease = "${::operatingsystemmajrelease}"
+        $majorrelease = ${::operatingsystemmajrelease}
         $reponame     = $majorrelease
       }
       default: {
