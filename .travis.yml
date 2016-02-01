@@ -1,15 +1,17 @@
 language: ruby
+sudo: false
 cache: bundler
 
 rvm:
   - 2.0.0
 
-script: "bundle exec rake spec"
+script: "bundle exec rake test"
 
 env:
   matrix:
     - PUPPET_GEM_VERSION="~> 2.7.0"
-    - PUPPET_GEM_VERSION="~> 3.7.3"
+    - PUPPET_GEM_VERSION="~> 3.0"
+    - PUPPET_GEM_VERSION="~> 4.0"
 
 notifications:
   email:
