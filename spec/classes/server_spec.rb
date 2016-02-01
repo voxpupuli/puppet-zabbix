@@ -22,17 +22,17 @@ describe 'zabbix::server' do
     it { should contain_service('zabbix-server').with_ensure('running') }
 
     describe 'with database_type as postgresql' do
-        let(:params) {{ :database_type => 'postgresql', :server_configfile_path => '/etc/zabbix/zabbix_server.conf', :include_dir => '/etc/zabbix/zabbix_server.conf.d' }}
-        it { should contain_package('zabbix-server-pgsql').with_ensure('present') }
-        it { should contain_package('zabbix-server-pgsql').with_name('zabbix-server-pgsql') }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_require('Package[zabbix-server-pgsql]') }
+      let(:params) {{ :database_type => 'postgresql', :server_configfile_path => '/etc/zabbix/zabbix_server.conf', :include_dir => '/etc/zabbix/zabbix_server.conf.d' }}
+      it { should contain_package('zabbix-server-pgsql').with_ensure('present') }
+      it { should contain_package('zabbix-server-pgsql').with_name('zabbix-server-pgsql') }
+      it { should contain_file('/etc/zabbix/zabbix_server.conf').with_require('Package[zabbix-server-pgsql]') }
     end
 
     describe 'with database_type as mysql' do
-        let(:params) {{ :database_type => 'mysql' }}
-        it { should contain_package('zabbix-server-mysql').with_ensure('present') }
-        it { should contain_package('zabbix-server-mysql').with_name('zabbix-server-mysql') }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_require('Package[zabbix-server-mysql]') }
+      let(:params) {{ :database_type => 'mysql' }}
+      it { should contain_package('zabbix-server-mysql').with_ensure('present') }
+      it { should contain_package('zabbix-server-mysql').with_name('zabbix-server-mysql') }
+      it { should contain_file('/etc/zabbix/zabbix_server.conf').with_require('Package[zabbix-server-mysql]') }
     end
 
     # Include directory should be available.
@@ -390,6 +390,5 @@ describe 'zabbix::server' do
       let(:params) { { :loadmodule => 'pizza' } }
       it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^LoadModule = pizza}}
     end
-
   end
 end

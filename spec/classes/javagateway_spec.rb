@@ -36,24 +36,23 @@ describe 'zabbix::javagateway' do
     end 
 
     context 'with listenip => 192.168.1.1' do
-        let(:params) { { :listenip => '192.168.1.1' } }
-        it { should contain_file('/etc/zabbix/zabbix_java_gateway.conf').with_content %r{^LISTEN_IP=192.168.1.1$} }
+      let(:params) { { :listenip => '192.168.1.1' } }
+      it { should contain_file('/etc/zabbix/zabbix_java_gateway.conf').with_content %r{^LISTEN_IP=192.168.1.1$} }
     end
 
     context 'with listenport => 10052' do
-        let(:params) { { :listenport => '10052' } }
-        it { should contain_file('/etc/zabbix/zabbix_java_gateway.conf').with_content %r{^LISTEN_PORT=10052$} }
+      let(:params) { { :listenport => '10052' } }
+      it { should contain_file('/etc/zabbix/zabbix_java_gateway.conf').with_content %r{^LISTEN_PORT=10052$} }
     end
 
     context 'with pidfile => /var/run/zabbix/zabbix_java.pid' do
-        let(:params) { { :pidfile => '/var/run/zabbix/zabbix_java.pid' } }
-        it { should contain_file('/etc/zabbix/zabbix_java_gateway.conf').with_content %r{^PID_FILE=/var/run/zabbix/zabbix_java.pid$} }
+      let(:params) { { :pidfile => '/var/run/zabbix/zabbix_java.pid' } }
+      it { should contain_file('/etc/zabbix/zabbix_java_gateway.conf').with_content %r{^PID_FILE=/var/run/zabbix/zabbix_java.pid$} }
     end
 
     context 'with startpollers => 5' do
-        let(:params) { { :startpollers => '5' } }
-        it { should contain_file('/etc/zabbix/zabbix_java_gateway.conf').with_content %r{^START_POLLERS=5$} }
+      let(:params) { { :startpollers => '5' } }
+      it { should contain_file('/etc/zabbix/zabbix_java_gateway.conf').with_content %r{^START_POLLERS=5$} }
     end
-
   end
 end

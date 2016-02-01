@@ -1,22 +1,21 @@
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'zabbix'))
 Puppet::Type.type(:zabbix_template_host).provide(:ruby, :parent => Puppet::Provider::Zabbix) do
-
   def template_name
-    return @template_name ||= @resource[:name].split('@')[0]
+    @template_name ||= @resource[:name].split('@')[0]
   end
 
   def template_id
     zbx = connect
-    return @template_id ||= zbx.templates.get_id(:host => template_name)
+    @template_id ||= zbx.templates.get_id(:host => template_name)
   end
 
   def hostname
-    return @hostname ||= @resource[:name].split('@')[1]
+    @hostname ||= @resource[:name].split('@')[1]
   end
 
   def hostid
     zbx = connect
-    return @hostid ||= zbx.hosts.get_id(:host => hostname)
+    @hostid ||= zbx.hosts.get_id(:host => hostname)
   end
 
   def connect
@@ -25,7 +24,7 @@ Puppet::Type.type(:zabbix_template_host).provide(:ruby, :parent => Puppet::Provi
     end
 
     @zbx ||= self.class.create_connection(@resource[:zabbix_url],@resource[:zabbix_user],@resource[:zabbix_pass],@resource[:apache_use_ssl])
-    return @zbx
+    @zbx
   end
 
   def create
@@ -48,5 +47,4 @@ Puppet::Type.type(:zabbix_template_host).provide(:ruby, :parent => Puppet::Provi
       :templates_id => [template_id]
     )
   end
-
 end

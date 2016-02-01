@@ -1,9 +1,20 @@
-require 'rspec-puppet'
 require 'puppetlabs_spec_helper/module_spec_helper'
+require 'rspec-puppet-facts'
 
-fixture_path = File.expand_path(File.join(__FILE__, '..', 'fixtures'))
+include RspecPuppetFacts
+
+require 'simplecov'
+require 'simplecov-console'
+
+SimpleCov.start do
+  add_filter '/spec'
+  add_filter '/vendor'
+  formatter SimpleCov::Formatter::MultiFormatter[
+    SimpleCov::Formatter::HTMLFormatter,
+    SimpleCov::Formatter::Console
+  ]
+end
 
 RSpec.configure do |c|
-  c.module_path = File.join(fixture_path, 'modules')
-  c.manifest_dir = File.join(fixture_path, 'manifests')
+  c.hiera_config = File.expand_path(File.join(__FILE__, '../fixtures/hiera.yaml'))
 end

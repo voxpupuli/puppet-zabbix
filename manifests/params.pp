@@ -252,4 +252,28 @@ class zabbix::params {
   $javagateway_listenip          = '0.0.0.0'
   $javagateway_listenport        = '10052'
   $javagateway_startpollers      = '5'
+
+  # Gem provider may vary based on version/type of puppet install.
+  # This can be a little complicated and may need revisited over time.
+  if str2bool($::is_pe) {
+    if $::pe_version and versioncmp("${::pe_version}", '3.7.0') >= 0 { #lint:ignore:only_variable_string
+      $puppetgem = 'pe_puppetserver_gem'
+    }
+    else {
+      $puppetgem = 'pe_gem'
+    }
+  }
+  else {
+    if $::puppetversion and versioncmp($::puppetversion, '4.0.0') >= 0 {
+      if $::pe_server_version {
+        $puppetgem = 'puppetserver_gem'
+      }
+      else {
+        $puppetgem = 'puppet_gem'
+      }
+    }
+    else {
+      $puppetgem = 'gem'
+    }
+  }
 }

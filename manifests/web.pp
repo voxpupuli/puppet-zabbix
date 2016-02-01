@@ -136,6 +136,9 @@
 # [*ldap_clientkey*]
 # Set location of client key used by LDAP authentication.
 #
+# [*puppetgem*]
+# Provider for the zabbixapi gem package
+#
 # === Example
 #
 #   When running everything on a single node, please check
@@ -152,6 +155,7 @@
 #       zabbix_server => 'wdpuppet03.dj-wasabi.local',
 #       database_host => 'wdpuppet04.dj-wasabi.local',
 #       database_type => 'mysql',
+#       puppetgem     => 'gem',
 #     }
 #   }
 #
@@ -161,7 +165,7 @@
 #
 # === Copyright
 #
-# Copyright 2014 Werner Dijkerman
+# Copyright 2016 Werner Dijkerman
 #
 class zabbix::web (
   $zabbix_url                               = $zabbix::params::zabbix_url,
@@ -202,11 +206,12 @@ class zabbix::web (
   $ldap_cacert                              = $zabbix::params::ldap_cacert,
   $ldap_clientcert                          = $zabbix::params::ldap_clientcert,
   $ldap_clientkey                           = $zabbix::params::ldap_clientkey,
+  $puppetgem                                = $zabbix::params::puppetgem,
 ) inherits zabbix::params {
 
   # Only include the repo class if it has not yet been included
   unless defined(Class['Zabbix::Repo']) {
-    class { 'zabbix::repo':
+    class { '::zabbix::repo':
       manage_repo    => $manage_repo,
       zabbix_version => $zabbix_version,
     }
@@ -232,7 +237,7 @@ class zabbix::web (
   # is set to false, you'll get warnings like this:
   # "Warning: You cannot collect without storeconfigs being set"
   if $manage_resources {
-    include ruby::dev
+    include ::ruby::dev
 
     # Determine correct zabbixapi version.
     case $zabbix_version {
@@ -258,10 +263,10 @@ class zabbix::web (
     } ->
     package { 'zabbixapi':
       ensure   => $zabbixapi_version,
-      provider => $::puppetgem,
+      provider => $puppetgem,
       require  => Class['ruby::dev'],
     } ->
-    class { 'zabbix::resources::web':
+    class { '::zabbix::resources::web':
       zabbix_url     => $zabbix_url,
       zabbix_user    => $zabbix_api_user,
       zabbix_pass    => $zabbix_api_pass,
@@ -284,7 +289,7 @@ class zabbix::web (
         before => [
           Package[$zabbix_web_package],
           File['/etc/zabbix/web/zabbix.conf.php'],
-        ]
+        ],
       }
     }
     default : {
@@ -303,7 +308,7 @@ class zabbix::web (
     owner   => 'zabbix',
     group   => 'zabbix',
     mode    => '0755',
-    require => Package[$zabbix_web_package]
+    require => Package[$zabbix_web_package],
   }
 
   package { $zabbix_web_package:
@@ -324,7 +329,7 @@ class zabbix::web (
 
   # Is set to true, it will create the apache vhost.
   if $manage_vhost {
-    include apache
+    include ::apache
     # Check if we use ssl. If so, we also create an non ssl
     # vhost for redirect traffic from non ssl to ssl site.
     if $apache_use_ssl {

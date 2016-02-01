@@ -196,7 +196,7 @@ class zabbix::database(
             collate  => $database_collate,
             host     => $zabbix_server,
             grant    => ['all'],
-            require  => Class['mysql::server']
+            require  => Class['mysql::server'],
           }
         }
 
@@ -209,7 +209,7 @@ class zabbix::database(
             collate  => $database_collate,
             host     => $zabbix_proxy,
             grant    => ['all'],
-            require  => Class['mysql::server']
+            require  => Class['mysql::server'],
           }
         }
 
@@ -239,7 +239,7 @@ class zabbix::database(
         } # END if $zabbix_web != $zabbix_server
       }
       'sqlite': {
-        class { 'zabbix::database::sqlite': }
+        class { '::zabbix::database::sqlite': }
       }
       default: {
         fail('Unrecognized database type for server.')

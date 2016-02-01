@@ -70,7 +70,7 @@ class zabbix::zapache (
       group   => 'root',
       mode    => '0644',
       require => Package['zabbix-agent'],
-      notify  => Service['zabbix-agent']
+      notify  => Service['zabbix-agent'],
     }
     file { '/etc/httpd/conf.d/httpd-server-status.conf':
       ensure  => present,
