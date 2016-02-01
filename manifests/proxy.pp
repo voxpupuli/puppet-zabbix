@@ -419,6 +419,9 @@ class zabbix::proxy (
     'sqlite': {
       $db = 'sqlite3'
     }
+    default: {
+      fail("Unrecognized database type for proxy: ${database_type}")
+    }
   }
 
   if $manage_database == true {
