@@ -394,7 +394,7 @@ class zabbix::proxy (
   # is set to false, you'll get warnings like this:
   # "Warning: You cannot collect without storeconfigs being set"
   if $manage_resources {
-    class { 'zabbix::resources::proxy':
+    class { '::zabbix::resources::proxy':
       hostname  => $hostname,
       ipaddress => $listen_ip,
       use_ip    => $use_ip,
@@ -415,7 +415,7 @@ class zabbix::proxy (
         $db = 'pgsql'
 
         # Execute the postgresql scripts
-        class { 'zabbix::database::postgresql':
+        class { '::zabbix::database::postgresql':
           zabbix_type          => 'proxy',
           zabbix_version       => $zabbix_version,
           database_schema_path => $database_schema_path,
@@ -431,7 +431,7 @@ class zabbix::proxy (
         $db = 'mysql'
 
         # Execute the mysql scripts
-        class { 'zabbix::database::mysql':
+        class { '::zabbix::database::mysql':
           zabbix_type          => 'proxy',
           zabbix_version       => $zabbix_version,
           database_schema_path => $database_schema_path,
@@ -454,7 +454,7 @@ class zabbix::proxy (
 
   # Only include the repo class if it has not yet been included
   unless defined(Class['Zabbix::Repo']) {
-    class { 'zabbix::repo':
+    class { '::zabbix::repo':
       manage_repo    => $manage_repo,
       zabbix_version => $zabbix_version,
     }
@@ -468,7 +468,7 @@ class zabbix::proxy (
     'redhat','centos','oraclelinux' : {
       package { 'zabbix-proxy':
         ensure  => $zabbix_package_state,
-        require => Package["zabbix-proxy-${db}"]
+        require => Package["zabbix-proxy-${db}"],
       }
       # Installing the packages
       package { "zabbix-proxy-${db}":
@@ -504,7 +504,7 @@ class zabbix::proxy (
   # if we want to manage the databases, we do
   # some stuff. (for maintaining database only.)
   if $manage_database == true {
-    class { 'zabbix::database':
+    class { '::zabbix::database':
       database_type     => $database_type,
       zabbix_type       => 'proxy',
       database_name     => $database_name,
@@ -516,7 +516,7 @@ class zabbix::proxy (
       before            => [
         Service[$proxy_service_name],
         Class["zabbix::database::${database_type}"],
-      ]
+      ],
     }
   }
 

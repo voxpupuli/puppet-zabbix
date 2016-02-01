@@ -19,47 +19,47 @@ describe 'zabbix::web' do
     end
 
     describe 'with database_type as postgresql' do
-        let(:params) {{ :database_type => 'postgresql' }}
-        it { should contain_package('zabbix-web-pgsql').with_name('zabbix-web-pgsql') }
-        it { should contain_package('zabbix-web')}
+      let(:params) {{ :database_type => 'postgresql' }}
+      it { should contain_package('zabbix-web-pgsql').with_name('zabbix-web-pgsql') }
+      it { should contain_package('zabbix-web')}
     end
 
     describe 'with database_type as mysql' do
-        let(:params) {{ :database_type => 'mysql' }}
-        it { should contain_package('zabbix-web-mysql').with_name('zabbix-web-mysql') }
-        it { should contain_package('zabbix-web')}
+      let(:params) {{ :database_type => 'mysql' }}
+      it { should contain_package('zabbix-web-mysql').with_name('zabbix-web-mysql') }
+      it { should contain_package('zabbix-web')}
     end
 
     it { should contain_file('/etc/zabbix/web/zabbix.conf.php')}
 
     describe "when manage_resources is true" do
-        let(:params) {{ :manage_resources => true }}
-        it { should contain_class('zabbix::resources::web') }
+      let(:params) {{ :manage_resources => true }}
+      it { should contain_class('zabbix::resources::web') }
         
-        it { should contain_package('zabbixapi').that_requires('Class[ruby::dev]').with_provider('gem') }
-        it { should contain_class('ruby::dev') }
+      it { should contain_package('zabbixapi').that_requires('Class[ruby::dev]').with_provider('gem') }
+      it { should contain_class('ruby::dev') }
     end
 
     describe "when manage_resources and is_pe are true" do
       let :facts do
-	super().merge({
-	  :is_pe      => true,
-	  :pe_version => '3.7.0',
-	})
+        super().merge({
+          :is_pe      => true,
+          :pe_version => '3.7.0',
+        })
       end
 
       let (:params) do
-	{
-	  :manage_resources => true
-	}
+        {
+          :manage_resources => true
+        }
       end
 
       it { should contain_package('zabbixapi').with_provider('pe_puppetserver_gem') }
     end
     
     describe "when manage_resources is false" do
-        let(:params) {{ :manage_resources => false}}
-        it { should_not contain_class('zabbix::resources::web') }
+      let(:params) {{ :manage_resources => false}}
+      it { should_not contain_class('zabbix::resources::web') }
     end
 
     it { should contain_apache__vhost('zabbix.example.com').with_name('zabbix.example.com') }
@@ -103,7 +103,6 @@ describe 'zabbix::web' do
       let(:params) { { :zabbix_server => 'localhost' } }
       it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(/^\$ZBX_SERVER_NAME = 'localhost'/) }
     end
-
   end
 end
 
@@ -127,5 +126,4 @@ describe 'zabbix::web' do
     end
   it { should contain_package('zabbix-frontend-php')}
   end
-
 end

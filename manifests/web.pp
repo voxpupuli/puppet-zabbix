@@ -211,7 +211,7 @@ class zabbix::web (
 
   # Only include the repo class if it has not yet been included
   unless defined(Class['Zabbix::Repo']) {
-    class { 'zabbix::repo':
+    class { '::zabbix::repo':
       manage_repo    => $manage_repo,
       zabbix_version => $zabbix_version,
     }
@@ -237,7 +237,7 @@ class zabbix::web (
   # is set to false, you'll get warnings like this:
   # "Warning: You cannot collect without storeconfigs being set"
   if $manage_resources {
-    include ruby::dev
+    include ::ruby::dev
 
     # Determine correct zabbixapi version.
     case $zabbix_version {
@@ -266,7 +266,7 @@ class zabbix::web (
       provider => $puppetgem,
       require  => Class['ruby::dev'],
     } ->
-    class { 'zabbix::resources::web':
+    class { '::zabbix::resources::web':
       zabbix_url     => $zabbix_url,
       zabbix_user    => $zabbix_api_user,
       zabbix_pass    => $zabbix_api_pass,
@@ -289,7 +289,7 @@ class zabbix::web (
         before => [
           Package[$zabbix_web_package],
           File['/etc/zabbix/web/zabbix.conf.php'],
-        ]
+        ],
       }
     }
     default : {
@@ -308,7 +308,7 @@ class zabbix::web (
     owner   => 'zabbix',
     group   => 'zabbix',
     mode    => '0755',
-    require => Package[$zabbix_web_package]
+    require => Package[$zabbix_web_package],
   }
 
   package { $zabbix_web_package:
@@ -329,7 +329,7 @@ class zabbix::web (
 
   # Is set to true, it will create the apache vhost.
   if $manage_vhost {
-    include apache
+    include ::apache
     # Check if we use ssl. If so, we also create an non ssl
     # vhost for redirect traffic from non ssl to ssl site.
     if $apache_use_ssl {

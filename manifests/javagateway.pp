@@ -64,7 +64,7 @@ class zabbix::javagateway(
 
   # Only include the repo class if it has not yet been included
   unless defined(Class['Zabbix::Repo']) {
-    class { 'zabbix::repo':
+    class { '::zabbix::repo':
       manage_repo    => $manage_repo,
       zabbix_version => $zabbix_version,
     }
@@ -73,7 +73,7 @@ class zabbix::javagateway(
   # Installing the package
   package { 'zabbix-java-gateway':
     ensure  => $zabbix_package_state,
-    require => Class['zabbix::repo']
+    require => Class['zabbix::repo'],
   }
 
   # Configuring the zabbix-javagateway configuration file

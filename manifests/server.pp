@@ -347,7 +347,7 @@ class zabbix::server (
 
   # Only include the repo class if it has not yet been included
   unless defined(Class['Zabbix::Repo']) {
-    class { 'zabbix::repo':
+    class { '::zabbix::repo':
       zabbix_version => $zabbix_version,
       manage_repo    => $manage_repo,
     }
@@ -363,7 +363,7 @@ class zabbix::server (
       $db = 'pgsql'
 
       # Execute the postgresql scripts
-      class { 'zabbix::database::postgresql':
+      class { '::zabbix::database::postgresql':
         zabbix_type          => 'server',
         zabbix_version       => $zabbix_version,
         database_schema_path => $database_schema_path,
@@ -379,7 +379,7 @@ class zabbix::server (
       $db = 'mysql'
 
       # Execute the mysql scripts
-      class { 'zabbix::database::mysql':
+      class { '::zabbix::database::mysql':
         zabbix_type          => 'server',
         zabbix_version       => $zabbix_version,
         database_schema_path => $database_schema_path,

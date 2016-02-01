@@ -1,7 +1,6 @@
 require 'puppet/util/zabbix'
 
 Puppet::Type.newtype(:zabbix_application) do
-
   @doc = %q{Manage zabbix applications
 
     Example.
@@ -34,6 +33,5 @@ Puppet::Type.newtype(:zabbix_application) do
   end
 
   Puppet::Util::Zabbix.add_zabbix_type_methods(self)
-
 end
 

@@ -256,7 +256,7 @@ class zabbix::params {
   # Gem provider may vary based on version/type of puppet install.
   # This can be a little complicated and may need revisited over time.
   if str2bool($::is_pe) {
-    if $::pe_version and versioncmp("${::pe_version}", '3.7.0') >= 0 {
+    if $::pe_version and versioncmp("${::pe_version}", '3.7.0') >= 0 { #lint:ignore:only_variable_string
       $puppetgem = 'pe_puppetserver_gem'
     }
     else {

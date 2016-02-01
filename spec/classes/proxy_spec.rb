@@ -387,6 +387,5 @@ describe 'zabbix::proxy' do
       it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LoadModule=pizza$}}
     end  
   end # END context 'zabbix_proxy.conf configuration'
-
 end
 
