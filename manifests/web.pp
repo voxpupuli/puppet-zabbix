@@ -136,6 +136,9 @@
 # [*ldap_clientkey*]
 # Set location of client key used by LDAP authentication.
 #
+# [*puppetgem*]
+# Provider for the zabbixapi gem package
+#
 # === Example
 #
 #   When running everything on a single node, please check
@@ -152,6 +155,7 @@
 #       zabbix_server => 'wdpuppet03.dj-wasabi.local',
 #       database_host => 'wdpuppet04.dj-wasabi.local',
 #       database_type => 'mysql',
+#       puppetgem     => 'gem',
 #     }
 #   }
 #
@@ -161,7 +165,7 @@
 #
 # === Copyright
 #
-# Copyright 2014 Werner Dijkerman
+# Copyright 2016 Werner Dijkerman
 #
 class zabbix::web (
   $zabbix_url                               = $zabbix::params::zabbix_url,
@@ -202,6 +206,7 @@ class zabbix::web (
   $ldap_cacert                              = $zabbix::params::ldap_cacert,
   $ldap_clientcert                          = $zabbix::params::ldap_clientcert,
   $ldap_clientkey                           = $zabbix::params::ldap_clientkey,
+  $puppetgem                                = $zabbix::params::puppetgem,
 ) inherits zabbix::params {
 
   # Only include the repo class if it has not yet been included
@@ -258,7 +263,7 @@ class zabbix::web (
     } ->
     package { 'zabbixapi':
       ensure   => $zabbixapi_version,
-      provider => $::puppetgem,
+      provider => $puppetgem,
       require  => Class['ruby::dev'],
     } ->
     class { 'zabbix::resources::web':

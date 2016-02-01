@@ -36,8 +36,25 @@ describe 'zabbix::web' do
         let(:params) {{ :manage_resources => true }}
         it { should contain_class('zabbix::resources::web') }
         
-        it { should contain_package('zabbixapi').that_requires('Class[ruby::dev]') }
+        it { should contain_package('zabbixapi').that_requires('Class[ruby::dev]').with_provider('gem') }
         it { should contain_class('ruby::dev') }
+    end
+
+    describe "when manage_resources and is_pe are true" do
+      let :facts do
+	super().merge({
+	  :is_pe      => true,
+	  :pe_version => '3.7.0',
+	})
+      end
+
+      let (:params) do
+	{
+	  :manage_resources => true
+	}
+      end
+
+      it { should contain_package('zabbixapi').with_provider('pe_puppetserver_gem') }
     end
     
     describe "when manage_resources is false" do
