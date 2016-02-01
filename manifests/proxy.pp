@@ -409,10 +409,21 @@ class zabbix::proxy (
 
   # Get the correct database_type. We need this for installing the
   # correct package and loading the sql files.
+  case $database_type {
+    'postgresql': {
+      $db = 'pgsql'
+    }
+    'mysql': {
+      $db = 'mysql'
+    }
+    'sqlite': {
+      $db = 'sqlite3'
+    }
+  }
+
   if $manage_database == true {
     case $database_type {
       'postgresql': {
-        $db = 'pgsql'
 
         # Execute the postgresql scripts
         class { '::zabbix::database::postgresql':
@@ -428,7 +439,6 @@ class zabbix::proxy (
         }
       }
       'mysql': {
-        $db = 'mysql'
 
         # Execute the mysql scripts
         class { '::zabbix::database::mysql':
@@ -443,9 +453,7 @@ class zabbix::proxy (
           require              => Package["zabbix-proxy-${db}"],
         }
       }
-      'sqlite': {
-        $db = 'sqlite3'
-      }
+
       default: {
         fail("Unrecognized database type for proxy: ${database_type}")
       }
