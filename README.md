@@ -2,7 +2,7 @@
 
 Continuous Integration status:
 
-![alt Codeship](https://codeship.com/projects/893516d0-4e8c-0133-d194-4e8e1c03c7f2/status?branch=master)
+[![Build Status](https://travis-ci.org/dj-wasabi/puppet-zabbix.svg?branch=master)](https://travis-ci.org/dj-wasabi/puppet-zabbix)
 
 ####Table of Contents
 
