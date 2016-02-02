@@ -4,6 +4,14 @@ Below an overview of all changes in the releases.
 
 Version (Release date)
 
+2.1.0   (2016-02-02)
+
+  * Removed a debug entry #156 (By pull request: hkumarmk (Thanks!))
+  * Add Puppet Forge Version and Downloads badges #163 (By pull request: rnelson0 (Thanks!))
+  * Travis CI setup: ensure all rspec tests pass #162 (By pull request: rnelson0 (Thanks!))
+  * Update proxy.pp, fix Error: ...install zabbix-proxy- .. #159 (By pull request: subkowlex (Thanks!))
+  * Puppetgem #158 (By pull request: rnelson0 (Thanks!))
+
 2.0.0   (2016-01-31)
 
   * wdijkerman-zabbix works with puppet 4
@@ -22,7 +30,6 @@ Version (Release date)
   * Added support for adding LDAP certificate location to Zabbix Web. Upd… #150 (By pull request: elricsfate (Thanks!))
   * Added zabbix_template_host type #154 (By pull request: hkumarmk (Thanks!))
   * Type to manage zabbix application #155 (By pull request: hkumarmk (Thanks!))
-
 
 1.7.0   (2015-11-07)
 
