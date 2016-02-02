@@ -3,6 +3,8 @@
 Continuous Integration status:
 
 [![Build Status](https://travis-ci.org/dj-wasabi/puppet-zabbix.svg?branch=master)](https://travis-ci.org/dj-wasabi/puppet-zabbix)
+[![Puppet Forge](http://img.shields.io/puppetforge/v/wdijkerman/zabbix.svg)](https://forge.puppetlabs.com/wdijkerman/zabbix)
+[![Puppet Forge Downloads](http://img.shields.io/puppetforge/dt/wdijkerman/zabbix.svg)](https://forge.puppetlabs.com/wdijkerman/zabbix)
 
 ####Table of Contents
 
