@@ -25,19 +25,21 @@ class zabbix::database::mysql (
   $database_host        = '',
   $database_path        = $zabbix::params::database_path,
 ) {
-# Allow to customize the path to the Database Schema,
-  if ! $database_schema_path {
+  # Allow to customize the path to the Database Schema,
+  if ($database_schema_path == false) or ($database_schema_path == '') {
     case $::operatingsystem {
-      'centos','redhat','oraclelinux' : {
-            $schema_path   = "/usr/share/doc/zabbix-*-mysql-${zabbix_version}*/create"
-          }
-        default : {
-          $schema_path   = '/usr/share/zabbix-*-mysql'
+      'CentOS','RedHat','OracleLinux' : {
+        $schema_path = "/usr/share/doc/zabbix-*-mysql-${zabbix_version}*/create"
+      }
+      default : {
+        $schema_path = '/usr/share/zabbix-*-mysql'
       }
     }
-  }else {
-      $schema_path = $database_schema_path
   }
+  else {
+    $schema_path = $database_schema_path
+  }
+
   # Loading the sql files.
   case $zabbix_type {
     'proxy': {

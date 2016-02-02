@@ -219,11 +219,16 @@ class zabbix::agent (
     if ($listenip =~ /^(eth|bond|lxc|eno|tap|tun).*/) {
       $int_name = "ipaddress_${listenip}"
       $listen_ip = inline_template('<%= scope.lookupvar(int_name) %>')
-    } elsif is_ip_address($listenip) or $listenip == '*' {
+    }
+    elsif is_ip_address($listenip) or $listenip == '*' {
       $listen_ip = $listenip
-    } else {
+    }
+    else {
       $listen_ip = $::ipaddress
     }
+  }
+  else {
+    $listen_ip = $::ipaddress
   }
 
   # So if manage_resources is set to true, we can send some data

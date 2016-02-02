@@ -1,13 +1,15 @@
 require 'spec_helper'
 
 describe 'zabbix::repo' do
-  # Set some facts / params.
-#  let(:params) { {:manage_repo => true} }
+  context "on Debian 6 and Zabbix 2.0" do
+    let (:params) do
+      {
+        :zabbix_version => '2.0',
+        :manage_repo => true,
+      }
+    end
 
-  # Testing the Debian: 6, ZBX: 2.0
-  context "on a Debian OS" do
-    let(:params) { {:zabbix_version => '2.0', :manage_repo => true} }
-    let :facts do
+    let (:facts) do
       {
         :operatingsystem        => 'Debian',
         :operatingsystemrelease => '6',
@@ -17,13 +19,19 @@ describe 'zabbix::repo' do
         :osfamily               => 'Debian'
       }
     end
+
     it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.0/debian/') }
   end
 
-  # Testing the Debian: 7, ZBX: 2.0
-  context "on a Debian OS" do
-    let(:params) { {:zabbix_version => '2.0', :manage_repo => true} }
-    let :facts do
+  context "on Debian 7 and Zabbix 2.0" do
+    let (:params) do
+      {
+        :zabbix_version => '2.0',
+        :manage_repo => true,
+      }
+    end
+
+    let (:facts) do
       {
         :operatingsystem        => 'Debian',
         :operatingsystemrelease => '7',
@@ -33,13 +41,19 @@ describe 'zabbix::repo' do
         :osfamily               => 'Debian'
       }
     end
+
     it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.0/debian/') }
   end
 
-  # Testing the Debian: 7, ZBX: 2.2
-  context "on a Debian OS" do
-    let(:params) { {:zabbix_version => '2.2', :manage_repo => true} }
-    let :facts do
+  context "on Debian 7 and Zabbix 2.2" do
+    let (:params) do
+      {
+        :zabbix_version => '2.2',
+        :manage_repo => true,
+      }
+    end
+
+    let (:facts) do
       {
         :operatingsystem        => 'Debian',
         :operatingsystemrelease => '7',
@@ -49,13 +63,19 @@ describe 'zabbix::repo' do
         :osfamily               => 'Debian'
       }
     end
+
     it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.2/debian/') }
   end
 
-  # Testing the Debian: 7, ZBX: 2.4
-  context "on a Debian OS" do
-    let(:params) { {:zabbix_version => '2.4', :manage_repo => true} }
-    let :facts do
+  context "on Debian 7 and Zabbix 2.4" do
+    let (:params) do
+      {
+        :zabbix_version => '2.4',
+        :manage_repo => true,
+      }
+    end
+
+    let (:facts) do
       {
         :operatingsystem        => 'Debian',
         :operatingsystemrelease => '7',
@@ -65,13 +85,19 @@ describe 'zabbix::repo' do
         :osfamily               => 'Debian'
       }
     end
+
     it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.4/debian/') }
   end
 
-  # Testing the Ubuntu: 12.04, ZBX: 2.0
-  context "on a Ubuntu OS" do
-    let(:params) { {:zabbix_version => '2.0', :manage_repo => true} }
-    let :facts do
+  context "on Ubuntu 12.04 and Zabbix 2.0" do
+    let (:params) do
+      {
+        :zabbix_version => '2.0',
+        :manage_repo => true,
+      }
+    end
+
+    let (:facts) do
       {
         :operatingsystem        => 'Ubuntu',
         :operatingsystemrelease => '12.04',
@@ -81,13 +107,19 @@ describe 'zabbix::repo' do
         :osfamily               => 'Debian'
       }
     end
+
     it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.0/ubuntu/') }
   end
 
-  # Testing the Ubuntu: 12.04, ZBX: 2.2
-  context "on a Ubuntu OS" do
-    let(:params) { {:zabbix_version => '2.2', :manage_repo => true} }
-    let :facts do
+  context "on Ubuntu 12.04 and Zabbix 2.2" do
+    let (:params) do
+      {
+        :zabbix_version => '2.2',
+        :manage_repo => true,
+      }
+    end
+
+    let (:facts) do
       {
         :operatingsystem        => 'Ubuntu',
         :operatingsystemrelease => '12.04',
@@ -97,13 +129,19 @@ describe 'zabbix::repo' do
         :osfamily               => 'Debian'
       }
     end
+
     it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.2/ubuntu/') }
   end
 
-  # Testing the Ubuntu: 12.04, ZBX: 2.4
-  context "on a Ubuntu OS" do
-    let(:params) { {:zabbix_version => '2.4', :manage_repo => true} }
-    let :facts do
+  context "on Ubuntu 12.04 and Zabbix 2.4" do
+    let (:params) do
+      {
+        :zabbix_version => '2.4',
+        :manage_repo => true,
+      }
+    end
+
+    let (:facts) do
       {
         :operatingsystem        => 'Ubuntu',
         :operatingsystemrelease => '12.04',
@@ -113,14 +151,20 @@ describe 'zabbix::repo' do
         :osfamily               => 'Debian'
       }
     end
+
     it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.4/ubuntu/') }
   end
 
 
-  # Testing the RHEL: 5, ZBX: 2.0
-  context "on a RedHat OS" do
-    let(:params) { {:zabbix_version => '2.0', :manage_repo => true} }
-    let :facts do
+  context "on RedHat 5 and Zabbix 2.0" do
+    let (:params) do
+      {
+        :zabbix_version => '2.0',
+        :manage_repo => true,
+      }
+    end
+
+    let (:facts) do
       {
         :operatingsystem        => 'RedHat',
         :operatingsystemrelease => '5',
@@ -128,14 +172,20 @@ describe 'zabbix::repo' do
         :osfamily               => 'RedHat'
       }
     end
+
     it { should contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/2.0/rhel/$releasever/$basearch/') }
     it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/$releasever/$basearch/') }
   end
 
-  # Testing the RHEL: 6, ZBX: 2.0
-  context "on a RedHat OS" do
-    let(:params) { {:zabbix_version => '2.0', :manage_repo => true} }
-    let :facts do
+  context "on RedHat 6 and Zabbix 2.0" do
+    let (:params) do
+      {
+        :zabbix_version => '2.0',
+        :manage_repo => true,
+      }
+    end
+
+    let (:facts) do
       {
         :operatingsystem        => 'RedHat',
         :operatingsystemrelease => '6',
@@ -144,14 +194,20 @@ describe 'zabbix::repo' do
         :$majorrelease          => '6'
       }
     end
+
     it { should contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/2.0/rhel/$releasever/$basearch/') }
     it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/$releasever/$basearch/') }
   end
 
-  # Testing the RHEL: 6, ZBX: 2.2
-  context "on a RedHat OS" do
-    let(:params) { {:zabbix_version => '2.2', :manage_repo => true} }
-    let :facts do
+  context "on RedHat 6 and Zabbix 2.2" do
+    let (:params) do
+      {
+        :zabbix_version => '2.2',
+        :manage_repo => true,
+      }
+    end
+
+    let (:facts) do
       {
         :operatingsystem        => 'RedHat',
         :operatingsystemrelease => '6',
@@ -160,14 +216,20 @@ describe 'zabbix::repo' do
         :$majorrelease          => '6'
       }
     end
+
     it { should contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/2.2/rhel/$releasever/$basearch/') }
     it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/$releasever/$basearch/') }
   end
 
-  # Testing the RHEL: 6, ZBX: 2.4
-  context "on a RedHat OS" do
-    let(:params) { {:zabbix_version => '2.4', :manage_repo => true} }
-    let :facts do
+  context "on RedHat 6 and Zabbix 2.4" do
+    let (:params) do
+      {
+        :zabbix_version => '2.4',
+        :manage_repo => true,
+      }
+    end
+
+    let (:facts) do
       {
         :operatingsystem        => 'RedHat',
         :operatingsystemrelease => '6',
@@ -176,6 +238,7 @@ describe 'zabbix::repo' do
         :$majorrelease          => '6'
       }
     end
+
     it { should contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/2.4/rhel/$releasever/$basearch/') }
     it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/$releasever/$basearch/') }
   end
