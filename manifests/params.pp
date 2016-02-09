@@ -36,6 +36,7 @@ class zabbix::params {
   # Zabbix overall params. Is used by all components.
   $zabbix_version                           = '2.4'
   $zabbix_timezone                          = 'Europe/Amsterdam'
+  $zabbix_url                               = 'localhost'
   $zabbix_server                            = 'localhost'
   $zabbix_web                               = 'localhost'
   $zabbix_proxy                             = 'localhost'
@@ -74,7 +75,7 @@ class zabbix::params {
   $server_api_user                = 'Admin'
   $server_api_pass                = 'zabbix'
   $ldap_cacert                    = undef
-  $ldap_clientcrt                 = undef
+  $ldap_clientcert                = undef
   $ldap_clientkey                 = undef
 
   # Zabbix-server
@@ -265,12 +266,7 @@ class zabbix::params {
   }
   else {
     if $::puppetversion and versioncmp($::puppetversion, '4.0.0') >= 0 {
-      if $::pe_server_version {
-        $puppetgem = 'puppetserver_gem'
-      }
-      else {
-        $puppetgem = 'puppet_gem'
-      }
+      $puppetgem = 'puppet_gem'
     }
     else {
       $puppetgem = 'gem'
