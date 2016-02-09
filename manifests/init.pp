@@ -290,7 +290,6 @@ class zabbix (
     database_host     => $database_host,
     database_charset  => $database_charset,
     database_collate  => $database_collate,
-    require           => Class['zabbix::repo'],
   }
 
 }
