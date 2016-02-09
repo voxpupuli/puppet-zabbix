@@ -4,6 +4,11 @@ Below an overview of all changes in the releases.
 
 Version (Release date)
 
+2.1.1   (2016-02-09)
+
+  * Make Zabbix module compile on puppet 4.x AIO. #164 (By pull request: ITler (Thanks!))
+  * Fix for Repo is always added #148
+
 2.1.0   (2016-02-02)
 
   * Removed a debug entry #156 (By pull request: hkumarmk (Thanks!))

@@ -1,6 +1,6 @@
 {
   "name": "wdijkerman-zabbix",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "summary": "Installing and maintaining Zabbix. Will install server, proxy, java-gateway and agent on RedHat/Debian/Ubuntu (Incl. exported resources).",
   "author": "Werner Dijkerman",
   "dependencies": [
