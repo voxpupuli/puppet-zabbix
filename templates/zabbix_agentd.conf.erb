@@ -66,7 +66,7 @@ LogRemoteCommands=<%= @logremotecommands %>
 # mandatory: yes
 # default:
 # server=
-Server=<%= @server %>
+Server=<%= @server.join(",") %>
 
 ### option: listenport
 #       agent will listen on this port for connections from the server.
@@ -79,7 +79,7 @@ ListenPort=<%= @listenport %>
 #       first ip address is sent to zabbix server if connecting to it to retrieve list of active checks.
 #
 <% if @listen_ip -%>
-ListenIP=<%= @listen_ip %>
+ListenIP=<%= @listen_ip.join(",") %>
 <% end -%>
 
 ### option: startagents
@@ -99,7 +99,7 @@ StartAgents=<%= @startagents %>
 #       example: serveractive=127.0.0.1:20051,zabbix.domain,[::1]:30051,::1,[12fc::1]
 #
 <% if @serveractive -%>
-ServerActive=<%= @serveractive %>
+ServerActive=<%= @serveractive.join(",") %>
 <% end -%>
 
 ### option: hostname
