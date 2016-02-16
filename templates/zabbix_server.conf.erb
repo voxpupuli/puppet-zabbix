@@ -3,7 +3,7 @@
 # visit http://www.zabbix.com
 
 ############ general parameters #################
-<% if @zabbix_version != '2.4' %>
+<% if @zabbix_version != '2.4' and @zabbix_version != '3.0' %>
 ### option: nodeid
 #	unique nodeid in distributed setup.
 #	0 - standalone server
@@ -236,11 +236,13 @@ HistoryCacheSize=<%= @historycachesize %>
 #
 TrendCacheSize=<%= @trendcachesize %>
 
+<% if @zabbix_version != '3.0' %>
 ### option: historytextcachesize
 #	size of text history cache, in bytes.
 #	shared memory size for storing character, text or log history data.
 #
 HistoryTextCacheSize=<%= @historytextcachesize %>
+<% end %>
 
 <% if @zabbix_version == '2.2'  or @zabbix_version == '2.4' %>
 ### option: valuecachesize
@@ -251,7 +253,7 @@ HistoryTextCacheSize=<%= @historytextcachesize %>
 ValueCacheSize=<%= @valuecachesize %>
 <% end %>
 
-<% if @zabbix_version != '2.4' %>
+<% if @zabbix_version != '2.4' and @zabbix_version != '3.0' %>
 ### option: nodenoevents
 #	if set to '1' local events won't be sent to master node.
 #	this won't impact ability of this node to propagate events from its child nodes.
