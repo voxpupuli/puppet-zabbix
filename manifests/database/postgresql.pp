@@ -25,11 +25,20 @@ class zabbix::database::postgresql (
   $database_host        = '',
   $database_path        = $zabbix::params::database_path,
 ) {
+  # Adjustments for version 3.0 - structure of package with sqls differs from previous versions
+  case $zabbix_version {
+    '3.0': {
+      $sql_dir = ''
+    }
+    default: {
+      $sql_dir = 'create'
+    }
+  }
   # Allow to customize the path to the Database Schema,
   if ($database_schema_path == false) or ($database_schema_path == '') {
     case $::operatingsystem {
       'CentOS', 'RedHat', 'OracleLinux': {
-        $schema_path   = "/usr/share/doc/zabbix-*-pgsql-${zabbix_version}*/"
+        $schema_path   = "/usr/share/doc/zabbix-*-pgsql-${zabbix_version}*/${sql_dir}"
       }
       default : {
         $schema_path   = '/usr/share/zabbix-*-pgsql'
@@ -39,12 +48,6 @@ class zabbix::database::postgresql (
   else {
     $schema_path = $database_schema_path
   }
-
-  if ($zabbix_version != '3.0') {
-    $schema_path   = "${schema_path}/create"
-  }
-
-
 
   exec { 'update_pgpass':
     command => "echo ${database_host}:5432:${database_name}:${database_user}:${database_password} >> /root/.pgpass",
