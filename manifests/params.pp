@@ -13,53 +13,53 @@
 class zabbix::params {
   # It seems that ubuntu has an different fping path...
   case $::operatingsystem {
-    'ubuntu': {
-        $server_fpinglocation     = '/usr/bin/fping'
-        $server_fping6location    = '/usr/bin/fping6'
-        $proxy_fpinglocation      = '/usr/bin/fping'
-        $proxy_fping6location     = '/usr/bin/fping6'
+    'ubuntu' : {
+      $server_fpinglocation  = '/usr/bin/fping'
+      $server_fping6location = '/usr/bin/fping6'
+      $proxy_fpinglocation   = '/usr/bin/fping'
+      $proxy_fping6location  = '/usr/bin/fping6'
     }
-    'debian': {
-        $server_fpinglocation     = '/usr/bin/fping'
-        $server_fping6location    = '/usr/bin/fping6'
-        $proxy_fpinglocation      = '/usr/bin/fping'
-        $proxy_fping6location     = '/usr/bin/fping6'
+    'debian' : {
+      $server_fpinglocation  = '/usr/bin/fping'
+      $server_fping6location = '/usr/bin/fping6'
+      $proxy_fpinglocation   = '/usr/bin/fping'
+      $proxy_fping6location  = '/usr/bin/fping6'
     }
-    default: {
-        $server_fpinglocation     = '/usr/sbin/fping'
-        $server_fping6location    = '/usr/sbin/fping6'
-        $proxy_fpinglocation      = '/usr/sbin/fping'
-        $proxy_fping6location     = '/usr/sbin/fping6'
+    default  : {
+      $server_fpinglocation  = '/usr/sbin/fping'
+      $server_fping6location = '/usr/sbin/fping6'
+      $proxy_fpinglocation   = '/usr/sbin/fping'
+      $proxy_fping6location  = '/usr/sbin/fping6'
     }
   }
 
   # Zabbix overall params. Is used by all components.
-  $zabbix_package_state                     = 'present'
-  $zabbix_proxy                             = 'localhost'
-  $zabbix_proxy_ip                          = '127.0.0.1'
-  $zabbix_server                            = 'localhost'
-  $zabbix_server_ip                         = '127.0.0.1'
-  $zabbix_template_dir                      = '/etc/zabbix/imported_templates'
-  $zabbix_timezone                          = 'Europe/Amsterdam'
-  $zabbix_url                               = 'localhost'
-  $zabbix_version                           = '2.4'
-  $zabbix_web                               = 'localhost'
-  $zabbix_web_ip                            = '127.0.0.1'
-  $manage_database                          = true
-  $manage_firewall                          = false
-  $manage_repo                              = true
-  $manage_resources                         = false
-  $manage_vhost                             = true
-  $database_path                            = '/usr/sbin'
-  $database_schema_path                     = false
-  $database_type                            = 'postgresql'
+  $zabbix_package_state           = 'present'
+  $zabbix_proxy                   = 'localhost'
+  $zabbix_proxy_ip                = '127.0.0.1'
+  $zabbix_server                  = 'localhost'
+  $zabbix_server_ip               = '127.0.0.1'
+  $zabbix_template_dir            = '/etc/zabbix/imported_templates'
+  $zabbix_timezone                = 'Europe/Amsterdam'
+  $zabbix_url                     = 'localhost'
+  $zabbix_version                 = '2.4'
+  $zabbix_web                     = 'localhost'
+  $zabbix_web_ip                  = '127.0.0.1'
+  $manage_database                = true
+  $manage_firewall                = false
+  $manage_repo                    = true
+  $manage_resources               = false
+  $manage_vhost                   = true
+  $database_path                  = '/usr/sbin'
+  $database_schema_path           = false
+  $database_type                  = 'postgresql'
   $apache_php_always_populate_raw_post_data = '-1'
-  $apache_php_max_execution_time            = '300'
-  $apache_php_max_input_time                = '300'
-  $apache_php_max_input_vars                = 1000
-  $apache_php_memory_limit                  = '128M'
-  $apache_php_post_max_size                 = '16M'
-  $apache_php_upload_max_filesize           = '2M'
+  $apache_php_max_execution_time  = '300'
+  $apache_php_max_input_time      = '300'
+  $apache_php_max_input_vars      = 1000
+  $apache_php_memory_limit        = '128M'
+  $apache_php_post_max_size       = '16M'
+  $apache_php_upload_max_filesize = '2M'
 
   # Zabbix-web
   $apache_listen_ip               = undef
@@ -138,6 +138,10 @@ class zabbix::params {
   $server_starttrappers           = '5'
   $server_startvmwarecollectors   = '0'
   $server_timeout                 = '3'
+  $server_tlscafile               = undef
+  $server_tlscertfile             = undef
+  $server_tlscrlfile              = undef
+  $server_tlskeyfile              = undef
   $server_tmpdir                  = '/tmp'
   $server_trappertimeout          = '300'
   $server_trendcachesize          = '4M'
@@ -147,7 +151,6 @@ class zabbix::params {
   $server_valuecachesize          = '8M'
   $server_vmwarecachesize         = '8M'
   $server_vmwarefrequency         = '60'
-
 
   # Agent specific params
   $agent_allowroot                = '0'
@@ -177,99 +180,116 @@ class zabbix::params {
   $agent_sourceip                 = undef
   $agent_startagents              = '3'
   $agent_timeout                  = '3'
+  $agent_tlsaccept                = undef
+  $agent_tlscafile                = undef
+  $agent_tlscertfile              = undef
+  $agent_tlsconnect               = undef
+  $agent_tlscrlfile               = undef
+  $agent_tlskeyfile               = undef
+  $agent_tlspskfile               = undef
+  $agent_tlspskidentity           = undef
+  $agent_tlsservercertissuer      = undef
+  $agent_tlsservercertsubject     = undef
   $agent_unsafeuserparameters     = '0'
   $agent_use_ip                   = true
   $agent_userparameter            = undef
   $agent_zabbix_alias             = undef
   $agent_zbx_group                = 'Linux servers'
   $agent_zbx_group_create         = true
-  $agent_zbx_templates            = [ 'Template OS Linux', 'Template App SSH Service' ]
+  $agent_zbx_templates            = ['Template OS Linux', 'Template App SSH Service']
   $apache_status                  = false
   $monitored_by_proxy             = undef
 
   # Proxy specific params
-  $proxy_allowroot               = '0'
-  $proxy_cachesize               = '8M'
-  $proxy_configfile_path         = '/etc/zabbix/zabbix_proxy.conf'
-  $proxy_configfrequency         = '3600'
-  $proxy_database_host           = 'localhost'
-  $proxy_database_name           = 'zabbix_proxy'
-  $proxy_database_password       = 'zabbix-proxy'
-  $proxy_database_port           = undef
-  $proxy_database_schema         = undef
-  $proxy_database_socket         = undef
-  $proxy_database_user           = 'zabbix-proxy'
-  $proxy_datasenderfrequency     = '1'
-  $proxy_debuglevel              = '3'
-  $proxy_externalscripts         = '/usr/lib/zabbix/externalscripts'
-  $proxy_heartbeatfrequency      = '60'
-  $proxy_historycachesize        = '8M'
-  $proxy_historytextcachesize    = '16M'
-  $proxy_hostname                = $::fqdn
-  $proxy_housekeepingfrequency   = '1'
-  $proxy_include                 = '/etc/zabbix/zabbix_proxy.conf.d'
-  $proxy_javagateway             = undef
-  $proxy_javagatewayport         = '10052'
-  $proxy_listenip                = undef
-  $proxy_listenport              = '10051'
-  $proxy_loadmodule              = undef
-  $proxy_loadmodulepath          = '/usr/lib/modules'
-  $proxy_localbuffer             = '0'
-  $proxy_logfile                 = '/var/log/zabbix/zabbix_proxy.log'
-  $proxy_logfilesize             = '10'
-  $proxy_loglowqueries           = '0'
-  $proxy_mode                    = '0'
-  $proxy_offlinebuffer           = '1'
-  $proxy_pidfile                 = '/var/run/zabbix/zabbix_proxy.pid'
-  $proxy_service_name            = 'zabbix-proxy'
-  $proxy_snmptrapper             = '0'
-  $proxy_snmptrapperfile         = '/tmp/zabbix_traps.tmp'
-  $proxy_sourceip                = undef
-  $proxy_sshkeylocation          = undef
-  $proxy_startdbsyncers          = '4'
-  $proxy_startdiscoverers        = '1'
-  $proxy_starthttppollers        = '1'
-  $proxy_startipmipollers        = '0'
-  $proxy_startjavapollers        = '5'
-  $proxy_startpingers            = '1'
-  $proxy_startpollers            = '5'
-  $proxy_startpollersunreachable = '1'
-  $proxy_starttrappers           = '5'
-  $proxy_startvmwarecollectors   = '0'
-  $proxy_timeout                 = '3'
-  $proxy_tmpdir                  = '/tmp'
-  $proxy_trappertimeout          = '300'
-  $proxy_unavaliabledelay        = '60'
-  $proxy_unreachabedelay         = '15'
-  $proxy_unreachableperiod       = '45'
-  $proxy_use_ip                  = true
-  $proxy_vmwarecachesize         = '8M'
-  $proxy_vmwarefrequency         = '60'
-  $proxy_zabbix_server_host      = undef
-  $proxy_zabbix_server_port      = '10051'
-  $proxy_zbx_templates           = [ 'Template App Zabbix Proxy' ]
+  $proxy_allowroot                = '0'
+  $proxy_cachesize                = '8M'
+  $proxy_configfile_path          = '/etc/zabbix/zabbix_proxy.conf'
+  $proxy_configfrequency          = '3600'
+  $proxy_database_host            = 'localhost'
+  $proxy_database_name            = 'zabbix_proxy'
+  $proxy_database_password        = 'zabbix-proxy'
+  $proxy_database_port            = undef
+  $proxy_database_schema          = undef
+  $proxy_database_socket          = undef
+  $proxy_database_user            = 'zabbix-proxy'
+  $proxy_datasenderfrequency      = '1'
+  $proxy_debuglevel               = '3'
+  $proxy_externalscripts          = '/usr/lib/zabbix/externalscripts'
+  $proxy_heartbeatfrequency       = '60'
+  $proxy_historycachesize         = '8M'
+  $proxy_historytextcachesize     = '16M'
+  $proxy_hostname                 = $::fqdn
+  $proxy_housekeepingfrequency    = '1'
+  $proxy_include                  = '/etc/zabbix/zabbix_proxy.conf.d'
+  $proxy_javagateway              = undef
+  $proxy_javagatewayport          = '10052'
+  $proxy_listenip                 = undef
+  $proxy_listenport               = '10051'
+  $proxy_loadmodule               = undef
+  $proxy_loadmodulepath           = '/usr/lib/modules'
+  $proxy_localbuffer              = '0'
+  $proxy_logfile                  = '/var/log/zabbix/zabbix_proxy.log'
+  $proxy_logfilesize              = '10'
+  $proxy_loglowqueries            = '0'
+  $proxy_mode                     = '0'
+  $proxy_offlinebuffer            = '1'
+  $proxy_pidfile                  = '/var/run/zabbix/zabbix_proxy.pid'
+  $proxy_service_name             = 'zabbix-proxy'
+  $proxy_snmptrapper              = '0'
+  $proxy_snmptrapperfile          = '/tmp/zabbix_traps.tmp'
+  $proxy_sourceip                 = undef
+  $proxy_sshkeylocation           = undef
+  $proxy_startdbsyncers           = '4'
+  $proxy_startdiscoverers         = '1'
+  $proxy_starthttppollers         = '1'
+  $proxy_startipmipollers         = '0'
+  $proxy_startjavapollers         = '5'
+  $proxy_startpingers             = '1'
+  $proxy_startpollers             = '5'
+  $proxy_startpollersunreachable  = '1'
+  $proxy_starttrappers            = '5'
+  $proxy_startvmwarecollectors    = '0'
+  $proxy_timeout                  = '3'
+  $proxy_tlsaccept                = undef
+  $proxy_tlscafile                = undef
+  $proxy_tlscertfile              = undef
+  $proxy_tlsconnect               = undef
+  $proxy_tlscrlfile               = undef
+  $proxy_tlskeyfile               = undef
+  $proxy_tlspskfile               = undef
+  $proxy_tlspskidentity           = undef
+  $proxy_tlsservercertissuer      = undef
+  $proxy_tlsservercertsubject     = undef
+  $proxy_tmpdir                   = '/tmp'
+  $proxy_trappertimeout           = '300'
+  $proxy_unavaliabledelay         = '60'
+  $proxy_unreachabedelay          = '15'
+  $proxy_unreachableperiod        = '45'
+  $proxy_use_ip                   = true
+  $proxy_vmwarecachesize          = '8M'
+  $proxy_vmwarefrequency          = '60'
+  $proxy_zabbix_server_host       = undef
+  $proxy_zabbix_server_port       = '10051'
+  $proxy_zbx_templates            = ['Template App Zabbix Proxy']
 
   # Java Gateway specific params
-  $javagateway_listenip          = '0.0.0.0'
-  $javagateway_listenport        = '10052'
-  $javagateway_pidfile           = '/var/run/zabbix/zabbix_java.pid'
-  $javagateway_startpollers      = '5'
+  $javagateway_listenip           = '0.0.0.0'
+  $javagateway_listenport         = '10052'
+  $javagateway_pidfile            = '/var/run/zabbix/zabbix_java.pid'
+  $javagateway_startpollers       = '5'
 
   # Gem provider may vary based on version/type of puppet install.
   # This can be a little complicated and may need revisited over time.
   if str2bool($::is_pe) {
-    if $::pe_version and versioncmp("${::pe_version}", '3.7.0') >= 0 { #lint:ignore:only_variable_string
+    if $::pe_version and versioncmp("${::pe_version}", '3.7.0') >= 0 { # lint:ignore:only_variable_string
       $puppetgem = 'pe_puppetserver_gem'
-    }
-    else {
+    } else {
       $puppetgem = 'pe_gem'
     }
-  }
-  else {
+  } else {
     if $::puppetversion and versioncmp($::puppetversion, '4.0.0') >= 0 {
       $puppetgem = 'puppet_gem'
-    }
-    else {
+    } else {
       $puppetgem = 'gem'
     }
   }

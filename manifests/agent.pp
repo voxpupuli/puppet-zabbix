@@ -125,6 +125,36 @@
 # [*timeout*]
 #   Spend no more than timeout seconds on processing.
 #
+# [*tlsaccept*]
+#   What incoming connections to accept from Zabbix server. Used for a passive proxy, ignored on an active proxy.
+#
+# [*tlscafile*]
+#   Full pathname of a file containing the top-level CA(s) certificates for peer certificate verification.
+#
+# [*tlscertfile*]
+#   Full pathname of a file containing the proxy certificate or certificate chain.
+#
+# [*tlsconnect*]
+#   How the proxy should connect to Zabbix server. Used for an active proxy, ignored on a passive proxy.
+#
+# [*tlscrlfile*]
+#   Full pathname of a file containing revoked certificates.
+#
+# [*tlskeyfile*]
+#   Full pathname of a file containing the proxy private key.
+#
+# [*tlspskfile*]
+#   Full pathname of a file containing the pre-shared key.
+#
+# [*tlspskidentity*]
+#   Unique, case sensitive string used to identify the pre-shared key.
+#
+# [*tlsservercertissuer*]
+#   Allowed server certificate issuer.
+#
+# [*tlsservercertsubject*]
+#   Allowed server certificate subject.
+#
 # [*include_dir*]
 #   You may include individual files or all files in a directory in the configuration file.
 #
@@ -198,14 +228,22 @@ class zabbix::agent (
   $allowroot             = $zabbix::params::agent_allowroot,
   $zabbix_alias          = $zabbix::params::agent_zabbix_alias,
   $timeout               = $zabbix::params::agent_timeout,
+  $tlsaccept             = $zabbix::params::agent_tlsaccept,
+  $tlscafile             = $zabbix::params::agent_tlscafile,
+  $tlscertfile           = $zabbix::params::agent_tlscertfile,
+  $tlsconnect            = $zabbix::params::agent_tlsconnect,
+  $tlscrlfile            = $zabbix::params::agent_tlscrlfile,
+  $tlskeyfile            = $zabbix::params::agent_tlskeyfile,
+  $tlspskfile            = $zabbix::params::agent_tlspskfile,
+  $tlspskidentity        = $zabbix::params::agent_tlspskidentity,
+  $tlsservercertissuer   = $zabbix::params::agent_tlsservercertissuer,
+  $tlsservercertsubject  = $zabbix::params::agent_tlsservercertsubject,
   $include_dir           = $zabbix::params::agent_include,
   $include_dir_purge     = $zabbix::params::agent_include_purge,
   $unsafeuserparameters  = $zabbix::params::agent_unsafeuserparameters,
   $userparameter         = $zabbix::params::agent_userparameter,
   $loadmodulepath        = $zabbix::params::agent_loadmodulepath,
-  $loadmodule            = $zabbix::params::agent_loadmodule,
-  ) inherits zabbix::params {
-
+  $loadmodule            = $zabbix::params::agent_loadmodule,) inherits zabbix::params {
   # Check some if they are boolean
   validate_bool($manage_firewall)
   validate_bool($manage_repo)
@@ -217,17 +255,14 @@ class zabbix::agent (
   # is set to for example "eth1" or "bond0.73".
   if ($listenip != undef) {
     if ($listenip =~ /^(eth|bond|lxc|eno|tap|tun).*/) {
-      $int_name = "ipaddress_${listenip}"
+      $int_name  = "ipaddress_${listenip}"
       $listen_ip = inline_template('<%= scope.lookupvar(int_name) %>')
-    }
-    elsif is_ip_address($listenip) or $listenip == '*' {
+    } elsif is_ip_address($listenip) or $listenip == '*' {
       $listen_ip = $listenip
-    }
-    else {
+    } else {
       $listen_ip = $::ipaddress
     }
-  }
-  else {
+  } else {
     $listen_ip = $::ipaddress
   }
 
@@ -236,7 +271,7 @@ class zabbix::agent (
   # is set to false, you'll get warnings like this:
   # "Warning: You cannot collect without storeconfigs being set"
   if $manage_resources {
-    if $monitored_by_proxy != ''{
+    if $monitored_by_proxy != '' {
       $use_proxy = $monitored_by_proxy
     } else {
       $use_proxy = ''
@@ -256,7 +291,7 @@ class zabbix::agent (
 
   # Only include the repo class if it has not yet been included
   unless defined(Class['Zabbix::Repo']) {
-    class {'::zabbix::repo':
+    class { '::zabbix::repo':
       manage_repo    => $manage_repo,
       zabbix_version => $zabbix_version,
     }
@@ -307,7 +342,7 @@ class zabbix::agent (
       proto  => 'tcp',
       action => 'accept',
       source => $server,
-      state  => ['NEW','RELATED', 'ESTABLISHED'],
+      state  => ['NEW', 'RELATED', 'ESTABLISHED'],
     }
   }
 }

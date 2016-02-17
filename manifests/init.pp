@@ -148,6 +148,10 @@ class zabbix (
   $nodenoevents                             = $zabbix::params::server_nodenoevents,
   $nodenohistory                            = $zabbix::params::server_nodenohistory,
   $timeout                                  = $zabbix::params::server_timeout,
+  $tlscafile                                = $zabbix::params::server_tlscafile,
+  $tlscertfile                              = $zabbix::params::server_tlscertfile,
+  $tlscrlfile                               = $zabbix::params::server_tlscrlfile,
+  $tlskeyfile                               = $zabbix::params::server_tlskeyfile,
   $trappertimeout                           = $zabbix::params::server_trappertimeout,
   $unreachableperiod                        = $zabbix::params::server_unreachableperiod,
   $unavailabledelay                         = $zabbix::params::server_unavailabledelay,
@@ -165,9 +169,7 @@ class zabbix (
   $allowroot                                = $zabbix::params::server_allowroot,
   $include_dir                              = $zabbix::params::server_include,
   $loadmodulepath                           = $zabbix::params::server_loadmodulepath,
-  $loadmodule                               = $zabbix::params::server_loadmodule,
-  ) inherits zabbix::params {
-
+  $loadmodule                               = $zabbix::params::server_loadmodule,) inherits zabbix::params {
   class { '::zabbix::web':
     zabbix_url                               => $zabbix_url,
     database_type                            => $database_type,
@@ -255,6 +257,10 @@ class zabbix (
     nodenoevents            => $nodenoevents,
     nodenohistory           => $nodenohistory,
     timeout                 => $timeout,
+    tlscafile               => $tlscafile,
+    tlscertfile             => $tlscertfile,
+    tlscrlfile              => $tlscrlfile,
+    tlskeyfile              => $tlskeyfile,
     trappertimeout          => $trappertimeout,
     unreachableperiod       => $unreachableperiod,
     unavailabledelay        => $unavailabledelay,
