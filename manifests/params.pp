@@ -111,9 +111,23 @@ class zabbix::params {
   $server_logfilesize             = '10'
   $server_logslowqueries          = '0'
   $server_maxhousekeeperdelete    = '500'
-  $server_nodeid                  = '0'
-  $server_nodenoevents            = '0'
-  $server_nodenohistory           = '0'
+  case $zabbix_version {
+    '2.2': {
+        $server_nodeid                  = '0'
+        $server_nodenoevents            = '0'
+        $server_nodenohistory           = '0'
+    }
+    '2.4': {
+        $server_nodeid                  = '0'
+        $server_nodenoevents            = '0'
+        $server_nodenohistory           = '0'
+    }
+    '3.0': {
+        $server_nodeid                  = undef
+        $server_nodenoevents            = undef
+        $server_nodenohistory           = undef
+    }
+  }
   $server_pidfile                 = '/var/run/zabbix/zabbix_server.pid'
   $server_proxyconfigfrequency    = '3600'
   $server_proxydatafrequency      = '1'
