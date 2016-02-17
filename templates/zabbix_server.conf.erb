@@ -3,7 +3,7 @@
 # visit http://www.zabbix.com
 
 ############ general parameters #################
-<% if @zabbix_version.to_i <= '2.4' %>
+<% if @zabbix_version.to_f <= '2.4' %>
 ### option: nodeid
 #	unique nodeid in distributed setup.
 #	0 - standalone server
