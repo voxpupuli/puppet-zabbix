@@ -175,6 +175,18 @@
 # [*timeout*]
 #   Specifies how long we wait for agent, snmp device or external check (in seconds).
 #
+# [*tlscafile*]
+#   Full pathname of a file containing the top-level CA(s) certificates for peer certificate verification.
+#
+# [*tlscertfile*]
+#   Full pathname of a file containing the server certificate or certificate chain.
+#
+# [*tlscrlfile*]
+#   Full pathname of a file containing revoked certificates.
+#
+# [*tlskeyfile*]
+#   Full pathname of a file containing the server private key.
+#
 # [*trappertimeout*]
 #   Specifies how many seconds trapper may spend processing new data.
 #
@@ -231,9 +243,9 @@
 #
 # [*sslcertlocation_dir*]
 #   Location of SSL client certificate files for client authentication.
-# 
+#
 # [*sslkeylocation_dir*]
-#   Location of SSL private key files for client authentication. 
+#   Location of SSL private key files for client authentication.
 #
 # === Example
 #
@@ -322,6 +334,10 @@ class zabbix::server (
   $nodenoevents            = $zabbix::params::server_nodenoevents,
   $nodenohistory           = $zabbix::params::server_nodenohistory,
   $timeout                 = $zabbix::params::server_timeout,
+  $tlscafile               = $zabbix::params::server_tlscafile,
+  $tlscertfile             = $zabbix::params::server_tlscertfile,
+  $tlscrlfile              = $zabbix::params::server_tlscrlfile,
+  $tlskeyfile              = $zabbix::params::server_tlskeyfile,
   $trappertimeout          = $zabbix::params::server_trappertimeout,
   $unreachableperiod       = $zabbix::params::server_unreachableperiod,
   $unavailabledelay        = $zabbix::params::server_unavailabledelay,
@@ -341,10 +357,7 @@ class zabbix::server (
   $loadmodulepath          = $zabbix::params::server_loadmodulepath,
   $loadmodule              = $zabbix::params::server_loadmodule,
   $sslcertlocation_dir     = $zabbix::params::server_sslcertlocation,
-  $sslkeylocation_dir      = $zabbix::params::server_sslkeylocation,
-
-) inherits zabbix::params {
-
+  $sslkeylocation_dir      = $zabbix::params::server_sslkeylocation,) inherits zabbix::params {
   # Only include the repo class if it has not yet been included
   unless defined(Class['Zabbix::Repo']) {
     class { '::zabbix::repo':
@@ -359,7 +372,7 @@ class zabbix::server (
   # Get the correct database_type. We need this for installing the
   # correct package and loading the sql files.
   case $database_type {
-    'postgresql': {
+    'postgresql' : {
       $db = 'pgsql'
 
       # Execute the postgresql scripts
@@ -375,7 +388,7 @@ class zabbix::server (
         require              => Package["zabbix-server-${db}"],
       }
     }
-    'mysql': {
+    'mysql'      : {
       $db = 'mysql'
 
       # Execute the mysql scripts
@@ -391,7 +404,7 @@ class zabbix::server (
         require              => Package["zabbix-server-${db}"],
       }
     }
-    default: {
+    default      : {
       fail('unrecognized database type for server.')
     }
   }
@@ -405,7 +418,8 @@ class zabbix::server (
   # Workaround for: The redhat provider can not handle attribute enable
   # This is only happening when using an redhat family version 5.x.
   if $::osfamily == 'redhat' and $::operatingsystemrelease !~ /^5.*/ {
-    Service[$server_service_name] { enable     => true }
+    Service[$server_service_name] {
+      enable => true }
   }
 
   # Controlling the 'zabbix-server' service
@@ -417,8 +431,7 @@ class zabbix::server (
       Package["zabbix-server-${db}"],
       File[$include_dir],
       File[$server_configfile_path],
-      Class["zabbix::database::${database_type}"]
-    ],
+      Class["zabbix::database::${database_type}"]],
   }
 
   # Configuring the zabbix-server configuration file
@@ -447,7 +460,7 @@ class zabbix::server (
       dport  => $listenport,
       proto  => 'tcp',
       action => 'accept',
-      state  => ['NEW','RELATED', 'ESTABLISHED'],
+      state  => ['NEW', 'RELATED', 'ESTABLISHED'],
     }
   }
 

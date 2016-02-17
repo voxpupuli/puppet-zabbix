@@ -183,6 +183,36 @@
 # [*timeout*]
 #   Specifies how long we wait for agent, snmp device or external check (in seconds).
 #
+# [*tlsaccept*]
+#   What incoming connections to accept from Zabbix server. Used for a passive proxy, ignored on an active proxy.
+#
+# [*tlscafile*]
+#   Full pathname of a file containing the top-level CA(s) certificates for peer certificate verification.
+#
+# [*tlscertfile*]
+#   Full pathname of a file containing the proxy certificate or certificate chain.
+#
+# [*tlsconnect*]
+#   How the proxy should connect to Zabbix server. Used for an active proxy, ignored on a passive proxy.
+#
+# [*tlscrlfile*]
+#   Full pathname of a file containing revoked certificates.
+#
+# [*tlskeyfile*]
+#   Full pathname of a file containing the proxy private key.
+#
+# [*tlspskfile*]
+#   Full pathname of a file containing the pre-shared key.
+#
+# [*tlspskidentity*]
+#   Unique, case sensitive string used to identify the pre-shared key.
+#
+# [*tlsservercertissuer*]
+#   Allowed server certificate issuer.
+#
+# [*tlsservercertsubject*]
+#   Allowed server certificate subject.
+#
 # [*trappertimeout*]
 #   Specifies how many seconds trapper may spend processing new data.
 #
@@ -352,6 +382,16 @@ class zabbix::proxy (
   $historycachesize        = $zabbix::params::proxy_historycachesize,
   $historytextcachesize    = $zabbix::params::proxy_historytextcachesize,
   $timeout                 = $zabbix::params::proxy_timeout,
+  $tlsaccept               = $zabbix::params::proxy_tlsaccept,
+  $tlscafile               = $zabbix::params::proxy_tlscafile,
+  $tlscertfile             = $zabbix::params::proxy_tlscertfile,
+  $tlsconnect              = $zabbix::params::proxy_tlsconnect,
+  $tlscrlfile              = $zabbix::params::proxy_tlscrlfile,
+  $tlskeyfile              = $zabbix::params::proxy_tlskeyfile,
+  $tlspskfile              = $zabbix::params::proxy_tlspskfile,
+  $tlspskidentity          = $zabbix::params::proxy_tlspskidentity,
+  $tlsservercertissuer     = $zabbix::params::proxy_tlsservercertissuer,
+  $tlsservercertsubject    = $zabbix::params::proxy_tlsservercertsubject,
   $trappertimeout          = $zabbix::params::proxy_trappertimeout,
   $unreachableperiod       = $zabbix::params::proxy_unreachableperiod,
   $unavaliabledelay        = $zabbix::params::proxy_unavaliabledelay,
@@ -365,9 +405,7 @@ class zabbix::proxy (
   $allowroot               = $zabbix::params::proxy_allowroot,
   $include_dir             = $zabbix::params::proxy_include,
   $loadmodulepath          = $zabbix::params::proxy_loadmodulepath,
-  $loadmodule              = $zabbix::params::proxy_loadmodule,
-) inherits zabbix::params {
-
+  $loadmodule              = $zabbix::params::proxy_loadmodule,) inherits zabbix::params {
   # Check some if they are boolean
   validate_bool($manage_database)
   validate_bool($manage_firewall)
@@ -380,7 +418,7 @@ class zabbix::proxy (
   # is set to for example "eth1" or "bond0.73".
   if ($listenip != undef) {
     if ($listenip =~ /^(eth|bond|lxc|eno|tap|tun).*/) {
-      $int_name = "ipaddress_${listenip}"
+      $int_name  = "ipaddress_${listenip}"
       $listen_ip = inline_template('<%= scope.lookupvar(int_name) %>')
     } elsif is_ip_address($listenip) {
       $listen_ip = $listenip
@@ -402,32 +440,22 @@ class zabbix::proxy (
       port      => $listenport,
       templates => $zbx_templates,
     }
-    zabbix::userparameters { 'Zabbix_Proxy':
-      template => 'Template App Zabbix Proxy',
-    }
+
+    zabbix::userparameters { 'Zabbix_Proxy': template => 'Template App Zabbix Proxy', }
   }
 
   # Get the correct database_type. We need this for installing the
   # correct package and loading the sql files.
   case $database_type {
-    'postgresql': {
-      $db = 'pgsql'
-    }
-    'mysql': {
-      $db = 'mysql'
-    }
-    'sqlite': {
-      $db = 'sqlite3'
-    }
-    default: {
-      fail("Unrecognized database type for proxy: ${database_type}")
-    }
+    'postgresql' : { $db = 'pgsql' }
+    'mysql'      : { $db = 'mysql' }
+    'sqlite'     : { $db = 'sqlite3' }
+    default      : { fail("Unrecognized database type for proxy: ${database_type}") }
   }
 
   if $manage_database == true {
     case $database_type {
-      'postgresql': {
-
+      'postgresql' : {
         # Execute the postgresql scripts
         class { '::zabbix::database::postgresql':
           zabbix_type          => 'proxy',
@@ -441,8 +469,7 @@ class zabbix::proxy (
           require              => Package["zabbix-proxy-${db}"],
         }
       }
-      'mysql': {
-
+      'mysql'      : {
         # Execute the mysql scripts
         class { '::zabbix::database::mysql':
           zabbix_type          => 'proxy',
@@ -457,7 +484,7 @@ class zabbix::proxy (
         }
       }
 
-      default: {
+      default      : {
         fail("Unrecognized database type for proxy: ${database_type}")
       }
     }
@@ -469,35 +496,35 @@ class zabbix::proxy (
       manage_repo    => $manage_repo,
       zabbix_version => $zabbix_version,
     }
+
     Package["zabbix-proxy-${db}"] {
-      require => Class['zabbix::repo']
-    }
+      require => Class['zabbix::repo'] }
   }
 
   # Now we are going to install the correct packages.
   case $::operatingsystem {
-    'redhat','centos','oraclelinux' : {
+    'redhat', 'centos', 'oraclelinux' : {
       package { 'zabbix-proxy':
         ensure  => $zabbix_package_state,
         require => Package["zabbix-proxy-${db}"],
       }
+
       # Installing the packages
-      package { "zabbix-proxy-${db}":
-        ensure  => $zabbix_package_state,
-      }
+      package { "zabbix-proxy-${db}": ensure => $zabbix_package_state, }
     } # END 'redhat','centos','oraclelinux'
     default : {
       # Installing the packages
-      package { "zabbix-proxy-${db}":
-        ensure  => $zabbix_package_state,
-      }
+      package { "zabbix-proxy-${db}": ensure => $zabbix_package_state, }
     } # END default
   } # END case $::operatingsystem
+
+
 
   # Workaround for: The redhat provider can not handle attribute enable
   # This is only happening when using an redhat family version 5.x.
   if $::osfamily == 'redhat' and $::operatingsystemrelease !~ /^5.*/ {
-    Service[$proxy_service_name] { enable     => true }
+    Service[$proxy_service_name] {
+      enable => true }
   }
 
   # Controlling the 'zabbix-proxy' service
@@ -505,11 +532,7 @@ class zabbix::proxy (
     ensure     => running,
     hasstatus  => true,
     hasrestart => true,
-    require    => [
-      Package["zabbix-proxy-${db}"],
-      File[$include_dir],
-      File[$proxy_configfile_path]
-    ],
+    require    => [Package["zabbix-proxy-${db}"], File[$include_dir], File[$proxy_configfile_path]],
   }
 
   # if we want to manage the databases, we do
@@ -524,10 +547,7 @@ class zabbix::proxy (
       database_host     => $database_host,
       zabbix_proxy      => $zabbix_proxy,
       zabbix_proxy_ip   => $zabbix_proxy_ip,
-      before            => [
-        Service[$proxy_service_name],
-        Class["zabbix::database::${database_type}"],
-      ],
+      before            => [Service[$proxy_service_name], Class["zabbix::database::${database_type}"],],
     }
   }
 
@@ -555,7 +575,7 @@ class zabbix::proxy (
       dport  => $listenport,
       proto  => 'tcp',
       action => 'accept',
-      state  => ['NEW','RELATED', 'ESTABLISHED'],
+      state  => ['NEW', 'RELATED', 'ESTABLISHED'],
     }
   }
 }
