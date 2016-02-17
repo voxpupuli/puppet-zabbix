@@ -372,11 +372,12 @@ class zabbix::server (
 
   # Get the correct database_type. We need this for installing the
   # correct package and loading the sql files.
-  if $manage_database == true {
-    case $database_type {
-      'postgresql' : {
-        $db = 'pgsql'
 
+  case $database_type {
+    'postgresql' : {
+      $db = 'pgsql'
+
+      if $manage_database == true {
         # Execute the postgresql scripts
         class { '::zabbix::database::postgresql':
           zabbix_type          => 'server',
@@ -390,9 +391,11 @@ class zabbix::server (
           require              => Package["zabbix-server-${db}"],
         }
       }
-      'mysql'      : {
-        $db = 'mysql'
+    }
+    'mysql'      : {
+      $db = 'mysql'
 
+      if $manage_database == true {
         # Execute the mysql scripts
         class { '::zabbix::database::mysql':
           zabbix_type          => 'server',
@@ -406,9 +409,9 @@ class zabbix::server (
           require              => Package["zabbix-server-${db}"],
         }
       }
-      default      : {
-        fail('unrecognized database type for server.')
-      }
+    }
+    default      : {
+      fail('unrecognized database type for server.')
     }
   }
 
