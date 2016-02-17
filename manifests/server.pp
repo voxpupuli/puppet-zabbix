@@ -1,6 +1,6 @@
 # == Class: zabbix::server
 #
-#  This will install and configure the zabbix-agent deamon
+#  This will install and configure the zabbix-server deamon
 #
 # === Requirements
 #
