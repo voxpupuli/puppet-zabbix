@@ -399,3 +399,41 @@ LoadModulePath=<%= @loadmodulepath %>
 <% if @loadmodule %>
 LoadModule = <%= @loadmodule %>
 <% end %>
+
+<% if @zabbix_version == '3.0' %>
+####### TLS-RELATED PARAMETERS #######
+
+### Option: TLSCAFile
+#	Full pathname of a file containing the top-level CA(s) certificates for
+#	peer certificate verification.
+#
+# Mandatory: no
+# Default:
+# TLSCAFile=
+<% if @tlscafile %>TLSCAFile=<%= @tlscafile %><% end %>
+
+### Option: TLSCRLFile
+#	Full pathname of a file containing revoked certificates.
+#
+# Mandatory: no
+# Default:
+# TLSCRLFile=
+<% if @tlscrlfile %>TLSCRLFile=<%= @tlscrlfile %><% end %>
+
+### Option: TLSCertFile
+#	Full pathname of a file containing the server certificate or certificate chain.
+#
+# Mandatory: no
+# Default:
+# TLSCertFile=
+<% if @tlscertfile %>TLSCertFile=<%= @tlscertfile %><% end %>
+
+### Option: TLSKeyFile
+#	Full pathname of a file containing the server private key.
+#
+# Mandatory: no
+# Default:
+# TLSKeyFile=
+<% if @tlskeyfile %>TLSKeyFile=<%= @tlskeyfile %><% end %>
+
+<% end %>
