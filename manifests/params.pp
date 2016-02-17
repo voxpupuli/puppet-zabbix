@@ -250,6 +250,16 @@ class zabbix::params {
   $proxy_starttrappers            = '5'
   $proxy_startvmwarecollectors    = '0'
   $proxy_timeout                  = '3'
+  $proxy_tlsaccept                = undef
+  $proxy_tlscafile                = undef
+  $proxy_tlscertfile              = undef
+  $proxy_tlsconnect               = undef
+  $proxy_tlscrlfile               = undef
+  $proxy_tlskeyfile               = undef
+  $proxy_tlspskfile               = undef
+  $proxy_tlspskidentity           = undef
+  $proxy_tlsservercertissuer      = undef
+  $proxy_tlsservercertsubject     = undef
   $proxy_tmpdir                   = '/tmp'
   $proxy_trappertimeout           = '300'
   $proxy_unavaliabledelay         = '60'
