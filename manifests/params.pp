@@ -138,6 +138,10 @@ class zabbix::params {
   $server_starttrappers           = '5'
   $server_startvmwarecollectors   = '0'
   $server_timeout                 = '3'
+  $server_tlscafile               = undef
+  $server_tlscertfile             = undef
+  $server_tlscrlfile              = undef
+  $server_tlskeyfile              = undef
   $server_tmpdir                  = '/tmp'
   $server_trappertimeout          = '300'
   $server_trendcachesize          = '4M'
@@ -176,6 +180,16 @@ class zabbix::params {
   $agent_sourceip                 = undef
   $agent_startagents              = '3'
   $agent_timeout                  = '3'
+  $agent_tlsaccept                = undef
+  $agent_tlscafile                = undef
+  $agent_tlscertfile              = undef
+  $agent_tlsconnect               = undef
+  $agent_tlscrlfile               = undef
+  $agent_tlskeyfile               = undef
+  $agent_tlspskfile               = undef
+  $agent_tlspskidentity           = undef
+  $agent_tlsservercertissuer      = undef
+  $agent_tlsservercertsubject     = undef
   $agent_unsafeuserparameters     = '0'
   $agent_use_ip                   = true
   $agent_userparameter            = undef
