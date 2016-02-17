@@ -192,7 +192,7 @@ VMwareFrequency=<%= @vmwarefrequency %>
 ### Option: VMwarePerfFrequency
 #   How often Zabbix will connect to VMware service to obtain performance data.
 #
-VMwarePerfFrequency=<%= @vmwareperffrequency %>
+<% if @vmwareperffrequency %>VMwarePerfFrequency=<%= @vmwareperffrequency %><% end %>
 
 ### Option: VMwareCacheSize
 #   Size of VMware cache, in bytes.
