@@ -2,403 +2,469 @@
 # to get more information about zabbix,
 # visit http://www.zabbix.com
 
-############ general parameters #################
-<% if @zabbix_version != '2.4' and @zabbix_version != '3.0' %>
-### option: nodeid
-#	unique nodeid in distributed setup.
-#	0 - standalone server
+############ GENERAL PARAMETERS #################
+<% if @zabbix_version.to_f < 2.4 %>
+### Option: NodeID
+#   Unique NodeID in distributed setup.
+#   0 - standalone server
 #
 NodeID=<%= @nodeid %>
 <% end %>
-### option: listenport
-#	listen port for trapper.
+
+### Option: ListenPort
+#	Listen port for trapper.
 #
+# Mandatory: no
+# Range: 1024-32767
+# Default:
+# ListenPort=10051
 ListenPort=<%= @listenport %>
 
-### option: sourceip
-#	source ip address for outgoing connections.
+### Option: SourceIP
+#	Source IP address for outgoing connections.
 #
+# Mandatory: no
+# Default:
+# SourceIP=
 <% if @sourceip %>SourceIP=<%= @sourceip %><% end %>
 
-### option: logfile
-#	name of log file.
-#	if not set, syslog is used.
+<% if @zabbix_version.to_f >= 3.0 %>
+### Option: LogType
+#	Specifies where log messages are written to:
+#		system  - syslog
+#		file    - file specified with LogFile parameter
+#		console - standard output
+#
+<% if @logtype %>LogType=<%= @logtype %><% end %>
+<% end %>
+
+### Option: LogFile
+#	Log file name for LogType 'file' parameter.
 #
 LogFile=<%= @logfile %>
 
-### option: logfilesize
-#	maximum size of log file in mb.
+### Option: LogFileSize
+#	Maximum size of log file in MB.
 #	0 - disable automatic log rotation.
 #
 LogFileSize=<%= @logfilesize %>
 
-### option: debuglevel
-#	specifies debug level
-#	0 - no debug
+### Option: DebugLevel
+#	Specifies debug level:
+#	0 - basic information about starting and stopping of Zabbix processes
 #	1 - critical information
 #	2 - error information
 #	3 - warnings
 #	4 - for debugging (produces lots of information)
-#
+<% if @zabbix_version.to_f >= 3.0 %>
+#	5 - extended debugging (produces even more information)
+<% end %>
 DebugLevel=<%= @debuglevel %>
 
-### option: pidfile
-#	name of pid file.
+### Option: PidFile
+#	Name of PID file.
 #
 PidFile=<%= @pidfile %>
 
-### option: dbhost
-#	database host name.
-#	if set to localhost, socket is used for mysql.
-#	if set to empty string, socket is used for postgresql.
+### Option: DBHost
+#	Database host name.
+#	If set to localhost, socket is used for MySQL.
+#	If set to empty string, socket is used for PostgreSQL.
 #
 DBHost=<%= @database_host %>
 
-### option: dbname
-#	database name.
-#	for sqlite3 path to database file must be provided. dbuser and dbpassword are ignored.
+### Option: DBName
+#	Database name.
+#	For SQLite3 path to database file must be provided. DBUser and DBPassword are ignored.
 #
 DBName=<%= @database_name %>
 
-### option: dbschema
-#	schema name. used for ibm db2.
+### Option: DBSchema
+#	Schema name. Used for IBM DB2 and PostgreSQL.
 #
 <% if @database_schema %>DBSchema=<%= @database_schema %><% end %>
 
-### option: dbuser
-#	database user. ignored for sqlite.
+### Option: DBUser
+#	Database user. Ignored for SQLite.
 #
 DBUser=<%= @database_user %>
 
-### option: dbpassword
-#	database password. ignored for sqlite.
-#	comment this line if no password is used.
+### Option: DBPassword
+#	Database password. Ignored for SQLite.
+#	Comment this line if no password is used.
 #
 DBPassword=<%= @database_password %>
 
-### option: dbsocket
-#	path to mysql socket.
+### Option: DBSocket
+#	Path to MySQL socket.
 #
 <% if @database_socket %>DBSocket=<%= @database_socket %><% end %>
 
-### option: dbport
-#	database port when not using local socket. ignored for sqlite.
+### Option: DBPort
+#	Database port when not using local socket. Ignored for SQLite.
 #
 <% if @database_port %>DBPort=<%= @database_port %><% end %>
 
-############ advanced parameters ################
+############ ADVANCED PARAMETERS ################
 
-### option: startpollers
-#	number of pre-forked instances of pollers.
+### Option: StartPollers
+#	Number of pre-forked instances of pollers.
 #
 StartPollers=<%= @startpollers %>
 
-### option: startipmipollers
-#	number of pre-forked instances of ipmi pollers.
+### Option: StartIPMIPollers
+#	Number of pre-forked instances of IPMI pollers.
 #
 StartIPMIPollers=<%= @startipmipollers %>
 
-### option: startpollersunreachable
-#	number of pre-forked instances of pollers for unreachable hosts (including ipmi).
+### Option: StartPollersUnreachable
+#	Number of pre-forked instances of pollers for unreachable hosts (including IPMI and Java).
+#	At least one poller for unreachable hosts must be running if regular, IPMI or Java pollers
+#	are started.
 #
 StartPollersUnreachable=<%= @startpollersunreachable %>
 
-### option: starttrappers
-#	number of pre-forked instances of trappers.
-#	trappers accept incoming connections from zabbix sender, active agents, active proxies and child nodes.
-#	at least one trapper process must be running to display server availability in the frontend.
+### Option: StartTrappers
+#	Number of pre-forked instances of trappers.
+#	Trappers accept incoming connections from Zabbix sender, active agents and active proxies.
+#	At least one trapper process must be running to display server availability and view queue
+#	in the frontend.
 #
 StartTrappers=<%= @starttrappers %>
 
-### option: startpingers
-#	number of pre-forked instances of icmp pingers.
+### Option: StartPingers
+#	Number of pre-forked instances of ICMP pingers.
 #
 StartPingers=<%= @startpingers %>
 
-### option: startdiscoverers
-#	number of pre-forked instances of discoverers.
+### Option: StartDiscoverers
+#	Number of pre-forked instances of discoverers.
 #
 StartDiscoverers=<%= @startdiscoverers %>
 
-### option: starthttppollers
-#	number of pre-forked instances of http pollers.
+### Option: StartHTTPPollers
+#	Number of pre-forked instances of HTTP pollers.
 #
 StartHTTPPollers=<%= @starthttppollers %>
-<% if @zabbix_version == '2.2' or @zabbix_version == '2.4' %>
-### option: starttimers
-#	number of pre-forked instances of timers.
-#	timers process time-based trigger functions and maintenance periods.
-#	only the first timer process handles the maintenance periods.
+
+### Option: StartTimers
+#	Number of pre-forked instances of timers.
+#	Timers process time-based trigger functions and maintenance periods.
+#	Only the first timer process handles the maintenance periods.
 #
 StartTimers=<%= @starttimers %>
-<% end %>
-### option: javagateway
-#	ip address (or hostname) of zabbix java gateway.
-#	only required if java pollers are started.
-#
-<% if @javagateway %>JavaGateway=<%= @javagateway %>
 
-### option: javagatewayport
-#	port that zabbix java gateway listens on.
+<% if @zabbix_version.to_f >= 3.0 %>
+### Option: StartEscalators
+#   Number of pre-forked instances of escalators.
+#
+<% if @startescalators %>StartEscalators=<%= @startescalators %><% end %>
+<% end %>
+
+<% if @javagateway %>
+### Option: JavaGateway
+#	IP address (or hostname) of Zabbix Java gateway.
+#	Only required if Java pollers are started.
+#
+JavaGateway=<%= @javagateway %>
+
+### Option: JavaGatewayPort
+#	Port that Zabbix Java gateway listens on.
 #
 JavaGatewayPort=<%= @javagatewayport %>
 
-### option: startjavapollers
-#	number of pre-forked instances of java pollers.
+### Option: StartJavaPollers
+#	Number of pre-forked instances of Java pollers.
 #
 StartJavaPollers=<%= @startjavapollers %>
 <% end %>
 
-<% if @zabbix_version == '2.2' or @zabbix_version == '2.4' %>
-### option: startvmwarecollectors
-#	number of pre-forked vmware collector instances.
+### Option: StartVMwareCollectors
+#	Number of pre-forked vmware collector instances.
 #
 StartVMwareCollectors=<%= @startvmwarecollectors %>
 
-### option: vmwarefrequency
-#	how often zabbix will connect to vmware service to obtain a new data.
+### Option: VMwareFrequency
+#	How often Zabbix will connect to VMware service to obtain a new data.
 #
 VMwareFrequency=<%= @vmwarefrequency %>
 
-### option: vmwarecachesize
-#	size of vmware cache, in bytes.
-#	shared memory size for storing vmware data.
-#	only used if vmware collectors are started.
+### Option: VMwarePerfFrequency
+#   How often Zabbix will connect to VMware service to obtain performance data.
+#
+<% if @vmwareperffrequency %>VMwarePerfFrequency=<%= @vmwareperffrequency %><% end %>
+
+### Option: VMwareCacheSize
+#   Size of VMware cache, in bytes.
+#   Shared memory size for storing VMware data.
+#   Only used if VMware collectors are started.
 #
 VMwareCacheSize=<%= @vmwarecachesize %>
+
+### Option: VMwareTimeout
+#   Specifies how many seconds vmware collector waits for response from VMware service.
+#
+<% if @vmwaretimeout %>VMwareTimeout=<%= @vmwaretimeout %><% end %>
+
+<% if @zabbix_version.to_f < 2.4 %>
+### Option: EnableSNMPBulkRequests
+#   Enable or disable SNMP bulk requests.
+#   0 - disable
+#   1 - enable
+#
+<% if @enablesnmpbulkrequests %>EnableSNMPBulkRequests=<%= @enablesnmpbulkrequests %><% end %>
 <% end %>
 
-### option: snmptrapperfile
-#	temporary file used for passing data from snmp trap daemon to the server.
-#	must be the same as in zabbix_trap_receiver.pl or snmptt configuration file.
+### Option: SNMPTrapperFile
+#   Temporary file used for passing data from SNMP trap daemon to the server.
+#   Must be the same as in zabbix_trap_receiver.pl or SNMPTT configuration file.
 #
 SNMPTrapperFile=<%= @snmptrapperfile %>
 
-### option: startsnmptrapper
-#	if 1, snmp trapper process is started.
+### Option: StartSNMPTrapper
+#   If 1, SNMP trapper process is started.
 #
 StartSNMPTrapper=<%= @startsnmptrapper %>
 
-### option: listenip
-#	list of comma delimited ip addresses that the trapper should listen on.
-#	trapper will listen on all network interfaces if this parameter is missing.
+### Option: ListenIP
+#   List of comma delimited IP addresses that the trapper should listen on.
+#   Trapper will listen on all network interfaces if this parameter is missing.
 #
-<% if @listenip %>
-ListenIP=<%= @listenip %>
-<% end %>
+<% if @listenip %>ListenIP=<%= @listenip %><% end %>
 
-### option: housekeepingfrequency
-#	how often zabbix will perform housekeeping procedure (in hours).
-#	housekeeping is removing unnecessary information from history, alert, and alarms tables.
+### Option: HousekeepingFrequency
+#   How often Zabbix will perform housekeeping procedure (in hours).
+#   Housekeeping is removing outdated information from the database.
+#   To prevent Housekeeper from being overloaded, no more than 4 times HousekeepingFrequency
+#   hours of outdated information are deleted in one housekeeping cycle, for each item.
+#   To lower load on server startup housekeeping is postponed for 30 minutes after server start.
 #
 HousekeepingFrequency=<%= @housekeepingfrequency %>
 
-### option: maxhousekeeperdelete
-#	the table "housekeeper" contains "tasks" for housekeeping procedure in the format:
-#	[housekeeperid], [tablename], [field], [value].
-#	no more than 'maxhousekeeperdelete' rows (corresponding to [tablename], [field], [value])
-#	will be deleted per one task in one housekeeping cycle.
-#	sqlite3 does not use this parameter, deletes all corresponding rows without a limit.
-#	if set to 0 then no limit is used at all. in this case you must know what you are doing!
+### Option: MaxHousekeeperDelete
+#   The table "housekeeper" contains "tasks" for housekeeping procedure in the format:
+#   [housekeeperid], [tablename], [field], [value].
+#   No more than 'MaxHousekeeperDelete' rows (corresponding to [tablename], [field], [value])
+#   will be deleted per one task in one housekeeping cycle.
+#   SQLite3 does not use this parameter, deletes all corresponding rows without a limit.
+#   If set to 0 then no limit is used at all. In this case you must know what you are doing!
 #
 MaxHousekeeperDelete=<%= @maxhousekeeperdelete %>
 
-### option: senderfrequency
-#	how often zabbix will try to send unsent alerts (in seconds).
+### Option: SenderFrequency
+#   How often Zabbix will try to send unsent alerts (in seconds).
 #
 SenderFrequency=<%= @senderfrequency %>
 
-### option: cachesize
-#	size of configuration cache, in bytes.
-#	shared memory size for storing host, item and trigger data.
+### Option: CacheSize
+#   Size of configuration cache, in bytes.
+#   Shared memory size for storing host, item and trigger data.
 #
 CacheSize=<%= @cachesize %>
 
-### option: cacheupdatefrequency
-#	how often zabbix will perform update of configuration cache, in seconds.
+### Option: CacheUpdateFrequency
+#   How often Zabbix will perform update of configuration cache, in seconds.
 #
 CacheUpdateFrequency=<%= @cacheupdatefrequency %>
 
-### option: startdbsyncers
-#	number of pre-forked instances of db syncers
+### Option: StartDBSyncers
+#   Number of pre-forked instances of DB Syncers
 #
 StartDBSyncers=<%= @startdbsyncers %>
 
-### option: historycachesize
-#	size of history cache, in bytes.
-#	shared memory size for storing history data.
+### Option: HistoryCacheSize
+#   Size of history cache, in bytes.
+#   Shared memory size for storing history data.
 #
 HistoryCacheSize=<%= @historycachesize %>
 
-### option: trendcachesize
-#	size of trend cache, in bytes.
-#	shared memory size for storing trends data.
+<% if @zabbix_version.to_f >= 3.0 %>
+### Option: HistoryIndexCacheSize
+#   Size of history index cache, in bytes.
+#   Shared memory size for indexing history cache.
+#
+<% if @historyindexcachesize %>HistoryIndexCacheSize=<%= @historyindexcachesize %><% end %>
+<% end %>
+
+### Option: TrendCacheSize
+#   Size of trend cache, in bytes.
+#   Shared memory size for storing trends data.
 #
 TrendCacheSize=<%= @trendcachesize %>
 
-<% if @zabbix_version != '3.0' %>
-### option: historytextcachesize
-#	size of text history cache, in bytes.
-#	shared memory size for storing character, text or log history data.
+<% if @zabbix_version.to_f <= 2.4 %>
+### Option: HistoryTextCacheSize
+#   Size of text history cache, in bytes.
+#   Shared memory size for storing character, text or log history data.
 #
 HistoryTextCacheSize=<%= @historytextcachesize %>
 <% end %>
 
-<% if @zabbix_version == '2.2'  or @zabbix_version == '2.4' %>
-### option: valuecachesize
-#	size of history value cache, in bytes.
-#	shared memory size for caching item history data requests
-#	setting to 0 disables value cache.
+### Option: ValueCacheSize
+#   Size of history value cache, in bytes.
+#   Shared memory size for caching item history data requests.
+#   Setting to 0 disables value cache.
 #
 ValueCacheSize=<%= @valuecachesize %>
-<% end %>
 
-<% if @zabbix_version != '2.4' and @zabbix_version != '3.0' %>
-### option: nodenoevents
-#	if set to '1' local events won't be sent to master node.
-#	this won't impact ability of this node to propagate events from its child nodes.
+<% if @zabbix_version.to_f < 2.4 %>
+### Option: NodeNoEvents
+#   If set to '1' local events won't be sent to master node.
+#   This won't impact ability of this node to propagate events from its child nodes.
 #
 NodeNoEvents=<%= @nodenoevents %>
 
-### option: nodenohistory
-#	if set to '1' local history won't be sent to master node.
-#	this won't impact ability of this node to propagate history from its child nodes.
+### Option: NodeNoHistory
+#   If set to '1' local history won't be sent to master node.
+#   This won't impact ability of this node to propagate history from its child nodes.
 #
 NodeNoHistory=<%= @nodenohistory %>
 <% end %>
 
-### option: timeout
-#	specifies how long we wait for agent, snmp device or external check (in seconds).
+### Option: Timeout
+#   Specifies how long we wait for agent, SNMP device or external check (in seconds).
 #
 Timeout=<%= @timeout %>
 
-### option: trappertimeout
-#	specifies how many seconds trapper may spend processing new data.
+### Option: TrapperTimeout
+#   Specifies how many seconds trapper may spend processing new data.
 #
 TrapperTimeout=<%= @trappertimeout %>
 
-### option: unreachableperiod
-#	after how many seconds of unreachability treat a host as unavailable.
+### Option: UnreachablePeriod
+#   After how many seconds of unreachability treat a host as unavailable.
 #
 UnreachablePeriod=<%= @unreachableperiod %>
 
-### option: unavailabledelay
-#	how often host is checked for availability during the unavailability period, in seconds.
+### Option: UnavailableDelay
+#   How often host is checked for availability during the unavailability period, in seconds.
 #
 UnavailableDelay=<%= @unavailabledelay %>
 
-### option: unreachabledelay
-#	how often host is checked for availability during the unreachability period, in seconds.
+### Option: UnreachableDelay
+#   How often host is checked for availability during the unreachability period, in seconds.
 #
 UnreachableDelay=<%= @unreachabledelay %>
 
-### option: alertscriptspath
-#	full path to location of custom alert scripts.
-#	default depends on compilation options.
+### Option: AlertScriptsPath
+#   Full path to location of custom alert scripts.
+#   Default depends on compilation options.
 #
 AlertScriptsPath=<%= @alertscriptspath %>
 
-### option: externalscripts
-#	full path to location of external scripts.
-#	default depends on compilation options.
+### Option: ExternalScripts
+#   Full path to location of external scripts.
+#   Default depends on compilation options.
 #
 ExternalScripts=<%= @externalscripts %>
 
-### option: fpinglocation
-#	location of fping.
-#	make sure that fping binary has root ownership and suid flag set.
+### Option: FpingLocation
+#   Location of fping.
+#   Make sure that fping binary has root ownership and SUID flag set.
 #
 FpingLocation=<%= @fpinglocation %>
 
-### option: fping6location
-#	location of fping6.
-#	make sure that fping6 binary has root ownership and suid flag set.
-#	make empty if your fping utility is capable to process ipv6 addresses.
+### Option: Fping6Location
+#   Location of fping6.
+#   Make sure that fping6 binary has root ownership and SUID flag set.
+#   Make empty if your fping utility is capable to process IPv6 addresses.
 #
 Fping6Location=<%= @fping6location %>
 
-### option: sshkeylocation
-#	location of public and private keys for ssh checks and actions.
+### Option: SSHKeyLocation
+#   Location of public and private keys for SSH checks and actions.
 #
-<% if @sshkeylocation %>
-SSHKeyLocation=<%= @sshkeylocation %>
-<% end %>
+<% if @sshkeylocation %>SSHKeyLocation=<%= @sshkeylocation %><% end %>
 
-### option: logslowqueries
-#	how long a database query may take before being logged (in milliseconds).
-#	only works if debuglevel set to 3 or 4.
-#	0 - don't log slow queries.
+### Option: LogSlowQueries
+#   How long a database query may take before being logged (in milliseconds).
+#   Only works if DebugLevel set to 3 or 4<% if @zabbix_version.to_f >= 3.0 %> or 5<% end %>.
+#   0 - don't log slow queries.
 #
 LogSlowQueries=<%= @logslowqueries %>
 
-### option: tmpdir
-#	temporary directory.
+### Option: TmpDir
+#   Temporary directory.
 #
 TmpDir=<%= @tmpdir %>
 
-### option: startproxypollers
-#	number of pre-forked instances of pollers for passive proxies.
+### Option: StartProxyPollers
+#   Number of pre-forked instances of pollers for passive proxies.
 #
 StartProxyPollers=<%= @startproxypollers %>
 
-### option: proxyconfigfrequency
-#	how often zabbix server sends configuration data to a zabbix proxy in seconds.
-#	this parameter is used only for proxies in the passive mode.
+### Option: ProxyConfigFrequency
+#   How often Zabbix Server sends configuration data to a Zabbix Proxy in seconds.
+#   This parameter is used only for proxies in the passive mode.
 #
 ProxyConfigFrequency=<%= @proxyconfigfrequency %>
 
-### option: proxydatafrequency
-#	how often zabbix server requests history data from a zabbix proxy in seconds.
-#	this parameter is used only for proxies in the passive mode.
+### Option: ProxyDataFrequency
+#   How often Zabbix Server requests history data from a Zabbix Proxy in seconds.
+#   This parameter is used only for proxies in the passive mode.
 #
 ProxyDataFrequency=<%= @proxydatafrequency %>
 
-<% if @zabbix_version == '2.2'  or @zabbix_version == '2.4' %>
-### option: allowroot
-#	allow the server to run as 'root'. if disabled and the server is started by 'root', the server
-#	will try to switch to user 'zabbix' instead. has no effect if started under a regular user.
-#	0 - do not allow
-#	1 - allow
+### Option: AllowRoot
+#   Allow the server to run as 'root'. If disabled and the server is started by 'root', the server
+#   will try to switch to the user specified by the User configuration option instead.
+#   Has no effect if started under a regular user.
+#   0 - do not allow
+#   1 - allow
 #
 AllowRoot=<%= @allowroot %>
-<% end %>
 
-### option: include
-#	you may include individual files or all files in a directory in the configuration file.
-#	installing zabbix will create include directory in /usr/local/etc, unless modified during the compile time.
+### Option: User
+#   Drop privileges to a specific, existing user on the system.
+#   Only has effect if run as 'root' and AllowRoot is disabled.
+#
+# Mandatory: no
+# Default:
+# User=zabbix
+<% if @zabbix_user %>User=<%= @zabbix_user %><% end %>
+
+### Option: Include
+#   You may include individual files or all files in a directory in the configuration file.
+#   Installing Zabbix will create include directory in /usr/local/etc, unless modified during the compile time.
 #
 Include=<%= @include_dir %>
 
 <% if @zabbix_version == '2.4' %>
-### option: SSLCertLocation
-#       location of SSL client certificate files for client authentication.
+### Option: SSLCertLocation
+#   Location of SSL client certificates.
+#   This parameter is used only in web monitoring.
 #
 SSLCertLocation=<%= @sslcertlocation_dir %>
-
-### option: SSLKeyLocation
-#       location of SSL private key files for client authentication.
+ 
+### Option: SSLKeyLocation
+#   Location of private keys for SSL client certificates.
+#   This parameter is used only in web monitoring.
 #
 SSLKeyLocation=<%= @sslkeylocation_dir %>
+ 
+### Option: SSLCALocation
+#   Override the location of certificate authority (CA) files for SSL server certificate verification.
+#   If not set, system-wide directory will be used.
+#   This parameter is used only in web monitoring.
+#
+<% if @sslcalocation_dir %>SSLCALocation=<%= @sslcalocation_dir %><% end %>
 <% end %>
 
-####### loadable modules #######
-<% if @zabbix_version == '2.2' or @zabbix_version == '2.4' %>
-### option: loadmodulepath
-#	full path to location of server modules.
-#	default depends on compilation options.
+####### LOADABLE MODULES #######
+ 
+### Option: LoadModulePath
+#   Full path to location of server modules.
+#   Default depends on compilation options.
 #
 LoadModulePath=<%= @loadmodulepath %>
-<% end %>
 
-### option: loadmodule
-#	module to load at server startup. modules are used to extend functionality of the server.
-#	format: loadmodule=<module.so>
-#	the modules must be located in directory specified by loadmodulepath.
-#	it is allowed to include multiple loadmodule parameters.
+### Option: LoadModule
+#   Module to load at server startup. Modules are used to extend functionality of the server.
+#   Format: LoadModule=<module.so>
+#   The modules must be located in directory specified by LoadModulePath.
+#   It is allowed to include multiple LoadModule parameters.
 #
-<% if @loadmodule %>
-LoadModule = <%= @loadmodule %>
-<% end %>
+<% if @loadmodule %>LoadModule = <%= @loadmodule %><% end %>
 
 <% if @zabbix_version == '3.0' %>
 ####### TLS-RELATED PARAMETERS #######

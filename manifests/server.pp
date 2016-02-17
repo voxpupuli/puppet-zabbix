@@ -285,6 +285,7 @@ class zabbix::server (
   $zabbix_package_state    = $zabbix::params::zabbix_package_state,
   $manage_firewall         = $zabbix::params::manage_firewall,
   $manage_repo             = $zabbix::params::manage_repo,
+  $manage_database         = $zabbix::params::manage_database,
   $server_configfile_path  = $zabbix::params::server_configfile_path,
   $server_config_owner     = $zabbix::params::server_config_owner,
   $server_config_group     = $zabbix::params::server_config_group,
@@ -358,6 +359,8 @@ class zabbix::server (
   $loadmodule              = $zabbix::params::server_loadmodule,
   $sslcertlocation_dir     = $zabbix::params::server_sslcertlocation,
   $sslkeylocation_dir      = $zabbix::params::server_sslkeylocation,) inherits zabbix::params {
+  notify { "Installing Zabbix Server ${zabbix_version}": }
+
   # Only include the repo class if it has not yet been included
   unless defined(Class['Zabbix::Repo']) {
     class { '::zabbix::repo':
@@ -371,37 +374,42 @@ class zabbix::server (
 
   # Get the correct database_type. We need this for installing the
   # correct package and loading the sql files.
+
   case $database_type {
     'postgresql' : {
       $db = 'pgsql'
 
-      # Execute the postgresql scripts
-      class { '::zabbix::database::postgresql':
-        zabbix_type          => 'server',
-        zabbix_version       => $zabbix_version,
-        database_schema_path => $database_schema_path,
-        database_name        => $database_name,
-        database_user        => $database_user,
-        database_password    => $database_password,
-        database_host        => $database_host,
-        database_path        => $database_path,
-        require              => Package["zabbix-server-${db}"],
+      if $manage_database == true {
+        # Execute the postgresql scripts
+        class { '::zabbix::database::postgresql':
+          zabbix_type          => 'server',
+          zabbix_version       => $zabbix_version,
+          database_schema_path => $database_schema_path,
+          database_name        => $database_name,
+          database_user        => $database_user,
+          database_password    => $database_password,
+          database_host        => $database_host,
+          database_path        => $database_path,
+          require              => Package["zabbix-server-${db}"],
+        }
       }
     }
     'mysql'      : {
       $db = 'mysql'
 
-      # Execute the mysql scripts
-      class { '::zabbix::database::mysql':
-        zabbix_type          => 'server',
-        zabbix_version       => $zabbix_version,
-        database_schema_path => $database_schema_path,
-        database_name        => $database_name,
-        database_user        => $database_user,
-        database_password    => $database_password,
-        database_host        => $database_host,
-        database_path        => $database_path,
-        require              => Package["zabbix-server-${db}"],
+      if $manage_database == true {
+        # Execute the mysql scripts
+        class { '::zabbix::database::mysql':
+          zabbix_type          => 'server',
+          zabbix_version       => $zabbix_version,
+          database_schema_path => $database_schema_path,
+          database_name        => $database_name,
+          database_user        => $database_user,
+          database_password    => $database_password,
+          database_host        => $database_host,
+          database_path        => $database_path,
+          require              => Package["zabbix-server-${db}"],
+        }
       }
     }
     default      : {
@@ -431,7 +439,7 @@ class zabbix::server (
       Package["zabbix-server-${db}"],
       File[$include_dir],
       File[$server_configfile_path],
-      Class["zabbix::database::${database_type}"]],
+      ],
   }
 
   # Configuring the zabbix-server configuration file
