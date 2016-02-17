@@ -204,7 +204,7 @@ VMwareCacheSize=<%= @vmwarecachesize %>
 ### Option: VMwareTimeout
 #   Specifies how many seconds vmware collector waits for response from VMware service.
 #
-VMwareTimeout=<%= @vmwarecachesize %>
+<% if @vmwarecachesize %>VMwareTimeout=<%= @vmwarecachesize %><% end %>
 
 <% if @zabbix_version.to_f < 2.4 %>
 ### Option: EnableSNMPBulkRequests
