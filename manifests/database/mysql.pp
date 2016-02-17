@@ -23,40 +23,31 @@ class zabbix::database::mysql (
   $database_user        = '',
   $database_password    = '',
   $database_host        = '',
-  $database_path        = $zabbix::params::database_path,
-) {
+  $database_path        = $zabbix::params::database_path,) inherits zabbix::params {
   # Adjustments for version 3.0 - structure of package with sqls differs from previous versions
   case $zabbix_version {
-    '3.0': {
-      $sql_dir = ''
-    }
-    default: {
-      $sql_dir = 'create'
-    }
+    '3.0'   : { $sql_dir = '' }
+    default : { $sql_dir = 'create' }
   }
+
   # Allow to customize the path to the Database Schema,
   if ($database_schema_path == false) or ($database_schema_path == '') {
     case $::operatingsystem {
-      'CentOS','RedHat','OracleLinux' : {
-        $schema_path = "/usr/share/doc/zabbix-*-mysql-${zabbix_version}*/${sql_dir}"
-      }
-      default : {
-        $schema_path = '/usr/share/zabbix-*-mysql'
-      }
+      'CentOS', 'RedHat', 'OracleLinux' : { $schema_path = "/usr/share/doc/zabbix-*-mysql-${zabbix_version}*/${sql_dir}" }
+      default : { $schema_path = '/usr/share/zabbix-*-mysql' }
     }
-  }
-  else {
+  } else {
     $schema_path = $database_schema_path
   }
 
   # Loading the sql files.
   case $zabbix_type {
-    'proxy': {
+    'proxy'  : {
       case $zabbix_version {
-        '3.0': {
+        '3.0'   : {
           $zabbix_proxy_create_sql = "cd ${schema_path} && if [ -f create.sql.gz ]; then gunzip create.sql.gz ; fi && mysql -h '${database_host}' -u '${database_user}' -p'${database_password}' -D '${database_name}' < create.sql && touch /etc/zabbix/.schema.done"
         }
-        default: {
+        default : {
           $zabbix_proxy_create_sql = "cd ${schema_path} && if [ -f schema.sql.gz ]; then gunzip schema.sql.gz ; fi && mysql -h '${database_host}' -u '${database_user}' -p'${database_password}' -D '${database_name}' < schema.sql && touch /etc/zabbix/.schema.done"
         }
       }
@@ -70,14 +61,14 @@ class zabbix::database::mysql (
         notify   => Service['zabbix-proxy'],
       }
     }
-    'server': {
+    'server' : {
       case $zabbix_version {
-        '3.0': {
+        '3.0'   : {
           $zabbix_server_create_sql = "cd ${schema_path} && if [ -f create.sql.gz ]; then gunzip create.sql.gz ; fi && mysql -h '${database_host}' -u '${database_user}' -p'${database_password}' -D '${database_name}' < create.sql && touch /etc/zabbix/.schema.done"
           $zabbix_server_images_sql = 'touch /etc/zabbix/.images.done'
           $zabbix_server_data_sql   = 'touch /etc/zabbix/.data.done'
         }
-        default: {
+        default : {
           $zabbix_server_create_sql = "cd ${schema_path} && if [ -f schema.sql.gz ]; then gunzip schema.sql.gz ; fi && mysql -h '${database_host}' -u '${database_user}' -p'${database_password}' -D '${database_name}' < schema.sql && touch /etc/zabbix/.schema.done"
           $zabbix_server_images_sql = "cd ${schema_path} && if [ -f images.sql.gz ]; then gunzip images.sql.gz ; fi && mysql -h '${database_host}' -u '${database_user}' -p'${database_password}' -D '${database_name}' < images.sql && touch /etc/zabbix/.images.done"
           $zabbix_server_data_sql   = "cd ${schema_path} && if [ -f data.sql.gz ]; then gunzip data.sql.gz ; fi && mysql -h '${database_host}' -u '${database_user}' -p'${database_password}' -D '${database_name}' < data.sql && touch /etc/zabbix/.data.done"
@@ -102,7 +93,7 @@ class zabbix::database::mysql (
         provider => 'shell',
       }
     }
-    default: {
+    default  : {
       fail 'We do not work.'
     }
   } # END case $zabbix_type
