@@ -460,7 +460,10 @@ class zabbix::server (
       dport  => $listenport,
       proto  => 'tcp',
       action => 'accept',
-      state  => ['NEW', 'RELATED', 'ESTABLISHED'],
+      state  => [
+        'NEW',
+        'RELATED',
+        'ESTABLISHED'],
     }
   }
 

@@ -532,7 +532,10 @@ class zabbix::proxy (
     ensure     => running,
     hasstatus  => true,
     hasrestart => true,
-    require    => [Package["zabbix-proxy-${db}"], File[$include_dir], File[$proxy_configfile_path]],
+    require    => [
+      Package["zabbix-proxy-${db}"],
+      File[$include_dir],
+      File[$proxy_configfile_path]],
   }
 
   # if we want to manage the databases, we do
@@ -547,7 +550,10 @@ class zabbix::proxy (
       database_host     => $database_host,
       zabbix_proxy      => $zabbix_proxy,
       zabbix_proxy_ip   => $zabbix_proxy_ip,
-      before            => [Service[$proxy_service_name], Class["zabbix::database::${database_type}"],],
+      before            => [
+        Service[$proxy_service_name],
+        Class["zabbix::database::${database_type}"],
+        ],
     }
   }
 
@@ -575,7 +581,10 @@ class zabbix::proxy (
       dport  => $listenport,
       proto  => 'tcp',
       action => 'accept',
-      state  => ['NEW', 'RELATED', 'ESTABLISHED'],
+      state  => [
+        'NEW',
+        'RELATED',
+        'ESTABLISHED'],
     }
   }
 }
