@@ -359,8 +359,6 @@ class zabbix::server (
   $loadmodule              = $zabbix::params::server_loadmodule,
   $sslcertlocation_dir     = $zabbix::params::server_sslcertlocation,
   $sslkeylocation_dir      = $zabbix::params::server_sslkeylocation,) inherits zabbix::params {
-  notify { "Installing Zabbix Server ${zabbix_version}": }
-
   # Only include the repo class if it has not yet been included
   unless defined(Class['Zabbix::Repo']) {
     class { '::zabbix::repo':
