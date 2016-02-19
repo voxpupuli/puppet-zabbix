@@ -432,27 +432,28 @@ class zabbix::server (
     Service['zabbix-server-system'] {
       enable => false }
   }
-   
+
   # Controlling the 'zabbix-server' service
   if $pacemaker {
     service { 'zabbix-server-system':
-      name       => 'zabbix-server',
-      ensure     => stopped,
-      require    => [
+      name    => 'zabbix-server',
+      ensure  => stopped,
+      require => [
         Package["zabbix-server-${db}"],
         File[$include_dir],
         File[$server_configfile_path],
         ],
     }
+
     service { $server_service_name:
-      name       => 'pacemaker_zabbix',
-      ensure     => running,
-      provider   => 'service',
-      status     => "/usr/sbin/pcs status resources | grep ${pacemaker_resource} | grep Started; echo $?",
-      restart    => "/usr/sbin/pcs resource restart ${pacemaker_resource}",
-      start      => "/usr/sbin/pcs resource start ${pacemaker_resource}",
-      stop       => "/usr/sbin/pcs resource stop ${pacemaker_resource}",
-      require    => [
+      name     => 'pacemaker_zabbix',
+      ensure   => running,
+      provider => 'service',
+      status   => "/usr/sbin/pcs status resources | grep ${pacemaker_resource} | grep Started; echo $?",
+      restart  => "/usr/sbin/pcs resource restart ${pacemaker_resource}",
+      start    => "/usr/sbin/pcs resource start ${pacemaker_resource}",
+      stop     => "/usr/sbin/pcs resource stop ${pacemaker_resource}",
+      require  => [
         Package["zabbix-server-${db}"],
         File[$include_dir],
         File[$server_configfile_path],
@@ -503,4 +504,4 @@ class zabbix::server (
         'ESTABLISHED'],
     }
   }
-
+}

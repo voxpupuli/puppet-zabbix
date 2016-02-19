@@ -120,6 +120,7 @@ class zabbix::params {
   $server_senderfrequency                   = '30'
   $server_service_name                      = 'zabbix-server'
   $server_pacemaker                         = false
+  $server_pacemaker_resource                = undef
   $server_snmptrapperfile                   = '/tmp/zabbix_traps.tmp'
   $server_sourceip                          = undef
   $server_sshkeylocation                    = undef
