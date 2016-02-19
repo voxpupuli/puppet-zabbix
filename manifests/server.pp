@@ -428,21 +428,13 @@ class zabbix::server (
   if $::osfamily == 'redhat' and $::operatingsystemrelease !~ /^5.*/ {
     Service[$server_service_name] {
       enable => true }
-  } elsif $pacemaker {
-    Service['zabbix-server-system'] {
-      enable => false }
   }
 
   # Controlling the 'zabbix-server' service
   if $pacemaker {
-    service { 'zabbix-server-system':
-      name    => 'zabbix-server',
-      ensure  => stopped,
-      require => [
-        Package["zabbix-server-${db}"],
-        File[$include_dir],
-        File[$server_configfile_path],
-        ],
+    exec { "prevent zabbix boot-start":
+      command => "/usr/bin/systemctl disable ${server_service_name}",
+      unless  => "systemctl is-enabled ${server_service_name}; echo $?",
     }
 
     service { $server_service_name:
