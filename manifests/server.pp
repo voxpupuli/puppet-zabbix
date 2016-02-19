@@ -438,6 +438,13 @@ class zabbix::server (
       unless  => "systemctl is-enabled ${server_service_name} | grep enabled | wc -l",
     }
 
+    exec { "stop zabbix if running without pacemaker":
+      path    => "/usr/bin:/usr/sbin:/bin",
+      command => "systemctl stop ${server_service_name}",
+      unless  => "systemctl status zabbix-server | grep running | wc -l",
+      onlyif  => "systemctl status zabbix-server | grep pacemaker | wc -l",
+    }
+
     service { $server_service_name:
       ensure     => running,
       provider   => 'base',
