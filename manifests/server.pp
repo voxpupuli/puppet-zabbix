@@ -432,14 +432,14 @@ class zabbix::server (
 
   # Controlling the 'zabbix-server' service
   if $pacemaker {
-    exec { "prevent zabbix boot-start":
-      path    => "/usr/bin:/usr/sbin:/bin",
+    exec { 'prevent zabbix boot-start':
+      path    => '/usr/bin:/usr/sbin:/bin',
       command => "systemctl disable ${server_service_name}",
       unless  => "systemctl is-enabled ${server_service_name} | grep enabled | wc -l",
     }
 
-    exec { "stop zabbix if running without pacemaker":
-      path    => "/usr/bin:/usr/sbin:/bin",
+    exec { 'stop zabbix if running without pacemaker':
+      path    => '/usr/bin:/usr/sbin:/bin',
       command => "systemctl stop ${server_service_name}",
       onlyif  => "systemctl status ${server_service_name} | grep running >> /dev/null",
       unless  => "systemctl status ${server_service_name} | grep pacemaker >> /dev/null",
