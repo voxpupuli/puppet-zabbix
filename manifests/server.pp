@@ -444,7 +444,7 @@ class zabbix::server (
     exec { "stop zabbix if running without pacemaker":
       path    => "/usr/bin:/usr/sbin:/bin",
       command => "systemctl stop ${server_service_name}",
-      onlyif  => "(( ${zabbix_run_test} == '1' && ${pacemaker_run_test} == '0'))",
+      onlyif  => "if [[${zabbix_run_test} == '1' && ${pacemaker_run_test} == '0']]; then echo 0; fi",
     }
 
     service { $server_service_name:
