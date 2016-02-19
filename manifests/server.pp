@@ -435,7 +435,7 @@ class zabbix::server (
     exec { "prevent zabbix boot-start":
       path    => "/usr/bin:/usr/sbin:/bin",
       command => "systemctl disable ${server_service_name}",
-      unless  => "systemctl is-enabled ${server_service_name}; echo $?",
+      unless  => "systemctl is-enabled ${server_service_name}| grep enabled; echo $?",
     }
 
     service { $server_service_name:
