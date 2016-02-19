@@ -433,7 +433,8 @@ class zabbix::server (
   # Controlling the 'zabbix-server' service
   if $pacemaker {
     exec { "prevent zabbix boot-start":
-      command => "/usr/bin/systemctl disable ${server_service_name}",
+      path    => "/usr/bin:/usr/sbin:/bin",
+      command => "systemctl disable ${server_service_name}",
       unless  => "systemctl is-enabled ${server_service_name}; echo $?",
     }
 
