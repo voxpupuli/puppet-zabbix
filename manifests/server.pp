@@ -439,13 +439,15 @@ class zabbix::server (
     }
 
     service { $server_service_name:
-      ensure   => running,
-      provider => 'service',
-      status   => "/usr/sbin/pcs status resources | grep ${pacemaker_resource} | grep Started; echo $?",
-      restart  => "/usr/sbin/pcs resource restart ${pacemaker_resource}",
-      start    => "/usr/sbin/pcs resource start ${pacemaker_resource}",
-      stop     => "/usr/sbin/pcs resource stop ${pacemaker_resource}",
-      require  => [
+      ensure     => running,
+      provider   => 'service',
+      hasstatus  => true,
+      hasrestart => true,
+      status     => "/usr/sbin/pcs status resources | grep ${pacemaker_resource} | grep Started; echo $?",
+      restart    => "/usr/sbin/pcs resource restart ${pacemaker_resource}",
+      start      => "/usr/sbin/pcs resource start ${pacemaker_resource}",
+      stop       => "/usr/sbin/pcs resource stop ${pacemaker_resource}",
+      require    => [
         Package["zabbix-server-${db}"],
         File[$include_dir],
         File[$server_configfile_path],
