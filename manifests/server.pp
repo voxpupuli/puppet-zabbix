@@ -441,8 +441,9 @@ class zabbix::server (
     exec { "stop zabbix if running without pacemaker":
       path    => "/usr/bin:/usr/sbin:/bin",
       command => "systemctl stop ${server_service_name}",
-      unless  => "systemctl status ${server_service_name} | grep running | wc -l",
-      onlyif  => "systemctl status ${server_service_name} | grep pacemaker | wc -l",
+      onlyif  => [
+        "systemctl status ${server_service_name} | grep pacemaker | wc -l",
+        "systemctl status ${server_service_name} | grep running | wc -l"],
     }
 
     service { $server_service_name:
