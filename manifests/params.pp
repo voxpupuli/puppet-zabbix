@@ -48,6 +48,7 @@ class zabbix::params {
   $manage_database                          = true
   $manage_firewall                          = false
   $manage_repo                              = true
+  $repo_location                            = ''
   $manage_resources                         = false
   $manage_vhost                             = true
   $database_path                            = '/usr/sbin'
