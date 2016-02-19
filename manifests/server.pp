@@ -446,7 +446,6 @@ class zabbix::server (
     }
 
     service { $server_service_name:
-      name     => 'pacemaker_zabbix',
       ensure   => running,
       provider => 'service',
       status   => "/usr/sbin/pcs status resources | grep ${pacemaker_resource} | grep Started; echo $?",
