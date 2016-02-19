@@ -290,6 +290,8 @@ class zabbix::server (
   $server_config_owner     = $zabbix::params::server_config_owner,
   $server_config_group     = $zabbix::params::server_config_group,
   $server_service_name     = $zabbix::params::server_service_name,
+  $pacemaker               = $zabbix::params::server_pacemaker,
+  $pacemaker_resource      = $zabbix::params::server_pacemaker_resource,
   $nodeid                  = $zabbix::params::server_nodeid,
   $listenport              = $zabbix::params::server_listenport,
   $sourceip                = $zabbix::params::server_sourceip,
@@ -426,18 +428,47 @@ class zabbix::server (
   if $::osfamily == 'redhat' and $::operatingsystemrelease !~ /^5.*/ {
     Service[$server_service_name] {
       enable => true }
+  } elsif $pacemaker {
+    Service['zabbix-server-system'] {
+      enable => false }
   }
-
+   
   # Controlling the 'zabbix-server' service
-  service { $server_service_name:
-    ensure     => running,
-    hasstatus  => true,
-    hasrestart => true,
-    require    => [
-      Package["zabbix-server-${db}"],
-      File[$include_dir],
-      File[$server_configfile_path],
-      ],
+  if $pacemaker {
+    service { 'zabbix-server-system':
+      name       => 'zabbix-server',
+      ensure     => stopped,
+      require    => [
+        Package["zabbix-server-${db}"],
+        File[$include_dir],
+        File[$server_configfile_path],
+        ],
+    }
+    service { $server_service_name:
+      name       => 'pacemaker_zabbix',
+      ensure     => running,
+      provider   => 'service',
+      status     => "/usr/sbin/pcs status resources | grep ${pacemaker_resource} | grep Started; echo $?",
+      restart    => "/usr/sbin/pcs resource restart ${pacemaker_resource}",
+      start      => "/usr/sbin/pcs resource start ${pacemaker_resource}",
+      stop       => "/usr/sbin/pcs resource stop ${pacemaker_resource}",
+      require    => [
+        Package["zabbix-server-${db}"],
+        File[$include_dir],
+        File[$server_configfile_path],
+        ],
+    }
+  } else {
+    service { $server_service_name:
+      ensure     => running,
+      hasstatus  => true,
+      hasrestart => true,
+      require    => [
+        Package["zabbix-server-${db}"],
+        File[$include_dir],
+        File[$server_configfile_path],
+        ],
+    }
   }
 
   # Configuring the zabbix-server configuration file
@@ -473,4 +504,3 @@ class zabbix::server (
     }
   }
 
-}
