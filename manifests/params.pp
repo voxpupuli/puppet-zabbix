@@ -242,6 +242,7 @@ class zabbix::params {
   $proxy_offlinebuffer                      = '1'
   $proxy_pidfile                            = '/var/run/zabbix/zabbix_proxy.pid'
   $proxy_service_name                       = 'zabbix-proxy'
+  $proxy_enablesnmpbulkrequests             = undef
   $proxy_snmptrapper                        = '0'
   $proxy_snmptrapperfile                    = '/tmp/zabbix_traps.tmp'
   $proxy_sourceip                           = undef
@@ -275,6 +276,8 @@ class zabbix::params {
   $proxy_use_ip                             = true
   $proxy_vmwarecachesize                    = '8M'
   $proxy_vmwarefrequency                    = '60'
+  $proxy_vmwareperffrequency                = undef
+  $proxy_vmwaretimeout                      = undef
   $proxy_zabbix_server_host                 = undef
   $proxy_zabbix_server_port                 = '10051'
   $proxy_zbx_templates                      = ['Template App Zabbix Proxy']
