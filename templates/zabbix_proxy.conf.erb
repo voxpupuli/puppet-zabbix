@@ -50,11 +50,27 @@ ListenPort=<%= @listenport %>
 # SourceIP=
 <% if @sourceip %>SourceIP=<%= @sourceip %><% end %>
 
+<% if @zabbix_version.to_f >= 3.0 -%>
+### Option: LogType
+#	Specifies where log messages are written to:
+#		system  - syslog
+#		file    - file specified with LogFile parameter
+#		console - standard output
+#
+<% if @logtype %>LogType=<%= @logtype %><% end %>
+
+### Option: LogFile
+#	Log file name for LogType 'file' parameter.
+#
+LogFile=<%= @logfile %>
+
+<% else %>
 ### Option: LogFile
 #	Name of log file.
 #	If not set, syslog is used.
 #
 LogFile=<%= @logfile %>
+<% end %>
 
 ### Option: LogFileSize
 #	Maximum size of log file in MB.
@@ -64,12 +80,14 @@ LogFileSize=<%= @logfilesize %>
 
 ### Option: DebugLevel
 #	Specifies debug level
-#	0 - no debug
+#	0 - basic information about starting and stopping of Zabbix processes
 #	1 - critical information
 #	2 - error information
 #	3 - warnings
 #	4 - for debugging (produces lots of information)
-#
+<% if @zabbix_version.to_f >= 3.0 %>
+#	5 - extended debugging (produces even more information)
+<% end %>
 DebugLevel=<%= @debuglevel %>
 
 ### Option: PidFile
@@ -268,6 +286,11 @@ StartSNMPTrapper=<%= @snmptrapper %>
 #	To prevent Housekeeper from being overloaded, no more than 4 times HousekeepingFrequency
 #	hours of outdated information are deleted in one housekeeping cycle.
 #	To lower load on proxy startup housekeeping is postponed for 30 minutes after proxy start.
+<% if @zabbix_version.to_f >= 3.0 %>
+#	With HousekeepingFrequency=0 the housekeeper can be only executed using the runtime control option.
+#	In this case the period of outdated information deleted in one housekeeping cycle is 4 times the
+#	period since the last housekeeping cycle, but not less than 4 hours and not greater than 4 days.
+<% end %>
 #
 HousekeepingFrequency=<%= @housekeepingfrequency %>
 
@@ -288,11 +311,21 @@ StartDBSyncers=<%= @startdbsyncers %>
 #
 HistoryCacheSize=<%= @historycachesize %>
 
+<% if @zabbix_version.to_f <= 2.4 %>
 ### Option: HistoryTextCacheSize
-#	Size of text history cache, in bytes.
-#	Shared memory size for storing character, text or log history data.
+#   Size of text history cache, in bytes.
+#   Shared memory size for storing character, text or log history data.
 #
 HistoryTextCacheSize=<%= @historytextcachesize %>
+<% end %>
+
+<% if @zabbix_version.to_f >= 3.0 %>
+### Option: HistoryIndexCacheSize
+#   Size of history index cache, in bytes.
+#   Shared memory size for indexing history cache.
+#
+<% if @historyindexcachesize %>HistoryIndexCacheSize=<%= @historyindexcachesize %><% end %>
+<% end %>
 
 ### Option: Timeout
 #	Specifies how long we wait for agent, SNMP device or external check (in seconds).
@@ -341,16 +374,14 @@ Fping6Location=<%= @fping6location %>
 ### Option: SSHKeyLocation
 #	Location of public and private keys for SSH checks and actions.
 #
-<% if @sshkeylocation %> 
-SSHKeyLocation=<%= @sshkeylocation %>
-<% end %>
+<% if @sshkeylocation %>SSHKeyLocation=<%= @sshkeylocation %><% end %>
 
 ### Option: LogSlowQueries
 #	How long a database query may take before being logged (in milliseconds).
 #	Only works if DebugLevel set to 3 or 4.
 #	0 - don't log slow queries.
 #
-LogSlowQueries=<%=  @loglowqueries %>
+LogSlowQueries=<%=  @logslowqueries %>
 
 ### Option: TmpDir
 #	Temporary directory.
