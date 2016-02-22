@@ -25,28 +25,60 @@ class zabbix::database::postgresql (
   $database_host        = '',
   $database_path        = $zabbix::params::database_path,
 ) {
+  #
   # Adjustments for version 3.0 - structure of package with sqls differs from previous versions
   case $zabbix_version {
     '3.0': {
-      $sql_dir = ''
+      if ($database_schema_path == false) or ($database_schema_path == '') {
+        case $::operatingsystem {
+          'CentOS', 'RedHat', 'OracleLinux': {
+            $schema_path   = "/usr/share/doc/zabbix-*-pgsql-${zabbix_version}*/"
+          }
+          default : {
+            $schema_path   = '/usr/share/doc/zabbix-*-pgsql'
+          }
+        }
+      }
+      else {
+        $schema_path = $database_schema_path
+      }
+
+      case $zabbix_type {
+        'proxy': {
+          $zabbix_proxy_create_sql = "cd ${schema_path} && if [ -f create.sql.gz ]; then gunzip create.sql.gz ; fi && psql -h '${database_host}' -U '${database_user}' -d '${database_name}' -f create.sql && touch /etc/zabbix/.schema.done"
+        }
+        default: {
+          $zabbix_server_create_sql = "cd ${schema_path} && if [ -f create.sql.gz ]; then gunzip create.sql.gz ; fi && psql -h '${database_host}' -U '${database_user}' -d '${database_name}' -f create.sql && touch /etc/zabbix/.schema.done"
+          $zabbix_server_images_sql = 'touch /etc/zabbix/.images.done'
+          $zabbix_server_data_sql   = 'touch /etc/zabbix/.data.done'
+        }
+      }
     }
     default: {
-      $sql_dir = 'create'
-    }
-  }
-  # Allow to customize the path to the Database Schema,
-  if ($database_schema_path == false) or ($database_schema_path == '') {
-    case $::operatingsystem {
-      'CentOS', 'RedHat', 'OracleLinux': {
-        $schema_path   = "/usr/share/doc/zabbix-*-pgsql-${zabbix_version}*/${sql_dir}"
+      if ($database_schema_path == false) or ($database_schema_path == '') {
+        case $::operatingsystem {
+          'CentOS', 'RedHat', 'OracleLinux': {
+            $schema_path   = "/usr/share/doc/zabbix-*-pgsql-${zabbix_version}*/create"
+          }
+          default : {
+            $schema_path   = '/usr/share/zabbix-*-pgsql'
+          }
+        }
       }
-      default : {
-        $schema_path   = '/usr/share/zabbix-*-pgsql'
+      else {
+        $schema_path = $database_schema_path
+      }
+      case $zabbix_type {
+        'proxy': {
+          $zabbix_proxy_create_sql = "cd ${schema_path} && if [ -f schema.sql.gz ]; then gunzip schema.sql.gz ; fi && psql -h '${database_host}' -U '${database_user}' -d '${database_name}' -f schema.sql && touch /etc/zabbix/.schema.done"
+        }
+        default: {
+          $zabbix_server_create_sql = "cd ${schema_path} && if [ -f schema.sql.gz ]; then gunzip schema.sql.gz ; fi && psql -h '${database_host}' -U '${database_user}' -d '${database_name}' -f schema.sql && touch /etc/zabbix/.schema.done"
+          $zabbix_server_images_sql = "cd ${schema_path} && if [ -f images.sql.gz ]; then gunzip images.sql.gz ; fi && psql -h '${database_host}' -U '${database_user}' -d '${database_name}' -f images.sql && touch /etc/zabbix/.images.done"
+          $zabbix_server_data_sql   = "cd ${schema_path} && if [ -f data.sql.gz ]; then gunzip data.sql.gz ; fi && psql -h '${database_host}' -U '${database_user}' -d '${database_name}' -f data.sql && touch /etc/zabbix/.data.done"
+        }
       }
     }
-  }
-  else {
-    $schema_path = $database_schema_path
   }
 
   exec { 'update_pgpass':
@@ -66,15 +98,6 @@ class zabbix::database::postgresql (
 
   case $zabbix_type {
       'proxy': {
-        case $zabbix_version {
-          '3.0': {
-            $zabbix_proxy_create_sql = "cd ${schema_path} && if [ -f create.sql.gz ]; then gunzip create.sql.gz ; fi && psql -h '${database_host}' -U '${database_user}' -d '${database_name}' -f create.sql && touch /etc/zabbix/.schema.done"
-          }
-          default: {
-            $zabbix_proxy_create_sql = "cd ${schema_path} && if [ -f schema.sql.gz ]; then gunzip schema.sql.gz ; fi && psql -h '${database_host}' -U '${database_user}' -d '${database_name}' -f schema.sql && touch /etc/zabbix/.schema.done"
-          }
-        }
-
         exec { 'zabbix_proxy_create.sql':
           command  => $zabbix_proxy_create_sql,
           path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
@@ -86,18 +109,6 @@ class zabbix::database::postgresql (
         }
       }
       'server': {
-        case $zabbix_version {
-          '3.0': {
-            $zabbix_server_create_sql = "cd ${schema_path} && if [ -f create.sql.gz ]; then gunzip create.sql.gz ; fi && psql -h '${database_host}' -U '${database_user}' -d '${database_name}' -f create.sql && touch /etc/zabbix/.schema.done"
-            $zabbix_server_images_sql = 'touch /etc/zabbix/.images.done'
-            $zabbix_server_data_sql   = 'touch /etc/zabbix/.data.done'
-          }
-          default: {
-            $zabbix_server_create_sql = "cd ${schema_path} && if [ -f schema.sql.gz ]; then gunzip schema.sql.gz ; fi && psql -h '${database_host}' -U '${database_user}' -d '${database_name}' -f schema.sql && touch /etc/zabbix/.schema.done"
-            $zabbix_server_images_sql = "cd ${schema_path} && if [ -f images.sql.gz ]; then gunzip images.sql.gz ; fi && psql -h '${database_host}' -U '${database_user}' -d '${database_name}' -f images.sql && touch /etc/zabbix/.images.done"
-            $zabbix_server_data_sql   = "cd ${schema_path} && if [ -f data.sql.gz ]; then gunzip data.sql.gz ; fi && psql -h '${database_host}' -U '${database_user}' -d '${database_name}' -f data.sql && touch /etc/zabbix/.data.done"
-          }
-        }
         exec { 'zabbix_server_create.sql':
           command  => $zabbix_server_create_sql,
           path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
