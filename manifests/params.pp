@@ -237,7 +237,7 @@ class zabbix::params {
   $proxy_localbuffer                        = '0'
   $proxy_logfile                            = '/var/log/zabbix/zabbix_proxy.log'
   $proxy_logfilesize                        = '10'
-  $proxy_loglowqueries                      = '0'
+  $proxy_logslowqueries                     = '0'
   $proxy_mode                               = '0'
   $proxy_offlinebuffer                      = '1'
   $proxy_pidfile                            = '/var/run/zabbix/zabbix_proxy.pid'
