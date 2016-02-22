@@ -157,6 +157,7 @@ class zabbix::params {
 
   # Agent specific params
   $agent_allowroot                          = '0'
+  $agent_zabbix_user                        = undef
   $agent_buffersend                         = '5'
   $agent_buffersize                         = '100'
   $agent_configfile_path                    = '/etc/zabbix/zabbix_agentd.conf'
@@ -172,6 +173,7 @@ class zabbix::params {
   $agent_listenport                         = '10050'
   $agent_loadmodule                         = undef
   $agent_loadmodulepath                     = '/usr/lib/modules'
+  $agent_logtype                            = 'file'
   $agent_logfile                            = '/var/log/zabbix/zabbix_agentd.log'
   $agent_logfilesize                        = '100'
   $agent_logremotecommands                  = '0'
