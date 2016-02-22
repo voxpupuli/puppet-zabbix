@@ -48,12 +48,29 @@ ListenPort=<%= @listenport %>
 # Mandatory: no
 # Default:
 # SourceIP=
+<% if @sourceip %>SourceIP=<%= @sourceip %><% end %>
 
+<% if @zabbix_version.to_f >= 3.0 -%>
+### Option: LogType
+#	Specifies where log messages are written to:
+#		system  - syslog
+#		file    - file specified with LogFile parameter
+#		console - standard output
+#
+<% if @logtype %>LogType=<%= @logtype %><% end %>
+
+### Option: LogFile
+#	Log file name for LogType 'file' parameter.
+#
+LogFile=<%= @logfile %>
+
+<% else %>
 ### Option: LogFile
 #	Name of log file.
 #	If not set, syslog is used.
 #
 LogFile=<%= @logfile %>
+<% end %>
 
 ### Option: LogFileSize
 #	Maximum size of log file in MB.
@@ -63,12 +80,14 @@ LogFileSize=<%= @logfilesize %>
 
 ### Option: DebugLevel
 #	Specifies debug level
-#	0 - no debug
+#	0 - basic information about starting and stopping of Zabbix processes
 #	1 - critical information
 #	2 - error information
 #	3 - warnings
 #	4 - for debugging (produces lots of information)
-#
+<% if @zabbix_version.to_f >= 3.0 %>
+#	5 - extended debugging (produces even more information)
+<% end %>
 DebugLevel=<%= @debuglevel %>
 
 ### Option: PidFile
@@ -91,11 +110,9 @@ DBHost=<%= @database_host %>
 DBName=<%= @database_name %>
 
 ### Option: DBSchema
-#	Schema name. Used for IBM DB2.
+#	Schema name. Used for IBM DB2 and PostgreSQL.
 #
-<% if @database_schema %>
-DBSchema=<%= @database_schema %>
-<% end %>
+<% if @database_schema %>DBSchema=<%= @database_schema %><% end %>
 
 ### Option: DBUser
 #	Database user. Ignored for SQLite.
@@ -111,11 +128,12 @@ DBPassword=<%= @database_password %>
 ### Option: DBSocket
 #	Path to MySQL socket.
 #
+<% if @database_socket %>DBSocket=<%= @database_socket %><% end %>
 
 # Option: DBPort
 #	Database port when not using local socket. Ignored for SQLite.
 #
-
+<% if @database_port %>DBPort=<%= @database_port %><% end %>
 
 ######### PROXY SPECIFIC PARAMETERS #############
 
@@ -164,7 +182,9 @@ StartPollers=<%= @startpollers %>
 StartIPMIPollers=<%= @startipmipollers %>
 
 ### Option: StartPollersUnreachable
-#	Number of pre-forked instances of pollers for unreachable hosts (including IPMI).
+#	Number of pre-forked instances of pollers for unreachable hosts (including IPMI and Java).
+#	At least one poller for unreachable hosts must be running if regular, IPMI or Java pollers
+#	are started.
 #
 StartPollersUnreachable=<%= @startpollersunreachable %>
 
@@ -207,7 +227,6 @@ JavaGatewayPort=<%= @javagatewayport %>
 StartJavaPollers=<%= @startjavapollers %>
 <% end %>
 
-<% if @zabbix_version == '2.2' or @zabbix_version == '2.4' %>
 ### Option: StartVMwareCollectors
 #	Number of pre-forked vmware collector instances.
 #
@@ -218,12 +237,30 @@ StartVMwareCollectors=<%= @startvmwarecollectors %>
 #
 VMwareFrequency=<%= @vmwarefrequency %>
 
+### Option: VMwarePerfFrequency
+#	How often Zabbix will connect to VMware service to obtain performance data.
+#
+<% if @vmwareperffrequency %>VMwarePerfFrequency=<%= @vmwareperffrequency %><% end %>
+
 ### Option: VMwareCacheSize
 #	Size of VMware cache, in bytes.
 #	Shared memory size for storing VMware data.
 #	Only used if VMware collectors are started.
 #
-VMwareCacheSize=<%= @vmwarecachesize -%>
+VMwareCacheSize=<%= @vmwarecachesize %>
+
+### Option: VMwareTimeout
+#	Specifies how many seconds vmware collector waits for response from VMware service.
+#
+<% if @vmwaretimeout %>VMwareTimeout=<%= @vmwaretimeout %><% end %>
+
+<% if @zabbix_version.to_f < 2.4 %>
+### Option: EnableSNMPBulkRequests
+#	Enable or disable SNMP bulk requests.
+#	0 - disable
+#	1 - enable
+#
+<% if @enablesnmpbulkrequests %>EnableSNMPBulkRequests=<%= @enablesnmpbulkrequests %><% end %>
 <% end %>
 
 ### Option: SNMPTrapperFile
@@ -241,21 +278,27 @@ StartSNMPTrapper=<%= @snmptrapper %>
 #	List of comma delimited IP addresses that the trapper should listen on.
 #	Trapper will listen on all network interfaces if this parameter is missing.
 #
-<% if @listenip %>
-ListenIP=<%= @listenip %>
-<% end %>
+<% if @listenip %>ListenIP=<%= @listenip %><% end %>
 
 ### Option: HousekeepingFrequency
 #	How often Zabbix will perform housekeeping procedure (in hours).
-#	Housekeeping is removing unnecessary information from history, alert, and alarms tables.
+#	Housekeeping is removing outdated information from the database.
+#	To prevent Housekeeper from being overloaded, no more than 4 times HousekeepingFrequency
+#	hours of outdated information are deleted in one housekeeping cycle.
+#	To lower load on proxy startup housekeeping is postponed for 30 minutes after proxy start.
+<% if @zabbix_version.to_f >= 3.0 %>
+#	With HousekeepingFrequency=0 the housekeeper can be only executed using the runtime control option.
+#	In this case the period of outdated information deleted in one housekeeping cycle is 4 times the
+#	period since the last housekeeping cycle, but not less than 4 hours and not greater than 4 days.
+<% end %>
 #
 HousekeepingFrequency=<%= @housekeepingfrequency %>
 
 ### Option: CacheSize
-#	Size of configuration cache, in MB.
+#	Size of configuration cache, in bytes.
 #	Shared memory size, for storing hosts and items data.
 #
-CacheSize=<%= @cachesize -%>
+CacheSize=<%= @cachesize %>
 
 ### Option: StartDBSyncers
 #	Number of pre-forked instances of DB Syncers
@@ -266,13 +309,23 @@ StartDBSyncers=<%= @startdbsyncers %>
 #	Size of history cache, in bytes.
 #	Shared memory size for storing history data.
 #
-HistoryCacheSize=<%= @historycachesize -%>
+HistoryCacheSize=<%= @historycachesize %>
 
+<% if @zabbix_version.to_f <= 2.4 %>
 ### Option: HistoryTextCacheSize
-#	Size of text history cache, in bytes.
-#	Shared memory size for storing character, text or log history data.
+#   Size of text history cache, in bytes.
+#   Shared memory size for storing character, text or log history data.
 #
-HistoryTextCacheSize=<%= @historytextcachesize -%>
+HistoryTextCacheSize=<%= @historytextcachesize %>
+<% end %>
+
+<% if @zabbix_version.to_f >= 3.0 %>
+### Option: HistoryIndexCacheSize
+#   Size of history index cache, in bytes.
+#   Shared memory size for indexing history cache.
+#
+<% if @historyindexcachesize %>HistoryIndexCacheSize=<%= @historyindexcachesize %><% end %>
+<% end %>
 
 ### Option: Timeout
 #	Specifies how long we wait for agent, SNMP device or external check (in seconds).
@@ -321,30 +374,35 @@ Fping6Location=<%= @fping6location %>
 ### Option: SSHKeyLocation
 #	Location of public and private keys for SSH checks and actions.
 #
-<% if @sshkeylocation %> 
-SSHKeyLocation=<%= @sshkeylocation %>
-<% end %>
+<% if @sshkeylocation %>SSHKeyLocation=<%= @sshkeylocation %><% end %>
 
 ### Option: LogSlowQueries
 #	How long a database query may take before being logged (in milliseconds).
 #	Only works if DebugLevel set to 3 or 4.
 #	0 - don't log slow queries.
 #
-LogSlowQueries=<%=  @loglowqueries %>
+LogSlowQueries=<%=  @logslowqueries %>
 
 ### Option: TmpDir
 #	Temporary directory.
 #
 TmpDir=<%= @tmpdir %>
 
-<% if @zabbix_version == '2.2' or @zabbix_version == '2.4' %>
 ### Option: AllowRoot
 #	Allow the proxy to run as 'root'. If disabled and the proxy is started by 'root', the proxy
-#	will try to switch to user 'zabbix' instead. Has no effect if started under a regular user.
+#	will try to switch to the user specified by the User configuration option instead.
+#	Has no effect if started under a regular user.
 #	0 - do not allow
 #	1 - allow
 #
 AllowRoot=<%= @allowroot %>
+
+<% if @zabbix_version.to_f >= 2.4 %>
+### Option: User
+#	Drop privileges to a specific, existing user on the system.
+#	Only has effect if run as 'root' and AllowRoot is disabled.
+#
+<% if @zabbix_user %>User=<%= @zabbix_user %><% end %>
 <% end %>
 
 ### Option: Include
@@ -353,15 +411,34 @@ AllowRoot=<%= @allowroot %>
 #
 Include=<%= @include_dir %>
 
+<% if @zabbix_version.to_f >= 2.4 %>
+### Option: SSLCertLocation
+#	Location of SSL client certificates.
+#	This parameter is used only in web monitoring.
+#
+<% if @sslcertlocation %>SSLCertLocation=<%= @sslcertlocation %><% end %>
+
+### Option: SSLKeyLocation
+#	Location of private keys for SSL client certificates.
+#	This parameter is used only in web monitoring.
+#
+<% if @sslkeylocation %>SSLKeyLocation=<%= @sslkeylocation %><% end %>
+
+### Option: SSLCALocation
+#	Location of certificate authority (CA) files for SSL server certificate verification.
+#	If not set, system-wide directory will be used.
+#	This parameter is used only in web monitoring.
+#
+<% if @sslcalocation %>SSLCALocation=<%= @sslcalocation %><% end %>
+<% end %>
+
 ####### LOADABLE MODULES #######
 
-<% if @zabbix_version == '2.2' or @zabbix_version == '2.4' %>
 ### Option: LoadModulePath
 #	Full path to location of proxy modules.
 #	Default depends on compilation options.
 #
 LoadModulePath=<%= @loadmodulepath %>
-<% end %>
 
 ### Option: LoadModule
 #	Module to load at proxy startup. Modules are used to extend functionality of the proxy.
@@ -369,9 +446,8 @@ LoadModulePath=<%= @loadmodulepath %>
 #	The modules must be located in directory specified by LoadModulePath.
 #	It is allowed to include multiple LoadModule parameters.
 #
-<% if @loadmodule %>
-LoadModule=<%= @loadmodule %>
-<% end %>
+<% if @loadmodule %>LoadModule=<%= @loadmodule %><% end %>
+
 
 <% if @zabbix_version == '3.0' %>
 ####### TLS-RELATED PARAMETERS #######
@@ -404,65 +480,41 @@ LoadModule=<%= @loadmodule %>
 #	Full pathname of a file containing the top-level CA(s) certificates for
 #	peer certificate verification.
 #
-# Mandatory: no
-# Default:
-# TLSCAFile=
 <% if @tlscafile %>TLSCAFile=<%= @tlscafile %><% end %>
 
 ### Option: TLSCRLFile
 #	Full pathname of a file containing revoked certificates.
 #
-# Mandatory: no
-# Default:
-# TLSCRLFile=
 <% if @tlscrlfile %>TLSCRLFile=<%= @tlscrlfile %><% end %>
 
 ### Option: TLSServerCertIssuer
 #      Allowed server certificate issuer.
 #
-# Mandatory: no
-# Default:
-# TLSServerCertIssuer=
 <% if @tlsservercertissuer %>TLSServerCertIssuer=<%= @tlsservercertissuer %><% end %>
 
 ### Option: TLSServerCertSubject
 #      Allowed server certificate subject.
 #
-# Mandatory: no
-# Default:
-# TLSServerCertSubject=
 <% if @tlsservercertsubject %>TLSServerCertSubject=<%= @tlsservercertsubject %><% end %>
 
 ### Option: TLSCertFile
 #	Full pathname of a file containing the proxy certificate or certificate chain.
 #
-# Mandatory: no
-# Default:
-# TLSCertFile=
 <% if @tlscertfile %>TLSCertFile=<%= @tlscertfile %><% end %>
 
 ### Option: TLSKeyFile
 #	Full pathname of a file containing the proxy private key.
 #
-# Mandatory: no
-# Default:
-# TLSKeyFile=
 <% if @tlskeyfile %>TLSKeyFile=<%= @tlskeyfile %><% end %>
 
 ### Option: TLSPSKIdentity
 #	Unique, case sensitive string used to identify the pre-shared key.
 #
-# Mandatory: no
-# Default:
-# TLSPSKIdentity=
 <% if @tlspskidentity %>TLSPSKIdentity=<%= @tlspskidentity %><% end %>
 
 ### Option: TLSPSKFile
 #	Full pathname of a file containing the pre-shared key.
 #
-# Mandatory: no
-# Default:
-# TLSPSKFile=
 <% if @tlspskfile %>TLSPSKFile=<%= @tlspskfile %><% end %>
 
 <% end %>

@@ -25,34 +25,31 @@
 #
 # Copyright 2014 Werner Dijkerman
 #
-class zabbix::repo(
+class zabbix::repo (
   $manage_repo    = $zabbix::params::manage_repo,
-  $zabbix_version = $zabbix::params::zabbix_version,
-) inherits zabbix::params {
-
+  $repo_location  = $zabbix::params::repo_location,
+  $zabbix_version = $zabbix::params::zabbix_version,) inherits zabbix::params {
   if ($manage_repo) {
     case $::operatingsystem {
-      'PSBM':  {
+      'PSBM'        : {
         $majorrelease = '6'
         $reponame     = $majorrelease
       }
-      'oraclelinux':  {
+      'oraclelinux' : {
         $majorrelease = $::operatingsystemmajrelease
         $reponame     = $majorrelease
       }
-      default: {
+      default       : {
         $majorrelease = '$releasever'
         $reponame     = $::operatingsystemmajrelease
       }
     }
+
     case $::operatingsystemrelease {
-      /\/sid$/: {
-        $releasename = regsubst($::operatingsystemrelease, '/sid$', '')
-      }
-      default: {
-        $releasename = $::lsbdistcodename
-      }
+      /\/sid$/ : { $releasename = regsubst($::operatingsystemrelease, '/sid$', '') }
+      default  : { $releasename = $::lsbdistcodename }
     }
+
     case $::osfamily {
       'RedHat' : {
         yumrepo { 'zabbix':
@@ -63,6 +60,7 @@ class zabbix::repo(
           gpgkey   => 'http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX',
           priority => '1',
         }
+
         yumrepo { 'zabbix-nonsupported':
           name     => "Zabbix_nonsupported_${reponame}_${::architecture}",
           descr    => "Zabbix_nonsupported_${reponame}_${::architecture}",
@@ -81,13 +79,16 @@ class zabbix::repo(
             key      => {
               'id'     => 'BC274A7EA7FD5DD267C9A18FD54A213C80E871A7',
               'source' => 'http://naizvoru.com/raspbian/zabbix/conf/boris@steki.net.gpg.key',
-            },
+            }
+            ,
             include  => {
               'src' => false,
-            },
+            }
+            ,
           }
         } else {
           $operatingsystem = downcase($::operatingsystem)
+
           apt::source { 'zabbix':
             location => "http://repo.zabbix.com/zabbix/${zabbix_version}/${operatingsystem}/",
             repos    => 'main',
@@ -95,11 +96,12 @@ class zabbix::repo(
             key      => {
               'id'     => 'FBABD5FB20255ECAB22EE194D13D58E479EA5ED4',
               'source' => 'http://repo.zabbix.com/zabbix-official-repo.key',
-            },
+            }
+            ,
           }
         }
       }
-      default : {
+      default  : {
         fail('Unrecognized operating system for webserver')
       }
     }
