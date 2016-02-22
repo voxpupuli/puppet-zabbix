@@ -187,7 +187,7 @@ describe 'zabbix::proxy' do
           :localbuffer             => '0',
           :logfilesize             => '15',
           :logfile                 => '/var/log/zabbix/proxy_server.log',
-          :logslowqueries           => '0',
+          :logslowqueries          => '0',
           :mode                    => '0',
           :offlinebuffer           => '1',
           :pidfile                 => '/var/run/zabbix/proxy_server.pid',
