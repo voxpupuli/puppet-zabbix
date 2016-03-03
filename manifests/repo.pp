@@ -40,7 +40,7 @@ class zabbix::repo (
         $reponame     = $majorrelease
       }
       default       : {
-        $majorrelease = '$releasever'
+        $majorrelease = $::operatingsystemmajrelease
         $reponame     = $::operatingsystemmajrelease
       }
     }
