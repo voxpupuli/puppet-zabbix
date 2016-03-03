@@ -10,12 +10,12 @@ describe 'zabbix::agent' do
     }
   end
 
-  context 'On RedHat 6.5' do
+  context 'On RedHat 7.1' do
     let (:facts) do
       {
         :osfamily               => 'RedHat',
         :operatingsystem        => 'RedHat',
-        :operatingsystemrelease => '6.5',
+        :operatingsystemrelease => '7.1',
         :architecture           => 'x86_64',
         :lsbdistid              => 'RedHat',
         :concat_basedir         => '/tmp',
@@ -38,7 +38,7 @@ describe 'zabbix::agent' do
         }
       end
 
-      it { should contain_class('zabbix::repo').with_zabbix_version('2.4') }
+      it { should contain_class('zabbix::repo').with_zabbix_version('3.0') }
       it { should contain_package('zabbix-agent').with_require('Class[Zabbix::Repo]')}
     end
   
@@ -105,6 +105,16 @@ describe 'zabbix::agent' do
           :startagents           => '3',
           :timeout               => '30',
           :unsafeuserparameters  => '0',
+          :tlsconnect            => 'cert',
+          :tlsaccept             => 'cert',
+          :tlscafile             => '/etc/zabbix/keys/file.ca',
+          :tlscrlfile            => '/etc/zabbix/keys/file.crl',
+          :tlsservercertissuer   => 'Zabbix.Com',
+          :tlsservercertsubject  => 'MySubJect',
+          :tlscertfile           => '/etc/zabbix/keys/tls.crt',
+          :tlskeyfile            => '/etc/zabbix/keys/tls.key',
+          :tlspskidentity        => '/etc/zabbix/keys/tlspskidentity.id',
+          :tlspskfile            => '/etc/zabbix/keys/tlspskfile.key',
         }
       end
 
@@ -127,6 +137,16 @@ describe 'zabbix::agent' do
       it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^StartAgents=3$}}
       it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^Timeout=30$}}
       it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^UnsafeUserParameters=0$}}
+      it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSConnect=cert$}}
+      it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSAccept=cert$}}
+      it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSCAFile=/etc/zabbix/keys/file.ca$}}
+      it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSCRLFile=/etc/zabbix/keys/file.crl$}}
+      it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSServerCertIssuer=Zabbix.Com$}}
+      it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSServerCertSubject=MySubJect$}}
+      it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSCertFile=/etc/zabbix/keys/tls.crt$}}
+      it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSKeyFile=/etc/zabbix/keys/tls.key$}}
+      it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSPSKIdentity=/etc/zabbix/keys/tlspskidentity.id$}}
+      it {should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSPSKFile=/etc/zabbix/keys/tlspskfile.key$}}
     end
   end
 end

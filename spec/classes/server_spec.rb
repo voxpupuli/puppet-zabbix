@@ -3,18 +3,18 @@ require 'spec_helper'
 describe 'zabbix::server' do
   let (:params) do
     {
-      :zabbix_version => '2.4',
+      :zabbix_version => '3.0',
     }
   end
 
   let (:node) { 'rspec.puppet.com' }
 
-  context 'On RedHat 6.5' do
+  context 'On RedHat 7.1' do
     let :facts do
       {
         :osfamily               => 'RedHat',
         :operatingsystem        => 'RedHat',
-        :operatingsystemrelease => '6.5',
+        :operatingsystemrelease => '7.1',
         :architecture           => 'x86_64',
         :lsbdistid              => 'RedHat',
         :concat_basedir         => '/tmp'
@@ -66,7 +66,7 @@ describe 'zabbix::server' do
       end
 
       it { should contain_class('zabbix::database::postgresql').with_zabbix_type('server')}
-      it { should contain_class('zabbix::database::postgresql').with_zabbix_version('2.4')}
+      it { should contain_class('zabbix::database::postgresql').with_zabbix_version('3.0')}
       it { should contain_class('zabbix::database::postgresql').with_database_name('zabbix-server')}
       it { should contain_class('zabbix::database::postgresql').with_database_user('zabbix-server')}
       it { should contain_class('zabbix::database::postgresql').with_database_password('zabbix-server')}
@@ -85,7 +85,7 @@ describe 'zabbix::server' do
       end
 
       it { should contain_class('zabbix::database::mysql').with_zabbix_type('server')}
-      it { should contain_class('zabbix::database::mysql').with_zabbix_version('2.4')}
+      it { should contain_class('zabbix::database::mysql').with_zabbix_version('3.0')}
       it { should contain_class('zabbix::database::mysql').with_database_name('zabbix-server')}
       it { should contain_class('zabbix::database::mysql').with_database_user('zabbix-server')}
       it { should contain_class('zabbix::database::mysql').with_database_password('zabbix-server')}
@@ -263,5 +263,22 @@ describe 'zabbix::server' do
       it { should_not contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeNoEvents=0}}
       it { should_not contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeNoHistory=0}}
     end
+
+    context "with zabbix_server.conf and version 3.0" do
+      let (:params) do
+        {
+          :tlscafile => '/etc/zabbix/keys/zabbix-server.ca',
+          :tlscrlfile => '/etc/zabbix/keys/zabbix-server.crl',
+          :tlscertfile => '/etc/zabbix/keys/zabbix-server.crt',
+          :tlskeyfile => '/etc/zabbix/keys/zabbix-server.key',
+          :zabbix_version => '3.0',
+        }
+      end
+
+      it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCAFile=/etc/zabbix/keys/zabbix-server.ca$}}
+      it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCRLFile=/etc/zabbix/keys/zabbix-server.crl$}}
+      it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCertFile=/etc/zabbix/keys/zabbix-server.crt$}}
+      it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSKeyFile=/etc/zabbix/keys/zabbix-server.key$}}
+    end 
   end
 end

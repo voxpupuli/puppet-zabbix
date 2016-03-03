@@ -10,13 +10,13 @@ describe 'zabbix::proxy' do
     }
   end
 
-  context 'On RedHat 6.5' do
+  context 'On RedHat 7.1' do
     let (:facts) do
       {
         :osfamily                  => 'RedHat',
         :operatingsystem           => 'RedHat',
-        :operatingsystemrelease    => '6.5',
-        :operatingsystemmajrelease => '6',
+        :operatingsystemrelease    => '7.1',
+        :operatingsystemmajrelease => '7',
         :architecture              => 'x86_64',
         :lsbdistid                 => 'RedHat',
         :concat_basedir            => '/tmp',
@@ -37,7 +37,7 @@ describe 'zabbix::proxy' do
         }
       end
 
-      it { should contain_class('zabbix::repo').with_zabbix_version('2.4') }
+      it { should contain_class('zabbix::repo').with_zabbix_version('3.0') }
       it { should contain_package('zabbix-proxy-pgsql').with_require('Class[Zabbix::Repo]') }
     end
 
@@ -88,7 +88,7 @@ describe 'zabbix::proxy' do
       end
 
       it { should contain_class('zabbix::database::postgresql').with_zabbix_type('proxy')}
-      it { should contain_class('zabbix::database::postgresql').with_zabbix_version('2.4')}
+      it { should contain_class('zabbix::database::postgresql').with_zabbix_version('3.0')}
       it { should contain_class('zabbix::database::postgresql').with_database_name('zabbix_proxy')}
       it { should contain_class('zabbix::database::postgresql').with_database_user('zabbix-proxy')}
       it { should contain_class('zabbix::database::postgresql').with_database_password('zabbix-proxy')}
@@ -108,7 +108,7 @@ describe 'zabbix::proxy' do
       end
 
       it { should contain_class('zabbix::database::mysql').with_zabbix_type('proxy')}
-      it { should contain_class('zabbix::database::mysql').with_zabbix_version('2.4')}
+      it { should contain_class('zabbix::database::mysql').with_zabbix_version('3.0')}
       it { should contain_class('zabbix::database::mysql').with_database_name('zabbix_proxy')}
       it { should contain_class('zabbix::database::mysql').with_database_user('zabbix-proxy')}
       it { should contain_class('zabbix::database::mysql').with_database_password('zabbix-proxy')}
@@ -272,7 +272,36 @@ describe 'zabbix::proxy' do
       it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^Include=/etc/zabbix/zabbix_proxy.conf.d$}}
       it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LoadModulePath=\$\{libdir\}/modules$}}
       it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LoadModule=pizza$}}
-    end  
+    end
+
+    context "with zabbix_proxy.conf and version 3.0" do
+      let (:params) do
+        {
+          :tlsaccept => 'cert',
+          :tlscafile => '/etc/zabbix/keys/zabbix-server.ca',
+          :tlscrlfile => '/etc/zabbix/keys/zabbix-server.crl',
+          :tlscertfile => '/etc/zabbix/keys/zabbix-server.crt',
+          :tlskeyfile => '/etc/zabbix/keys/zabbix-server.key',
+          :tlsservercertissuer => 'Zabbix.Com',
+          :tlsservercertsubject => 'MyZabbix',
+          :tlspskidentity => '/etc/zabbix/keys/identity.file',
+          :tlspskfile => '/etc/zabbix/keys/file.key',
+          :zabbix_version => '3.0',
+        }
+      end
+
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSAccept=cert$}}
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSCAFile=/etc/zabbix/keys/zabbix-server.ca$}}
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSCRLFile=/etc/zabbix/keys/zabbix-server.crl$}}
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSCertFile=/etc/zabbix/keys/zabbix-server.crt$}}
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSKeyFile=/etc/zabbix/keys/zabbix-server.key$}}
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSServerCertIssuer=Zabbix.Com$}}
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSServerCertSubject=MyZabbix$}}
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSPSKIdentity=/etc/zabbix/keys/identity.file$}}
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSPSKFile=/etc/zabbix/keys/file.key$}}
+    end 
+    
+    
   end # END context 'zabbix_proxy.conf configuration'
 end
 
