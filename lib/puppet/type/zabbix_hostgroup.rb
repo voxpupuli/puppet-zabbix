@@ -1,3 +1,4 @@
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..",".."))
 require 'puppet/util/zabbix'
 
 Puppet::Type.newtype(:zabbix_hostgroup) do
