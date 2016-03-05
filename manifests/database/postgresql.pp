@@ -45,7 +45,7 @@ class zabbix::database::postgresql (
 
       case $zabbix_type {
         'proxy': {
-          $zabbix_proxy_create_sql = "cd ${schema_path} && if [ -f create.sql.gz ]; then gunzip create.sql.gz ; fi && psql -h '${database_host}' -U '${database_user}' -d '${database_name}' -f create.sql && touch /etc/zabbix/.schema.done"
+          $zabbix_proxy_create_sql = "cd ${schema_path} && if [ -f schema.sql.gz ]; then gunzip schema.sql.gz ; fi && psql -h '${database_host}' -U '${database_user}' -d '${database_name}' -f schema.sql && touch /etc/zabbix/.schema.done"
         }
         default: {
           $zabbix_server_create_sql = "cd ${schema_path} && if [ -f create.sql.gz ]; then gunzip create.sql.gz ; fi && psql -h '${database_host}' -U '${database_user}' -d '${database_name}' -f create.sql && touch /etc/zabbix/.schema.done"
