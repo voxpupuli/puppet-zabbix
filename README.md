@@ -44,6 +44,9 @@ This module contains the classes for installing and configuring the following za
   - zabbix-proxy
   - zabbix-javagateway
 
+This readme will contain all basic information to get you started. Some more information can be found on the github wiki, location: https://github.com/dj-wasabi/puppet-zabbix/wiki
+
+
 ##Module Description
 When using this module, you can monitor your whole environment with zabbix. It can install the various zabbix components like the server and agent, but you will also be able to install specific "userparameter" file which zabbix can use for monitoring.  
 

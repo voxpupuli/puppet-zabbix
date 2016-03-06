@@ -4,6 +4,20 @@ Below an overview of all changes in the releases.
 
 Version (Release date)
 
+2.2.0   (2016-03-06)
+
+  * Adjust server config and databases sqls for 3.0 #167 (By pull request: slashr00t (Thanks!))
+  * Added Zabbix Proxy, Agent, Server, 3.0 support and Pacemaker exclusions #174 (By pull request: ericsysmin (Thanks!))
+  * removed notify, forgot to take it out when I was troubleshooting #173 (By pull request: ericsysmin (Thanks!))
+  * Patch 6 #171 (By pull request: ericsysmin (Thanks!))
+  * TLS Support for Zabbix 3.0 #169 (By pull request: ericsysmin (Thanks!))
+  * Added rspec tests for Zabbix 3.0
+  * Fix for: Issues with RHEL7 repos configuration #183.
+  * Make types run in puppet 4 #182 (By pull request: ITler (Thanks!))
+  * Added documentation for Zabbix::Proxy regaring sqlite3 database.
+  * Zabbix 3.0 Proxy Postgres DB Schema Using Incorrect File #186 (By request: channone-arif-nbcuni (Thanks!))
+  * Moved some documentation to the github wiki.
+
 2.1.1   (2016-02-09)
 
   * Make Zabbix module compile on puppet 4.x AIO. #164 (By pull request: ITler (Thanks!))
