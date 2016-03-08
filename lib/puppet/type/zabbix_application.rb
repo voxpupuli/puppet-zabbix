@@ -1,3 +1,4 @@
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..",".."))
 require 'puppet/util/zabbix'
 
 Puppet::Type.newtype(:zabbix_application) do
@@ -34,4 +35,3 @@ Puppet::Type.newtype(:zabbix_application) do
 
   Puppet::Util::Zabbix.add_zabbix_type_methods(self)
 end
-

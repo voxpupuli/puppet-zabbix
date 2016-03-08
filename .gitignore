@@ -6,6 +6,7 @@ log
 .DS_Store
 .idea
 Gemfile.lock
+.project
 /.bundle
 /vendor
 /coverage
