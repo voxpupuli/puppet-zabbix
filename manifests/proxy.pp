@@ -487,6 +487,8 @@ class zabbix::proxy (
         }
       }
 
+      'sqlite'      : {}
+
       default      : {
         fail("Unrecognized database type for proxy: ${database_type}")
       }
