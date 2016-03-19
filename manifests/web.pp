@@ -424,4 +424,12 @@ class zabbix::web (
       require         => Package[$zabbix_web_package],
     }
   } # END if $manage_vhost
+
+  # check if selinux is active and allow zabbix
+  if $::selinux_config_mode == 'enforcing' {
+    selboolean{'httpd_can_connect_zabbix':
+      persistent => true,
+      value      => 'on',
+    }
+  }
 }
