@@ -20,6 +20,7 @@ Continuous Integration status:
     * [zabbix-agent](#usage-zabbix-agent)
     * [zabbix-proxy](#usage-zabbix-proxy)
     * [zabbix-javagateway](#usage-zabbix-javagateway)
+    * [zabbix-sender](#usage-zabbix-sender)
     * [zabbix-userparameters](#usage-zabbix-userparameters)
     * [zabbix-template](#usage-zabbix-template)
 6. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
@@ -43,6 +44,7 @@ This module contains the classes for installing and configuring the following za
   - zabbix-agent
   - zabbix-proxy
   - zabbix-javagateway
+  - zabbix-sender
 
 This readme will contain all basic information to get you started. Some more information can be found on the github wiki, location: https://github.com/dj-wasabi/puppet-zabbix/wiki
 
@@ -251,6 +253,12 @@ node server11.example.com {
     javagateway        => '192.168.20.15',
   }
 }
+```
+###Usage zabbix-sender
+
+The zabbix-sender installation is quite simple and straightforward:
+```ruby
+include zabbix::sender
 ```
 ###Usage zabbix-userparameters
 Using an 'source' file:
