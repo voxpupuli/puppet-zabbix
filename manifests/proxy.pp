@@ -112,7 +112,7 @@
 #   Unique nodeid in distributed setup.
 #
 # [*configfrequency*]
-#   Unique nodeid in distributed setup.
+#   How often proxy retrieves configuration data from Zabbix Server in seconds.
 #
 # [*datasenderfrequency*]
 #   Proxy will send collected data to the Server every N seconds.
