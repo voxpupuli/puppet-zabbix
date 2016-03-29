@@ -35,6 +35,10 @@
 #   When true, it will create an vhost for apache. The parameter zabbix_url
 #   has to be set.
 #
+# [*default_vhost*]
+#   When true priority of 15 is passed to zabbix vhost which would end up 
+#   with marking zabbix vhost as default one, when false priority is set to 25
+#
 # [*manage_resources*]
 #   When true, it will export resources to something like puppetdb.
 #   When set to true, you'll need to configure 'storeconfigs' to make
@@ -146,6 +150,7 @@ class zabbix::web (
   $zabbix_timezone                          = $zabbix::params::zabbix_timezone,
   $zabbix_package_state                     = $zabbix::params::zabbix_package_state,
   $manage_vhost                             = $zabbix::params::manage_vhost,
+  $default_vhost                            = $zabbix::params::default_vhost,
   $manage_resources                         = $zabbix::params::manage_resources,
   $apache_use_ssl                           = $zabbix::params::apache_use_ssl,
   $apache_ssl_cert                          = $zabbix::params::apache_ssl_cert,
@@ -260,6 +265,7 @@ class zabbix::web (
       apache::vhost { "${zabbix_url}_nonssl":
         docroot        => '/usr/share/zabbix',
         manage_docroot => false,
+        default_vhost  => $default_vhost,
         port           => '80',
         servername     => $zabbix_url,
         ssl            => false,
@@ -288,6 +294,7 @@ class zabbix::web (
     apache::vhost { $zabbix_url:
       docroot         => '/usr/share/zabbix',
       port            => $apache_listen_port,
+      default_vhost   => $default_vhost,
       directories     => [
         merge({
           path     => '/usr/share/zabbix',
