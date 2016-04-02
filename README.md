@@ -522,6 +522,8 @@ The following have contributed to this puppet module:
  * ITler
  * slashr00t
  * channone-arif-nbcuni
+ * BcTpe4HbIu
+ * vide
 
 Many thanks for this!
 (If I have forgotten you, please let me know and put you in the list of fame. :-))
