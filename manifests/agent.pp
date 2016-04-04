@@ -119,11 +119,45 @@
 # [*allowroot*]
 #   Allow the agent to run as 'root'.
 #
+# [*zabbix_user*]
+#   Drop privileges to a specific, existing user on the system.
+#   Only has effect if run as 'root' and AllowRoot is disabled.
+#
 # [*zabbix_alias*]
 #   Sets an alias for parameter.
 #
 # [*timeout*]
 #   Spend no more than timeout seconds on processing.
+#
+# [*tlsaccept*]
+#   What incoming connections to accept from Zabbix server. Used for a passive proxy, ignored on an active proxy.
+#
+# [*tlscafile*]
+#   Full pathname of a file containing the top-level CA(s) certificates for peer certificate verification.
+#
+# [*tlscertfile*]
+#   Full pathname of a file containing the proxy certificate or certificate chain.
+#
+# [*tlsconnect*]
+#   How the proxy should connect to Zabbix server. Used for an active proxy, ignored on a passive proxy.
+#
+# [*tlscrlfile*]
+#   Full pathname of a file containing revoked certificates.
+#
+# [*tlskeyfile*]
+#   Full pathname of a file containing the proxy private key.
+#
+# [*tlspskfile*]
+#   Full pathname of a file containing the pre-shared key.
+#
+# [*tlspskidentity*]
+#   Unique, case sensitive string used to identify the pre-shared key.
+#
+# [*tlsservercertissuer*]
+#   Allowed server certificate issuer.
+#
+# [*tlsservercertsubject*]
+#   Allowed server certificate subject.
 #
 # [*include_dir*]
 #   You may include individual files or all files in a directory in the configuration file.
@@ -176,6 +210,7 @@ class zabbix::agent (
   $zbx_templates         = $zabbix::params::agent_zbx_templates,
   $agent_configfile_path = $zabbix::params::agent_configfile_path,
   $pidfile               = $zabbix::params::agent_pidfile,
+  $logtype               = $zabbix::params::agent_logtype,
   $logfile               = $zabbix::params::agent_logfile,
   $logfilesize           = $zabbix::params::agent_logfilesize,
   $debuglevel            = $zabbix::params::agent_debuglevel,
@@ -195,17 +230,26 @@ class zabbix::agent (
   $buffersend            = $zabbix::params::agent_buffersend,
   $buffersize            = $zabbix::params::agent_buffersize,
   $maxlinespersecond     = $zabbix::params::agent_maxlinespersecond,
-  $allowroot             = $zabbix::params::agent_allowroot,
   $zabbix_alias          = $zabbix::params::agent_zabbix_alias,
   $timeout               = $zabbix::params::agent_timeout,
+  $allowroot             = $zabbix::params::agent_allowroot,
+  $zabbix_user           = $zabbix::params::agent_zabbix_user,
   $include_dir           = $zabbix::params::agent_include,
   $include_dir_purge     = $zabbix::params::agent_include_purge,
   $unsafeuserparameters  = $zabbix::params::agent_unsafeuserparameters,
   $userparameter         = $zabbix::params::agent_userparameter,
   $loadmodulepath        = $zabbix::params::agent_loadmodulepath,
   $loadmodule            = $zabbix::params::agent_loadmodule,
-  ) inherits zabbix::params {
-
+  $tlsaccept             = $zabbix::params::agent_tlsaccept,
+  $tlscafile             = $zabbix::params::agent_tlscafile,
+  $tlscertfile           = $zabbix::params::agent_tlscertfile,
+  $tlsconnect            = $zabbix::params::agent_tlsconnect,
+  $tlscrlfile            = $zabbix::params::agent_tlscrlfile,
+  $tlskeyfile            = $zabbix::params::agent_tlskeyfile,
+  $tlspskfile            = $zabbix::params::agent_tlspskfile,
+  $tlspskidentity        = $zabbix::params::agent_tlspskidentity,
+  $tlsservercertissuer   = $zabbix::params::agent_tlsservercertissuer,
+  $tlsservercertsubject  = $zabbix::params::agent_tlsservercertsubject,) inherits zabbix::params {
   # Check some if they are boolean
   validate_bool($manage_firewall)
   validate_bool($manage_repo)
@@ -216,10 +260,10 @@ class zabbix::agent (
   # can find the ipaddress of this specific interface if listenip
   # is set to for example "eth1" or "bond0.73".
   if ($listenip != undef) {
-    if ($listenip =~ /^(eth|bond|lxc).*/) {
-      $int_name = "ipaddress_${listenip}"
+    if ($listenip =~ /^(eth|bond|lxc|eno|tap|tun).*/) {
+      $int_name  = "ipaddress_${listenip}"
       $listen_ip = inline_template('<%= scope.lookupvar(int_name) %>')
-    } elsif is_ip_address($listenip) {
+    } elsif is_ip_address($listenip) or $listenip == '*' {
       $listen_ip = $listenip
     } else {
       $listen_ip = $::ipaddress
@@ -233,13 +277,13 @@ class zabbix::agent (
   # is set to false, you'll get warnings like this:
   # "Warning: You cannot collect without storeconfigs being set"
   if $manage_resources {
-    if $monitored_by_proxy != ''{
+    if $monitored_by_proxy != '' {
       $use_proxy = $monitored_by_proxy
     } else {
       $use_proxy = ''
     }
 
-    class { 'zabbix::resources::agent':
+    class { '::zabbix::resources::agent':
       hostname     => $::fqdn,
       ipaddress    => $listen_ip,
       use_ip       => $agent_use_ip,
@@ -251,15 +295,18 @@ class zabbix::agent (
     }
   }
 
-  # Check if manage_repo is true.
-  if $manage_repo {
-    include zabbix::repo
-    Package['zabbix-agent'] {require => Class['zabbix::repo']}
+  # Only include the repo class if it has not yet been included
+  unless defined(Class['Zabbix::Repo']) {
+    class { '::zabbix::repo':
+      manage_repo    => $manage_repo,
+      zabbix_version => $zabbix_version,
+    }
   }
 
   # Installing the package
   package { 'zabbix-agent':
     ensure  => $zabbix_package_state,
+    require => Class['zabbix::repo'],
   }
 
   # Controlling the 'zabbix-agent' service
@@ -301,7 +348,10 @@ class zabbix::agent (
       proto  => 'tcp',
       action => 'accept',
       source => $server,
-      state  => ['NEW','RELATED', 'ESTABLISHED'],
+      state  => [
+        'NEW',
+        'RELATED',
+        'ESTABLISHED'],
     }
   }
 }

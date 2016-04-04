@@ -112,7 +112,7 @@
 #   Unique nodeid in distributed setup.
 #
 # [*configfrequency*]
-#   Unique nodeid in distributed setup.
+#   How often proxy retrieves configuration data from Zabbix Server in seconds.
 #
 # [*datasenderfrequency*]
 #   Proxy will send collected data to the Server every N seconds.
@@ -182,6 +182,36 @@
 #
 # [*timeout*]
 #   Specifies how long we wait for agent, snmp device or external check (in seconds).
+#
+# [*tlsaccept*]
+#   What incoming connections to accept from Zabbix server. Used for a passive proxy, ignored on an active proxy.
+#
+# [*tlscafile*]
+#   Full pathname of a file containing the top-level CA(s) certificates for peer certificate verification.
+#
+# [*tlscertfile*]
+#   Full pathname of a file containing the proxy certificate or certificate chain.
+#
+# [*tlsconnect*]
+#   How the proxy should connect to Zabbix server. Used for an active proxy, ignored on a passive proxy.
+#
+# [*tlscrlfile*]
+#   Full pathname of a file containing revoked certificates.
+#
+# [*tlskeyfile*]
+#   Full pathname of a file containing the proxy private key.
+#
+# [*tlspskfile*]
+#   Full pathname of a file containing the pre-shared key.
+#
+# [*tlspskidentity*]
+#   Unique, case sensitive string used to identify the pre-shared key.
+#
+# [*tlsservercertissuer*]
+#   Allowed server certificate issuer.
+#
+# [*tlsservercertsubject*]
+#   Allowed server certificate subject.
 #
 # [*trappertimeout*]
 #   Specifies how many seconds trapper may spend processing new data.
@@ -340,9 +370,12 @@ class zabbix::proxy (
   $javagateway             = $zabbix::params::proxy_javagateway,
   $javagatewayport         = $zabbix::params::proxy_javagatewayport,
   $startjavapollers        = $zabbix::params::proxy_startjavapollers,
-  $startvmwarecollector    = $zabbix::params::proxy_startvmwarecollector,
+  $startvmwarecollectors   = $zabbix::params::proxy_startvmwarecollectors,
   $vmwarefrequency         = $zabbix::params::proxy_vmwarefrequency,
+  $vmwareperffrequency     = $zabbix::params::proxy_vmwareperffrequency,
   $vmwarecachesize         = $zabbix::params::proxy_vmwarecachesize,
+  $vmwaretimeout           = $zabbix::params::proxy_vmwaretimeout,
+  $enablesnmpbulkrequests  = $zabbix::params::proxy_enablesnmpbulkrequests,
   $snmptrapperfile         = $zabbix::params::proxy_snmptrapperfile,
   $snmptrapper             = $zabbix::params::proxy_snmptrapper,
   $listenip                = $zabbix::params::proxy_listenip,
@@ -352,6 +385,16 @@ class zabbix::proxy (
   $historycachesize        = $zabbix::params::proxy_historycachesize,
   $historytextcachesize    = $zabbix::params::proxy_historytextcachesize,
   $timeout                 = $zabbix::params::proxy_timeout,
+  $tlsaccept               = $zabbix::params::proxy_tlsaccept,
+  $tlscafile               = $zabbix::params::proxy_tlscafile,
+  $tlscertfile             = $zabbix::params::proxy_tlscertfile,
+  $tlsconnect              = $zabbix::params::proxy_tlsconnect,
+  $tlscrlfile              = $zabbix::params::proxy_tlscrlfile,
+  $tlskeyfile              = $zabbix::params::proxy_tlskeyfile,
+  $tlspskfile              = $zabbix::params::proxy_tlspskfile,
+  $tlspskidentity          = $zabbix::params::proxy_tlspskidentity,
+  $tlsservercertissuer     = $zabbix::params::proxy_tlsservercertissuer,
+  $tlsservercertsubject    = $zabbix::params::proxy_tlsservercertsubject,
   $trappertimeout          = $zabbix::params::proxy_trappertimeout,
   $unreachableperiod       = $zabbix::params::proxy_unreachableperiod,
   $unavaliabledelay        = $zabbix::params::proxy_unavaliabledelay,
@@ -359,15 +402,13 @@ class zabbix::proxy (
   $externalscripts         = $zabbix::params::proxy_externalscripts,
   $fpinglocation           = $zabbix::params::proxy_fpinglocation,
   $fping6location          = $zabbix::params::proxy_fping6location,
-  $sshkeylocation          = $zabbix::params::proxy_sshkeylocationundef,
-  $loglowqueries           = $zabbix::params::proxy_loglowqueries,
+  $sshkeylocation          = $zabbix::params::proxy_sshkeylocation,
+  $logslowqueries          = $zabbix::params::proxy_logslowqueries,
   $tmpdir                  = $zabbix::params::proxy_tmpdir,
   $allowroot               = $zabbix::params::proxy_allowroot,
   $include_dir             = $zabbix::params::proxy_include,
   $loadmodulepath          = $zabbix::params::proxy_loadmodulepath,
-  $loadmodule              = $zabbix::params::proxy_loadmodule,
-) inherits zabbix::params {
-
+  $loadmodule              = $zabbix::params::proxy_loadmodule,) inherits zabbix::params {
   # Check some if they are boolean
   validate_bool($manage_database)
   validate_bool($manage_firewall)
@@ -379,8 +420,8 @@ class zabbix::proxy (
   # can find the ipaddress of this specific interface if listenip
   # is set to for example "eth1" or "bond0.73".
   if ($listenip != undef) {
-    if ($listenip =~ /^(eth|bond).*/) {
-      $int_name = "ipaddress_${listenip}"
+    if ($listenip =~ /^(eth|bond|lxc|eno|tap|tun).*/) {
+      $int_name  = "ipaddress_${listenip}"
       $listen_ip = inline_template('<%= scope.lookupvar(int_name) %>')
     } elsif is_ip_address($listenip) {
       $listen_ip = $listenip
@@ -394,7 +435,7 @@ class zabbix::proxy (
   # is set to false, you'll get warnings like this:
   # "Warning: You cannot collect without storeconfigs being set"
   if $manage_resources {
-    class { 'zabbix::resources::proxy':
+    class { '::zabbix::resources::proxy':
       hostname  => $hostname,
       ipaddress => $listen_ip,
       use_ip    => $use_ip,
@@ -402,84 +443,93 @@ class zabbix::proxy (
       port      => $listenport,
       templates => $zbx_templates,
     }
-    zabbix::userparameters { 'Zabbix_Proxy':
-      template => 'Template App Zabbix Proxy',
-    }
+
+    zabbix::userparameters { 'Zabbix_Proxy': template => 'Template App Zabbix Proxy', }
   }
 
   # Get the correct database_type. We need this for installing the
   # correct package and loading the sql files.
   case $database_type {
-    'postgresql': {
-      $db = 'pgsql'
+    'postgresql' : { $db = 'pgsql' }
+    'mysql'      : { $db = 'mysql' }
+    'sqlite'     : { $db = 'sqlite3' }
+    default      : { fail("Unrecognized database type for proxy: ${database_type}") }
+  }
 
-      # Execute the postgresql scripts
-      class { 'zabbix::database::postgresql':
-        zabbix_type          => 'proxy',
-        zabbix_version       => $zabbix_version,
-        database_schema_path => $database_schema_path,
-        database_name        => $database_name,
-        database_user        => $database_user,
-        database_password    => $database_password,
-        database_host        => $database_host,
-        database_path        => $database_path,
-        require              => Package["zabbix-proxy-${db}"],
+  if $manage_database == true {
+    case $database_type {
+      'postgresql' : {
+        # Execute the postgresql scripts
+        class { '::zabbix::database::postgresql':
+          zabbix_type          => 'proxy',
+          zabbix_version       => $zabbix_version,
+          database_schema_path => $database_schema_path,
+          database_name        => $database_name,
+          database_user        => $database_user,
+          database_password    => $database_password,
+          database_host        => $database_host,
+          database_path        => $database_path,
+          require              => Package["zabbix-proxy-${db}"],
+        }
       }
-    }
-    'mysql': {
-      $db = 'mysql'
+      'mysql'      : {
+        # Execute the mysql scripts
+        class { '::zabbix::database::mysql':
+          zabbix_type          => 'proxy',
+          zabbix_version       => $zabbix_version,
+          database_schema_path => $database_schema_path,
+          database_name        => $database_name,
+          database_user        => $database_user,
+          database_password    => $database_password,
+          database_host        => $database_host,
+          database_path        => $database_path,
+          require              => Package["zabbix-proxy-${db}"],
+        }
+      }
 
-      # Execute the mysqll scripts
-      class { 'zabbix::database::mysql':
-        zabbix_type          => 'proxy',
-        zabbix_version       => $zabbix_version,
-        database_schema_path => $database_schema_path,
-        database_name        => $database_name,
-        database_user        => $database_user,
-        database_password    => $database_password,
-        database_host        => $database_host,
-        database_path        => $database_path,
-        require              => Package["zabbix-proxy-${db}"],
+      'sqlite'      : {}
+
+      default      : {
+        fail("Unrecognized database type for proxy: ${database_type}")
       }
-    }
-    'sqlite': {
-      $db = 'sqlite3'
-    }
-    default: {
-      fail("Unrecognized database type for proxy: ${database_type}")
     }
   }
 
-  # Check if manage_repo is true.
-  if $manage_repo {
-    include zabbix::repo
-    Package["zabbix-proxy-${db}"] {require => Class['zabbix::repo']}
+  # Only include the repo class if it has not yet been included
+  unless defined(Class['Zabbix::Repo']) {
+    class { '::zabbix::repo':
+      manage_repo    => $manage_repo,
+      zabbix_version => $zabbix_version,
+    }
+
+    Package["zabbix-proxy-${db}"] {
+      require => Class['zabbix::repo'] }
   }
 
   # Now we are going to install the correct packages.
   case $::operatingsystem {
-    'redhat','centos','oraclelinux' : {
+    'redhat', 'centos', 'oraclelinux' : {
       package { 'zabbix-proxy':
         ensure  => $zabbix_package_state,
-        require => Package["zabbix-proxy-${db}"]
+        require => Package["zabbix-proxy-${db}"],
       }
+
       # Installing the packages
-      package { "zabbix-proxy-${db}":
-        ensure  => $zabbix_package_state,
-      }
+      package { "zabbix-proxy-${db}": ensure => $zabbix_package_state, }
     } # END 'redhat','centos','oraclelinux'
     default : {
       # Installing the packages
-      package { "zabbix-proxy-${db}":
-        ensure  => $zabbix_package_state,
-      }
+      package { "zabbix-proxy-${db}": ensure => $zabbix_package_state, }
     } # END default
   } # END case $::operatingsystem
+
+
 
   # Workaround for: The redhat provider can not handle attribute enable
   # This is only happening when using an redhat family version 5.x.
   if $::osfamily == 'redhat' and $::operatingsystemrelease !~ /^5.*/ {
-    Service[$proxy_service_name] { enable     => true }
+    Service[$proxy_service_name] {
+      enable => true }
   }
 
   # Controlling the 'zabbix-proxy' service
@@ -490,14 +540,13 @@ class zabbix::proxy (
     require    => [
       Package["zabbix-proxy-${db}"],
       File[$include_dir],
-      File[$proxy_configfile_path]
-    ],
+      File[$proxy_configfile_path]],
   }
 
   # if we want to manage the databases, we do
   # some stuff. (for maintaining database only.)
   if $manage_database == true {
-    class { 'zabbix::database':
+    class { '::zabbix::database':
       database_type     => $database_type,
       zabbix_type       => 'proxy',
       database_name     => $database_name,
@@ -509,7 +558,7 @@ class zabbix::proxy (
       before            => [
         Service[$proxy_service_name],
         Class["zabbix::database::${database_type}"],
-      ]
+        ],
     }
   }
 
@@ -537,7 +586,10 @@ class zabbix::proxy (
       dport  => $listenport,
       proto  => 'tcp',
       action => 'accept',
-      state  => ['NEW','RELATED', 'ESTABLISHED'],
+      state  => [
+        'NEW',
+        'RELATED',
+        'ESTABLISHED'],
     }
   }
 }

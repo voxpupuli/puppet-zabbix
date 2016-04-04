@@ -1,32 +1,65 @@
-require 'rake'
-require 'rspec/core/rake_task'
-require 'puppetlabs_spec_helper/module_spec_helper'
+require 'rubygems'
+require 'bundler/setup'
+
 require 'puppetlabs_spec_helper/rake_tasks'
+require 'puppet/version'
+require 'puppet/vendor/semantic/lib/semantic' unless Puppet.version.to_f < 3.6
+require 'puppet-lint/tasks/puppet-lint'
+require 'puppet-syntax/tasks/puppet-syntax'
+require 'metadata-json-lint/rake_task'
+require 'rubocop/rake_task'
 
-desc "Run all RSpec code examples"
-RSpec::Core::RakeTask.new(:rspec) do |t|
-  #t.rspec_opts = File.read("spec/spec.opts").chomp || ""
-  t.rspec_opts = ['--color', '--format', 'documentation']
-end
-
-SPEC_SUITES = (Dir.entries('spec') - ['.', '..','fixtures']).select {|e| File.directory? "spec/#{e}" }
-namespace :rspec do
-  SPEC_SUITES.each do |suite|
-    desc "Run #{suite} RSpec code examples"
-    RSpec::Core::RakeTask.new(suite) do |t|
-      t.pattern = "spec/#{suite}/**/*_spec.rb"
-      #t.rspec_opts = File.read("spec/spec.opts").chomp || ""
-      t.rspec_opts = ['--color', '--format', 'documentation']
-    end
-  end
-end
-task :default => :rspec
-
+# These gems aren't always present, for instance
+# on Travis with --without development
 begin
-  if Gem::Specification::find_by_name('puppet-lint')
-    require 'puppet-lint/tasks/puppet-lint'
-    PuppetLint.configuration.ignore_paths = ["spec/**/*.pp", "vendor/**/*.pp"]
-    task :default => [:rspec, :lint]
-  end
-rescue Gem::LoadError
+  require 'puppet_blacksmith/rake_tasks'
+rescue LoadError # rubocop:disable Lint/HandleExceptions
 end
+
+RuboCop::RakeTask.new
+
+exclude_paths = [
+  "bundle/**/*",
+  "pkg/**/*",
+  "vendor/**/*",
+  "spec/**/*",
+]
+
+# Coverage from puppetlabs-spec-helper requires rcov which
+# doesn't work in anything since 1.8.7
+Rake::Task[:coverage].clear
+
+Rake::Task[:lint].clear
+
+PuppetLint.configuration.relative = true
+PuppetLint.configuration.disable_80chars
+PuppetLint.configuration.disable_class_inherits_from_params_class
+PuppetLint.configuration.disable_class_parameter_defaults
+PuppetLint.configuration.disable_documentation
+PuppetLint.configuration.disable_single_quote_string_with_variables
+PuppetLint.configuration.fail_on_warnings = true
+
+PuppetLint::RakeTask.new :lint do |config|
+  config.ignore_paths = exclude_paths
+end
+
+PuppetSyntax.exclude_paths = exclude_paths
+
+desc "Run acceptance tests"
+RSpec::Core::RakeTask.new(:acceptance) do |t|
+  t.pattern = 'spec/acceptance'
+end
+
+desc "Populate CONTRIBUTORS file"
+task :contributors do
+  system("git log --format='%aN' | sort -u > CONTRIBUTORS")
+end
+
+desc "Run syntax, lint, and spec tests."
+task :test => [
+  :metadata_lint,
+  :syntax,
+  :lint,
+  :rubocop,
+  :spec,
+]

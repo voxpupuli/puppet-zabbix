@@ -64,6 +64,14 @@
 #   The hostname of the server running the database.
 #   default: localhost
 #
+# [* database_charset*]
+#   The default charset of the database.
+#   default: utf8
+#
+# [* database_collate*]
+#   The default collation of the database.
+#   default: utf8_general_ci
+#
 # === Example
 #
 #   When running everything on a single node, please check
@@ -118,6 +126,8 @@ class zabbix::database(
   $database_user        = $zabbix::params::server_database_user,
   $database_password    = $zabbix::params::server_database_password,
   $database_host        = $zabbix::params::server_database_host,
+  $database_charset     = $zabbix::params::server_database_charset,
+  $database_collate     = $zabbix::params::server_database_collate,
 ) inherits zabbix::params {
 
   # So lets create the databases and load all files. This can only be
@@ -182,9 +192,11 @@ class zabbix::database(
           mysql::db { $database_name:
             user     => $database_user,
             password => $database_password,
+            charset  => $database_charset,
+            collate  => $database_collate,
             host     => $zabbix_server,
             grant    => ['all'],
-            require  => Class['mysql::server']
+            require  => Class['mysql::server'],
           }
         }
 
@@ -193,9 +205,11 @@ class zabbix::database(
           mysql::db { $database_name:
             user     => $database_user,
             password => $database_password,
+            charset  => $database_charset,
+            collate  => $database_collate,
             host     => $zabbix_proxy,
             grant    => ['all'],
-            require  => Class['mysql::server']
+            require  => Class['mysql::server'],
           }
         }
 
@@ -225,7 +239,7 @@ class zabbix::database(
         } # END if $zabbix_web != $zabbix_server
       }
       'sqlite': {
-        class { 'zabbix::database::sqlite': }
+        class { '::zabbix::database::sqlite': }
       }
       default: {
         fail('Unrecognized database type for server.')

@@ -23,4 +23,14 @@ $ZBX_SERVER_PORT = '<%= @zabbix_listenport %>';
 $ZBX_SERVER_NAME = '<%= @zabbix_server %>';
 
 $IMAGE_FORMAT_DEFAULT = IMAGE_FORMAT_PNG;
+
+<% if @ldap_cacert %>
+putenv("LDAPTLS_CACERT=<%= @ldap_cacert %>");
+<% end %>
+<% if @ldap_clientcrt %>
+putenv("LDAPTLS_CERT=<%= @ldap_clientcrt %>");
+<% end %>
+<% if @ldap_clientkey %>
+putenv("LDAPTLS_KEY=<%= @ldap_clientkey %>");
+<% end %>
 ?>

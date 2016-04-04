@@ -62,15 +62,18 @@ class zabbix::javagateway(
   validate_bool($manage_firewall)
   validate_bool($manage_repo)
 
-  # Check if manage_repo is true.
-  if $manage_repo {
-    include zabbix::repo
-    Package['zabbix-java-gateway'] {require => Class['zabbix::repo']}
+  # Only include the repo class if it has not yet been included
+  unless defined(Class['Zabbix::Repo']) {
+    class { '::zabbix::repo':
+      manage_repo    => $manage_repo,
+      zabbix_version => $zabbix_version,
+    }
   }
 
   # Installing the package
   package { 'zabbix-java-gateway':
     ensure  => $zabbix_package_state,
+    require => Class['zabbix::repo'],
   }
 
   # Configuring the zabbix-javagateway configuration file

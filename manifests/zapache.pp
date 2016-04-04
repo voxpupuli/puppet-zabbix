@@ -45,7 +45,7 @@
 # Check if apache_status is true, installs Zapache scripts. Defaults to false.
 class zabbix::zapache (
   $apache_status         = $zabbix::params::apache_status,
- ) inherits zabbix::params {
+  ) inherits zabbix::params {
   # Check if apache_status is boolean
   validate_bool($apache_status)
 
@@ -70,7 +70,7 @@ class zabbix::zapache (
       group   => 'root',
       mode    => '0644',
       require => Package['zabbix-agent'],
-      notify  => Service['zabbix-agent']
+      notify  => Service['zabbix-agent'],
     }
     file { '/etc/httpd/conf.d/httpd-server-status.conf':
       ensure  => present,

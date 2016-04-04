@@ -1,6 +1,6 @@
 # == Class: zabbix::server
 #
-#  This will install and configure the zabbix-agent deamon
+#  This will install and configure the zabbix-server deamon
 #
 # === Requirements
 #
@@ -21,6 +21,9 @@
 # [*zabbix_version*]
 #   This is the zabbix version.
 #   Example: 2.4
+#
+# [*manage_repo*]
+#   When true (default) this module will manage the Zabbix repository
 #
 # [*zabbix_package_state*]
 #   The state of the package that needs to be installed: present or latest.
@@ -172,6 +175,18 @@
 # [*timeout*]
 #   Specifies how long we wait for agent, snmp device or external check (in seconds).
 #
+# [*tlscafile*]
+#   Full pathname of a file containing the top-level CA(s) certificates for peer certificate verification.
+#
+# [*tlscertfile*]
+#   Full pathname of a file containing the server certificate or certificate chain.
+#
+# [*tlscrlfile*]
+#   Full pathname of a file containing revoked certificates.
+#
+# [*tlskeyfile*]
+#   Full pathname of a file containing the server private key.
+#
 # [*trappertimeout*]
 #   Specifies how many seconds trapper may spend processing new data.
 #
@@ -226,6 +241,12 @@
 # [*loadmodule*]
 #   Module to load at server startup.
 #
+# [*sslcertlocation_dir*]
+#   Location of SSL client certificate files for client authentication.
+#
+# [*sslkeylocation_dir*]
+#   Location of SSL private key files for client authentication.
+#
 # === Example
 #
 #   When running everything on a single node, please check
@@ -263,10 +284,14 @@ class zabbix::server (
   $zabbix_version          = $zabbix::params::zabbix_version,
   $zabbix_package_state    = $zabbix::params::zabbix_package_state,
   $manage_firewall         = $zabbix::params::manage_firewall,
+  $manage_repo             = $zabbix::params::manage_repo,
+  $manage_database         = $zabbix::params::manage_database,
   $server_configfile_path  = $zabbix::params::server_configfile_path,
   $server_config_owner     = $zabbix::params::server_config_owner,
   $server_config_group     = $zabbix::params::server_config_group,
   $server_service_name     = $zabbix::params::server_service_name,
+  $pacemaker               = $zabbix::params::server_pacemaker,
+  $pacemaker_resource      = $zabbix::params::server_pacemaker_resource,
   $nodeid                  = $zabbix::params::server_nodeid,
   $listenport              = $zabbix::params::server_listenport,
   $sourceip                = $zabbix::params::server_sourceip,
@@ -312,6 +337,10 @@ class zabbix::server (
   $nodenoevents            = $zabbix::params::server_nodenoevents,
   $nodenohistory           = $zabbix::params::server_nodenohistory,
   $timeout                 = $zabbix::params::server_timeout,
+  $tlscafile               = $zabbix::params::server_tlscafile,
+  $tlscertfile             = $zabbix::params::server_tlscertfile,
+  $tlscrlfile              = $zabbix::params::server_tlscrlfile,
+  $tlskeyfile              = $zabbix::params::server_tlskeyfile,
   $trappertimeout          = $zabbix::params::server_trappertimeout,
   $unreachableperiod       = $zabbix::params::server_unreachableperiod,
   $unavailabledelay        = $zabbix::params::server_unavailabledelay,
@@ -330,49 +359,60 @@ class zabbix::server (
   $include_dir             = $zabbix::params::server_include,
   $loadmodulepath          = $zabbix::params::server_loadmodulepath,
   $loadmodule              = $zabbix::params::server_loadmodule,
-  ) inherits zabbix::params {
+  $sslcertlocation_dir     = $zabbix::params::server_sslcertlocation,
+  $sslkeylocation_dir      = $zabbix::params::server_sslkeylocation,) inherits zabbix::params {
+  # Only include the repo class if it has not yet been included
+  unless defined(Class['Zabbix::Repo']) {
+    class { '::zabbix::repo':
+      zabbix_version => $zabbix_version,
+      manage_repo    => $manage_repo,
+    }
+  }
 
-  include zabbix::repo
-  
   # Check some if they are boolean
   validate_bool($manage_firewall)
 
   # Get the correct database_type. We need this for installing the
   # correct package and loading the sql files.
+
   case $database_type {
-    'postgresql': {
+    'postgresql' : {
       $db = 'pgsql'
 
-      # Execute the postgresql scripts
-      class { 'zabbix::database::postgresql':
-        zabbix_type          => 'server',
-        zabbix_version       => $zabbix_version,
-        database_schema_path => $database_schema_path,
-        database_name        => $database_name,
-        database_user        => $database_user,
-        database_password    => $database_password,
-        database_host        => $database_host,
-        database_path        => $database_path,
-        require              => Package["zabbix-server-${db}"],
+      if $manage_database == true {
+        # Execute the postgresql scripts
+        class { '::zabbix::database::postgresql':
+          zabbix_type          => 'server',
+          zabbix_version       => $zabbix_version,
+          database_schema_path => $database_schema_path,
+          database_name        => $database_name,
+          database_user        => $database_user,
+          database_password    => $database_password,
+          database_host        => $database_host,
+          database_path        => $database_path,
+          require              => Package["zabbix-server-${db}"],
+        }
       }
     }
-    'mysql': {
+    'mysql'      : {
       $db = 'mysql'
 
-      # Execute the mysql scripts
-      class { 'zabbix::database::mysql':
-        zabbix_type          => 'server',
-        zabbix_version       => $zabbix_version,
-        database_schema_path => $database_schema_path,
-        database_name        => $database_name,
-        database_user        => $database_user,
-        database_password    => $database_password,
-        database_host        => $database_host,
-        database_path        => $database_path,
-        require              => Package["zabbix-server-${db}"],
+      if $manage_database == true {
+        # Execute the mysql scripts
+        class { '::zabbix::database::mysql':
+          zabbix_type          => 'server',
+          zabbix_version       => $zabbix_version,
+          database_schema_path => $database_schema_path,
+          database_name        => $database_name,
+          database_user        => $database_user,
+          database_password    => $database_password,
+          database_host        => $database_host,
+          database_path        => $database_path,
+          require              => Package["zabbix-server-${db}"],
+        }
       }
     }
-    default: {
+    default      : {
       fail('unrecognized database type for server.')
     }
   }
@@ -386,20 +426,51 @@ class zabbix::server (
   # Workaround for: The redhat provider can not handle attribute enable
   # This is only happening when using an redhat family version 5.x.
   if $::osfamily == 'redhat' and $::operatingsystemrelease !~ /^5.*/ {
-    Service[$server_service_name] { enable     => true }
+    Service[$server_service_name] {
+      enable => true }
   }
 
   # Controlling the 'zabbix-server' service
-  service { $server_service_name:
-    ensure     => running,
-    hasstatus  => true,
-    hasrestart => true,
-    require    => [
-      Package["zabbix-server-${db}"],
-      File[$include_dir],
-      File[$server_configfile_path],
-      Class["zabbix::database::${database_type}"]
-    ],
+  if $pacemaker {
+    exec { 'prevent zabbix boot-start':
+      path    => '/usr/bin:/usr/sbin:/bin',
+      command => "systemctl disable ${server_service_name}",
+      onlyif  => "systemctl is-enabled ${server_service_name} | grep enabled >> /dev/null",
+    }
+
+    exec { 'stop zabbix if running without pacemaker':
+      path    => '/usr/bin:/usr/sbin:/bin',
+      command => "systemctl stop ${server_service_name}",
+      onlyif  => "systemctl status ${server_service_name} | grep running >> /dev/null",
+      unless  => "systemctl status ${server_service_name} | grep pacemaker >> /dev/null",
+    }
+
+    service { $server_service_name:
+      ensure     => running,
+      provider   => 'base',
+      hasstatus  => true,
+      hasrestart => true,
+      status     => "/usr/sbin/pcs status resources | grep ${pacemaker_resource} | grep Started; echo $?",
+      restart    => "/usr/sbin/pcs resource restart ${pacemaker_resource}",
+      start      => "/usr/sbin/pcs resource start ${pacemaker_resource}",
+      stop       => "/usr/sbin/pcs resource stop ${pacemaker_resource}",
+      require    => [
+        Package["zabbix-server-${db}"],
+        File[$include_dir],
+        File[$server_configfile_path],
+        ],
+    }
+  } else {
+    service { $server_service_name:
+      ensure     => running,
+      hasstatus  => true,
+      hasrestart => true,
+      require    => [
+        Package["zabbix-server-${db}"],
+        File[$include_dir],
+        File[$server_configfile_path],
+        ],
+    }
   }
 
   # Configuring the zabbix-server configuration file
@@ -428,8 +499,10 @@ class zabbix::server (
       dport  => $listenport,
       proto  => 'tcp',
       action => 'accept',
-      state  => ['NEW','RELATED', 'ESTABLISHED'],
+      state  => [
+        'NEW',
+        'RELATED',
+        'ESTABLISHED'],
     }
   }
-
 }

@@ -14,14 +14,14 @@
 #
 #
 class zabbix::resources::agent (
-  $hostname     = undef,
-  $ipaddress    = undef,
-  $use_ip       = undef,
-  $port         = undef,
-  $group        = undef,
-  $group_create = undef,
-  $templates    = undef,
-  $proxy        = undef,
+  $hostname      = undef,
+  $ipaddress     = undef,
+  $use_ip        = undef,
+  $port          = undef,
+  $group         = undef,
+  $group_create  = undef,
+  $templates     = undef,
+  $proxy         = undef,
 ) {
 
   @@zabbix_host { $hostname:

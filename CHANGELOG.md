@@ -4,6 +4,88 @@ Below an overview of all changes in the releases.
 
 Version (Release date)
 
+2.2.0   (2016-03-06)
+
+  * Adjust server config and databases sqls for 3.0 #167 (By pull request: slashr00t (Thanks!))
+  * Added Zabbix Proxy, Agent, Server, 3.0 support and Pacemaker exclusions #174 (By pull request: ericsysmin (Thanks!))
+  * removed notify, forgot to take it out when I was troubleshooting #173 (By pull request: ericsysmin (Thanks!))
+  * Patch 6 #171 (By pull request: ericsysmin (Thanks!))
+  * TLS Support for Zabbix 3.0 #169 (By pull request: ericsysmin (Thanks!))
+  * Added rspec tests for Zabbix 3.0
+  * Fix for: Issues with RHEL7 repos configuration #183.
+  * Make types run in puppet 4 #182 (By pull request: ITler (Thanks!))
+  * Added documentation for Zabbix::Proxy regaring sqlite3 database.
+  * Zabbix 3.0 Proxy Postgres DB Schema Using Incorrect File #186 (By request: channone-arif-nbcuni (Thanks!))
+  * Moved some documentation to the github wiki.
+
+2.1.1   (2016-02-09)
+
+  * Make Zabbix module compile on puppet 4.x AIO. #164 (By pull request: ITler (Thanks!))
+  * Fix for Repo is always added #148
+
+2.1.0   (2016-02-02)
+
+  * Removed a debug entry #156 (By pull request: hkumarmk (Thanks!))
+  * Add Puppet Forge Version and Downloads badges #163 (By pull request: rnelson0 (Thanks!))
+  * Travis CI setup: ensure all rspec tests pass #162 (By pull request: rnelson0 (Thanks!))
+  * Update proxy.pp, fix Error: ...install zabbix-proxy- .. #159 (By pull request: subkowlex (Thanks!))
+  * Puppetgem #158 (By pull request: rnelson0 (Thanks!))
+
+2.0.0   (2016-01-31)
+
+  * wdijkerman-zabbix works with puppet 4
+  * Fix for: Server and Proxy templates are inconsistent #144
+  * fixed SSL server template options for 2.2 #141 (By pull request: IceBear2k (Thanks!))
+  * fix syntax error #139 (By pull request: mkrakowitzer (Thanks!))
+  * Allow agent to listen on * #138 (By pull request: ekohl (Thanks!))
+  * enable apache_php_max_input_vars #137 (By pull request: bastelfreak (Thanks!))
+  * Fix typo in zabbix-userparameters reference #136 (By pull request: sgnl05 (Thanks!))
+  * Listen on all IPs #133 (By pull request: z3rogate (Thanks!))
+  * tap0 or tun0 (OpenVPN interfaces) interface as listenip #132 (By pull request: z3rogate (Thanks!))
+  * fixed typo for comment mysql #145 (By pull request: eander210 (Thanks!))
+  * Updated the listen_ip for proxy so it same as for agent.
+  * allow serveractive to be optional #146 (By pull request: ericsysmin (Thanks!))
+  * Allow agent_serveractive value to be blank #147 (By pull request: ericsysmin (Thanks!))
+  * Added support for adding LDAP certificate location to Zabbix Web. Upd… #150 (By pull request: elricsfate (Thanks!))
+  * Added zabbix_template_host type #154 (By pull request: hkumarmk (Thanks!))
+  * Type to manage zabbix application #155 (By pull request: hkumarmk (Thanks!))
+
+1.7.0   (2015-11-07)
+
+  * misspelled parameter path #116 (By pull request: karolisc (Thanks!))
+  * Update template.pp #121 (By pull request: claflico (Thanks!))
+  * add support for CloudLinux #122 (By pull request: bastelfreak (Thanks!))
+  * Fping wrong path in debian #124  (By pull request: Oyabi (Thanks!))
+  * refactoring of repo.pp #126  (By pull request: bastelfreak (Thanks!))
+  * Added supporting new Zabbix params #128 (By pull request: akostetskiy (Thanks!))
+  * Generalise the zabbix_url #129 (By pull request: DjxDeaf (Thanks!))
+
+1.6.0   (2015-08-21)
+
+  * Pass manage_repo and zabbix_repo to repo.pp and prevent double include #110 (By pull request: mmerfort (Thanks!))
+  * Add "eno" to interface name matching #104 (By pull request: sgnl05 (Thanks!))
+  * use the new puppetlabs-apt version 2.x module #103 (By pull request: hmn (Thanks!))
+  * Fix name startvmwarecollector -> startvmwarecollectors #102 (By pull request: BcTpe4HbIu (Thanks!))
+  * Custom apache IP and port #99 (By pull request: mschuett (Thanks!))
+  * Feature Request: add charset/collate option during a mysql db resource creation #107
+  * Added support Debian 8
+  * Fixed some rpsec tests
+  * Fixed some puppet-lint identation warnings
+  * Updated the zabbixapi gem install with recent versions
+
+1.5.0   (2015-06-08)
+
+  * Fix for: Inherting params #93
+  * Fix for: new postgresql instance #91; Also update metadata for postgresl module version
+  * Fix for: Need to overide php_values #89
+  * 2nd fix for: Zabbix-proxy install database population #62. Also for postgresql now.
+  * Added support to Amazon Linux with epel 6. #96 (By pull request: Wprosdocimo (Thanks!))
+  * import templates and create hostgroup if missing #95 (By pull request: 1n (Thanks!))
+  * Added Support For Zapache monitoring script #94 (By pull request: elricsfate (Thanks!))
+  * merge of hiera hashes from entire hierarchy #98 (By pull request: szemlyanoy (Thanks!))
+  * Added property script_ext for: File extensions of Userparameters scripts #97
+  * Updated documentation in README.md
+
 1.4.0   (2015-05-18)
 
   * Adding "apt" as dependency.
