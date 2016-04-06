@@ -208,6 +208,8 @@ class zabbix::web (
   $ldap_clientkey                           = $zabbix::params::ldap_clientkey,
   $puppetgem                                = $zabbix::params::puppetgem,
 ) inherits zabbix::params {
+  $apache_user = $apache::user
+  $apache_group = $apache::group
 
   # Only include the repo class if it has not yet been included
   unless defined(Class['Zabbix::Repo']) {
@@ -320,9 +322,9 @@ class zabbix::web (
   # Webinterface config file
   file { '/etc/zabbix/web/zabbix.conf.php':
     ensure  => present,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
+    owner   => $apache_user,
+    group   => $apache_group,
+    mode    => '0640',
     replace => true,
     content => template('zabbix/web/zabbix.conf.php.erb'),
   }
