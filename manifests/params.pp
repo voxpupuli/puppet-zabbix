@@ -13,14 +13,7 @@
 class zabbix::params {
   # It seems that ubuntu has an different fping path...
   case $::operatingsystem {
-    'ubuntu' : {
-      $server_fpinglocation  = '/usr/bin/fping'
-      $server_fping6location = '/usr/bin/fping6'
-      $proxy_fpinglocation   = '/usr/bin/fping'
-      $proxy_fping6location  = '/usr/bin/fping6'
-      $manage_repo           = true
-    }
-    'debian' : {
+    'ubuntu', 'debian' : {
       $server_fpinglocation  = '/usr/bin/fping'
       $server_fping6location = '/usr/bin/fping6'
       $proxy_fpinglocation   = '/usr/bin/fping'
