@@ -28,7 +28,12 @@ class zabbix::params {
       $manage_repo           = true
     }
     'Archlinux': {
+      $server_fpinglocation  = '/usr/bin/fping'
+      $server_fping6location = '/usr/bin/fping6'
+      $proxy_fpinglocation   = '/usr/bin/fping'
+      $proxy_fping6location  = '/usr/bin/fping6'
       $manage_repo = false
+
     }
     default  : {
       $server_fpinglocation  = '/usr/sbin/fping'
