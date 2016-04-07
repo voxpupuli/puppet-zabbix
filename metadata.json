@@ -33,6 +33,7 @@
     { "operatingsystem":"Ubuntu", "operatingsystemrelease": [ "12.04", "14.04" ] },
     { "operatingsystem":"Debian", "operatingsystemrelease": [ "6.0", "7.0", "8.0" ]  },
     { "operatingsystem":"PSBM", "operatingsystemrelease": [ "5.0" ]  },
-    { "operatingsystem":"PCS", "operatingsystemrelease": [ "6.0" ]  }
+    { "operatingsystem":"PCS", "operatingsystemrelease": [ "6.0" ]  },
+    { "operatingsystem":"Archlinux" }
    ]
 }
