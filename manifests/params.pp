@@ -18,12 +18,17 @@ class zabbix::params {
       $server_fping6location = '/usr/bin/fping6'
       $proxy_fpinglocation   = '/usr/bin/fping'
       $proxy_fping6location  = '/usr/bin/fping6'
+      $manage_repo           = true
     }
     'debian' : {
       $server_fpinglocation  = '/usr/bin/fping'
       $server_fping6location = '/usr/bin/fping6'
       $proxy_fpinglocation   = '/usr/bin/fping'
       $proxy_fping6location  = '/usr/bin/fping6'
+      $manage_repo           = true
+    }
+    'Archlinux': {
+      $manage_repo = false
     }
     default  : {
       $server_fpinglocation  = '/usr/sbin/fping'
@@ -47,7 +52,6 @@ class zabbix::params {
   $zabbix_web_ip                            = '127.0.0.1'
   $manage_database                          = true
   $manage_firewall                          = false
-  $manage_repo                              = true
   $repo_location                            = ''
   $manage_resources                         = false
   $manage_vhost                             = true
