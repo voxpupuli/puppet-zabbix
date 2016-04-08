@@ -36,22 +36,14 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, :parent => Puppet::Provider::Zabb
     end
 
     # Check if we need to connect via ip or fqdn
-    if use_ip == true
-      use_ip = 1
-    else
-      use_ip = 0
-    end
+    use_ip = use_ip ? 1 : 0
 
     # When using DNS you still have to send a value for ip
     if ipaddress.nil? and use_ip == 0
       ipaddress = ''
     end
 
-    if hostgroup_create == true
-      hostgroup_create = 1
-    else
-      hostgroup_create = 0
-    end
+    hostgroup_create = hostgroup_create ? 1 : 0
 
     # First check if we have an correct hostgroup and if not, we raise an error.
     search_hostgroup = zbx.hostgroups.get_id(:name => hostgroup)
