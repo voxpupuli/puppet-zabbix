@@ -19,6 +19,7 @@ class zabbix::params {
       $proxy_fpinglocation   = '/usr/bin/fping'
       $proxy_fping6location  = '/usr/bin/fping6'
       $manage_repo           = true
+      $zabbix_package_agent  = 'zabbix-agent'
     }
     'Archlinux': {
       $server_fpinglocation  = '/usr/bin/fping'
@@ -26,6 +27,7 @@ class zabbix::params {
       $proxy_fpinglocation   = '/usr/bin/fping'
       $proxy_fping6location  = '/usr/bin/fping6'
       $manage_repo = false
+      $zabbix_package_agent  = 'zabbix3-agent'
 
     }
     default  : {
@@ -33,6 +35,7 @@ class zabbix::params {
       $server_fping6location = '/usr/sbin/fping6'
       $proxy_fpinglocation   = '/usr/sbin/fping'
       $proxy_fping6location  = '/usr/sbin/fping6'
+      $zabbix_package_agent  = 'zabbix-agent'
     }
   }
 
