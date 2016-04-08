@@ -53,7 +53,7 @@ describe 'zabbix::server' do
     # Include directory should be available.
     it { should contain_file('/etc/zabbix/zabbix_server.conf.d').with_ensure('directory') }
     it { should contain_file('/etc/zabbix/zabbix_server.conf.d').with_require('File[/etc/zabbix/zabbix_server.conf]') }
-   
+
     context 'with zabbix::database::postgresql class' do
       let (:params) do
         {
@@ -103,7 +103,7 @@ describe 'zabbix::server' do
 
       it { should contain_firewall('151 zabbix-server') }
     end
-  
+
     context "when declaring manage_firewall is false" do
       let (:params) do
         {
@@ -112,7 +112,7 @@ describe 'zabbix::server' do
       end
 
       it { should_not contain_firewall('151 zabbix-server') }
-    end 
+    end
 
     context "with all zabbix_server.conf-related parameters" do
       let (:params) do
@@ -275,6 +275,6 @@ describe 'zabbix::server' do
       it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCRLFile=/etc/zabbix/keys/zabbix-server.crl$}}
       it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCertFile=/etc/zabbix/keys/zabbix-server.crt$}}
       it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSKeyFile=/etc/zabbix/keys/zabbix-server.key$}}
-    end 
+    end
   end
 end

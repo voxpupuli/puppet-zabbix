@@ -1,12 +1,12 @@
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'zabbix'))
 Puppet::Type.type(:zabbix_host).provide(:ruby, :parent => Puppet::Provider::Zabbix) do
-  def create 
+  def create
     zabbix_url = @resource[:zabbix_url]
 
     if zabbix_url != ''
       self.class.require_zabbix
     end
-        
+
     # Set some vars
     host = @resource[:hostname]
     ipaddress = @resource[:ipaddress]
@@ -23,7 +23,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, :parent => Puppet::Provider::Zabb
 
     # Connect to zabbix api
     zbx = self.class.create_connection(zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
-    
+
     # Get the template ids.
     template_array = Array.new
     if templates.kind_of?(Array)
@@ -52,7 +52,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, :parent => Puppet::Provider::Zabb
     else
       hostgroup_create = 0
     end
- 
+
     # First check if we have an correct hostgroup and if not, we raise an error.
     search_hostgroup = zbx.hostgroups.get_id(:name => hostgroup)
     if search_hostgroup.nil? and hostgroup_create == 1
@@ -115,7 +115,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, :parent => Puppet::Provider::Zabb
 
   def destroy
     zabbix_url = @resource[:zabbix_url]
-    
+
     if zabbix_url != ''
       self.class.require_zabbix
     end

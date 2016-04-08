@@ -110,7 +110,7 @@ describe 'zabbix::repo' do
 
     it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/3.0/debian/') }
   end
-  
+
   context "on Ubuntu 12.04 and Zabbix 2.0" do
     let (:params) do
       {

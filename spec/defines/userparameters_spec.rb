@@ -13,7 +13,7 @@ describe 'zabbix::userparameters', :type => :define do
   end
   let(:title) { 'mysqld' }
   let(:pre_condition) { 'class { "zabbix::agent": include_dir => "/etc/zabbix/zabbix_agentd.d" }' }
-  
+
   context "with an content" do
     let(:params) {{ :content => 'UserParameter=mysql.ping,mysqladmin -uroot ping | grep -c alive' } }
     it { should contain_file('/etc/zabbix/zabbix_agentd.d/mysqld.conf').with_ensure('present') }

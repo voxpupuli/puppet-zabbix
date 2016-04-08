@@ -1,7 +1,7 @@
 class Puppet::Provider::Zabbix < Puppet::Provider
   # Require the zabbixapi gem
   def self.require_zabbix
-    require "zabbixapi"    
+    require "zabbixapi"
   end
 
   # Create the api connection

@@ -61,11 +61,11 @@ Puppet::Type.type(:zabbix_proxy).provide(:ruby, :parent => Puppet::Provider::Zab
 
   def exists?
     zabbix_url = @resource[:zabbix_url]
-    
+
     if zabbix_url != ''
       self.class.require_zabbix
     end
-   
+
     host = @resource[:hostname]
     zabbix_user = @resource[:zabbix_user]
     zabbix_pass = @resource[:zabbix_pass]

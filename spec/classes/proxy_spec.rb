@@ -22,14 +22,14 @@ describe 'zabbix::proxy' do
         :concat_basedir            => '/tmp',
       }
     end
-  
+
     let (:pre_condition) do
       "class {'postgresql::server':}"
     end
 
     it { should contain_file('/etc/zabbix/zabbix_proxy.conf.d').with_ensure('directory') }
     it { should contain_file('/etc/zabbix/zabbix_proxy.conf.d').with_require('File[/etc/zabbix/zabbix_proxy.conf]') }
-  
+
     describe "when manage_repo is true" do
       let (:params) do
         {
@@ -299,9 +299,9 @@ describe 'zabbix::proxy' do
       it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSServerCertSubject=MyZabbix$}}
       it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSPSKIdentity=/etc/zabbix/keys/identity.file$}}
       it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSPSKFile=/etc/zabbix/keys/file.key$}}
-    end 
-    
-    
+    end
+
+
   end # END context 'zabbix_proxy.conf configuration'
 end
 
