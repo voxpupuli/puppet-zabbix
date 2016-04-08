@@ -25,7 +25,7 @@
 #   'source' which you add. The template will be added to the host.
 #
 # [*script_dir*]
-#   When 'script' is used, this parameter can provide the directly where this script needs to 
+#   When 'script' is used, this parameter can provide the directly where this script needs to
 #   be placed. Default: '/usr/bin'
 #
 # === Example
