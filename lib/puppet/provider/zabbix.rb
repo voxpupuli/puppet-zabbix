@@ -6,11 +6,7 @@ class Puppet::Provider::Zabbix < Puppet::Provider
 
   # Create the api connection
   def self.create_connection(zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
-    if apache_use_ssl
-      protocol = 'https'
-    else
-      protocol = 'http'
-    end
+    protocol = apache_use_ssl ? 'https' : 'http'
     zbx = ZabbixApi.connect(
       :url => "#{protocol}://#{zabbix_url}/api_jsonrpc.php",
       :user => zabbix_user,
