@@ -37,7 +37,7 @@ describe 'zabbix::database' do
 
       it { should contain_postgresql__server__db('zabbix-server').with_name('zabbix-server') }
       it { should contain_postgresql__server__db('zabbix-server').with_user('zabbix-server') }
-      
+
       it { should contain_postgresql__server__pg_hba_rule('Allow zabbix-server to access database').with_database('zabbix-server') }
       it { should contain_postgresql__server__pg_hba_rule('Allow zabbix-server to access database').with_user('zabbix-server') }
       it { should contain_postgresql__server__pg_hba_rule('Allow zabbix-server to access database').with_address('127.0.0.1/32') }
@@ -61,7 +61,7 @@ describe 'zabbix::database' do
 
       it { should contain_postgresql__server__db('zabbix-server').with_name('zabbix-server') }
       it { should contain_postgresql__server__db('zabbix-server').with_user('zabbix-server') }
-      
+
       it { should_not contain_postgresql__server__pg_hba_rule('Allow zabbix-server to access database').with_database('zabbix-server') }
       it { should_not contain_postgresql__server__pg_hba_rule('Allow zabbix-server to access database').with_user('zabbix-server') }
       it { should_not contain_postgresql__server__pg_hba_rule('Allow zabbix-server to access database').with_address('127.0.0.1/32') }

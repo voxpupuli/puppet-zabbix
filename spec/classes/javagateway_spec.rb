@@ -12,6 +12,14 @@ describe 'zabbix::javagateway' do
         :architecture           => 'x86_64',
         :lsbdistid              => 'RedHat',
         :concat_basedir         => '/tmp',
+        :is_pe                  => false,
+        :puppetversion          => Puppet.version,
+        :facterversion          => Facter.version,
+        :ipaddress              => '192.168.1.10',
+        :lsbdistcodename        => '',
+        :id                     => 'root',
+        :kernel                 => 'Linux',
+        :path                   => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
       }
     end
 
@@ -37,7 +45,7 @@ describe 'zabbix::javagateway' do
 
       it { should contain_firewall('152 zabbix-javagateway') }
     end
-  
+
     context "when declaring manage_firewall is false" do
       let(:params) do
         {
@@ -46,7 +54,7 @@ describe 'zabbix::javagateway' do
       end
 
       it { should_not contain_firewall('152 zabbix-javagateway') }
-    end 
+    end
 
     context 'with zabbix_java_gateway.conf settings' do
       let(:params) do
