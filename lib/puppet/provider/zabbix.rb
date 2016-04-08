@@ -20,7 +20,7 @@ class Puppet::Provider::Zabbix < Puppet::Provider
     begin
       zbx = create_connection(zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
       zbx.hosts.get_id(:host => host)
-    rescue Puppet::ExecutionFailure => e
+    rescue Puppet::ExecutionFailure
       false
     end
   end
@@ -31,7 +31,7 @@ class Puppet::Provider::Zabbix < Puppet::Provider
       require_zabbix
       zbx = create_connection(zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
       zbx.proxies.get_id(:host => host)
-    rescue Puppet::ExecutionFailure => e
+    rescue Puppet::ExecutionFailure
       false
     end
   end
@@ -59,7 +59,7 @@ class Puppet::Provider::Zabbix < Puppet::Provider
     begin
       zbx = create_connection(zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
       zbx.templates.get_id( :host => template )
-    rescue Puppet::ExecutionFailure => e
+    rescue Puppet::ExecutionFailure
       false
     end
   end
@@ -76,7 +76,7 @@ class Puppet::Provider::Zabbix < Puppet::Provider
       exported_clean = exported.gsub(/>\s*/, ">").gsub(/\s*</, "<").gsub(/<date>.*<\/date>/,"DATEWASHERE")
       template_source_clean = template_source.gsub(/>\s*/, ">").gsub(/\s*</, "<").gsub(/<date>.*<\/date>/,"DATEWASHERE")
       exported_clean.eql? template_source_clean
-    rescue Puppet::ExecutionFailure => e
+    rescue Puppet::ExecutionFailure
       false
     end
   end
