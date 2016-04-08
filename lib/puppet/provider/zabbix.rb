@@ -52,7 +52,7 @@ class Puppet::Provider::Zabbix < Puppet::Provider
     template_id = self.get_template_id(zbx,template)
     template_array = Array.new
     template_array = zbx.templates.get_ids_by_host( :hostids => [zbx.hosts.get_id(:host => host)] )
-    template_array.include?("#{template_id}")
+    template_array.include?(template_id.to_s)
   end
 
   def self.check_template_exist(template,template_source,zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
