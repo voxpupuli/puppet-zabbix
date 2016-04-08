@@ -319,7 +319,7 @@ class zabbix::agent (
     enable     => true,
     hasstatus  => true,
     hasrestart => true,
-    require    => Package['zabbix-agent'],
+    require    => Package[$zabbix_package_agent],
   }
 
   # Configuring the zabbix-agent configuration file
@@ -329,7 +329,7 @@ class zabbix::agent (
     group   => 'zabbix',
     mode    => '0644',
     notify  => Service['zabbix-agent'],
-    require => Package['zabbix-agent'],
+    require => Package[$zabbix_package_agent],
     replace => true,
     content => template('zabbix/zabbix_agentd.conf.erb'),
   }
