@@ -9,6 +9,7 @@ require 'simplecov-console'
 SimpleCov.start do
   add_filter '/spec'
   add_filter '/vendor'
+  add_filter '/.vendor'
   formatter SimpleCov::Formatter::MultiFormatter[
     SimpleCov::Formatter::HTMLFormatter,
     SimpleCov::Formatter::Console
