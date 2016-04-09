@@ -13,12 +13,21 @@ describe 'zabbix::web' do
   context 'On a RedHat OS' do
     let :facts do
       {
-        :osfamily               => 'RedHat',
-        :operatingsystem        => 'RedHat',
-        :operatingsystemrelease => '6.5',
-        :architecture           => 'x86_64',
-        :lsbdistid              => 'RedHat',
-        :concat_basedir         => '/tmp'
+        :osfamily                   => 'RedHat',
+        :operatingsystem            => 'RedHat',
+        :operatingsystemrelease     => '6.5',
+        :operatingsystemmajrelease  => '6',
+        :architecture               => 'x86_64',
+        :lsbdistid                  => 'RedHat',
+        :concat_basedir             => '/tmp',
+        :is_pe                      => false,
+        :puppetversion              => Puppet.version,
+        :facterversion              => Facter.version,
+        :ipaddress                  => '192.168.1.10',
+        :lsbdistcodename            => '',
+        :id                         => 'root',
+        :kernel                     => 'Linux',
+        :path                       => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
       }
     end
 
@@ -120,13 +129,21 @@ describe 'zabbix::web' do
   context 'On Debian 6.0' do
     let :facts do
       {
-        :osfamily               => 'debian',
-        :operatingsystem        => 'debian',
-        :operatingsystemrelease => '6.0',
-        :lsbdistcodename        => 'squeeze',
-        :architecture           => 'x86_64',
-        :lsbdistid              => 'debian',
-        :concat_basedir         => '/tmp',
+        :osfamily                   => 'debian',
+        :operatingsystem            => 'debian',
+        :operatingsystemrelease     => '6.0',
+        :operatingsystemmajrelease  => '6',
+        :architecture               => 'x86_64',
+        :lsbdistid                  => 'debian',
+        :concat_basedir             => '/tmp',
+        :is_pe                      => false,
+        :puppetversion              => Puppet.version,
+        :facterversion              => Facter.version,
+        :ipaddress                  => '192.168.1.10',
+        :lsbdistcodename            => 'squeeze',
+        :id                         => 'root',
+        :kernel                     => 'Linux',
+        :path                       => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
       }
     end
 
