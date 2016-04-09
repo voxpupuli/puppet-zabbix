@@ -64,7 +64,7 @@ describe 'zabbix::web' do
       end
 
       it { should contain_class('zabbix::resources::web') }
-      it { should contain_package('zabbixapi').that_requires('Class[ruby::dev]').with_provider('gem') }
+      it { should contain_package('zabbixapi').that_requires('Class[ruby::dev]').with_provider('puppet_gem') }
       it { should contain_class('ruby::dev') }
     end
 
