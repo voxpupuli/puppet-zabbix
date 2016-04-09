@@ -327,8 +327,8 @@ describe 'zabbix::repo' do
       }
     end
 
-    it { should contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/2.0/rhel//$basearch/') }
-    it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel//$basearch/') }
+    it { should contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/2.0/rhel/5/$basearch/') }
+    it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/5/$basearch/') }
   end
 
   context "on RedHat 6 and Zabbix 2.0" do
@@ -358,8 +358,8 @@ describe 'zabbix::repo' do
       }
     end
 
-    it { should contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/2.0/rhel//$basearch/') }
-    it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel//$basearch/') }
+    it { should contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/2.0/rhel/6/$basearch/') }
+    it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/6/$basearch/') }
   end
 
   context "on RedHat 6 and Zabbix 2.2" do
@@ -389,8 +389,8 @@ describe 'zabbix::repo' do
       }
     end
 
-    it { should contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/2.2/rhel//$basearch/') }
-    it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel//$basearch/') }
+    it { should contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/2.2/rhel/6/$basearch/') }
+    it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/6/$basearch/') }
   end
 
   context "on RedHat 6 and Zabbix 2.4" do
@@ -420,8 +420,8 @@ describe 'zabbix::repo' do
       }
     end
 
-    it { should contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/2.4/rhel//$basearch/') }
-    it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel//$basearch/') }
+    it { should contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/2.4/rhel/6/$basearch/') }
+    it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/6/$basearch/') }
   end
 
   context "on RedHat 7 and Zabbix 3.0" do
@@ -435,8 +435,8 @@ describe 'zabbix::repo' do
     let (:facts) do
       {
         :operatingsystem            => 'RedHat',
-        :operatingsystemrelease     => '7',
-        :operatingsystemmajrelease  => '7.1',
+        :operatingsystemrelease     => '7.1',
+        :operatingsystemmajrelease  => '7',
         :architecture               => 'x86_64',
         :osfamily                   => 'RedHat',
         :$majorrelease              => '7',
@@ -452,6 +452,6 @@ describe 'zabbix::repo' do
     end
 
     it { should contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/3.0/rhel/7/$basearch/') }
-    it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel//$basearch/') }
+    it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/7/$basearch/') }
   end
 end
