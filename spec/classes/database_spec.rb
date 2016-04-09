@@ -10,16 +10,21 @@ describe 'zabbix::database' do
   context 'On RedHat 6.5' do
     let (:facts) do
       {
-        :kernel                    => 'Linux',
-        :osfamily                  => 'RedHat',
-        :operatingsystem           => 'RedHat',
-        :operatingsystemrelease    => '6.5',
-        :operatingsystemmajrelease => '6',
-        :architecture              => 'x86_64',
-        :lsbdistid                 => 'RedHat',
-        :concat_basedir            => '/tmp',
-        :puppetversion             => '4.0.0',
-        :id                        => 'root',
+        :osfamily                   => 'RedHat',
+        :operatingsystem            => 'RedHat',
+        :operatingsystemrelease     => '6.5',
+        :operatingsystemmajrelease  => '6',
+        :architecture               => 'x86_64',
+        :lsbdistid                  => 'RedHat',
+        :concat_basedir             => '/tmp',
+        :is_pe                      => false,
+        :puppetversion              => Puppet.version,
+        :facterversion              => Facter.version,
+        :ipaddress                  => '192.168.1.10',
+        :lsbdistcodename            => '',
+        :id                         => 'root',
+        :kernel                     => 'Linux',
+        :path                       => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
       }
     end
 
