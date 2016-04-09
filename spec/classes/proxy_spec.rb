@@ -81,6 +81,7 @@ describe 'zabbix::proxy' do
       let (:params) do
         {
           :manage_resources => true,
+          :listenip         => '192.168.1.1',
         }
       end
 
