@@ -19,6 +19,9 @@ describe 'zabbix::agent' do
         :architecture           => 'x86_64',
         :lsbdistid              => 'RedHat',
         :concat_basedir         => '/tmp',
+        :is_pe                  => false,
+        :puppetversion          => Puppet.version,
+        :facterversion          => Facter.version,
       }
     end
 
