@@ -38,6 +38,5 @@ describe 'zabbix::sender' do
       it { should contain_class('zabbix::repo').with_zabbix_version('3.0') }
       it { should contain_package('zabbix-sender').with_require('Class[Zabbix::Repo]')}
     end
-
   end
 end
