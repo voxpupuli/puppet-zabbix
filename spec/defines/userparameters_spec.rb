@@ -3,12 +3,21 @@ require 'spec_helper'
 describe 'zabbix::userparameters', :type => :define do
   let :facts do
     {
-      :osfamily               => 'RedHat',
-      :operatingsystem        => 'RedHat',
-      :operatingsystemrelease => '6.5',
-      :architecture           => 'x86_64',
-      :lsbdistid              => 'RedHat',
-      :concat_basedir         => '/tmp'
+      :osfamily                   => 'RedHat',
+      :operatingsystem            => 'RedHat',
+      :operatingsystemrelease     => '6.5',
+      :operatingsystemmajrelease  => '6',
+      :architecture               => 'x86_64',
+      :lsbdistid                  => 'RedHat',
+      :concat_basedir             => '/tmp',
+      :is_pe                      => false,
+      :puppetversion              => Puppet.version,
+      :facterversion              => Facter.version,
+      :ipaddress                  => '192.168.1.10',
+      :lsbdistcodename            => '',
+      :id                         => 'root',
+      :kernel                     => 'Linux',
+      :path                       => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
     }
   end
   let(:title) { 'mysqld' }
