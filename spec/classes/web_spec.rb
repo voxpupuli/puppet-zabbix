@@ -72,7 +72,6 @@ describe 'zabbix::web' do
       it { should contain_class('zabbix::resources::web') }
       # disabled due to https://github.com/rodjek/rspec-puppet/issues/352
       #it { should contain_package('zabbixapi').that_requires('Class[ruby::dev]').with_provider('puppet_gem') }
-      it { should contain_package('zabbixapi').that_requires('Class[ruby::dev]') }
       it { should contain_class('ruby::dev') }
     end
 
