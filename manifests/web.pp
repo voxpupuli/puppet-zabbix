@@ -208,8 +208,8 @@ class zabbix::web (
   $ldap_clientkey                           = $zabbix::params::ldap_clientkey,
   $puppetgem                                = $zabbix::params::puppetgem,
 ) inherits zabbix::params {
-  $apache_user = $apache::user
-  $apache_group = $apache::group
+  $apache_user = getvar('::apache::user')
+  $apache_group = getvar('::apache::group')
 
   # Only include the repo class if it has not yet been included
   unless defined(Class['Zabbix::Repo']) {
