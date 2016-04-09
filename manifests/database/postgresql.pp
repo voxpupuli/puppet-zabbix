@@ -24,7 +24,7 @@ class zabbix::database::postgresql (
   $database_password    = '',
   $database_host        = '',
   $database_path        = $zabbix::params::database_path,
-) {
+) inherits zabbix::params {
   #
   # Adjustments for version 3.0 - structure of package with sqls differs from previous versions
   case $zabbix_version {
