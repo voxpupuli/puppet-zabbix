@@ -92,7 +92,7 @@ Lint/Loop:
 
 # DISABLED
 Lint/ParenthesesAsGroupedExpression:
-  Enabled: false
+  Enabled: true
 
 Lint/RescueException:
   Enabled: false

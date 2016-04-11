@@ -2,9 +2,12 @@
 require 'spec_helper'
 
 describe 'zabbix::userparameter' do
-  let (:node) { 'agent.example.com' }
+  let :node do
+    'agent.example.com'
+  end
+
   context 'On RedHat 7.1' do
-    let (:facts) do
+    let :facts do
       {
         osfamily: 'RedHat',
         operatingsystem: 'RedHat',

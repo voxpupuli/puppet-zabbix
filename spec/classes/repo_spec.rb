@@ -3,14 +3,14 @@ require 'spec_helper'
 
 describe 'zabbix::repo' do
   context "on Debian 6 and Zabbix 2.0" do
-    let (:params) do
+    let :params do
       {
         zabbix_version: '2.0',
         manage_repo: true,
       }
     end
 
-    let (:facts) do
+    let :facts do
       {
         operatingsystem: 'Debian',
         operatingsystemrelease: '6',
@@ -33,14 +33,14 @@ describe 'zabbix::repo' do
   end
 
   context "on Debian 7 and Zabbix 2.0" do
-    let (:params) do
+    let :params do
       {
         zabbix_version: '2.0',
         manage_repo: true,
       }
     end
 
-    let (:facts) do
+    let :facts do
       {
         operatingsystem: 'Debian',
         operatingsystemrelease: '7',
@@ -63,14 +63,14 @@ describe 'zabbix::repo' do
   end
 
   context "on Debian 7 and Zabbix 2.2" do
-    let (:params) do
+    let :params do
       {
         zabbix_version: '2.2',
         manage_repo: true,
       }
     end
 
-    let (:facts) do
+    let :facts do
       {
         operatingsystem: 'Debian',
         operatingsystemrelease: '7',
@@ -93,14 +93,14 @@ describe 'zabbix::repo' do
   end
 
   context "on Debian 7 and Zabbix 2.4" do
-    let (:params) do
+    let :params do
       {
         zabbix_version: '2.4',
         manage_repo: true,
       }
     end
 
-    let (:facts) do
+    let :facts do
       {
         operatingsystem: 'Debian',
         operatingsystemrelease: '7',
@@ -123,14 +123,14 @@ describe 'zabbix::repo' do
   end
 
   context "on Debian 8 and Zabbix 3.0" do
-    let (:params) do
+    let :params do
       {
         zabbix_version: '3.0',
         manage_repo: true,
       }
     end
 
-    let (:facts) do
+    let :facts do
       {
         operatingsystem: 'Debian',
         operatingsystemrelease: '8',
@@ -153,14 +153,14 @@ describe 'zabbix::repo' do
   end
 
   context "on Ubuntu 12.04 and Zabbix 2.0" do
-    let (:params) do
+    let :params do
       {
         zabbix_version: '2.0',
         manage_repo: true,
       }
     end
 
-    let (:facts) do
+    let :facts do
       {
         operatingsystem: 'Ubuntu',
         operatingsystemrelease: '12.04',
@@ -183,14 +183,14 @@ describe 'zabbix::repo' do
   end
 
   context "on Ubuntu 12.04 and Zabbix 2.2" do
-    let (:params) do
+    let :params do
       {
         zabbix_version: '2.2',
         manage_repo: true,
       }
     end
 
-    let (:facts) do
+    let :facts do
       {
         operatingsystem: 'Ubuntu',
         operatingsystemrelease: '12.04',
@@ -213,14 +213,14 @@ describe 'zabbix::repo' do
   end
 
   context "on Ubuntu 12.04 and Zabbix 2.4" do
-    let (:params) do
+    let :params do
       {
         zabbix_version: '2.4',
         manage_repo: true,
       }
     end
 
-    let (:facts) do
+    let :facts do
       {
         operatingsystem: 'Ubuntu',
         operatingsystemrelease: '12.04',
@@ -243,14 +243,14 @@ describe 'zabbix::repo' do
   end
 
   context "on Ubuntu 14.04 and Zabbix 2.4" do
-    let (:params) do
+    let :params do
       {
         zabbix_version: '2.4',
         manage_repo: true,
       }
     end
 
-    let (:facts) do
+    let :facts do
       {
         operatingsystem: 'Ubuntu',
         operatingsystemrelease: '14.04',
@@ -273,14 +273,14 @@ describe 'zabbix::repo' do
   end
 
   context "on Ubuntu 14.04 and Zabbix 3.0" do
-    let (:params) do
+    let :params do
       {
         zabbix_version: '3.0',
         manage_repo: true,
       }
     end
 
-    let (:facts) do
+    let :facts do
       {
         operatingsystem: 'Ubuntu',
         operatingsystemrelease: '14.04',
@@ -303,14 +303,14 @@ describe 'zabbix::repo' do
   end
 
   context "on RedHat 5 and Zabbix 2.0" do
-    let (:params) do
+    let :params do
       {
         zabbix_version: '2.0',
         manage_repo: true,
       }
     end
 
-    let (:facts) do
+    let :facts do
       {
         operatingsystem: 'RedHat',
         operatingsystemrelease: '5',
@@ -333,14 +333,14 @@ describe 'zabbix::repo' do
   end
 
   context "on RedHat 6 and Zabbix 2.0" do
-    let (:params) do
+    let :params do
       {
         zabbix_version: '2.0',
         manage_repo: true,
       }
     end
 
-    let (:facts) do
+    let :facts do
       {
         :operatingsystem            => 'RedHat',
         :operatingsystemrelease     => '6',
@@ -364,14 +364,14 @@ describe 'zabbix::repo' do
   end
 
   context "on RedHat 6 and Zabbix 2.2" do
-    let (:params) do
+    let :params do
       {
         zabbix_version: '2.2',
         manage_repo: true,
       }
     end
 
-    let (:facts) do
+    let :facts do
       {
         :operatingsystem            => 'RedHat',
         :operatingsystemrelease     => '6',
@@ -395,14 +395,14 @@ describe 'zabbix::repo' do
   end
 
   context "on RedHat 6 and Zabbix 2.4" do
-    let (:params) do
+    let :params do
       {
         zabbix_version: '2.4',
         manage_repo: true,
       }
     end
 
-    let (:facts) do
+    let :facts do
       {
         :operatingsystem            => 'RedHat',
         :operatingsystemrelease     => '6',
@@ -426,14 +426,14 @@ describe 'zabbix::repo' do
   end
 
   context "on RedHat 7 and Zabbix 3.0" do
-    let (:params) do
+    let :params do
       {
         zabbix_version: '3.0',
         manage_repo: true,
       }
     end
 
-    let (:facts) do
+    let :facts do
       {
         :operatingsystem            => 'RedHat',
         :operatingsystemrelease     => '7.1',

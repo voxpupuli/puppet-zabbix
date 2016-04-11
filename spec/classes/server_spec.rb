@@ -2,13 +2,15 @@
 require 'spec_helper'
 
 describe 'zabbix::server' do
-  let (:params) do
+  let :params do
     {
       zabbix_version: '3.0',
     }
   end
 
-  let (:node) { 'rspec.puppet.com' }
+  let :node do
+    'rspec.puppet.com'
+  end
 
   context 'On RedHat 7.1' do
     let :facts do
@@ -35,7 +37,7 @@ describe 'zabbix::server' do
     it { should contain_service('zabbix-server').with_ensure('running') }
 
     describe 'with database_type as postgresql' do
-      let (:params) do
+      let :params do
         {
           database_type: 'postgresql',
           server_configfile_path: '/etc/zabbix/zabbix_server.conf',
@@ -49,7 +51,7 @@ describe 'zabbix::server' do
     end
 
     describe 'with database_type as mysql' do
-      let (:params) do
+      let :params do
         {
           database_type: 'mysql',
         }
@@ -65,7 +67,7 @@ describe 'zabbix::server' do
     it { should contain_file('/etc/zabbix/zabbix_server.conf.d').with_require('File[/etc/zabbix/zabbix_server.conf]') }
 
     context 'with zabbix::database::postgresql class' do
-      let (:params) do
+      let :params do
         {
           database_type: 'postgresql',
           database_user: 'zabbix-server',
@@ -84,7 +86,7 @@ describe 'zabbix::server' do
     end
 
     context 'with zabbix::database::mysql class' do
-      let (:params) do
+      let :params do
         {
           database_type: 'mysql',
           database_user: 'zabbix-server',
@@ -105,7 +107,7 @@ describe 'zabbix::server' do
     # So if manage_firewall is set to true, it should install
     # the firewall rule.
     context "when declaring manage_firewall is true" do
-      let (:params) do
+      let :params do
         {
           manage_firewall: true,
         }
@@ -115,7 +117,7 @@ describe 'zabbix::server' do
     end
 
     context "when declaring manage_firewall is false" do
-      let (:params) do
+      let :params do
         {
           manage_firewall: false,
         }
@@ -125,7 +127,7 @@ describe 'zabbix::server' do
     end
 
     context "with all zabbix_server.conf-related parameters" do
-      let (:params) do
+      let :params do
         {
           alertscriptspath: '${datadir}/zabbix/alertscripts' ,
           allowroot: '1' ,
@@ -256,7 +258,7 @@ describe 'zabbix::server' do
     end
 
     context "with zabbix_server.conf and version 2.4" do
-      let (:params) do
+      let :params do
         {
           nodeid: '0',
           nodenohistory: '0',
@@ -271,7 +273,7 @@ describe 'zabbix::server' do
     end
 
     context "with zabbix_server.conf and version 3.0" do
-      let (:params) do
+      let :params do
         {
           tlscafile: '/etc/zabbix/keys/zabbix-server.ca',
           tlscrlfile: '/etc/zabbix/keys/zabbix-server.crl',

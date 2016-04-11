@@ -2,9 +2,11 @@
 require 'spec_helper'
 
 describe 'zabbix::proxy' do
-  let (:node) { 'rspec.puppet.com' }
+  let :node do
+    'rspec.puppet.com'
+  end
 
-  let (:params) do
+  let :params do
     {
       zabbix_server_host: '192.168.1.1',
       zabbix_version: '2.4'
@@ -12,7 +14,7 @@ describe 'zabbix::proxy' do
   end
 
   context 'On RedHat 7.1' do
-    let (:facts) do
+    let :facts do
       {
         osfamily: 'RedHat',
         operatingsystem: 'RedHat',
@@ -32,7 +34,7 @@ describe 'zabbix::proxy' do
       }
     end
 
-    let (:pre_condition) do
+    let :pre_condition do
       "class {'postgresql::server':}"
     end
 
@@ -40,7 +42,7 @@ describe 'zabbix::proxy' do
     it { should contain_file('/etc/zabbix/zabbix_proxy.conf.d').with_require('File[/etc/zabbix/zabbix_proxy.conf]') }
 
     describe "when manage_repo is true" do
-      let (:params) do
+      let :params do
         {
           manage_repo: true,
         }
@@ -51,7 +53,7 @@ describe 'zabbix::proxy' do
     end
 
     describe "when database_type is postgresql" do
-      let (:params) do
+      let :params do
         {
           database_type: 'postgresql',
         }
@@ -65,7 +67,7 @@ describe 'zabbix::proxy' do
     end
 
     describe "when database_type is mysql" do
-      let (:params) do
+      let :params do
         {
           database_type: 'mysql',
         }
@@ -79,7 +81,7 @@ describe 'zabbix::proxy' do
     end
 
     describe "when manage_resources is true" do
-      let (:params) do
+      let :params do
         {
           manage_resources: true,
           listenip: '192.168.1.1',
@@ -90,7 +92,7 @@ describe 'zabbix::proxy' do
     end
 
     context 'with zabbix::database::postgresql class' do
-      let (:params) do
+      let :params do
         {
           database_type: 'postgresql',
           manage_database: true,
@@ -285,7 +287,7 @@ describe 'zabbix::proxy' do
     end
 
     context "with zabbix_proxy.conf and version 3.0" do
-      let (:params) do
+      let :params do
         {
           tlsaccept: 'cert',
           tlscafile: '/etc/zabbix/keys/zabbix-server.ca',

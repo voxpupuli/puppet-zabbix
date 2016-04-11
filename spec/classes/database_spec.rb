@@ -2,14 +2,16 @@
 require 'spec_helper'
 
 describe 'zabbix::database' do
-  let (:node) { 'rspec.puppet.com' }
+  let :node do
+    'rspec.puppet.com'
+  end
 
-  let (:pre_condition) do
+  let :pre_condition do
     "class {'postgresql::server':}"
   end
 
   context 'On RedHat 6.5' do
-    let (:facts) do
+    let :facts do
       {
         osfamily: 'RedHat',
         operatingsystem: 'RedHat',
@@ -30,7 +32,7 @@ describe 'zabbix::database' do
     end
 
     describe "database_type is postgresql, zabbix_type is server and is multiple host setup" do
-      let (:params) do
+      let :params do
         {
           database_type: 'postgresql',
           database_name: 'zabbix-server',
@@ -54,7 +56,7 @@ describe 'zabbix::database' do
     end
 
     describe "database_type is postgresql, zabbix_type is server and is single node setup" do
-      let (:params) do
+      let :params do
         {
           database_type: 'postgresql',
           database_name: 'zabbix-server',
@@ -78,7 +80,7 @@ describe 'zabbix::database' do
     end
 
     describe "database_type is postgresql, zabbix_type is proxy" do
-      let (:params) do
+      let :params do
         {
           database_type: 'postgresql',
           database_name: 'zabbix-proxy',
@@ -94,7 +96,7 @@ describe 'zabbix::database' do
     end
 
     describe "database_type is mysql, zabbix_type is server and is multiple host setup" do
-      let (:params) do
+      let :params do
         {
           database_type: 'mysql',
           database_name: 'zabbix-server',
@@ -116,7 +118,7 @@ describe 'zabbix::database' do
     end
 
     describe "database_type is mysql, zabbix_type is server and is a single host setup" do
-      let (:params) do
+      let :params do
         {
           database_type: 'mysql',
           database_name: 'zabbix-server',
@@ -138,7 +140,7 @@ describe 'zabbix::database' do
     end
 
     describe "database_type is mysql, zabbix_type is proxy and is a single host setup" do
-      let (:params) do
+      let :params do
         {
           database_type: 'mysql',
           database_name: 'zabbix-proxy',
@@ -152,7 +154,7 @@ describe 'zabbix::database' do
     end
 
     describe "database_type is sqlite, zabbix_type is proxy and is a multiple host setup" do
-      let (:params) do
+      let :params do
         {
           database_type: 'sqlite',
           database_name: 'zabbix-server',
