@@ -5,7 +5,7 @@ Puppet::Type.newtype(:zabbix_userparameters) do
     defaultto :present
   end
 
-  newparam(:name, :namevar => true) do
+  newparam(:name, namevar: true) do
     desc 'An unique name for this define.'
   end
 

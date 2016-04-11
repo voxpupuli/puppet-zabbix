@@ -9,7 +9,7 @@ Puppet::Type.newtype(:zabbix_hostgroup) do
     defaultto :present
   end
 
-  newparam(:name, :namevar => true) do
+  newparam(:name, namevar: true) do
     desc 'hostgroup name'
   end
 

@@ -1,5 +1,5 @@
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'zabbix'))
-Puppet::Type.type(:zabbix_proxy).provide(:ruby, :parent => Puppet::Provider::Zabbix) do
+Puppet::Type.type(:zabbix_proxy).provide(:ruby, parent: Puppet::Provider::Zabbix) do
   def create
     zabbix_url = @resource[:zabbix_url]
 
@@ -40,13 +40,13 @@ Puppet::Type.type(:zabbix_proxy).provide(:ruby, :parent => Puppet::Provider::Zab
     mode = proxy_mode == "0" ? 5 : 6
 
     zbx.proxies.create_or_update(
-      :host => host,
-      :status => proxy_mode,
-      :interfaces => [
-        :ip => ipaddress,
-        :dns => host,
-        :useip => use_ip,
-        :port => port
+      host: host,
+      status: proxy_mode,
+      interfaces: [
+        ip: ipaddress,
+        dns: host,
+        useip: use_ip,
+        port: port
       ]
     )
   end

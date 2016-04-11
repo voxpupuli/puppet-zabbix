@@ -1,5 +1,5 @@
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'zabbix'))
-Puppet::Type.type(:zabbix_userparameters).provide(:ruby, :parent => Puppet::Provider::Zabbix) do
+Puppet::Type.type(:zabbix_userparameters).provide(:ruby, parent: Puppet::Provider::Zabbix) do
   def create
     zabbix_url = @resource[:zabbix_url]
     if zabbix_url != ''
@@ -18,8 +18,8 @@ Puppet::Type.type(:zabbix_userparameters).provide(:ruby, :parent => Puppet::Prov
     # Find the template_id we are looking for and add it to the host
     template_id = self.class.get_template_id(zbx,template)
     zbx.templates.mass_add(
-      :hosts_id => [zbx.hosts.get_id(:host => host)],
-      :templates_id => [ template_id ]
+      hosts_id: [zbx.hosts.get_id(host: host)],
+      templates_id: [ template_id ]
     )
   end
 

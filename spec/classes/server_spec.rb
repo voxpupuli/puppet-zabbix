@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'zabbix::server' do
   let (:params) do
     {
-      :zabbix_version => '3.0',
+      zabbix_version: '3.0',
     }
   end
 
@@ -12,21 +12,21 @@ describe 'zabbix::server' do
   context 'On RedHat 7.1' do
     let :facts do
       {
-        :osfamily                   => 'RedHat',
-        :operatingsystem            => 'RedHat',
-        :operatingsystemrelease     => '7.1',
-        :operatingsystemmajrelease  => '7',
-        :architecture               => 'x86_64',
-        :lsbdistid                  => 'RedHat',
-        :concat_basedir             => '/tmp',
-        :is_pe                      => false,
-        :puppetversion              => Puppet.version,
-        :facterversion              => Facter.version,
-        :ipaddress                  => '192.168.1.10',
-        :lsbdistcodename            => '',
-        :id                         => 'root',
-        :kernel                     => 'Linux',
-        :path                       => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
+        osfamily: 'RedHat',
+        operatingsystem: 'RedHat',
+        operatingsystemrelease: '7.1',
+        operatingsystemmajrelease: '7',
+        architecture: 'x86_64',
+        lsbdistid: 'RedHat',
+        concat_basedir: '/tmp',
+        is_pe: false,
+        puppetversion: Puppet.version,
+        facterversion: Facter.version,
+        ipaddress: '192.168.1.10',
+        lsbdistcodename: '',
+        id: 'root',
+        kernel: 'Linux',
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
       }
     end
 
@@ -36,9 +36,9 @@ describe 'zabbix::server' do
     describe 'with database_type as postgresql' do
       let (:params) do
         {
-          :database_type => 'postgresql',
-          :server_configfile_path => '/etc/zabbix/zabbix_server.conf',
-          :include_dir => '/etc/zabbix/zabbix_server.conf.d',
+          database_type: 'postgresql',
+          server_configfile_path: '/etc/zabbix/zabbix_server.conf',
+          include_dir: '/etc/zabbix/zabbix_server.conf.d',
         }
       end
 
@@ -50,7 +50,7 @@ describe 'zabbix::server' do
     describe 'with database_type as mysql' do
       let (:params) do
         {
-          :database_type => 'mysql',
+          database_type: 'mysql',
         }
       end
 
@@ -66,11 +66,11 @@ describe 'zabbix::server' do
     context 'with zabbix::database::postgresql class' do
       let (:params) do
         {
-          :database_type => 'postgresql',
-          :database_user => 'zabbix-server',
-          :database_password => 'zabbix-server',
-          :database_host => 'localhost',
-          :database_name => 'zabbix-server',
+          database_type: 'postgresql',
+          database_user: 'zabbix-server',
+          database_password: 'zabbix-server',
+          database_host: 'localhost',
+          database_name: 'zabbix-server',
         }
       end
 
@@ -85,11 +85,11 @@ describe 'zabbix::server' do
     context 'with zabbix::database::mysql class' do
       let (:params) do
         {
-          :database_type => 'mysql',
-          :database_user => 'zabbix-server',
-          :database_password => 'zabbix-server',
-          :database_host => 'localhost',
-          :database_name => 'zabbix-server',
+          database_type: 'mysql',
+          database_user: 'zabbix-server',
+          database_password: 'zabbix-server',
+          database_host: 'localhost',
+          database_name: 'zabbix-server',
         }
       end
 
@@ -106,7 +106,7 @@ describe 'zabbix::server' do
     context "when declaring manage_firewall is true" do
       let (:params) do
         {
-          :manage_firewall => true,
+          manage_firewall: true,
         }
       end
 
@@ -116,7 +116,7 @@ describe 'zabbix::server' do
     context "when declaring manage_firewall is false" do
       let (:params) do
         {
-          :manage_firewall => false,
+          manage_firewall: false,
         }
       end
 
@@ -126,68 +126,68 @@ describe 'zabbix::server' do
     context "with all zabbix_server.conf-related parameters" do
       let (:params) do
         {
-          :alertscriptspath => '${datadir}/zabbix/alertscripts' ,
-          :allowroot => '1' ,
-          :cachesize => '8M' ,
-          :cacheupdatefrequency => '30' ,
-          :database_host => 'localhost',
-          :database_name => 'zabbix-server',
-          :database_password => 'zabbix-server',
-          :database_port => '3306',
-          :database_schema => 'zabbix-server',
-          :database_socket => '/tmp/socket.db',
-          :database_user => 'zabbix-server',
-          :debuglevel => '3',
-          :externalscripts => '/usr/lib/zabbix/externalscripts0' ,
-          :fping6location => '/usr/sbin/fping6' ,
-          :fpinglocation => '/usr/sbin/fping' ,
-          :historycachesize => '4M' ,
-          :historytextcachesize => '4M' ,
-          :housekeepingfrequency => '1' ,
-          :include_dir => '/etc/zabbix/zabbix_server.conf.d' ,
-          :javagateway => '192.168.2.2',
-          :javagatewayport => '10052',
-          :listenip => '192.168.1.1' ,
-          :listenport => '10051',
-          :loadmodulepath => '${libdir}/modules' ,
-          :loadmodule => 'pizza' ,
-          :logfilesize => '10',
-          :logfile => '/var/log/zabbix/zabbix_server.log',
-          :logslowqueries => '0' ,
-          :maxhousekeeperdelete => '500' ,
-          :nodeid => '0',
-          :nodenoevents => '0',
-          :nodenohistory => '0',
-          :pidfile => '/var/run/zabbix/zabbix_server.pid',
-          :proxyconfigfrequency => '3600' ,
-          :proxydatafrequency => '1' ,
-          :senderfrequency => '30' ,
-          :snmptrapperfile => '/tmp/zabbix_traps.tmp',
-          :sourceip => '192.168.1.1',
-          :sshkeylocation => '/home/zabbix' ,
-          :startdbsyncers => '4' ,
-          :startdiscoverers => '1',
-          :starthttppollers => '1',
-          :startipmipollers => '12',
-          :startpingers => '1',
-          :startpollers => '12',
-          :startpollersunreachable => '1',
-          :startproxypollers => '1' ,
-          :startsnmptrapper => '1' ,
-          :starttimers => '1',
-          :starttrappers => '5',
-          :startvmwarecollectors => '5',
-          :timeout => '3' ,
-          :tmpdir => '/tmp' ,
-          :trappertimeout => '30' ,
-          :trendcachesize => '4M' ,
-          :unavailabledelay => '30' ,
-          :unreachabledelay => '30' ,
-          :unreachableperiod => '30' ,
-          :valuecachesize => '4M',
-          :vmwarecachesize => '8M',
-          :vmwarefrequency => '60',
-          :zabbix_version => '2.2',
+          alertscriptspath: '${datadir}/zabbix/alertscripts' ,
+          allowroot: '1' ,
+          cachesize: '8M' ,
+          cacheupdatefrequency: '30' ,
+          database_host: 'localhost',
+          database_name: 'zabbix-server',
+          database_password: 'zabbix-server',
+          database_port: '3306',
+          database_schema: 'zabbix-server',
+          database_socket: '/tmp/socket.db',
+          database_user: 'zabbix-server',
+          debuglevel: '3',
+          externalscripts: '/usr/lib/zabbix/externalscripts0' ,
+          fping6location: '/usr/sbin/fping6' ,
+          fpinglocation: '/usr/sbin/fping' ,
+          historycachesize: '4M' ,
+          historytextcachesize: '4M' ,
+          housekeepingfrequency: '1' ,
+          include_dir: '/etc/zabbix/zabbix_server.conf.d' ,
+          javagateway: '192.168.2.2',
+          javagatewayport: '10052',
+          listenip: '192.168.1.1' ,
+          listenport: '10051',
+          loadmodulepath: '${libdir}/modules' ,
+          loadmodule: 'pizza' ,
+          logfilesize: '10',
+          logfile: '/var/log/zabbix/zabbix_server.log',
+          logslowqueries: '0' ,
+          maxhousekeeperdelete: '500' ,
+          nodeid: '0',
+          nodenoevents: '0',
+          nodenohistory: '0',
+          pidfile: '/var/run/zabbix/zabbix_server.pid',
+          proxyconfigfrequency: '3600' ,
+          proxydatafrequency: '1' ,
+          senderfrequency: '30' ,
+          snmptrapperfile: '/tmp/zabbix_traps.tmp',
+          sourceip: '192.168.1.1',
+          sshkeylocation: '/home/zabbix' ,
+          startdbsyncers: '4' ,
+          startdiscoverers: '1',
+          starthttppollers: '1',
+          startipmipollers: '12',
+          startpingers: '1',
+          startpollers: '12',
+          startpollersunreachable: '1',
+          startproxypollers: '1' ,
+          startsnmptrapper: '1' ,
+          starttimers: '1',
+          starttrappers: '5',
+          startvmwarecollectors: '5',
+          timeout: '3' ,
+          tmpdir: '/tmp' ,
+          trappertimeout: '30' ,
+          trendcachesize: '4M' ,
+          unavailabledelay: '30' ,
+          unreachabledelay: '30' ,
+          unreachableperiod: '30' ,
+          valuecachesize: '4M',
+          vmwarecachesize: '8M',
+          vmwarefrequency: '60',
+          zabbix_version: '2.2',
         }
       end
 
@@ -257,10 +257,10 @@ describe 'zabbix::server' do
     context "with zabbix_server.conf and version 2.4" do
       let (:params) do
         {
-          :nodeid => '0',
-          :nodenohistory => '0',
-          :nodenoevents => '0',
-          :zabbix_version => '2.4',
+          nodeid: '0',
+          nodenohistory: '0',
+          nodenoevents: '0',
+          zabbix_version: '2.4',
         }
       end
 
@@ -272,11 +272,11 @@ describe 'zabbix::server' do
     context "with zabbix_server.conf and version 3.0" do
       let (:params) do
         {
-          :tlscafile => '/etc/zabbix/keys/zabbix-server.ca',
-          :tlscrlfile => '/etc/zabbix/keys/zabbix-server.crl',
-          :tlscertfile => '/etc/zabbix/keys/zabbix-server.crt',
-          :tlskeyfile => '/etc/zabbix/keys/zabbix-server.key',
-          :zabbix_version => '3.0',
+          tlscafile: '/etc/zabbix/keys/zabbix-server.ca',
+          tlscrlfile: '/etc/zabbix/keys/zabbix-server.crl',
+          tlscertfile: '/etc/zabbix/keys/zabbix-server.crt',
+          tlskeyfile: '/etc/zabbix/keys/zabbix-server.key',
+          zabbix_version: '3.0',
         }
       end
 
