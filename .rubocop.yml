@@ -479,7 +479,7 @@ Style/Encoding:
   Enabled: false
 
 Style/BlockDelimiters:
-  Enabled: False
+  Enabled: true
 
 Style/MultilineBlockLayout:
   Enabled: true
