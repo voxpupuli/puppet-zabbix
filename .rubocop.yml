@@ -72,7 +72,7 @@ Lint/Eval:
 
 # DISABLED
 Lint/BlockAlignment:
-  Enabled: false
+  Enabled: true
 
 # DISABLED
 Lint/DefEndAlignment:
