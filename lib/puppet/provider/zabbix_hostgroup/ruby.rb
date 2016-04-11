@@ -13,6 +13,7 @@ Puppet::Type.type(:zabbix_hostgroup).provide(:ruby, parent: Puppet::Provider::Za
     # Connect to zabbix api
     zbx = connect
     hgid = zbx.hostgroups.create(name: @resource[:name])
+    hgid
   end
 
   def exists?
