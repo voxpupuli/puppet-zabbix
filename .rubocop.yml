@@ -467,7 +467,7 @@ Style/SpaceBeforeFirstArg:
   Enabled: false
 
 Style/ModuleFunction:
-  Enabled: false
+  Enabled: true
 
 Lint/Debugger:
   Enabled: true
