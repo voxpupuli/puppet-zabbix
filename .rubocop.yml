@@ -473,7 +473,7 @@ Lint/Debugger:
   Enabled: false
 
 Style/IfWithSemicolon:
-  Enabled: false
+  Enabled: true
 
 Style/Encoding:
   Enabled: true
