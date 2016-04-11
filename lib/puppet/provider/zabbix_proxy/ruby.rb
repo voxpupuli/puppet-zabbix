@@ -34,18 +34,10 @@ Puppet::Type.type(:zabbix_proxy).provide(:ruby, :parent => Puppet::Provider::Zab
     end
 
     # Check if we need to connect via ip or fqdn
-    if use_ip == true
-      use_ip = 1
-    else
-      use_ip = 0
-    end
+    use_ip = use_ip ? 1 : 0
 
     # Find out which mode it is.
-    if mode == "0"
-      proxy_mode = 5
-    else
-      proxy_mode = 6
-    end
+    mode = proxy_mode == "0" ? 5 : 6
 
     zbx.proxies.create_or_update(
       :host => host,
@@ -61,11 +53,11 @@ Puppet::Type.type(:zabbix_proxy).provide(:ruby, :parent => Puppet::Provider::Zab
 
   def exists?
     zabbix_url = @resource[:zabbix_url]
-    
+
     if zabbix_url != ''
       self.class.require_zabbix
     end
-   
+
     host = @resource[:hostname]
     zabbix_user = @resource[:zabbix_user]
     zabbix_pass = @resource[:zabbix_pass]

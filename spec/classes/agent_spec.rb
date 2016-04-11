@@ -13,22 +13,31 @@ describe 'zabbix::agent' do
   context 'On RedHat 7.1' do
     let (:facts) do
       {
-        :osfamily               => 'RedHat',
-        :operatingsystem        => 'RedHat',
-        :operatingsystemrelease => '7.1',
-        :architecture           => 'x86_64',
-        :lsbdistid              => 'RedHat',
-        :concat_basedir         => '/tmp',
+        :osfamily                   => 'RedHat',
+        :operatingsystem            => 'RedHat',
+        :operatingsystemrelease     => '7.1',
+        :operatingsystemmajrelease  => '7',
+        :architecture               => 'x86_64',
+        :lsbdistid                  => 'RedHat',
+        :concat_basedir             => '/tmp',
+        :is_pe                      => false,
+        :puppetversion              => Puppet.version,
+        :facterversion              => Facter.version,
+        :ipaddress                  => '192.168.1.10',
+        :lsbdistcodename            => '',
+        :id                         => 'root',
+        :kernel                     => 'Linux',
+        :path                       => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
       }
     end
 
     # Make sure package will be installed, service running and ensure of directory.
     it { should contain_package('zabbix-agent').with_ensure('present') }
     it { should contain_package('zabbix-agent').with_name('zabbix-agent') }
-  
+
     it { should contain_service('zabbix-agent').with_ensure('running') }
     it { should contain_service('zabbix-agent').with_name('zabbix-agent') }
-  
+
     it { should contain_file('/etc/zabbix/zabbix_agentd.d').with_ensure('directory') }
 
     context "when declaring manage_repo is true" do
@@ -41,7 +50,7 @@ describe 'zabbix::agent' do
       it { should contain_class('zabbix::repo').with_zabbix_version('3.0') }
       it { should contain_package('zabbix-agent').with_require('Class[Zabbix::Repo]')}
     end
-  
+
     context "when declaring manage_resources is true" do
       let (:params) do
         {
@@ -71,7 +80,7 @@ describe 'zabbix::agent' do
 
       it { should contain_firewall('150 zabbix-agent') }
     end
-  
+
     context "when declaring manage_firewall is false" do
       let (:params) do
         {

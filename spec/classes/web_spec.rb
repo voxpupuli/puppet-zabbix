@@ -13,12 +13,21 @@ describe 'zabbix::web' do
   context 'On a RedHat OS' do
     let :facts do
       {
-        :osfamily               => 'RedHat',
-        :operatingsystem        => 'RedHat',
-        :operatingsystemrelease => '6.5',
-        :architecture           => 'x86_64',
-        :lsbdistid              => 'RedHat',
-        :concat_basedir         => '/tmp'
+        :osfamily                   => 'RedHat',
+        :operatingsystem            => 'RedHat',
+        :operatingsystemrelease     => '6.5',
+        :operatingsystemmajrelease  => '6',
+        :architecture               => 'x86_64',
+        :lsbdistid                  => 'RedHat',
+        :concat_basedir             => '/tmp',
+        :is_pe                      => false,
+        :puppetversion              => Puppet.version,
+        :facterversion              => Facter.version,
+        :ipaddress                  => '192.168.1.10',
+        :lsbdistcodename            => '',
+        :id                         => 'root',
+        :kernel                     => 'Linux',
+        :path                       => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
       }
     end
 
@@ -47,10 +56,36 @@ describe 'zabbix::web' do
 
     it { should contain_file('/etc/zabbix/web/zabbix.conf.php')}
 
-    describe "when manage_resources is true" do
+    describe "when manage_resources is true and Puppet is 4.X" do
       let (:params) do
         super().merge({
           :manage_resources => true,
+        })
+      end
+
+      let :facts do
+        super().merge({
+          :puppetversion  => '4.4.1'
+        })
+      end
+
+      it { should contain_class('zabbix::resources::web') }
+      # disabled due to https://github.com/rodjek/rspec-puppet/issues/352
+      #it { should contain_package('zabbixapi').that_requires('Class[ruby::dev]').with_provider('puppet_gem') }
+      it { should contain_class('ruby::dev') }
+    end
+
+    describe "when manage_resources is true and Puppet is 3.X" do
+      let (:params) do
+        super().merge({
+          :manage_resources => true,
+
+        })
+      end
+
+      let :facts do
+        super().merge({
+          :puppetversion  => '3.8.6'
         })
       end
 
@@ -75,7 +110,7 @@ describe 'zabbix::web' do
 
       it { should contain_package('zabbixapi').with_provider('pe_puppetserver_gem') }
     end
-    
+
     describe "when manage_resources is false" do
       let (:params) do
         super().merge({
@@ -120,13 +155,21 @@ describe 'zabbix::web' do
   context 'On Debian 6.0' do
     let :facts do
       {
-        :osfamily               => 'debian',
-        :operatingsystem        => 'debian',
-        :operatingsystemrelease => '6.0',
-        :lsbdistcodename        => 'squeeze',
-        :architecture           => 'x86_64',
-        :lsbdistid              => 'debian',
-        :concat_basedir         => '/tmp',
+        :osfamily                   => 'debian',
+        :operatingsystem            => 'debian',
+        :operatingsystemrelease     => '6.0',
+        :operatingsystemmajrelease  => '6',
+        :architecture               => 'x86_64',
+        :lsbdistid                  => 'debian',
+        :concat_basedir             => '/tmp',
+        :is_pe                      => false,
+        :puppetversion              => Puppet.version,
+        :facterversion              => Facter.version,
+        :ipaddress                  => '192.168.1.10',
+        :lsbdistcodename            => 'squeeze',
+        :id                         => 'root',
+        :kernel                     => 'Linux',
+        :path                       => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
       }
     end
 

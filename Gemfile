@@ -3,12 +3,12 @@ source "https://rubygems.org"
 group :test do
   gem "rake"
   gem "puppet", ENV['PUPPET_GEM_VERSION'] || '~> 4.0'
-  gem "rspec", '< 3.2.0'
-  gem "rspec-puppet", '2.3.2'
+  gem "rspec"
+  gem "rspec-puppet"
   gem "puppetlabs_spec_helper"
   gem "metadata-json-lint"
   gem "rspec-puppet-facts"
-  gem 'rubocop', '0.33.0'
+  gem 'rubocop', '0.39.0'
   gem 'simplecov'
   gem 'simplecov-console'
 
