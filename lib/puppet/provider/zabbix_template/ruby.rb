@@ -8,7 +8,6 @@ Puppet::Type.type(:zabbix_template).provide(:ruby, parent: Puppet::Provider::Zab
     end
 
     # Set some vars
-    template_name = @resource[:template_name]
     template_source = @resource[:template_source]
     zabbix_url = @resource[:zabbix_url]
     zabbix_user = @resource[:zabbix_user]
@@ -93,7 +92,7 @@ Puppet::Type.type(:zabbix_template).provide(:ruby, parent: Puppet::Provider::Zab
     zabbix_pass = @resource[:zabbix_pass]
     apache_use_ssl = @resource[:apache_use_ssl]
 
-    zbx = self.class.create_connection(zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
+    self.class.create_connection(zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
     self.class.check_template_is_equal(template_name,template_source,zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
   end
 end

@@ -493,4 +493,4 @@ Metrics/PerceivedComplexity:
   Enabled: False
 
 Lint/UselessAssignment:
-  Enabled: False
+  Enabled: true
