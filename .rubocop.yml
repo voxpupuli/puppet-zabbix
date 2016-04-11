@@ -68,7 +68,7 @@ Lint/AmbiguousRegexpLiteral:
 
 # DISABLED
 Lint/Eval:
-  Enabled: false
+  Enabled: true
 
 # DISABLED
 Lint/BlockAlignment:
