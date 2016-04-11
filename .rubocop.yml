@@ -215,9 +215,6 @@ Style/SpaceAfterColon:
 Style/SpaceAfterComma:
   Enabled: false
 
-Style/SpaceAroundKeyword:
-  Enabled: false
-
 Style/SpaceAfterMethodName:
   Enabled: false
 
