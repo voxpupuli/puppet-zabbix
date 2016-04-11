@@ -125,7 +125,7 @@ Style/Alias:
   Enabled: false
 
 Style/AlignArray:
-  Enabled: false
+  Enabled: true
 
 Style/AlignHash:
   Enabled: false
