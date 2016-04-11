@@ -11,6 +11,7 @@ before_install: rm Gemfile.lock || true
 rvm:
   - 1.9.3
   - 2.1.8
+  - 2.2.4
 script: "bundle exec rake test"
 env:
   - PUPPET_GEM_VERSION="~> 3.0" STRICT_VARIABLES=yes
