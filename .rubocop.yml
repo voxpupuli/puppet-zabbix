@@ -461,7 +461,7 @@ Metrics/ParameterLists:
   Enabled: false
 
 Lint/RequireParentheses:
-  Enabled: false
+  Enabled: true
 
 Style/SpaceBeforeFirstArg:
   Enabled: false
