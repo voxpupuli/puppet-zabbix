@@ -8,9 +8,9 @@ class Puppet::Provider::Zabbix < Puppet::Provider
   def self.create_connection(zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
     protocol = apache_use_ssl ? 'https' : 'http'
     zbx = ZabbixApi.connect(
-      :url => "#{protocol}://#{zabbix_url}/api_jsonrpc.php",
-      :user => zabbix_user,
-      :password => zabbix_pass
+      url: "#{protocol}://#{zabbix_url}/api_jsonrpc.php",
+      user: zabbix_user,
+      password: zabbix_pass
     )
     zbx
   end
@@ -19,7 +19,7 @@ class Puppet::Provider::Zabbix < Puppet::Provider
   def self.check_host(host,zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
     begin
       zbx = create_connection(zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
-      zbx.hosts.get_id(:host => host)
+      zbx.hosts.get_id(host: host)
     rescue Puppet::ExecutionFailure
       false
     end
@@ -30,7 +30,7 @@ class Puppet::Provider::Zabbix < Puppet::Provider
     begin
       require_zabbix
       zbx = create_connection(zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
-      zbx.proxies.get_id(:host => host)
+      zbx.proxies.get_id(host: host)
     rescue Puppet::ExecutionFailure
       false
     end
@@ -41,7 +41,7 @@ class Puppet::Provider::Zabbix < Puppet::Provider
     if self.is_a_number?(template)
       return template
     else
-      id = zbx.templates.get_id( :host => template )
+      id = zbx.templates.get_id( host: template )
       return id
     end
   end
@@ -51,14 +51,14 @@ class Puppet::Provider::Zabbix < Puppet::Provider
     zbx = create_connection(zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
     template_id = self.get_template_id(zbx,template)
     template_array = Array.new
-    template_array = zbx.templates.get_ids_by_host( :hostids => [zbx.hosts.get_id(:host => host)] )
+    template_array = zbx.templates.get_ids_by_host( hostids: [zbx.hosts.get_id(host: host)] )
     template_array.include?(template_id.to_s)
   end
 
   def self.check_template_exist(template,template_source,zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
     begin
       zbx = create_connection(zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
-      zbx.templates.get_id( :host => template )
+      zbx.templates.get_id( host: template )
     rescue Puppet::ExecutionFailure
       false
     end
@@ -68,9 +68,9 @@ class Puppet::Provider::Zabbix < Puppet::Provider
     begin
       zbx = create_connection(zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
       exported = zbx.configurations.export(
-        :format => "xml",
-        :options => {
-          :templates => [zbx.templates.get_id(:host => template)]
+        format: "xml",
+        options: {
+          templates: [zbx.templates.get_id(host: template)]
         }
       )
       exported_clean = exported.gsub(/>\s*/, ">").gsub(/\s*</, "<").gsub(/<date>.*<\/date>/,"DATEWASHERE")

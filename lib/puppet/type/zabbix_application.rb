@@ -25,7 +25,7 @@ Puppet::Type.newtype(:zabbix_application) do
     defaultto :present
   end
 
-  newparam(:name, :namevar => true) do
+  newparam(:name, namevar: true) do
     desc 'application name'
   end
 

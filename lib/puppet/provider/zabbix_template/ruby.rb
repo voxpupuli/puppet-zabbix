@@ -1,5 +1,5 @@
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'zabbix'))
-Puppet::Type.type(:zabbix_template).provide(:ruby, :parent => Puppet::Provider::Zabbix) do
+Puppet::Type.type(:zabbix_template).provide(:ruby, parent: Puppet::Provider::Zabbix) do
  def create
     zabbix_url = @resource[:zabbix_url]
 
@@ -27,56 +27,56 @@ Puppet::Type.type(:zabbix_template).provide(:ruby, :parent => Puppet::Provider::
     }
 
     zbx.configurations.import(
-      :format => "xml",
-      :rules => {
-        :applications => {
-          :createMissing => true,
-          :updateExisting => true
+      format: "xml",
+      rules: {
+        applications: {
+          createMissing: true,
+          updateExisting: true
         },
-        :discoveryRules => {
-          :createMissing => true,
-          :updateExisting => true
+        discoveryRules: {
+          createMissing: true,
+          updateExisting: true
         },
-        :graphs =>{
-          :createMissing => true,
-          :updateExisting => true
+        graphs: {
+          createMissing: true,
+          updateExisting: true
         },
-        :groups => {
-          :createMissing => true
+        groups: {
+          createMissing: true
         },
-        :image => {
-          :createMissing => true,
-          :updateExisting => true
+        image: {
+          createMissing: true,
+          updateExisting: true
         },
-        :items => {
-          :createMissing => true,
-          :updateExisting => true
+        items: {
+          createMissing: true,
+          updateExisting: true
         },
-        :maps => {
-          :createMissing => true,
-          :updateExisting => true
+        maps: {
+          createMissing: true,
+          updateExisting: true
         },
-        :screens => {
-          :createMissing => true,
-          :updateExisting => true
+        screens: {
+          createMissing: true,
+          updateExisting: true
         },
-        :templateLinkage => {
-          :createMissing => true
+        templateLinkage: {
+          createMissing: true
         },
-        :templates => {
-          :createMissing => true,
-          :updateExisting => true
+        templates: {
+          createMissing: true,
+          updateExisting: true
         },
-        :templateScreens => {
-          :createMissing => true,
-          :updateExisting => true
+        templateScreens: {
+          createMissing: true,
+          updateExisting: true
         },
-        :triggers => {
-          :createMissing => true,
-          :updateExisting => true
+        triggers: {
+          createMissing: true,
+          updateExisting: true
         }
       },
-      :source => template_contents
+      source: template_contents
     )
   end
 

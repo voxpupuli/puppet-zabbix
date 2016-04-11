@@ -5,29 +5,29 @@ describe 'zabbix::proxy' do
 
   let (:params) do
     {
-      :zabbix_server_host => '192.168.1.1',
-      :zabbix_version => '2.4'
+      zabbix_server_host: '192.168.1.1',
+      zabbix_version: '2.4'
     }
   end
 
   context 'On RedHat 7.1' do
     let (:facts) do
       {
-        :osfamily                   => 'RedHat',
-        :operatingsystem            => 'RedHat',
-        :operatingsystemrelease     => '7.1',
-        :operatingsystemmajrelease  => '7',
-        :architecture               => 'x86_64',
-        :lsbdistid                  => 'RedHat',
-        :concat_basedir             => '/tmp',
-        :is_pe                      => false,
-        :puppetversion              => Puppet.version,
-        :facterversion              => Facter.version,
-        :ipaddress                  => '192.168.1.10',
-        :lsbdistcodename            => '',
-        :id                         => 'root',
-        :kernel                     => 'Linux',
-        :path                       => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
+        osfamily: 'RedHat',
+        operatingsystem: 'RedHat',
+        operatingsystemrelease: '7.1',
+        operatingsystemmajrelease: '7',
+        architecture: 'x86_64',
+        lsbdistid: 'RedHat',
+        concat_basedir: '/tmp',
+        is_pe: false,
+        puppetversion: Puppet.version,
+        facterversion: Facter.version,
+        ipaddress: '192.168.1.10',
+        lsbdistcodename: '',
+        id: 'root',
+        kernel: 'Linux',
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
       }
     end
 
@@ -41,7 +41,7 @@ describe 'zabbix::proxy' do
     describe "when manage_repo is true" do
       let (:params) do
         {
-          :manage_repo => true,
+          manage_repo: true,
         }
       end
 
@@ -52,7 +52,7 @@ describe 'zabbix::proxy' do
     describe "when database_type is postgresql" do
       let (:params) do
         {
-          :database_type => 'postgresql',
+          database_type: 'postgresql',
         }
       end
 
@@ -66,7 +66,7 @@ describe 'zabbix::proxy' do
     describe "when database_type is mysql" do
       let (:params) do
         {
-          :database_type => 'mysql',
+          database_type: 'mysql',
         }
       end
 
@@ -80,8 +80,8 @@ describe 'zabbix::proxy' do
     describe "when manage_resources is true" do
       let (:params) do
         {
-          :manage_resources => true,
-          :listenip         => '192.168.1.1',
+          manage_resources: true,
+          listenip: '192.168.1.1',
         }
       end
 
@@ -91,8 +91,8 @@ describe 'zabbix::proxy' do
     context 'with zabbix::database::postgresql class' do
       let (:params) do
         {
-          :database_type => 'postgresql',
-          :manage_database => true,
+          database_type: 'postgresql',
+          manage_database: true,
         }
       end
 
@@ -107,8 +107,8 @@ describe 'zabbix::proxy' do
     context 'with zabbix::database::mysql class' do
       let(:params) do
         {
-          :database_type => 'mysql',
-          :manage_database => true,
+          database_type: 'mysql',
+          manage_database: true,
         }
       end
 
@@ -127,7 +127,7 @@ describe 'zabbix::proxy' do
     context 'when manage_database is true' do
       let(:params) do
         {
-          :manage_database => true,
+          manage_database: true,
         }
       end
 
@@ -144,7 +144,7 @@ describe 'zabbix::proxy' do
     context "when declaring manage_firewall is true" do
       let(:params) do
         {
-          :manage_firewall => true,
+          manage_firewall: true,
         }
       end
 
@@ -154,7 +154,7 @@ describe 'zabbix::proxy' do
     context "when declaring manage_firewall is false" do
       let(:params) do
         {
-          :manage_firewall => false,
+          manage_firewall: false,
         }
       end
 
@@ -167,62 +167,62 @@ describe 'zabbix::proxy' do
     context 'with zabbix_proxy.conf settings' do
       let(:params) do
         {
-          :allowroot               => '0',
-          :cachesize               => '8M',
-          :configfrequency         => '3600',
-          :database_host           => 'localhost',
-          :database_name           => 'zabbix-proxy',
-          :database_password       => 'zabbix-proxy',
-          :database_schema         => 'zabbix-proxy',
-          :database_user           => 'zabbix-proxy',
-          :datasenderfrequency     => '1',
-          :debuglevel              => '4',
-          :externalscripts         => '/usr/lib/zabbix/externalscripts',
-          :fping6location          => '/usr/sbin/fping6',
-          :fpinglocation           => '60',
-          :heartbeatfrequency      => '60',
-          :historycachesize        => '16M',
-          :historytextcachesize    => '8M',
-          :hostname                => 'rspec.puppet.com',
-          :housekeepingfrequency   => '1',
-          :include_dir             => '/etc/zabbix/zabbix_proxy.conf.d',
-          :javagateway             => '192.168.1.2',
-          :javagatewayport         => '10051',
-          :startjavapollers        => '5',
-          :listenip                => '192.168.1.1',
-          :listenport              => '10051',
-          :loadmodulepath          => '${libdir}/modules',
-          :loadmodule              => 'pizza',
-          :localbuffer             => '0',
-          :logfilesize             => '15',
-          :logfile                 => '/var/log/zabbix/proxy_server.log',
-          :logslowqueries          => '0',
-          :mode                    => '0',
-          :offlinebuffer           => '1',
-          :pidfile                 => '/var/run/zabbix/proxy_server.pid',
-          :snmptrapper             => '0',
-          :snmptrapperfile         => '/tmp/zabbix_traps.tmp',
-          :sshkeylocation          => '/home/zabbix/.ssh/',
-          :startdbsyncers          => '4',
-          :startdiscoverers        => '15',
-          :starthttppollers        => '15',
-          :startipmipollers        => '15',
-          :startpingers            => '15',
-          :startpollers            => '15',
-          :startpollersunreachable => '15',
-          :starttrappers           => '15',
-          :startvmwarecollectors   => '0',
-          :timeout                 => '20',
-          :tmpdir                  => '/tmp',
-          :trappertimeout          => '16',
-          :unavaliabledelay        => '60',
-          :unreachabedelay         => '15',
-          :unreachableperiod       => '45',
-          :vmwarecachesize         => '8M',
-          :vmwarefrequency         => '60',
-          :zabbix_server_host      => '192.168.1.1',
-          :zabbix_server_port      => '10051',
-          :zabbix_version          => '2.2',
+          allowroot: '0',
+          cachesize: '8M',
+          configfrequency: '3600',
+          database_host: 'localhost',
+          database_name: 'zabbix-proxy',
+          database_password: 'zabbix-proxy',
+          database_schema: 'zabbix-proxy',
+          database_user: 'zabbix-proxy',
+          datasenderfrequency: '1',
+          debuglevel: '4',
+          externalscripts: '/usr/lib/zabbix/externalscripts',
+          fping6location: '/usr/sbin/fping6',
+          fpinglocation: '60',
+          heartbeatfrequency: '60',
+          historycachesize: '16M',
+          historytextcachesize: '8M',
+          hostname: 'rspec.puppet.com',
+          housekeepingfrequency: '1',
+          include_dir: '/etc/zabbix/zabbix_proxy.conf.d',
+          javagateway: '192.168.1.2',
+          javagatewayport: '10051',
+          startjavapollers: '5',
+          listenip: '192.168.1.1',
+          listenport: '10051',
+          loadmodulepath: '${libdir}/modules',
+          loadmodule: 'pizza',
+          localbuffer: '0',
+          logfilesize: '15',
+          logfile: '/var/log/zabbix/proxy_server.log',
+          logslowqueries: '0',
+          mode: '0',
+          offlinebuffer: '1',
+          pidfile: '/var/run/zabbix/proxy_server.pid',
+          snmptrapper: '0',
+          snmptrapperfile: '/tmp/zabbix_traps.tmp',
+          sshkeylocation: '/home/zabbix/.ssh/',
+          startdbsyncers: '4',
+          startdiscoverers: '15',
+          starthttppollers: '15',
+          startipmipollers: '15',
+          startpingers: '15',
+          startpollers: '15',
+          startpollersunreachable: '15',
+          starttrappers: '15',
+          startvmwarecollectors: '0',
+          timeout: '20',
+          tmpdir: '/tmp',
+          trappertimeout: '16',
+          unavaliabledelay: '60',
+          unreachabedelay: '15',
+          unreachableperiod: '45',
+          vmwarecachesize: '8M',
+          vmwarefrequency: '60',
+          zabbix_server_host: '192.168.1.1',
+          zabbix_server_port: '10051',
+          zabbix_version: '2.2',
         }
       end
 
@@ -286,16 +286,16 @@ describe 'zabbix::proxy' do
     context "with zabbix_proxy.conf and version 3.0" do
       let (:params) do
         {
-          :tlsaccept => 'cert',
-          :tlscafile => '/etc/zabbix/keys/zabbix-server.ca',
-          :tlscrlfile => '/etc/zabbix/keys/zabbix-server.crl',
-          :tlscertfile => '/etc/zabbix/keys/zabbix-server.crt',
-          :tlskeyfile => '/etc/zabbix/keys/zabbix-server.key',
-          :tlsservercertissuer => 'Zabbix.Com',
-          :tlsservercertsubject => 'MyZabbix',
-          :tlspskidentity => '/etc/zabbix/keys/identity.file',
-          :tlspskfile => '/etc/zabbix/keys/file.key',
-          :zabbix_version => '3.0',
+          tlsaccept: 'cert',
+          tlscafile: '/etc/zabbix/keys/zabbix-server.ca',
+          tlscrlfile: '/etc/zabbix/keys/zabbix-server.crl',
+          tlscertfile: '/etc/zabbix/keys/zabbix-server.crt',
+          tlskeyfile: '/etc/zabbix/keys/zabbix-server.key',
+          tlsservercertissuer: 'Zabbix.Com',
+          tlsservercertsubject: 'MyZabbix',
+          tlspskidentity: '/etc/zabbix/keys/identity.file',
+          tlspskfile: '/etc/zabbix/keys/file.key',
+          zabbix_version: '3.0',
         }
       end
 

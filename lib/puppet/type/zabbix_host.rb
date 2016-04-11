@@ -4,7 +4,7 @@ Puppet::Type.newtype(:zabbix_host) do
     defaultto :present
   end
 
-  newparam(:hostname, :namevar => true) do
+  newparam(:hostname, namevar: true) do
     desc 'FQDN of the machine.'
   end
 

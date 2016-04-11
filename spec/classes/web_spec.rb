@@ -5,7 +5,7 @@ describe 'zabbix::web' do
 
   let (:params) do
     {
-      :zabbix_url => 'zabbix.example.com',
+      zabbix_url: 'zabbix.example.com',
     }
   end
 
@@ -13,28 +13,28 @@ describe 'zabbix::web' do
   context 'On a RedHat OS' do
     let :facts do
       {
-        :osfamily                   => 'RedHat',
-        :operatingsystem            => 'RedHat',
-        :operatingsystemrelease     => '6.5',
-        :operatingsystemmajrelease  => '6',
-        :architecture               => 'x86_64',
-        :lsbdistid                  => 'RedHat',
-        :concat_basedir             => '/tmp',
-        :is_pe                      => false,
-        :puppetversion              => Puppet.version,
-        :facterversion              => Facter.version,
-        :ipaddress                  => '192.168.1.10',
-        :lsbdistcodename            => '',
-        :id                         => 'root',
-        :kernel                     => 'Linux',
-        :path                       => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
+        osfamily: 'RedHat',
+        operatingsystem: 'RedHat',
+        operatingsystemrelease: '6.5',
+        operatingsystemmajrelease: '6',
+        architecture: 'x86_64',
+        lsbdistid: 'RedHat',
+        concat_basedir: '/tmp',
+        is_pe: false,
+        puppetversion: Puppet.version,
+        facterversion: Facter.version,
+        ipaddress: '192.168.1.10',
+        lsbdistcodename: '',
+        id: 'root',
+        kernel: 'Linux',
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
       }
     end
 
     describe 'with database_type as postgresql' do
       let (:params) do
         super().merge({
-          :database_type => 'postgresql',
+          database_type: 'postgresql',
         })
       end
 
@@ -46,7 +46,7 @@ describe 'zabbix::web' do
     describe 'with database_type as mysql' do
       let (:params) do
         super().merge({
-          :database_type => 'mysql',
+          database_type: 'mysql',
         })
       end
 
@@ -59,13 +59,13 @@ describe 'zabbix::web' do
     describe "when manage_resources is true and Puppet is 4.X" do
       let (:params) do
         super().merge({
-          :manage_resources => true,
+          manage_resources: true,
         })
       end
 
       let :facts do
         super().merge({
-          :puppetversion  => '4.4.1'
+          puppetversion: '4.4.1'
         })
       end
 
@@ -78,14 +78,14 @@ describe 'zabbix::web' do
     describe "when manage_resources is true and Puppet is 3.X" do
       let (:params) do
         super().merge({
-          :manage_resources => true,
+          manage_resources: true,
 
         })
       end
 
       let :facts do
         super().merge({
-          :puppetversion  => '3.8.6'
+          puppetversion: '3.8.6'
         })
       end
 
@@ -97,14 +97,14 @@ describe 'zabbix::web' do
     describe "when manage_resources and is_pe are true" do
       let :facts do
         super().merge({
-          :is_pe      => true,
-          :pe_version => '3.7.0',
+          is_pe: true,
+          pe_version: '3.7.0',
         })
       end
 
       let (:params) do
         super().merge({
-          :manage_resources => true
+          manage_resources: true
         })
       end
 
@@ -114,7 +114,7 @@ describe 'zabbix::web' do
     describe "when manage_resources is false" do
       let (:params) do
         super().merge({
-          :manage_resources => false,
+          manage_resources: false,
         })
       end
 
@@ -126,11 +126,11 @@ describe 'zabbix::web' do
     context 'with database_* settings' do
       let (:params) do
         super().merge({
-          :database_host => 'localhost',
-          :database_name => 'zabbix-server',
-          :database_user => 'zabbix-server',
-          :database_password => 'zabbix-server',
-          :zabbix_server => 'localhost',
+          database_host: 'localhost',
+          database_name: 'zabbix-server',
+          database_user: 'zabbix-server',
+          database_password: 'zabbix-server',
+          zabbix_server: 'localhost',
         })
       end
 
@@ -148,28 +148,28 @@ describe 'zabbix::web' do
 
   let (:params) do
     {
-      :zabbix_url => 'zabbix.example.com',
+      zabbix_url: 'zabbix.example.com',
     }
   end
 
   context 'On Debian 6.0' do
     let :facts do
       {
-        :osfamily                   => 'debian',
-        :operatingsystem            => 'debian',
-        :operatingsystemrelease     => '6.0',
-        :operatingsystemmajrelease  => '6',
-        :architecture               => 'x86_64',
-        :lsbdistid                  => 'debian',
-        :concat_basedir             => '/tmp',
-        :is_pe                      => false,
-        :puppetversion              => Puppet.version,
-        :facterversion              => Facter.version,
-        :ipaddress                  => '192.168.1.10',
-        :lsbdistcodename            => 'squeeze',
-        :id                         => 'root',
-        :kernel                     => 'Linux',
-        :path                       => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
+        osfamily: 'debian',
+        operatingsystem: 'debian',
+        operatingsystemrelease: '6.0',
+        operatingsystemmajrelease: '6',
+        architecture: 'x86_64',
+        lsbdistid: 'debian',
+        concat_basedir: '/tmp',
+        is_pe: false,
+        puppetversion: Puppet.version,
+        facterversion: Facter.version,
+        ipaddress: '192.168.1.10',
+        lsbdistcodename: 'squeeze',
+        id: 'root',
+        kernel: 'Linux',
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
       }
     end
 
