@@ -418,7 +418,7 @@ Style/OpMethod:
   Enabled: false
 
 Style/ParenthesesAroundCondition:
-  Enabled: false
+  Enabled: true
 
 Style/PercentLiteralDelimiters:
   Enabled: false
