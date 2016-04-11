@@ -53,6 +53,7 @@ class zabbix::params {
   $zabbix_web                               = 'localhost'
   $zabbix_web_ip                            = '127.0.0.1'
   $manage_database                          = true
+  $default_vhost                            = false
   $manage_firewall                          = false
   $repo_location                            = ''
   $manage_resources                         = false
