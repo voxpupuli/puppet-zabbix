@@ -53,7 +53,7 @@ Style/AndOr:
 
 # DISABLED - not useful
 Style/RedundantSelf:
-  Enabled: false
+  Enabled: true
 
 # DISABLED - not useful
 Metrics/MethodLength:
