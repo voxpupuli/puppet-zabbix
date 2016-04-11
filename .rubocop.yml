@@ -59,9 +59,8 @@ Style/RedundantSelf:
 Metrics/MethodLength:
   Enabled: false
 
-# DISABLED - not useful
 Style/WhileUntilModifier:
-  Enabled: false
+  Enabled: true
 
 # DISABLED - the offender is just haskell envy
 Lint/AmbiguousRegexpLiteral:
