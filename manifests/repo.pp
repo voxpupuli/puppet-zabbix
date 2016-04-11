@@ -28,7 +28,8 @@
 class zabbix::repo (
   $manage_repo    = $zabbix::params::manage_repo,
   $repo_location  = $zabbix::params::repo_location,
-  $zabbix_version = $zabbix::params::zabbix_version,) inherits zabbix::params {
+  $zabbix_version = $zabbix::params::zabbix_version,
+) inherits zabbix::params {
   if ($manage_repo) {
     case $::operatingsystem {
       'PSBM'        : {

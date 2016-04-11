@@ -12,12 +12,21 @@ describe 'zabbix::server' do
   context 'On RedHat 7.1' do
     let :facts do
       {
-        :osfamily               => 'RedHat',
-        :operatingsystem        => 'RedHat',
-        :operatingsystemrelease => '7.1',
-        :architecture           => 'x86_64',
-        :lsbdistid              => 'RedHat',
-        :concat_basedir         => '/tmp'
+        :osfamily                   => 'RedHat',
+        :operatingsystem            => 'RedHat',
+        :operatingsystemrelease     => '7.1',
+        :operatingsystemmajrelease  => '7',
+        :architecture               => 'x86_64',
+        :lsbdistid                  => 'RedHat',
+        :concat_basedir             => '/tmp',
+        :is_pe                      => false,
+        :puppetversion              => Puppet.version,
+        :facterversion              => Facter.version,
+        :ipaddress                  => '192.168.1.10',
+        :lsbdistcodename            => '',
+        :id                         => 'root',
+        :kernel                     => 'Linux',
+        :path                       => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
       }
     end
 
@@ -53,7 +62,7 @@ describe 'zabbix::server' do
     # Include directory should be available.
     it { should contain_file('/etc/zabbix/zabbix_server.conf.d').with_ensure('directory') }
     it { should contain_file('/etc/zabbix/zabbix_server.conf.d').with_require('File[/etc/zabbix/zabbix_server.conf]') }
-   
+
     context 'with zabbix::database::postgresql class' do
       let (:params) do
         {
@@ -103,7 +112,7 @@ describe 'zabbix::server' do
 
       it { should contain_firewall('151 zabbix-server') }
     end
-  
+
     context "when declaring manage_firewall is false" do
       let (:params) do
         {
@@ -112,7 +121,7 @@ describe 'zabbix::server' do
       end
 
       it { should_not contain_firewall('151 zabbix-server') }
-    end 
+    end
 
     context "with all zabbix_server.conf-related parameters" do
       let (:params) do
@@ -137,7 +146,6 @@ describe 'zabbix::server' do
           :housekeepingfrequency => '1' ,
           :include_dir => '/etc/zabbix/zabbix_server.conf.d' ,
           :javagateway => '192.168.2.2',
-          :javagateway => '192.168.2.2',
           :javagatewayport => '10052',
           :listenip => '192.168.1.1' ,
           :listenport => '10051',
@@ -148,11 +156,8 @@ describe 'zabbix::server' do
           :logslowqueries => '0' ,
           :maxhousekeeperdelete => '500' ,
           :nodeid => '0',
-          :nodeid => '0',
-          :nodenoevents => '0',
           :nodenoevents => '0',
           :nodenohistory => '0',
-          :nodenohistory => '0',:zabbix_version => '2.2' ,
           :pidfile => '/var/run/zabbix/zabbix_server.pid',
           :proxyconfigfrequency => '3600' ,
           :proxydatafrequency => '1' ,
@@ -279,6 +284,6 @@ describe 'zabbix::server' do
       it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCRLFile=/etc/zabbix/keys/zabbix-server.crl$}}
       it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCertFile=/etc/zabbix/keys/zabbix-server.crt$}}
       it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSKeyFile=/etc/zabbix/keys/zabbix-server.key$}}
-    end 
+    end
   end
 end
