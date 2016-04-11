@@ -64,7 +64,7 @@ Style/WhileUntilModifier:
 
 # DISABLED - the offender is just haskell envy
 Lint/AmbiguousRegexpLiteral:
-  Enabled: false
+  Enabled: true
 
 # DISABLED
 Lint/Eval:
