@@ -476,7 +476,7 @@ Style/IfWithSemicolon:
   Enabled: false
 
 Style/Encoding:
-  Enabled: false
+  Enabled: true
 
 Style/BlockDelimiters:
   Enabled: true
