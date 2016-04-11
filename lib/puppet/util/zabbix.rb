@@ -1,3 +1,4 @@
+# encoding: utf-8
 module Puppet::Util::Zabbix
   def self.add_zabbix_type_methods(type)
     type.newparam(:zabbix_url) do
