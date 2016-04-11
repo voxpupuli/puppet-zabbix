@@ -39,7 +39,7 @@ class Puppet::Provider::Zabbix < Puppet::Provider
 
   # Get the template id from the name.
   def self.get_template_id(zbx,template)
-    if self.is_a_number?(template)
+    if is_a_number?(template)
       return template
     else
       id = zbx.templates.get_id( host: template )
@@ -50,7 +50,7 @@ class Puppet::Provider::Zabbix < Puppet::Provider
   # Check if given template name exists in current host.
   def self.check_template_in_host(host,template,zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
     zbx = create_connection(zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
-    template_id = self.get_template_id(zbx,template)
+    template_id = get_template_id(zbx,template)
     template_array = zbx.templates.get_ids_by_host( hostids: [zbx.hosts.get_id(host: host)] )
     template_array.include?(template_id.to_s)
   end
