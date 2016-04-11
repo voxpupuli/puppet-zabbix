@@ -470,7 +470,7 @@ Style/ModuleFunction:
   Enabled: false
 
 Lint/Debugger:
-  Enabled: false
+  Enabled: true
 
 Style/IfWithSemicolon:
   Enabled: true
