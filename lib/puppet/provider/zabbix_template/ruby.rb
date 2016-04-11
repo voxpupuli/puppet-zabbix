@@ -6,7 +6,7 @@ Puppet::Type.type(:zabbix_template).provide(:ruby, parent: Puppet::Provider::Zab
     if zabbix_url != ''
       self.class.require_zabbix
     end
-        
+
     # Set some vars
     template_name = @resource[:template_name]
     template_source = @resource[:template_source]

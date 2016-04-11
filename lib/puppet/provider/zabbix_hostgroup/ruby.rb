@@ -9,7 +9,7 @@ Puppet::Type.type(:zabbix_hostgroup).provide(:ruby, parent: Puppet::Provider::Za
     @zbx
   end
 
-  def create 
+  def create
     # Connect to zabbix api
     zbx = connect
     hgid = zbx.hostgroups.create(name: @resource[:name])

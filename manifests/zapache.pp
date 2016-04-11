@@ -7,7 +7,7 @@
 #
 # Must import zapache-template.xml and zapache-template-active.xml
 # Using the Zabbix web portal
-# Note: I believe this can be automated via the API but have not done so. 
+# Note: I believe this can be automated via the API but have not done s.
 #
 # Must bind "Template App Apache Web Server zapache" OR "Template App Apache Web Server zapache Agent Active"
 # to the node.
