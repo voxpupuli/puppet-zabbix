@@ -463,7 +463,7 @@ Lint/RequireParentheses:
   Enabled: true
 
 Style/SpaceBeforeFirstArg:
-  Enabled: false
+  Enabled: true
 
 Style/ModuleFunction:
   Enabled: true
