@@ -262,7 +262,7 @@ Style/Documentation:
   Enabled: false
 
 Style/DefWithParentheses:
-  Enabled: false
+  Enabled: true
 
 Style/DeprecatedHashMethods:
   Enabled: false
