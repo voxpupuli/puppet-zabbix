@@ -2,8 +2,10 @@
 require 'spec_helper'
 
 describe 'zabbix::agent' do
-  let (:node) { 'agent.example.com' }
-  let (:params) do
+  let :node do
+    'agent.example.com'
+  end
+  let :params do
     {
       server: '192.168.1.1',
       serveractive: '192.168.1.1',
@@ -12,7 +14,7 @@ describe 'zabbix::agent' do
   end
 
   context 'On RedHat 7.1' do
-    let (:facts) do
+    let :facts do
       {
         osfamily: 'RedHat',
         operatingsystem: 'RedHat',
@@ -42,7 +44,7 @@ describe 'zabbix::agent' do
     it { should contain_file('/etc/zabbix/zabbix_agentd.d').with_ensure('directory') }
 
     context "when declaring manage_repo is true" do
-      let (:params) do
+      let :params do
         {
           manage_repo: true,
         }
@@ -53,7 +55,7 @@ describe 'zabbix::agent' do
     end
 
     context "when declaring manage_resources is true" do
-      let (:params) do
+      let :params do
         {
           manage_resources: true,
         }
@@ -63,7 +65,7 @@ describe 'zabbix::agent' do
     end
 
     context "configuration file with hostnameitem" do
-      let (:params) do
+      let :params do
         {
           hostnameitem: 'system.hostname',
         }
@@ -73,7 +75,7 @@ describe 'zabbix::agent' do
     end
 
     context "when declaring manage_firewall is true" do
-      let (:params) do
+      let :params do
         {
           manage_firewall: true,
         }
@@ -83,7 +85,7 @@ describe 'zabbix::agent' do
     end
 
     context "when declaring manage_firewall is false" do
-      let (:params) do
+      let :params do
         {
           manage_firewall: false,
         }
@@ -93,7 +95,7 @@ describe 'zabbix::agent' do
     end
 
     context "configuration file with full options" do
-      let (:params) do
+      let :params do
         {
           allowroot: '0',
           agent_configfile_path: '/etc/zabbix/zabbix_agentd.conf',

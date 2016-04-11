@@ -2,10 +2,12 @@
 require 'spec_helper'
 
 describe 'zabbix::sender' do
-  let (:node) { 'agent.example.com' }
+  let :node do
+    'agent.example.com'
+  end
 
   context 'On RedHat 7.1' do
-    let (:facts) do
+    let :facts do
       {
         osfamily: 'RedHat',
         operatingsystem: 'RedHat',
@@ -30,7 +32,7 @@ describe 'zabbix::sender' do
     it { should contain_package('zabbix-sender').with_name('zabbix-sender') }
 
     context "when declaring manage_repo is true" do
-      let (:params) do
+      let :params do
         {
           manage_repo: true,
         }

@@ -2,9 +2,11 @@
 require 'spec_helper'
 
 describe 'zabbix::web' do
-  let (:node) { 'rspec.puppet.com' }
+  let :node do
+    'rspec.puppet.com'
+  end
 
-  let (:params) do
+  let :params do
     {
       zabbix_url: 'zabbix.example.com',
     }
@@ -33,7 +35,7 @@ describe 'zabbix::web' do
     end
 
     describe 'with database_type as postgresql' do
-      let (:params) do
+      let :params do
         super().merge({
           database_type: 'postgresql',
         })
@@ -45,7 +47,7 @@ describe 'zabbix::web' do
     end
 
     describe 'with database_type as mysql' do
-      let (:params) do
+      let :params do
         super().merge({
           database_type: 'mysql',
         })
@@ -58,7 +60,7 @@ describe 'zabbix::web' do
     it { should contain_file('/etc/zabbix/web/zabbix.conf.php')}
 
     describe "when manage_resources is true and Puppet is 4.X" do
-      let (:params) do
+      let :params do
         super().merge({
           manage_resources: true,
         })
@@ -77,7 +79,7 @@ describe 'zabbix::web' do
     end
 
     describe "when manage_resources is true and Puppet is 3.X" do
-      let (:params) do
+      let :params do
         super().merge({
           manage_resources: true,
 
@@ -103,7 +105,7 @@ describe 'zabbix::web' do
         })
       end
 
-      let (:params) do
+      let :params do
         super().merge({
           manage_resources: true
         })
@@ -113,7 +115,7 @@ describe 'zabbix::web' do
     end
 
     describe "when manage_resources is false" do
-      let (:params) do
+      let :params do
         super().merge({
           manage_resources: false,
         })
@@ -125,7 +127,7 @@ describe 'zabbix::web' do
     it { should contain_apache__vhost('zabbix.example.com').with_name('zabbix.example.com') }
 
     context 'with database_* settings' do
-      let (:params) do
+      let :params do
         super().merge({
           database_host: 'localhost',
           database_name: 'zabbix-server',
@@ -145,9 +147,11 @@ describe 'zabbix::web' do
 end
 
 describe 'zabbix::web' do
-  let (:node) { 'rspec.puppet.com' }
+  let :node do
+    'rspec.puppet.com'
+  end
 
-  let (:params) do
+  let :params do
     {
       zabbix_url: 'zabbix.example.com',
     }

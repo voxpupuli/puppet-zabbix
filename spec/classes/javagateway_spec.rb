@@ -2,10 +2,12 @@
 require 'spec_helper'
 
 describe 'zabbix::javagateway' do
-  let (:node) { 'rspec.puppet.com' }
+  let :node do
+    'rspec.puppet.com'
+  end
 
   context 'On RedHat 6.5' do
-    let (:facts) do
+    let :facts do
       {
         osfamily: 'RedHat',
         operatingsystem: 'RedHat',
@@ -29,7 +31,7 @@ describe 'zabbix::javagateway' do
     it { should contain_service('zabbix-java-gateway')}
 
     context 'when declaring manage_repo is true' do
-      let (:params) do
+      let :params do
         {
           manage_repo: true,
         }

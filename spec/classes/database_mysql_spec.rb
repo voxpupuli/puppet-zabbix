@@ -2,10 +2,12 @@
 require 'spec_helper'
 
 describe 'zabbix::database::mysql' do
-  let (:node) { 'rspec.puppet.com' }
+  let :node do
+    'rspec.puppet.com'
+  end
 
   context 'On RedHat 6.5' do
-    let (:facts) do
+    let :facts do
       {
         osfamily: 'RedHat',
         operatingsystem: 'RedHat',
@@ -26,7 +28,7 @@ describe 'zabbix::database::mysql' do
     end
 
     describe "when zabbix_type is server" do
-      let (:params) do
+      let :params do
         {
           database_name: 'zabbix-server',
           database_user: 'zabbix-server',
@@ -43,7 +45,7 @@ describe 'zabbix::database::mysql' do
     end
 
     describe "when zabbix_type is proxy" do
-      let (:params) do
+      let :params do
         {
           database_name: 'zabbix-proxy',
           database_user: 'zabbix-proxy',
