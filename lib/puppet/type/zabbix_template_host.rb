@@ -22,7 +22,7 @@ Puppet::Type.newtype(:zabbix_template_host) do
     desc 'template_name@host_name'
   end
 
-Puppet::Util::Zabbix.add_zabbix_type_methods(self)
+  Puppet::Util::Zabbix.add_zabbix_type_methods(self)
 
   autorequire(:zabbix_host) do
     self[:name].split('@')[1]

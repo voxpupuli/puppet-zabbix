@@ -270,7 +270,7 @@ Style/IndentHash:
   Enabled: true
 
 Style/IndentationConsistency:
-  Enabled: false
+  Enabled: true
 
 Style/IndentationWidth:
   Enabled: false
