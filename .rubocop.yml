@@ -372,7 +372,7 @@ Style/MultilineTernaryOperator:
   Enabled: true
 
 Style/NestedTernaryOperator:
-  Enabled: false
+  Enabled: true
 
 Style/NilComparison:
   Enabled: false
