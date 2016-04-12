@@ -147,7 +147,7 @@ Style/ClassAndModuleCamelCase:
   Enabled: true
 
 Style/ClassAndModuleChildren:
-  Enabled: false
+  Enabled: true
 
 Style/ClassCheck:
   Enabled: true
