@@ -254,9 +254,8 @@ Style/DeprecatedHashMethods:
 Style/DotPosition:
   Enabled: true
 
-# DISABLED - used for converting to bool
 Style/DoubleNegation:
-  Enabled: false
+  Enabled: true
 
 Style/EachWithObject:
   Enabled: false
