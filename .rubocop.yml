@@ -240,7 +240,7 @@ Metrics/CyclomaticComplexity:
   Enabled: false
 
 Style/ConstantName:
-  Enabled: false
+  Enabled: true
 
 Style/Documentation:
   Enabled: false
