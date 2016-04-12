@@ -59,35 +59,28 @@ Metrics/MethodLength:
 Style/WhileUntilModifier:
   Enabled: true
 
-# DISABLED - the offender is just haskell envy
 Lint/AmbiguousRegexpLiteral:
   Enabled: true
 
-# DISABLED
 Lint/Eval:
   Enabled: true
 
-# DISABLED
 Lint/BlockAlignment:
   Enabled: true
 
-# DISABLED
 Lint/DefEndAlignment:
-  Enabled: false
+  Enabled: true
 
 # DISABLED
 Lint/EndAlignment:
   Enabled: false
 
-# DISABLED
 Lint/DeprecatedClassMethods:
   Enabled: true
 
-# DISABLED
 Lint/Loop:
   Enabled: true
 
-# DISABLED
 Lint/ParenthesesAsGroupedExpression:
   Enabled: true
 
