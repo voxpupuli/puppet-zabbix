@@ -120,7 +120,7 @@ Style/AlignHash:
   Enabled: true
 
 Style/AlignParameters:
-  Enabled: false
+  Enabled: true
 
 Metrics/BlockNesting:
   Enabled: false
