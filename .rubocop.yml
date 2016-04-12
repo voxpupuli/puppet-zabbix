@@ -216,7 +216,7 @@ Style/SpaceAfterComma:
   Enabled: true
 
 Style/SpaceAfterMethodName:
-  Enabled: false
+  Enabled: true
 
 Style/SpaceAfterNot:
   Enabled: false
