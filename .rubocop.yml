@@ -375,7 +375,7 @@ Style/NestedTernaryOperator:
   Enabled: true
 
 Style/NilComparison:
-  Enabled: false
+  Enabled: true
 
 Style/FormatString:
   Enabled: false

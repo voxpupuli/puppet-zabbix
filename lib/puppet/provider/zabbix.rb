@@ -80,6 +80,6 @@ class Puppet::Provider::Zabbix < Puppet::Provider
 
   # Is it an number?
   def self.is_a_number?(s)
-    s.to_s.match(/\A[+-]?\d+?(\.\d+)?\Z/) == nil ? false : true
+    s.to_s.match(/\A[+-]?\d+?(\.\d+)?\Z/).nil? ? false : true
   end
 end
