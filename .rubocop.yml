@@ -225,7 +225,7 @@ Style/SpaceBeforeComma:
   Enabled: true
 
 Style/CollectionMethods:
-  Enabled: false
+  Enabled: true
 
 Style/CommentIndentation:
   Enabled: false
