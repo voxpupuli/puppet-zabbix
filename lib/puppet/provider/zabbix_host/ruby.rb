@@ -69,7 +69,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
         }
       ],
       templates: template_array,
-      groups: [ groupid: search_hostgroup ]
+      groups: [groupid: search_hostgroup]
     )
 
     zbx.templates.mass_add(hosts_id: [hostid], templates_id: template_array)
