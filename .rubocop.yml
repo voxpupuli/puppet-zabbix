@@ -204,7 +204,7 @@ Style/SpaceInsideParens:
   Enabled: true
 
 Style/LeadingCommentSpace:
-  Enabled: false
+  Enabled: true
 
 Style/SpaceBeforeFirstArg:
   Enabled: false
