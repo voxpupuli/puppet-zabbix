@@ -369,7 +369,7 @@ Style/MethodName:
   Enabled: true
 
 Style/MultilineTernaryOperator:
-  Enabled: false
+  Enabled: true
 
 Style/NestedTernaryOperator:
   Enabled: false
