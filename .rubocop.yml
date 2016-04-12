@@ -321,7 +321,7 @@ Style/MultilineIfThen:
   Enabled: true
 
 Style/NegatedIf:
-  Enabled: false
+  Enabled: true
 
 Style/NegatedWhile:
   Enabled: false
