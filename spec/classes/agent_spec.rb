@@ -43,7 +43,7 @@ describe 'zabbix::agent' do
 
     it { should contain_file('/etc/zabbix/zabbix_agentd.d').with_ensure('directory') }
 
-    context "when declaring manage_repo is true" do
+    context 'when declaring manage_repo is true' do
       let :params do
         {
           manage_repo: true,
@@ -54,7 +54,7 @@ describe 'zabbix::agent' do
       it { should contain_package('zabbix-agent').with_require('Class[Zabbix::Repo]') }
     end
 
-    context "when declaring manage_resources is true" do
+    context 'when declaring manage_resources is true' do
       let :params do
         {
           manage_resources: true,
@@ -64,7 +64,7 @@ describe 'zabbix::agent' do
       it { should contain_class('zabbix::resources::agent') }
     end
 
-    context "configuration file with hostnameitem" do
+    context 'configuration file with hostnameitem' do
       let :params do
         {
           hostnameitem: 'system.hostname',
@@ -74,7 +74,7 @@ describe 'zabbix::agent' do
       it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^HostnameItem=system.hostname$} }
     end
 
-    context "when declaring manage_firewall is true" do
+    context 'when declaring manage_firewall is true' do
       let :params do
         {
           manage_firewall: true,
@@ -84,7 +84,7 @@ describe 'zabbix::agent' do
       it { should contain_firewall('150 zabbix-agent') }
     end
 
-    context "when declaring manage_firewall is false" do
+    context 'when declaring manage_firewall is false' do
       let :params do
         {
           manage_firewall: false,
@@ -94,7 +94,7 @@ describe 'zabbix::agent' do
       it { should_not contain_firewall('150 zabbix-agent') }
     end
 
-    context "configuration file with full options" do
+    context 'configuration file with full options' do
       let :params do
         {
           allowroot: '0',

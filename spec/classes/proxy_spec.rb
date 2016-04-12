@@ -41,7 +41,7 @@ describe 'zabbix::proxy' do
     it { should contain_file('/etc/zabbix/zabbix_proxy.conf.d').with_ensure('directory') }
     it { should contain_file('/etc/zabbix/zabbix_proxy.conf.d').with_require('File[/etc/zabbix/zabbix_proxy.conf]') }
 
-    describe "when manage_repo is true" do
+    describe 'when manage_repo is true' do
       let :params do
         {
           manage_repo: true,
@@ -52,7 +52,7 @@ describe 'zabbix::proxy' do
       it { should contain_package('zabbix-proxy-pgsql').with_require('Class[Zabbix::Repo]') }
     end
 
-    describe "when database_type is postgresql" do
+    describe 'when database_type is postgresql' do
       let :params do
         {
           database_type: 'postgresql',
@@ -66,7 +66,7 @@ describe 'zabbix::proxy' do
       it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_require('Package[zabbix-proxy-pgsql]') }
     end
 
-    describe "when database_type is mysql" do
+    describe 'when database_type is mysql' do
       let :params do
         {
           database_type: 'mysql',
@@ -80,7 +80,7 @@ describe 'zabbix::proxy' do
       it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_require('Package[zabbix-proxy-mysql]') }
     end
 
-    describe "when manage_resources is true" do
+    describe 'when manage_resources is true' do
       let :params do
         {
           manage_resources: true,
@@ -144,7 +144,7 @@ describe 'zabbix::proxy' do
       it { should contain_class('zabbix::database').with_zabbix_proxy_ip('127.0.0.1') }
     end
 
-    context "when declaring manage_firewall is true" do
+    context 'when declaring manage_firewall is true' do
       let(:params) do
         {
           manage_firewall: true,
@@ -154,7 +154,7 @@ describe 'zabbix::proxy' do
       it { should contain_firewall('151 zabbix-proxy') }
     end
 
-    context "when declaring manage_firewall is false" do
+    context 'when declaring manage_firewall is false' do
       let(:params) do
         {
           manage_firewall: false,
@@ -285,7 +285,7 @@ describe 'zabbix::proxy' do
       it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LoadModule=pizza$} }
     end
 
-    context "with zabbix_proxy.conf and version 3.0" do
+    context 'with zabbix_proxy.conf and version 3.0' do
       let :params do
         {
           tlsaccept: 'cert',

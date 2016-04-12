@@ -31,7 +31,7 @@ describe 'zabbix::database' do
       }
     end
 
-    describe "database_type is postgresql, zabbix_type is server and is multiple host setup" do
+    describe 'database_type is postgresql, zabbix_type is server and is multiple host setup' do
       let :params do
         {
           database_type: 'postgresql',
@@ -55,7 +55,7 @@ describe 'zabbix::database' do
       it { should contain_postgresql__server__pg_hba_rule('Allow zabbix-web to access database').with_address('127.0.0.2/32') }
     end
 
-    describe "database_type is postgresql, zabbix_type is server and is single node setup" do
+    describe 'database_type is postgresql, zabbix_type is server and is single node setup' do
       let :params do
         {
           database_type: 'postgresql',
@@ -79,7 +79,7 @@ describe 'zabbix::database' do
       it { should_not contain_postgresql__server__pg_hba_rule('Allow zabbix-web to access database').with_address('127.0.0.2/32') }
     end
 
-    describe "database_type is postgresql, zabbix_type is proxy" do
+    describe 'database_type is postgresql, zabbix_type is proxy' do
       let :params do
         {
           database_type: 'postgresql',
@@ -95,7 +95,7 @@ describe 'zabbix::database' do
       it { should contain_postgresql__server__pg_hba_rule('Allow zabbix-proxy to access database').with_address('127.0.0.1/32') }
     end
 
-    describe "database_type is mysql, zabbix_type is server and is multiple host setup" do
+    describe 'database_type is mysql, zabbix_type is server and is multiple host setup' do
       let :params do
         {
           database_type: 'mysql',
@@ -117,7 +117,7 @@ describe 'zabbix::database' do
       it { should contain_mysql_grant('zabbix-server@node1.example.com/zabbix-server.*').with_user('zabbix-server@node1.example.com') }
     end
 
-    describe "database_type is mysql, zabbix_type is server and is a single host setup" do
+    describe 'database_type is mysql, zabbix_type is server and is a single host setup' do
       let :params do
         {
           database_type: 'mysql',
@@ -139,7 +139,7 @@ describe 'zabbix::database' do
       it { should_not contain_mysql_grant('zabbix-server@node1.example.com/zabbix-server.*').with_user('zabbix-server@node1.example.com') }
     end
 
-    describe "database_type is mysql, zabbix_type is proxy and is a single host setup" do
+    describe 'database_type is mysql, zabbix_type is proxy and is a single host setup' do
       let :params do
         {
           database_type: 'mysql',
@@ -153,7 +153,7 @@ describe 'zabbix::database' do
       it { should contain_mysql__db('zabbix-proxy').with_name('zabbix-proxy') }
     end
 
-    describe "database_type is sqlite, zabbix_type is proxy and is a multiple host setup" do
+    describe 'database_type is sqlite, zabbix_type is proxy and is a multiple host setup' do
       let :params do
         {
           database_type: 'sqlite',

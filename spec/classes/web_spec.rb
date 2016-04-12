@@ -55,7 +55,7 @@ describe 'zabbix::web' do
 
     it { should contain_file('/etc/zabbix/web/zabbix.conf.php') }
 
-    describe "when manage_resources is true and Puppet is 4.X" do
+    describe 'when manage_resources is true and Puppet is 4.X' do
       let :params do
         super().merge(manage_resources: true)
       end
@@ -70,7 +70,7 @@ describe 'zabbix::web' do
       it { should contain_class('ruby::dev') }
     end
 
-    describe "when manage_resources is true and Puppet is 3.X" do
+    describe 'when manage_resources is true and Puppet is 3.X' do
       let :params do
         super().merge(manage_resources: true)
       end
@@ -84,7 +84,7 @@ describe 'zabbix::web' do
       it { should contain_class('ruby::dev') }
     end
 
-    describe "when manage_resources and is_pe are true" do
+    describe 'when manage_resources and is_pe are true' do
       let :facts do
         super().merge(
           is_pe: true,
@@ -99,7 +99,7 @@ describe 'zabbix::web' do
       it { should contain_package('zabbixapi').with_provider('pe_puppetserver_gem') }
     end
 
-    describe "when manage_resources is false" do
+    describe 'when manage_resources is false' do
       let :params do
         super().merge(manage_resources: false)
       end

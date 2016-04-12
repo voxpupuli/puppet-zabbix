@@ -1,5 +1,5 @@
 # encoding: utf-8
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), "..", ".."))
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', '..'))
 require 'puppet/util/zabbix'
 
 Puppet::Type.newtype(:zabbix_application) do
@@ -31,7 +31,7 @@ Puppet::Type.newtype(:zabbix_application) do
   end
 
   newparam(:template) do
-    desc "template to which the application is linked"
+    desc 'template to which the application is linked'
   end
 
   Puppet::Util::Zabbix.add_zabbix_type_methods(self)

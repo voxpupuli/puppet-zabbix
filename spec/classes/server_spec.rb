@@ -106,7 +106,7 @@ describe 'zabbix::server' do
 
     # So if manage_firewall is set to true, it should install
     # the firewall rule.
-    context "when declaring manage_firewall is true" do
+    context 'when declaring manage_firewall is true' do
       let :params do
         {
           manage_firewall: true,
@@ -116,7 +116,7 @@ describe 'zabbix::server' do
       it { should contain_firewall('151 zabbix-server') }
     end
 
-    context "when declaring manage_firewall is false" do
+    context 'when declaring manage_firewall is false' do
       let :params do
         {
           manage_firewall: false,
@@ -126,7 +126,7 @@ describe 'zabbix::server' do
       it { should_not contain_firewall('151 zabbix-server') }
     end
 
-    context "with all zabbix_server.conf-related parameters" do
+    context 'with all zabbix_server.conf-related parameters' do
       let :params do
         {
           alertscriptspath: '${datadir}/zabbix/alertscripts',
@@ -257,7 +257,7 @@ describe 'zabbix::server' do
       it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^VMwareFrequency=60} }
     end
 
-    context "with zabbix_server.conf and version 2.4" do
+    context 'with zabbix_server.conf and version 2.4' do
       let :params do
         {
           nodeid: '0',
@@ -272,7 +272,7 @@ describe 'zabbix::server' do
       it { should_not contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeNoHistory=0} }
     end
 
-    context "with zabbix_server.conf and version 3.0" do
+    context 'with zabbix_server.conf and version 3.0' do
       let :params do
         {
           tlscafile: '/etc/zabbix/keys/zabbix-server.ca',

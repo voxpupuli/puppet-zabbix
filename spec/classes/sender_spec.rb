@@ -31,7 +31,7 @@ describe 'zabbix::sender' do
     it { should contain_package('zabbix-sender').with_ensure('present') }
     it { should contain_package('zabbix-sender').with_name('zabbix-sender') }
 
-    context "when declaring manage_repo is true" do
+    context 'when declaring manage_repo is true' do
       let :params do
         {
           manage_repo: true,

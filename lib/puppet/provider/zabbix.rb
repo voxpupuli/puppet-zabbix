@@ -3,7 +3,7 @@
 class Puppet::Provider::Zabbix < Puppet::Provider
   # Require the zabbixapi gem
   def self.require_zabbix
-    require "zabbixapi"
+    require 'zabbixapi'
   end
 
   # Create the api connection
@@ -69,13 +69,13 @@ class Puppet::Provider::Zabbix < Puppet::Provider
     begin
       zbx = create_connection(zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
       exported = zbx.configurations.export(
-        format: "xml",
+        format: 'xml',
         options: {
           templates: [zbx.templates.get_id(host: template)]
         }
       )
-      exported_clean = exported.gsub(/>\s*/, ">").gsub(/\s*</, "<").gsub(/<date>.*<\/date>/, "DATEWASHERE")
-      template_source_clean = template_source.gsub(/>\s*/, ">").gsub(/\s*</, "<").gsub(/<date>.*<\/date>/, "DATEWASHERE")
+      exported_clean = exported.gsub(/>\s*/, '>').gsub(/\s*</, '<').gsub(/<date>.*<\/date>/, 'DATEWASHERE')
+      template_source_clean = template_source.gsub(/>\s*/, '>').gsub(/\s*</, '<').gsub(/<date>.*<\/date>/, 'DATEWASHERE')
       exported_clean.eql? template_source_clean
     rescue Puppet::ExecutionFailure
       false
