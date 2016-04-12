@@ -228,7 +228,7 @@ Style/SpaceAroundEqualsInParameterDefault:
   Enabled: false
 
 Style/SpaceAroundOperators:
-  Enabled: false
+  Enabled: true
 
 Style/SpaceBeforeBlockBraces:
   Enabled: true
