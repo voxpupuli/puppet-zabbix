@@ -318,7 +318,7 @@ Style/IfUnlessModifier:
   Enabled: true
 
 Style/MultilineIfThen:
-  Enabled: false
+  Enabled: true
 
 Style/NegatedIf:
   Enabled: false
