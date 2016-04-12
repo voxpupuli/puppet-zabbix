@@ -231,7 +231,7 @@ Style/CommentIndentation:
   Enabled: true
 
 Style/ColonMethodCall:
-  Enabled: false
+  Enabled: true
 
 Style/CommentAnnotation:
   Enabled: false
