@@ -399,7 +399,7 @@ Style/NumericLiterals:
   Enabled: true
 
 Style/OneLineConditional:
-  Enabled: false
+  Enabled: true
 
 Style/OpMethod:
   Enabled: false
