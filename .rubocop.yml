@@ -387,7 +387,7 @@ Style/Semicolon:
   Enabled: true
 
 Style/SignalException:
-  Enabled: false
+  Enabled: true
 
 Style/NonNilCheck:
   Enabled: false
