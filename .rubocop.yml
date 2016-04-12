@@ -348,7 +348,7 @@ Style/VariableInterpolation:
   Enabled: true
 
 Style/VariableName:
-  Enabled: false
+  Enabled: true
 
 Style/WhileUntilDo:
   Enabled: false
