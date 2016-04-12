@@ -354,7 +354,7 @@ Style/WhileUntilDo:
   Enabled: true
 
 Style/EvenOdd:
-  Enabled: false
+  Enabled: true
 
 Style/FileName:
   Enabled: false
