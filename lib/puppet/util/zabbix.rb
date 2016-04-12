@@ -1,5 +1,5 @@
 # encoding: utf-8
-module Puppet::Util::Zabbix
+module Puppet::Util::Zabbix # rubocop:disable Style/ClassAndModuleChildren
   def self.add_zabbix_type_methods(type)
     type.newparam(:zabbix_url) do
       desc 'The url on which the zabbix-api is available.'
