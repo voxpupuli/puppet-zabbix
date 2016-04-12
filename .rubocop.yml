@@ -87,7 +87,7 @@ Lint/RescueException:
   Enabled: true
 
 Lint/StringConversionInInterpolation:
-  Enabled: false
+  Enabled: true
 
 Lint/UnusedBlockArgument:
   Enabled: false
