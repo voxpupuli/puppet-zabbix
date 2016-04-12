@@ -222,7 +222,7 @@ Style/SpaceBeforeBlockBraces:
   Enabled: true
 
 Style/SpaceBeforeComma:
-  Enabled: false
+  Enabled: true
 
 Style/CollectionMethods:
   Enabled: false
