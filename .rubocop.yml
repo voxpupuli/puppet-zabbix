@@ -336,7 +336,7 @@ Style/SingleLineMethods:
   Enabled: true
 
 Style/SpecialGlobalVars:
-  Enabled: false
+  Enabled: true
 
 Style/TrivialAccessors:
   Enabled: false
