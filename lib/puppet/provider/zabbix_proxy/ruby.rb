@@ -6,9 +6,7 @@ Puppet::Type.type(:zabbix_proxy).provide(:ruby, parent: Puppet::Provider::Zabbix
 
     # Check if we have an zabbix_url. If so, we are about
     # to run on the zabbix-server.
-    if zabbix_url != ''
-      self.class.require_zabbix
-    end
+    self.class.require_zabbix if zabbix_url != ''
 
     # Set some vars
     host = @resource[:hostname]
@@ -51,9 +49,7 @@ Puppet::Type.type(:zabbix_proxy).provide(:ruby, parent: Puppet::Provider::Zabbix
   def exists?
     zabbix_url = @resource[:zabbix_url]
 
-    if zabbix_url != ''
-      self.class.require_zabbix
-    end
+    self.class.require_zabbix if zabbix_url != ''
 
     host = @resource[:hostname]
     zabbix_user = @resource[:zabbix_user]
