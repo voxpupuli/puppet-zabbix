@@ -162,7 +162,7 @@ Style/ClassVars:
   Enabled: true
 
 Style/WhenThen:
-  Enabled: false
+  Enabled: true
 
 # DISABLED - not useful
 Style/WordArray:
