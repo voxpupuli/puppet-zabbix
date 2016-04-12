@@ -24,7 +24,7 @@ Puppet::Type.type(:zabbix_proxy).provide(:ruby, parent: Puppet::Provider::Zabbix
 
     # Get the template ids.
     template_array = Array.new
-    if templates.kind_of?(Array) == true
+    if templates.is_a?(Array) == true
       for template in templates
         template_id = self.class.get_template_id(zbx,template)
         template_array.push template_id

@@ -27,7 +27,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
 
     # Get the template ids.
     template_array = Array.new
-    if templates.kind_of?(Array)
+    if templates.is_af?(Array)
       templates.each do |template|
         template_id = self.class.get_template_id(zbx, template)
         template_array.push template_id
@@ -95,7 +95,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
     apache_use_ssl = @resource[:apache_use_ssl]
     templates = @resource[:templates]
 
-    unless templates.kind_of?(Array)
+    unless templates.is_a?(Array)
       templates = [templates]
     end
     res = Array.new
