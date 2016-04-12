@@ -288,7 +288,7 @@ Metrics/LineLength:
   Enabled: false
 
 Style/MethodCallParentheses:
-  Enabled: false
+  Enabled: true
 
 Style/MethodDefParentheses:
   Enabled: false
