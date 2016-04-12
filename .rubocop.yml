@@ -384,7 +384,7 @@ Style/MultilineBlockChain:
   Enabled: true
 
 Style/Semicolon:
-  Enabled: false
+  Enabled: true
 
 Style/SignalException:
   Enabled: false
