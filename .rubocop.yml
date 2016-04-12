@@ -345,7 +345,7 @@ Style/UnlessElse:
   Enabled: true
 
 Style/VariableInterpolation:
-  Enabled: false
+  Enabled: true
 
 Style/VariableName:
   Enabled: false
