@@ -111,7 +111,7 @@ Style/AccessorMethodName:
   Enabled: true
 
 Style/Alias:
-  Enabled: false
+  Enabled: true
 
 Style/AlignArray:
   Enabled: true
