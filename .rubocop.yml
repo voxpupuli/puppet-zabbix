@@ -135,7 +135,7 @@ Style/BracesAroundHashParameters:
   Enabled: true
 
 Style/CaseEquality:
-  Enabled: false
+  Enabled: true
 
 Style/CaseIndentation:
   Enabled: true
