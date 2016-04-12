@@ -198,7 +198,7 @@ Style/SpaceInsideBrackets:
   Enabled: false
 
 Style/SpaceInsideHashLiteralBraces:
-  Enabled: false
+  Enabled: true
 
 Style/SpaceInsideParens:
   Enabled: false
