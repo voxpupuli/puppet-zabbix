@@ -126,7 +126,7 @@ Metrics/BlockNesting:
   Enabled: true
 
 Style/AsciiComments:
-  Enabled: false
+  Enabled: true
 
 Style/Attr:
   Enabled: false
