@@ -258,7 +258,7 @@ Style/DoubleNegation:
   Enabled: true
 
 Style/EachWithObject:
-  Enabled: false
+  Enabled: true
 
 Style/EmptyLineBetweenDefs:
   Enabled: false
