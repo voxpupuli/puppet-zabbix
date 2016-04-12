@@ -264,7 +264,7 @@ Style/EmptyLineBetweenDefs:
   Enabled: true
 
 Style/IndentArray:
-  Enabled: false
+  Enabled: true
 
 Style/IndentHash:
   Enabled: false
