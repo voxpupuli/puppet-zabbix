@@ -55,7 +55,7 @@ class Puppet::Provider::Zabbix < Puppet::Provider
     template_array.include?(template_id.to_s)
   end
 
-  def self.check_template_exist(template, template_source, zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
+  def self.check_template_exist(template, zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
     begin
       zbx = create_connection(zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
       zbx.templates.get_id(host: template)

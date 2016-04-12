@@ -93,7 +93,7 @@ Lint/UnusedBlockArgument:
   Enabled: true
 
 Lint/UnusedMethodArgument:
-  Enabled: false
+  Enabled: true
 
 Lint/UselessAccessModifier:
   Enabled: true
