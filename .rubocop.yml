@@ -378,7 +378,7 @@ Style/NilComparison:
   Enabled: true
 
 Style/FormatString:
-  Enabled: false
+  Enabled: true
 
 Style/MultilineBlockChain:
   Enabled: false
