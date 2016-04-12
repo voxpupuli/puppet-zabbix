@@ -108,7 +108,7 @@ Style/AccessModifierIndentation:
   Enabled: true
 
 Style/AccessorMethodName:
-  Enabled: false
+  Enabled: true
 
 Style/Alias:
   Enabled: false
