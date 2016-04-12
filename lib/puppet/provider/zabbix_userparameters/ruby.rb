@@ -20,7 +20,7 @@ Puppet::Type.type(:zabbix_userparameters).provide(:ruby, parent: Puppet::Provide
     template_id = self.class.get_template_id(zbx,template)
     zbx.templates.mass_add(
       hosts_id: [zbx.hosts.get_id(host: host)],
-      templates_id: [ template_id ]
+      templates_id: [template_id]
     )
   end
 

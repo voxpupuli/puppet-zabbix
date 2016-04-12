@@ -195,7 +195,7 @@ Style/SpaceInsideBlockBraces:
   Enabled: true
 
 Style/SpaceInsideBrackets:
-  Enabled: false
+  Enabled: true
 
 Style/SpaceInsideHashLiteralBraces:
   Enabled: true
