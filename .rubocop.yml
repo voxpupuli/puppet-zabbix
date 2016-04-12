@@ -117,7 +117,7 @@ Style/AlignArray:
   Enabled: true
 
 Style/AlignHash:
-  Enabled: false
+  Enabled: true
 
 Style/AlignParameters:
   Enabled: false
