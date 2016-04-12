@@ -312,7 +312,7 @@ Style/GlobalVars:
   Enabled: true
 
 Style/GuardClause:
-  Enabled: false
+  Enabled: true
 
 Style/IfUnlessModifier:
   Enabled: false

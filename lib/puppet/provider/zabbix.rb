@@ -40,12 +40,9 @@ class Puppet::Provider::Zabbix < Puppet::Provider
 
   # Get the template id from the name.
   def self.get_template_id(zbx, template)
-    if is_a_number?(template)
-      return template
-    else
-      id = zbx.templates.get_id(host: template)
-      return id
-    end
+    return template if is_a_number?(template)
+    id = zbx.templates.get_id(host: template)
+    id
   end
 
   # Check if given template name exists in current host.
