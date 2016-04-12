@@ -306,7 +306,7 @@ Style/TrailingCommaInArguments:
   Enabled: true
 
 Style/TrailingCommaInLiteral:
-  Enabled: false
+  Enabled: true
 
 Style/GlobalVars:
   Enabled: false

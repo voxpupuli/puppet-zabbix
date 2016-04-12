@@ -30,7 +30,7 @@ describe 'zabbix::proxy' do
         lsbdistcodename: '',
         id: 'root',
         kernel: 'Linux',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
       }
     end
 
@@ -44,7 +44,7 @@ describe 'zabbix::proxy' do
     describe 'when manage_repo is true' do
       let :params do
         {
-          manage_repo: true,
+          manage_repo: true
         }
       end
 
@@ -55,7 +55,7 @@ describe 'zabbix::proxy' do
     describe 'when database_type is postgresql' do
       let :params do
         {
-          database_type: 'postgresql',
+          database_type: 'postgresql'
         }
       end
 
@@ -69,7 +69,7 @@ describe 'zabbix::proxy' do
     describe 'when database_type is mysql' do
       let :params do
         {
-          database_type: 'mysql',
+          database_type: 'mysql'
         }
       end
 
@@ -84,7 +84,7 @@ describe 'zabbix::proxy' do
       let :params do
         {
           manage_resources: true,
-          listenip: '192.168.1.1',
+          listenip: '192.168.1.1'
         }
       end
 
@@ -95,7 +95,7 @@ describe 'zabbix::proxy' do
       let :params do
         {
           database_type: 'postgresql',
-          manage_database: true,
+          manage_database: true
         }
       end
 
@@ -111,7 +111,7 @@ describe 'zabbix::proxy' do
       let(:params) do
         {
           database_type: 'mysql',
-          manage_database: true,
+          manage_database: true
         }
       end
 
@@ -130,7 +130,7 @@ describe 'zabbix::proxy' do
     context 'when manage_database is true' do
       let(:params) do
         {
-          manage_database: true,
+          manage_database: true
         }
       end
 
@@ -147,7 +147,7 @@ describe 'zabbix::proxy' do
     context 'when declaring manage_firewall is true' do
       let(:params) do
         {
-          manage_firewall: true,
+          manage_firewall: true
         }
       end
 
@@ -157,7 +157,7 @@ describe 'zabbix::proxy' do
     context 'when declaring manage_firewall is false' do
       let(:params) do
         {
-          manage_firewall: false,
+          manage_firewall: false
         }
       end
 
@@ -224,7 +224,7 @@ describe 'zabbix::proxy' do
           vmwarefrequency: '60',
           zabbix_server_host: '192.168.1.1',
           zabbix_server_port: '10051',
-          zabbix_version: '2.2',
+          zabbix_version: '2.2'
         }
       end
 
@@ -297,7 +297,7 @@ describe 'zabbix::proxy' do
           tlsservercertsubject: 'MyZabbix',
           tlspskidentity: '/etc/zabbix/keys/identity.file',
           tlspskfile: '/etc/zabbix/keys/file.key',
-          zabbix_version: '3.0',
+          zabbix_version: '3.0'
         }
       end
 

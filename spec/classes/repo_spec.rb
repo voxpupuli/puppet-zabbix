@@ -6,7 +6,7 @@ describe 'zabbix::repo' do
     let :params do
       {
         zabbix_version: '2.0',
-        manage_repo: true,
+        manage_repo: true
       }
     end
 
@@ -25,7 +25,7 @@ describe 'zabbix::repo' do
         lsbdistcodename: 'squeeze',
         id: 'root',
         kernel: 'Linux',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
       }
     end
 
@@ -36,7 +36,7 @@ describe 'zabbix::repo' do
     let :params do
       {
         zabbix_version: '2.0',
-        manage_repo: true,
+        manage_repo: true
       }
     end
 
@@ -55,7 +55,7 @@ describe 'zabbix::repo' do
         lsbdistcodename: 'wheezy',
         id: 'root',
         kernel: 'Linux',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
       }
     end
 
@@ -66,7 +66,7 @@ describe 'zabbix::repo' do
     let :params do
       {
         zabbix_version: '2.2',
-        manage_repo: true,
+        manage_repo: true
       }
     end
 
@@ -85,7 +85,7 @@ describe 'zabbix::repo' do
         lsbdistcodename: 'wheezy',
         id: 'root',
         kernel: 'Linux',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
       }
     end
 
@@ -96,7 +96,7 @@ describe 'zabbix::repo' do
     let :params do
       {
         zabbix_version: '2.4',
-        manage_repo: true,
+        manage_repo: true
       }
     end
 
@@ -115,7 +115,7 @@ describe 'zabbix::repo' do
         lsbdistcodename: 'wheezy',
         id: 'root',
         kernel: 'Linux',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
       }
     end
 
@@ -126,7 +126,7 @@ describe 'zabbix::repo' do
     let :params do
       {
         zabbix_version: '3.0',
-        manage_repo: true,
+        manage_repo: true
       }
     end
 
@@ -145,7 +145,7 @@ describe 'zabbix::repo' do
         lsbdistcodename: 'jessie',
         id: 'root',
         kernel: 'Linux',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
       }
     end
 
@@ -156,7 +156,7 @@ describe 'zabbix::repo' do
     let :params do
       {
         zabbix_version: '2.0',
-        manage_repo: true,
+        manage_repo: true
       }
     end
 
@@ -175,7 +175,7 @@ describe 'zabbix::repo' do
         lsbdistcodename: 'Precise',
         id: 'root',
         kernel: 'Linux',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
       }
     end
 
@@ -186,7 +186,7 @@ describe 'zabbix::repo' do
     let :params do
       {
         zabbix_version: '2.2',
-        manage_repo: true,
+        manage_repo: true
       }
     end
 
@@ -205,7 +205,7 @@ describe 'zabbix::repo' do
         lsbdistcodename: 'Precise',
         id: 'root',
         kernel: 'Linux',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
       }
     end
 
@@ -216,7 +216,7 @@ describe 'zabbix::repo' do
     let :params do
       {
         zabbix_version: '2.4',
-        manage_repo: true,
+        manage_repo: true
       }
     end
 
@@ -235,7 +235,7 @@ describe 'zabbix::repo' do
         lsbdistcodename: 'Precise',
         id: 'root',
         kernel: 'Linux',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
       }
     end
 
@@ -246,7 +246,7 @@ describe 'zabbix::repo' do
     let :params do
       {
         zabbix_version: '2.4',
-        manage_repo: true,
+        manage_repo: true
       }
     end
 
@@ -265,7 +265,7 @@ describe 'zabbix::repo' do
         lsbdistcodename: 'Trusty',
         id: 'root',
         kernel: 'Linux',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
       }
     end
 
@@ -276,7 +276,7 @@ describe 'zabbix::repo' do
     let :params do
       {
         zabbix_version: '3.0',
-        manage_repo: true,
+        manage_repo: true
       }
     end
 
@@ -295,7 +295,7 @@ describe 'zabbix::repo' do
         lsbdistcodename: 'Trusty',
         id: 'root',
         kernel: 'Linux',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
       }
     end
 
@@ -306,7 +306,7 @@ describe 'zabbix::repo' do
     let :params do
       {
         zabbix_version: '2.0',
-        manage_repo: true,
+        manage_repo: true
       }
     end
 
@@ -324,7 +324,7 @@ describe 'zabbix::repo' do
         lsbdistcodename: '',
         id: 'root',
         kernel: 'Linux',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
       }
     end
 
@@ -336,7 +336,7 @@ describe 'zabbix::repo' do
     let :params do
       {
         zabbix_version: '2.0',
-        manage_repo: true,
+        manage_repo: true
       }
     end
 
@@ -355,7 +355,7 @@ describe 'zabbix::repo' do
         :lsbdistcodename            => '',
         :id                         => 'root',
         :kernel                     => 'Linux',
-        :path                       => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
+        :path                       => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
       }
     end
 
@@ -367,7 +367,7 @@ describe 'zabbix::repo' do
     let :params do
       {
         zabbix_version: '2.2',
-        manage_repo: true,
+        manage_repo: true
       }
     end
 
@@ -386,7 +386,7 @@ describe 'zabbix::repo' do
         :lsbdistcodename            => '',
         :id                         => 'root',
         :kernel                     => 'Linux',
-        :path                       => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
+        :path                       => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
       }
     end
 
@@ -398,7 +398,7 @@ describe 'zabbix::repo' do
     let :params do
       {
         zabbix_version: '2.4',
-        manage_repo: true,
+        manage_repo: true
       }
     end
 
@@ -417,7 +417,7 @@ describe 'zabbix::repo' do
         :lsbdistcodename            => '',
         :id                         => 'root',
         :kernel                     => 'Linux',
-        :path                       => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
+        :path                       => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
       }
     end
 
@@ -429,7 +429,7 @@ describe 'zabbix::repo' do
     let :params do
       {
         zabbix_version: '3.0',
-        manage_repo: true,
+        manage_repo: true
       }
     end
 
@@ -448,7 +448,7 @@ describe 'zabbix::repo' do
         :lsbdistcodename            => '',
         :id                         => 'root',
         :kernel                     => 'Linux',
-        :path                       => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
+        :path                       => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
       }
     end
 

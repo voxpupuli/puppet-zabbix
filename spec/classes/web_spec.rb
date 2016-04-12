@@ -8,7 +8,7 @@ describe 'zabbix::web' do
 
   let :params do
     {
-      zabbix_url: 'zabbix.example.com',
+      zabbix_url: 'zabbix.example.com'
     }
   end
 
@@ -30,7 +30,7 @@ describe 'zabbix::web' do
         lsbdistcodename: '',
         id: 'root',
         kernel: 'Linux',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
       }
     end
 
@@ -135,7 +135,7 @@ describe 'zabbix::web' do
 
   let :params do
     {
-      zabbix_url: 'zabbix.example.com',
+      zabbix_url: 'zabbix.example.com'
     }
   end
 
@@ -156,7 +156,7 @@ describe 'zabbix::web' do
         lsbdistcodename: 'squeeze',
         id: 'root',
         kernel: 'Linux',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
       }
     end
 
