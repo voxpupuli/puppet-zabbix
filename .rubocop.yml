@@ -267,7 +267,7 @@ Style/IndentArray:
   Enabled: true
 
 Style/IndentHash:
-  Enabled: false
+  Enabled: true
 
 Style/IndentationConsistency:
   Enabled: false
