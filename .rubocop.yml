@@ -189,7 +189,7 @@ Style/SpaceBeforeSemicolon:
   Enabled: true
 
 Style/TrailingBlankLines:
-  Enabled: false
+  Enabled: true
 
 Style/SpaceInsideBlockBraces:
   Enabled: true

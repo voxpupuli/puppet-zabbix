@@ -29,4 +29,3 @@ Puppet::Type.newtype(:zabbix_template) do
     desc 'If apache is uses with ssl'
   end
 end
-
