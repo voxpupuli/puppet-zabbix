@@ -2,9 +2,7 @@
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'zabbix'))
 Puppet::Type.type(:zabbix_hostgroup).provide(:ruby, parent: Puppet::Provider::Zabbix) do
   def connect
-    if @resource[:zabbix_url] != ''
-      self.class.require_zabbix
-    end
+    self.class.require_zabbix if @resource[:zabbix_url] != ''
 
     @zbx ||= self.class.create_connection(@resource[:zabbix_url], @resource[:zabbix_user], @resource[:zabbix_pass], @resource[:apache_use_ssl])
     @zbx

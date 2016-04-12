@@ -4,9 +4,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
   def create
     zabbix_url = @resource[:zabbix_url]
 
-    if zabbix_url != ''
-      self.class.require_zabbix
-    end
+    self.class.require_zabbix if zabbix_url != ''
 
     # Set some vars
     host = @resource[:hostname]
@@ -40,9 +38,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
     use_ip = use_ip ? 1 : 0
 
     # When using DNS you still have to send a value for ip
-    if ipaddress.nil? && use_ip == 0
-      ipaddress = ''
-    end
+    ipaddress = '' if ipaddress.nil? && use_ip == 0
 
     hostgroup_create = hostgroup_create ? 1 : 0
 
@@ -85,9 +81,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
   def exists?
     zabbix_url = @resource[:zabbix_url]
 
-    if zabbix_url != ''
-      self.class.require_zabbix
-    end
+    self.class.require_zabbix if zabbix_url != ''
 
     host = @resource[:hostname]
     zabbix_user = @resource[:zabbix_user]
@@ -95,9 +89,8 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
     apache_use_ssl = @resource[:apache_use_ssl]
     templates = @resource[:templates]
 
-    unless templates.is_a?(Array)
-      templates = [templates]
-    end
+    templates = [templates] unless templates.is_a?(Array)
+
     res = []
     res.push(self.class.check_host(host, zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl))
     templates.each do |template|
@@ -109,9 +102,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
   def destroy
     zabbix_url = @resource[:zabbix_url]
 
-    if zabbix_url != ''
-      self.class.require_zabbix
-    end
+    self.class.require_zabbix if zabbix_url != ''
 
     host = @resource[:hostname]
     zabbix_user = @resource[:zabbix_user]

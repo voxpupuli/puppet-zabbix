@@ -4,9 +4,7 @@ Puppet::Type.type(:zabbix_template).provide(:ruby, parent: Puppet::Provider::Zab
   def create
     zabbix_url = @resource[:zabbix_url]
 
-    if zabbix_url != ''
-      self.class.require_zabbix
-    end
+    self.class.require_zabbix if zabbix_url != ''
 
     # Set some vars
     template_source = @resource[:template_source]
@@ -81,9 +79,7 @@ Puppet::Type.type(:zabbix_template).provide(:ruby, parent: Puppet::Provider::Zab
   def exists?
     zabbix_url = @resource[:zabbix_url]
 
-    if zabbix_url != ''
-      self.class.require_zabbix
-    end
+    self.class.require_zabbix if zabbix_url != ''
 
     template_name = @resource[:template_name]
     template_source = @resource[:template_source]

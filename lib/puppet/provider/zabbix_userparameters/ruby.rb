@@ -2,10 +2,7 @@
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'zabbix'))
 Puppet::Type.type(:zabbix_userparameters).provide(:ruby, parent: Puppet::Provider::Zabbix) do
   def create
-    zabbix_url = @resource[:zabbix_url]
-    if zabbix_url != ''
-      self.class.require_zabbix
-    end
+    self.class.require_zabbix if zabbix_url != ''
 
     host = @resource[:hostname]
     template = @resource[:template]
@@ -27,9 +24,7 @@ Puppet::Type.type(:zabbix_userparameters).provide(:ruby, parent: Puppet::Provide
   def exists?
     zabbix_url = @resource[:zabbix_url]
 
-    if zabbix_url != ''
-      self.class.require_zabbix
-    end
+    self.class.require_zabbix if zabbix_url != ''
 
     host = @resource[:hostname]
     template = @resource[:template]

@@ -315,7 +315,7 @@ Style/GuardClause:
   Enabled: true
 
 Style/IfUnlessModifier:
-  Enabled: false
+  Enabled: true
 
 Style/MultilineIfThen:
   Enabled: false
