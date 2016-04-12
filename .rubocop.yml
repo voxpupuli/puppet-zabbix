@@ -429,7 +429,7 @@ Style/RaiseArgs:
   Enabled: false
 
 Style/RedundantBegin:
-  Enabled: false
+  Enabled: true
 
 Style/RescueModifier:
   Enabled: false
