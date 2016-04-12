@@ -309,7 +309,7 @@ Style/TrailingCommaInLiteral:
   Enabled: true
 
 Style/GlobalVars:
-  Enabled: false
+  Enabled: true
 
 Style/GuardClause:
   Enabled: false
