@@ -141,7 +141,7 @@ Style/CaseIndentation:
   Enabled: true
 
 Style/CharacterLiteral:
-  Enabled: false
+  Enabled: true
 
 Style/ClassAndModuleCamelCase:
   Enabled: false
