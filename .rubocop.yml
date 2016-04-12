@@ -451,7 +451,7 @@ Style/RegexpLiteral:
   Enabled: false
 
 Lint/UnderscorePrefixedVariableName:
-  Enabled: false
+  Enabled: true
 
 Metrics/ParameterLists:
   Enabled: false
