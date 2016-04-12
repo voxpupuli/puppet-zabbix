@@ -36,9 +36,7 @@ describe 'zabbix::web' do
 
     describe 'with database_type as postgresql' do
       let :params do
-        super().merge({
-          database_type: 'postgresql',
-        })
+        super().merge(database_type: 'postgresql',)
       end
 
       it { should contain_package('zabbix-web-pgsql').with_name('zabbix-web-pgsql') }
@@ -48,9 +46,7 @@ describe 'zabbix::web' do
 
     describe 'with database_type as mysql' do
       let :params do
-        super().merge({
-          database_type: 'mysql',
-        })
+        super().merge(database_type: 'mysql',)
       end
 
       it { should contain_package('zabbix-web-mysql').with_name('zabbix-web-mysql') }
@@ -61,15 +57,11 @@ describe 'zabbix::web' do
 
     describe "when manage_resources is true and Puppet is 4.X" do
       let :params do
-        super().merge({
-          manage_resources: true,
-        })
+        super().merge(manage_resources: true)
       end
 
       let :facts do
-        super().merge({
-          puppetversion: '4.4.1'
-        })
+        super().merge(puppetversion: '4.4.1')
       end
 
       it { should contain_class('zabbix::resources::web') }
@@ -80,16 +72,11 @@ describe 'zabbix::web' do
 
     describe "when manage_resources is true and Puppet is 3.X" do
       let :params do
-        super().merge({
-          manage_resources: true,
-
-        })
+        super().merge(manage_resources: true)
       end
 
       let :facts do
-        super().merge({
-          puppetversion: '3.8.6'
-        })
+        super().merge(puppetversion: '3.8.6')
       end
 
       it { should contain_class('zabbix::resources::web') }
@@ -99,16 +86,14 @@ describe 'zabbix::web' do
 
     describe "when manage_resources and is_pe are true" do
       let :facts do
-        super().merge({
+        super().merge(
           is_pe: true,
-          pe_version: '3.7.0',
-        })
+          pe_version: '3.7.0'
+        )
       end
 
       let :params do
-        super().merge({
-          manage_resources: true
-        })
+        super().merge(manage_resources: true)
       end
 
       it { should contain_package('zabbixapi').with_provider('pe_puppetserver_gem') }
@@ -116,9 +101,7 @@ describe 'zabbix::web' do
 
     describe "when manage_resources is false" do
       let :params do
-        super().merge({
-          manage_resources: false,
-        })
+        super().merge( manage_resources: false)
       end
 
       it { should_not contain_class('zabbix::resources::web') }
@@ -128,13 +111,12 @@ describe 'zabbix::web' do
 
     context 'with database_* settings' do
       let :params do
-        super().merge({
+        super().merge(
           database_host: 'localhost',
           database_name: 'zabbix-server',
           database_user: 'zabbix-server',
           database_password: 'zabbix-server',
-          zabbix_server: 'localhost',
-        })
+          zabbix_server: 'localhost')
       end
 
       it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(/^\$DB\['SERVER'\]   = 'localhost'/) }
