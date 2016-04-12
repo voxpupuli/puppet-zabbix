@@ -207,7 +207,7 @@ Style/LeadingCommentSpace:
   Enabled: true
 
 Style/SpaceBeforeFirstArg:
-  Enabled: false
+  Enabled: true
 
 Style/SpaceAfterColon:
   Enabled: false
