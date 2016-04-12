@@ -12,6 +12,7 @@ group :test do
   gem 'rubocop', '0.39.0'
   gem 'simplecov'
   gem 'simplecov-console'
+  gem 'puppet-syntax', git: 'https://github.com/gds-operations/puppet-syntax.git'
 
   gem "puppet-lint-absolute_classname-check"
   gem "puppet-lint-leading_zero-check"
