@@ -40,7 +40,7 @@ describe 'zabbix::web' do
       end
 
       it { should contain_package('zabbix-web-pgsql').with_name('zabbix-web-pgsql') }
-      it { should contain_package('zabbix-web')}
+      it { should contain_package('zabbix-web') }
       it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(/^\$DB\['TYPE'\]     = 'POSTGRESQL'/) }
     end
 
@@ -50,10 +50,10 @@ describe 'zabbix::web' do
       end
 
       it { should contain_package('zabbix-web-mysql').with_name('zabbix-web-mysql') }
-      it { should contain_package('zabbix-web')}
+      it { should contain_package('zabbix-web') }
     end
 
-    it { should contain_file('/etc/zabbix/web/zabbix.conf.php')}
+    it { should contain_file('/etc/zabbix/web/zabbix.conf.php') }
 
     describe "when manage_resources is true and Puppet is 4.X" do
       let :params do

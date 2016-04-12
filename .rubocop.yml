@@ -192,7 +192,7 @@ Style/TrailingBlankLines:
   Enabled: false
 
 Style/SpaceInsideBlockBraces:
-  Enabled: false
+  Enabled: true
 
 Style/SpaceInsideBrackets:
   Enabled: false

@@ -27,8 +27,8 @@ describe 'zabbix::javagateway' do
       }
     end
 
-    it { should contain_file('/etc/zabbix/zabbix_java_gateway.conf')}
-    it { should contain_service('zabbix-java-gateway')}
+    it { should contain_file('/etc/zabbix/zabbix_java_gateway.conf') }
+    it { should contain_service('zabbix-java-gateway') }
 
     context 'when declaring manage_repo is true' do
       let :params do
