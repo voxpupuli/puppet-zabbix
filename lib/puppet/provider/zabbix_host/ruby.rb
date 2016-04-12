@@ -26,7 +26,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
     zbx = self.class.create_connection(zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
 
     # Get the template ids.
-    template_array = Array.new
+    template_array = []
     if templates.is_af?(Array)
       templates.each do |template|
         template_id = self.class.get_template_id(zbx, template)
@@ -98,7 +98,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
     unless templates.is_a?(Array)
       templates = [templates]
     end
-    res = Array.new
+    res = []
     res.push(self.class.check_host(host, zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl))
     templates.each do |template|
       res.push(self.class.check_template_in_host(host, template, zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl))

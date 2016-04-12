@@ -282,7 +282,7 @@ Style/EmptyLinesAroundAccessModifier:
   Enabled: true
 
 Style/EmptyLiteral:
-  Enabled: false
+  Enabled: true
 
 Metrics/LineLength:
   Enabled: false
