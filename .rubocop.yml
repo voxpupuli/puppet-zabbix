@@ -396,7 +396,7 @@ Style/Not:
   Enabled: true
 
 Style/NumericLiterals:
-  Enabled: false
+  Enabled: true
 
 Style/OneLineConditional:
   Enabled: false
