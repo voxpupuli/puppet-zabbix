@@ -36,7 +36,7 @@ describe 'zabbix::web' do
 
     describe 'with database_type as postgresql' do
       let :params do
-        super().merge(database_type: 'postgresql',)
+        super().merge(database_type: 'postgresql')
       end
 
       it { should contain_package('zabbix-web-pgsql').with_name('zabbix-web-pgsql') }
@@ -46,7 +46,7 @@ describe 'zabbix::web' do
 
     describe 'with database_type as mysql' do
       let :params do
-        super().merge(database_type: 'mysql',)
+        super().merge(database_type: 'mysql')
       end
 
       it { should contain_package('zabbix-web-mysql').with_name('zabbix-web-mysql') }

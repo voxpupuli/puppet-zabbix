@@ -303,7 +303,7 @@ Style/StringLiterals:
   Enabled: true
 
 Style/TrailingCommaInArguments:
-  Enabled: false
+  Enabled: true
 
 Style/TrailingCommaInLiteral:
   Enabled: false
