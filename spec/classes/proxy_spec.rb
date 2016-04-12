@@ -314,4 +314,3 @@ describe 'zabbix::proxy' do
     end
   end # END context 'zabbix_proxy.conf configuration'
 end
-
