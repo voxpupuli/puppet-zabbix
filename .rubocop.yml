@@ -222,7 +222,7 @@ Style/SpaceAfterNot:
   Enabled: true
 
 Style/SpaceAfterSemicolon:
-  Enabled: false
+  Enabled: true
 
 Style/SpaceAroundEqualsInParameterDefault:
   Enabled: false
