@@ -105,7 +105,7 @@ Lint/Void:
   Enabled: true
 
 Style/AccessModifierIndentation:
-  Enabled: false
+  Enabled: true
 
 Style/AccessorMethodName:
   Enabled: false
