@@ -342,7 +342,7 @@ Style/TrivialAccessors:
   Enabled: true
 
 Style/UnlessElse:
-  Enabled: false
+  Enabled: true
 
 Style/VariableInterpolation:
   Enabled: false
