@@ -357,7 +357,7 @@ Style/EvenOdd:
   Enabled: true
 
 Style/FileName:
-  Enabled: false
+  Enabled: true
 
 Style/For:
   Enabled: false
