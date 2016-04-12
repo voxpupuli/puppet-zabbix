@@ -276,7 +276,7 @@ Style/IndentationWidth:
   Enabled: true
 
 Style/EmptyLines:
-  Enabled: false
+  Enabled: true
 
 Style/EmptyLinesAroundAccessModifier:
   Enabled: false
