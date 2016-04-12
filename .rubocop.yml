@@ -129,7 +129,7 @@ Style/AsciiComments:
   Enabled: true
 
 Style/Attr:
-  Enabled: false
+  Enabled: true
 
 Style/BracesAroundHashParameters:
   Enabled: true
