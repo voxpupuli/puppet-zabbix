@@ -339,7 +339,7 @@ Style/SpecialGlobalVars:
   Enabled: true
 
 Style/TrivialAccessors:
-  Enabled: false
+  Enabled: true
 
 Style/UnlessElse:
   Enabled: false
