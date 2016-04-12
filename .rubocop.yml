@@ -84,7 +84,7 @@ Lint/ParenthesesAsGroupedExpression:
   Enabled: true
 
 Lint/RescueException:
-  Enabled: false
+  Enabled: true
 
 Lint/StringConversionInInterpolation:
   Enabled: false
