@@ -6,7 +6,7 @@ class Puppet::Provider::Zabbix < Puppet::Provider
   end
 
   # Create the api connection
-  def self.create_connection(zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
+  def self.create_connection(zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
     protocol = apache_use_ssl ? 'https' : 'http'
     zbx = ZabbixApi.connect(
       url: "#{protocol}://#{zabbix_url}/api_jsonrpc.php",
@@ -17,9 +17,9 @@ class Puppet::Provider::Zabbix < Puppet::Provider
   end
 
   # Check if host exists. When error raised, return false.
-  def self.check_host(host,zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
+  def self.check_host(host, zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
     begin
-      zbx = create_connection(zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
+      zbx = create_connection(zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
       zbx.hosts.get_id(host: host)
     rescue Puppet::ExecutionFailure
       false
@@ -27,10 +27,10 @@ class Puppet::Provider::Zabbix < Puppet::Provider
   end
 
   # Check if proxy exists. When error raised, return false.
-  def self.check_proxy(host,zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
+  def self.check_proxy(host, zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
     begin
       require_zabbix
-      zbx = create_connection(zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
+      zbx = create_connection(zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
       zbx.proxies.get_id(host: host)
     rescue Puppet::ExecutionFailure
       false
@@ -38,7 +38,7 @@ class Puppet::Provider::Zabbix < Puppet::Provider
   end
 
   # Get the template id from the name.
-  def self.get_template_id(zbx,template)
+  def self.get_template_id(zbx, template)
     if is_a_number?(template)
       return template
     else
@@ -48,33 +48,33 @@ class Puppet::Provider::Zabbix < Puppet::Provider
   end
 
   # Check if given template name exists in current host.
-  def self.check_template_in_host(host,template,zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
-    zbx = create_connection(zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
-    template_id = get_template_id(zbx,template)
+  def self.check_template_in_host(host, template, zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
+    zbx = create_connection(zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
+    template_id = get_template_id(zbx, template)
     template_array = zbx.templates.get_ids_by_host(hostids: [zbx.hosts.get_id(host: host)])
     template_array.include?(template_id.to_s)
   end
 
-  def self.check_template_exist(template,template_source,zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
+  def self.check_template_exist(template, template_source, zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
     begin
-      zbx = create_connection(zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
+      zbx = create_connection(zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
       zbx.templates.get_id(host: template)
     rescue Puppet::ExecutionFailure
       false
     end
   end
 
-  def self.check_template_is_equal(template,template_source,zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
+  def self.check_template_is_equal(template, template_source, zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
     begin
-      zbx = create_connection(zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
+      zbx = create_connection(zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
       exported = zbx.configurations.export(
         format: "xml",
         options: {
           templates: [zbx.templates.get_id(host: template)]
         }
       )
-      exported_clean = exported.gsub(/>\s*/, ">").gsub(/\s*</, "<").gsub(/<date>.*<\/date>/,"DATEWASHERE")
-      template_source_clean = template_source.gsub(/>\s*/, ">").gsub(/\s*</, "<").gsub(/<date>.*<\/date>/,"DATEWASHERE")
+      exported_clean = exported.gsub(/>\s*/, ">").gsub(/\s*</, "<").gsub(/<date>.*<\/date>/, "DATEWASHERE")
+      template_source_clean = template_source.gsub(/>\s*/, ">").gsub(/\s*</, "<").gsub(/<date>.*<\/date>/, "DATEWASHERE")
       exported_clean.eql? template_source_clean
     rescue Puppet::ExecutionFailure
       false

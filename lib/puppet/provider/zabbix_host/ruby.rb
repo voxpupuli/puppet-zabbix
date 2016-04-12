@@ -23,7 +23,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
     apache_use_ssl = @resource[:apache_use_ssl]
 
     # Connect to zabbix api
-    zbx = self.class.create_connection(zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
+    zbx = self.class.create_connection(zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
 
     # Get the template ids.
     template_array = Array.new
@@ -99,9 +99,9 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
       templates = [templates]
     end
     res = Array.new
-    res.push(self.class.check_host(host,zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl))
+    res.push(self.class.check_host(host, zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl))
     templates.each do |template|
-      res.push(self.class.check_template_in_host(host,template,zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl))
+      res.push(self.class.check_template_in_host(host, template, zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl))
     end
     res.all?
   end
@@ -118,7 +118,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
     zabbix_pass = @resource[:zabbix_pass]
     apache_use_ssl = @resource[:apache_use_ssl]
 
-    zbx = self.class.create_connection(zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
+    zbx = self.class.create_connection(zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
     zbx.hosts.delete(zbx.hosts.get_id(host: host))
   end
 end

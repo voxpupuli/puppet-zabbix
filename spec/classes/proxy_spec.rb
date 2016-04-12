@@ -62,7 +62,7 @@ describe 'zabbix::proxy' do
       it { should contain_package('zabbix-proxy-pgsql').with_ensure('present') }
       it { should contain_package('zabbix-proxy-pgsql').with_ensure('present') }
       it { should contain_package('zabbix-proxy-pgsql').with_name('zabbix-proxy-pgsql') }
-      it { should contain_service('zabbix-proxy').with_require(['Package[zabbix-proxy-pgsql]','File[/etc/zabbix/zabbix_proxy.conf.d]','File[/etc/zabbix/zabbix_proxy.conf]']) }
+      it { should contain_service('zabbix-proxy').with_require(['Package[zabbix-proxy-pgsql]', 'File[/etc/zabbix/zabbix_proxy.conf.d]', 'File[/etc/zabbix/zabbix_proxy.conf]']) }
       it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_require('Package[zabbix-proxy-pgsql]') }
     end
 
@@ -76,7 +76,7 @@ describe 'zabbix::proxy' do
       it { should contain_package('zabbix-proxy-mysql').with_ensure('present') }
       it { should contain_package('zabbix-proxy-mysql').with_ensure('present') }
       it { should contain_package('zabbix-proxy-mysql').with_name('zabbix-proxy-mysql') }
-      it { should contain_service('zabbix-proxy').with_require(['Package[zabbix-proxy-mysql]','File[/etc/zabbix/zabbix_proxy.conf.d]','File[/etc/zabbix/zabbix_proxy.conf]']) }
+      it { should contain_service('zabbix-proxy').with_require(['Package[zabbix-proxy-mysql]', 'File[/etc/zabbix/zabbix_proxy.conf.d]', 'File[/etc/zabbix/zabbix_proxy.conf]']) }
       it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_require('Package[zabbix-proxy-mysql]') }
     end
 

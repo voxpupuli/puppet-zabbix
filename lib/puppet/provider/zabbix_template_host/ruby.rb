@@ -24,7 +24,7 @@ Puppet::Type.type(:zabbix_template_host).provide(:ruby, parent: Puppet::Provider
       self.class.require_zabbix
     end
 
-    @zbx ||= self.class.create_connection(@resource[:zabbix_url],@resource[:zabbix_user],@resource[:zabbix_pass],@resource[:apache_use_ssl])
+    @zbx ||= self.class.create_connection(@resource[:zabbix_url], @resource[:zabbix_user], @resource[:zabbix_pass], @resource[:apache_use_ssl])
     @zbx
   end
 
