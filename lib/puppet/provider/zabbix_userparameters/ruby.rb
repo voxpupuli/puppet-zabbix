@@ -42,8 +42,6 @@ Puppet::Type.type(:zabbix_userparameters).provide(:ruby, parent: Puppet::Provide
 
   def destroy
     zabbix_url = @resource[:zabbix_url]
-    if zabbix_url != ''
-      self.class.require_zabbix
-    end
+    self.class.require_zabbix if zabbix_url != ''
   end
 end
