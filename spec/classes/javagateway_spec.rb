@@ -40,7 +40,7 @@ describe 'zabbix::javagateway' do
       it { should contain_class('Zabbix::Repo') }
     end
 
-    context "when declaring manage_firewall is true" do
+    context 'when declaring manage_firewall is true' do
       let(:params) do
         {
           manage_firewall: true,
@@ -50,7 +50,7 @@ describe 'zabbix::javagateway' do
       it { should contain_firewall('152 zabbix-javagateway') }
     end
 
-    context "when declaring manage_firewall is false" do
+    context 'when declaring manage_firewall is false' do
       let(:params) do
         {
           manage_firewall: false,

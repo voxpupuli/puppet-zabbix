@@ -52,7 +52,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
       zbx.hostgroups.create(name: hostgroup)
       search_hostgroup = zbx.hostgroups.get_id(name: hostgroup)
     elsif search_hostgroup.nil? && hostgroup_create == 0
-      raise Puppet::Error, "The hostgroup (" + hostgroup + ") does not exist in zabbix. Please use the correct one."
+      raise Puppet::Error, 'The hostgroup (' + hostgroup + ') does not exist in zabbix. Please use the correct one.'
     end
 
     # Now we create the host

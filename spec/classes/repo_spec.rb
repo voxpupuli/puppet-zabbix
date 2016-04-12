@@ -2,7 +2,7 @@
 require 'spec_helper'
 
 describe 'zabbix::repo' do
-  context "on Debian 6 and Zabbix 2.0" do
+  context 'on Debian 6 and Zabbix 2.0' do
     let :params do
       {
         zabbix_version: '2.0',
@@ -32,7 +32,7 @@ describe 'zabbix::repo' do
     it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.0/debian/') }
   end
 
-  context "on Debian 7 and Zabbix 2.0" do
+  context 'on Debian 7 and Zabbix 2.0' do
     let :params do
       {
         zabbix_version: '2.0',
@@ -62,7 +62,7 @@ describe 'zabbix::repo' do
     it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.0/debian/') }
   end
 
-  context "on Debian 7 and Zabbix 2.2" do
+  context 'on Debian 7 and Zabbix 2.2' do
     let :params do
       {
         zabbix_version: '2.2',
@@ -92,7 +92,7 @@ describe 'zabbix::repo' do
     it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.2/debian/') }
   end
 
-  context "on Debian 7 and Zabbix 2.4" do
+  context 'on Debian 7 and Zabbix 2.4' do
     let :params do
       {
         zabbix_version: '2.4',
@@ -122,7 +122,7 @@ describe 'zabbix::repo' do
     it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.4/debian/') }
   end
 
-  context "on Debian 8 and Zabbix 3.0" do
+  context 'on Debian 8 and Zabbix 3.0' do
     let :params do
       {
         zabbix_version: '3.0',
@@ -152,7 +152,7 @@ describe 'zabbix::repo' do
     it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/3.0/debian/') }
   end
 
-  context "on Ubuntu 12.04 and Zabbix 2.0" do
+  context 'on Ubuntu 12.04 and Zabbix 2.0' do
     let :params do
       {
         zabbix_version: '2.0',
@@ -182,7 +182,7 @@ describe 'zabbix::repo' do
     it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.0/ubuntu/') }
   end
 
-  context "on Ubuntu 12.04 and Zabbix 2.2" do
+  context 'on Ubuntu 12.04 and Zabbix 2.2' do
     let :params do
       {
         zabbix_version: '2.2',
@@ -212,7 +212,7 @@ describe 'zabbix::repo' do
     it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.2/ubuntu/') }
   end
 
-  context "on Ubuntu 12.04 and Zabbix 2.4" do
+  context 'on Ubuntu 12.04 and Zabbix 2.4' do
     let :params do
       {
         zabbix_version: '2.4',
@@ -242,7 +242,7 @@ describe 'zabbix::repo' do
     it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.4/ubuntu/') }
   end
 
-  context "on Ubuntu 14.04 and Zabbix 2.4" do
+  context 'on Ubuntu 14.04 and Zabbix 2.4' do
     let :params do
       {
         zabbix_version: '2.4',
@@ -272,7 +272,7 @@ describe 'zabbix::repo' do
     it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.4/ubuntu/') }
   end
 
-  context "on Ubuntu 14.04 and Zabbix 3.0" do
+  context 'on Ubuntu 14.04 and Zabbix 3.0' do
     let :params do
       {
         zabbix_version: '3.0',
@@ -302,7 +302,7 @@ describe 'zabbix::repo' do
     it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/3.0/ubuntu/') }
   end
 
-  context "on RedHat 5 and Zabbix 2.0" do
+  context 'on RedHat 5 and Zabbix 2.0' do
     let :params do
       {
         zabbix_version: '2.0',
@@ -332,7 +332,7 @@ describe 'zabbix::repo' do
     it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/5/$basearch/') }
   end
 
-  context "on RedHat 6 and Zabbix 2.0" do
+  context 'on RedHat 6 and Zabbix 2.0' do
     let :params do
       {
         zabbix_version: '2.0',
@@ -363,7 +363,7 @@ describe 'zabbix::repo' do
     it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/6/$basearch/') }
   end
 
-  context "on RedHat 6 and Zabbix 2.2" do
+  context 'on RedHat 6 and Zabbix 2.2' do
     let :params do
       {
         zabbix_version: '2.2',
@@ -394,7 +394,7 @@ describe 'zabbix::repo' do
     it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/6/$basearch/') }
   end
 
-  context "on RedHat 6 and Zabbix 2.4" do
+  context 'on RedHat 6 and Zabbix 2.4' do
     let :params do
       {
         zabbix_version: '2.4',
@@ -425,7 +425,7 @@ describe 'zabbix::repo' do
     it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/6/$basearch/') }
   end
 
-  context "on RedHat 7 and Zabbix 3.0" do
+  context 'on RedHat 7 and Zabbix 3.0' do
     let :params do
       {
         zabbix_version: '3.0',

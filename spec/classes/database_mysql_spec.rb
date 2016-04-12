@@ -27,7 +27,7 @@ describe 'zabbix::database::mysql' do
       }
     end
 
-    describe "when zabbix_type is server" do
+    describe 'when zabbix_type is server' do
       let :params do
         {
           database_name: 'zabbix-server',
@@ -44,7 +44,7 @@ describe 'zabbix::database::mysql' do
       it { should contain_exec('zabbix_server_data.sql').with_command("cd /usr/share/doc/zabbix-*-mysql-2.4*/create && if [ -f data.sql.gz ]; then gunzip data.sql.gz ; fi && mysql -h 'node01.example.com' -u 'zabbix-server' -p'zabbix-server' -D 'zabbix-server' < data.sql && touch /etc/zabbix/.data.done") }
     end
 
-    describe "when zabbix_type is proxy" do
+    describe 'when zabbix_type is proxy' do
       let :params do
         {
           database_name: 'zabbix-proxy',

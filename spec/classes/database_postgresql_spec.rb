@@ -7,7 +7,7 @@ describe 'zabbix::database::postgresql' do
   end
 
   let :pre_condition do
-    "include ::postgresql::server"
+    'include ::postgresql::server'
   end
 
   context 'On RedHat 6.5' do
@@ -31,7 +31,7 @@ describe 'zabbix::database::postgresql' do
       }
     end
 
-    describe "when zabbix_type is server" do
+    describe 'when zabbix_type is server' do
       let :params do
         {
           database_name: 'zabbix-server',
@@ -49,7 +49,7 @@ describe 'zabbix::database::postgresql' do
       it { should contain_exec('zabbix_server_data.sql').with_command("cd /usr/share/doc/zabbix-*-pgsql-2.4*/create && if [ -f data.sql.gz ]; then gunzip data.sql.gz ; fi && psql -h 'node01.example.com' -U 'zabbix-server' -d 'zabbix-server' -f data.sql && touch /etc/zabbix/.data.done") }
     end
 
-    describe "when zabbix_type is proxy" do
+    describe 'when zabbix_type is proxy' do
       let :params do
         {
           database_name: 'zabbix-proxy',
