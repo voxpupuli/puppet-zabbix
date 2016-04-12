@@ -381,7 +381,7 @@ Style/FormatString:
   Enabled: true
 
 Style/MultilineBlockChain:
-  Enabled: false
+  Enabled: true
 
 Style/Semicolon:
   Enabled: false
