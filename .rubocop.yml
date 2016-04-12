@@ -219,7 +219,7 @@ Style/SpaceAfterMethodName:
   Enabled: true
 
 Style/SpaceAfterNot:
-  Enabled: false
+  Enabled: true
 
 Style/SpaceAfterSemicolon:
   Enabled: false
