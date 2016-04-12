@@ -84,7 +84,7 @@ Lint/EndAlignment:
 
 # DISABLED
 Lint/DeprecatedClassMethods:
-  Enabled: false
+  Enabled: true
 
 # DISABLED
 Lint/Loop:
