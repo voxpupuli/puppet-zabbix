@@ -149,7 +149,7 @@ Style/CaseEquality:
   Enabled: false
 
 Style/CaseIndentation:
-  Enabled: false
+  Enabled: true
 
 Style/CharacterLiteral:
   Enabled: false
