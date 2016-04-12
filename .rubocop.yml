@@ -261,7 +261,7 @@ Style/EachWithObject:
   Enabled: true
 
 Style/EmptyLineBetweenDefs:
-  Enabled: false
+  Enabled: true
 
 Style/IndentArray:
   Enabled: false
