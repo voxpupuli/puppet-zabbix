@@ -273,7 +273,7 @@ Style/IndentationConsistency:
   Enabled: true
 
 Style/IndentationWidth:
-  Enabled: false
+  Enabled: true
 
 Style/EmptyLines:
   Enabled: false
