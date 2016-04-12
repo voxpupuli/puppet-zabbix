@@ -71,9 +71,8 @@ Lint/BlockAlignment:
 Lint/DefEndAlignment:
   Enabled: true
 
-# DISABLED
 Lint/EndAlignment:
-  Enabled: false
+  Enabled: true
 
 Lint/DeprecatedClassMethods:
   Enabled: true
