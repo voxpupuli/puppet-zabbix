@@ -366,7 +366,7 @@ Style/Lambda:
   Enabled: true
 
 Style/MethodName:
-  Enabled: false
+  Enabled: true
 
 Style/MultilineTernaryOperator:
   Enabled: false
