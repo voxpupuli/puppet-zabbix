@@ -330,7 +330,7 @@ Style/Next:
   Enabled: true
 
 Style/SingleLineBlockParams:
-  Enabled: false
+  Enabled: true
 
 Style/SingleLineMethods:
   Enabled: false
