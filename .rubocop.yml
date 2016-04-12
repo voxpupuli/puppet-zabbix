@@ -363,7 +363,7 @@ Style/For:
   Enabled: true
 
 Style/Lambda:
-  Enabled: false
+  Enabled: true
 
 Style/MethodName:
   Enabled: false
