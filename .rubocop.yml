@@ -297,7 +297,7 @@ Style/LineEndConcatenation:
   Enabled: true
 
 Style/TrailingWhitespace:
-  Enabled: false
+  Enabled: true
 
 Style/StringLiterals:
   Enabled: false
