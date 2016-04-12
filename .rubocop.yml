@@ -210,7 +210,7 @@ Style/SpaceBeforeFirstArg:
   Enabled: true
 
 Style/SpaceAfterColon:
-  Enabled: false
+  Enabled: true
 
 Style/SpaceAfterComma:
   Enabled: false
