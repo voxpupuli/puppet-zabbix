@@ -234,7 +234,7 @@ Style/ColonMethodCall:
   Enabled: true
 
 Style/CommentAnnotation:
-  Enabled: false
+  Enabled: true
 
 Metrics/CyclomaticComplexity:
   Enabled: false
