@@ -23,7 +23,7 @@ describe 'zabbix::javagateway' do
         lsbdistcodename: '',
         id: 'root',
         kernel: 'Linux',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
       }
     end
 
@@ -33,7 +33,7 @@ describe 'zabbix::javagateway' do
     context 'when declaring manage_repo is true' do
       let :params do
         {
-          manage_repo: true,
+          manage_repo: true
         }
       end
 
@@ -43,7 +43,7 @@ describe 'zabbix::javagateway' do
     context 'when declaring manage_firewall is true' do
       let(:params) do
         {
-          manage_firewall: true,
+          manage_firewall: true
         }
       end
 
@@ -53,7 +53,7 @@ describe 'zabbix::javagateway' do
     context 'when declaring manage_firewall is false' do
       let(:params) do
         {
-          manage_firewall: false,
+          manage_firewall: false
         }
       end
 
@@ -66,7 +66,7 @@ describe 'zabbix::javagateway' do
           listenip: '192.168.1.1',
           listenport: '10052',
           pidfile: '/var/run/zabbix/zabbix_java.pid',
-          startpollers: '5',
+          startpollers: '5'
         }
       end
 

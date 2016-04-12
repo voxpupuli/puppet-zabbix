@@ -9,7 +9,7 @@ describe 'zabbix::agent' do
     {
       server: '192.168.1.1',
       serveractive: '192.168.1.1',
-      agent_configfile_path: '/etc/zabbix/zabbix_agentd.conf',
+      agent_configfile_path: '/etc/zabbix/zabbix_agentd.conf'
     }
   end
 
@@ -30,7 +30,7 @@ describe 'zabbix::agent' do
         lsbdistcodename: '',
         id: 'root',
         kernel: 'Linux',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
       }
     end
 
@@ -46,7 +46,7 @@ describe 'zabbix::agent' do
     context 'when declaring manage_repo is true' do
       let :params do
         {
-          manage_repo: true,
+          manage_repo: true
         }
       end
 
@@ -57,7 +57,7 @@ describe 'zabbix::agent' do
     context 'when declaring manage_resources is true' do
       let :params do
         {
-          manage_resources: true,
+          manage_resources: true
         }
       end
 
@@ -67,7 +67,7 @@ describe 'zabbix::agent' do
     context 'configuration file with hostnameitem' do
       let :params do
         {
-          hostnameitem: 'system.hostname',
+          hostnameitem: 'system.hostname'
         }
       end
 
@@ -77,7 +77,7 @@ describe 'zabbix::agent' do
     context 'when declaring manage_firewall is true' do
       let :params do
         {
-          manage_firewall: true,
+          manage_firewall: true
         }
       end
 
@@ -87,7 +87,7 @@ describe 'zabbix::agent' do
     context 'when declaring manage_firewall is false' do
       let :params do
         {
-          manage_firewall: false,
+          manage_firewall: false
         }
       end
 
@@ -126,7 +126,7 @@ describe 'zabbix::agent' do
           tlscertfile: '/etc/zabbix/keys/tls.crt',
           tlskeyfile: '/etc/zabbix/keys/tls.key',
           tlspskidentity: '/etc/zabbix/keys/tlspskidentity.id',
-          tlspskfile: '/etc/zabbix/keys/tlspskfile.key',
+          tlspskfile: '/etc/zabbix/keys/tlspskfile.key'
         }
       end
 

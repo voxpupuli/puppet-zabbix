@@ -4,7 +4,7 @@ require 'spec_helper'
 describe 'zabbix::server' do
   let :params do
     {
-      zabbix_version: '3.0',
+      zabbix_version: '3.0'
     }
   end
 
@@ -29,7 +29,7 @@ describe 'zabbix::server' do
         lsbdistcodename: '',
         id: 'root',
         kernel: 'Linux',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
       }
     end
 
@@ -41,7 +41,7 @@ describe 'zabbix::server' do
         {
           database_type: 'postgresql',
           server_configfile_path: '/etc/zabbix/zabbix_server.conf',
-          include_dir: '/etc/zabbix/zabbix_server.conf.d',
+          include_dir: '/etc/zabbix/zabbix_server.conf.d'
         }
       end
 
@@ -53,7 +53,7 @@ describe 'zabbix::server' do
     describe 'with database_type as mysql' do
       let :params do
         {
-          database_type: 'mysql',
+          database_type: 'mysql'
         }
       end
 
@@ -73,7 +73,7 @@ describe 'zabbix::server' do
           database_user: 'zabbix-server',
           database_password: 'zabbix-server',
           database_host: 'localhost',
-          database_name: 'zabbix-server',
+          database_name: 'zabbix-server'
         }
       end
 
@@ -92,7 +92,7 @@ describe 'zabbix::server' do
           database_user: 'zabbix-server',
           database_password: 'zabbix-server',
           database_host: 'localhost',
-          database_name: 'zabbix-server',
+          database_name: 'zabbix-server'
         }
       end
 
@@ -109,7 +109,7 @@ describe 'zabbix::server' do
     context 'when declaring manage_firewall is true' do
       let :params do
         {
-          manage_firewall: true,
+          manage_firewall: true
         }
       end
 
@@ -119,7 +119,7 @@ describe 'zabbix::server' do
     context 'when declaring manage_firewall is false' do
       let :params do
         {
-          manage_firewall: false,
+          manage_firewall: false
         }
       end
 
@@ -190,7 +190,7 @@ describe 'zabbix::server' do
           valuecachesize: '4M',
           vmwarecachesize: '8M',
           vmwarefrequency: '60',
-          zabbix_version: '2.2',
+          zabbix_version: '2.2'
         }
       end
 
@@ -263,7 +263,7 @@ describe 'zabbix::server' do
           nodeid: '0',
           nodenohistory: '0',
           nodenoevents: '0',
-          zabbix_version: '2.4',
+          zabbix_version: '2.4'
         }
       end
 
@@ -279,7 +279,7 @@ describe 'zabbix::server' do
           tlscrlfile: '/etc/zabbix/keys/zabbix-server.crl',
           tlscertfile: '/etc/zabbix/keys/zabbix-server.crt',
           tlskeyfile: '/etc/zabbix/keys/zabbix-server.key',
-          zabbix_version: '3.0',
+          zabbix_version: '3.0'
         }
       end
 

@@ -23,7 +23,7 @@ describe 'zabbix::userparameter' do
         lsbdistcodename: '',
         id: 'root',
         kernel: 'Linux',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
       }
     end
     it { should compile }

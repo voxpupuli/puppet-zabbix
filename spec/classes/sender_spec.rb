@@ -23,7 +23,7 @@ describe 'zabbix::sender' do
         lsbdistcodename: '',
         id: 'root',
         kernel: 'Linux',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
       }
     end
 
@@ -34,7 +34,7 @@ describe 'zabbix::sender' do
     context 'when declaring manage_repo is true' do
       let :params do
         {
-          manage_repo: true,
+          manage_repo: true
         }
       end
 

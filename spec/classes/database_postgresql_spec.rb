@@ -27,7 +27,7 @@ describe 'zabbix::database::postgresql' do
         lsbdistcodename: '',
         id: 'root',
         kernel: 'Linux',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
       }
     end
 
@@ -39,7 +39,7 @@ describe 'zabbix::database::postgresql' do
           database_password: 'zabbix-server',
           database_host: 'node01.example.com',
           zabbix_type: 'server',
-          zabbix_version: '2.4',
+          zabbix_version: '2.4'
         }
       end
 
@@ -57,7 +57,7 @@ describe 'zabbix::database::postgresql' do
           database_password: 'zabbix-proxy',
           database_host: 'node01.example.com',
           zabbix_type: 'proxy',
-          zabbix_version: '2.4',
+          zabbix_version: '2.4'
         }
       end
 
