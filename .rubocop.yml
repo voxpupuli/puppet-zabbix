@@ -168,7 +168,7 @@ Style/WordArray:
   Enabled: true
 
 Style/UnneededPercentQ:
-  Enabled: false
+  Enabled: true
 
 Style/Tab:
   Enabled: false
