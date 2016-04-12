@@ -231,7 +231,7 @@ Style/SpaceAroundOperators:
   Enabled: false
 
 Style/SpaceBeforeBlockBraces:
-  Enabled: false
+  Enabled: true
 
 Style/SpaceBeforeComma:
   Enabled: false
