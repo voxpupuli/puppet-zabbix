@@ -164,7 +164,6 @@ describe 'zabbix::proxy' do
       it { should_not contain_firewall('151 zabbix-proxy') }
     end
 
-
     # Make sure we have set some vars in zabbix_proxy.conf file. This is configuration file is the same on all
     # operating systems. So we aren't testing this for all opeating systems, just this one.
     context 'with zabbix_proxy.conf settings' do
