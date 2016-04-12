@@ -90,7 +90,7 @@ Lint/StringConversionInInterpolation:
   Enabled: true
 
 Lint/UnusedBlockArgument:
-  Enabled: false
+  Enabled: true
 
 Lint/UnusedMethodArgument:
   Enabled: false
