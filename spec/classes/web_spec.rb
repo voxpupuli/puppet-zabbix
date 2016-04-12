@@ -101,7 +101,7 @@ describe 'zabbix::web' do
 
     describe "when manage_resources is false" do
       let :params do
-        super().merge( manage_resources: false)
+        super().merge(manage_resources: false)
       end
 
       it { should_not contain_class('zabbix::resources::web') }

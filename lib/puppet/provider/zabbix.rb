@@ -42,7 +42,7 @@ class Puppet::Provider::Zabbix < Puppet::Provider
     if is_a_number?(template)
       return template
     else
-      id = zbx.templates.get_id( host: template )
+      id = zbx.templates.get_id(host: template)
       return id
     end
   end
@@ -51,14 +51,14 @@ class Puppet::Provider::Zabbix < Puppet::Provider
   def self.check_template_in_host(host,template,zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
     zbx = create_connection(zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
     template_id = get_template_id(zbx,template)
-    template_array = zbx.templates.get_ids_by_host( hostids: [zbx.hosts.get_id(host: host)] )
+    template_array = zbx.templates.get_ids_by_host(hostids: [zbx.hosts.get_id(host: host)])
     template_array.include?(template_id.to_s)
   end
 
   def self.check_template_exist(template,template_source,zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
     begin
       zbx = create_connection(zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
-      zbx.templates.get_id( host: template )
+      zbx.templates.get_id(host: template)
     rescue Puppet::ExecutionFailure
       false
     end

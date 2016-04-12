@@ -201,7 +201,7 @@ Style/SpaceInsideHashLiteralBraces:
   Enabled: true
 
 Style/SpaceInsideParens:
-  Enabled: false
+  Enabled: true
 
 Style/LeadingCommentSpace:
   Enabled: false
