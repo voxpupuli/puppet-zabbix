@@ -225,7 +225,7 @@ Style/SpaceAfterSemicolon:
   Enabled: true
 
 Style/SpaceAroundEqualsInParameterDefault:
-  Enabled: false
+  Enabled: true
 
 Style/SpaceAroundOperators:
   Enabled: true
