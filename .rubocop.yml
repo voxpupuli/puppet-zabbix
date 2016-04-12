@@ -390,7 +390,7 @@ Style/SignalException:
   Enabled: true
 
 Style/NonNilCheck:
-  Enabled: false
+  Enabled: true
 
 Style/Not:
   Enabled: false
