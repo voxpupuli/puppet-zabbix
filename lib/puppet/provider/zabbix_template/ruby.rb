@@ -16,7 +16,7 @@ Puppet::Type.type(:zabbix_template).provide(:ruby, parent: Puppet::Provider::Zab
     apache_use_ssl = @resource[:apache_use_ssl]
 
     # Connect to zabbix api
-    zbx = self.class.create_connection(zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
+    zbx = self.class.create_connection(zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
 
     # Opening the file, so we can place it as an long string into an variable. The ZabbixAPI
     # needs the content of the file, not location of the file.
@@ -91,7 +91,7 @@ Puppet::Type.type(:zabbix_template).provide(:ruby, parent: Puppet::Provider::Zab
     zabbix_pass = @resource[:zabbix_pass]
     apache_use_ssl = @resource[:apache_use_ssl]
 
-    self.class.create_connection(zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
-    self.class.check_template_is_equal(template_name,template_source,zabbix_url,zabbix_user,zabbix_pass,apache_use_ssl)
+    self.class.create_connection(zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
+    self.class.check_template_is_equal(template_name, template_source, zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
   end
 end
