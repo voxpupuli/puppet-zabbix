@@ -22,7 +22,7 @@ Puppet::Type.type(:zabbix_template).provide(:ruby, parent: Puppet::Provider::Zab
     # needs the content of the file, not location of the file.
     file = File.open(template_source)
     template_contents = ""
-    file.each {|line| template_contents << line}
+    file.each { |line| template_contents << line }
 
     zbx.configurations.import(
       format: "xml",

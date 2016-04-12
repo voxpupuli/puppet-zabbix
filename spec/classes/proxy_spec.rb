@@ -99,12 +99,12 @@ describe 'zabbix::proxy' do
         }
       end
 
-      it { should contain_class('zabbix::database::postgresql').with_zabbix_type('proxy')}
-      it { should contain_class('zabbix::database::postgresql').with_zabbix_version('3.0')}
-      it { should contain_class('zabbix::database::postgresql').with_database_name('zabbix_proxy')}
-      it { should contain_class('zabbix::database::postgresql').with_database_user('zabbix-proxy')}
-      it { should contain_class('zabbix::database::postgresql').with_database_password('zabbix-proxy')}
-      it { should contain_class('zabbix::database::postgresql').with_database_host('localhost')}
+      it { should contain_class('zabbix::database::postgresql').with_zabbix_type('proxy') }
+      it { should contain_class('zabbix::database::postgresql').with_zabbix_version('3.0') }
+      it { should contain_class('zabbix::database::postgresql').with_database_name('zabbix_proxy') }
+      it { should contain_class('zabbix::database::postgresql').with_database_user('zabbix-proxy') }
+      it { should contain_class('zabbix::database::postgresql').with_database_password('zabbix-proxy') }
+      it { should contain_class('zabbix::database::postgresql').with_database_host('localhost') }
     end
 
     context 'with zabbix::database::mysql class' do
@@ -119,12 +119,12 @@ describe 'zabbix::proxy' do
         "include 'mysql::server'"
       end
 
-      it { should contain_class('zabbix::database::mysql').with_zabbix_type('proxy')}
-      it { should contain_class('zabbix::database::mysql').with_zabbix_version('3.0')}
-      it { should contain_class('zabbix::database::mysql').with_database_name('zabbix_proxy')}
-      it { should contain_class('zabbix::database::mysql').with_database_user('zabbix-proxy')}
-      it { should contain_class('zabbix::database::mysql').with_database_password('zabbix-proxy')}
-      it { should contain_class('zabbix::database::mysql').with_database_host('localhost')}
+      it { should contain_class('zabbix::database::mysql').with_zabbix_type('proxy') }
+      it { should contain_class('zabbix::database::mysql').with_zabbix_version('3.0') }
+      it { should contain_class('zabbix::database::mysql').with_database_name('zabbix_proxy') }
+      it { should contain_class('zabbix::database::mysql').with_database_user('zabbix-proxy') }
+      it { should contain_class('zabbix::database::mysql').with_database_password('zabbix-proxy') }
+      it { should contain_class('zabbix::database::mysql').with_database_host('localhost') }
     end
 
     context 'when manage_database is true' do
@@ -134,14 +134,14 @@ describe 'zabbix::proxy' do
         }
       end
 
-      it { should contain_class('zabbix::database').with_zabbix_type('proxy')}
-      it { should contain_class('zabbix::database').with_database_type('postgresql')}
-      it { should contain_class('zabbix::database').with_database_name('zabbix_proxy')}
-      it { should contain_class('zabbix::database').with_database_user('zabbix-proxy')}
-      it { should contain_class('zabbix::database').with_database_password('zabbix-proxy')}
-      it { should contain_class('zabbix::database').with_database_host('localhost')}
-      it { should contain_class('zabbix::database').with_zabbix_proxy('localhost')}
-      it { should contain_class('zabbix::database').with_zabbix_proxy_ip('127.0.0.1')}
+      it { should contain_class('zabbix::database').with_zabbix_type('proxy') }
+      it { should contain_class('zabbix::database').with_database_type('postgresql') }
+      it { should contain_class('zabbix::database').with_database_name('zabbix_proxy') }
+      it { should contain_class('zabbix::database').with_database_user('zabbix-proxy') }
+      it { should contain_class('zabbix::database').with_database_password('zabbix-proxy') }
+      it { should contain_class('zabbix::database').with_database_host('localhost') }
+      it { should contain_class('zabbix::database').with_zabbix_proxy('localhost') }
+      it { should contain_class('zabbix::database').with_zabbix_proxy_ip('127.0.0.1') }
     end
 
     context "when declaring manage_firewall is true" do
@@ -229,61 +229,61 @@ describe 'zabbix::proxy' do
         }
       end
 
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^ProxyMode=0$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^Server=192.168.1.1$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^ServerPort=10051$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^Hostname=rspec.puppet.com$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^ListenPort=10051$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LogFile=/var/log/zabbix/proxy_server.log$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LogFileSize=15$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^DebugLevel=4$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^PidFile=/var/run/zabbix/proxy_server.pid$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^DBHost=localhost$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^DBName=zabbix-proxy$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^DBSchema=zabbix-proxy$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^DBUser=zabbix-proxy$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^DBPassword=zabbix-proxy$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^ProxyLocalBuffer=0$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^ProxyOfflineBuffer=1$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^HeartbeatFrequency=60$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^ConfigFrequency=3600$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^DataSenderFrequency=1$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartPollers=15$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartIPMIPollers=15$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartPollersUnreachable=15$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartTrappers=15$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartPingers=15$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartDiscoverers=15$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartHTTPPollers=15$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^JavaGateway=192.168.1.2$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^JavaGatewayPort=10051$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartJavaPollers=5$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartVMwareCollectors=0$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^VMwareFrequency=60$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^VMwareCacheSize=8M$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^SNMPTrapperFile=/tmp/zabbix_traps.tmp$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartSNMPTrapper=0$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^ListenIP=192.168.1.1$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^HousekeepingFrequency=1$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^CacheSize=8M$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartDBSyncers=4$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^HistoryCacheSize=16M$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^HistoryTextCacheSize=8M$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^Timeout=20$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TrapperTimeout=16$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^UnreachablePeriod=45$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^UnavailableDelay=60$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^UnreachableDelay=15$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^ExternalScripts=/usr/lib/zabbix/externalscripts$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^FpingLocation=60$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^Fping6Location=/usr/sbin/fping6$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^SSHKeyLocation=/home/zabbix/.ssh/$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LogSlowQueries=0$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TmpDir=/tmp$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^AllowRoot=0$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^Include=/etc/zabbix/zabbix_proxy.conf.d$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LoadModulePath=\$\{libdir\}/modules$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LoadModule=pizza$}}
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^ProxyMode=0$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^Server=192.168.1.1$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^ServerPort=10051$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^Hostname=rspec.puppet.com$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^ListenPort=10051$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LogFile=/var/log/zabbix/proxy_server.log$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LogFileSize=15$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^DebugLevel=4$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^PidFile=/var/run/zabbix/proxy_server.pid$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^DBHost=localhost$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^DBName=zabbix-proxy$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^DBSchema=zabbix-proxy$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^DBUser=zabbix-proxy$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^DBPassword=zabbix-proxy$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^ProxyLocalBuffer=0$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^ProxyOfflineBuffer=1$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^HeartbeatFrequency=60$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^ConfigFrequency=3600$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^DataSenderFrequency=1$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartPollers=15$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartIPMIPollers=15$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartPollersUnreachable=15$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartTrappers=15$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartPingers=15$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartDiscoverers=15$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartHTTPPollers=15$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^JavaGateway=192.168.1.2$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^JavaGatewayPort=10051$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartJavaPollers=5$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartVMwareCollectors=0$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^VMwareFrequency=60$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^VMwareCacheSize=8M$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^SNMPTrapperFile=/tmp/zabbix_traps.tmp$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartSNMPTrapper=0$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^ListenIP=192.168.1.1$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^HousekeepingFrequency=1$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^CacheSize=8M$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartDBSyncers=4$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^HistoryCacheSize=16M$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^HistoryTextCacheSize=8M$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^Timeout=20$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TrapperTimeout=16$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^UnreachablePeriod=45$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^UnavailableDelay=60$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^UnreachableDelay=15$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^ExternalScripts=/usr/lib/zabbix/externalscripts$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^FpingLocation=60$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^Fping6Location=/usr/sbin/fping6$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^SSHKeyLocation=/home/zabbix/.ssh/$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LogSlowQueries=0$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TmpDir=/tmp$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^AllowRoot=0$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^Include=/etc/zabbix/zabbix_proxy.conf.d$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LoadModulePath=\$\{libdir\}/modules$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LoadModule=pizza$} }
     end
 
     context "with zabbix_proxy.conf and version 3.0" do
@@ -302,15 +302,15 @@ describe 'zabbix::proxy' do
         }
       end
 
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSAccept=cert$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSCAFile=/etc/zabbix/keys/zabbix-server.ca$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSCRLFile=/etc/zabbix/keys/zabbix-server.crl$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSCertFile=/etc/zabbix/keys/zabbix-server.crt$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSKeyFile=/etc/zabbix/keys/zabbix-server.key$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSServerCertIssuer=Zabbix.Com$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSServerCertSubject=MyZabbix$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSPSKIdentity=/etc/zabbix/keys/identity.file$}}
-      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSPSKFile=/etc/zabbix/keys/file.key$}}
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSAccept=cert$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSCAFile=/etc/zabbix/keys/zabbix-server.ca$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSCRLFile=/etc/zabbix/keys/zabbix-server.crl$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSCertFile=/etc/zabbix/keys/zabbix-server.crt$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSKeyFile=/etc/zabbix/keys/zabbix-server.key$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSServerCertIssuer=Zabbix.Com$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSServerCertSubject=MyZabbix$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSPSKIdentity=/etc/zabbix/keys/identity.file$} }
+      it { should contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSPSKFile=/etc/zabbix/keys/file.key$} }
     end
   end # END context 'zabbix_proxy.conf configuration'
 end
