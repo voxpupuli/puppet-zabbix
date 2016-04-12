@@ -279,7 +279,7 @@ Style/EmptyLines:
   Enabled: true
 
 Style/EmptyLinesAroundAccessModifier:
-  Enabled: false
+  Enabled: true
 
 Style/EmptyLiteral:
   Enabled: false
