@@ -360,7 +360,7 @@ Style/FileName:
   Enabled: true
 
 Style/For:
-  Enabled: false
+  Enabled: true
 
 Style/Lambda:
   Enabled: false
