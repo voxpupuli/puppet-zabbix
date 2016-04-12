@@ -159,7 +159,7 @@ Style/ClassMethods:
   Enabled: true
 
 Style/ClassVars:
-  Enabled: false
+  Enabled: true
 
 Style/WhenThen:
   Enabled: false
