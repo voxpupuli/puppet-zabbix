@@ -324,7 +324,7 @@ Style/NegatedIf:
   Enabled: true
 
 Style/NegatedWhile:
-  Enabled: false
+  Enabled: true
 
 Style/Next:
   Enabled: false
