@@ -186,7 +186,7 @@ Style/Tab:
   Enabled: false
 
 Style/SpaceBeforeSemicolon:
-  Enabled: false
+  Enabled: true
 
 Style/TrailingBlankLines:
   Enabled: false
