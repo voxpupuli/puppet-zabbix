@@ -252,7 +252,7 @@ Style/DeprecatedHashMethods:
   Enabled: true
 
 Style/DotPosition:
-  Enabled: false
+  Enabled: true
 
 # DISABLED - used for converting to bool
 Style/DoubleNegation:
