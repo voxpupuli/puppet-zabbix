@@ -291,7 +291,7 @@ Style/MethodCallParentheses:
   Enabled: true
 
 Style/MethodDefParentheses:
-  Enabled: false
+  Enabled: true
 
 Style/LineEndConcatenation:
   Enabled: false
