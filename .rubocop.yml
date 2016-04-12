@@ -228,7 +228,7 @@ Style/CollectionMethods:
   Enabled: true
 
 Style/CommentIndentation:
-  Enabled: false
+  Enabled: true
 
 Style/ColonMethodCall:
   Enabled: false
