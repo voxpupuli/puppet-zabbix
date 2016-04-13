@@ -423,7 +423,7 @@ Style/SelfAssignment:
   Enabled: true
 
 Style/Proc:
-  Enabled: false
+  Enabled: true
 
 Style/RaiseArgs:
   Enabled: false
