@@ -411,7 +411,7 @@ Style/PercentLiteralDelimiters:
   Enabled: true
 
 Style/PerlBackrefs:
-  Enabled: false
+  Enabled: true
 
 Style/PredicateName:
   Enabled: false
