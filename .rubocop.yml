@@ -414,7 +414,7 @@ Style/PerlBackrefs:
   Enabled: true
 
 Style/PredicateName:
-  Enabled: false
+  Enabled: true
 
 Style/RedundantException:
   Enabled: false
