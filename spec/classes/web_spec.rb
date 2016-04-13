@@ -1,8 +1,7 @@
 require 'spec_helper'
 
 def package_provider_for_gems
-  # we could also do string comparsion which would be shorter
-  Puppet.version.to_s.chars.first.to_i == 4 ? 'puppet_gem' : 'gem'
+  Puppet.version =~ /^4/ ? 'puppet_gem' : 'gem'
 end
 
 describe 'zabbix::web' do
