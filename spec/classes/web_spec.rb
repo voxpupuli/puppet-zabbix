@@ -35,6 +35,10 @@ describe 'zabbix::web' do
       }
     end
 
+    describe 'with default settings' do
+      it { should contain_file('/etc/zabbix/web').with_ensure('directory') }
+    end
+
     describe 'with database_type as postgresql' do
       let (:params) do
         super().merge({
