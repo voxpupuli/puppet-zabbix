@@ -3,7 +3,7 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', '..'))
 require 'puppet/util/zabbix'
 
 Puppet::Type.newtype(:zabbix_application) do
-  @doc = %q{Manage zabbix applications
+  @doc = %q(Manage zabbix applications
 
     Example.
       Zabbix_application {
@@ -19,7 +19,7 @@ Puppet::Type.newtype(:zabbix_application) do
 
   It Raise exception on deleting an application which is a part of used template.
 
-  }
+  )
 
   ensurable do
     defaultvalues
