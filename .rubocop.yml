@@ -426,7 +426,7 @@ Style/Proc:
   Enabled: true
 
 Style/RaiseArgs:
-  Enabled: false
+  Enabled: true
 
 Style/RedundantBegin:
   Enabled: true
