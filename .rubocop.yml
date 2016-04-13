@@ -417,7 +417,7 @@ Style/PredicateName:
   Enabled: true
 
 Style/RedundantException:
-  Enabled: false
+  Enabled: true
 
 Style/SelfAssignment:
   Enabled: false
