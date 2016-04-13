@@ -402,7 +402,7 @@ Style/OneLineConditional:
   Enabled: true
 
 Style/OpMethod:
-  Enabled: false
+  Enabled: true
 
 Style/ParenthesesAroundCondition:
   Enabled: true
