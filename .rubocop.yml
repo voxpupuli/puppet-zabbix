@@ -408,7 +408,7 @@ Style/ParenthesesAroundCondition:
   Enabled: true
 
 Style/PercentLiteralDelimiters:
-  Enabled: false
+  Enabled: true
 
 Style/PerlBackrefs:
   Enabled: false
