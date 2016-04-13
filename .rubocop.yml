@@ -420,7 +420,7 @@ Style/RedundantException:
   Enabled: true
 
 Style/SelfAssignment:
-  Enabled: false
+  Enabled: true
 
 Style/Proc:
   Enabled: false
