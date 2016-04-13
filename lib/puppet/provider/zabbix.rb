@@ -36,7 +36,7 @@ class Puppet::Provider::Zabbix < Puppet::Provider
 
   # Get the template id from the name.
   def self.get_template_id(zbx, template)
-    return template if is_a_number?(template)
+    return template if a_number?(template)
     zbx.templates.get_id(host: template)
   end
 
@@ -71,7 +71,7 @@ class Puppet::Provider::Zabbix < Puppet::Provider
   end
 
   # Is it an number?
-  def self.is_a_number?(s)
+  def self.a_number?(s)
     s.to_s.match(/\A[+-]?\d+?(\.\d+)?\Z/).nil? ? false : true
   end
 end
