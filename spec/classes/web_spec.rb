@@ -1,5 +1,9 @@
 require 'spec_helper'
 
+def package_provider_for_gems
+  Puppet.version =~ /^4/ ? 'puppet_gem' : 'gem'
+end
+
 describe 'zabbix::web' do
   let (:node) { 'rspec.puppet.com' }
 
@@ -31,6 +35,10 @@ describe 'zabbix::web' do
       }
     end
 
+    describe 'with default settings' do
+      it { should contain_file('/etc/zabbix/web').with_ensure('directory') }
+    end
+
     describe 'with database_type as postgresql' do
       let (:params) do
         super().merge({
@@ -56,42 +64,17 @@ describe 'zabbix::web' do
 
     it { should contain_file('/etc/zabbix/web/zabbix.conf.php')}
 
-    describe "when manage_resources is true and Puppet is 4.X" do
+    describe "when manage_resources is true" do
       let (:params) do
         super().merge({
           :manage_resources => true,
         })
       end
 
-      let :facts do
-        super().merge({
-          :puppetversion  => '4.4.1'
-        })
-      end
-
       it { should contain_class('zabbix::resources::web') }
-      # disabled due to https://github.com/rodjek/rspec-puppet/issues/352
-      #it { should contain_package('zabbixapi').that_requires('Class[ruby::dev]').with_provider('puppet_gem') }
+      it { should contain_package('zabbixapi').that_requires('Class[ruby::dev]').with_provider(package_provider_for_gems) }
       it { should contain_class('ruby::dev') }
-    end
-
-    describe "when manage_resources is true and Puppet is 3.X" do
-      let (:params) do
-        super().merge({
-          :manage_resources => true,
-
-        })
-      end
-
-      let :facts do
-        super().merge({
-          :puppetversion  => '3.8.6'
-        })
-      end
-
-      it { should contain_class('zabbix::resources::web') }
-      it { should contain_package('zabbixapi').that_requires('Class[ruby::dev]').with_provider('gem') }
-      it { should contain_class('ruby::dev') }
+      it { should contain_file('/etc/zabbix/imported_templates').with_ensure('directory') }
     end
 
     describe "when manage_resources and is_pe are true" do
