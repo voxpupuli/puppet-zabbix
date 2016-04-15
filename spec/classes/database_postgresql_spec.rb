@@ -44,6 +44,7 @@ describe 'zabbix::database::postgresql' do
       it { should contain_exec('zabbix_server_create.sql').with_command("cd /usr/share/doc/zabbix-*-pgsql-2.4*/create && if [ -f schema.sql.gz ]; then gunzip schema.sql.gz ; fi && psql -h 'node01.example.com' -U 'zabbix-server' -d 'zabbix-server' -f schema.sql && touch /etc/zabbix/.schema.done") }
       it { should contain_exec('zabbix_server_images.sql').with_command("cd /usr/share/doc/zabbix-*-pgsql-2.4*/create && if [ -f images.sql.gz ]; then gunzip images.sql.gz ; fi && psql -h 'node01.example.com' -U 'zabbix-server' -d 'zabbix-server' -f images.sql && touch /etc/zabbix/.images.done") }
       it { should contain_exec('zabbix_server_data.sql').with_command("cd /usr/share/doc/zabbix-*-pgsql-2.4*/create && if [ -f data.sql.gz ]; then gunzip data.sql.gz ; fi && psql -h 'node01.example.com' -U 'zabbix-server' -d 'zabbix-server' -f data.sql && touch /etc/zabbix/.data.done") }
+      it { should contain_file('/root/.pgpass') }
     end
 
     describe "when zabbix_type is proxy" do
