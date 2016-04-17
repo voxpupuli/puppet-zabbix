@@ -66,7 +66,7 @@ describe 'zabbix::web' do
     describe 'when manage_resources is true' do
       let :params do
         super().merge(
-          manage_resources: true,
+          manage_resources: true
         )
       end
 
