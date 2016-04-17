@@ -55,8 +55,8 @@ describe 'zabbix::proxy' do
     describe 'when manage_repo is true and zabbix version is 2.4' do
       let :params do
         {
-          :manage_repo => true,
-          :zabbix_version => '2.4',
+          manage_repo: true,
+          zabbix_version: '2.4',
         }
       end
 
