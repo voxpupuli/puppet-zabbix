@@ -472,6 +472,9 @@ This module is supported on both the community as the Enterprise version of Pupp
 Please be aware, that when manage_resources is enabled, it can increase an puppet run on the zabbix-server a lot when you have a lot of hosts.
 
 ##Contributors
+
+ericsysmin will be helping and maintaining this puppet module. In Github terms he is an Collaborator. So don't be suprised if he acceps/rejects Pull Requests and comment in issues.
+
 The following have contributed to this puppet module:
 
  * Suff
@@ -486,6 +489,7 @@ The following have contributed to this puppet module:
  * genebean
  * meganuke19
  * fredprod
+ * ericsysmin
  * JvdW
  * rleemorlang
  * genebean
