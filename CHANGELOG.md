@@ -235,7 +235,7 @@ Version (Release date)
 
 0.0.1 (2014-03-18)
 
-  * Initial working version. Installing of the 
+  * Initial working version. Installing of the
     * zabbix-server
     * zabbix-agent
     * zabbix-proxy

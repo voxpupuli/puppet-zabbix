@@ -1,4 +1,4 @@
-# == Class zabbix::sender 
+# == Class zabbix::sender
 #
 #  This will install and configure the zabbix-agent deamon
 #

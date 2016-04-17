@@ -42,7 +42,7 @@
 #   has to be set.
 #
 # [*default_vhost*]
-#   When true priority of 15 is passed to zabbix vhost which would end up 
+#   When true priority of 15 is passed to zabbix vhost which would end up
 #   with marking zabbix vhost as default one, when false priority is set to 25
 #
 # [*manage_resources*]

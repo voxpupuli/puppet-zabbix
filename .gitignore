@@ -9,4 +9,5 @@ Gemfile.lock
 .project
 /.bundle
 /vendor
+/.vendor
 /coverage

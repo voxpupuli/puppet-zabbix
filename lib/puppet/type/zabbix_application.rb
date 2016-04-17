@@ -1,8 +1,9 @@
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..",".."))
+# encoding: utf-8
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', '..'))
 require 'puppet/util/zabbix'
 
 Puppet::Type.newtype(:zabbix_application) do
-  @doc = %q{Manage zabbix applications
+  @doc = %q(Manage zabbix applications
 
     Example.
       Zabbix_application {
@@ -18,19 +19,19 @@ Puppet::Type.newtype(:zabbix_application) do
 
   It Raise exception on deleting an application which is a part of used template.
 
-  }
+  )
 
   ensurable do
     defaultvalues
     defaultto :present
   end
 
-  newparam(:name, :namevar => true) do
+  newparam(:name, namevar: true) do
     desc 'application name'
   end
 
   newparam(:template) do
-    desc "template to which the application is linked"
+    desc 'template to which the application is linked'
   end
 
   Puppet::Util::Zabbix.add_zabbix_type_methods(self)

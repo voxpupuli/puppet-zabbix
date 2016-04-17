@@ -1,10 +1,11 @@
+# encoding: utf-8
 Puppet::Type.newtype(:zabbix_host) do
   ensurable do
     defaultvalues
     defaultto :present
   end
 
-  newparam(:hostname, :namevar => true) do
+  newparam(:hostname, namevar: true) do
     desc 'FQDN of the machine.'
   end
 
@@ -52,4 +53,3 @@ Puppet::Type.newtype(:zabbix_host) do
     desc 'If apache is uses with ssl'
   end
 end
-
