@@ -1,57 +1,60 @@
+# encoding: utf-8
 require 'spec_helper'
 
 describe 'zabbix::javagateway' do
-  let (:node) { 'rspec.puppet.com' }
+  let :node do
+    'rspec.puppet.com'
+  end
 
   context 'On RedHat 6.5' do
-    let (:facts) do
+    let :facts do
       {
-        :osfamily                   => 'RedHat',
-        :operatingsystem            => 'RedHat',
-        :operatingsystemrelease     => '6.5',
-        :operatingsystemmajrelease  => '6',
-        :architecture               => 'x86_64',
-        :lsbdistid                  => 'RedHat',
-        :concat_basedir             => '/tmp',
-        :is_pe                      => false,
-        :puppetversion              => Puppet.version,
-        :facterversion              => Facter.version,
-        :ipaddress                  => '192.168.1.10',
-        :lsbdistcodename            => '',
-        :id                         => 'root',
-        :kernel                     => 'Linux',
-        :path                       => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
+        osfamily: 'RedHat',
+        operatingsystem: 'RedHat',
+        operatingsystemrelease: '6.5',
+        operatingsystemmajrelease: '6',
+        architecture: 'x86_64',
+        lsbdistid: 'RedHat',
+        concat_basedir: '/tmp',
+        is_pe: false,
+        puppetversion: Puppet.version,
+        facterversion: Facter.version,
+        ipaddress: '192.168.1.10',
+        lsbdistcodename: '',
+        id: 'root',
+        kernel: 'Linux',
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
       }
     end
 
-    it { should contain_file('/etc/zabbix/zabbix_java_gateway.conf')}
-    it { should contain_service('zabbix-java-gateway')}
-    it { should contain_package('zabbix-java-gateway')}
+    it { should contain_file('/etc/zabbix/zabbix_java_gateway.conf') }
+    it { should contain_service('zabbix-java-gateway') }
+    it { should contain_package('zabbix-java-gateway') }
 
     context 'when declaring manage_repo is true' do
-      let (:params) do
+      let :params do
         {
-          :manage_repo => true,
+          manage_repo: true
         }
       end
 
       it { should contain_class('Zabbix::Repo') }
     end
 
-    context "when declaring manage_firewall is true" do
+    context 'when declaring manage_firewall is true' do
       let(:params) do
         {
-          :manage_firewall => true,
+          manage_firewall: true
         }
       end
 
       it { should contain_firewall('152 zabbix-javagateway') }
     end
 
-    context "when declaring manage_firewall is false" do
+    context 'when declaring manage_firewall is false' do
       let(:params) do
         {
-          :manage_firewall => false,
+          manage_firewall: false
         }
       end
 
@@ -61,10 +64,10 @@ describe 'zabbix::javagateway' do
     context 'with zabbix_java_gateway.conf settings' do
       let(:params) do
         {
-          :listenip => '192.168.1.1',
-          :listenport => '10052',
-          :pidfile => '/var/run/zabbix/zabbix_java.pid',
-          :startpollers => '5',
+          listenip: '192.168.1.1',
+          listenport: '10052',
+          pidfile: '/var/run/zabbix/zabbix_java.pid',
+          startpollers: '5'
         }
       end
 

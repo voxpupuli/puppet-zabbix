@@ -1,10 +1,11 @@
+# encoding: utf-8
 Puppet::Type.newtype(:zabbix_template) do
   ensurable do
     defaultvalues
     defaultto :present
   end
 
-  newparam(:template_name, :namevar => true) do
+  newparam(:template_name, namevar: true) do
     desc 'The name of template.'
   end
 
@@ -28,4 +29,3 @@ Puppet::Type.newtype(:zabbix_template) do
     desc 'If apache is uses with ssl'
   end
 end
-

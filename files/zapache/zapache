@@ -12,13 +12,13 @@
 #
 # Version: 1.5
 #
- 
+
 zapachever="1.5"
 rval=0
 value=""
 cache_seconds="60"
 [ "$TMPDIR" ] || TMPDIR=/tmp
- 
+
 function usage()
 {
 	echo "zapache version: $zapachever"
@@ -117,7 +117,7 @@ if ! [ -s "$cache" ]; then
 	echo "ZBX_NOTSUPPORTED"
 	exit 1
 fi
- 
+
 case "$CASE_VALUE" in
 'TotalAccesses')
 	value="`awk '/^Total Accesses:/ {print $3}' < \"$cache\"`"
@@ -187,13 +187,13 @@ esac
 if [ "$rval" -eq 0 -a -z "$value" ]; then
 	rval=1
 fi
- 
+
 if [ "$rval" -ne 0 ]; then
 	echo "ZBX_NOTSUPPORTED"
 fi
- 
+
 echo "$value"
 exit $rval
- 
+
 #
 # end zapache

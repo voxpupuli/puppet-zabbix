@@ -1,42 +1,45 @@
+# encoding: utf-8
 require 'spec_helper'
 
 describe 'zabbix::database::postgresql' do
-  let (:node) { 'rspec.puppet.com' }
+  let :node do
+    'rspec.puppet.com'
+  end
 
-  let (:pre_condition) do
-    "include ::postgresql::server"
+  let :pre_condition do
+    'include ::postgresql::server'
   end
 
   context 'On RedHat 6.5' do
-    let (:facts) do
+    let :facts do
       {
-        :osfamily                   => 'RedHat',
-        :operatingsystem            => 'RedHat',
-        :operatingsystemrelease     => '6.5',
-        :operatingsystemmajrelease  => '6',
-        :architecture               => 'x86_64',
-        :lsbdistid                  => 'RedHat',
-        :concat_basedir             => '/tmp',
-        :is_pe                      => false,
-        :puppetversion              => Puppet.version,
-        :facterversion              => Facter.version,
-        :ipaddress                  => '192.168.1.10',
-        :lsbdistcodename            => '',
-        :id                         => 'root',
-        :kernel                     => 'Linux',
-        :path                       => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
+        osfamily: 'RedHat',
+        operatingsystem: 'RedHat',
+        operatingsystemrelease: '6.5',
+        operatingsystemmajrelease: '6',
+        architecture: 'x86_64',
+        lsbdistid: 'RedHat',
+        concat_basedir: '/tmp',
+        is_pe: false,
+        puppetversion: Puppet.version,
+        facterversion: Facter.version,
+        ipaddress: '192.168.1.10',
+        lsbdistcodename: '',
+        id: 'root',
+        kernel: 'Linux',
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
       }
     end
 
-    describe "when zabbix_type is server" do
-      let (:params) do
+    describe 'when zabbix_type is server' do
+      let :params do
         {
-          :database_name     => 'zabbix-server',
-          :database_user     => 'zabbix-server',
-          :database_password => 'zabbix-server',
-          :database_host     => 'node01.example.com',
-          :zabbix_type       => 'server',
-          :zabbix_version    => '2.4',
+          database_name: 'zabbix-server',
+          database_user: 'zabbix-server',
+          database_password: 'zabbix-server',
+          database_host: 'node01.example.com',
+          zabbix_type: 'server',
+          zabbix_version: '2.4'
         }
       end
 
@@ -47,15 +50,15 @@ describe 'zabbix::database::postgresql' do
       it { should contain_file('/root/.pgpass') }
     end
 
-    describe "when zabbix_type is proxy" do
-      let (:params) do
+    describe 'when zabbix_type is proxy' do
+      let :params do
         {
-          :database_name     => 'zabbix-proxy',
-          :database_user     => 'zabbix-proxy',
-          :database_password => 'zabbix-proxy',
-          :database_host     => 'node01.example.com',
-          :zabbix_type       => 'proxy',
-          :zabbix_version    => '2.4',
+          database_name: 'zabbix-proxy',
+          database_user: 'zabbix-proxy',
+          database_password: 'zabbix-proxy',
+          database_host: 'node01.example.com',
+          zabbix_type: 'proxy',
+          zabbix_version: '2.4'
         }
       end
 
