@@ -34,6 +34,9 @@ Lint/ShadowingOuterLocalVariable:
 Lint/LiteralInInterpolation:
   Enabled: true
 
+Style/HashSyntax:
+  Enabled: true
+
 Style/RedundantReturn:
   Enabled: true
 
