@@ -1,7 +1,7 @@
 # Contributing
 
-Thank you for making time to (consider) creating an Pull Request for this 
-Puppet Module. I Know this puppet module has bugs or missing features and 
+Thank you for making time to (consider) creating an Pull Request for this
+Puppet Module. I Know this puppet module has bugs or missing features and
 that is something you can help me with. When an Pull Request is accepted
 your (github) name will be placed in the Contributors of Fame list. 8-)
 
@@ -19,8 +19,8 @@ your (github) name will be placed in the Contributors of Fame list. 8-)
     * This is usually the master branch.
     * Only target release branches if you are certain your fix must be on that
     branch.
-    * To quickly create a topic branch based on master; 
-    `git checkout -b fix/master/my_contribution master`. 
+    * To quickly create a topic branch based on master;
+    `git checkout -b fix/master/my_contribution master`.
     Please avoid working directly on the `master` branch.
 * Make commits of logical units.
 * Make sure you have added the necessary tests for your changes.
@@ -28,12 +28,12 @@ your (github) name will be placed in the Contributors of Fame list. 8-)
 
 ## Documentation
 
-For changes of a trivial nature to comments and documentation, it is not 
-necessary to create a new issue.    
+For changes of a trivial nature to comments and documentation, it is not
+necessary to create a new issue.
 
 ## Submitting Changes
 
 * Push your changes to a topic branch in your fork of the repository.
 * Submit a pull request to the repository in the puppetlabs organization.
-* 
+*
 * I'll try to review the Pull Request as soon as I'm able to do.
