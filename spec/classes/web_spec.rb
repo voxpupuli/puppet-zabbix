@@ -65,9 +65,9 @@ describe 'zabbix::web' do
 
     describe 'when manage_resources is true' do
       let :params do
-        super().merge({
+        super().merge(
           :manage_resources => true,
-        })
+        )
       end
 
       it { should contain_class('zabbix::resources::web') }
