@@ -62,7 +62,7 @@ describe 'zabbix::proxy' do
 
       it { should contain_class('zabbix::repo').with_zabbix_version('2.4') }
       it { should contain_package('zabbix-proxy-pgsql').with_require('Class[Zabbix::Repo]') }
-      it {should contain_package('zabbix-proxy').with_ensure('present') }
+      it { should contain_package('zabbix-proxy').with_ensure('present') }
     end
 
     describe 'when database_type is postgresql' do
