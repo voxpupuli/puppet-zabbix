@@ -1,10 +1,11 @@
+# encoding: utf-8
 Puppet::Type.newtype(:zabbix_proxy) do
   ensurable do
     defaultvalues
     defaultto :present
   end
 
-  newparam(:hostname, :namevar => true) do
+  newparam(:hostname, namevar: true) do
     desc 'FQDN of the machine.'
   end
 
@@ -39,7 +40,7 @@ Puppet::Type.newtype(:zabbix_proxy) do
   newparam(:zabbix_pass) do
     desc 'Zabbix-api password.'
   end
-    
+
   newparam(:apache_use_ssl) do
     desc 'If apache is uses with ssl'
   end
