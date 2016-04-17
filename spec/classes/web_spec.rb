@@ -63,7 +63,7 @@ describe 'zabbix::web' do
 
     it { should contain_file('/etc/zabbix/web/zabbix.conf.php') }
 
-    describe "when manage_resources is true" do
+    describe 'when manage_resources is true' do
       let :params do
         super().merge({
           :manage_resources => true,
