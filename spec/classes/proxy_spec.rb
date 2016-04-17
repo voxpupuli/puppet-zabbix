@@ -41,7 +41,7 @@ describe 'zabbix::proxy' do
     it { should contain_file('/etc/zabbix/zabbix_proxy.conf.d').with_ensure('directory') }
     it { should contain_file('/etc/zabbix/zabbix_proxy.conf.d').with_require('File[/etc/zabbix/zabbix_proxy.conf]') }
 
-    describe "when manage_repo is true and zabbix version is unset" do
+    describe 'when manage_repo is true and zabbix version is unset' do
       let :params do
         {
           manage_repo: true
@@ -52,7 +52,7 @@ describe 'zabbix::proxy' do
       it { should contain_package('zabbix-proxy-pgsql').with_require('Class[Zabbix::Repo]') }
     end
 
-    describe "when manage_repo is true and zabbix version is 2.4" do
+    describe 'when manage_repo is true and zabbix version is 2.4' do
       let :params do
         {
           :manage_repo => true,
@@ -65,7 +65,7 @@ describe 'zabbix::proxy' do
       it {should contain_package('zabbix-proxy').with_ensure('present') }
     end
 
-    describe "when database_type is postgresql" do
+    describe 'when database_type is postgresql' do
       let :params do
         {
           database_type: 'postgresql'
