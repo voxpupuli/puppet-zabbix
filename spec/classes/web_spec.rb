@@ -41,6 +41,14 @@ describe 'zabbix::web' do
 
     describe 'with default settings' do
       it { should contain_file('/etc/zabbix/web').with_ensure('directory') }
+      it { should_not contain_selboolean('httpd_can_connect_zabbix') }
+    end
+
+    describe 'with enabled selinux' do
+      let :facts do
+        super().merge(selinux_config_mode: 'enforcing')
+      end
+      it { should contain_selboolean('httpd_can_connect_zabbix').with('value' => 'on', 'persistent' => true) }
     end
 
     describe 'with database_type as postgresql' do
