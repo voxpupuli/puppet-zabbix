@@ -34,8 +34,18 @@ describe 'zabbix::server' do
       }
     end
 
-    it { should contain_class('zabbix::repo') }
-    it { should contain_service('zabbix-server').with_ensure('running') }
+    describe 'with default settings' do
+      it { should contain_class('zabbix::repo') }
+      it { should contain_service('zabbix-server').with_ensure('running') }
+      it { should_not contain_selboolean('zabbix_can_network') }
+    end
+
+    describe 'with enabled selinux' do
+      let :facts do
+        super().merge(selinux_config_mode: 'enforcing')
+      end
+      it { should contain_selboolean('zabbix_can_network').with('value' => 'on', 'persistent' => true) }
+    end
 
     describe 'with database_type as postgresql' do
       let :params do
