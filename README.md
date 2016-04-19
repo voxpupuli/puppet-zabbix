@@ -473,7 +473,7 @@ Please be aware, that when manage_resources is enabled, it can increase an puppe
 
 ##Contributors
 
-ericsysmin will be helping and maintaining this puppet module. In Github terms he is an Collaborator. So don't be suprised if he acceps/rejects Pull Requests and comment in issues.
+*ericsysmin* will be helping and maintaining this puppet module. In Github terms he is an Collaborator. So don't be suprised if he acceps/rejects Pull Requests and comment in issues.
 
 The following have contributed to this puppet module:
 
