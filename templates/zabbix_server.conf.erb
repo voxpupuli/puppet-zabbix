@@ -28,7 +28,7 @@ ListenPort=<%= @listenport %>
 # SourceIP=
 <% if @sourceip %>SourceIP=<%= @sourceip %><% end -%>
 
-<% if @zabbix_version.to_f >= 3.0 %>
+<% if @zabbix_version.to_f >= 3.0 -%>
 ### Option: LogType
 #	Specifies where log messages are written to:
 #		system  - syslog
@@ -154,12 +154,12 @@ StartHTTPPollers=<%= @starthttppollers %>
 #
 StartTimers=<%= @starttimers %>
 
-<% if @zabbix_version.to_f >= 3.0 %>
+<% if @zabbix_version.to_f >= 3.0 -%>
 ### Option: StartEscalators
 #   Number of pre-forked instances of escalators.
 #
-<% if @startescalators %>StartEscalators=<%= @startescalators %><% end %>
-<% end %>
+<% if @startescalators %>StartEscalators=<%= @startescalators %><% end -%>
+<% end -%>
 
 <% if @javagateway %>
 ### Option: JavaGateway
