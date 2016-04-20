@@ -158,10 +158,10 @@ StartTimers=<%= @starttimers %>
 ### Option: StartEscalators
 #   Number of pre-forked instances of escalators.
 #
-<% if @startescalators -%>StartEscalators=<%= @startescalators %><% end -%>
+<% if @startescalators %>StartEscalators=<%= @startescalators %><% end -%>
 <% end -%>
 
-<% if @javagateway %>
+<% if @javagateway -%>
 ### Option: JavaGateway
 #	IP address (or hostname) of Zabbix Java gateway.
 #	Only required if Java pollers are started.
@@ -177,7 +177,7 @@ JavaGatewayPort=<%= @javagatewayport %>
 #	Number of pre-forked instances of Java pollers.
 #
 StartJavaPollers=<%= @startjavapollers %>
-<% end %>
+<% end -%>
 
 ### Option: StartVMwareCollectors
 #	Number of pre-forked vmware collector instances.
@@ -192,7 +192,7 @@ VMwareFrequency=<%= @vmwarefrequency %>
 ### Option: VMwarePerfFrequency
 #   How often Zabbix will connect to VMware service to obtain performance data.
 #
-<% if @vmwareperffrequency -%>VMwarePerfFrequency=<%= @vmwareperffrequency %><% end -%>
+<% if @vmwareperffrequency %>VMwarePerfFrequency=<%= @vmwareperffrequency %><% end -%>
 
 ### Option: VMwareCacheSize
 #   Size of VMware cache, in bytes.
@@ -204,7 +204,7 @@ VMwareCacheSize=<%= @vmwarecachesize %>
 ### Option: VMwareTimeout
 #   Specifies how many seconds vmware collector waits for response from VMware service.
 #
-<% if @vmwaretimeout -%>VMwareTimeout=<%= @vmwaretimeout %><% end -%>
+<% if @vmwaretimeout %>VMwareTimeout=<%= @vmwaretimeout %><% end -%>
 
 <% if @zabbix_version.to_f < 2.4 -%>
 ### Option: EnableSNMPBulkRequests
@@ -212,7 +212,7 @@ VMwareCacheSize=<%= @vmwarecachesize %>
 #   0 - disable
 #   1 - enable
 #
-<% if @enablesnmpbulkrequests -%>EnableSNMPBulkRequests=<%= @enablesnmpbulkrequests %><% end -%>
+<% if @enablesnmpbulkrequests %>EnableSNMPBulkRequests=<%= @enablesnmpbulkrequests %><% end -%>
 <% end -%>
 
 ### Option: SNMPTrapperFile
@@ -230,7 +230,7 @@ StartSNMPTrapper=<%= @startsnmptrapper %>
 #   List of comma delimited IP addresses that the trapper should listen on.
 #   Trapper will listen on all network interfaces if this parameter is missing.
 #
-<% if @listenip -%>ListenIP=<%= @listenip %><% end -%>
+<% if @listenip %>ListenIP=<%= @listenip %><% end -%>
 
 ### Option: HousekeepingFrequency
 #   How often Zabbix will perform housekeeping procedure (in hours).
@@ -283,7 +283,7 @@ HistoryCacheSize=<%= @historycachesize %>
 #   Size of history index cache, in bytes.
 #   Shared memory size for indexing history cache.
 #
-<% if @historyindexcachesize -%>HistoryIndexCacheSize=<%= @historyindexcachesize %><% end -%>
+<% if @historyindexcachesize %>HistoryIndexCacheSize=<%= @historyindexcachesize %><% end -%>
 <% end -%>
 
 ### Option: TrendCacheSize
@@ -374,7 +374,7 @@ Fping6Location=<%= @fping6location %>
 ### Option: SSHKeyLocation
 #   Location of public and private keys for SSH checks and actions.
 #
-<% if @sshkeylocation -%>SSHKeyLocation=<%= @sshkeylocation %><% end -%>
+<% if @sshkeylocation %>SSHKeyLocation=<%= @sshkeylocation %><% end -%>
 
 ### Option: LogSlowQueries
 #   How long a database query may take before being logged (in milliseconds).
@@ -421,7 +421,7 @@ AllowRoot=<%= @allowroot %>
 # Mandatory: no
 # Default:
 # User=zabbix
-<% if @zabbix_user %>User=<%= @zabbix_user %><% end %>
+<% if @zabbix_user %>User=<%= @zabbix_user %><% end -%>
 
 ### Option: Include
 #   You may include individual files or all files in a directory in the configuration file.
@@ -447,7 +447,7 @@ SSLKeyLocation=<%= @sslkeylocation_dir %>
 #   If not set, system-wide directory will be used.
 #   This parameter is used only in web monitoring.
 #
-<% if @sslcalocation_dir -%>SSLCALocation=<%= @sslcalocation_dir %><% end -%>
+<% if @sslcalocation_dir %>SSLCALocation=<%= @sslcalocation_dir %><% end -%>
 <% end -%>
 
 ####### LOADABLE MODULES #######
@@ -464,7 +464,7 @@ LoadModulePath=<%= @loadmodulepath %>
 #   The modules must be located in directory specified by LoadModulePath.
 #   It is allowed to include multiple LoadModule parameters.
 #
-<% if @loadmodule -%>LoadModule = <%= @loadmodule %><% end -%>
+<% if @loadmodule %>LoadModule = <%= @loadmodule %><% end -%>
 
 <% if @zabbix_version.to_f >= 3.0 -%>
 ####### TLS-RELATED PARAMETERS #######
@@ -476,7 +476,7 @@ LoadModulePath=<%= @loadmodulepath %>
 # Mandatory: no
 # Default:
 # TLSCAFile=
-<% if @tlscafile %>TLSCAFile=<%= @tlscafile %><% end %>
+<% if @tlscafile %>TLSCAFile=<%= @tlscafile %><% end -%>
 
 ### Option: TLSCRLFile
 #	Full pathname of a file containing revoked certificates.
@@ -484,7 +484,7 @@ LoadModulePath=<%= @loadmodulepath %>
 # Mandatory: no
 # Default:
 # TLSCRLFile=
-<% if @tlscrlfile %>TLSCRLFile=<%= @tlscrlfile %><% end %>
+<% if @tlscrlfile %>TLSCRLFile=<%= @tlscrlfile %><% end -%>
 
 ### Option: TLSCertFile
 #	Full pathname of a file containing the server certificate or certificate chain.
@@ -492,7 +492,7 @@ LoadModulePath=<%= @loadmodulepath %>
 # Mandatory: no
 # Default:
 # TLSCertFile=
-<% if @tlscertfile %>TLSCertFile=<%= @tlscertfile %><% end %>
+<% if @tlscertfile %>TLSCertFile=<%= @tlscertfile %><% end -%>
 
 ### Option: TLSKeyFile
 #	Full pathname of a file containing the server private key.
@@ -500,6 +500,5 @@ LoadModulePath=<%= @loadmodulepath %>
 # Mandatory: no
 # Default:
 # TLSKeyFile=
-<% if @tlskeyfile %>TLSKeyFile=<%= @tlskeyfile %><% end %>
-
-<% end %>
+<% if @tlskeyfile %>TLSKeyFile=<%= @tlskeyfile %><% end -%>
+<% end -%>
