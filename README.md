@@ -20,6 +20,7 @@ Continuous Integration status:
     * [zabbix-agent](#usage-zabbix-agent)
     * [zabbix-proxy](#usage-zabbix-proxy)
     * [zabbix-javagateway](#usage-zabbix-javagateway)
+    * [zabbix-sender](#usage-zabbix-sender)
     * [zabbix-userparameters](#usage-zabbix-userparameters)
     * [zabbix-template](#usage-zabbix-template)
 6. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
@@ -43,12 +44,13 @@ This module contains the classes for installing and configuring the following za
   - zabbix-agent
   - zabbix-proxy
   - zabbix-javagateway
+  - zabbix-sender
 
 This readme will contain all basic information to get you started. Some more information can be found on the github wiki, location: https://github.com/dj-wasabi/puppet-zabbix/wiki
 
 
 ##Module Description
-When using this module, you can monitor your whole environment with zabbix. It can install the various zabbix components like the server and agent, but you will also be able to install specific "userparameter" file which zabbix can use for monitoring.  
+When using this module, you can monitor your whole environment with zabbix. It can install the various zabbix components like the server and agent, but you will also be able to install specific "userparameter" file which zabbix can use for monitoring.
 
 With the 0.4.0 release, you can - when you have configured exported resources - configure agents and proxies in the webinterface. So when you add an zabbix::agent to an host, it first install the agent onto the host. It will send some data to the puppetdb and when puppet runs on the zabbix-server it will create this new host via the zabbix-api.
 
@@ -251,6 +253,12 @@ node server11.example.com {
     javagateway        => '192.168.20.15',
   }
 }
+```
+###Usage zabbix-sender
+
+The zabbix-sender installation is quite simple and straightforward:
+```ruby
+include zabbix::sender
 ```
 ###Usage zabbix-userparameters
 Using an 'source' file:
@@ -464,6 +472,9 @@ This module is supported on both the community as the Enterprise version of Pupp
 Please be aware, that when manage_resources is enabled, it can increase an puppet run on the zabbix-server a lot when you have a lot of hosts.
 
 ##Contributors
+
+**ericsysmin** will be helping and maintaining this puppet module. In Github terms he is an Collaborator. So don't be suprised if he acceps/rejects Pull Requests and comment in issues.
+
 The following have contributed to this puppet module:
 
  * Suff
@@ -478,6 +489,7 @@ The following have contributed to this puppet module:
  * genebean
  * meganuke19
  * fredprod
+ * ericsysmin
  * JvdW
  * rleemorlang
  * genebean
@@ -514,6 +526,8 @@ The following have contributed to this puppet module:
  * ITler
  * slashr00t
  * channone-arif-nbcuni
+ * BcTpe4HbIu
+ * vide
 
 Many thanks for this!
 (If I have forgotten you, please let me know and put you in the list of fame. :-))

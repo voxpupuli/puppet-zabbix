@@ -18,6 +18,9 @@
 #   The state of the package that needs to be installed: present or latest.
 #   Default: present
 #
+# [*zabbix_package_agent*]
+#   The name of the agent package that we manage
+#
 # [*manage_firewall*]
 #   When true, it will create iptables rules.
 #
@@ -200,6 +203,7 @@
 class zabbix::agent (
   $zabbix_version        = $zabbix::params::zabbix_version,
   $zabbix_package_state  = $zabbix::params::zabbix_package_state,
+  $zabbix_package_agent  = $zabbix::params::zabbix_package_agent,
   $manage_firewall       = $zabbix::params::manage_firewall,
   $manage_repo           = $zabbix::params::manage_repo,
   $manage_resources      = $zabbix::params::manage_resources,
@@ -304,7 +308,7 @@ class zabbix::agent (
   }
 
   # Installing the package
-  package { 'zabbix-agent':
+  package { $zabbix_package_agent:
     ensure  => $zabbix_package_state,
     require => Class['zabbix::repo'],
   }
@@ -315,7 +319,7 @@ class zabbix::agent (
     enable     => true,
     hasstatus  => true,
     hasrestart => true,
-    require    => Package['zabbix-agent'],
+    require    => Package[$zabbix_package_agent],
   }
 
   # Configuring the zabbix-agent configuration file
@@ -325,7 +329,7 @@ class zabbix::agent (
     group   => 'zabbix',
     mode    => '0644',
     notify  => Service['zabbix-agent'],
-    require => Package['zabbix-agent'],
+    require => Package[$zabbix_package_agent],
     replace => true,
     content => template('zabbix/zabbix_agentd.conf.erb'),
   }

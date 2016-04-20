@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe 'zabbix::userparameter' do
+describe 'zabbix::sender' do
   let :node do
     'agent.example.com'
   end
@@ -26,6 +26,20 @@ describe 'zabbix::userparameter' do
         path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
       }
     end
-    it { should compile }
+
+    # Make sure package will be installed, service running and ensure of directory.
+    it { should contain_package('zabbix-sender').with_ensure('present') }
+    it { should contain_package('zabbix-sender').with_name('zabbix-sender') }
+
+    context 'when declaring manage_repo is true' do
+      let :params do
+        {
+          manage_repo: true
+        }
+      end
+
+      it { should contain_class('zabbix::repo').with_zabbix_version('3.0') }
+      it { should contain_package('zabbix-sender').with_require('Class[Zabbix::Repo]') }
+    end
   end
 end

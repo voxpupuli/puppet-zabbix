@@ -4,6 +4,21 @@ Below an overview of all changes in the releases.
 
 Version (Release date)
 
+2.3.0
+
+  * Enhance spec testing #206 (By pull request: bastelfreak (Thanks!))
+  * Update rubocop #204 (By pull request: bastelfreak (Thanks!))
+  * Update rspec #203 (By pull request: bastelfreak (Thanks!))
+  * [WIP]Add archlinux #201 (By pull request: bastelfreak (Thanks!))
+  * Fix for: Web interface config file readable by all (contains unencrypted database password) #200
+  * there is no zabbix proxy package in zbx-3.0 #198 (By pull request: BcTpe4HbIu (Thanks!))
+  * Zabbix as default vhost #180 #196 (By pull request: szemlyanoy (Thanks!))
+  * fix wrong comment for configfrequency #192 (By pull request: BcTpe4HbIu (Thanks!))
+  * Add Zabbix sender support #195 (By pull request: vide (Thanks!))
+  * Update zabbixapi gem to 2.4.7 form Zabbix 3.0
+  * ericsysmin is added as an Collaborator. He will help maintain this puppet module.
+  
+
 2.2.0   (2016-03-06)
 
   * Adjust server config and databases sqls for 3.0 #167 (By pull request: slashr00t (Thanks!))
@@ -235,7 +250,7 @@ Version (Release date)
 
 0.0.1 (2014-03-18)
 
-  * Initial working version. Installing of the 
+  * Initial working version. Installing of the
     * zabbix-server
     * zabbix-agent
     * zabbix-proxy

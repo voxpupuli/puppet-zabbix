@@ -13,23 +13,30 @@
 class zabbix::params {
   # It seems that ubuntu has an different fping path...
   case $::operatingsystem {
-    'ubuntu' : {
+    'ubuntu', 'debian' : {
       $server_fpinglocation  = '/usr/bin/fping'
       $server_fping6location = '/usr/bin/fping6'
       $proxy_fpinglocation   = '/usr/bin/fping'
       $proxy_fping6location  = '/usr/bin/fping6'
+      $manage_repo           = true
+      $zabbix_package_agent  = 'zabbix-agent'
     }
-    'debian' : {
+    'Archlinux': {
       $server_fpinglocation  = '/usr/bin/fping'
       $server_fping6location = '/usr/bin/fping6'
       $proxy_fpinglocation   = '/usr/bin/fping'
       $proxy_fping6location  = '/usr/bin/fping6'
+      $manage_repo = false
+      $zabbix_package_agent  = 'zabbix3-agent'
+
     }
     default  : {
       $server_fpinglocation  = '/usr/sbin/fping'
       $server_fping6location = '/usr/sbin/fping6'
       $proxy_fpinglocation   = '/usr/sbin/fping'
       $proxy_fping6location  = '/usr/sbin/fping6'
+      $manage_repo           = true
+      $zabbix_package_agent  = 'zabbix-agent'
     }
   }
 
@@ -46,8 +53,8 @@ class zabbix::params {
   $zabbix_web                               = 'localhost'
   $zabbix_web_ip                            = '127.0.0.1'
   $manage_database                          = true
+  $default_vhost                            = false
   $manage_firewall                          = false
-  $manage_repo                              = true
   $repo_location                            = ''
   $manage_resources                         = false
   $manage_vhost                             = true

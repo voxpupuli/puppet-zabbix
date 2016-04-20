@@ -112,7 +112,7 @@
 #   Unique nodeid in distributed setup.
 #
 # [*configfrequency*]
-#   Unique nodeid in distributed setup.
+#   How often proxy retrieves configuration data from Zabbix Server in seconds.
 #
 # [*datasenderfrequency*]
 #   Proxy will send collected data to the Server every N seconds.
@@ -487,6 +487,8 @@ class zabbix::proxy (
         }
       }
 
+      'sqlite'      : {}
+
       default      : {
         fail("Unrecognized database type for proxy: ${database_type}")
       }
@@ -507,9 +509,12 @@ class zabbix::proxy (
   # Now we are going to install the correct packages.
   case $::operatingsystem {
     'redhat', 'centos', 'oraclelinux' : {
-      package { 'zabbix-proxy':
-        ensure  => $zabbix_package_state,
-        require => Package["zabbix-proxy-${db}"],
+      #There is no zabbix-proxy package in 3.0
+      if versioncmp('3.0',$zabbix_version) > 0 {
+        package { 'zabbix-proxy':
+          ensure  => $zabbix_package_state,
+          require => Package["zabbix-proxy-${db}"],
+        }
       }
 
       # Installing the packages
