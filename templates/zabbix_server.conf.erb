@@ -35,7 +35,7 @@ ListenPort=<%= @listenport %>
 #		file    - file specified with LogFile parameter
 #		console - standard output
 #
-<% if @logtype %>LogType=<%= @logtype %><% end %>
+<% if @logtype %>LogType=<%= @logtype %><% end -%>
 <% end -%>
 
 ### Option: LogFile
@@ -158,7 +158,7 @@ StartTimers=<%= @starttimers %>
 ### Option: StartEscalators
 #   Number of pre-forked instances of escalators.
 #
-<% if @startescalators %>StartEscalators=<%= @startescalators %><% end -%>
+<% if @startescalators -%>StartEscalators=<%= @startescalators %><% end -%>
 <% end -%>
 
 <% if @javagateway %>
@@ -192,7 +192,7 @@ VMwareFrequency=<%= @vmwarefrequency %>
 ### Option: VMwarePerfFrequency
 #   How often Zabbix will connect to VMware service to obtain performance data.
 #
-<% if @vmwareperffrequency %>VMwarePerfFrequency=<%= @vmwareperffrequency %><% end %>
+<% if @vmwareperffrequency -%>VMwarePerfFrequency=<%= @vmwareperffrequency %><% end -%>
 
 ### Option: VMwareCacheSize
 #   Size of VMware cache, in bytes.
@@ -204,7 +204,7 @@ VMwareCacheSize=<%= @vmwarecachesize %>
 ### Option: VMwareTimeout
 #   Specifies how many seconds vmware collector waits for response from VMware service.
 #
-<% if @vmwaretimeout %>VMwareTimeout=<%= @vmwaretimeout %><% end %>
+<% if @vmwaretimeout -%>VMwareTimeout=<%= @vmwaretimeout %><% end -%>
 
 <% if @zabbix_version.to_f < 2.4 -%>
 ### Option: EnableSNMPBulkRequests
@@ -212,7 +212,7 @@ VMwareCacheSize=<%= @vmwarecachesize %>
 #   0 - disable
 #   1 - enable
 #
-<% if @enablesnmpbulkrequests %>EnableSNMPBulkRequests=<%= @enablesnmpbulkrequests %><% end %>
+<% if @enablesnmpbulkrequests -%>EnableSNMPBulkRequests=<%= @enablesnmpbulkrequests %><% end -%>
 <% end -%>
 
 ### Option: SNMPTrapperFile
@@ -230,7 +230,7 @@ StartSNMPTrapper=<%= @startsnmptrapper %>
 #   List of comma delimited IP addresses that the trapper should listen on.
 #   Trapper will listen on all network interfaces if this parameter is missing.
 #
-<% if @listenip %>ListenIP=<%= @listenip %><% end %>
+<% if @listenip -%>ListenIP=<%= @listenip %><% end -%>
 
 ### Option: HousekeepingFrequency
 #   How often Zabbix will perform housekeeping procedure (in hours).
@@ -278,13 +278,13 @@ StartDBSyncers=<%= @startdbsyncers %>
 #
 HistoryCacheSize=<%= @historycachesize %>
 
-<% if @zabbix_version.to_f >= 3.0 %>
+<% if @zabbix_version.to_f >= 3.0 -%>
 ### Option: HistoryIndexCacheSize
 #   Size of history index cache, in bytes.
 #   Shared memory size for indexing history cache.
 #
-<% if @historyindexcachesize %>HistoryIndexCacheSize=<%= @historyindexcachesize %><% end %>
-<% end %>
+<% if @historyindexcachesize -%>HistoryIndexCacheSize=<%= @historyindexcachesize %><% end -%>
+<% end -%>
 
 ### Option: TrendCacheSize
 #   Size of trend cache, in bytes.
@@ -292,13 +292,13 @@ HistoryCacheSize=<%= @historycachesize %>
 #
 TrendCacheSize=<%= @trendcachesize %>
 
-<% if @zabbix_version.to_f <= 2.4 %>
+<% if @zabbix_version.to_f <= 2.4 -%>
 ### Option: HistoryTextCacheSize
 #   Size of text history cache, in bytes.
 #   Shared memory size for storing character, text or log history data.
 #
 HistoryTextCacheSize=<%= @historytextcachesize %>
-<% end %>
+<% end -%>
 
 ### Option: ValueCacheSize
 #   Size of history value cache, in bytes.
@@ -307,7 +307,7 @@ HistoryTextCacheSize=<%= @historytextcachesize %>
 #
 ValueCacheSize=<%= @valuecachesize %>
 
-<% if @zabbix_version.to_f < 2.4 %>
+<% if @zabbix_version.to_f < 2.4 -%>
 ### Option: NodeNoEvents
 #   If set to '1' local events won't be sent to master node.
 #   This won't impact ability of this node to propagate events from its child nodes.
@@ -319,7 +319,7 @@ NodeNoEvents=<%= @nodenoevents %>
 #   This won't impact ability of this node to propagate history from its child nodes.
 #
 NodeNoHistory=<%= @nodenohistory %>
-<% end %>
+<% end -%>
 
 ### Option: Timeout
 #   Specifies how long we wait for agent, SNMP device or external check (in seconds).
@@ -374,7 +374,7 @@ Fping6Location=<%= @fping6location %>
 ### Option: SSHKeyLocation
 #   Location of public and private keys for SSH checks and actions.
 #
-<% if @sshkeylocation %>SSHKeyLocation=<%= @sshkeylocation %><% end %>
+<% if @sshkeylocation -%>SSHKeyLocation=<%= @sshkeylocation %><% end -%>
 
 ### Option: LogSlowQueries
 #   How long a database query may take before being logged (in milliseconds).
@@ -429,7 +429,7 @@ AllowRoot=<%= @allowroot %>
 #
 Include=<%= @include_dir %>
 
-<% if @zabbix_version == '2.4' %>
+<% if @zabbix_version == '2.4' -%>
 ### Option: SSLCertLocation
 #   Location of SSL client certificates.
 #   This parameter is used only in web monitoring.
@@ -447,8 +447,8 @@ SSLKeyLocation=<%= @sslkeylocation_dir %>
 #   If not set, system-wide directory will be used.
 #   This parameter is used only in web monitoring.
 #
-<% if @sslcalocation_dir %>SSLCALocation=<%= @sslcalocation_dir %><% end %>
-<% end %>
+<% if @sslcalocation_dir -%>SSLCALocation=<%= @sslcalocation_dir %><% end -%>
+<% end -%>
 
 ####### LOADABLE MODULES #######
 
@@ -464,9 +464,9 @@ LoadModulePath=<%= @loadmodulepath %>
 #   The modules must be located in directory specified by LoadModulePath.
 #   It is allowed to include multiple LoadModule parameters.
 #
-<% if @loadmodule %>LoadModule = <%= @loadmodule %><% end %>
+<% if @loadmodule -%>LoadModule = <%= @loadmodule %><% end -%>
 
-<% if @zabbix_version.to_f >= 3.0 %>
+<% if @zabbix_version.to_f >= 3.0 -%>
 ####### TLS-RELATED PARAMETERS #######
 
 ### Option: TLSCAFile
