@@ -9,7 +9,7 @@
 #   0 - standalone server
 #
 NodeID=<%= @nodeid %>
-<% end %>
+<% end -%>
 
 ### Option: ListenPort
 #	Listen port for trapper.
@@ -26,7 +26,7 @@ ListenPort=<%= @listenport %>
 # Mandatory: no
 # Default:
 # SourceIP=
-<% if @sourceip %>SourceIP=<%= @sourceip %><% end %>
+<% if @sourceip %>SourceIP=<%= @sourceip %><% end -%>
 
 <% if @zabbix_version.to_f >= 3.0 %>
 ### Option: LogType
@@ -36,7 +36,7 @@ ListenPort=<%= @listenport %>
 #		console - standard output
 #
 <% if @logtype %>LogType=<%= @logtype %><% end %>
-<% end %>
+<% end -%>
 
 ### Option: LogFile
 #	Log file name for LogType 'file' parameter.
@@ -56,9 +56,9 @@ LogFileSize=<%= @logfilesize %>
 #	2 - error information
 #	3 - warnings
 #	4 - for debugging (produces lots of information)
-<% if @zabbix_version.to_f >= 3.0 %>
+<% if @zabbix_version.to_f >= 3.0 -%>
 #	5 - extended debugging (produces even more information)
-<% end %>
+<% end -%>
 DebugLevel=<%= @debuglevel %>
 
 ### Option: PidFile
@@ -98,12 +98,12 @@ DBPassword=<%= @database_password %>
 ### Option: DBSocket
 #	Path to MySQL socket.
 #
-<% if @database_socket %>DBSocket=<%= @database_socket %><% end %>
+<% if @database_socket %>DBSocket=<%= @database_socket %><% end -%>
 
 ### Option: DBPort
 #	Database port when not using local socket. Ignored for SQLite.
 #
-<% if @database_port %>DBPort=<%= @database_port %><% end %>
+<% if @database_port %>DBPort=<%= @database_port %><% end -%>
 
 ############ ADVANCED PARAMETERS ################
 
@@ -206,14 +206,14 @@ VMwareCacheSize=<%= @vmwarecachesize %>
 #
 <% if @vmwaretimeout %>VMwareTimeout=<%= @vmwaretimeout %><% end %>
 
-<% if @zabbix_version.to_f < 2.4 %>
+<% if @zabbix_version.to_f < 2.4 -%>
 ### Option: EnableSNMPBulkRequests
 #   Enable or disable SNMP bulk requests.
 #   0 - disable
 #   1 - enable
 #
 <% if @enablesnmpbulkrequests %>EnableSNMPBulkRequests=<%= @enablesnmpbulkrequests %><% end %>
-<% end %>
+<% end -%>
 
 ### Option: SNMPTrapperFile
 #   Temporary file used for passing data from SNMP trap daemon to the server.
@@ -466,7 +466,7 @@ LoadModulePath=<%= @loadmodulepath %>
 #
 <% if @loadmodule %>LoadModule = <%= @loadmodule %><% end %>
 
-<% if @zabbix_version == '3.0' %>
+<% if @zabbix_version.to_f >= 3.0 %>
 ####### TLS-RELATED PARAMETERS #######
 
 ### Option: TLSCAFile
