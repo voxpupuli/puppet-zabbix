@@ -91,6 +91,8 @@ class zabbix (
   $apache_ssl_key                           = $zabbix::params::apache_ssl_key,
   $apache_ssl_cipher                        = $zabbix::params::apache_ssl_cipher,
   $apache_ssl_chain                         = $zabbix::params::apache_ssl_chain,
+  $apache_user                              = $zabbix::params::apache_user,
+  $apache_group                             = $zabbix::params::apache_group,
   $apache_listen_ip                         = $zabbix::params::apache_listen_ip,
   $apache_listenport                        = $zabbix::params::apache_listenport,
   $apache_listenport_ssl                    = $zabbix::params::apache_listenport_ssl,
