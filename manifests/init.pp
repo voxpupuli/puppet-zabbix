@@ -200,6 +200,8 @@ class zabbix (
     database_port                            => $database_port,
     zabbix_server                            => $zabbix_server,
     zabbix_listenport                        => $listenport,
+    apache_user                              => $apache_user,
+    apache_group                             => $apache_group,
     apache_php_max_execution_time            => $apache_php_max_execution_time,
     apache_php_memory_limit                  => $apache_php_memory_limit,
     apache_php_post_max_size                 => $apache_php_post_max_size,
