@@ -19,7 +19,7 @@ define zabbix::resources::template (
   $template_source = '',
 ) {
 
-  @@file { "${template_dir}/${template_name}.xml":
+  file { "${template_dir}/${template_name}.xml":
     ensure => present,
     owner  => 'zabbix',
     group  => 'zabbix',
