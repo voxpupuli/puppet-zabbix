@@ -29,6 +29,7 @@ class zabbix::resources::web (
       Package['zabbixapi'],
     ],
   } ->
+  File <<| tag == 'zabbix_template' |>> ->
   Zabbix_template <<| |>> {
     zabbix_url     => $zabbix_url,
     zabbix_user    => $zabbix_user,
