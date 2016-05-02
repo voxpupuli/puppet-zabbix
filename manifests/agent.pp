@@ -287,9 +287,15 @@ class zabbix::agent (
       $use_proxy = ''
     }
 
+    if $listen_ip == '*' {
+      $agent_listen_ip = $::ipaddress
+    } else {
+      $agent_listen_ip = $listen_ip
+    }
+
     class { '::zabbix::resources::agent':
       hostname     => $::fqdn,
-      ipaddress    => $listen_ip,
+      ipaddress    => $agent_listen_ip,
       use_ip       => $agent_use_ip,
       port         => $listenport,
       group        => $zbx_group,
