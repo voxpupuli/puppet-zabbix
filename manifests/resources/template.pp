@@ -23,8 +23,7 @@ define zabbix::resources::template (
     ensure => present,
     owner  => 'zabbix',
     group  => 'zabbix',
-    source => $template_source,
-    tag    => ['zabbix_template']
+    source => $template_source
   }
 
   @@zabbix_template { $template_name:
