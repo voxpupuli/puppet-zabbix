@@ -17,7 +17,7 @@ Version (Release date)
   * Add Zabbix sender support #195 (By pull request: vide (Thanks!))
   * Update zabbixapi gem to 2.4.7 form Zabbix 3.0
   * ericsysmin is added as an Collaborator. He will help maintain this puppet module.
-  
+
 
 2.2.0   (2016-03-06)
 
