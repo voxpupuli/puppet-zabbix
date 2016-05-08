@@ -2,9 +2,9 @@
 
 Continuous Integration status:
 
-[![Build Status](https://travis-ci.org/dj-wasabi/puppet-zabbix.svg?branch=master)](https://travis-ci.org/dj-wasabi/puppet-zabbix)
-[![Puppet Forge](http://img.shields.io/puppetforge/v/wdijkerman/zabbix.svg)](https://forge.puppetlabs.com/wdijkerman/zabbix)
-[![Puppet Forge Downloads](http://img.shields.io/puppetforge/dt/wdijkerman/zabbix.svg)](https://forge.puppetlabs.com/wdijkerman/zabbix)
+[![Build Status](https://travis-ci.org/voxpupuli/puppet-zabbix.svg?branch=master)](https://travis-ci.org/voxpupuli/puppet-zabbix)
+[![Puppet Forge](http://img.shields.io/puppetforge/v/puppet/zabbix.svg)](https://forge.puppetlabs.com/puppet/zabbix)
+[![Puppet Forge Downloads](http://img.shields.io/puppetforge/dt/puppet/zabbix.svg)](https://forge.puppetlabs.com/puppet/zabbix)
 
 ####Table of Contents
 
@@ -46,7 +46,7 @@ This module contains the classes for installing and configuring the following za
   - zabbix-javagateway
   - zabbix-sender
 
-This readme will contain all basic information to get you started. Some more information can be found on the github wiki, location: https://github.com/dj-wasabi/puppet-zabbix/wiki
+This readme will contain all basic information to get you started. Some more information can be found on the github wiki, location: https://github.com/voxpupuli/puppet-zabbix/wiki
 
 
 ##Module Description
@@ -166,7 +166,7 @@ node 'zabbix.example.com'
 ```
 
 Everything will be installed on the same server. There is also an possibility to seperate the components, please check the following wiki:
-https://github.com/dj-wasabi/puppet-zabbix/wiki/Multi-node-Zabbix-Server-setup
+https://github.com/voxpupuli/puppet-zabbix/wiki/Multi-node-Zabbix-Server-setup
 
 ###Usage zabbix-agent
 
@@ -220,7 +220,7 @@ class { 'zabbix::proxy':
 You'll have to specify the location to the file in the `database_name` parameter. Zabbix should have write access to the file/directory.
 
 Everything will be installed on the same server. There is also an possibility to seperate the components, please check the following wiki:
-https://github.com/dj-wasabi/puppet-zabbix/wiki/Multi-node-Zabbix-Proxy-setup
+https://github.com/voxpupuli/puppet-zabbix/wiki/Multi-node-Zabbix-Proxy-setup
 
 ###Usage zabbix-javagateway
 
