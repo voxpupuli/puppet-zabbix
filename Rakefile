@@ -1,49 +1,32 @@
-# encoding: utf-8
-require 'rubygems'
-require 'bundler/setup'
-
 require 'puppetlabs_spec_helper/rake_tasks'
-require 'puppet/version'
-require 'puppet/vendor/semantic/lib/semantic' unless Puppet.version.to_f < 3.6
 require 'puppet-lint/tasks/puppet-lint'
 require 'puppet-syntax/tasks/puppet-syntax'
 require 'metadata-json-lint/rake_task'
+require 'puppet_blacksmith/rake_tasks'
+require 'voxpupuli/release/rake_tasks'
 require 'rubocop/rake_task'
+require 'puppet-strings/rake_tasks'
 
-# These gems aren't always present, for instance
-# on Travis with --without development
-begin
-  require 'puppet_blacksmith/rake_tasks'
-rescue LoadError # rubocop:disable Lint/HandleExceptions
+RuboCop::RakeTask.new(:rubocop) do |task|
+  # These make the rubocop experience maybe slightly less terrible
+  task.options = ['-D', '-S', '-E']
 end
 
-RuboCop::RakeTask.new
-
-exclude_paths = [
-  'bundle/**/*',
-  'pkg/**/*',
-  'vendor/**/*',
-  'spec/**/*'
-]
-
-# Coverage from puppetlabs-spec-helper requires rcov which
-# doesn't work in anything since 1.8.7
-Rake::Task[:coverage].clear
-
-Rake::Task[:lint].clear
-
-PuppetLint.configuration.relative = true
-PuppetLint.configuration.disable_80chars
-PuppetLint.configuration.disable_class_inherits_from_params_class
-PuppetLint.configuration.disable_class_parameter_defaults
-PuppetLint.configuration.disable_documentation
-PuppetLint.configuration.disable_single_quote_string_with_variables
+PuppetLint.configuration.log_format = '%{path}:%{linenumber}:%{check}:%{KIND}:%{message}'
 PuppetLint.configuration.fail_on_warnings = true
+PuppetLint.configuration.send('relative')
+PuppetLint.configuration.send('disable_140chars')
+PuppetLint.configuration.send('disable_class_inherits_from_params_class')
+PuppetLint.configuration.send('disable_documentation')
+PuppetLint.configuration.send('disable_single_quote_string_with_variables')
 
-PuppetLint::RakeTask.new :lint do |config|
-  config.ignore_paths = exclude_paths
-end
-
+exclude_paths = %w(
+  pkg/**/*
+  vendor/**/*
+  .vendor/**/*
+  spec/**/*
+)
+PuppetLint.configuration.ignore_paths = exclude_paths
 PuppetSyntax.exclude_paths = exclude_paths
 
 desc 'Run acceptance tests'
@@ -51,16 +34,10 @@ RSpec::Core::RakeTask.new(:acceptance) do |t|
   t.pattern = 'spec/acceptance'
 end
 
-desc 'Populate CONTRIBUTORS file'
-task :contributors do
-  system("git log --format='%aN' | sort -u > CONTRIBUTORS")
-end
-
-desc 'Run syntax, lint, and spec tests.'
+desc 'Run tests metadata_lint, lint, syntax, spec'
 task test: [
   :metadata_lint,
-  :syntax,
   :lint,
-  :rubocop,
-  :spec
+  :syntax,
+  :spec,
 ]

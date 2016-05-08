@@ -1,39 +1,96 @@
-# Contributing
+This module has grown over time based on a range of contributions from
+people using it. If you follow these contributing guidelines your patch
+will likely make it into a release a little quicker.
 
-Thank you for making time to (consider) creating an Pull Request for this
-Puppet Module. I Know this puppet module has bugs or missing features and
-that is something you can help me with. When an Pull Request is accepted
-your (github) name will be placed in the Contributors of Fame list. 8-)
 
-## Getting started
+## Contributing
 
-  * Make sure you have a [GitHub account](https://github.com/signup/free)
-  * Submit a ticket for your issue, assuming one does not already exist.
-  * Clearly describe the issue including steps to reproduce when it is a bug.
-  * Make sure you fill in the earliest version that you know has the issue.
-  * Fork the repository on GitHub
+Please note that this project is released with a Contributor Code of Conduct. By participating in this project you agree to abide by its terms. [Contributor Code of Conduct](https://voxpupuli.org/coc/).
 
-## Making Changes
+1. Fork the repo.
 
-* Create a topic branch from where you want to base your work.
-    * This is usually the master branch.
-    * Only target release branches if you are certain your fix must be on that
-    branch.
-    * To quickly create a topic branch based on master;
-    `git checkout -b fix/master/my_contribution master`.
-    Please avoid working directly on the `master` branch.
-* Make commits of logical units.
-* Make sure you have added the necessary tests for your changes.
-* Run _all_ the tests to assure nothing else was accidentally broken.
+1. Create a separate branch for your change.
 
-## Documentation
+1. Run the tests. We only take pull requests with passing tests, and
+   documentation.
 
-For changes of a trivial nature to comments and documentation, it is not
-necessary to create a new issue.
+1. Add a test for your change. Only refactoring and documentation
+   changes require no new tests. If you are adding functionality
+   or fixing a bug, please add a test.
 
-## Submitting Changes
+1. Squash your commits down into logical components. Make sure to rebase
+   against the current master.
 
-* Push your changes to a topic branch in your fork of the repository.
-* Submit a pull request to the repository in the puppetlabs organization.
-*
-* I'll try to review the Pull Request as soon as I'm able to do.
+1. Push the branch to your fork and submit a pull request.
+
+Please be prepared to repeat some of these steps as our contributors review
+your code.
+
+## Dependencies
+
+The testing and development tools have a bunch of dependencies,
+all managed by [bundler](http://bundler.io/) according to the
+[Puppet support matrix](http://docs.puppetlabs.com/guides/platforms.html#ruby-versions).
+
+By default the tests use a baseline version of Puppet.
+
+If you have Ruby 2.x or want a specific version of Puppet,
+you must set an environment variable such as:
+
+    export PUPPET_VERSION="~> 4.2.0"
+
+Install the dependencies like so...
+
+    bundle install
+
+## Syntax and style
+
+The test suite will run [Puppet Lint](http://puppet-lint.com/) and
+[Puppet Syntax](https://github.com/gds-operations/puppet-syntax) to
+check various syntax and style things. You can run these locally with:
+
+    bundle exec rake lint
+    bundle exec rake validate
+
+## Running the unit tests
+
+The unit test suite covers most of the code, as mentioned above please
+add tests if you're adding new functionality. If you've not used
+[rspec-puppet](http://rspec-puppet.com/) before then feel free to ask
+about how best to test your new feature.
+
+To run your all the unit tests
+
+    bundle exec rake spec SPEC_OPTS='--format documentation'
+
+To run a specific spec test set the `SPEC` variable:
+
+    bundle exec rake spec SPEC=spec/foo_spec.rb
+
+To run the linter, the syntax checker and the unit tests:
+
+    bundle exec rake test
+
+
+## Integration tests
+
+The unit tests just check the code runs, not that it does exactly what
+we want on a real machine. For that we're using
+[beaker](https://github.com/puppetlabs/beaker).
+
+This fires up a new virtual machine (using vagrant) and runs a series of
+simple tests against it after applying the module. You can run this
+with:
+
+    bundle exec rake acceptance
+
+This will run the tests on an Ubuntu 12.04 virtual machine. You can also
+run the integration tests against Centos 6.5 with.
+
+    BEAKER_set=centos-64-x64 bundle exec rake acceptances
+
+If you don't want to have to recreate the virtual machine every time you
+can use `BEAKER_DESTROY=no` and `BEAKER_PROVISION=no`. On the first run you will
+at least need `BEAKER_PROVISION` set to yes (the default). The Vagrantfile
+for the created virtual machines will be in `.vagrant/beaker_vagrant_fies`.
+
