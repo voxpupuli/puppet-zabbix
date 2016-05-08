@@ -61,7 +61,7 @@ define zabbix::userparameters (
   $script_dir = '/usr/bin',
 ) {
   $include_dir          = getvar('::zabbix::agent::include_dir')
-  $zabbix_agent_package = getvar('::zabbix::params::zabbix_agent_package')
+  $zabbix_agent_package = getvar('::zabbix::params::zabbix_package_agent')
 
   if $source != '' {
     file { "${include_dir}/${name}.conf":
