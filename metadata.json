@@ -1,5 +1,5 @@
 {
-  "name": "wdijkerman-zabbix",
+  "name": "puppet-zabbix",
   "version": "2.3.0",
   "summary": "Installing and maintaining Zabbix. Will install server, proxy, java-gateway and agent on RedHat/Debian/Ubuntu (Incl. exported resources).",
   "author": "Voxpupuli",
