@@ -442,7 +442,7 @@ Style/RescueModifier:
   Enabled: true
 
 Style/RegexpLiteral:
-  Enabled: true
+  Enabled: false
 
 Lint/UnderscorePrefixedVariableName:
   Enabled: true
