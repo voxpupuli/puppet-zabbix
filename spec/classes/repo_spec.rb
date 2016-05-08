@@ -265,7 +265,8 @@ describe 'zabbix::repo' do
         lsbdistcodename: 'Trusty',
         id: 'root',
         kernel: 'Linux',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
+        lsbdistrelease: '14.04'
       }
     end
 
@@ -295,7 +296,8 @@ describe 'zabbix::repo' do
         lsbdistcodename: 'Trusty',
         id: 'root',
         kernel: 'Linux',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
+        lsbdistrelease: '14.04'
       }
     end
 
