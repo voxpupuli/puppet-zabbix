@@ -1,11 +1,12 @@
 AllCops:
+  TargetRubyVersion: 1.9
+  Include:
+    - ./**/*.rb
   Exclude:
-    # Ignore HTML related things
-    - '**/*.erb'
-    # Ignore vendored gems
-    - 'vendor/**/*'
-    # Ignore code from test fixtures
-    - 'spec/fixtures/**/*'
+    - vendor/**/*
+    - .vendor/**/*
+    - pkg/**/*
+    - spec/fixtures/**/*
 
 Lint/ConditionPosition:
   Enabled: true
@@ -55,8 +56,11 @@ Style/AndOr:
 Style/RedundantSelf:
   Enabled: true
 
-# DISABLED - not useful
+# Method length is not necessarily an indicator of code quality
 Metrics/MethodLength:
+  Enabled: false
+
+Metrics/ModuleLength:
   Enabled: false
 
 Style/WhileUntilModifier:
@@ -480,3 +484,6 @@ Metrics/PerceivedComplexity:
 
 Lint/UselessAssignment:
   Enabled: true
+
+Style/ClosingParenthesisIndentation:
+  Enabled: false
