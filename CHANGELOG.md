@@ -1,11 +1,8 @@
 ## 2016-5-08 Release 2.3.0
 
-Below an overview of all changes in the releases.
-
-Version (Release date)
-
-2.3.0
-
+  * fix typo/missing code in userparameters
+  * modulesync with voxpupuli defaults #214
+  * fix typo in zabbix_host provider #211
   * Enhance spec testing #206 (By pull request: bastelfreak (Thanks!))
   * Update rubocop #204 (By pull request: bastelfreak (Thanks!))
   * Update rspec #203 (By pull request: bastelfreak (Thanks!))
