@@ -116,7 +116,8 @@ describe 'zabbix::web' do
           database_name: 'zabbix-server',
           database_user: 'zabbix-server',
           database_password: 'zabbix-server',
-          zabbix_server: 'localhost')
+          zabbix_server: 'localhost'
+        )
       end
 
       it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(/^\$DB\['SERVER'\]   = 'localhost'/) }
