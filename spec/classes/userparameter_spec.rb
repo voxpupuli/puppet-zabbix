@@ -5,27 +5,15 @@ describe 'zabbix::userparameter' do
   let :node do
     'agent.example.com'
   end
-
-  context 'On RedHat 7.1' do
-    let :facts do
-      {
-        osfamily: 'RedHat',
-        operatingsystem: 'RedHat',
-        operatingsystemrelease: '7.1',
-        operatingsystemmajrelease: '7',
-        architecture: 'x86_64',
-        lsbdistid: 'RedHat',
-        concat_basedir: '/tmp',
-        is_pe: false,
-        puppetversion: Puppet.version,
-        facterversion: Facter.version,
-        ipaddress: '192.168.1.10',
-        lsbdistcodename: '',
-        id: 'root',
-        kernel: 'Linux',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
-      }
+  on_supported_os.each do |os, facts|
+    context "on #{os} " do
+      let(:facts) do
+        facts
+      end
+      context 'with all defaults' do
+        it { should contain_class('zabbix::userparameter') }
+        it { should compile.with_all_deps }
+      end
     end
-    it { should compile }
   end
 end
