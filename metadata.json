@@ -10,7 +10,7 @@
     },
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.1.0"
+      "version_requirement": ">= 4.4.0"
     },
     {
       "name": "puppetlabs/mysql",
