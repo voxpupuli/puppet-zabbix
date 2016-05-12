@@ -265,8 +265,7 @@ class zabbix::agent (
   # is set to for example "eth1" or "bond0.73".
   if ($listenip != undef) {
     if ($listenip =~ /^(eth|bond|lxc|eno|tap|tun).*/) {
-      $int_name  = "ipaddress_${listenip}"
-      $listen_ip = inline_template('<%= scope.lookupvar(int_name) %>')
+      $int_name  = getvar("::ipaddress_${listenip}")
     } elsif is_ip_address($listenip) or $listenip == '*' {
       $listen_ip = $listenip
     } else {
