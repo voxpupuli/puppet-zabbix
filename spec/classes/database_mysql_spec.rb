@@ -17,13 +17,13 @@ describe 'zabbix::database::mysql' do
           should raise_error(Puppet::Error, /We do not work./)
         end
       end
-      if facts[:osfamily] == 'RedHat'
-        # path to sql files on zabbix 2.4 on RedHat
-        path2 = '/usr/share/doc/zabbix-*-mysql-2.4*/create'
-      else
-        # path to sql files on zabbix 2.4 on Debian
-        path2 = '/usr/share/zabbix-*-mysql'
-      end
+      path2 = if facts[:osfamily] == 'RedHat'
+                # path to sql files on zabbix 2.4 on RedHat
+                '/usr/share/doc/zabbix-*-mysql-2.4*/create'
+              else
+                # path to sql files on zabbix 2.4 on Debian
+                '/usr/share/zabbix-*-mysql'
+              end
       # path to sql files on zabbix 3.X on Debian and RedHat
       path3 = '/usr/share/doc/zabbix-*-mysql*'
 
