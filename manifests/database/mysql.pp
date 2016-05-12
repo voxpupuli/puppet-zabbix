@@ -29,14 +29,7 @@ class zabbix::database::mysql (
   case $zabbix_version {
     '3.0': {
       if ($database_schema_path == false) or ($database_schema_path == '') {
-        case $::operatingsystem {
-          'CentOS', 'RedHat', 'OracleLinux': {
-            $schema_path   = "/usr/share/doc/zabbix-*-mysql-${zabbix_version}**/"
-          }
-          default : {
-            $schema_path   = '/usr/share/doc/zabbix-*-mysql'
-          }
-        }
+        $schema_path   = "/usr/share/doc/zabbix-*-mysql*"
       }
       else {
         $schema_path = $database_schema_path
