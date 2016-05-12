@@ -56,7 +56,8 @@ describe 'zabbix::database::mysql' do
           }
         end
         it { should contain_class('zabbix::database::mysql') }
-        #it { should compile.with_all_deps }
+        # this doesn't make much sense because the class requires other classes
+        # it { should compile.with_all_deps }
         it { should contain_exec('zabbix_proxy_create.sql').with_command("cd #{path2} && if [ -f schema.sql.gz ]; then gunzip schema.sql.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-proxy' -p'zabbix-proxy' -D 'zabbix-proxy' < schema.sql && touch /etc/zabbix/.schema.done") }
       end
       context 'when zabbix_type is server and zabbix version is 3.0' do
@@ -89,7 +90,8 @@ describe 'zabbix::database::mysql' do
           }
         end
         it { should contain_class('zabbix::database::mysql') }
-        #it { should compile.with_all_deps }
+        # this doesn't make much sense because the class requires other classes
+        # it { should compile.with_all_deps }
         it { should contain_exec('zabbix_proxy_create.sql').with_command("cd #{path3} && if [ -f schema.sql.gz ]; then gunzip schema.sql.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-proxy' -p'zabbix-proxy' -D 'zabbix-proxy' < schema.sql && touch /etc/zabbix/.schema.done") }
       end
     end
