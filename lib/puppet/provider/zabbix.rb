@@ -1,4 +1,3 @@
-# encoding: utf-8
 # zabbix provider type for puppet
 class Puppet::Provider::Zabbix < Puppet::Provider
   # Require the zabbixapi gem

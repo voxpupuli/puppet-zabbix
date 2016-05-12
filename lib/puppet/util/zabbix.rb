@@ -1,4 +1,3 @@
-# encoding: utf-8
 # this module adds additional params to a puppet type
 module Puppet::Util::Zabbix # rubocop:disable Style/ClassAndModuleChildren
   def self.add_zabbix_type_methods(type)
