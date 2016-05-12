@@ -8,7 +8,9 @@ describe 'zabbix::database::mysql' do
   on_supported_os.each do |os, facts|
     context "on #{os} " do
       let(:facts) do
-        facts
+        facts.merge(
+          is_pe: false
+        )
       end
       context 'with all defaults' do
         it 'fails' do
@@ -19,7 +21,7 @@ describe 'zabbix::database::mysql' do
         # path to sql files on zabbix 2.4 on RedHat
         path2 = '/usr/share/doc/zabbix-*-mysql-2.4*/create'
       else
-        #path to sql files on zabbix 2.4 on Debian
+        # path to sql files on zabbix 2.4 on Debian
         path2 = '/usr/share/zabbix-*-mysql'
       end
       # path to sql files on zabbix 3.X on Debian and RedHat
