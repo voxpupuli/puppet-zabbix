@@ -50,11 +50,6 @@ class zabbix::repo (
       }
     }
 
-    case $::operatingsystemrelease {
-      /\/sid$/ : { $releasename = regsubst($::operatingsystemrelease, '/sid$', '') }
-      default  : { $releasename = $::lsbdistcodename }
-    }
-
     case $::osfamily {
       'RedHat' : {
         yumrepo { 'zabbix':
@@ -93,7 +88,10 @@ class zabbix::repo (
           }
         } else {
           $operatingsystem = downcase($::operatingsystem)
-
+          case $::operatingsystemrelease {
+            /\/sid$/ : { $releasename = regsubst($::operatingsystemrelease, '/sid$', '') }
+            default  : { $releasename = $::lsbdistcodename }
+          }
           apt::source { 'zabbix':
             location => "http://repo.zabbix.com/zabbix/${zabbix_version}/${operatingsystem}/",
             repos    => 'main',
