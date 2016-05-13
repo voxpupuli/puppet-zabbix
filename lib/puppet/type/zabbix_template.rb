@@ -1,4 +1,3 @@
-# encoding: utf-8
 Puppet::Type.newtype(:zabbix_template) do
   ensurable do
     defaultvalues
