@@ -1,5 +1,5 @@
-# encoding: utf-8
 # zabbix provider type for puppet
+# rubocop:disable Style/ClassAndModuleChildren
 class Puppet::Provider::Zabbix < Puppet::Provider
   # Require the zabbixapi gem
   def self.require_zabbix
