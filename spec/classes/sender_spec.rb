@@ -7,7 +7,9 @@ describe 'zabbix::sender' do
   on_supported_os.each do |os, facts|
     context "on #{os} " do
       let(:facts) do
-        facts
+        facts.merge(
+          is_pe: false
+        )
       end
       context 'with all defaults' do
         it { should contain_class('zabbix::sender') }
