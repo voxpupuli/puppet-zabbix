@@ -48,8 +48,8 @@ class zabbix::database::mysql (
     }
     default: {
       if ($database_schema_path == false) or ($database_schema_path == '') {
-        case $::operatingsystem {
-          'CentOS', 'RedHat', 'OracleLinux': {
+        case $::osfamily {
+          'RedHat': {
             $schema_path   = "/usr/share/doc/zabbix-*-mysql-${zabbix_version}*/create"
           }
           default : {
