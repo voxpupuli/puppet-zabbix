@@ -201,6 +201,8 @@ class zabbix::web (
   $database_port                            = $zabbix::params::server_database_port,
   $zabbix_server                            = $zabbix::params::zabbix_server,
   $zabbix_listenport                        = $zabbix::params::server_listenport,
+  $apache_user                              = $zabbix::params::apache_user,
+  $apache_group                             = $zabbix::params::apache_group,
   $apache_php_max_execution_time            = $zabbix::params::apache_php_max_execution_time,
   $apache_php_memory_limit                  = $zabbix::params::apache_php_memory_limit,
   $apache_php_post_max_size                 = $zabbix::params::apache_php_post_max_size,
@@ -213,9 +215,6 @@ class zabbix::web (
   $ldap_clientkey                           = $zabbix::params::ldap_clientkey,
   $puppetgem                                = $zabbix::params::puppetgem,
 ) inherits zabbix::params {
-  $apache_user = getvar('::apache::user')
-  $apache_group = getvar('::apache::group')
-
   # Only include the repo class if it has not yet been included
   unless defined(Class['Zabbix::Repo']) {
     class { '::zabbix::repo':

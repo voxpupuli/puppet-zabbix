@@ -70,6 +70,8 @@ class zabbix::params {
   $apache_php_upload_max_filesize           = '2M'
 
   # Zabbix-web
+  $apache_user                              = getvar('::apache::user')
+  $apache_group                             = getvar('::apache::group')
   $apache_listen_ip                         = undef
   $apache_listenport                        = '80'
   $apache_listenport_ssl                    = '443'
