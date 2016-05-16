@@ -310,16 +310,19 @@ class zabbix::agent (
   case $ensure {
     'absent': {
       $service_ensure = 'stopped'
+      $service_enabled = false
       $file_ensure = 'absent'
       $directory_ensure = 'absent'
     }
     'present': {
       $service_ensure = 'running'
+      $service_enabled = true
       $file_ensure = 'file'
       $directory_ensure = 'directory'
     }
     default: {
       $service_ensure = 'running'
+      $service_enabled = true
       $file_ensure = 'file'
       $directory_ensure = 'directory'
     }
@@ -334,7 +337,7 @@ class zabbix::agent (
   # Controlling the 'zabbix-agent' service
   service { 'zabbix-agent':
     ensure     => $service_ensure,
-    enable     => true,
+    enable     => $service_enabled,
     hasstatus  => true,
     hasrestart => true,
     require    => Package[$zabbix_package_agent],
