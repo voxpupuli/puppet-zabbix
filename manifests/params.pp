@@ -42,6 +42,7 @@ class zabbix::params {
 
   # Zabbix overall params. Is used by all components.
   $zabbix_package_state                     = 'present'
+  $agent_ensure                             = 'present'
   $zabbix_proxy                             = 'localhost'
   $zabbix_proxy_ip                          = '127.0.0.1'
   $zabbix_server                            = 'localhost'

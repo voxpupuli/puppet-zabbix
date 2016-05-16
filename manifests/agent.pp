@@ -201,6 +201,7 @@
 # Copyright 2014 Werner Dijkerman
 #
 class zabbix::agent (
+  $ensure                = $zabbix::params::agent_ensure,
   $zabbix_version        = $zabbix::params::zabbix_version,
   $zabbix_package_state  = $zabbix::params::zabbix_package_state,
   $zabbix_package_agent  = $zabbix::params::zabbix_package_agent,
@@ -306,6 +307,24 @@ class zabbix::agent (
     }
   }
 
+  case $ensure {
+    'absent': {
+      $service_ensure = 'stopped'
+      $file_ensure = 'absent'
+      $directory_ensure = 'absent'
+    }
+    'present': {
+      $service_ensure = 'running'
+      $file_ensure = 'file'
+      $directory_ensure = 'directory'
+    }
+    default: {
+      $service_ensure = 'running'
+      $file_ensure = 'file'
+      $directory_ensure = 'directory'
+    }
+  }
+
   # Installing the package
   package { $zabbix_package_agent:
     ensure  => $zabbix_package_state,
@@ -314,7 +333,7 @@ class zabbix::agent (
 
   # Controlling the 'zabbix-agent' service
   service { 'zabbix-agent':
-    ensure     => running,
+    ensure     => $service_ensure,
     enable     => true,
     hasstatus  => true,
     hasrestart => true,
@@ -323,7 +342,7 @@ class zabbix::agent (
 
   # Configuring the zabbix-agent configuration file
   file { $agent_configfile_path:
-    ensure  => present,
+    ensure  => $file_ensure,
     owner   => 'zabbix',
     group   => 'zabbix',
     mode    => '0644',
@@ -335,7 +354,7 @@ class zabbix::agent (
 
   # Include dir for specific zabbix-agent checks.
   file { $include_dir:
-    ensure  => directory,
+    ensure  => $directory_ensure,
     owner   => 'zabbix',
     group   => 'zabbix',
     recurse => true,
