@@ -372,7 +372,7 @@ class zabbix::agent (
       owner   => 'zabbix',
       group   => 'zabbix',
       recurse => true,
-      force   => true
+      force   => true,
       purge   => $include_dir_purge,
       require => File[$agent_configfile_path],
     }
