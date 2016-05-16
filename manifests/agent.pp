@@ -356,14 +356,26 @@ class zabbix::agent (
   }
 
   # Include dir for specific zabbix-agent checks.
-  file { $include_dir:
-    ensure  => $directory_ensure,
-    owner   => 'zabbix',
-    group   => 'zabbix',
-    recurse => true,
-    purge   => $include_dir_purge,
-    notify  => Service['zabbix-agent'],
-    require => File[$agent_configfile_path],
+  if $directory_ensure == 'directory' {
+    file { $include_dir:
+      ensure  => $directory_ensure,
+      owner   => 'zabbix',
+      group   => 'zabbix',
+      recurse => true,
+      purge   => $include_dir_purge,
+      notify  => Service['zabbix-agent'],
+      require => File[$agent_configfile_path],
+    }
+  } else {
+    file { $include_dir:
+      ensure  => $directory_ensure,
+      owner   => 'zabbix',
+      group   => 'zabbix',
+      recurse => true,
+      force   => true
+      purge   => $include_dir_purge,
+      require => File[$agent_configfile_path],
+    }
   }
 
   # Manage firewall
