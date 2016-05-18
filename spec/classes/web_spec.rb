@@ -52,63 +52,57 @@ describe 'zabbix::web' do
           end
         end
 
-      it { should_not contain_class('zabbix::resources::web') }
-    end
+        describe 'with database_type as postgresql' do
+          let :params do
+            super().merge(database_type: 'postgresql')
+          end
+          packages = facts[:osfamily] == 'RedHat' ? ['zabbix-web-pgsql', 'zabbix-web'] : ['zabbix-frontend-php']
+          packages.each do |package|
+            it { should contain_package(package) }
+          end
+          it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(/^\$DB\['TYPE'\]     = 'POSTGRESQL'/) }
+        end
 
-    it { should contain_apache__vhost('zabbix.example.com').with_name('zabbix.example.com') }
+        describe 'with database_type as mysql' do
+          let :params do
+            super().merge(database_type: 'mysql')
+          end
+          packages = facts[:osfamily] == 'RedHat' ? ['zabbix-web-mysql', 'zabbix-web'] : ['zabbix-frontend-php']
+          packages.each do |package|
+            it { should contain_package(package) }
+          end
+          it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(/^\$DB\['TYPE'\]     = 'MYSQL'/) }
+        end
 
-    context 'with database_* settings' do
-      let :params do
-        super().merge(
-          database_host: 'localhost',
-          database_name: 'zabbix-server',
-          database_user: 'zabbix-server',
-          database_password: 'zabbix-server',
-          zabbix_server: 'localhost'
-        )
-      end
+        it { should contain_file('/etc/zabbix/web/zabbix.conf.php') }
 
-      it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(/^\$DB\['SERVER'\]   = 'localhost'/) }
-      it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(/^\$DB\['DATABASE'\] = 'zabbix-server'/) }
-      it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(/^\$DB\['USER'\]     = 'zabbix-server'/) }
-      it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(/^\$DB\['PASSWORD'\] = 'zabbix-server'/) }
-      it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(/^\$ZBX_SERVER      = 'localhost'/) }
-    end
-  end
-end
+        describe 'when manage_resources is true' do
+          let :params do
+            super().merge(
+              manage_resources: true
+            )
+          end
 
-describe 'zabbix::web' do
-  let :node do
-    'rspec.puppet.com'
-  end
+          it { should contain_class('zabbix::resources::web') }
+          it { should contain_package('zabbixapi').that_requires('Class[ruby::dev]').with_provider(package_provider_for_gems) }
+          it { should contain_class('ruby::dev') }
+          it { should contain_file('/etc/zabbix/imported_templates').with_ensure('directory') }
+        end
 
-  let :params do
-    {
-      zabbix_url: 'zabbix.example.com'
-    }
-  end
+        describe 'when manage_resources and is_pe are true' do
+          let :facts do
+            super().merge(
+              is_pe: true,
+              pe_version: '3.7.0'
+            )
+          end
 
-  context 'On Debian 6.0' do
-    let :facts do
-      {
-        osfamily: 'debian',
-        operatingsystem: 'debian',
-        operatingsystemrelease: '6.0',
-        operatingsystemmajrelease: '6',
-        architecture: 'x86_64',
-        lsbdistid: 'debian',
-        concat_basedir: '/tmp',
-        is_pe: false,
-        puppetversion: Puppet.version,
-        facterversion: Facter.version,
-        ipaddress: '192.168.1.10',
-        lsbdistcodename: 'squeeze',
-        id: 'root',
-        kernel: 'Linux',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
-        selinux_config_mode: ''
-      }
-    end
+          let :params do
+            super().merge(manage_resources: true)
+          end
+
+          it { should contain_package('zabbixapi').with_provider('pe_puppetserver_gem') }
+        end
 
         describe 'when manage_resources is false' do
           let :params do
