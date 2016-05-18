@@ -45,7 +45,7 @@ describe 'zabbix::web' do
           end
         end
 
-        ['permissive', 'disabled'].each do |mode|
+        %w(permissive disabled).each do |mode|
           describe "with #{mode} selinux" do
             let :facts do
               super().merge(selinux_config_mode: mode)
