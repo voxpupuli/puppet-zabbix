@@ -22,9 +22,15 @@ describe 'zabbix::web' do
         )
       end
 
-      let :params do
-        super().merge(manage_resources: true)
-      end
+      if facts[:osfamily] == 'Archlinux'
+        context 'with all defaults' do
+          it {is_expected.not_to compile}
+        end
+      else
+        context 'with all defaults' do
+          it { should compile.with_all_deps }
+          it { should contain_file('/etc/zabbix/web').with_ensure('directory') }
+        end
 
         describe 'with enforcing selinux' do
           let :facts do
@@ -104,6 +110,34 @@ describe 'zabbix::web' do
       }
     end
 
-    it { should contain_package('zabbix-frontend-php') }
+        describe 'when manage_resources is false' do
+          let :params do
+            super().merge(manage_resources: false)
+          end
+
+          it { should_not contain_class('zabbix::resources::web') }
+        end
+
+        it { should contain_apache__vhost('zabbix.example.com').with_name('zabbix.example.com') }
+
+        context 'with database_* settings' do
+          let :params do
+            super().merge(
+              database_host: 'localhost',
+              database_name: 'zabbix-server',
+              database_user: 'zabbix-server',
+              database_password: 'zabbix-server',
+              zabbix_server: 'localhost'
+            )
+          end
+
+          it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(/^\$DB\['SERVER'\]   = 'localhost'/) }
+          it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(/^\$DB\['DATABASE'\] = 'zabbix-server'/) }
+          it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(/^\$DB\['USER'\]     = 'zabbix-server'/) }
+          it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(/^\$DB\['PASSWORD'\] = 'zabbix-server'/) }
+          it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(/^\$ZBX_SERVER      = 'localhost'/) }
+        end
+      end
+    end
   end
 end
