@@ -213,6 +213,12 @@ class zabbix::web (
   $ldap_clientkey                           = $zabbix::params::ldap_clientkey,
   $puppetgem                                = $zabbix::params::puppetgem,
 ) inherits zabbix::params {
+
+  # check osfamily, Arch is currently not supported for web
+  if $::osfamily == 'Archlinux' {
+    fail('Archlinux is currently not supported for zabbix::web ')
+  }
+
   $apache_user = getvar('::apache::user')
   $apache_group = getvar('::apache::group')
 
