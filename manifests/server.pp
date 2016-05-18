@@ -507,7 +507,7 @@ class zabbix::server (
   }
 
   # check if selinux is active and allow zabbix
-  if $::selinux_config_mode == 'enforcing' {
+  if $::osfamily == 'RedHat' and $::selinux_config_mode == 'enforcing' {
     selboolean{'zabbix_can_network':
       persistent => true,
       value      => 'on',
