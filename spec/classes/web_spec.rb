@@ -26,7 +26,7 @@ describe 'zabbix::web' do
 
       if facts[:osfamily] == 'Archlinux'
         context 'with all defaults' do
-          it {is_expected.not_to compile}
+          it { is_expected.not_to compile }
         end
       else
         context 'with all defaults' do
