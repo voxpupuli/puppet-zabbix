@@ -69,7 +69,7 @@ describe 'zabbix::web' do
           let :params do
             super().merge(database_type: 'mysql')
           end
-          packages = facts[:osfamily] == 'RedHat' ? ['zabbix-web-mysql', 'zabbix-web'] : ['zabbix-frontend-php']
+          packages = facts[:osfamily] == 'RedHat' ? ['zabbix-web-mysql', 'zabbix-web'] : ['zabbix-frontend-php', 'php5-mysql']
           packages.each do |package|
             it { should contain_package(package) }
           end
