@@ -26,13 +26,25 @@ describe 'zabbix::web' do
         super().merge(manage_resources: true)
       end
 
-      it { should contain_package('zabbixapi').with_provider('pe_puppetserver_gem') }
-    end
+        describe 'with enforcing selinux' do
+          let :facts do
+            super().merge(selinux_config_mode: 'enforcing')
+          end
+          if facts[:osfamily] == 'RedHat'
+            it { should contain_selboolean('httpd_can_connect_zabbix').with('value' => 'on', 'persistent' => true) }
+          else
+            it { should_not contain_selboolean('httpd_can_connect_zabbix') }
+          end
+        end
 
-    describe 'when manage_resources is false' do
-      let :params do
-        super().merge(manage_resources: false)
-      end
+        ['permissive', 'disabled'].each do |mode|
+          describe "with #{mode} selinux" do
+            let :facts do
+              super().merge(selinux_config_mode: mode)
+            end
+            it { should_not contain_selboolean('httpd_can_connect_zabbix') }
+          end
+        end
 
       it { should_not contain_class('zabbix::resources::web') }
     end
