@@ -19,6 +19,7 @@ describe 'zabbix::web' do
       let :facts do
         facts.merge(
           concat_basedir: '/tmp',
+          is_pe: false,
         )
       end
 
