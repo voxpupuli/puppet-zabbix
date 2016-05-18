@@ -14,81 +14,11 @@ describe 'zabbix::web' do
       zabbix_url: 'zabbix.example.com'
     }
   end
-
-  # Running an RedHat OS.
-  context 'On a RedHat OS' do
-    let :facts do
-      {
-        osfamily: 'RedHat',
-        operatingsystem: 'RedHat',
-        operatingsystemrelease: '6.5',
-        operatingsystemmajrelease: '6',
-        architecture: 'x86_64',
-        lsbdistid: 'RedHat',
-        concat_basedir: '/tmp',
-        is_pe: false,
-        puppetversion: Puppet.version,
-        facterversion: Facter.version,
-        ipaddress: '192.168.1.10',
-        lsbdistcodename: '',
-        id: 'root',
-        kernel: 'Linux',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
-        selinux_config_mode: ''
-      }
-    end
-
-    describe 'with default settings' do
-      it { should contain_file('/etc/zabbix/web').with_ensure('directory') }
-      it { should_not contain_selboolean('httpd_can_connect_zabbix') }
-    end
-
-    describe 'with enabled selinux' do
+  on_supported_os.each do |os, facts|
+    context "on #{os} " do
       let :facts do
-        super().merge(selinux_config_mode: 'enforcing')
-      end
-      it { should contain_selboolean('httpd_can_connect_zabbix').with('value' => 'on', 'persistent' => true) }
-    end
-
-    describe 'with database_type as postgresql' do
-      let :params do
-        super().merge(database_type: 'postgresql')
-      end
-
-      it { should contain_package('zabbix-web-pgsql').with_name('zabbix-web-pgsql') }
-      it { should contain_package('zabbix-web') }
-      it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(/^\$DB\['TYPE'\]     = 'POSTGRESQL'/) }
-    end
-
-    describe 'with database_type as mysql' do
-      let :params do
-        super().merge(database_type: 'mysql')
-      end
-
-      it { should contain_package('zabbix-web-mysql').with_name('zabbix-web-mysql') }
-      it { should contain_package('zabbix-web') }
-    end
-
-    it { should contain_file('/etc/zabbix/web/zabbix.conf.php') }
-
-    describe 'when manage_resources is true' do
-      let :params do
-        super().merge(
-          manage_resources: true
-        )
-      end
-
-      it { should contain_class('zabbix::resources::web') }
-      it { should contain_package('zabbixapi').that_requires('Class[ruby::dev]').with_provider(package_provider_for_gems) }
-      it { should contain_class('ruby::dev') }
-      it { should contain_file('/etc/zabbix/imported_templates').with_ensure('directory') }
-    end
-
-    describe 'when manage_resources and is_pe are true' do
-      let :facts do
-        super().merge(
-          is_pe: true,
-          pe_version: '3.7.0'
+        facts.merge(
+          concat_basedir: '/tmp',
         )
       end
 
