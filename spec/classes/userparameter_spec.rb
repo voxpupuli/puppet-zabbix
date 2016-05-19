@@ -6,8 +6,10 @@ describe 'zabbix::userparameter' do
   end
   on_supported_os.each do |os, facts|
     context "on #{os} " do
-      let(:facts) do
-        facts
+      let :facts do
+        facts.merge(
+          mocked_facts
+        )
       end
       context 'with all defaults' do
         it { should contain_class('zabbix::userparameter') }
