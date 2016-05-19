@@ -1,3 +1,12 @@
+## 2016-5-19 Release 2.3.1
+
+  * Fix: correct path to DB schema on all RHEL systems
+  * Fix: don't deal with selinux on non RHEL systems
+  * Maintenance: modulesync with voxpupuli defaults
+  * enhance test matrix
+  * enhance code coverage
+  * bump required stdlib version from 4.1.0 to 4.4.0
+
 ## 2016-5-08 Release 2.3.0
 
   * fix typo/missing code in userparameters
