@@ -83,6 +83,21 @@ describe 'zabbix::agent' do
       it { should contain_firewall('150 zabbix-agent') }
     end
 
+    context 'when ensure is set to absent' do
+      let :params do
+        {
+          ensure: "absent",
+          zabbix_package_state: "absent",
+          agent_configfile_path: '/etc/zabbix/zabbix_agentd.conf',
+        }
+      end
+
+      it { should contain_service("zabbix-agent").with_ensure("stopped") }
+      it { should contain_package("zabbix-agent").with_ensure("absent") }
+      it { should contain_file("/etc/zabbix/zabbix_agentd.conf").with_ensure("absent") }
+      it { should contain_file("/etc/zabbix/zabbix_agentd.d").with_ensure("absent") }
+    end
+
     context 'when declaring manage_firewall is false' do
       let :params do
         {

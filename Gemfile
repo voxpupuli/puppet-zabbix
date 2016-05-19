@@ -28,6 +28,7 @@ group :test do
   gem 'voxpupuli-release',                                          :require => false, :git => 'https://github.com/voxpupuli/voxpupuli-release-gem.git'
   gem 'puppet-strings',                                             :require => false, :git => 'https://github.com/puppetlabs/puppetlabs-strings.git'
   gem 'rubocop', '~> 0.39',                                         :require => false
+  gem 'listen', '3.0.5'
 end
 
 group :development do

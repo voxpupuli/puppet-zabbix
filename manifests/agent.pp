@@ -201,6 +201,7 @@
 # Copyright 2014 Werner Dijkerman
 #
 class zabbix::agent (
+  $ensure                = $zabbix::params::agent_ensure,
   $zabbix_version        = $zabbix::params::zabbix_version,
   $zabbix_package_state  = $zabbix::params::zabbix_package_state,
   $zabbix_package_agent  = $zabbix::params::zabbix_package_agent,
@@ -306,6 +307,27 @@ class zabbix::agent (
     }
   }
 
+  case $ensure {
+    'absent': {
+      $service_ensure = 'stopped'
+      $service_enabled = false
+      $file_ensure = 'absent'
+      $directory_ensure = 'absent'
+    }
+    'present': {
+      $service_ensure = 'running'
+      $service_enabled = true
+      $file_ensure = 'file'
+      $directory_ensure = 'directory'
+    }
+    default: {
+      $service_ensure = 'running'
+      $service_enabled = true
+      $file_ensure = 'file'
+      $directory_ensure = 'directory'
+    }
+  }
+
   # Installing the package
   package { $zabbix_package_agent:
     ensure  => $zabbix_package_state,
@@ -314,8 +336,8 @@ class zabbix::agent (
 
   # Controlling the 'zabbix-agent' service
   service { 'zabbix-agent':
-    ensure     => running,
-    enable     => true,
+    ensure     => $service_ensure,
+    enable     => $service_enabled,
     hasstatus  => true,
     hasrestart => true,
     require    => Package[$zabbix_package_agent],
@@ -323,7 +345,7 @@ class zabbix::agent (
 
   # Configuring the zabbix-agent configuration file
   file { $agent_configfile_path:
-    ensure  => present,
+    ensure  => $file_ensure,
     owner   => 'zabbix',
     group   => 'zabbix',
     mode    => '0644',
@@ -334,14 +356,26 @@ class zabbix::agent (
   }
 
   # Include dir for specific zabbix-agent checks.
-  file { $include_dir:
-    ensure  => directory,
-    owner   => 'zabbix',
-    group   => 'zabbix',
-    recurse => true,
-    purge   => $include_dir_purge,
-    notify  => Service['zabbix-agent'],
-    require => File[$agent_configfile_path],
+  if $directory_ensure == 'directory' {
+    file { $include_dir:
+      ensure  => $directory_ensure,
+      owner   => 'zabbix',
+      group   => 'zabbix',
+      recurse => true,
+      purge   => $include_dir_purge,
+      notify  => Service['zabbix-agent'],
+      require => File[$agent_configfile_path],
+    }
+  } else {
+    file { $include_dir:
+      ensure  => $directory_ensure,
+      owner   => 'zabbix',
+      group   => 'zabbix',
+      recurse => true,
+      force   => true,
+      purge   => $include_dir_purge,
+      require => File[$agent_configfile_path],
+    }
   }
 
   # Manage firewall
