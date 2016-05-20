@@ -1,3 +1,4 @@
+require: rubocop-rspec
 AllCops:
   TargetRubyVersion: 1.9
   Include:
@@ -60,6 +61,7 @@ Style/RedundantSelf:
 Metrics/MethodLength:
   Enabled: false
 
+# Module length is not necessarily an indicator of code quality
 Metrics/ModuleLength:
   Enabled: false
 
@@ -159,6 +161,7 @@ Style/ClassAndModuleChildren:
 Style/ClassCheck:
   Enabled: true
 
+# Class length is not necessarily an indicator of code quality
 Metrics/ClassLength:
   Enabled: false
 
@@ -243,6 +246,7 @@ Style/ColonMethodCall:
 Style/CommentAnnotation:
   Enabled: true
 
+# 'Complexity' is very relative
 Metrics/CyclomaticComplexity:
   Enabled: false
 
@@ -291,6 +295,7 @@ Style/EmptyLinesAroundAccessModifier:
 Style/EmptyLiteral:
   Enabled: true
 
+# Configuration parameters: AllowURI, URISchemes.
 Metrics/LineLength:
   Enabled: false
 
@@ -474,11 +479,11 @@ Style/BlockDelimiters:
 Style/MultilineBlockLayout:
   Enabled: true
 
-# These cops are enabled by default, they have been disabled to get started with Rubocop
-# They should be re-evaluated soonish - rnelson0, 2/1/2016
+# 'Complexity' is very relative
 Metrics/AbcSize:
   Enabled: False
 
+# 'Complexity' is very relative
 Metrics/PerceivedComplexity:
   Enabled: False
 
@@ -487,3 +492,7 @@ Lint/UselessAssignment:
 
 Style/ClosingParenthesisIndentation:
   Enabled: false
+
+# RSpec
+RSpec/DescribeClass:
+  Enabled: False
