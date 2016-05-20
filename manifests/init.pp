@@ -82,6 +82,7 @@ class zabbix (
   $database_type                            = $zabbix::params::database_type,
   $database_path                            = $zabbix::params::database_path,
   $manage_database                          = $zabbix::params::manage_database,
+  $default_vhost                            = $zabbix::params::default_vhost,
   $manage_vhost                             = $zabbix::params::manage_vhost,
   $manage_firewall                          = $zabbix::params::manage_firewall,
   $manage_repo                              = $zabbix::params::manage_repo,
