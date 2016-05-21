@@ -494,5 +494,11 @@ Style/ClosingParenthesisIndentation:
   Enabled: false
 
 # RSpec
+
+# We don't use rspec in this way
 RSpec/DescribeClass:
+  Enabled: False
+
+# Example length is not necessarily an indicator of code quality
+RSpec/ExampleLength:
   Enabled: False
