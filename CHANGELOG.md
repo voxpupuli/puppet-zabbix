@@ -1,3 +1,9 @@
+## 2016-05-2 Release 2.3.2
+
+  * Maintenance: modulesync with voxpupuli defaults
+  * removed broken jruby tests which broke deployment to the forge
+
+
 ## 2016-5-19 Release 2.3.1
 
   * Fix: correct path to DB schema on all RHEL systems
