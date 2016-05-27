@@ -265,8 +265,7 @@ class zabbix::agent (
   # is set to for example "eth1" or "bond0.73".
   if ($listenip != undef) {
     if ($listenip =~ /^(eth|lo|bond|lxc|eno|tap|tun).*/) {
-      $int_name  = getvar("::ipaddress_${listenip}")
-      $listen_ip = $int_name
+      $listen_ip = getvar("::ipaddress_${listenip}")
     } elsif is_ip_address($listenip) or $listenip == '*' {
       $listen_ip = $listenip
     } else {
