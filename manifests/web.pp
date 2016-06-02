@@ -312,6 +312,7 @@ class zabbix::web (
         ensure  => $zabbix_package_state,
         before  => Package[$zabbix_web_package],
         require => Class['zabbix::repo'],
+        tag     => 'zabbix',
       }
     }
   } # END case $::operatingsystem
@@ -328,6 +329,7 @@ class zabbix::web (
     ensure  => $zabbix_package_state,
     before  => File['/etc/zabbix/web/zabbix.conf.php'],
     require => Class['zabbix::repo'],
+    tag     => 'zabbix',
   }
 
   # Webinterface config file
