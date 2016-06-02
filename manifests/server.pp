@@ -421,6 +421,7 @@ class zabbix::server (
   package { "zabbix-server-${db}":
     ensure  => $zabbix_package_state,
     require => Class['zabbix::repo'],
+    tag     => 'zabbix',
   }
 
   # Workaround for: The redhat provider can not handle attribute enable

@@ -513,15 +513,22 @@ class zabbix::proxy (
         package { 'zabbix-proxy':
           ensure  => $zabbix_package_state,
           require => Package["zabbix-proxy-${db}"],
+          tag     => 'zabbix',
         }
       }
 
       # Installing the packages
-      package { "zabbix-proxy-${db}": ensure => $zabbix_package_state, }
+      package { "zabbix-proxy-${db}":
+        ensure => $zabbix_package_state,
+        tag    => 'zabbix',
+      }
     } # END 'redhat','centos','oraclelinux'
     default : {
       # Installing the packages
-      package { "zabbix-proxy-${db}": ensure => $zabbix_package_state, }
+      package { "zabbix-proxy-${db}":
+        ensure => $zabbix_package_state,
+        tag    => 'zabbix',
+      }
     } # END default
   } # END case $::operatingsystem
 
