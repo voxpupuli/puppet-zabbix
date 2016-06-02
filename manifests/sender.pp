@@ -35,5 +35,6 @@ class zabbix::sender(
   package { 'zabbix-sender':
     ensure  => $zabbix_package_state,
     require => Class['zabbix::repo'],
+    tag     => 'zabbix',
   }
 }

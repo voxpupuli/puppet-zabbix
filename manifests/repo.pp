@@ -72,6 +72,7 @@ class zabbix::repo (
 
       }
       'Debian' : {
+        include ::apt
         if ($::architecture == 'armv6l') {
           apt::source { 'zabbix':
             location => 'http://naizvoru.com/raspbian/zabbix',
@@ -103,6 +104,8 @@ class zabbix::repo (
             ,
           }
         }
+        Apt::Source['zabbix'] -> Package<|tag == 'zabbix'|>
+        Class['Apt::Update']  -> Package<|tag == 'zabbix'|>
       }
       default  : {
         fail('Unrecognized operating system for webserver')
