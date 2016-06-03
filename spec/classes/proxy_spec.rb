@@ -29,7 +29,8 @@ describe 'zabbix::proxy' do
         lsbdistcodename: '',
         id: 'root',
         kernel: 'Linux',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
+        selinux_config_mode: ''
       }
     end
 
@@ -62,6 +63,13 @@ describe 'zabbix::proxy' do
       it { should contain_class('zabbix::repo').with_zabbix_version('2.4') }
       it { should contain_package('zabbix-proxy-pgsql').with_require('Class[Zabbix::Repo]') }
       it { should contain_package('zabbix-proxy').with_ensure('present') }
+    end
+
+    describe 'with enabled selinux' do
+      let :facts do
+        super().merge(selinux_config_mode: 'enforcing')
+      end
+      it { should contain_selboolean('zabbix_can_network').with('value' => 'on', 'persistent' => true) }
     end
 
     describe 'when database_type is postgresql' do
