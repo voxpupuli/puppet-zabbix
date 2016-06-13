@@ -26,7 +26,7 @@ describe 'zabbix::sender' do
         end
         if facts[:osfamily] == 'Archlinux'
           it 'fails' do
-            should raise_error(Puppet::Error, /Unrecognized operating system for webserver/)
+            should raise_error(Puppet::Error, %r{Unrecognized operating system for webserver})
           end
         else
           it { should contain_class('zabbix::repo').with_zabbix_version('3.0') }
