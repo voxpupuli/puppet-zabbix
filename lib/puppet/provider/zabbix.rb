@@ -1,5 +1,4 @@
 # zabbix provider type for puppet
-# rubocop:disable Style/ClassAndModuleChildren
 class Puppet::Provider::Zabbix < Puppet::Provider
   # Require the zabbixapi gem
   def self.require_zabbix
@@ -63,8 +62,8 @@ class Puppet::Provider::Zabbix < Puppet::Provider
         templates: [zbx.templates.get_id(host: template)]
       }
     )
-    exported_clean = exported.gsub(/>\s*/, '>').gsub(/\s*</, '<').gsub(/<date>.*<\/date>/, 'DATEWASHERE')
-    template_source_clean = template_source.gsub(/>\s*/, '>').gsub(/\s*</, '<').gsub(/<date>.*<\/date>/, 'DATEWASHERE')
+    exported_clean = exported.gsub(%r{>\s*}, '>').gsub(%r{\s*<}, '<').gsub(%r{<date>.*<\/date>}, 'DATEWASHERE')
+    template_source_clean = template_source.gsub(%r{>\s*}, '>').gsub(%r{\s*<}, '<').gsub(%r{<date>.*<\/date>}, 'DATEWASHERE')
     exported_clean.eql? template_source_clean
   rescue Puppet::ExecutionFailure
     false
@@ -72,6 +71,6 @@ class Puppet::Provider::Zabbix < Puppet::Provider
 
   # Is it an number?
   def self.a_number?(s)
-    s.to_s.match(/\A[+-]?\d+?(\.\d+)?\Z/).nil? ? false : true
+    s.to_s.match(%r{\A[+-]?\d+?(\.\d+)?\Z}).nil? ? false : true
   end
 end

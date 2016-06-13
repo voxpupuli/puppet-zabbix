@@ -17,7 +17,7 @@ Puppet::Type.newtype(:zabbix_template_host) do
   end
 
   newparam(:name, namevar: true) do
-    newvalues(/.+\@.+/)
+    newvalues(%r{.+\@.+})
     desc 'template_name@host_name'
   end
 

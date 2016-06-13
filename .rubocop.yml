@@ -8,7 +8,6 @@ AllCops:
     - .vendor/**/*
     - pkg/**/*
     - spec/fixtures/**/*
-
 Lint/ConditionPosition:
   Enabled: true
 
@@ -156,7 +155,7 @@ Style/ClassAndModuleCamelCase:
   Enabled: true
 
 Style/ClassAndModuleChildren:
-  Enabled: true
+  Enabled: false
 
 Style/ClassCheck:
   Enabled: true
@@ -254,7 +253,7 @@ Style/ConstantName:
   Enabled: true
 
 Style/Documentation:
-  Enabled: true
+  Enabled: false
 
 Style/DefWithParentheses:
   Enabled: true
@@ -263,7 +262,7 @@ Style/DeprecatedHashMethods:
   Enabled: true
 
 Style/DotPosition:
-  Enabled: true
+  EnforcedStyle: trailing
 
 Style/DoubleNegation:
   Enabled: true
@@ -446,8 +445,10 @@ Style/RedundantBegin:
 Style/RescueModifier:
   Enabled: true
 
+# based on https://github.com/voxpupuli/modulesync_config/issues/168
 Style/RegexpLiteral:
-  Enabled: false
+  EnforcedStyle: percent_r
+  Enabled: true
 
 Lint/UnderscorePrefixedVariableName:
   Enabled: true

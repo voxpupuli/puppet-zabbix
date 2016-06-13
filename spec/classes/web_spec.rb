@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 def package_provider_for_gems
-  Puppet.version =~ /^4/ ? 'puppet_gem' : 'gem'
+  Puppet.version =~ %r{^4} ? 'puppet_gem' : 'gem'
 end
 
 describe 'zabbix::web' do
@@ -60,7 +60,7 @@ describe 'zabbix::web' do
           packages.each do |package|
             it { should contain_package(package) }
           end
-          it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(/^\$DB\['TYPE'\]     = 'POSTGRESQL'/) }
+          it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['TYPE'\]     = 'POSTGRESQL'}) }
         end
 
         describe 'with database_type as mysql' do
@@ -71,7 +71,7 @@ describe 'zabbix::web' do
           packages.each do |package|
             it { should contain_package(package) }
           end
-          it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(/^\$DB\['TYPE'\]     = 'MYSQL'/) }
+          it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['TYPE'\]     = 'MYSQL'}) }
         end
 
         it { should contain_file('/etc/zabbix/web/zabbix.conf.php') }
@@ -125,11 +125,11 @@ describe 'zabbix::web' do
             )
           end
 
-          it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(/^\$DB\['SERVER'\]   = 'localhost'/) }
-          it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(/^\$DB\['DATABASE'\] = 'zabbix-server'/) }
-          it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(/^\$DB\['USER'\]     = 'zabbix-server'/) }
-          it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(/^\$DB\['PASSWORD'\] = 'zabbix-server'/) }
-          it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(/^\$ZBX_SERVER      = 'localhost'/) }
+          it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['SERVER'\]   = 'localhost'}) }
+          it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['DATABASE'\] = 'zabbix-server'}) }
+          it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['USER'\]     = 'zabbix-server'}) }
+          it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['PASSWORD'\] = 'zabbix-server'}) }
+          it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$ZBX_SERVER      = 'localhost'}) }
         end
       end
     end
