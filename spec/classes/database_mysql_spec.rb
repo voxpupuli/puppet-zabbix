@@ -13,7 +13,7 @@ describe 'zabbix::database::mysql' do
       end
       context 'with all defaults' do
         it 'fails' do
-          should raise_error(Puppet::Error, /We do not work./)
+          should raise_error(Puppet::Error, %r{We do not work.})
         end
       end
       path2 = if facts[:osfamily] == 'RedHat'
