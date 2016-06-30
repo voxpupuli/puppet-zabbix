@@ -312,6 +312,33 @@ class zabbix::agent (
     require => Class['zabbix::repo'],
     tag     => 'zabbix',
   }
+  
+  # Ensure that the correct config file is used.
+  
+  if $::osfamily == 'debian' {
+	file { '/etc/init.d/zabbix-agent':
+		ensure  => present,
+		mode    => '0755',
+		require => Package["$zabbix_package_agent"],
+		replace => true,
+		content => template('zabbix/zabbix-agent-debian.init.erb'),
+	}
+  } elsif $::osfamily == 'redhat' {
+		file { '/etc/init.d/zabbix-agent':
+			ensure  => present,
+			mode    => '0755',
+			require => Package["$zabbix_package_agent"],
+			replace => true,
+			content => template('zabbix/zabbix-agent-redhat.init.erb'),
+		}
+	}
+	
+	if $server_configfile_path != '/etc/zabbix/zabbix_agentd.conf' {
+		file { '/etc/zabbix/zabbix_agentd.conf':
+			require => Package["$zabbix_package_agent"],
+			ensure  => absent,
+		}
+	}
 
   # Controlling the 'zabbix-agent' service
   service { 'zabbix-agent':

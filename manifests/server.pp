@@ -423,6 +423,33 @@ class zabbix::server (
     require => Class['zabbix::repo'],
     tag     => 'zabbix',
   }
+  
+  # Ensure that the correct config file is used.
+  
+  if $::osfamily == 'debian' {
+		file { '/etc/init.d/zabbix-server':
+			ensure  => present,
+			mode    => '0755',
+			require => Package["zabbix-server-${db}"],
+			replace => true,
+			content => template('zabbix/zabbix-server-debian.init.erb'),
+		}
+  } elsif $::osfamily == 'redhat' {
+		file { '/etc/init.d/zabbix-server':
+			ensure  => present,
+			mode    => '0755',
+			require => Package["zabbix-server-${db}"],
+			replace => true,
+			content => template('zabbix/zabbix-server-redhat.init.erb'),
+		}
+	}
+
+	if $server_configfile_path != '/etc/zabbix/zabbix_server.conf' {
+		file { '/etc/zabbix/zabbix_server.conf':
+			require => Package["zabbix-server-${db}"],
+			ensure  => absent,
+		}
+	}
 
   # Workaround for: The redhat provider can not handle attribute enable
   # This is only happening when using an redhat family version 5.x.
