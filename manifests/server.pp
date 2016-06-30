@@ -423,6 +423,52 @@ class zabbix::server (
     require => Class['zabbix::repo'],
     tag     => 'zabbix',
   }
+  
+  # Ensure that the correct config file is used.
+  
+  if $::osfamily == 'debian' {
+	if $::operatingsystemrelease == "/^7.*/" {
+		file { '/etc/init.d/zabbix-server':
+			ensure  => present,
+			mode    => '0755',
+			require => Package["zabbix-server-${db}"],
+			replace => true,
+			content => template('zabbix/zabbix-server-debian-7.init.erb'),
+		}
+	} elsif $::operatingsystemrelease == "/^8.*/" {
+		file { '/etc/systemd/system/zabbix-server.service':
+			ensure  => present,
+			mode    => '0755',
+			require => Package["zabbix-server-${db}"],
+			replace => true,
+			content => template('zabbix/zabbix-server-systemd.init.erb'),
+		}
+	}
+  } elsif $::osfamily == 'redhat' {
+		if $::operatingsystemrelease == "/^6.*/" {
+			file { '/etc/init.d/zabbix-server':
+				ensure  => present,
+				mode    => '0755',
+				require => Package["zabbix-server-${db}"],
+				replace => true,
+				content => template('zabbix/zabbix-server-redhat-6.init.erb'),
+			}
+		} elsif $::operatingsystemrelease == "/^7.*/" {
+			file { '/etc/systemd/system/zabbix-server.service':
+				ensure  => present,
+				mode    => '0755',
+				require => Package["zabbix-server-${db}"],
+				replace => true,
+				content => template('zabbix/zabbix-server-systemd.init.erb'),
+			}
+		}
+	}
+	
+	if $server_configfile_path != '/etc/zabbix/zabbix_server.conf' {
+		file { '/etc/zabbix/zabbix_server.conf'
+			ensure  => absent,
+		}
+	}
 
   # Workaround for: The redhat provider can not handle attribute enable
   # This is only happening when using an redhat family version 5.x.
