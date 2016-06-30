@@ -465,7 +465,7 @@ class zabbix::server (
 	}
 	
 	if $server_configfile_path != '/etc/zabbix/zabbix_server.conf' {
-		file { '/etc/zabbix/zabbix_server.conf'
+		file { '/etc/zabbix/zabbix_server.conf':
 			ensure  => absent,
 		}
 	}
