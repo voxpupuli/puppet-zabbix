@@ -355,6 +355,7 @@ class zabbix::agent (
 	
 	if $server_configfile_path != '/etc/zabbix/zabbix_agentd.conf' {
 		file { '/etc/zabbix/zabbix_agentd.conf':
+			require => Package["$zabbix_package_agent"],
 			ensure  => absent,
 		}
 	}
