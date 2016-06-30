@@ -316,40 +316,20 @@ class zabbix::agent (
   # Ensure that the correct config file is used.
   
   if $::osfamily == 'debian' {
-	if $::operatingsystemrelease == "/^7.*/" {
+	file { '/etc/init.d/zabbix-agent':
+		ensure  => present,
+		mode    => '0755',
+		require => Package["$zabbix_package_agent"],
+		replace => true,
+		content => template('zabbix/zabbix-agent-debian.init.erb'),
+	}
+  } elsif $::osfamily == 'redhat' {
 		file { '/etc/init.d/zabbix-agent':
 			ensure  => present,
 			mode    => '0755',
 			require => Package["$zabbix_package_agent"],
 			replace => true,
-			content => template('zabbix/zabbix-agent-debian-7.init.erb'),
-		}
-	} elsif $::operatingsystemrelease == "/^8.*/" {
-		file { '/etc/systemd/system/zabbix-agent.service':
-			ensure  => present,
-			mode    => '0755',
-			require => Package["$zabbix_package_agent"],
-			replace => true,
-			content => template('zabbix/zabbix-agent-systemd.init.erb'),
-		}
-	}
-  } elsif $::osfamily == 'redhat' {
-		if $::operatingsystemrelease == "/^6.*/" {
-			file { '/etc/init.d/zabbix-agent':
-				ensure  => present,
-				mode    => '0755',
-				require => Package["$zabbix_package_agent"],
-				replace => true,
-				content => template('zabbix/zabbix-agent-redhat-6.init.erb'),
-			}
-		} elsif $::operatingsystemrelease == "/^7.*/" {
-			file { '/etc/systemd/system/zabbix-agent.service':
-				ensure  => present,
-				mode    => '0755',
-				require => Package["$zabbix_package_agent"],
-				replace => true,
-				content => template('zabbix/zabbix-agent-systemd.init.erb'),
-			}
+			content => template('zabbix/zabbix-agent-redhat.init.erb'),
 		}
 	}
 	
