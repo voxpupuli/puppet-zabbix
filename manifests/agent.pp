@@ -316,29 +316,45 @@ class zabbix::agent (
   # Ensure that the correct config file is used.
   
   if $::osfamily == 'debian' {
-	file { '/etc/init.d/zabbix-agent':
-		ensure  => present,
-		mode    => '0755',
-		require => Package["$zabbix_package_agent"],
-		replace => true,
-		content => template('zabbix/zabbix-agent-debian.init.erb'),
-	}
+    if $::operatingsystemrelease !~ /^8.*/ {
+      file { '/etc/init.d/zabbix-agent':
+        ensure  => file,
+        mode    => '0755',
+        require => Package["$zabbix_package_agent"],
+        content => template('zabbix/zabbix-agent-debian.init.erb'),
+      }
+    } else {
+      file { '/etc/systemd/system/zabbix-agent.service':
+        ensure  => file,
+        mode    => '0664',
+        require => Package["$zabbix_package_agent"],
+        content => template('zabbix/zabbix-agent-systemd.init.erb'),
+      }
+    }
   } elsif $::osfamily == 'redhat' {
-		file { '/etc/init.d/zabbix-agent':
-			ensure  => present,
-			mode    => '0755',
-			require => Package["$zabbix_package_agent"],
-			replace => true,
-			content => template('zabbix/zabbix-agent-redhat.init.erb'),
-		}
-	}
+    if $::operatingsystemrelease !~ /^7.*/ {
+      file { '/etc/init.d/zabbix-agent':
+        ensure  => file,
+        mode    => '0755',
+        require => Package["$zabbix_package_agent"],
+        content => template('zabbix/zabbix-agent-redhat.init.erb'),
+      }
+    } else {
+      file { '/etc/systemd/system/zabbix-agent.service':
+        ensure  => file,
+        mode    => '0664',
+        require => Package["$zabbix_package_agent"],
+        content => template('zabbix/zabbix-agent-systemd.init.erb'),
+      }
+    }
+  }
 	
-	if $agent_configfile_path != '/etc/zabbix/zabbix_agentd.conf' {
-		file { '/etc/zabbix/zabbix_agentd.conf':
-			require => Package["$zabbix_package_agent"],
-			ensure  => absent,
-		}
-	}
+  if $agent_configfile_path != '/etc/zabbix/zabbix_agentd.conf' {
+    file { '/etc/zabbix/zabbix_agentd.conf':
+      require => Package["$zabbix_package_agent"],
+      ensure  => absent,
+    }
+  }
 
   # Controlling the 'zabbix-agent' service
   service { 'zabbix-agent':
