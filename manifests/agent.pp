@@ -330,6 +330,10 @@ class zabbix::agent (
         require => Package["$zabbix_package_agent"],
         content => template('zabbix/zabbix-agent-systemd.init.erb'),
       }
+      file { '/etc/init.d/zabbix-agent':
+        ensure  => absent,
+        require => Package["$zabbix_package_agent"],
+      }
     }
   } elsif $::osfamily == 'redhat' {
     if $::operatingsystemrelease !~ /^7.*/ {
@@ -345,6 +349,10 @@ class zabbix::agent (
         mode    => '0664',
         require => Package["$zabbix_package_agent"],
         content => template('zabbix/zabbix-agent-systemd.init.erb'),
+      }
+      file { '/etc/init.d/zabbix-agent':
+        ensure  => absent,
+        require => Package["$zabbix_package_agent"],
       }
     }
   }

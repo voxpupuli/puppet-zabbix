@@ -441,6 +441,10 @@ class zabbix::server (
         require => Package["zabbix-server-${db}"],
         content => template('zabbix/zabbix-server-systemd.init.erb'),
       }
+      file { '/etc/init.d/zabbix-server':
+        ensure  => absent,
+        require => Package["zabbix-server-${db}"],
+      }
     }
   } elsif $::osfamily == 'redhat' {
     if $::operatingsystemrelease !~ /^7.*/ {
@@ -456,6 +460,10 @@ class zabbix::server (
         mode    => '0664',
         require => Package["zabbix-server-${db}"],
         content => template('zabbix/zabbix-server-systemd.init.erb'),
+      }
+      file { '/etc/init.d/zabbix-server':
+        ensure  => absent,
+        require => Package["zabbix-server-${db}"],
       }
     }
   }

@@ -1,9 +1,9 @@
 [Unit]
 Description=Zabbix Server
 <% if @database_type == "mysql" %>
-  After=syslog.target network.target mysqld.service
+After=syslog.target network.target mysqld.service
 <% else %>
-  After=syslog.target network.target postgresql.service
+After=syslog.target network.target postgresql.service
 <% end -%>
 
 [Service]
