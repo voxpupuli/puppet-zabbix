@@ -536,6 +536,17 @@ class zabbix::server (
     replace => true,
     content => template('zabbix/zabbix_server.conf.erb'),
   }
+  
+  # Ensure snmp trapper file exists when startsnmptrapper is set to 1
+  
+  if $startsnmptrapper == 1 {
+    file { $server_snmptrapperfile:
+      ensure => file,
+      owner   => $server_config_owner,
+      group   => $server_config_group,
+      require => Package["zabbix-server-${db}"],
+    }
+  }
 
   # Include dir for specific zabbix-server checks.
   file { $include_dir:
