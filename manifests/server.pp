@@ -542,6 +542,7 @@ class zabbix::server (
   if $startsnmptrapper == 1 {
     file { $snmptrapperfile:
       ensure => file,
+      content => '',
       owner   => $server_config_owner,
       group   => $server_config_group,
       require => Package["zabbix-server-${db}"],
