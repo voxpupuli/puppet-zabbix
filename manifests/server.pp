@@ -540,7 +540,7 @@ class zabbix::server (
   # Ensure snmp trapper file exists when startsnmptrapper is set to 1
   
   if $startsnmptrapper == 1 {
-    file { $server_snmptrapperfile:
+    file { $snmptrapperfile:
       ensure => file,
       owner   => $server_config_owner,
       group   => $server_config_group,
