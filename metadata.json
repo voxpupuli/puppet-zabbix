@@ -40,6 +40,10 @@
       "name": "puppetlabs/concat",
       "version_requirement": ">= 1.2.5"
     }
+    {
+      "name": "camptocamp/systemd",
+      "version_requirement": ">= 0.3.0"
+    }
   ],
   "source": "https://github.com/voxpupuli/puppet-zabbix.git",
   "project_page": "https://github.com/voxpupuli/puppet-zabbix",

@@ -435,12 +435,14 @@ class zabbix::server (
         content => template('zabbix/zabbix-server-debian.init.erb'),
       }
     } else {
+      include ::systemd
       file { '/etc/systemd/system/zabbix-server.service':
         ensure  => file,
         mode    => '0664',
         require => Package["zabbix-server-${db}"],
         content => template('zabbix/zabbix-server-systemd.init.erb'),
-      }
+      } ~>
+      Exec['systemctl-daemon-reload']
       file { '/etc/init.d/zabbix-server':
         ensure  => absent,
         require => Package["zabbix-server-${db}"],
@@ -455,12 +457,14 @@ class zabbix::server (
         content => template('zabbix/zabbix-server-redhat.init.erb'),
       }
     } else {
+      include ::systemd
       file { '/etc/systemd/system/zabbix-server.service':
         ensure  => file,
         mode    => '0664',
         require => Package["zabbix-server-${db}"],
         content => template('zabbix/zabbix-server-systemd.init.erb'),
-      }
+      } ~>
+      Exec['systemctl-daemon-reload']
       file { '/etc/init.d/zabbix-server':
         ensure  => absent,
         require => Package["zabbix-server-${db}"],

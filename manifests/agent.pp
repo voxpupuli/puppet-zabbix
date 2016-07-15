@@ -324,12 +324,14 @@ class zabbix::agent (
         content => template('zabbix/zabbix-agent-debian.init.erb'),
       }
     } else {
+      include ::systemd
       file { '/etc/systemd/system/zabbix-agent.service':
         ensure  => file,
         mode    => '0664',
         require => Package[$zabbix_package_agent],
         content => template('zabbix/zabbix-agent-systemd.init.erb'),
-      }
+      } ~>
+      Exec['systemctl-daemon-reload']
       file { '/etc/init.d/zabbix-agent':
         ensure  => absent,
         require => Package[$zabbix_package_agent],
@@ -344,12 +346,14 @@ class zabbix::agent (
         content => template('zabbix/zabbix-agent-redhat.init.erb'),
       }
     } else {
+      include ::systemd
       file { '/etc/systemd/system/zabbix-agent.service':
         ensure  => file,
         mode    => '0664',
         require => Package[$zabbix_package_agent],
         content => template('zabbix/zabbix-agent-systemd.init.erb'),
-      }
+      } ~>
+      Exec['systemctl-daemon-reload']
       file { '/etc/init.d/zabbix-agent':
         ensure  => absent,
         require => Package[$zabbix_package_agent],
