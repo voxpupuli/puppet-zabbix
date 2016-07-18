@@ -427,7 +427,7 @@ class zabbix::server (
   # Ensure that the correct config file is used.
   
   if $::osfamily == 'debian' {
-    if versioncmp($::operatingsystemmajrelease, 8) == -1 {
+    if versioncmp($::operatingsystemmajrelease, '8') == -1 {
       file { '/etc/init.d/zabbix-server':
         ensure  => file,
         mode    => '0755',
@@ -449,7 +449,7 @@ class zabbix::server (
       }
     }
   } elsif $::osfamily == 'redhat' {
-    if versioncmp($::operatingsystemmajrelease, 7) == -1 {
+    if versioncmp($::operatingsystemmajrelease, '7') == -1 {
       file { '/etc/init.d/zabbix-server':
         ensure  => file,
         mode    => '0755',
