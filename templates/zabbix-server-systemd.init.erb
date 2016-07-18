@@ -1,0 +1,22 @@
+[Unit]
+Description=Zabbix Server
+Documentation=man:zabbix_server
+<% if @database_type == "mysql" %>
+After=syslog.target network.target mysqld.service
+<% else %>
+After=syslog.target network.target postgresql.service
+<% end -%>
+
+[Service]
+Type=forking
+ExecStart=/usr/sbin/zabbix_server -c <%= @server_configfile_path %>
+ExecReload=/usr/sbin/zabbix_server -R config_cache_reload
+PIDFile=<%= @pidfile %>
+Restart=on-abnormal
+PrivateDevices=yes
+PrivateTmp=yes
+ProtectSystem=full
+ProtectHome=yes
+
+[Install]
+WantedBy=multi-user.target

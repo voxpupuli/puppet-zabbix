@@ -1,0 +1,16 @@
+[Unit]
+Description=Zabbix Agent
+After=syslog.target network.target
+Documentation=man:zabbix_agentd
+
+[Service]
+Type=forking
+ExecStart=/usr/sbin/zabbix_agentd -c <%= @agent_configfile_path %>
+Restart=on-abnormal
+PIDFile=<%= @pidfile %>
+PrivateTmp=yes
+ProtectSystem=full
+ProtectHome=yes
+
+[Install]
+WantedBy=multi-user.target
