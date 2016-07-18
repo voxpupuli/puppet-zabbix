@@ -313,6 +313,61 @@ class zabbix::agent (
     tag     => 'zabbix',
   }
 
+  # Ensure that the correct config file is used.
+  
+  if $::osfamily == 'debian' {
+    if $::operatingsystemmajrelease < 8 {
+      file { '/etc/init.d/zabbix-agent':
+        ensure  => file,
+        mode    => '0755',
+        require => Package[$zabbix_package_agent],
+        content => template('zabbix/zabbix-agent-debian.init.erb'),
+      }
+    } else {
+      include ::systemd
+      file { '/etc/systemd/system/zabbix-agent.service':
+        ensure  => file,
+        mode    => '0664',
+        require => Package[$zabbix_package_agent],
+        content => template('zabbix/zabbix-agent-systemd.init.erb'),
+      } ~>
+      Exec['systemctl-daemon-reload']
+      file { '/etc/init.d/zabbix-agent':
+        ensure  => absent,
+        require => Package[$zabbix_package_agent],
+      }
+    }
+  } elsif $::osfamily == 'redhat' {
+    if $::operatingsystemmajrelease < 7 {
+      file { '/etc/init.d/zabbix-agent':
+        ensure  => file,
+        mode    => '0755',
+        require => Package[$zabbix_package_agent],
+        content => template('zabbix/zabbix-agent-redhat.init.erb'),
+      }
+    } else {
+      include ::systemd
+      file { '/etc/systemd/system/zabbix-agent.service':
+        ensure  => file,
+        mode    => '0664',
+        require => Package[$zabbix_package_agent],
+        content => template('zabbix/zabbix-agent-systemd.init.erb'),
+      } ~>
+      Exec['systemctl-daemon-reload']
+      file { '/etc/init.d/zabbix-agent':
+        ensure  => absent,
+        require => Package[$zabbix_package_agent],
+      }
+    }
+  }
+	
+  if $agent_configfile_path != '/etc/zabbix/zabbix_agentd.conf' {
+    file { '/etc/zabbix/zabbix_agentd.conf':
+      require => Package[$zabbix_package_agent],
+      ensure  => absent,
+    }
+  }
+
   # Controlling the 'zabbix-agent' service
   service { 'zabbix-agent':
     ensure     => running,
