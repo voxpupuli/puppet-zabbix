@@ -424,6 +424,61 @@ class zabbix::server (
     tag     => 'zabbix',
   }
 
+  # Ensure that the correct config file is used.
+  
+  if $::osfamily == 'debian' {
+    if versioncmp($::operatingsystemmajrelease, '8') == -1 {
+      file { '/etc/init.d/zabbix-server':
+        ensure  => file,
+        mode    => '0755',
+        require => Package["zabbix-server-${db}"],
+        content => template('zabbix/zabbix-server-debian.init.erb'),
+      }
+    } else {
+      include ::systemd
+      file { '/etc/systemd/system/zabbix-server.service':
+        ensure  => file,
+        mode    => '0664',
+        require => Package["zabbix-server-${db}"],
+        content => template('zabbix/zabbix-server-systemd.init.erb'),
+      } ~>
+      Exec['systemctl-daemon-reload']
+      file { '/etc/init.d/zabbix-server':
+        ensure  => absent,
+        require => Package["zabbix-server-${db}"],
+      }
+    }
+  } elsif $::osfamily == 'redhat' {
+    if versioncmp($::operatingsystemmajrelease, '7') == -1 {
+      file { '/etc/init.d/zabbix-server':
+        ensure  => file,
+        mode    => '0755',
+        require => Package["zabbix-server-${db}"],
+        content => template('zabbix/zabbix-server-redhat.init.erb'),
+      }
+    } else {
+      include ::systemd
+      file { '/etc/systemd/system/zabbix-server.service':
+        ensure  => file,
+        mode    => '0664',
+        require => Package["zabbix-server-${db}"],
+        content => template('zabbix/zabbix-server-systemd.init.erb'),
+      } ~>
+      Exec['systemctl-daemon-reload']
+      file { '/etc/init.d/zabbix-server':
+        ensure  => absent,
+        require => Package["zabbix-server-${db}"],
+      }
+    }
+  }
+
+  if $server_configfile_path != '/etc/zabbix/zabbix_server.conf' {
+    file { '/etc/zabbix/zabbix_server.conf':
+      ensure  => absent,
+      require => Package["zabbix-server-${db}"],
+    }
+  }
+
   # Workaround for: The redhat provider can not handle attribute enable
   # This is only happening when using an redhat family version 5.x.
   if $::osfamily == 'redhat' and $::operatingsystemrelease !~ /^5.*/ {
