@@ -177,6 +177,9 @@
 # [*historycachesize*]
 #   Size of history cache, in bytes.
 #
+# [*historyindexcachesize*]
+#   Size of history index cache, in bytes.
+#
 # [*historytextcachesize*]
 #   Size of text history cache, in bytes.
 #
@@ -383,6 +386,7 @@ class zabbix::proxy (
   $cachesize               = $zabbix::params::proxy_cachesize,
   $startdbsyncers          = $zabbix::params::proxy_startdbsyncers,
   $historycachesize        = $zabbix::params::proxy_historycachesize,
+  $historyindexcachesize   = $zabbix::params::proxy_historyindexcachesize,
   $historytextcachesize    = $zabbix::params::proxy_historytextcachesize,
   $timeout                 = $zabbix::params::proxy_timeout,
   $tlsaccept               = $zabbix::params::proxy_tlsaccept,

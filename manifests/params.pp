@@ -106,6 +106,7 @@ class zabbix::params {
   $server_debuglevel                        = '3'
   $server_externalscripts                   = '/usr/lib/zabbix/externalscripts'
   $server_historycachesize                  = '8M'
+  $server_historyindexcachesize             = undef
   $server_historytextcachesize              = '16M'
   $server_housekeepingfrequency             = '1'
   $server_include                           = '/etc/zabbix/zabbix_server.conf.d'
@@ -231,6 +232,7 @@ class zabbix::params {
   $proxy_externalscripts                    = '/usr/lib/zabbix/externalscripts'
   $proxy_heartbeatfrequency                 = '60'
   $proxy_historycachesize                   = '8M'
+  $proxy_historyindexcachesize              = undef
   $proxy_historytextcachesize               = '16M'
   $proxy_hostname                           = $::fqdn
   $proxy_housekeepingfrequency              = '1'

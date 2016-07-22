@@ -155,6 +155,9 @@
 # [*historycachesize*]
 #   Size of history cache, in bytes.
 #
+# [*historyindexcachesize*]
+#   Size of history index cache, in bytes.
+#
 # [*trendcachesize*]
 #   Size of trend cache, in bytes.
 #
@@ -331,6 +334,7 @@ class zabbix::server (
   $cacheupdatefrequency    = $zabbix::params::server_cacheupdatefrequency,
   $startdbsyncers          = $zabbix::params::server_startdbsyncers,
   $historycachesize        = $zabbix::params::server_historycachesize,
+  $historyindexcachesize   = $zabbix::params::server_historyindexcachesize,
   $trendcachesize          = $zabbix::params::server_trendcachesize,
   $historytextcachesize    = $zabbix::params::server_historytextcachesize,
   $valuecachesize          = $zabbix::params::server_valuecachesize,
