@@ -29,7 +29,8 @@ describe 'zabbix::server' do
         id: 'root',
         kernel: 'Linux',
         path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
-        selinux_config_mode: ''
+        selinux_config_mode: '',
+        systemd: true
       }
     end
 
