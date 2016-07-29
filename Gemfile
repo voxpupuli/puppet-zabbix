@@ -26,7 +26,7 @@ group :test do
   gem 'puppet-blacksmith',                                          :require => false
   gem 'voxpupuli-release',                                          :require => false, :git => 'https://github.com/voxpupuli/voxpupuli-release-gem.git'
   gem 'puppet-strings',                                             :require => false, :git => 'https://github.com/puppetlabs/puppetlabs-strings.git'
-  gem 'rubocop-rspec', '~> 1.5',                                    :require => false
+  gem 'rubocop-rspec', '~> 1.5',                                    :require => false if RUBY_VERSION >= 2.0.0
 end
 
 group :development do
