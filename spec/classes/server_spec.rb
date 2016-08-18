@@ -137,6 +137,29 @@ describe 'zabbix::server' do
       it { should_not contain_firewall('151 zabbix-server') }
     end
 
+    # If manage_service is true (default), it should create a service
+    # and ensure that it is running.
+    context 'when declaring manage_service is true' do
+      let :params do
+        {
+          manage_service: true
+        }
+      end
+
+      it { should contain_service('zabbix-server').with_ensure('running') }
+    end
+
+    # When the manage_service is false, it may not make the service.
+    context 'when declaring manage_service is false' do
+      let :params do
+        {
+          manage_service: false
+        }
+      end
+
+      it { should_not contain_service('zabbix-server') }
+    end
+
     context 'with all zabbix_server.conf-related parameters' do
       let :params do
         {
