@@ -1,3 +1,21 @@
+## 2016-08-18 Release 2.4.0
+
+  * Maintenance: modulesync with voxpupuli defaults
+  * Fix: add concat as a dep to metadata,json
+  * Fix: Add package tagging for apt update workflow
+  * Fix: add historyindexcachesize option to server and proxy code
+  * Fix: manage database parameter not pass to zabbix::server
+  * Fix: Incorrect selection of systemd in certain OS
+  * Feature: Manage default_vhost in zabbix main class
+  * Feature: Allow setting ListenIP as "lo" loopback interface
+  * Feature: Set selboolean for zabbix proxy
+  * Feature: Support Custom config file name/path
+  * Feature: Respect user provided Zabbix agent package name in userparameters
+  * Feature: Add manage_service option
+
+
+
+
 ## 2016-05-2 Release 2.3.2
 
   * Maintenance: modulesync with voxpupuli defaults
