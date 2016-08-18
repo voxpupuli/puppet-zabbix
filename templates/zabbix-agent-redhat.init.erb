@@ -1,74 +1,91 @@
-#!/bin/bash
+#!/bin/sh
 #
-#       /etc/rc.d/init.d/zabbix_agentd
-#
-# Starts the zabbix_agentd daemon
-#
-# chkconfig: - 95 5
-# description: Zabbix Monitoring Agent
+# chkconfig: - 86 14
+# description: Zabbix agent daemon
 # processname: zabbix_agentd
-# pidfile: /tmp/zabbix_agentd.pid
+# config: /etc/zabbix/zabbix_agentd.conf
+#
 
-# Modified for Zabbix 2.0.0
-# May 2012, Zabbix SIA
+### BEGIN INIT INFO
+# Provides: zabbix-agent
+# Required-Start: $local_fs $network
+# Required-Stop: $local_fs $network
+# Should-Start: zabbix zabbix-proxy
+# Should-Stop: zabbix zabbix-proxy
+# Default-Start:
+# Default-Stop: 0 1 2 3 4 5 6
+# Short-Description: Start and stop Zabbix agent
+# Description: Zabbix agent
+### END INIT INFO
 
 # Source function library.
+. /etc/rc.d/init.d/functions
 
-. /etc/init.d/functions
-
-RETVAL=0
-prog="Zabbix Agent"
-ZABBIX_BIN="/usr/local/sbin/zabbix_agentd"
-OPTS="-c <%= @agent_configfile_path %>"
-
-if [ ! -x ${ZABBIX_BIN} ] ; then
-        echo -n "${ZABBIX_BIN} not installed! "
-        # Tell the user this has skipped
-        exit 5
+if [ -x /usr/sbin/zabbix_agentd ]; then
+    exec=zabbix_agentd
+else
+    exit 5
 fi
 
-start() {
-        echo -n $"Starting $prog: "
-        daemon "$ZABBIX_BIN -c $OPTS"
-        RETVAL=$?
-        [ $RETVAL -eq 0 ] && touch /var/lock/subsys/zabbix_agentd
-        echo
+prog=${exec##*/}
+conf=/etc/zabbix/zabbix_agentd.conf
+pidfile=$(grep -e "^PidFile=.*$" $conf | cut -d= -f2 | tr -d '\r')
+timeout=10
+
+if [ -f /etc/sysconfig/zabbix-agent ]; then
+    . /etc/sysconfig/zabbix-agent
+fi
+
+lockfile=/var/lock/subsys/zabbix-agent
+
+start()
+{
+    echo -n $"Starting Zabbix agent: "
+    daemon $exec -c $conf
+    rv=$?
+    echo
+    [ $rv -eq 0 ] && touch $lockfile
+    return $rv
 }
 
-stop() {
-        echo -n $"Stopping $prog: "
-        killproc $ZABBIX_BIN
-        RETVAL=$?
-        [ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/zabbix_agentd
-        echo
+stop()
+{
+    echo -n $"Shutting down Zabbix agent: "
+    killproc -p $pidfile -d $timeout $prog
+    rv=$?
+    echo
+    [ $rv -eq 0 ] && rm -f $lockfile
+    return $rv
+}
+
+restart()
+{
+    stop
+    start
 }
 
 case "$1" in
-  start)
-        start
+    start|stop|restart)
+        $1
         ;;
-  stop)
-        stop
+    force-reload)
+        restart
         ;;
-  reload|restart)
-        stop
-        sleep 10
-        start
-        RETVAL=$?
+    status)
+        status -p $pidfile $prog
         ;;
-  condrestart)
-        if [ -f /var/lock/subsys/zabbix_agentd ]; then
-            stop
-            start
+    try-restart|condrestart)
+        if status $prog >/dev/null ; then
+            restart
         fi
         ;;
-  status)
-        status $ZABBIX_BIN
-        RETVAL=$?
+    reload)
+        action $"Service ${0##*/} does not support the reload action: " /bin/false
+        exit 3
         ;;
-  *)
-        echo $"Usage: $0 {condrestart|start|stop|restart|reload|status}"
-        exit 1
+    *)
+        echo $"Usage: $0 {start|stop|status|restart|try-restart|force-reload}"
+        exit 2
+        ;;
 esac
 
-exit $RETVAL
