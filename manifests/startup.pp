@@ -11,14 +11,6 @@
 #  zabbix::startup { 'agent':
 #  }
 #
-# === Authors
-#
-# Author Name: ikben@werner-dijkerman.nl
-#
-# === Copyright
-#
-# Copyright 2014 Werner Dijkerman
-#
 define zabbix::startup {
   if str2bool($::systemd) {
     contain ::systemd
