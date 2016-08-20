@@ -315,7 +315,9 @@ class zabbix::agent (
 
   # Ensure that the correct config file is used.
   zabbix::startup {'zabbix-agent':
-    require => Package[$zabbix_package_agent],
+    pidfile               => $pidfile,
+    agent_configfile_path => $agent_configfile_path,
+    require               => Package[$zabbix_package_agent],
   }
 
   if $agent_configfile_path != '/etc/zabbix/zabbix_agentd.conf' {

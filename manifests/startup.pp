@@ -11,8 +11,34 @@
 #  zabbix::startup { 'agent':
 #  }
 #
-define zabbix::startup {
+define zabbix::startup (
+  $pidfile                = undef,
+  $agent_configfile_path  = undef,
+  $server_configfile_path = undef,
+  $database_type          = undef,
+  ) {
+  case $title {
+    /agent/: {
+      unless $agent_configfile_path {
+        fail('you have to provide a agent_configfile_path param')
+      }
+    }
+    /server/: {
+      unless $server_configfile_path {
+        fail('you have to provide a server_configfile_path param')
+      }
+      unless $database_type {
+        fail('you have to provide a database_type param')
+      }
+    }
+    default: {
+      fail('we currently only spport a title that contains agent or server')
+    }
+  }
   if str2bool($::systemd) {
+    unless $pidfile {
+      fail('you have to provide a pidfile param')
+    }
     contain ::systemd
     file { "/etc/systemd/system/${name}.service":
       ensure  => file,
@@ -31,5 +57,7 @@ define zabbix::startup {
       mode    => '0755',
       content => template("zabbix/${name}-${osfamily_downcase}.init.erb"),
     }
+  } else {
+    fail('We currently only support Debian and RedHat osfamily as non-systemd')
   }
 }
