@@ -436,7 +436,10 @@ class zabbix::server (
 
   # Ensure that the correct config file is used.
   zabbix::startup {'zabbix-server':
-    require => Package["zabbix-server-${db}"],
+    pidfile                => $pidfile,
+    database_type          => $database_type,
+    server_configfile_path => $server_configfile_path,
+    require                => Package["zabbix-server-${db}"],
   }
 
   if $server_configfile_path != '/etc/zabbix/zabbix_server.conf' {
