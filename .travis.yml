@@ -39,7 +39,7 @@ notifications:
   email: false
 deploy:
   provider: puppetforge
-  edge:
+  deploy:
     branch: ha-bug-puppet-forge
   user: puppet
   password:
