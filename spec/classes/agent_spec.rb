@@ -14,9 +14,17 @@ describe 'zabbix::agent' do
 
   on_supported_os.each do |os, facts|
     context "on #{os} " do
+      systemd_fact = case facts[:osfamily]
+                     when 'Archlinux'
+                       { systemd: true }
+                     else
+                       { systemd: false }
+                     end
       let :facts do
         facts.merge(
           mocked_facts
+        ).merge(
+          systemd_fact
         )
       end
 
@@ -47,7 +55,6 @@ describe 'zabbix::agent' do
         end
 
         it { should contain_file('/etc/zabbix/zabbix_agentd.d').with_ensure('directory') }
-
         it { should contain_zabbix__startup('zabbix-agent').that_requires("Package[#{package}]") }
       end
 
