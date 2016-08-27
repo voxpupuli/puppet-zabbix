@@ -108,7 +108,7 @@ class zabbix::repo (
         Class['Apt::Update']  -> Package<|tag == 'zabbix'|>
       }
       default  : {
-        fail('Unrecognized operating system for webserver')
+        fail("Managing a repo on ${::osfamily} is currently not implemented")
       }
     }
   } # end if ($manage_repo)

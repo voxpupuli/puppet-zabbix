@@ -436,7 +436,10 @@ class zabbix::server (
 
   # Ensure that the correct config file is used.
   zabbix::startup {'zabbix-server':
-    require => Package["zabbix-server-${db}"],
+    pidfile                => $pidfile,
+    database_type          => $database_type,
+    server_configfile_path => $server_configfile_path,
+    require                => Package["zabbix-server-${db}"],
   }
 
   if $server_configfile_path != '/etc/zabbix/zabbix_server.conf' {
@@ -532,7 +535,7 @@ class zabbix::server (
   }
 
   # check if selinux is active and allow zabbix
-  if $::osfamily == 'RedHat' and $::selinux_config_mode == 'enforcing' {
+  if $::selinux_config_mode == 'enforcing' {
     selboolean{'zabbix_can_network':
       persistent => true,
       value      => 'on',
