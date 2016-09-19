@@ -328,9 +328,15 @@ class zabbix::agent (
   }
 
   # Controlling the 'zabbix-agent' service
+  if str2bool($::systemd) {
+    $service_provider = 'systemd'
+  } else {
+    $service_provider = undef
+  }
   service { 'zabbix-agent':
     ensure     => running,
     enable     => true,
+    provider   => $service_provider,
     hasstatus  => true,
     hasrestart => true,
     require    => Package[$zabbix_package_agent],
