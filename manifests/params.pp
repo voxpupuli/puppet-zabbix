@@ -20,6 +20,7 @@ class zabbix::params {
       $proxy_fping6location  = '/usr/bin/fping6'
       $manage_repo           = true
       $zabbix_package_agent  = 'zabbix-agent'
+      $agent_configfile_path = '/etc/zabbix/zabbix_agentd.conf'
     }
     'Archlinux': {
       $server_fpinglocation  = '/usr/bin/fping'
@@ -28,7 +29,17 @@ class zabbix::params {
       $proxy_fping6location  = '/usr/bin/fping6'
       $manage_repo           = false
       $zabbix_package_agent  = 'zabbix3-agent'
+      $agent_configfile_path = '/etc/zabbix/zabbix_agentd.conf'
 
+    }
+    'Fedora': {
+      $server_fpinglocation  = '/usr/sbin/fping'
+      $server_fping6location = '/usr/sbin/fping6'
+      $proxy_fpinglocation   = '/usr/sbin/fping'
+      $proxy_fping6location  = '/usr/sbin/fping6'
+      $manage_repo           = false
+      $zabbix_package_agent  = 'zabbix-agent'
+      $agent_configfile_path = '/etc/zabbix_agentd.conf'
     }
     default  : {
       $server_fpinglocation  = '/usr/sbin/fping'
@@ -37,6 +48,7 @@ class zabbix::params {
       $proxy_fping6location  = '/usr/sbin/fping6'
       $manage_repo           = true
       $zabbix_package_agent  = 'zabbix-agent'
+      $agent_configfile_path = '/etc/zabbix/zabbix_agentd.conf'
     }
   }
 
@@ -169,7 +181,6 @@ class zabbix::params {
   $agent_zabbix_user                        = undef
   $agent_buffersend                         = '5'
   $agent_buffersize                         = '100'
-  $agent_configfile_path                    = '/etc/zabbix/zabbix_agentd.conf'
   $agent_debuglevel                         = '3'
   $agent_enableremotecommands               = '0'
   $agent_hostmetadata                       = undef
