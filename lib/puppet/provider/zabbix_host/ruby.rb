@@ -69,12 +69,11 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
 
     zbx.templates.mass_add(hosts_id: [hostid], templates_id: template_array)
 
-    if proxy != ''
-      zbx.hosts.update(
-        hostid: zbx.hosts.get_id(host: host),
-        proxy_hostid: zbx.proxies.get_id(host: proxy)
-      )
-    end
+    return if proxy.nil? || proxy.empty?
+    zbx.hosts.update(
+      hostid: zbx.hosts.get_id(host: host),
+      proxy_hostid: zbx.proxies.get_id(host: proxy)
+    )
   end
 
   def exists?
