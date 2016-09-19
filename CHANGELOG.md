@@ -1,3 +1,12 @@
+## 2016-09-19 Release 2.5.0
+
+  * Maintenance: modulesync with voxpupuli defaults
+  * Maintenance: Improved test coverage
+  * Fix: Implement zabbix::startup with proper params (fixes broken init scripts)
+  * Fix: Use correct provider for service on Debian
+  * Feature: Add Fedora 24 support
+
+
 ## 2016-08-18 Release 2.4.0
 
   * Maintenance: modulesync with voxpupuli defaults
