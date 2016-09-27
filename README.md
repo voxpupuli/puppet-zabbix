@@ -312,7 +312,7 @@ With the 'zabbix::template' define, you can install Zabbix templates via the API
 
 Please be aware that you can only make use of this feature when you have configured the module to make use of exported resources.
 
-You can instal the MySQL template xml via the next example:
+You can install the MySQL template xml via the next example:
 ```ruby
 zabbix::template { 'Template App MySQL':
   templ_source => 'puppet:///modules/zabbix/MySQL.xml'
