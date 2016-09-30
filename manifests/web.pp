@@ -297,7 +297,16 @@ class zabbix::web (
           $zabbix_web_package = 'zabbix-frontend-php'
         }
       }
-      package { "php5-${db}":
+
+      # Check OS release for proper prefix
+      if $::operatingsystemmajrelease >= '16.04' {
+        $php_db_package = "php-${db}"
+      }
+      else {
+        $php_db_package = "php5-${db}"
+      }
+
+      package { "${php_db_package}":
         ensure => $zabbix_package_state,
         before => [
           Package[$zabbix_web_package],
