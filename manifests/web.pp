@@ -306,7 +306,7 @@ class zabbix::web (
         $php_db_package = "php5-${db}"
       }
 
-      package { "${php_db_package}":
+      package { $php_db_package:
         ensure => $zabbix_package_state,
         before => [
           Package[$zabbix_web_package],
