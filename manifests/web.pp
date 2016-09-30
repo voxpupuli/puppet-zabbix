@@ -299,7 +299,7 @@ class zabbix::web (
       }
 
       # Check OS release for proper prefix
-      if $::operatingsystemmajrelease >= '16.04' {
+      if versioncmp($::operatingsystemmajrelease, '16.04') >= 0 {
         $php_db_package = "php-${db}"
       }
       else {
