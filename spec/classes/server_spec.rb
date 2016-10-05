@@ -154,6 +154,26 @@ describe 'zabbix::server' do
         it { should_not contain_service('zabbix-server') }
       end
 
+      context 'on systemd pidfile should be stored in /run' do
+        let :facts do
+          facts.merge(
+            mocked_facts
+          ).merge(
+            systemd_fact
+          ).merge(
+            {
+              service_provider: 'systemd'
+            }
+          )
+        end
+
+        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^PidFile=/run/zabbix/zabbix_server.pid} }
+      end
+
+      context 'on sysv pidfile should be stored in /var/run' do
+        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^PidFile=/var/run/zabbix/zabbix_server.pid} }
+      end
+
       context 'with all zabbix_server.conf-related parameters' do
         let :params do
           {

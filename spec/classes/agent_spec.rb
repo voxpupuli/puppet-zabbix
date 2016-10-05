@@ -114,6 +114,26 @@ describe 'zabbix::agent' do
         it { should_not contain_firewall('150 zabbix-agent') }
       end
 
+      context 'on systemd pidfile should be stored in /run' do
+        let :facts do
+          facts.merge(
+            mocked_facts
+          ).merge(
+            systemd_fact
+          ).merge(
+            {
+              service_provider: 'systemd'
+            }
+          )
+        end
+
+        it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^PidFile=/run/zabbix/zabbix_agentd.pid$} }
+      end
+
+      context 'on sysv pidfile should be stored in /var/run' do
+        it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^PidFile=/var/run/zabbix/zabbix_agentd.pid$} }
+      end
+
       context 'configuration file with full options' do
         let :params do
           {
