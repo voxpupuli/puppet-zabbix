@@ -52,6 +52,22 @@ class zabbix::params {
     }
   }
 
+  case $::service_provider {
+    'systemd': {
+      $agent_pidfile       = '/run/zabbix/zabbix_agentd.pid'
+      $javagateway_pidfile = '/run/zabbix/zabbix_java.pid'
+      $proxy_pidfile       = '/run/zabbix/zabbix_proxy.pid'
+      $server_pidfile      = '/run/zabbix/zabbix_server.pid'
+    }
+
+    default: {
+      $agent_pidfile       = '/var/run/zabbix/zabbix_agentd.pid'
+      $javagateway_pidfile = '/var/run/zabbix/zabbix_java.pid'
+      $proxy_pidfile       = '/var/run/zabbix/zabbix_proxy.pid'
+      $server_pidfile      = '/var/run/zabbix/zabbix_server.pid'
+    }
+  }
+
   # Zabbix overall params. Is used by all components.
   $zabbix_package_state                     = 'present'
   $zabbix_proxy                             = 'localhost'
@@ -136,7 +152,6 @@ class zabbix::params {
   $server_nodeid                            = '0'
   $server_nodenoevents                      = '0'
   $server_nodenohistory                     = '0'
-  $server_pidfile                           = '/var/run/zabbix/zabbix_server.pid'
   $server_proxyconfigfrequency              = '3600'
   $server_proxydatafrequency                = '1'
   $server_senderfrequency                   = '30'
@@ -198,7 +213,6 @@ class zabbix::params {
   $agent_logfilesize                        = '100'
   $agent_logremotecommands                  = '0'
   $agent_maxlinespersecond                  = '100'
-  $agent_pidfile                            = '/var/run/zabbix/zabbix_agentd.pid'
   $agent_refreshactivechecks                = '120'
   $agent_server                             = '127.0.0.1'
   $agent_serveractive                       = undef
@@ -261,7 +275,6 @@ class zabbix::params {
   $proxy_logslowqueries                     = '0'
   $proxy_mode                               = '0'
   $proxy_offlinebuffer                      = '1'
-  $proxy_pidfile                            = '/var/run/zabbix/zabbix_proxy.pid'
   $proxy_service_name                       = 'zabbix-proxy'
   $proxy_enablesnmpbulkrequests             = undef
   $proxy_snmptrapper                        = '0'
@@ -306,7 +319,6 @@ class zabbix::params {
   # Java Gateway specific params
   $javagateway_listenip                     = '0.0.0.0'
   $javagateway_listenport                   = '10052'
-  $javagateway_pidfile                      = '/var/run/zabbix/zabbix_java.pid'
   $javagateway_startpollers                 = '5'
 
   # Gem provider may vary based on version/type of puppet install.

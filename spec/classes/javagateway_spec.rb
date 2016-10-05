@@ -5,25 +5,27 @@ describe 'zabbix::javagateway' do
     'rspec.puppet.com'
   end
 
+  facts = {
+    osfamily: 'RedHat',
+    operatingsystem: 'RedHat',
+    operatingsystemrelease: '6.5',
+    operatingsystemmajrelease: '6',
+    architecture: 'x86_64',
+    lsbdistid: 'RedHat',
+    concat_basedir: '/tmp',
+    is_pe: false,
+    puppetversion: Puppet.version,
+    facterversion: Facter.version,
+    ipaddress: '192.168.1.10',
+    lsbdistcodename: '',
+    id: 'root',
+    kernel: 'Linux',
+    path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
+  }
+
   context 'On RedHat 6.5' do
     let :facts do
-      {
-        osfamily: 'RedHat',
-        operatingsystem: 'RedHat',
-        operatingsystemrelease: '6.5',
-        operatingsystemmajrelease: '6',
-        architecture: 'x86_64',
-        lsbdistid: 'RedHat',
-        concat_basedir: '/tmp',
-        is_pe: false,
-        puppetversion: Puppet.version,
-        facterversion: Facter.version,
-        ipaddress: '192.168.1.10',
-        lsbdistcodename: '',
-        id: 'root',
-        kernel: 'Linux',
-        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
-      }
+      facts
     end
 
     it { should contain_file('/etc/zabbix/zabbix_java_gateway.conf') }
@@ -74,6 +76,22 @@ describe 'zabbix::javagateway' do
       it { should contain_file('/etc/zabbix/zabbix_java_gateway.conf').with_content %r{^LISTEN_PORT=10052$} }
       it { should contain_file('/etc/zabbix/zabbix_java_gateway.conf').with_content %r{^PID_FILE=/var/run/zabbix/zabbix_java.pid$} }
       it { should contain_file('/etc/zabbix/zabbix_java_gateway.conf').with_content %r{^START_POLLERS=5$} }
+    end
+
+    context 'on systemd pidfile should be stored in /run' do
+      let :facts do
+        facts.merge(
+          {
+            service_provider: 'systemd'
+          }
+        )
+      end
+
+      it { should contain_file('/etc/zabbix/zabbix_java_gateway.conf').with_content %r{^PID_FILE=/run/zabbix/zabbix_java.pid$} }
+    end
+
+    context 'on sysv pidfile should be stored in /var/run' do
+      it { should contain_file('/etc/zabbix/zabbix_java_gateway.conf').with_content %r{^PID_FILE=/var/run/zabbix/zabbix_java.pid$} }
     end
   end
 end
