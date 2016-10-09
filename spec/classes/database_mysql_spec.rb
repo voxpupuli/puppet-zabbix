@@ -40,9 +40,9 @@ describe 'zabbix::database::mysql' do
 
         it { should contain_class('zabbix::database::mysql') }
         it { should compile.with_all_deps }
-        it { should contain_exec('zabbix_server_create.sql').with_command("cd #{path2} && if [ -f schema.sql.gz ]; then gunzip schema.sql.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-server' -p'zabbix-server' -D 'zabbix-server' < schema.sql && touch /etc/zabbix/.schema.done") }
-        it { should contain_exec('zabbix_server_images.sql').with_command("cd #{path2} && if [ -f images.sql.gz ]; then gunzip images.sql.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-server' -p'zabbix-server' -D 'zabbix-server' < images.sql && touch /etc/zabbix/.images.done") }
-        it { should contain_exec('zabbix_server_data.sql').with_command("cd #{path2} && if [ -f data.sql.gz ]; then gunzip data.sql.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-server' -p'zabbix-server' -D 'zabbix-server' < data.sql && touch /etc/zabbix/.data.done") }
+        it { should contain_exec('zabbix_server_create.sql').with_command("cd #{path2} && if [ -f schema.sql.gz ]; then gunzip -f schema.sql.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-server' -p'zabbix-server' -D 'zabbix-server' < schema.sql && touch /etc/zabbix/.schema.done") }
+        it { should contain_exec('zabbix_server_images.sql').with_command("cd #{path2} && if [ -f images.sql.gz ]; then gunzip -f images.sql.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-server' -p'zabbix-server' -D 'zabbix-server' < images.sql && touch /etc/zabbix/.images.done") }
+        it { should contain_exec('zabbix_server_data.sql').with_command("cd #{path2} && if [ -f data.sql.gz ]; then gunzip -f data.sql.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-server' -p'zabbix-server' -D 'zabbix-server' < data.sql && touch /etc/zabbix/.data.done") }
       end
 
       describe 'when zabbix_type is proxy and zabbix version is 2.4' do
@@ -59,7 +59,7 @@ describe 'zabbix::database::mysql' do
         it { should contain_class('zabbix::database::mysql') }
         # this doesn't make much sense because the class requires other classes
         # it { should compile.with_all_deps }
-        it { should contain_exec('zabbix_proxy_create.sql').with_command("cd #{path2} && if [ -f schema.sql.gz ]; then gunzip schema.sql.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-proxy' -p'zabbix-proxy' -D 'zabbix-proxy' < schema.sql && touch /etc/zabbix/.schema.done") }
+        it { should contain_exec('zabbix_proxy_create.sql').with_command("cd #{path2} && if [ -f schema.sql.gz ]; then gunzip -f schema.sql.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-proxy' -p'zabbix-proxy' -D 'zabbix-proxy' < schema.sql && touch /etc/zabbix/.schema.done") }
       end
       context 'when zabbix_type is server and zabbix version is 3.0' do
         let :params do
@@ -74,7 +74,7 @@ describe 'zabbix::database::mysql' do
         end
         it { should contain_class('zabbix::database::mysql') }
         it { should compile.with_all_deps }
-        it { should contain_exec('zabbix_server_create.sql').with_command("cd #{path3} && if [ -f create.sql.gz ]; then gunzip create.sql.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-server' -p'zabbix-server' -D 'zabbix-server' < create.sql && touch /etc/zabbix/.schema.done") }
+        it { should contain_exec('zabbix_server_create.sql').with_command("cd #{path3} && if [ -f create.sql.gz ]; then gunzip -f create.sql.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-server' -p'zabbix-server' -D 'zabbix-server' < create.sql && touch /etc/zabbix/.schema.done") }
         it { should contain_exec('zabbix_server_images.sql').with_command('touch /etc/zabbix/.images.done') }
         it { should contain_exec('zabbix_server_data.sql').with_command('touch /etc/zabbix/.data.done') }
       end
@@ -93,7 +93,7 @@ describe 'zabbix::database::mysql' do
         it { should contain_class('zabbix::database::mysql') }
         # this doesn't make much sense because the class requires other classes
         # it { should compile.with_all_deps }
-        it { should contain_exec('zabbix_proxy_create.sql').with_command("cd #{path3} && if [ -f schema.sql.gz ]; then gunzip schema.sql.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-proxy' -p'zabbix-proxy' -D 'zabbix-proxy' < schema.sql && touch /etc/zabbix/.schema.done") }
+        it { should contain_exec('zabbix_proxy_create.sql').with_command("cd #{path3} && if [ -f schema.sql.gz ]; then gunzip -f schema.sql.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-proxy' -p'zabbix-proxy' -D 'zabbix-proxy' < schema.sql && touch /etc/zabbix/.schema.done") }
       end
     end
   end
