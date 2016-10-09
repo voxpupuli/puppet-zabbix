@@ -104,7 +104,11 @@
 #   Database port when not using local socket. Ignored for sqlite.
 #
 # [*zabbix_server*]
-#   The fqdn name of the host running the zabbix-server. When single node:
+#   The ip of the host running the zabbix-server. When single node:
+#   localhost
+#
+# [*zabbix_server_name*]
+#   The fqdn name of the host running the zabbix-server. Shows up in the Webinterface and titleWhen single node:
 #   localhost
 #
 # [*zabbix_listenport*]
@@ -200,6 +204,7 @@ class zabbix::web (
   $database_socket                          = $zabbix::params::server_database_socket,
   $database_port                            = $zabbix::params::server_database_port,
   $zabbix_server                            = $zabbix::params::zabbix_server,
+  $zabbix_server_name                       = $zabbix::params::zabbix_server_name,
   $zabbix_listenport                        = $zabbix::params::server_listenport,
   $apache_php_max_execution_time            = $zabbix::params::apache_php_max_execution_time,
   $apache_php_memory_limit                  = $zabbix::params::apache_php_memory_limit,
