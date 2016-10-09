@@ -433,6 +433,61 @@ class zabbix::server (
     require => Class['zabbix::repo'],
     tag     => 'zabbix',
   }
+  
+  # Ensure that the correct config file is used.
+  
+  if $::osfamily == 'debian' {
+    if $::operatingsystemmajrelease < 8 {
+      file { '/etc/init.d/zabbix-server':
+        ensure  => file,
+        mode    => '0755',
+        require => Package["zabbix-server-${db}"],
+        content => template('zabbix/zabbix-server-debian.init.erb'),
+      }
+    } else {
+      include ::systemd
+      file { '/etc/systemd/system/zabbix-server.service':
+        ensure  => file,
+        mode    => '0664',
+        require => Package["zabbix-server-${db}"],
+        content => template('zabbix/zabbix-server-systemd.init.erb'),
+      } ~>
+      Exec['systemctl-daemon-reload']
+      file { '/etc/init.d/zabbix-server':
+        ensure  => absent,
+        require => Package["zabbix-server-${db}"],
+      }
+    }
+  } elsif $::osfamily == 'redhat' {
+    if $::operatingsystemrelease < 7 {
+      file { '/etc/init.d/zabbix-server':
+        ensure  => file,
+        mode    => '0755',
+        require => Package["zabbix-server-${db}"],
+        content => template('zabbix/zabbix-server-redhat.init.erb'),
+      }
+    } else {
+      include ::systemd
+      file { '/etc/systemd/system/zabbix-server.service':
+        ensure  => file,
+        mode    => '0664',
+        require => Package["zabbix-server-${db}"],
+        content => template('zabbix/zabbix-server-systemd.init.erb'),
+      } ~>
+      Exec['systemctl-daemon-reload']
+      file { '/etc/init.d/zabbix-server':
+        ensure  => absent,
+        require => Package["zabbix-server-${db}"],
+      }
+    }
+  }
+
+  if $server_configfile_path != '/etc/zabbix/zabbix_server.conf' {
+    file { '/etc/zabbix/zabbix_server.conf':
+      require => Package["zabbix-server-${db}"],
+      ensure  => absent,
+    }
+  }
 
   # Ensure that the correct config file is used.
   zabbix::startup {'zabbix-server':
@@ -511,6 +566,18 @@ class zabbix::server (
     require => Package["zabbix-server-${db}"],
     replace => true,
     content => template('zabbix/zabbix_server.conf.erb'),
+  }
+  
+  # Ensure snmp trapper file exists when startsnmptrapper is set to 1
+  
+  if $startsnmptrapper == 1 {
+    file { $snmptrapperfile:
+      ensure => file,
+      content => '',
+      owner   => $server_config_owner,
+      group   => $server_config_group,
+      require => Package["zabbix-server-${db}"],
+    }
   }
 
   # Include dir for specific zabbix-server checks.
