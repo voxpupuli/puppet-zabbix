@@ -104,11 +104,11 @@
 #   Database port when not using local socket. Ignored for sqlite.
 #
 # [*zabbix_server*]
-#   The ip of the host running the zabbix-server. When single node:
+#   The fqdn name of the host running the zabbix-server. When single node:
 #   localhost
 #
 # [*zabbix_server_name*]
-#   The fqdn name of the host running the zabbix-server. Shows up in the Webinterface and titleWhen single node:
+#   The fqdn name of the host running the zabbix-server. Shows up in the Webinterface and title. When single node:
 #   localhost
 #
 # [*zabbix_listenport*]
