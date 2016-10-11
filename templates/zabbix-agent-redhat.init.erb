@@ -18,8 +18,8 @@
 
 RETVAL=0
 prog="Zabbix Agent"
-ZABBIX_BIN="/usr/local/sbin/zabbix_agentd"
-OPTS="-c <%= @agent_configfile_path %>"
+ZABBIX_BIN="$(type -P zabbix_agentd)"
+OPTS="<%= @agent_configfile_path %>"
 
 if [ ! -x ${ZABBIX_BIN} ] ; then
         echo -n "${ZABBIX_BIN} not installed! "
