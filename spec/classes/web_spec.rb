@@ -56,7 +56,20 @@ describe 'zabbix::web' do
           let :params do
             super().merge(database_type: 'postgresql')
           end
-          packages = facts[:osfamily] == 'RedHat' ? ['zabbix-web-pgsql', 'zabbix-web'] : ['zabbix-frontend-php', 'php5-pgsql']
+
+          pgsqlpackage = ""
+          case facts[:osfamily]
+          when 'Debian'
+            if facts[:operatingsystemmajrelease] >= '16.04'
+              pgsqlpackage = "php-pgsql"
+            else
+              pgsqlpackage = "php5-pgsql"
+            end
+          else
+            pgsqlpackage = "php5-pgsql"
+          end
+
+          packages = facts[:osfamily] == 'RedHat' ? ['zabbix-web-pgsql', 'zabbix-web'] : ['zabbix-frontend-php', pgsqlpackage]
           packages.each do |package|
             it { should contain_package(package) }
           end
@@ -67,7 +80,20 @@ describe 'zabbix::web' do
           let :params do
             super().merge(database_type: 'mysql')
           end
-          packages = facts[:osfamily] == 'RedHat' ? ['zabbix-web-mysql', 'zabbix-web'] : ['zabbix-frontend-php', 'php5-mysql']
+
+          mysqlpackage = ""
+          case facts[:osfamily]
+          when 'Debian'
+            if facts[:operatingsystemmajrelease] >= '16.04'
+              mysqlpackage = "php-mysql"
+            else
+              mysqlpackage = "php5-mysql"
+            end
+          else
+            mysqlpackage = "php5-mysql"
+          end
+
+          packages = facts[:osfamily] == 'RedHat' ? ['zabbix-web-mysql', 'zabbix-web'] : ['zabbix-frontend-php', mysqlpackage]
           packages.each do |package|
             it { should contain_package(package) }
           end
