@@ -31,7 +31,7 @@ describe 'zabbix::startup', type: :define do # rubocop:disable RSpec/MultipleDes
               it do
                 should contain_file('/etc/init.d/zabbix-agent').with(
                   ensure: 'file',
-                  content: %r{OPTS="-c /something"}
+                  content: %r{OPTS="/something"}
                 )
               end
             else
@@ -122,7 +122,7 @@ describe 'zabbix::startup', type: :define do
               it do
                 should contain_file('/etc/init.d/zabbix-server').with(
                   ensure: 'file',
-                  content: %r{OPTS="-c /something"}
+                  content: %r{OPTS="/something"}
                 )
               end
             else
