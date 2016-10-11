@@ -18,8 +18,8 @@
 
 RETVAL=0
 prog="Zabbix Server"
-ZABBIX_BIN="/usr/local/sbin/zabbix_server"
-OPTS="-c <%= @server_configfile_path %>"
+ZABBIX_BIN="$(type -P zabbix_server)"
+OPTS="<%= @server_configfile_path %>"
 
 if [ ! -x ${ZABBIX_BIN} ] ; then
         echo -n "${ZABBIX_BIN} not installed! "
