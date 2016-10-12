@@ -60,12 +60,12 @@ describe 'zabbix::web' do
           pgsqlpackage = case facts[:osfamily]
                          when 'Debian'
                            if facts[:operatingsystemmajrelease] >= '16.04'
-                             "php-pgsql"
+                             'php-pgsql'
                            else
-                             "php5-pgsql"
+                             'php5-pgsql'
                            end
                          else
-                           "php5-pgsql"
+                           'php5-pgsql'
                          end
 
           packages = facts[:osfamily] == 'RedHat' ? ['zabbix-web-pgsql', 'zabbix-web'] : ['zabbix-frontend-php', pgsqlpackage]
@@ -83,12 +83,12 @@ describe 'zabbix::web' do
           mysqlpackage = case facts[:osfamily]
                          when 'Debian'
                            if facts[:operatingsystemmajrelease] >= '16.04'
-                             "php-mysql"
+                             'php-mysql'
                            else
-                             "php5-mysql"
+                             'php5-mysql'
                            end
                          else
-                           "php5-mysql"
+                           'php5-mysql'
                          end
 
           packages = facts[:osfamily] == 'RedHat' ? ['zabbix-web-mysql', 'zabbix-web'] : ['zabbix-frontend-php', mysqlpackage]
