@@ -316,9 +316,9 @@ class zabbix::web (
             $php_db_package = "php5-${db}"
           }
         }
-      }
-      default : {
-        $php_db_package = "php5-${db}"
+        default : {
+          $php_db_package = "php5-${db}"
+        }
       }
 
       package { $php_db_package:
