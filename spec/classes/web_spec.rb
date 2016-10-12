@@ -57,17 +57,16 @@ describe 'zabbix::web' do
             super().merge(database_type: 'postgresql')
           end
 
-          pgsqlpackage = ""
-          case facts[:osfamily]
-          when 'Debian'
-            if facts[:operatingsystemmajrelease] >= '16.04'
-              pgsqlpackage = "php-pgsql"
-            else
-              pgsqlpackage = "php5-pgsql"
-            end
-          else
-            pgsqlpackage = "php5-pgsql"
-          end
+          pgsqlpackage = case facts[:osfamily]
+                         when 'Debian'
+                           if facts[:operatingsystemmajrelease] >= '16.04'
+                             "php-pgsql"
+                           else
+                             "php5-pgsql"
+                           end
+                         else
+                           "php5-pgsql"
+                         end
 
           packages = facts[:osfamily] == 'RedHat' ? ['zabbix-web-pgsql', 'zabbix-web'] : ['zabbix-frontend-php', pgsqlpackage]
           packages.each do |package|
@@ -81,17 +80,16 @@ describe 'zabbix::web' do
             super().merge(database_type: 'mysql')
           end
 
-          mysqlpackage = ""
-          case facts[:osfamily]
-          when 'Debian'
-            if facts[:operatingsystemmajrelease] >= '16.04'
-              mysqlpackage = "php-mysql"
-            else
-              mysqlpackage = "php5-mysql"
-            end
-          else
-            mysqlpackage = "php5-mysql"
-          end
+          mysqlpackage = case facts[:osfamily]
+                         when 'Debian'
+                           if facts[:operatingsystemmajrelease] >= '16.04'
+                             "php-mysql"
+                           else
+                             "php5-mysql"
+                           end
+                         else
+                           "php5-mysql"
+                         end
 
           packages = facts[:osfamily] == 'RedHat' ? ['zabbix-web-mysql', 'zabbix-web'] : ['zabbix-frontend-php', mysqlpackage]
           packages.each do |package|
