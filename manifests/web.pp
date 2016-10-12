@@ -299,11 +299,23 @@ class zabbix::web (
       }
 
       # Check OS release for proper prefix
-      if versioncmp($::operatingsystemmajrelease, '16.04') >= 0 {
-        $php_db_package = "php-${db}"
-      }
-      else {
-        $php_db_package = "php5-${db}"
+      case $::operatingsystem {
+        'Ubuntu' : {
+          if versioncmp($::operatingsystemmajrelease, '16.04') >= 0 {
+            $php_db_package = "php-${db}"
+          }
+          else {
+            $php_db_package = "php5-${db}"
+          }
+        }
+        'Debian' : {
+          if versioncmp($::operatingsystemmajrelease, '9') >= 0 {
+            $php_db_package = "php-${db}"
+          }
+          else {
+            $php_db_package = "php5-${db}"
+          }
+        }
       }
 
       package { $php_db_package:
