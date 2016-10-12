@@ -95,9 +95,9 @@ describe 'zabbix::web' do
                            end
                          when 'Debian'
                            if facts[:operatingsystemmajrelease] >= '8'
-                             'php-pgsql'
+                             'php-mysql'
                            else
-                             'php5-pgsql'
+                             'php5-mysql'
                            end
                          else
                            'php5-mysql'
