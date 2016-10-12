@@ -57,9 +57,15 @@ describe 'zabbix::web' do
             super().merge(database_type: 'postgresql')
           end
 
-          pgsqlpackage = case facts[:osfamily]
-                         when 'Debian'
+          pgsqlpackage = case facts[:operatingsystem]
+                         when 'Ubuntu'
                            if facts[:operatingsystemmajrelease] >= '16.04'
+                             'php-pgsql'
+                           else
+                             'php5-pgsql'
+                           end
+                         when 'Debian'
+                           if facts[:operatingsystemmajrelease] >= '8'
                              'php-pgsql'
                            else
                              'php5-pgsql'
@@ -80,12 +86,18 @@ describe 'zabbix::web' do
             super().merge(database_type: 'mysql')
           end
 
-          mysqlpackage = case facts[:osfamily]
-                         when 'Debian'
+          mysqlpackage = case facts[:operatingsystem]
+                         when 'Ubuntu'
                            if facts[:operatingsystemmajrelease] >= '16.04'
                              'php-mysql'
                            else
                              'php5-mysql'
+                           end
+                         when 'Debian'
+                           if facts[:operatingsystemmajrelease] >= '8'
+                             'php-pgsql'
+                           else
+                             'php5-pgsql'
                            end
                          else
                            'php5-mysql'
