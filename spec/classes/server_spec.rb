@@ -316,6 +316,22 @@ describe 'zabbix::server' do
         it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCertFile=/etc/zabbix/keys/zabbix-server.crt$} }
         it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSKeyFile=/etc/zabbix/keys/zabbix-server.key$} }
       end
+      context 'with zabbix_server.conf and version 3.2' do
+        let :params do
+          {
+            tlscafile: '/etc/zabbix/keys/zabbix-server.ca',
+            tlscrlfile: '/etc/zabbix/keys/zabbix-server.crl',
+            tlscertfile: '/etc/zabbix/keys/zabbix-server.crt',
+            tlskeyfile: '/etc/zabbix/keys/zabbix-server.key',
+            zabbix_version: '3.2'
+          }
+        end
+
+        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCAFile=/etc/zabbix/keys/zabbix-server.ca$} }
+        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCRLFile=/etc/zabbix/keys/zabbix-server.crl$} }
+        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCertFile=/etc/zabbix/keys/zabbix-server.crt$} }
+        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSKeyFile=/etc/zabbix/keys/zabbix-server.key$} }
+      end
     end
   end
 end

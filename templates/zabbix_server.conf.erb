@@ -466,7 +466,7 @@ LoadModulePath=<%= @loadmodulepath %>
 #
 <% if @loadmodule %>LoadModule = <%= @loadmodule %><% end %>
 
-<% if @zabbix_version == '3.0' %>
+<% if @zabbix_version.to_f >= 3.0 %>
 ####### TLS-RELATED PARAMETERS #######
 
 ### Option: TLSCAFile
