@@ -1,3 +1,10 @@
+## 201-10-11 Release 2.6.0
+
+  * Maintenance: modulesync with voxpupuli defaults
+  * Fix: Create working init script on RHEL6
+  * Feature: don't fail if uncompressed SQL file exists
+
+
 ## 2016-09-19 Release 2.5.0
 
   * Maintenance: modulesync with voxpupuli defaults
@@ -21,8 +28,6 @@
   * Feature: Support Custom config file name/path
   * Feature: Respect user provided Zabbix agent package name in userparameters
   * Feature: Add manage_service option
-
-
 
 
 ## 2016-05-2 Release 2.3.2
