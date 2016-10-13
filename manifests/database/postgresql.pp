@@ -28,7 +28,7 @@ class zabbix::database::postgresql (
   #
   # Adjustments for version 3.0 - structure of package with sqls differs from previous versions
   case $zabbix_version {
-    '3.0': {
+    /^3.\d+$/: {
       if ($database_schema_path == false) or ($database_schema_path == '') {
         case $::operatingsystem {
           'CentOS', 'RedHat', 'OracleLinux': {
