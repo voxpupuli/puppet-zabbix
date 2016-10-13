@@ -1,3 +1,11 @@
+## 2016-10-13 Release 2.5.1
+
+  * Maintenance: modulesync with voxpupuli defaults
+  * Fix: Workaround for already existing DB dumps
+  * Fix: Correctly handle php packages on Ubuntu 16.04
+  * Fix: Don't write Zabbix3.2 options into older setups
+  * Fix: Create working init script on RHEL6
+
 ## 2016-09-19 Release 2.5.0
 
   * Maintenance: modulesync with voxpupuli defaults
