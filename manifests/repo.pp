@@ -52,12 +52,20 @@ class zabbix::repo (
 
     case $::osfamily {
       'RedHat' : {
+        # Zabbix-3.2 and newer RPMs are signed with the GPG key
+        if versioncmp($zabbix_version, '3.2') < 0 {
+          $gpgkey = 'http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX'
+        }
+        else {
+          $gpgkey = 'http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591'
+        }
+
         yumrepo { 'zabbix':
           name     => "Zabbix_${reponame}_${::architecture}",
           descr    => "Zabbix_${reponame}_${::architecture}",
           baseurl  => "http://repo.zabbix.com/zabbix/${zabbix_version}/rhel/${majorrelease}/\$basearch/",
           gpgcheck => '1',
-          gpgkey   => 'http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX',
+          gpgkey   => $gpgkey,
           priority => '1',
         }
 
@@ -66,7 +74,7 @@ class zabbix::repo (
           descr    => "Zabbix_nonsupported_${reponame}_${::architecture}",
           baseurl  => "http://repo.zabbix.com/non-supported/rhel/${majorrelease}/\$basearch/",
           gpgcheck => '1',
-          gpgkey   => 'http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX',
+          gpgkey   => $gpgkey,
           priority => '1',
         }
 
