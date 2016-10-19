@@ -15,17 +15,19 @@ describe 'zabbix::agent' do
   on_supported_os.each do |os, facts|
     context "on #{os} " do
       systemd_fact = case facts[:osfamily]
-                     when 'Archlinux'
+                     when 'Archlinux', 'Fedora'
                        { systemd: true }
                      else
                        { systemd: false }
                      end
+      config_path = case facts[:operatingsystem]
+                    when 'Fedora'
+                      '/etc/zabbix_agentd.conf'
+                    else
+                      '/etc/zabbix/zabbix_agentd.conf'
+                    end
       let :facts do
-        facts.merge(
-          mocked_facts
-        ).merge(
-          systemd_fact
-        )
+        facts.merge(systemd_fact)
       end
 
       context 'with all defaults' do
@@ -56,6 +58,8 @@ describe 'zabbix::agent' do
 
         it { should contain_file('/etc/zabbix/zabbix_agentd.d').with_ensure('directory') }
         it { should contain_zabbix__startup('zabbix-agent').that_requires("Package[#{package}]") }
+        it { should compile.with_all_deps }
+        it { should contain_class('zabbix::params') }
       end
 
       context 'when declaring manage_repo is true' do
@@ -91,7 +95,19 @@ describe 'zabbix::agent' do
           }
         end
 
-        it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^HostnameItem=system.hostname$} }
+        it { should contain_file(config_path).with_content %r{^HostnameItem=system.hostname$} }
+      end
+
+      context 'ignores hostnameitem if hostname is set' do
+        let :params do
+          {
+            hostname: 'test',
+            hostnameitem: 'system.hostname'
+          }
+        end
+
+        it { should contain_file(config_path).without_content %r{^HostnameItem=system.hostname$} }
+        it { should contain_file(config_path).with_content %r{^Hostname=test$} }
       end
 
       context 'when declaring manage_firewall is true' do
@@ -114,6 +130,16 @@ describe 'zabbix::agent' do
         it { should_not contain_firewall('150 zabbix-agent') }
       end
 
+      context 'it creates a startup script' do
+        case facts[:osfamily]
+        when 'Archlinux', 'Fedora'
+          it { should contain_file('/etc/init.d/zabbix-agent').with_ensure('absent') }
+          it { should contain_file('/etc/systemd/system/zabbix-agent.service').with_ensure('file') }
+        else
+          it { should contain_file('/etc/init.d/zabbix-agent').with_ensure('file') }
+          it { should_not contain_file('/etc/systemd/system/zabbix-agent.service') }
+        end
+      end
       context 'configuration file with full options' do
         let :params do
           {

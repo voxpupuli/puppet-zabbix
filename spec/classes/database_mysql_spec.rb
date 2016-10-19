@@ -7,9 +7,7 @@ describe 'zabbix::database::mysql' do
   on_supported_os.each do |os, facts|
     context "on #{os} " do
       let :facts do
-        facts.merge(
-          mocked_facts
-        )
+        facts
       end
       context 'with all defaults' do
         it 'fails' do
