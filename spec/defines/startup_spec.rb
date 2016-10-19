@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'zabbix::startup', type: :define do # rubocop:disable RSpec/MultipleDescribes
   let(:title) { 'zabbix-agent' }
 
-  %w(RedHat Debian Gentoo).each do |osfamily|
+  %w(RedHat Debian Gentoo Archlinux).each do |osfamily|
     context "on #{osfamily}" do
       context 'on legacy init systems' do
         ['false', false].each do |systemd_fact_state|
