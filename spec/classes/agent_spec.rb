@@ -20,6 +20,12 @@ describe 'zabbix::agent' do
                      else
                        { systemd: false }
                      end
+      config_path = case facts[:operatingsystem]
+                    when 'Fedora'
+                      '/etc/zabbix_agentd.conf'
+                    else
+                      '/etc/zabbix/zabbix_agentd.conf'
+                    end
       let :facts do
         facts.merge(systemd_fact)
       end
@@ -89,7 +95,19 @@ describe 'zabbix::agent' do
           }
         end
 
-        it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^HostnameItem=system.hostname$} }
+        it { should contain_file(config_path).with_content %r{^HostnameItem=system.hostname$} }
+      end
+
+      context 'ignores hostnameitem if hostname is set' do
+        let :params do
+          {
+            hostname: 'test',
+            hostnameitem: 'system.hostname'
+          }
+        end
+
+        it { should contain_file(config_path).without_content %r{^HostnameItem=system.hostname$} }
+        it { should contain_file(config_path).with_content %r{^Hostname=test$} }
       end
 
       context 'when declaring manage_firewall is true' do
