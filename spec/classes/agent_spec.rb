@@ -52,6 +52,8 @@ describe 'zabbix::agent' do
 
         it { should contain_file('/etc/zabbix/zabbix_agentd.d').with_ensure('directory') }
         it { should contain_zabbix__startup('zabbix-agent').that_requires("Package[#{package}]") }
+        it { should compile.with_all_deps }
+        it { should contain_class('zabbix::params') }
       end
 
       context 'when declaring manage_repo is true' do
