@@ -15,7 +15,7 @@ describe 'zabbix::agent' do
   on_supported_os.each do |os, facts|
     context "on #{os} " do
       systemd_fact = case facts[:osfamily]
-                     when 'Archlinux'
+                     when 'Archlinux','Fedora'
                        { systemd: true }
                      else
                        { systemd: false }
