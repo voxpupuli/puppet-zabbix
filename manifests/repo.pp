@@ -57,7 +57,7 @@ class zabbix::repo (
           descr    => "Zabbix_${reponame}_${::architecture}",
           baseurl  => "http://repo.zabbix.com/zabbix/${zabbix_version}/rhel/${majorrelease}/\$basearch/",
           gpgcheck => '1',
-          gpgkey   => 'http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX',
+          gpgkey   => ['http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX, http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591'],
           priority => '1',
         }
 
@@ -66,7 +66,7 @@ class zabbix::repo (
           descr    => "Zabbix_nonsupported_${reponame}_${::architecture}",
           baseurl  => "http://repo.zabbix.com/non-supported/rhel/${majorrelease}/\$basearch/",
           gpgcheck => '1',
-          gpgkey   => 'http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX',
+          gpgkey   => ['http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX, http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591'],
           priority => '1',
         }
 
