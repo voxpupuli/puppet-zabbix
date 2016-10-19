@@ -15,7 +15,7 @@ describe 'zabbix::agent' do
   on_supported_os.each do |os, facts|
     context "on #{os} " do
       systemd_fact = case facts[:osfamily]
-                     when 'Archlinux','Fedora'
+                     when 'Archlinux', 'Fedora'
                        { systemd: true }
                      else
                        { systemd: false }
@@ -131,9 +131,8 @@ describe 'zabbix::agent' do
       end
 
       context 'it creates a startup script' do
-
         case facts[:osfamily]
-        when 'Archlinux','Fedora'
+        when 'Archlinux', 'Fedora'
           it { should contain_file('/etc/init.d/zabbix-agent').with_ensure('absent') }
           it { should contain_file('/etc/systemd/system/zabbix-agent.service').with_ensure('file') }
         else
