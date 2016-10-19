@@ -21,11 +21,7 @@ describe 'zabbix::agent' do
                        { systemd: false }
                      end
       let :facts do
-        facts.merge(
-          mocked_facts
-        ).merge(
-          systemd_fact
-        )
+        facts.merge(systemd_fact)
       end
 
       context 'with all defaults' do
