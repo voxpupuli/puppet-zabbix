@@ -20,11 +20,7 @@ describe 'zabbix::server' do
                        { systemd: false }
                      end
       let :facts do
-        facts.merge(
-          mocked_facts
-        ).merge(
-          systemd_fact
-        )
+        facts.merge(systemd_fact)
       end
 
       describe 'with default settings' do
