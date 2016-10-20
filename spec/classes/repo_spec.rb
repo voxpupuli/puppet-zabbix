@@ -345,20 +345,20 @@ describe 'zabbix::repo' do
 
     let :facts do
       {
-        :operatingsystem            => 'RedHat',
-        :operatingsystemrelease     => '6',
-        :operatingsystemmajrelease  => '6',
-        :architecture               => 'x86_64',
-        :osfamily                   => 'RedHat',
-        :majorrelease               => '6',
-        :is_pe                      => false,
-        :puppetversion              => Puppet.version,
-        :facterversion              => Facter.version,
-        :ipaddress                  => '192.168.1.10',
-        :lsbdistcodename            => '',
-        :id                         => 'root',
-        :kernel                     => 'Linux',
-        :path                       => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
+        operatingsystem: 'RedHat',
+        operatingsystemrelease: '6',
+        operatingsystemmajrelease: '6',
+        architecture: 'x86_64',
+        osfamily: 'RedHat',
+        majorrelease: '6',
+        is_pe: false,
+        puppetversion: Puppet.version,
+        facterversion: Facter.version,
+        ipaddress: '192.168.1.10',
+        lsbdistcodename: '',
+        id: 'root',
+        kernel: 'Linux',
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
       }
     end
 
@@ -378,20 +378,20 @@ describe 'zabbix::repo' do
 
     let :facts do
       {
-        :operatingsystem            => 'RedHat',
-        :operatingsystemrelease     => '6',
-        :operatingsystemmajrelease  => '6',
-        :architecture               => 'x86_64',
-        :osfamily                   => 'RedHat',
-        :majorrelease               => '6',
-        :is_pe                      => false,
-        :puppetversion              => Puppet.version,
-        :facterversion              => Facter.version,
-        :ipaddress                  => '192.168.1.10',
-        :lsbdistcodename            => '',
-        :id                         => 'root',
-        :kernel                     => 'Linux',
-        :path                       => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
+        operatingsystem: 'RedHat',
+        operatingsystemrelease: '6',
+        operatingsystemmajrelease: '6',
+        architecture: 'x86_64',
+        osfamily: 'RedHat',
+        majorrelease: '6',
+        is_pe: false,
+        puppetversion: Puppet.version,
+        facterversion: Facter.version,
+        ipaddress: '192.168.1.10',
+        lsbdistcodename: '',
+        id: 'root',
+        kernel: 'Linux',
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
       }
     end
 
@@ -411,20 +411,20 @@ describe 'zabbix::repo' do
 
     let :facts do
       {
-        :operatingsystem            => 'RedHat',
-        :operatingsystemrelease     => '6',
-        :operatingsystemmajrelease  => '6',
-        :architecture               => 'x86_64',
-        :osfamily                   => 'RedHat',
-        :majorrelease               => '6',
-        :is_pe                      => false,
-        :puppetversion              => Puppet.version,
-        :facterversion              => Facter.version,
-        :ipaddress                  => '192.168.1.10',
-        :lsbdistcodename            => '',
-        :id                         => 'root',
-        :kernel                     => 'Linux',
-        :path                       => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
+        operatingsystem: 'RedHat',
+        operatingsystemrelease: '6',
+        operatingsystemmajrelease: '6',
+        architecture: 'x86_64',
+        osfamily: 'RedHat',
+        majorrelease: '6',
+        is_pe: false,
+        puppetversion: Puppet.version,
+        facterversion: Facter.version,
+        ipaddress: '192.168.1.10',
+        lsbdistcodename: '',
+        id: 'root',
+        kernel: 'Linux',
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
       }
     end
 
@@ -444,20 +444,20 @@ describe 'zabbix::repo' do
 
     let :facts do
       {
-        :operatingsystem            => 'RedHat',
-        :operatingsystemrelease     => '6',
-        :operatingsystemmajrelease  => '6',
-        :architecture               => 'x86_64',
-        :osfamily                   => 'RedHat',
-        :majorrelease               => '6',
-        :is_pe                      => false,
-        :puppetversion              => Puppet.version,
-        :facterversion              => Facter.version,
-        :ipaddress                  => '192.168.1.10',
-        :lsbdistcodename            => '',
-        :id                         => 'root',
-        :kernel                     => 'Linux',
-        :path                       => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
+        operatingsystem: 'RedHat',
+        operatingsystemrelease: '6',
+        operatingsystemmajrelease: '6',
+        architecture: 'x86_64',
+        osfamily: 'RedHat',
+        majorrelease: '6',
+        is_pe: false,
+        puppetversion: Puppet.version,
+        facterversion: Facter.version,
+        ipaddress: '192.168.1.10',
+        lsbdistcodename: '',
+        id: 'root',
+        kernel: 'Linux',
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
       }
     end
 
@@ -477,20 +477,20 @@ describe 'zabbix::repo' do
 
     let :facts do
       {
-        :operatingsystem            => 'RedHat',
-        :operatingsystemrelease     => '6',
-        :operatingsystemmajrelease  => '6',
-        :architecture               => 'x86_64',
-        :osfamily                   => 'RedHat',
-        :majorrelease               => '6',
-        :is_pe                      => false,
-        :puppetversion              => Puppet.version,
-        :facterversion              => Facter.version,
-        :ipaddress                  => '192.168.1.10',
-        :lsbdistcodename            => '',
-        :id                         => 'root',
-        :kernel                     => 'Linux',
-        :path                       => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
+        operatingsystem: 'RedHat',
+        operatingsystemrelease: '6',
+        operatingsystemmajrelease: '6',
+        architecture: 'x86_64',
+        osfamily: 'RedHat',
+        majorrelease: '6',
+        is_pe: false,
+        puppetversion: Puppet.version,
+        facterversion: Facter.version,
+        ipaddress: '192.168.1.10',
+        lsbdistcodename: '',
+        id: 'root',
+        kernel: 'Linux',
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
       }
     end
 
@@ -510,20 +510,20 @@ describe 'zabbix::repo' do
 
     let :facts do
       {
-        :operatingsystem            => 'RedHat',
-        :operatingsystemrelease     => '7.1',
-        :operatingsystemmajrelease  => '7',
-        :architecture               => 'x86_64',
-        :osfamily                   => 'RedHat',
-        :majorrelease               => '7',
-        :is_pe                      => false,
-        :puppetversion              => Puppet.version,
-        :facterversion              => Facter.version,
-        :ipaddress                  => '192.168.1.10',
-        :lsbdistcodename            => '',
-        :id                         => 'root',
-        :kernel                     => 'Linux',
-        :path                       => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
+        operatingsystem: 'RedHat',
+        operatingsystemrelease: '7.1',
+        operatingsystemmajrelease: '7',
+        architecture: 'x86_64',
+        osfamily: 'RedHat',
+        majorrelease: '7',
+        is_pe: false,
+        puppetversion: Puppet.version,
+        facterversion: Facter.version,
+        ipaddress: '192.168.1.10',
+        lsbdistcodename: '',
+        id: 'root',
+        kernel: 'Linux',
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
       }
     end
 
@@ -543,20 +543,20 @@ describe 'zabbix::repo' do
 
     let :facts do
       {
-        :operatingsystem            => 'RedHat',
-        :operatingsystemrelease     => '7.1',
-        :operatingsystemmajrelease  => '7',
-        :architecture               => 'x86_64',
-        :osfamily                   => 'RedHat',
-        :majorrelease               => '7',
-        :is_pe                      => false,
-        :puppetversion              => Puppet.version,
-        :facterversion              => Facter.version,
-        :ipaddress                  => '192.168.1.10',
-        :lsbdistcodename            => '',
-        :id                         => 'root',
-        :kernel                     => 'Linux',
-        :path                       => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
+        operatingsystem: 'RedHat',
+        operatingsystemrelease: '7.1',
+        operatingsystemmajrelease: '7',
+        architecture: 'x86_64',
+        osfamily: 'RedHat',
+        majorrelease: '7',
+        is_pe: false,
+        puppetversion: Puppet.version,
+        facterversion: Facter.version,
+        ipaddress: '192.168.1.10',
+        lsbdistcodename: '',
+        id: 'root',
+        kernel: 'Linux',
+        path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin'
       }
     end
 
