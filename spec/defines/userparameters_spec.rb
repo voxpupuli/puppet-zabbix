@@ -26,7 +26,7 @@ describe 'zabbix::userparameters', type: :define do
 
   context 'with an content' do
     let(:params) { { content: 'UserParameter=mysql.ping,mysqladmin -uroot ping | grep -c alive' } }
-    it { should contain_file('/etc/zabbix/zabbix_agentd.d/mysqld.conf').with_ensure('present') }
-    it { should contain_file('/etc/zabbix/zabbix_agentd.d/mysqld.conf').with_content %r{^UserParameter=mysql.ping,mysqladmin -uroot ping | grep -c alive$} }
+    it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.d/mysqld.conf').with_ensure('present') }
+    it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.d/mysqld.conf').with_content %r{^UserParameter=mysql.ping,mysqladmin -uroot ping | grep -c alive$} }
   end
 end

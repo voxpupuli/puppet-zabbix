@@ -10,8 +10,8 @@ describe 'zabbix::userparameter' do
         facts
       end
       context 'with all defaults' do
-        it { should contain_class('zabbix::userparameter') }
-        it { should compile.with_all_deps }
+        it { is_expected.to contain_class('zabbix::userparameter') }
+        it { is_expected.to compile.with_all_deps }
       end
     end
   end
