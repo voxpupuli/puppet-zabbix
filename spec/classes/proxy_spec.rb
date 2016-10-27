@@ -40,6 +40,12 @@ describe 'zabbix::proxy' do
 
     it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf.d').with_ensure('directory') }
     it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf.d').with_require('File[/etc/zabbix/zabbix_proxy.conf]') }
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.to contain_class('zabbix::params') }
+    it { is_expected.to contain_exec('update_pgpass') }
+    it { is_expected.to contain_exec('zabbix_proxy_create.sql') }
+    it { is_expected.to contain_file('/root/.pgpass') }
+    it { is_expected.to contain_postgresql__server__pg_hba_rule('Allow zabbix-proxy to access database') }
 
     describe 'when manage_repo is true and zabbix version is unset' do
       let :params do
@@ -50,6 +56,8 @@ describe 'zabbix::proxy' do
 
       it { is_expected.to contain_class('zabbix::repo').with_zabbix_version('3.0') }
       it { is_expected.to contain_package('zabbix-proxy-pgsql').with_require('Class[Zabbix::Repo]') }
+      it { is_expected.to contain_yumrepo('zabbix-nonsupported') }
+      it { is_expected.to contain_yumrepo('zabbix') }
     end
 
     describe 'when manage_repo is true and zabbix version is 2.4' do
@@ -109,6 +117,8 @@ describe 'zabbix::proxy' do
       end
 
       it { is_expected.to contain_class('zabbix::resources::proxy') }
+      it { is_expected.to contain_zabbix__userparameters('Zabbix_Proxy') }
+      it { is_expected.to contain_zabbix__resources__userparameters('rspec_Zabbix_Proxy') }
     end
 
     context 'with zabbix::database::postgresql class' do
@@ -145,6 +155,7 @@ describe 'zabbix::proxy' do
       it { is_expected.to contain_class('zabbix::database::mysql').with_database_user('zabbix-proxy') }
       it { is_expected.to contain_class('zabbix::database::mysql').with_database_password('zabbix-proxy') }
       it { is_expected.to contain_class('zabbix::database::mysql').with_database_host('localhost') }
+      it { is_expected.to contain_mysql__db('zabbix_proxy') }
     end
 
     context 'when manage_database is true' do

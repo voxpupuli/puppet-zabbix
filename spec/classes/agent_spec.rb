@@ -72,9 +72,15 @@ describe 'zabbix::agent' do
         case facts[:osfamily]
         when 'Archlinux'
           it { is_expected.to raise_error(Puppet::Error, %r{Managing a repo on Archlinux is currently not implemented}) }
-        else
+        when 'Debian'
           it { is_expected.to contain_class('zabbix::repo').with_zabbix_version('3.0') }
           it { is_expected.to contain_package('zabbix-agent').with_require('Class[Zabbix::Repo]') }
+          it { is_expected.to contain_apt__source('zabbix') }
+        when 'RedHat'
+          it { is_expected.to contain_class('zabbix::repo').with_zabbix_version('3.0') }
+          it { is_expected.to contain_package('zabbix-agent').with_require('Class[Zabbix::Repo]') }
+          it { is_expected.to contain_yumrepo('zabbix-nonsupported') }
+          it { is_expected.to contain_yumrepo('zabbix') }
         end
       end
 

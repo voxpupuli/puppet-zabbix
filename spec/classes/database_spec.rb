@@ -52,6 +52,7 @@ describe 'zabbix::database' do
       it { is_expected.to contain_postgresql__server__pg_hba_rule('Allow zabbix-web to access database').with_database('zabbix-server') }
       it { is_expected.to contain_postgresql__server__pg_hba_rule('Allow zabbix-web to access database').with_user('zabbix-server') }
       it { is_expected.to contain_postgresql__server__pg_hba_rule('Allow zabbix-web to access database').with_address('127.0.0.2/32') }
+      it { is_expected.to contain_class('zabbix::params') }
     end
 
     describe 'database_type is postgresql, zabbix_type is server and is single node setup' do
@@ -76,6 +77,7 @@ describe 'zabbix::database' do
       it { is_expected.to_not contain_postgresql__server__pg_hba_rule('Allow zabbix-web to access database').with_database('zabbix-server') }
       it { is_expected.to_not contain_postgresql__server__pg_hba_rule('Allow zabbix-web to access database').with_user('zabbix-server') }
       it { is_expected.to_not contain_postgresql__server__pg_hba_rule('Allow zabbix-web to access database').with_address('127.0.0.2/32') }
+      it { is_expected.to contain_class('zabbix::params') }
     end
 
     describe 'database_type is postgresql, zabbix_type is proxy' do
@@ -92,6 +94,8 @@ describe 'zabbix::database' do
       it { is_expected.to contain_postgresql__server__pg_hba_rule('Allow zabbix-proxy to access database').with_database('zabbix-proxy') }
       it { is_expected.to contain_postgresql__server__pg_hba_rule('Allow zabbix-proxy to access database').with_user('zabbix-proxy') }
       it { is_expected.to contain_postgresql__server__pg_hba_rule('Allow zabbix-proxy to access database').with_address('127.0.0.1/32') }
+      it { is_expected.to contain_postgresql__server__db('zabbix-proxy') }
+      it { is_expected.to contain_class('zabbix::params') }
     end
 
     describe 'database_type is mysql, zabbix_type is server and is multiple host setup' do
@@ -114,6 +118,7 @@ describe 'zabbix::database' do
       it { is_expected.to contain_mysql_grant('zabbix-server@node1.example.com/zabbix-server.*').with_name('zabbix-server@node1.example.com/zabbix-server.*') }
       it { is_expected.to contain_mysql_grant('zabbix-server@node1.example.com/zabbix-server.*').with_table('zabbix-server.*') }
       it { is_expected.to contain_mysql_grant('zabbix-server@node1.example.com/zabbix-server.*').with_user('zabbix-server@node1.example.com') }
+      it { is_expected.to contain_class('zabbix::params') }
     end
 
     describe 'database_type is mysql, zabbix_type is server and is a single host setup' do
@@ -136,6 +141,7 @@ describe 'zabbix::database' do
       it { is_expected.to_not contain_mysql_grant('zabbix-server@node1.example.com/zabbix-server.*').with_name('zabbix-server@node1.example.com/zabbix-server.*') }
       it { is_expected.to_not contain_mysql_grant('zabbix-server@node1.example.com/zabbix-server.*').with_table('zabbix-server.*') }
       it { is_expected.to_not contain_mysql_grant('zabbix-server@node1.example.com/zabbix-server.*').with_user('zabbix-server@node1.example.com') }
+      it { is_expected.to contain_class('zabbix::params') }
     end
 
     describe 'database_type is mysql, zabbix_type is proxy and is a single host setup' do
@@ -150,6 +156,7 @@ describe 'zabbix::database' do
       end
 
       it { is_expected.to contain_mysql__db('zabbix-proxy').with_name('zabbix-proxy') }
+      it { is_expected.to contain_class('zabbix::params') }
     end
 
     describe 'database_type is sqlite, zabbix_type is proxy and is a multiple host setup' do
@@ -165,6 +172,7 @@ describe 'zabbix::database' do
       end
 
       it { is_expected.to contain_class('zabbix::database::sqlite') }
+      it { is_expected.to contain_class('zabbix::params') }
     end
   end
 end

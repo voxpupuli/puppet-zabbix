@@ -29,7 +29,9 @@ describe 'zabbix::javagateway' do
     it { is_expected.to contain_file('/etc/zabbix/zabbix_java_gateway.conf') }
     it { is_expected.to contain_service('zabbix-java-gateway') }
     it { is_expected.to contain_package('zabbix-java-gateway') }
-
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.to contain_class('zabbix::javagateway') }
+    it { is_expected.to contain_class('zabbix::params') }
     context 'when declaring manage_repo is true' do
       let :params do
         {
@@ -38,6 +40,8 @@ describe 'zabbix::javagateway' do
       end
 
       it { is_expected.to contain_class('Zabbix::Repo') }
+      it { is_expected.to contain_yumrepo('zabbix-nonsupported') }
+      it { is_expected.to contain_yumrepo('zabbix') }
     end
 
     context 'when declaring manage_firewall is true' do

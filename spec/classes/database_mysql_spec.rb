@@ -41,6 +41,7 @@ describe 'zabbix::database::mysql' do
         it { is_expected.to contain_exec('zabbix_server_create.sql').with_command("cd #{path2} && if [ -f schema.sql.gz ]; then gunzip -f schema.sql.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-server' -p'zabbix-server' -D 'zabbix-server' < schema.sql && touch /etc/zabbix/.schema.done") }
         it { is_expected.to contain_exec('zabbix_server_images.sql').with_command("cd #{path2} && if [ -f images.sql.gz ]; then gunzip -f images.sql.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-server' -p'zabbix-server' -D 'zabbix-server' < images.sql && touch /etc/zabbix/.images.done") }
         it { is_expected.to contain_exec('zabbix_server_data.sql').with_command("cd #{path2} && if [ -f data.sql.gz ]; then gunzip -f data.sql.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-server' -p'zabbix-server' -D 'zabbix-server' < data.sql && touch /etc/zabbix/.data.done") }
+        it { is_expected.to contain_class('zabbix::params') }
       end
 
       describe 'when zabbix_type is proxy and zabbix version is 2.4' do
