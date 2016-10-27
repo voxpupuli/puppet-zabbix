@@ -24,17 +24,17 @@ describe 'zabbix::server' do
       end
 
       describe 'with default settings' do
-        it { should contain_class('zabbix::repo') }
-        it { should contain_service('zabbix-server').with_ensure('running') }
-        it { should_not contain_selboolean('zabbix_can_network') }
-        it { should contain_zabbix__startup('zabbix-server') }
+        it { is_expected.to contain_class('zabbix::repo') }
+        it { is_expected.to contain_service('zabbix-server').with_ensure('running') }
+        it { is_expected.to_not contain_selboolean('zabbix_can_network') }
+        it { is_expected.to contain_zabbix__startup('zabbix-server') }
       end
 
       describe 'with enabled selinux' do
         let :facts do
           super().merge(selinux_config_mode: 'enforcing')
         end
-        it { should contain_selboolean('zabbix_can_network').with('value' => 'on', 'persistent' => true) }
+        it { is_expected.to contain_selboolean('zabbix_can_network').with('value' => 'on', 'persistent' => true) }
       end
 
       describe 'with database_type as postgresql' do
@@ -46,9 +46,9 @@ describe 'zabbix::server' do
           }
         end
 
-        it { should contain_package('zabbix-server-pgsql').with_ensure('present') }
-        it { should contain_package('zabbix-server-pgsql').with_name('zabbix-server-pgsql') }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_require('Package[zabbix-server-pgsql]') }
+        it { is_expected.to contain_package('zabbix-server-pgsql').with_ensure('present') }
+        it { is_expected.to contain_package('zabbix-server-pgsql').with_name('zabbix-server-pgsql') }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_require('Package[zabbix-server-pgsql]') }
       end
 
       describe 'with database_type as mysql' do
@@ -58,14 +58,14 @@ describe 'zabbix::server' do
           }
         end
 
-        it { should contain_package('zabbix-server-mysql').with_ensure('present') }
-        it { should contain_package('zabbix-server-mysql').with_name('zabbix-server-mysql') }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_require('Package[zabbix-server-mysql]') }
+        it { is_expected.to contain_package('zabbix-server-mysql').with_ensure('present') }
+        it { is_expected.to contain_package('zabbix-server-mysql').with_name('zabbix-server-mysql') }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_require('Package[zabbix-server-mysql]') }
       end
 
       # Include directory should be available.
-      it { should contain_file('/etc/zabbix/zabbix_server.conf.d').with_ensure('directory') }
-      it { should contain_file('/etc/zabbix/zabbix_server.conf.d').with_require('File[/etc/zabbix/zabbix_server.conf]') }
+      it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf.d').with_ensure('directory') }
+      it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf.d').with_require('File[/etc/zabbix/zabbix_server.conf]') }
 
       context 'with zabbix::database::postgresql class' do
         let :params do
@@ -78,12 +78,12 @@ describe 'zabbix::server' do
           }
         end
 
-        it { should contain_class('zabbix::database::postgresql').with_zabbix_type('server') }
-        it { should contain_class('zabbix::database::postgresql').with_zabbix_version('3.0') }
-        it { should contain_class('zabbix::database::postgresql').with_database_name('zabbix-server') }
-        it { should contain_class('zabbix::database::postgresql').with_database_user('zabbix-server') }
-        it { should contain_class('zabbix::database::postgresql').with_database_password('zabbix-server') }
-        it { should contain_class('zabbix::database::postgresql').with_database_host('localhost') }
+        it { is_expected.to contain_class('zabbix::database::postgresql').with_zabbix_type('server') }
+        it { is_expected.to contain_class('zabbix::database::postgresql').with_zabbix_version('3.0') }
+        it { is_expected.to contain_class('zabbix::database::postgresql').with_database_name('zabbix-server') }
+        it { is_expected.to contain_class('zabbix::database::postgresql').with_database_user('zabbix-server') }
+        it { is_expected.to contain_class('zabbix::database::postgresql').with_database_password('zabbix-server') }
+        it { is_expected.to contain_class('zabbix::database::postgresql').with_database_host('localhost') }
       end
 
       context 'with zabbix::database::mysql class' do
@@ -97,12 +97,12 @@ describe 'zabbix::server' do
           }
         end
 
-        it { should contain_class('zabbix::database::mysql').with_zabbix_type('server') }
-        it { should contain_class('zabbix::database::mysql').with_zabbix_version('3.0') }
-        it { should contain_class('zabbix::database::mysql').with_database_name('zabbix-server') }
-        it { should contain_class('zabbix::database::mysql').with_database_user('zabbix-server') }
-        it { should contain_class('zabbix::database::mysql').with_database_password('zabbix-server') }
-        it { should contain_class('zabbix::database::mysql').with_database_host('localhost') }
+        it { is_expected.to contain_class('zabbix::database::mysql').with_zabbix_type('server') }
+        it { is_expected.to contain_class('zabbix::database::mysql').with_zabbix_version('3.0') }
+        it { is_expected.to contain_class('zabbix::database::mysql').with_database_name('zabbix-server') }
+        it { is_expected.to contain_class('zabbix::database::mysql').with_database_user('zabbix-server') }
+        it { is_expected.to contain_class('zabbix::database::mysql').with_database_password('zabbix-server') }
+        it { is_expected.to contain_class('zabbix::database::mysql').with_database_host('localhost') }
       end
 
       # So if manage_firewall is set to true, it should install
@@ -114,7 +114,7 @@ describe 'zabbix::server' do
           }
         end
 
-        it { should contain_firewall('151 zabbix-server') }
+        it { is_expected.to contain_firewall('151 zabbix-server') }
       end
 
       context 'when declaring manage_firewall is false' do
@@ -124,7 +124,7 @@ describe 'zabbix::server' do
           }
         end
 
-        it { should_not contain_firewall('151 zabbix-server') }
+        it { is_expected.to_not contain_firewall('151 zabbix-server') }
       end
 
       # If manage_service is true (default), it should create a service
@@ -136,7 +136,7 @@ describe 'zabbix::server' do
           }
         end
 
-        it { should contain_service('zabbix-server').with_ensure('running') }
+        it { is_expected.to contain_service('zabbix-server').with_ensure('running') }
       end
 
       # When the manage_service is false, it may not make the service.
@@ -147,7 +147,7 @@ describe 'zabbix::server' do
           }
         end
 
-        it { should_not contain_service('zabbix-server') }
+        it { is_expected.to_not contain_service('zabbix-server') }
       end
 
       context 'with all zabbix_server.conf-related parameters' do
@@ -218,67 +218,67 @@ describe 'zabbix::server' do
           }
         end
 
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^AlertScriptsPath=\$\{datadir\}/zabbix/alertscripts} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^AllowRoot=1} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^CacheSize=8M} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^CacheUpdateFrequency=30} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^DBHost=localhost} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^DBName=zabbix-server} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^DBPassword=zabbix-server} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^DBPort=3306} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^DBSchema=zabbix-server} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^DBSocket=/tmp/socket.db} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^DBUser=zabbix-server} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^DebugLevel=3} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^ExternalScripts=/usr/lib/zabbix/externalscripts} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^Fping6Location=/usr/sbin/fping6} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^FpingLocation=/usr/sbin/fping} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^HistoryCacheSize=4M} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^HistoryTextCacheSize=4M} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^HousekeepingFrequency=1} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^Include=/etc/zabbix/zabbix_server.conf.d} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^JavaGateway=192.168.2.2} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^JavaGatewayPort=10052} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^ListenIP=192.168.1.1} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^ListenPort=10051$} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^LoadModulePath=\$\{libdir\}/modules} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^LoadModule = pizza} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^LogFileSize=10} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^LogFile=/var/log/zabbix/zabbix_server.log} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^LogSlowQueries=0} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^MaxHousekeeperDelete=500} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeID=0$} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeNoEvents=0} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeNoHistory=0} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^PidFile=/var/run/zabbix/zabbix_server.pid} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^ProxyConfigFrequency=3600} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^ProxyDataFrequency=1} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SenderFrequency=30} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SNMPTrapperFile=/tmp/zabbix_traps.tmp} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SourceIP=192.168.1.1} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SSHKeyLocation=/home/zabbix} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartDBSyncers=4} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartDiscoverers=1} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartHTTPPollers=1} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartIPMIPollers=12} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartPingers=1} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartPollers=12} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartPollersUnreachable=1} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartProxyPollers=1} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartSNMPTrapper=1} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartTimers=1} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartTrappers=5} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartVMwareCollectors=5} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^Timeout=3} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TmpDir=/tmp} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TrapperTimeout=30} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TrendCacheSize=4M} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^UnavailableDelay=30} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^UnreachableDelay=30} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^UnreachablePeriod=30} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^ValueCacheSize=4M} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^VMwareCacheSize=8M} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^VMwareFrequency=60} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^AlertScriptsPath=\$\{datadir\}/zabbix/alertscripts} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^AllowRoot=1} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^CacheSize=8M} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^CacheUpdateFrequency=30} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^DBHost=localhost} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^DBName=zabbix-server} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^DBPassword=zabbix-server} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^DBPort=3306} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^DBSchema=zabbix-server} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^DBSocket=/tmp/socket.db} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^DBUser=zabbix-server} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^DebugLevel=3} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^ExternalScripts=/usr/lib/zabbix/externalscripts} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^Fping6Location=/usr/sbin/fping6} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^FpingLocation=/usr/sbin/fping} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^HistoryCacheSize=4M} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^HistoryTextCacheSize=4M} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^HousekeepingFrequency=1} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^Include=/etc/zabbix/zabbix_server.conf.d} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^JavaGateway=192.168.2.2} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^JavaGatewayPort=10052} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^ListenIP=192.168.1.1} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^ListenPort=10051$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^LoadModulePath=\$\{libdir\}/modules} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^LoadModule = pizza} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^LogFileSize=10} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^LogFile=/var/log/zabbix/zabbix_server.log} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^LogSlowQueries=0} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^MaxHousekeeperDelete=500} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeID=0$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeNoEvents=0} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeNoHistory=0} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^PidFile=/var/run/zabbix/zabbix_server.pid} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^ProxyConfigFrequency=3600} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^ProxyDataFrequency=1} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SenderFrequency=30} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SNMPTrapperFile=/tmp/zabbix_traps.tmp} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SourceIP=192.168.1.1} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SSHKeyLocation=/home/zabbix} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartDBSyncers=4} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartDiscoverers=1} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartHTTPPollers=1} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartIPMIPollers=12} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartPingers=1} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartPollers=12} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartPollersUnreachable=1} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartProxyPollers=1} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartSNMPTrapper=1} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartTimers=1} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartTrappers=5} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartVMwareCollectors=5} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^Timeout=3} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TmpDir=/tmp} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TrapperTimeout=30} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TrendCacheSize=4M} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^UnavailableDelay=30} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^UnreachableDelay=30} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^UnreachablePeriod=30} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^ValueCacheSize=4M} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^VMwareCacheSize=8M} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^VMwareFrequency=60} }
       end
 
       context 'with zabbix_server.conf and version 2.4' do
@@ -291,9 +291,9 @@ describe 'zabbix::server' do
           }
         end
 
-        it { should_not contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeID=0$} }
-        it { should_not contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeNoEvents=0} }
-        it { should_not contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeNoHistory=0} }
+        it { is_expected.to_not contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeID=0$} }
+        it { is_expected.to_not contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeNoEvents=0} }
+        it { is_expected.to_not contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeNoHistory=0} }
       end
 
       context 'with zabbix_server.conf and version 3.0' do
@@ -307,10 +307,10 @@ describe 'zabbix::server' do
           }
         end
 
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCAFile=/etc/zabbix/keys/zabbix-server.ca$} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCRLFile=/etc/zabbix/keys/zabbix-server.crl$} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCertFile=/etc/zabbix/keys/zabbix-server.crt$} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSKeyFile=/etc/zabbix/keys/zabbix-server.key$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCAFile=/etc/zabbix/keys/zabbix-server.ca$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCRLFile=/etc/zabbix/keys/zabbix-server.crl$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCertFile=/etc/zabbix/keys/zabbix-server.crt$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSKeyFile=/etc/zabbix/keys/zabbix-server.key$} }
       end
       context 'with zabbix_server.conf and version 3.2' do
         let :params do
@@ -323,10 +323,10 @@ describe 'zabbix::server' do
           }
         end
 
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCAFile=/etc/zabbix/keys/zabbix-server.ca$} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCRLFile=/etc/zabbix/keys/zabbix-server.crl$} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCertFile=/etc/zabbix/keys/zabbix-server.crt$} }
-        it { should contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSKeyFile=/etc/zabbix/keys/zabbix-server.key$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCAFile=/etc/zabbix/keys/zabbix-server.ca$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCRLFile=/etc/zabbix/keys/zabbix-server.crl$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCertFile=/etc/zabbix/keys/zabbix-server.crt$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSKeyFile=/etc/zabbix/keys/zabbix-server.key$} }
       end
     end
   end
