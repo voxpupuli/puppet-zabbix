@@ -39,7 +39,7 @@ describe 'zabbix::agent' do
                   end
         # Make sure package will be installed, service running and ensure of directory.
         it do
-          should contain_package(package).with(
+          is_expected.to contain_package(package).with(
             ensure:   'present',
             require:  'Class[Zabbix::Repo]',
             tag:      'zabbix'
@@ -47,7 +47,7 @@ describe 'zabbix::agent' do
         end
 
         it do
-          should contain_service('zabbix-agent').with(
+          is_expected.to contain_service('zabbix-agent').with(
             ensure:     'running',
             enable:     true,
             hasstatus:  true,
@@ -56,10 +56,10 @@ describe 'zabbix::agent' do
           )
         end
 
-        it { should contain_file('/etc/zabbix/zabbix_agentd.d').with_ensure('directory') }
-        it { should contain_zabbix__startup('zabbix-agent').that_requires("Package[#{package}]") }
-        it { should compile.with_all_deps }
-        it { should contain_class('zabbix::params') }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.d').with_ensure('directory') }
+        it { is_expected.to contain_zabbix__startup('zabbix-agent').that_requires("Package[#{package}]") }
+        it { is_expected.to compile.with_all_deps }
+        it { is_expected.to contain_class('zabbix::params') }
       end
 
       context 'when declaring manage_repo is true' do
@@ -71,10 +71,16 @@ describe 'zabbix::agent' do
 
         case facts[:osfamily]
         when 'Archlinux'
-          it { should raise_error(Puppet::Error, %r{Managing a repo on Archlinux is currently not implemented}) }
-        else
-          it { should contain_class('zabbix::repo').with_zabbix_version('3.0') }
-          it { should contain_package('zabbix-agent').with_require('Class[Zabbix::Repo]') }
+          it { is_expected.to raise_error(Puppet::Error, %r{Managing a repo on Archlinux is currently not implemented}) }
+        when 'Debian'
+          it { is_expected.to contain_class('zabbix::repo').with_zabbix_version('3.0') }
+          it { is_expected.to contain_package('zabbix-agent').with_require('Class[Zabbix::Repo]') }
+          it { is_expected.to contain_apt__source('zabbix') }
+        when 'RedHat'
+          it { is_expected.to contain_class('zabbix::repo').with_zabbix_version('3.0') }
+          it { is_expected.to contain_package('zabbix-agent').with_require('Class[Zabbix::Repo]') }
+          it { is_expected.to contain_yumrepo('zabbix-nonsupported') }
+          it { is_expected.to contain_yumrepo('zabbix') }
         end
       end
 
@@ -85,7 +91,7 @@ describe 'zabbix::agent' do
           }
         end
 
-        it { should contain_class('zabbix::resources::agent') }
+        it { is_expected.to contain_class('zabbix::resources::agent') }
       end
 
       context 'configuration file with hostnameitem' do
@@ -95,7 +101,7 @@ describe 'zabbix::agent' do
           }
         end
 
-        it { should contain_file(config_path).with_content %r{^HostnameItem=system.hostname$} }
+        it { is_expected.to contain_file(config_path).with_content %r{^HostnameItem=system.hostname$} }
       end
 
       context 'ignores hostnameitem if hostname is set' do
@@ -106,8 +112,8 @@ describe 'zabbix::agent' do
           }
         end
 
-        it { should contain_file(config_path).without_content %r{^HostnameItem=system.hostname$} }
-        it { should contain_file(config_path).with_content %r{^Hostname=test$} }
+        it { is_expected.to contain_file(config_path).without_content %r{^HostnameItem=system.hostname$} }
+        it { is_expected.to contain_file(config_path).with_content %r{^Hostname=test$} }
       end
 
       context 'when declaring manage_firewall is true' do
@@ -117,7 +123,7 @@ describe 'zabbix::agent' do
           }
         end
 
-        it { should contain_firewall('150 zabbix-agent') }
+        it { is_expected.to contain_firewall('150 zabbix-agent') }
       end
 
       context 'when declaring manage_firewall is false' do
@@ -127,17 +133,17 @@ describe 'zabbix::agent' do
           }
         end
 
-        it { should_not contain_firewall('150 zabbix-agent') }
+        it { is_expected.not_to contain_firewall('150 zabbix-agent') }
       end
 
       context 'it creates a startup script' do
         case facts[:osfamily]
         when 'Archlinux', 'Fedora'
-          it { should contain_file('/etc/init.d/zabbix-agent').with_ensure('absent') }
-          it { should contain_file('/etc/systemd/system/zabbix-agent.service').with_ensure('file') }
+          it { is_expected.to contain_file('/etc/init.d/zabbix-agent').with_ensure('absent') }
+          it { is_expected.to contain_file('/etc/systemd/system/zabbix-agent.service').with_ensure('file') }
         else
-          it { should contain_file('/etc/init.d/zabbix-agent').with_ensure('file') }
-          it { should_not contain_file('/etc/systemd/system/zabbix-agent.service') }
+          it { is_expected.to contain_file('/etc/init.d/zabbix-agent').with_ensure('file') }
+          it { is_expected.not_to contain_file('/etc/systemd/system/zabbix-agent.service') }
         end
       end
       context 'configuration file with full options' do
@@ -176,35 +182,35 @@ describe 'zabbix::agent' do
           }
         end
 
-        it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^AllowRoot=0$} }
-        it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^BufferSend=5$} }
-        it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^BufferSize=100$} }
-        it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^DebugLevel=4$} }
-        it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^EnableRemoteCommands=1$} }
-        it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^Hostname=10050$} }
-        it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^Include=/etc/zabbix/zabbix_agentd.d$} }
-        it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^ListenPort=10050$} }
-        it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LoadModulePath=\$\{libdir\}/modules$} }
-        it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LogFileSize=4$} }
-        it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LogFile=/var/log/zabbix/zabbix_agentd.log$} }
-        it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LogRemoteCommands=0$} }
-        it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^PidFile=/var/run/zabbix/zabbix_agentd.pid$} }
-        it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^RefreshActiveChecks=120$} }
-        it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^Server=192.168.1.1$} }
-        it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^ServerActive=192.168.1.1$} }
-        it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^StartAgents=3$} }
-        it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^Timeout=30$} }
-        it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^UnsafeUserParameters=0$} }
-        it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSConnect=cert$} }
-        it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSAccept=cert$} }
-        it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSCAFile=/etc/zabbix/keys/file.ca$} }
-        it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSCRLFile=/etc/zabbix/keys/file.crl$} }
-        it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSServerCertIssuer=Zabbix.Com$} }
-        it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSServerCertSubject=MySubJect$} }
-        it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSCertFile=/etc/zabbix/keys/tls.crt$} }
-        it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSKeyFile=/etc/zabbix/keys/tls.key$} }
-        it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSPSKIdentity=/etc/zabbix/keys/tlspskidentity.id$} }
-        it { should contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSPSKFile=/etc/zabbix/keys/tlspskfile.key$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^AllowRoot=0$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^BufferSend=5$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^BufferSize=100$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^DebugLevel=4$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^EnableRemoteCommands=1$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^Hostname=10050$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^Include=/etc/zabbix/zabbix_agentd.d$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^ListenPort=10050$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LoadModulePath=\$\{libdir\}/modules$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LogFileSize=4$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LogFile=/var/log/zabbix/zabbix_agentd.log$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LogRemoteCommands=0$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^PidFile=/var/run/zabbix/zabbix_agentd.pid$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^RefreshActiveChecks=120$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^Server=192.168.1.1$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^ServerActive=192.168.1.1$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^StartAgents=3$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^Timeout=30$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^UnsafeUserParameters=0$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSConnect=cert$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSAccept=cert$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSCAFile=/etc/zabbix/keys/file.ca$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSCRLFile=/etc/zabbix/keys/file.crl$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSServerCertIssuer=Zabbix.Com$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSServerCertSubject=MySubJect$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSCertFile=/etc/zabbix/keys/tls.crt$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSKeyFile=/etc/zabbix/keys/tls.key$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSPSKIdentity=/etc/zabbix/keys/tlspskidentity.id$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSPSKFile=/etc/zabbix/keys/tlspskfile.key$} }
       end
     end
   end

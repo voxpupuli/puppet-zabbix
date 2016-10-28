@@ -28,7 +28,7 @@ describe 'zabbix::repo' do
       }
     end
 
-    it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.0/debian/') }
+    it { is_expected.to contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.0/debian/') }
   end
 
   context 'on Debian 7 and Zabbix 2.0' do
@@ -58,7 +58,7 @@ describe 'zabbix::repo' do
       }
     end
 
-    it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.0/debian/') }
+    it { is_expected.to contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.0/debian/') }
   end
 
   context 'on Debian 7 and Zabbix 2.2' do
@@ -88,7 +88,7 @@ describe 'zabbix::repo' do
       }
     end
 
-    it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.2/debian/') }
+    it { is_expected.to contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.2/debian/') }
   end
 
   context 'on Debian 7 and Zabbix 2.4' do
@@ -118,7 +118,7 @@ describe 'zabbix::repo' do
       }
     end
 
-    it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.4/debian/') }
+    it { is_expected.to contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.4/debian/') }
   end
 
   context 'on Debian 8 and Zabbix 3.0' do
@@ -148,7 +148,7 @@ describe 'zabbix::repo' do
       }
     end
 
-    it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/3.0/debian/') }
+    it { is_expected.to contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/3.0/debian/') }
   end
 
   context 'on Ubuntu 12.04 and Zabbix 2.0' do
@@ -178,7 +178,7 @@ describe 'zabbix::repo' do
       }
     end
 
-    it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.0/ubuntu/') }
+    it { is_expected.to contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.0/ubuntu/') }
   end
 
   context 'on Ubuntu 12.04 and Zabbix 2.2' do
@@ -208,7 +208,7 @@ describe 'zabbix::repo' do
       }
     end
 
-    it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.2/ubuntu/') }
+    it { is_expected.to contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.2/ubuntu/') }
   end
 
   context 'on Ubuntu 12.04 and Zabbix 2.4' do
@@ -238,7 +238,7 @@ describe 'zabbix::repo' do
       }
     end
 
-    it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.4/ubuntu/') }
+    it { is_expected.to contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.4/ubuntu/') }
   end
 
   context 'on Ubuntu 14.04 and Zabbix 2.4' do
@@ -269,7 +269,7 @@ describe 'zabbix::repo' do
       }
     end
 
-    it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.4/ubuntu/') }
+    it { is_expected.to contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.4/ubuntu/') }
   end
 
   context 'on Ubuntu 14.04 and Zabbix 3.0' do
@@ -300,7 +300,7 @@ describe 'zabbix::repo' do
       }
     end
 
-    it { should contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/3.0/ubuntu/') }
+    it { is_expected.to contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/3.0/ubuntu/') }
   end
 
   context 'on RedHat 5 and Zabbix 2.0' do
@@ -329,10 +329,10 @@ describe 'zabbix::repo' do
       }
     end
 
-    it { should contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/2.0/rhel/5/$basearch/') }
-    it { should contain_yumrepo('zabbix').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX') }
-    it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/5/$basearch/') }
-    it { should contain_yumrepo('zabbix-nonsupported').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX') }
+    it { is_expected.to contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/2.0/rhel/5/$basearch/') }
+    it { is_expected.to contain_yumrepo('zabbix').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX') }
+    it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/5/$basearch/') }
+    it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX') }
   end
 
   context 'on RedHat 6 and Zabbix 2.0' do
@@ -362,10 +362,10 @@ describe 'zabbix::repo' do
       }
     end
 
-    it { should contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/2.0/rhel/6/$basearch/') }
-    it { should contain_yumrepo('zabbix').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX') }
-    it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/6/$basearch/') }
-    it { should contain_yumrepo('zabbix-nonsupported').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX') }
+    it { is_expected.to contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/2.0/rhel/6/$basearch/') }
+    it { is_expected.to contain_yumrepo('zabbix').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX') }
+    it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/6/$basearch/') }
+    it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX') }
   end
 
   context 'on RedHat 6 and Zabbix 2.2' do
@@ -395,10 +395,10 @@ describe 'zabbix::repo' do
       }
     end
 
-    it { should contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/2.2/rhel/6/$basearch/') }
-    it { should contain_yumrepo('zabbix').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX') }
-    it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/6/$basearch/') }
-    it { should contain_yumrepo('zabbix-nonsupported').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX') }
+    it { is_expected.to contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/2.2/rhel/6/$basearch/') }
+    it { is_expected.to contain_yumrepo('zabbix').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX') }
+    it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/6/$basearch/') }
+    it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX') }
   end
 
   context 'on RedHat 6 and Zabbix 2.4' do
@@ -428,10 +428,10 @@ describe 'zabbix::repo' do
       }
     end
 
-    it { should contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/2.4/rhel/6/$basearch/') }
-    it { should contain_yumrepo('zabbix').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX') }
-    it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/6/$basearch/') }
-    it { should contain_yumrepo('zabbix-nonsupported').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX') }
+    it { is_expected.to contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/2.4/rhel/6/$basearch/') }
+    it { is_expected.to contain_yumrepo('zabbix').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX') }
+    it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/6/$basearch/') }
+    it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX') }
   end
 
   context 'on RedHat 6 and Zabbix 3.0' do
@@ -461,10 +461,10 @@ describe 'zabbix::repo' do
       }
     end
 
-    it { should contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/3.0/rhel/6/$basearch/') }
-    it { should contain_yumrepo('zabbix').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX') }
-    it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/6/$basearch/') }
-    it { should contain_yumrepo('zabbix-nonsupported').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX') }
+    it { is_expected.to contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/3.0/rhel/6/$basearch/') }
+    it { is_expected.to contain_yumrepo('zabbix').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX') }
+    it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/6/$basearch/') }
+    it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX') }
   end
 
   context 'on RedHat 6 and Zabbix 3.2' do
@@ -494,10 +494,10 @@ describe 'zabbix::repo' do
       }
     end
 
-    it { should contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/3.2/rhel/6/$basearch/') }
-    it { should contain_yumrepo('zabbix').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591') }
-    it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/6/$basearch/') }
-    it { should contain_yumrepo('zabbix-nonsupported').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591') }
+    it { is_expected.to contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/3.2/rhel/6/$basearch/') }
+    it { is_expected.to contain_yumrepo('zabbix').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591') }
+    it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/6/$basearch/') }
+    it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591') }
   end
 
   context 'on RedHat 7 and Zabbix 3.0' do
@@ -527,10 +527,10 @@ describe 'zabbix::repo' do
       }
     end
 
-    it { should contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/3.0/rhel/7/$basearch/') }
-    it { should contain_yumrepo('zabbix').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX') }
-    it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/7/$basearch/') }
-    it { should contain_yumrepo('zabbix-nonsupported').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX') }
+    it { is_expected.to contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/3.0/rhel/7/$basearch/') }
+    it { is_expected.to contain_yumrepo('zabbix').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX') }
+    it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/7/$basearch/') }
+    it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX') }
   end
 
   context 'on RedHat 7 and Zabbix 3.2' do
@@ -560,9 +560,9 @@ describe 'zabbix::repo' do
       }
     end
 
-    it { should contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/3.2/rhel/7/$basearch/') }
-    it { should contain_yumrepo('zabbix').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591') }
-    it { should contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/7/$basearch/') }
-    it { should contain_yumrepo('zabbix-nonsupported').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591') }
+    it { is_expected.to contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/3.2/rhel/7/$basearch/') }
+    it { is_expected.to contain_yumrepo('zabbix').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591') }
+    it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/7/$basearch/') }
+    it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591') }
   end
 end

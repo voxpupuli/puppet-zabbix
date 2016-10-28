@@ -26,8 +26,8 @@ describe 'zabbix::web' do
         end
       else
         context 'with all defaults' do
-          it { should compile.with_all_deps }
-          it { should contain_file('/etc/zabbix/web').with_ensure('directory') }
+          it { is_expected.to compile.with_all_deps }
+          it { is_expected.to contain_file('/etc/zabbix/web').with_ensure('directory') }
         end
 
         describe 'with enforcing selinux' do
@@ -35,9 +35,9 @@ describe 'zabbix::web' do
             super().merge(selinux_config_mode: 'enforcing')
           end
           if facts[:osfamily] == 'RedHat'
-            it { should contain_selboolean('httpd_can_connect_zabbix').with('value' => 'on', 'persistent' => true) }
+            it { is_expected.to contain_selboolean('httpd_can_connect_zabbix').with('value' => 'on', 'persistent' => true) }
           else
-            it { should_not contain_selboolean('httpd_can_connect_zabbix') }
+            it { is_expected.not_to contain_selboolean('httpd_can_connect_zabbix') }
           end
         end
 
@@ -46,7 +46,7 @@ describe 'zabbix::web' do
             let :facts do
               super().merge(selinux_config_mode: mode)
             end
-            it { should_not contain_selboolean('httpd_can_connect_zabbix') }
+            it { is_expected.not_to contain_selboolean('httpd_can_connect_zabbix') }
           end
         end
 
@@ -74,9 +74,9 @@ describe 'zabbix::web' do
 
           packages = facts[:osfamily] == 'RedHat' ? ['zabbix-web-pgsql', 'zabbix-web'] : ['zabbix-frontend-php', pgsqlpackage]
           packages.each do |package|
-            it { should contain_package(package) }
+            it { is_expected.to contain_package(package) }
           end
-          it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['TYPE'\]     = 'POSTGRESQL'}) }
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['TYPE'\]     = 'POSTGRESQL'}) }
         end
 
         describe 'with database_type as mysql' do
@@ -103,12 +103,12 @@ describe 'zabbix::web' do
 
           packages = facts[:osfamily] == 'RedHat' ? ['zabbix-web-mysql', 'zabbix-web'] : ['zabbix-frontend-php', mysqlpackage]
           packages.each do |package|
-            it { should contain_package(package) }
+            it { is_expected.to contain_package(package) }
           end
-          it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['TYPE'\]     = 'MYSQL'}) }
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['TYPE'\]     = 'MYSQL'}) }
         end
 
-        it { should contain_file('/etc/zabbix/web/zabbix.conf.php') }
+        it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php') }
 
         describe 'when manage_resources is true' do
           let :params do
@@ -117,10 +117,10 @@ describe 'zabbix::web' do
             )
           end
 
-          it { should contain_class('zabbix::resources::web') }
-          it { should contain_package('zabbixapi').that_requires('Class[ruby::dev]').with_provider(package_provider_for_gems) }
-          it { should contain_class('ruby::dev') }
-          it { should contain_file('/etc/zabbix/imported_templates').with_ensure('directory') }
+          it { is_expected.to contain_class('zabbix::resources::web') }
+          it { is_expected.to contain_package('zabbixapi').that_requires('Class[ruby::dev]').with_provider(package_provider_for_gems) }
+          it { is_expected.to contain_class('ruby::dev') }
+          it { is_expected.to contain_file('/etc/zabbix/imported_templates').with_ensure('directory') }
         end
 
         describe 'when manage_resources and is_pe are true' do
@@ -135,7 +135,7 @@ describe 'zabbix::web' do
             super().merge(manage_resources: true)
           end
 
-          it { should contain_package('zabbixapi').with_provider('pe_puppetserver_gem') }
+          it { is_expected.to contain_package('zabbixapi').with_provider('pe_puppetserver_gem') }
         end
 
         describe 'when manage_resources is false' do
@@ -143,10 +143,10 @@ describe 'zabbix::web' do
             super().merge(manage_resources: false)
           end
 
-          it { should_not contain_class('zabbix::resources::web') }
+          it { is_expected.not_to contain_class('zabbix::resources::web') }
         end
 
-        it { should contain_apache__vhost('zabbix.example.com').with_name('zabbix.example.com') }
+        it { is_expected.to contain_apache__vhost('zabbix.example.com').with_name('zabbix.example.com') }
 
         context 'with database_* settings' do
           let :params do
@@ -159,11 +159,11 @@ describe 'zabbix::web' do
             )
           end
 
-          it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['SERVER'\]   = 'localhost'}) }
-          it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['DATABASE'\] = 'zabbix-server'}) }
-          it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['USER'\]     = 'zabbix-server'}) }
-          it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['PASSWORD'\] = 'zabbix-server'}) }
-          it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$ZBX_SERVER      = 'localhost'}) }
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['SERVER'\]   = 'localhost'}) }
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['DATABASE'\] = 'zabbix-server'}) }
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['USER'\]     = 'zabbix-server'}) }
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['PASSWORD'\] = 'zabbix-server'}) }
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$ZBX_SERVER      = 'localhost'}) }
         end
       end
     end
