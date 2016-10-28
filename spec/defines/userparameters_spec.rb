@@ -26,7 +26,18 @@ describe 'zabbix::userparameters', type: :define do
 
   context 'with an content' do
     let(:params) { { content: 'UserParameter=mysql.ping,mysqladmin -uroot ping | grep -c alive' } }
-    it { should contain_file('/etc/zabbix/zabbix_agentd.d/mysqld.conf').with_ensure('present') }
-    it { should contain_file('/etc/zabbix/zabbix_agentd.d/mysqld.conf').with_content %r{^UserParameter=mysql.ping,mysqladmin -uroot ping | grep -c alive$} }
+    it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.d/mysqld.conf').with_ensure('present') }
+    it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.d/mysqld.conf').with_content %r{^UserParameter=mysql.ping,mysqladmin -uroot ping | grep -c alive$} }
+    it { is_expected.to contain_class('zabbix::params') }
+    it { is_expected.to contain_class('zabbix::repo') }
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.to contain_file('/etc/init.d/zabbix-agent') }
+    it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf') }
+    it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.d') }
+    it { is_expected.to contain_package('zabbix-agent') }
+    it { is_expected.to contain_service('zabbix-agent') }
+    it { is_expected.to contain_yumrepo('zabbix-nonsupported') }
+    it { is_expected.to contain_yumrepo('zabbix') }
+    it { is_expected.to contain_zabbix__startup('zabbix-agent') }
   end
 end

@@ -22,31 +22,31 @@ describe 'zabbix::startup', type: :define do # rubocop:disable RSpec/MultipleDes
             end
             if osfamily == 'Debian'
               it do
-                should contain_file('/etc/init.d/zabbix-agent').with(
+                is_expected.to contain_file('/etc/init.d/zabbix-agent').with(
                   ensure: 'file',
                   content: %r{DAEMON_OPTS="-c /something"}
                 )
               end
             elsif osfamily == 'RedHat'
               it do
-                should contain_file('/etc/init.d/zabbix-agent').with(
+                is_expected.to contain_file('/etc/init.d/zabbix-agent').with(
                   ensure: 'file',
                   content: %r{OPTS="/something"}
                 )
               end
             else
-              it { should raise_error(Puppet::Error, %r{We currently only support Debian and RedHat osfamily as non-systemd}) }
+              it { is_expected.to raise_error(Puppet::Error, %r{We currently only support Debian and RedHat osfamily as non-systemd}) }
               next
             end
-            it { should_not contain_class('systemd') }
-            it { should_not contain_file('/etc/systemd/system/zabbix-agent.service') }
+            it { is_expected.not_to contain_class('systemd') }
+            it { is_expected.not_to contain_file('/etc/systemd/system/zabbix-agent.service') }
           end
 
           context 'it fails when agent_configfile_path param is missing' do
             let :params do
               {}
             end
-            it { should raise_error(Puppet::Error, %r{you have to provide a agent_configfile_path param}) }
+            it { is_expected.to raise_error(Puppet::Error, %r{you have to provide a agent_configfile_path param}) }
           end
         end
       end
@@ -67,16 +67,16 @@ describe 'zabbix::startup', type: :define do # rubocop:disable RSpec/MultipleDes
               pidfile: '/somethingelse'
             }
           end
-          it { should contain_class('systemd') }
-          it { should contain_file('/etc/init.d/zabbix-agent').with_ensure('absent') }
+          it { is_expected.to contain_class('systemd') }
+          it { is_expected.to contain_file('/etc/init.d/zabbix-agent').with_ensure('absent') }
           it do
-            should contain_file('/etc/systemd/system/zabbix-agent.service').with(
+            is_expected.to contain_file('/etc/systemd/system/zabbix-agent.service').with(
               ensure: 'file',
               mode:   '0664'
             ).that_notifies('Exec[systemctl-daemon-reload]')
           end
-          it { should contain_file('/etc/systemd/system/zabbix-agent.service').with_content(%r{ExecStart=/usr/sbin/zabbix_agentd -c /something}) }
-          it { should contain_file('/etc/systemd/system/zabbix-agent.service').with_content(%r{PIDFile=/somethingelse}) }
+          it { is_expected.to contain_file('/etc/systemd/system/zabbix-agent.service').with_content(%r{ExecStart=/usr/sbin/zabbix_agentd -c /something}) }
+          it { is_expected.to contain_file('/etc/systemd/system/zabbix-agent.service').with_content(%r{PIDFile=/somethingelse}) }
         end
 
         context 'it fails when pidfile param is missing' do
@@ -85,7 +85,7 @@ describe 'zabbix::startup', type: :define do # rubocop:disable RSpec/MultipleDes
               agent_configfile_path: '/something'
             }
           end
-          it { should raise_error(Puppet::Error, %r{you have to provide a pidfile param}) }
+          it { is_expected.to raise_error(Puppet::Error, %r{you have to provide a pidfile param}) }
         end
       end
     end
@@ -113,31 +113,31 @@ describe 'zabbix::startup', type: :define do
             end
             if osfamily == 'Debian'
               it do
-                should contain_file('/etc/init.d/zabbix-server').with(
+                is_expected.to contain_file('/etc/init.d/zabbix-server').with(
                   ensure: 'file',
                   content: %r{DAEMON_OPTS="-c /something"}
                 )
               end
             elsif osfamily == 'RedHat'
               it do
-                should contain_file('/etc/init.d/zabbix-server').with(
+                is_expected.to contain_file('/etc/init.d/zabbix-server').with(
                   ensure: 'file',
                   content: %r{OPTS="/something"}
                 )
               end
             else
-              it { should raise_error(Puppet::Error, %r{We currently only support Debian and RedHat osfamily as non-systemd}) }
+              it { is_expected.to raise_error(Puppet::Error, %r{We currently only support Debian and RedHat osfamily as non-systemd}) }
               next
             end
-            it { should_not contain_class('systemd') }
-            it { should_not contain_file('/etc/systemd/system/zabbix-server.service') }
+            it { is_expected.not_to contain_class('systemd') }
+            it { is_expected.not_to contain_file('/etc/systemd/system/zabbix-server.service') }
           end
 
           context 'it fails when server_configfile_path param is missing' do
             let :params do
               {}
             end
-            it { should raise_error(Puppet::Error, %r{you have to provide a server_configfile_path param}) }
+            it { is_expected.to raise_error(Puppet::Error, %r{you have to provide a server_configfile_path param}) }
           end
         end
       end
@@ -159,17 +159,17 @@ describe 'zabbix::startup', type: :define do
               database_type: 'mysql'
             }
           end
-          it { should contain_class('systemd') }
-          it { should contain_file('/etc/init.d/zabbix-server').with_ensure('absent') }
+          it { is_expected.to contain_class('systemd') }
+          it { is_expected.to contain_file('/etc/init.d/zabbix-server').with_ensure('absent') }
           it do
-            should contain_file('/etc/systemd/system/zabbix-server.service').with(
+            is_expected.to contain_file('/etc/systemd/system/zabbix-server.service').with(
               ensure: 'file',
               mode:   '0664'
             ).that_notifies('Exec[systemctl-daemon-reload]')
           end
-          it { should contain_file('/etc/systemd/system/zabbix-server.service').with_content(%r{ExecStart=/usr/sbin/zabbix_server -c /something}) }
-          it { should contain_file('/etc/systemd/system/zabbix-server.service').with_content(%r{PIDFile=/somethingelse}) }
-          it { should contain_file('/etc/systemd/system/zabbix-server.service').with_content(%r{After=syslog.target network.target mysqld.service}) }
+          it { is_expected.to contain_file('/etc/systemd/system/zabbix-server.service').with_content(%r{ExecStart=/usr/sbin/zabbix_server -c /something}) }
+          it { is_expected.to contain_file('/etc/systemd/system/zabbix-server.service').with_content(%r{PIDFile=/somethingelse}) }
+          it { is_expected.to contain_file('/etc/systemd/system/zabbix-server.service').with_content(%r{After=syslog.target network.target mysqld.service}) }
 
           context 'and works on postgres' do
             let :params do
@@ -179,7 +179,7 @@ describe 'zabbix::startup', type: :define do
                 database_type: 'postgres'
               }
             end
-            it { should contain_file('/etc/systemd/system/zabbix-server.service').with_content(%r{After=syslog.target network.target postgresql.service}) }
+            it { is_expected.to contain_file('/etc/systemd/system/zabbix-server.service').with_content(%r{After=syslog.target network.target postgresql.service}) }
           end
         end
 
@@ -190,7 +190,7 @@ describe 'zabbix::startup', type: :define do
               pidfile: '/somethingelse'
             }
           end
-          it { should raise_error(Puppet::Error, %r{you have to provide a database_type param}) }
+          it { is_expected.to raise_error(Puppet::Error, %r{you have to provide a database_type param}) }
         end
       end
     end

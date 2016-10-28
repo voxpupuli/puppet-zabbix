@@ -10,11 +10,11 @@ describe 'zabbix::sender' do
         facts
       end
       context 'with all defaults' do
-        it { should contain_class('zabbix::sender') }
-        it { should compile.with_all_deps }
+        it { is_expected.to contain_class('zabbix::sender') }
+        it { is_expected.to compile.with_all_deps }
         # Make sure package will be installed, service running and ensure of directory.
-        it { should contain_package('zabbix-sender').with_ensure('present') }
-        it { should contain_package('zabbix-sender').with_name('zabbix-sender') }
+        it { is_expected.to contain_package('zabbix-sender').with_ensure('present') }
+        it { is_expected.to contain_package('zabbix-sender').with_name('zabbix-sender') }
       end
       context 'when declaring manage_repo is true' do
         let :params do
@@ -24,11 +24,11 @@ describe 'zabbix::sender' do
         end
         if facts[:osfamily] == 'Archlinux'
           it 'fails' do
-            should raise_error(Puppet::Error, %r{Managing a repo on Archlinux is currently not implemented})
+            is_expected.to raise_error(Puppet::Error, %r{Managing a repo on Archlinux is currently not implemented})
           end
         else
-          it { should contain_class('zabbix::repo').with_zabbix_version('3.0') }
-          it { should contain_package('zabbix-sender').with_require('Class[Zabbix::Repo]') }
+          it { is_expected.to contain_class('zabbix::repo').with_zabbix_version('3.0') }
+          it { is_expected.to contain_package('zabbix-sender').with_require('Class[Zabbix::Repo]') }
         end
       end
     end

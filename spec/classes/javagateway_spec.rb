@@ -26,10 +26,12 @@ describe 'zabbix::javagateway' do
       }
     end
 
-    it { should contain_file('/etc/zabbix/zabbix_java_gateway.conf') }
-    it { should contain_service('zabbix-java-gateway') }
-    it { should contain_package('zabbix-java-gateway') }
-
+    it { is_expected.to contain_file('/etc/zabbix/zabbix_java_gateway.conf') }
+    it { is_expected.to contain_service('zabbix-java-gateway') }
+    it { is_expected.to contain_package('zabbix-java-gateway') }
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.to contain_class('zabbix::javagateway') }
+    it { is_expected.to contain_class('zabbix::params') }
     context 'when declaring manage_repo is true' do
       let :params do
         {
@@ -37,7 +39,9 @@ describe 'zabbix::javagateway' do
         }
       end
 
-      it { should contain_class('Zabbix::Repo') }
+      it { is_expected.to contain_class('Zabbix::Repo') }
+      it { is_expected.to contain_yumrepo('zabbix-nonsupported') }
+      it { is_expected.to contain_yumrepo('zabbix') }
     end
 
     context 'when declaring manage_firewall is true' do
@@ -47,7 +51,7 @@ describe 'zabbix::javagateway' do
         }
       end
 
-      it { should contain_firewall('152 zabbix-javagateway') }
+      it { is_expected.to contain_firewall('152 zabbix-javagateway') }
     end
 
     context 'when declaring manage_firewall is false' do
@@ -57,7 +61,7 @@ describe 'zabbix::javagateway' do
         }
       end
 
-      it { should_not contain_firewall('152 zabbix-javagateway') }
+      it { is_expected.not_to contain_firewall('152 zabbix-javagateway') }
     end
 
     context 'with zabbix_java_gateway.conf settings' do
@@ -70,10 +74,10 @@ describe 'zabbix::javagateway' do
         }
       end
 
-      it { should contain_file('/etc/zabbix/zabbix_java_gateway.conf').with_content %r{^LISTEN_IP=192.168.1.1$} }
-      it { should contain_file('/etc/zabbix/zabbix_java_gateway.conf').with_content %r{^LISTEN_PORT=10052$} }
-      it { should contain_file('/etc/zabbix/zabbix_java_gateway.conf').with_content %r{^PID_FILE=/var/run/zabbix/zabbix_java.pid$} }
-      it { should contain_file('/etc/zabbix/zabbix_java_gateway.conf').with_content %r{^START_POLLERS=5$} }
+      it { is_expected.to contain_file('/etc/zabbix/zabbix_java_gateway.conf').with_content %r{^LISTEN_IP=192.168.1.1$} }
+      it { is_expected.to contain_file('/etc/zabbix/zabbix_java_gateway.conf').with_content %r{^LISTEN_PORT=10052$} }
+      it { is_expected.to contain_file('/etc/zabbix/zabbix_java_gateway.conf').with_content %r{^PID_FILE=/var/run/zabbix/zabbix_java.pid$} }
+      it { is_expected.to contain_file('/etc/zabbix/zabbix_java_gateway.conf').with_content %r{^START_POLLERS=5$} }
     end
   end
 end
