@@ -133,7 +133,7 @@ describe 'zabbix::agent' do
           }
         end
 
-        it { is_expected.to_not contain_firewall('150 zabbix-agent') }
+        it { is_expected.not_to contain_firewall('150 zabbix-agent') }
       end
 
       context 'it creates a startup script' do
@@ -143,7 +143,7 @@ describe 'zabbix::agent' do
           it { is_expected.to contain_file('/etc/systemd/system/zabbix-agent.service').with_ensure('file') }
         else
           it { is_expected.to contain_file('/etc/init.d/zabbix-agent').with_ensure('file') }
-          it { is_expected.to_not contain_file('/etc/systemd/system/zabbix-agent.service') }
+          it { is_expected.not_to contain_file('/etc/systemd/system/zabbix-agent.service') }
         end
       end
       context 'configuration file with full options' do

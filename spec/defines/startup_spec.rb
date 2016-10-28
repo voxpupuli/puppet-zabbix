@@ -38,8 +38,8 @@ describe 'zabbix::startup', type: :define do # rubocop:disable RSpec/MultipleDes
               it { is_expected.to raise_error(Puppet::Error, %r{We currently only support Debian and RedHat osfamily as non-systemd}) }
               next
             end
-            it { is_expected.to_not contain_class('systemd') }
-            it { is_expected.to_not contain_file('/etc/systemd/system/zabbix-agent.service') }
+            it { is_expected.not_to contain_class('systemd') }
+            it { is_expected.not_to contain_file('/etc/systemd/system/zabbix-agent.service') }
           end
 
           context 'it fails when agent_configfile_path param is missing' do
@@ -129,8 +129,8 @@ describe 'zabbix::startup', type: :define do
               it { is_expected.to raise_error(Puppet::Error, %r{We currently only support Debian and RedHat osfamily as non-systemd}) }
               next
             end
-            it { is_expected.to_not contain_class('systemd') }
-            it { is_expected.to_not contain_file('/etc/systemd/system/zabbix-server.service') }
+            it { is_expected.not_to contain_class('systemd') }
+            it { is_expected.not_to contain_file('/etc/systemd/system/zabbix-server.service') }
           end
 
           context 'it fails when server_configfile_path param is missing' do

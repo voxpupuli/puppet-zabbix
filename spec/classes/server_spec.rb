@@ -26,7 +26,7 @@ describe 'zabbix::server' do
       describe 'with default settings' do
         it { is_expected.to contain_class('zabbix::repo') }
         it { is_expected.to contain_service('zabbix-server').with_ensure('running') }
-        it { is_expected.to_not contain_selboolean('zabbix_can_network') }
+        it { is_expected.not_to contain_selboolean('zabbix_can_network') }
         it { is_expected.to contain_zabbix__startup('zabbix-server') }
       end
 
@@ -124,7 +124,7 @@ describe 'zabbix::server' do
           }
         end
 
-        it { is_expected.to_not contain_firewall('151 zabbix-server') }
+        it { is_expected.not_to contain_firewall('151 zabbix-server') }
       end
 
       # If manage_service is true (default), it should create a service
@@ -147,7 +147,7 @@ describe 'zabbix::server' do
           }
         end
 
-        it { is_expected.to_not contain_service('zabbix-server') }
+        it { is_expected.not_to contain_service('zabbix-server') }
       end
 
       context 'with all zabbix_server.conf-related parameters' do
@@ -291,9 +291,9 @@ describe 'zabbix::server' do
           }
         end
 
-        it { is_expected.to_not contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeID=0$} }
-        it { is_expected.to_not contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeNoEvents=0} }
-        it { is_expected.to_not contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeNoHistory=0} }
+        it { is_expected.not_to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeID=0$} }
+        it { is_expected.not_to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeNoEvents=0} }
+        it { is_expected.not_to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeNoHistory=0} }
       end
 
       context 'with zabbix_server.conf and version 3.0' do
