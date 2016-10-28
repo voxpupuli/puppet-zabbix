@@ -37,7 +37,7 @@ describe 'zabbix::web' do
           if facts[:osfamily] == 'RedHat'
             it { is_expected.to contain_selboolean('httpd_can_connect_zabbix').with('value' => 'on', 'persistent' => true) }
           else
-            it { is_expected.to_not contain_selboolean('httpd_can_connect_zabbix') }
+            it { is_expected.not_to contain_selboolean('httpd_can_connect_zabbix') }
           end
         end
 
@@ -46,7 +46,7 @@ describe 'zabbix::web' do
             let :facts do
               super().merge(selinux_config_mode: mode)
             end
-            it { is_expected.to_not contain_selboolean('httpd_can_connect_zabbix') }
+            it { is_expected.not_to contain_selboolean('httpd_can_connect_zabbix') }
           end
         end
 
@@ -143,7 +143,7 @@ describe 'zabbix::web' do
             super().merge(manage_resources: false)
           end
 
-          it { is_expected.to_not contain_class('zabbix::resources::web') }
+          it { is_expected.not_to contain_class('zabbix::resources::web') }
         end
 
         it { is_expected.to contain_apache__vhost('zabbix.example.com').with_name('zabbix.example.com') }

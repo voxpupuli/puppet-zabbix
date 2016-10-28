@@ -70,13 +70,13 @@ describe 'zabbix::database' do
       it { is_expected.to contain_postgresql__server__db('zabbix-server').with_name('zabbix-server') }
       it { is_expected.to contain_postgresql__server__db('zabbix-server').with_user('zabbix-server') }
 
-      it { is_expected.to_not contain_postgresql__server__pg_hba_rule('Allow zabbix-server to access database').with_database('zabbix-server') }
-      it { is_expected.to_not contain_postgresql__server__pg_hba_rule('Allow zabbix-server to access database').with_user('zabbix-server') }
-      it { is_expected.to_not contain_postgresql__server__pg_hba_rule('Allow zabbix-server to access database').with_address('127.0.0.1/32') }
+      it { is_expected.not_to contain_postgresql__server__pg_hba_rule('Allow zabbix-server to access database').with_database('zabbix-server') }
+      it { is_expected.not_to contain_postgresql__server__pg_hba_rule('Allow zabbix-server to access database').with_user('zabbix-server') }
+      it { is_expected.not_to contain_postgresql__server__pg_hba_rule('Allow zabbix-server to access database').with_address('127.0.0.1/32') }
 
-      it { is_expected.to_not contain_postgresql__server__pg_hba_rule('Allow zabbix-web to access database').with_database('zabbix-server') }
-      it { is_expected.to_not contain_postgresql__server__pg_hba_rule('Allow zabbix-web to access database').with_user('zabbix-server') }
-      it { is_expected.to_not contain_postgresql__server__pg_hba_rule('Allow zabbix-web to access database').with_address('127.0.0.2/32') }
+      it { is_expected.not_to contain_postgresql__server__pg_hba_rule('Allow zabbix-web to access database').with_database('zabbix-server') }
+      it { is_expected.not_to contain_postgresql__server__pg_hba_rule('Allow zabbix-web to access database').with_user('zabbix-server') }
+      it { is_expected.not_to contain_postgresql__server__pg_hba_rule('Allow zabbix-web to access database').with_address('127.0.0.2/32') }
       it { is_expected.to contain_class('zabbix::params') }
     end
 
@@ -137,10 +137,10 @@ describe 'zabbix::database' do
       it { is_expected.to contain_mysql__db('zabbix-server').with_user('zabbix-server') }
       it { is_expected.to contain_mysql__db('zabbix-server').with_host('node0.example.com') }
 
-      it { is_expected.to_not contain_mysql_user('zabbix-server@node1.example.com').with_name('zabbix-server@node1.example.com') }
-      it { is_expected.to_not contain_mysql_grant('zabbix-server@node1.example.com/zabbix-server.*').with_name('zabbix-server@node1.example.com/zabbix-server.*') }
-      it { is_expected.to_not contain_mysql_grant('zabbix-server@node1.example.com/zabbix-server.*').with_table('zabbix-server.*') }
-      it { is_expected.to_not contain_mysql_grant('zabbix-server@node1.example.com/zabbix-server.*').with_user('zabbix-server@node1.example.com') }
+      it { is_expected.not_to contain_mysql_user('zabbix-server@node1.example.com').with_name('zabbix-server@node1.example.com') }
+      it { is_expected.not_to contain_mysql_grant('zabbix-server@node1.example.com/zabbix-server.*').with_name('zabbix-server@node1.example.com/zabbix-server.*') }
+      it { is_expected.not_to contain_mysql_grant('zabbix-server@node1.example.com/zabbix-server.*').with_table('zabbix-server.*') }
+      it { is_expected.not_to contain_mysql_grant('zabbix-server@node1.example.com/zabbix-server.*').with_user('zabbix-server@node1.example.com') }
       it { is_expected.to contain_class('zabbix::params') }
     end
 

@@ -192,7 +192,7 @@ describe 'zabbix::proxy' do
         }
       end
 
-      it { is_expected.to_not contain_firewall('151 zabbix-proxy') }
+      it { is_expected.not_to contain_firewall('151 zabbix-proxy') }
     end
 
     # Make sure we have set some vars in zabbix_proxy.conf file. This is configuration file is the same on all

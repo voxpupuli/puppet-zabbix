@@ -61,7 +61,7 @@ describe 'zabbix::javagateway' do
         }
       end
 
-      it { is_expected.to_not contain_firewall('152 zabbix-javagateway') }
+      it { is_expected.not_to contain_firewall('152 zabbix-javagateway') }
     end
 
     context 'with zabbix_java_gateway.conf settings' do
