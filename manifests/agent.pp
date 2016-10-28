@@ -328,7 +328,7 @@ class zabbix::agent (
   }
 
   # Controlling the 'zabbix-agent' service
-  if str2bool($::systemd) {
+  if str2bool(getvar('::systemd')) {
     $service_provider = 'systemd'
   } else {
     $service_provider = undef
