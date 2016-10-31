@@ -324,4 +324,30 @@ class zabbix::params {
       $puppetgem = 'gem'
     }
   }
+
+  if $::apache::user {
+    $web_config_owner = getvar('::apache::user')
+  } else {
+    case $::operatingsystem {
+      'ubuntu', 'debian': {
+        $web_config_owner = 'www-data'
+      }
+      default: {
+        $web_config_owner = 'apache'
+      }
+    }
+  }
+
+  if $::apache::group {
+    $web_config_group = getvar('::apache::group')
+  } else {
+    case $::operatingsystem {
+      'ubuntu', 'debian': {
+        $web_config_owner = 'www-data'
+      }
+      default: {
+        $web_config_group = 'apache'
+      }
+    }
+  }
 }
