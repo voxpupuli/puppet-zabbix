@@ -37,6 +37,12 @@
 #   The state of the package that needs to be installed: present or latest.
 #   Default: present
 #
+# [*web_config_owner*]
+#   Which user should own the web interface configuration file.
+#
+# [*web_config_group*]
+#   Which group should own the web interface configuration file.
+#
 # [*manage_vhost*]
 #   When true, it will create an vhost for apache. The parameter zabbix_url
 #   has to be set.
@@ -179,6 +185,8 @@ class zabbix::web (
   $zabbix_timezone                          = $zabbix::params::zabbix_timezone,
   $zabbix_package_state                     = $zabbix::params::zabbix_package_state,
   $zabbix_template_dir                      = $zabbix::params::zabbix_template_dir,
+  $web_config_owner                         = $zabbix::params::web_config_owner,
+  $web_config_group                         = $zabbix::params::web_config_group,
   $manage_vhost                             = $zabbix::params::manage_vhost,
   $default_vhost                            = $zabbix::params::default_vhost,
   $manage_resources                         = $zabbix::params::manage_resources,
@@ -218,9 +226,6 @@ class zabbix::web (
   if $::osfamily == 'Archlinux' {
     fail('Archlinux is currently not supported for zabbix::web ')
   }
-
-  $apache_user = getvar('::apache::user')
-  $apache_group = getvar('::apache::group')
 
   # Only include the repo class if it has not yet been included
   unless defined(Class['Zabbix::Repo']) {
@@ -359,8 +364,8 @@ class zabbix::web (
   # Webinterface config file
   file { '/etc/zabbix/web/zabbix.conf.php':
     ensure  => present,
-    owner   => $apache_user,
-    group   => $apache_group,
+    owner   => $web_config_owner,
+    group   => $web_config_group,
     mode    => '0640',
     replace => true,
     content => template('zabbix/web/zabbix.conf.php.erb'),
