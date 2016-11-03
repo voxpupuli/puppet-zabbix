@@ -35,7 +35,7 @@ define zabbix::startup (
       fail('we currently only spport a title that contains agent or server')
     }
   }
-  if str2bool($::systemd) {
+  if str2bool(getvar('::systemd')) {
     unless $pidfile {
       fail('you have to provide a pidfile param')
     }
