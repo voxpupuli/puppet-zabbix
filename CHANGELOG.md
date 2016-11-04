@@ -1,3 +1,12 @@
+## 2016-11-04 Release 2.6.0
+
+  * Maintenance: modulesync with Vox Pupuli defaults (#303, #308)
+  * Maintenance: Improvide rspec testing (#299, #302, #304)
+  * Fix: use getvar to get systemd fact (#305)
+  * Fix: Ensure to use correct upstream gpg key for repo setup (#300)
+  * Feature: Allow to configure Owner/Group of webconfig file (#307)
+
+
 ## 2016-10-13 Release 2.5.1
 
   * Maintenance: modulesync with voxpupuli defaults
