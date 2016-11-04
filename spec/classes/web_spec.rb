@@ -111,13 +111,17 @@ describe 'zabbix::web' do
         it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php') }
 
         describe 'with parameter: web_config_owner' do
-          let (:params) { { :web_config_owner => '_VALUE_' } }
-          it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_owner('_VALUE_') }
+          let :params do
+            super().merge(web_config_owner: 'apache')
+          end
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_owner('apache') }
         end
 
         describe 'with parameter: web_config_group' do
-          let (:params) { { :web_config_group => '_VALUE_' } }
-          it { should contain_file('/etc/zabbix/web/zabbix.conf.php').with_group('_VALUE_') }
+          let :params do
+            super().merge(web_config_group: 'apache')
+          end
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_group('apache') }
         end
 
         describe 'when manage_resources is true' do
