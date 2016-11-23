@@ -325,31 +325,34 @@ class zabbix::params {
     }
   }
 
+  $default_web_config_owner = $::operatingsystem ? {
+    /(Ubuntu|Debian)/ => 'www-data',
+    default           => 'apache',
+  }
+
   $_web_config_owner = getvar('::apache::user')
-  if $_web_config_owner != '' {
-    $web_config_owner = $_web_config_owner
-  } else {
-    case $::operatingsystem {
-      'ubuntu', 'debian': {
-        $web_config_owner = 'www-data'
-      }
-      default: {
-        $web_config_owner = 'apache'
-      }
+  if $_web_config_owner {
+    if $_web_config_owner =~ /^\S+$/ {
+      # One or more non-whitespace chars
+      $web_config_owner = $_web_config_owner
+    } else {
+      # Empty string or contains whitespace (stdlib < 4.13.0 bug)
+      $web_config_owner = $default_web_config_owner
     }
+  } else {
+    # getvar returned undef
+    $web_config_owner = $default_web_config_owner
   }
 
   $_web_config_group = getvar('::apache::group')
-  if $_web_config_group != '' {
-    $web_config_group = getvar('::apache::group')
-  } else {
-    case $::operatingsystem {
-      'ubuntu', 'debian': {
-        $web_config_group = 'www-data'
-      }
-      default: {
-        $web_config_group = 'apache'
-      }
+  if $_web_config_group {
+    if $_web_config_group =~ /^\S+$/ {
+      $web_config_group = $_web_config_group
+    } else {
+      $web_config_group = $default_web_config_owner
     }
+  } else {
+    # getvar returned undef
+    $web_config_group = $default_web_config_owner
   }
 }
