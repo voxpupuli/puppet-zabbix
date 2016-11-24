@@ -1,10 +1,11 @@
 #puppet-zabbix
 
-Continuous Integration status:
-
 [![Build Status](https://travis-ci.org/voxpupuli/puppet-zabbix.svg?branch=master)](https://travis-ci.org/voxpupuli/puppet-zabbix)
-[![Puppet Forge](http://img.shields.io/puppetforge/v/puppet/zabbix.svg)](https://forge.puppetlabs.com/puppet/zabbix)
-[![Puppet Forge Downloads](http://img.shields.io/puppetforge/dt/puppet/zabbix.svg)](https://forge.puppetlabs.com/puppet/zabbix)
+[![Code Coverage](https://coveralls.io/repos/github/voxpupuli/puppet-zabbix/badge.svg?branch=master)](https://coveralls.io/github/voxpupuli/puppet-zabbix)
+[![Puppet Forge](https://img.shields.io/puppetforge/v/puppet/zabbix.svg)](https://forge.puppetlabs.com/puppet/zabbix)
+[![Puppet Forge - downloads](https://img.shields.io/puppetforge/dt/puppet/zabbix.svg)](https://forge.puppetlabs.com/puppet/zabbix)
+[![Puppet Forge - endorsement](https://img.shields.io/puppetforge/e/puppet/zabbix.svg)](https://forge.puppetlabs.com/puppet/zabbix)
+[![Puppet Forge - scores](https://img.shields.io/puppetforge/f/puppet/zabbix.svg)](https://forge.puppetlabs.com/puppet/zabbix)
 
 ####Table of Contents
 
