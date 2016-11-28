@@ -86,7 +86,11 @@ Puppet::Type.type(:zabbix_template).provide(:ruby, parent: Puppet::Provider::Zab
     zabbix_pass = @resource[:zabbix_pass]
     apache_use_ssl = @resource[:apache_use_ssl]
 
+    file = File.open(template_source)
+    template_contents = ''
+    file.each { |line| template_contents << line }
+
     self.class.create_connection(zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
-    self.class.check_template_is_equal(template_name, template_source, zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
+    self.class.check_template_is_equal(template_name, template_contents, zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
   end
 end
