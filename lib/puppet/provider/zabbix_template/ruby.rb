@@ -1,25 +1,14 @@
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'zabbix'))
 Puppet::Type.type(:zabbix_template).provide(:ruby, parent: Puppet::Provider::Zabbix) do
+  def connect
+    self.class.require_zabbix if @resource[:zabbix_url] != ''
+    @zbx ||= self.class.create_connection(@resource[:zabbix_url], @resource[:zabbix_user], @resource[:zabbix_pass], @resource[:apache_use_ssl])
+    @zbx
+  end
+
   def create
-    zabbix_url = @resource[:zabbix_url]
-
-    self.class.require_zabbix if zabbix_url != ''
-
-    # Set some vars
-    template_source = @resource[:template_source]
-    zabbix_url = @resource[:zabbix_url]
-    zabbix_user = @resource[:zabbix_user]
-    zabbix_pass = @resource[:zabbix_pass]
-    apache_use_ssl = @resource[:apache_use_ssl]
-
     # Connect to zabbix api
-    zbx = self.class.create_connection(zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
-
-    # Opening the file, so we can place it as an long string into an variable. The ZabbixAPI
-    # needs the content of the file, not location of the file.
-    file = File.open(template_source)
-    template_contents = ''
-    file.each { |line| template_contents << line }
+    zbx = connect
 
     zbx.configurations.import(
       format: 'xml',
@@ -75,18 +64,29 @@ Puppet::Type.type(:zabbix_template).provide(:ruby, parent: Puppet::Provider::Zab
     )
   end
 
+  def destroy
+    zbx = connect
+    id = zbx.templates.get_id(host: @resource[:template_name])
+    zbx.templates.delete(id)
+  end
+
   def exists?
-    zabbix_url = @resource[:zabbix_url]
+    zbx = connect
+    zbx.templates.get_id(host: @resource[:template_name])
+  end
 
-    self.class.require_zabbix if zabbix_url != ''
+  def xml
+    zbx = connect
+    zbx.configurations.export(
+      format: 'xml',
+      options: {
+        templates: [zbx.templates.get_id(host: @resource[:template_name])]
+      }
+    )
+  end
 
-    template_name = @resource[:template_name]
-    template_source = @resource[:template_source]
-    zabbix_user = @resource[:zabbix_user]
-    zabbix_pass = @resource[:zabbix_pass]
-    apache_use_ssl = @resource[:apache_use_ssl]
-
-    self.class.create_connection(zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
-    self.class.check_template_is_equal(template_name, template_source, zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
+  def template_contents
+    file = File.new(@resource[:template_source], 'rb')
+    file.read
   end
 end
