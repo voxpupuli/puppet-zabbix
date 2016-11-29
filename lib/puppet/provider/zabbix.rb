@@ -47,29 +47,7 @@ class Puppet::Provider::Zabbix < Puppet::Provider
     template_array.include?(template_id.to_s)
   end
 
-  def self.check_template_exist(template, zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
-    zbx = create_connection(zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
-    zbx.templates.get_id(host: template)
-  rescue Puppet::ExecutionFailure
-    false
-  end
-
-  def self.check_template_is_equal(template, template_source, zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
-    zbx = create_connection(zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
-    exported = zbx.configurations.export(
-      format: 'xml',
-      options: {
-        templates: [zbx.templates.get_id(host: template)]
-      }
-    )
-    exported_clean = exported.gsub(%r{>\s*}, '>').gsub(%r{\s*<}, '<').gsub(%r{<date>.*<\/date>}, 'DATEWASHERE')
-    template_source_clean = template_source.gsub(%r{>\s*}, '>').gsub(%r{\s*<}, '<').gsub(%r{<date>.*<\/date>}, 'DATEWASHERE')
-    exported_clean.eql? template_source_clean
-  rescue Puppet::ExecutionFailure
-    false
-  end
-
-  # Is it an number?
+  # Is it a number?
   def self.a_number?(s)
     s.to_s.match(%r{\A[+-]?\d+?(\.\d+)?\Z}).nil? ? false : true
   end
