@@ -14,6 +14,8 @@ if Dir.exist?(File.expand_path('../../lib', __FILE__)) && RUBY_VERSION !~ %r{^1.
   SimpleCov.start do
     track_files 'lib/**/*.rb'
     add_filter '/spec'
+    add_filter '/vendor'
+    add_filter '/.vendor'
   end
 end
 
