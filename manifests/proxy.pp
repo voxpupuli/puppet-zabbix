@@ -607,7 +607,7 @@ class zabbix::proxy (
   }
 
   # check if selinux is active and allow zabbix
-  if $::osfamily == 'RedHat' and $::selinux_config_mode == 'enforcing' {
+  if $::osfamily == 'RedHat' and getvar('::selinux_config_mode') == 'enforcing' {
     selboolean{'zabbix_can_network':
       persistent => true,
       value      => 'on',
