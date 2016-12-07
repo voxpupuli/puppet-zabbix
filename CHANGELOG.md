@@ -1,3 +1,15 @@
+## 2016-12-06 Release 2.6.1
+
+  * Maintenance: modulesync with Vox Pupuli defaults
+  * Maintenance: Add unit tests for zabbix_group type
+  * Maintenance: Add unit tests for zabbix_template type
+  * Maintenance: Improve zabbix_template type
+  * Fix: Default web_config_owner/group correctly
+  * Fix: Replace agent systemd service with official ones
+  * Fix: Strict variables support for selinux_config_mode
+  * Fix: Add missing virbr to list of listenip interfaces
+
+
 ## 2016-11-04 Release 2.6.0
 
   * Maintenance: modulesync with Vox Pupuli defaults (#303, #308)
