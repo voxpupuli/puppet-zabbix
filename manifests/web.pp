@@ -463,7 +463,7 @@ class zabbix::web (
   } # END if $manage_vhost
 
   # check if selinux is active and allow zabbix
-  if $::osfamily == 'RedHat' and $::selinux_config_mode == 'enforcing' {
+  if $::osfamily == 'RedHat' and getvar('::selinux_config_mode') == 'enforcing' {
     selboolean{'httpd_can_connect_zabbix':
       persistent => true,
       value      => 'on',
