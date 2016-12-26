@@ -6,43 +6,43 @@
   "dependencies": [
     {
       "name": "puppetlabs/postgresql",
-      "version_requirement": ">= 4.0.0"
+      "version_requirement": ">= 4.4.2 < 5.0.0"
     },
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.4.0"
+      "version_requirement": ">= 4.6.0 < 5.0.0"
     },
     {
       "name": "puppetlabs/mysql",
-      "version_requirement": ">= 2.0.0"
+      "version_requirement": ">= 3.5.0 < 4.0.0"
     },
     {
       "name": "puppetlabs/apache",
-      "version_requirement": ">= 1.0.0"
+      "version_requirement": ">= 1.6.0 < 2.0.0"
     },
     {
       "name": "puppetlabs/firewall",
-      "version_requirement": ">= 1.0.0"
+      "version_requirement": ">= 1.7.0 < 2.0.0"
     },
     {
       "name": "puppetlabs/ruby",
-      "version_requirement": ">= 0.4.0"
+      "version_requirement": ">= 0.6.0 < 2.0.0"
     },
     {
       "name": "puppetlabs/pe_gem",
-      "version_requirement": ">= 0.1.0"
+      "version_requirement": ">= 0.2.0 < 2.0.0"
     },
     {
       "name": "puppetlabs/apt",
-      "version_requirement": ">= 2.0.0"
+      "version_requirement": ">= 2.1.0 < 3.0.0"
     },
     {
       "name": "puppetlabs/concat",
-      "version_requirement": ">= 1.2.5"
+      "version_requirement": ">= 1.2.5 < 3.0.0"
     },
     {
       "name": "camptocamp/systemd",
-      "version_requirement": ">= 0.3.0"
+      "version_requirement": ">= 0.4.0 < 2.0.0"
     }
   ],
   "source": "https://github.com/voxpupuli/puppet-zabbix.git",
@@ -59,12 +59,8 @@
   ],
   "requirements": [
     {
-      "name": "pe",
-      "version_requirement": "3.x"
-    },
-    {
       "name": "puppet",
-      "version_requirement": ">= 3.0.0 < 5.0.0"
+      "version_requirement": ">= 3.8.7 < 5.0.0"
     }
   ],
   "operatingsystem_support": [
