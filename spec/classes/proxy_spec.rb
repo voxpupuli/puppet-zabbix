@@ -30,6 +30,7 @@ describe 'zabbix::proxy' do
         id: 'root',
         kernel: 'Linux',
         path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
+        selinux: true,
         selinux_config_mode: ''
       }
     end
