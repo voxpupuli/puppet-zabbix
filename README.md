@@ -174,6 +174,7 @@ Basic one way of setup, wheter it is monitored by zabbix-server or zabbix-proxy:
 ```ruby
 class { 'zabbix::agent':
   server => '192.168.20.11',
+  serveractive => '192.168.20.11',
 }
 ```
 
