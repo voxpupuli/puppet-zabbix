@@ -1,3 +1,11 @@
+## 2017-01-11 Release 2.6.2
+
+This is the last release with Puppet 3 support!
+
+  * Maintenance: modulesync with Vox Pupuli defaults
+  * Maintenance: Adjust required Puppet version + dependencies
+  * Fix: Correctly mock selinux
+
 ## 2016-12-06 Release 2.6.1
 
   * Maintenance: modulesync with Vox Pupuli defaults
