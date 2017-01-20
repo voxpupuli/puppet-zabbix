@@ -70,7 +70,8 @@ describe 'zabbix::javagateway' do
           listenip: '192.168.1.1',
           listenport: '10052',
           pidfile: '/var/run/zabbix/zabbix_java.pid',
-          startpollers: '5'
+          startpollers: '5',
+          timeout: '15'
         }
       end
 
@@ -78,6 +79,7 @@ describe 'zabbix::javagateway' do
       it { is_expected.to contain_file('/etc/zabbix/zabbix_java_gateway.conf').with_content %r{^LISTEN_PORT=10052$} }
       it { is_expected.to contain_file('/etc/zabbix/zabbix_java_gateway.conf').with_content %r{^PID_FILE=/var/run/zabbix/zabbix_java.pid$} }
       it { is_expected.to contain_file('/etc/zabbix/zabbix_java_gateway.conf').with_content %r{^START_POLLERS=5$} }
+      it { is_expected.to contain_file('/etc/zabbix/zabbix_java_gateway.conf').with_content %r{^TIMEOUT=15$} }
     end
   end
 end
