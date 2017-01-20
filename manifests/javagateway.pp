@@ -33,6 +33,9 @@
 # [*startpollers*]
 #   Number of worker threads to start.
 #
+# [*timeout*]
+#   How long to wait for network operations.
+#
 # === Example
 #
 #  class { 'zabbix::javagateway':
@@ -56,6 +59,7 @@ class zabbix::javagateway(
   $listenip             = $zabbix::params::javagateway_listenip,
   $listenport           = $zabbix::params::javagateway_listenport,
   $startpollers         = $zabbix::params::javagateway_startpollers,
+  $timeout              = $zabbix::params::javagateway_timeout,
 ) inherits zabbix::params  {
 
   # Check some if they are boolean
