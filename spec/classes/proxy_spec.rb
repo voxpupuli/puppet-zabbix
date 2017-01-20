@@ -89,7 +89,6 @@ describe 'zabbix::proxy' do
       end
 
       it { is_expected.to contain_package('zabbix-proxy-pgsql').with_ensure('present') }
-      it { is_expected.to contain_package('zabbix-proxy-pgsql').with_ensure('present') }
       it { is_expected.to contain_package('zabbix-proxy-pgsql').with_name('zabbix-proxy-pgsql') }
       it { is_expected.to contain_service('zabbix-proxy').with_require(['Package[zabbix-proxy-pgsql]', 'File[/etc/zabbix/zabbix_proxy.conf.d]', 'File[/etc/zabbix/zabbix_proxy.conf]']) }
       it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_require('Package[zabbix-proxy-pgsql]') }
@@ -102,7 +101,6 @@ describe 'zabbix::proxy' do
         }
       end
 
-      it { is_expected.to contain_package('zabbix-proxy-mysql').with_ensure('present') }
       it { is_expected.to contain_package('zabbix-proxy-mysql').with_ensure('present') }
       it { is_expected.to contain_package('zabbix-proxy-mysql').with_name('zabbix-proxy-mysql') }
       it { is_expected.to contain_service('zabbix-proxy').with_require(['Package[zabbix-proxy-mysql]', 'File[/etc/zabbix/zabbix_proxy.conf.d]', 'File[/etc/zabbix/zabbix_proxy.conf]']) }
