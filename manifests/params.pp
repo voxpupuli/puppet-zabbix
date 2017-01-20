@@ -308,6 +308,7 @@ class zabbix::params {
   $javagateway_listenport                   = '10052'
   $javagateway_pidfile                      = '/var/run/zabbix/zabbix_java.pid'
   $javagateway_startpollers                 = '5'
+  $javagateway_timeout                      = '3'
 
   # Gem provider may vary based on version/type of puppet install.
   # This can be a little complicated and may need revisited over time.
