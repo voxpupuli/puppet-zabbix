@@ -21,3 +21,11 @@ PID_FILE=<%= @pidfile %>
 #       Number of worker threads to start.
 #
 START_POLLERS=<%= @startpollers %>
+
+### Option: zabbix.timeout
+#       How long to wait for network operations
+# 	Mandatory: No
+# 	Range: 1-30
+# 	Default: 3
+#
+TIMEOUT=<%= @timeout %>
