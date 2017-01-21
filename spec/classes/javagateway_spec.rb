@@ -70,7 +70,7 @@ describe 'zabbix::javagateway' do
           listenip: '192.168.1.1',
           listenport: '10052',
           pidfile: '/var/run/zabbix/zabbix_java.pid',
-          startpollers: '5'
+          startpollers: '5',
           timeout: '15'
         }
       end
