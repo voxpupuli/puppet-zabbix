@@ -35,7 +35,7 @@
 #
 # [*timeout*]
 #   Number of worker threads to start.
-£
+#
 # === Example
 #
 #  class { 'zabbix::javagateway':
