@@ -57,7 +57,8 @@ class zabbix::repo (
           $gpgkey = 'http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX'
         }
         else {
-          $gpgkey = 'http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591'
+          $gpgkey1 = 'http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591'
+          $gpgkey2 = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-79EA5ED4'
         }
 
         yumrepo { 'zabbix':
@@ -65,7 +66,7 @@ class zabbix::repo (
           descr    => "Zabbix_${reponame}_${::architecture}",
           baseurl  => "http://repo.zabbix.com/zabbix/${zabbix_version}/rhel/${majorrelease}/\$basearch/",
           gpgcheck => '1',
-          gpgkey   => $gpgkey,
+          gpgkey   => $gpgkey1,
           priority => '1',
         }
 
@@ -74,7 +75,7 @@ class zabbix::repo (
           descr    => "Zabbix_nonsupported_${reponame}_${::architecture}",
           baseurl  => "http://repo.zabbix.com/non-supported/rhel/${majorrelease}/\$basearch/",
           gpgcheck => '1',
-          gpgkey   => $gpgkey,
+          gpgkey   => $gpgkey2,
           priority => '1',
         }
 
