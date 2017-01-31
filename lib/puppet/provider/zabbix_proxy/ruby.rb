@@ -9,6 +9,7 @@ Puppet::Type.type(:zabbix_proxy).provide(:ruby, parent: Puppet::Provider::Zabbix
 
     # Set some vars
     host = @resource[:hostname]
+    mode = @resource[:mode]
     ipaddress = @resource[:ipaddress]
     use_ip = @resource[:use_ip]
     port = @resource[:port]
@@ -32,6 +33,9 @@ Puppet::Type.type(:zabbix_proxy).provide(:ruby, parent: Puppet::Provider::Zabbix
 
     # Check if we need to connect via ip or fqdn
     use_ip = use_ip ? 1 : 0
+    
+    # Set correct proxy mode (Active/Passive) for API request
+    proxy_mode = mode > 0 ? 6 : 5
 
     zbx.proxies.create_or_update(
       host: host,
