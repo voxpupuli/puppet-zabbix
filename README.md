@@ -135,7 +135,7 @@ The zabbix-server can be used in 2 ways:
 The following is an example for using the PostgreSQL as database:
 
 ```ruby
-node 'zabbix.example.com'
+node 'zabbix.example.com' {
   class { 'apache':
     mpm_module => 'prefork',
   }
@@ -151,7 +151,7 @@ node 'zabbix.example.com'
 
 When you want to make use of an MySQL database as backend:
 ```ruby
-node 'zabbix.example.com'
+node 'zabbix.example.com' {
   class { 'apache':
     mpm_module => 'prefork',
   }
@@ -186,7 +186,7 @@ Like the zabbix-server, the zabbix-proxy can also be used in 2 ways:
 
 The following is an example for using the PostgreSQL as database:
 ```ruby
-node 'proxy.example.com'
+node 'proxy.example.com' {
   class { 'postgresql::server': }
 
   class { 'zabbix::proxy':
@@ -198,7 +198,7 @@ node 'proxy.example.com'
 
 When you want to make use of an MySQL database as backend:
 ```ruby
-node 'proxy.example.com'
+node 'proxy.example.com' {
   class { 'mysql::server': }
 
   class { 'zabbix::proxy':
@@ -228,7 +228,7 @@ https://github.com/voxpupuli/puppet-zabbix/wiki/Multi-node-Zabbix-Proxy-setup
 The zabbix-javagateway can be used with an zabbix-server or zabbix-proxy. You'll need to install it on an server. (Can be together with zabbix-server or zabbix-proxy, you can even install it on a sperate machine.). The following example shows you to use it on a seperate machine.
 
 ```ruby
-node server05.example.com {
+node 'server05.example.com' {
 # My ip: 192.168.20.15
   class { 'zabbix::javagateway': }
 }
@@ -237,7 +237,7 @@ node server05.example.com {
 When installed on seperate machine, the zabbix::server configuration should be updated by adding the `javagateway` parameter.
 
 ```ruby
-node server01.example.com {
+node 'server01.example.com' {
   class { 'zabbix::server':
     zabbix_url  => 'zabbix.example.com',
     javagateway => '192.168.20.15',
@@ -248,7 +248,7 @@ node server01.example.com {
 Or when using with an zabbix-proxy:
 
 ```ruby
-node server11.example.com {
+node 'server11.example.com' {
   class { 'zabbix::proxy':
     zabbix_server_host => '192.168.20.11',
     javagateway        => '192.168.20.15',
