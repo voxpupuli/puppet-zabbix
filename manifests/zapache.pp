@@ -44,10 +44,8 @@
 
 # Check if apache_status is true, installs Zapache scripts. Defaults to false.
 class zabbix::zapache (
-  $apache_status         = $zabbix::params::apache_status,
+  Boolean $apache_status = $zabbix::params::apache_status,
   ) inherits zabbix::params {
-  # Check if apache_status is boolean
-  validate_bool($apache_status)
 
   if $apache_status {
     file { [ '/var/lib/zabbixsrv/','/var/lib/zabbixsrv/externalscripts/']:

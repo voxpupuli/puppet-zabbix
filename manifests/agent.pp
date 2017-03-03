@@ -204,9 +204,9 @@ class zabbix::agent (
   $zabbix_version        = $zabbix::params::zabbix_version,
   $zabbix_package_state  = $zabbix::params::zabbix_package_state,
   $zabbix_package_agent  = $zabbix::params::zabbix_package_agent,
-  $manage_firewall       = $zabbix::params::manage_firewall,
-  $manage_repo           = $zabbix::params::manage_repo,
-  $manage_resources      = $zabbix::params::manage_resources,
+  Boolean $manage_firewall  = $zabbix::params::manage_firewall,
+  Boolean $manage_repo      = $zabbix::params::manage_repo,
+  Boolean $manage_resources = $zabbix::params::manage_resources,
   $monitored_by_proxy    = $zabbix::params::monitored_by_proxy,
   $agent_use_ip          = $zabbix::params::agent_use_ip,
   $zbx_group             = $zabbix::params::agent_zbx_group,
@@ -255,9 +255,6 @@ class zabbix::agent (
   $tlsservercertissuer   = $zabbix::params::agent_tlsservercertissuer,
   $tlsservercertsubject  = $zabbix::params::agent_tlsservercertsubject,) inherits zabbix::params {
   # Check some if they are boolean
-  validate_bool($manage_firewall)
-  validate_bool($manage_repo)
-  validate_bool($manage_resources)
 
   # Find if listenip is set. If not, we can set to specific ip or
   # to network name. If more than 1 interfaces are available, we

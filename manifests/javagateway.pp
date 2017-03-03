@@ -51,20 +51,16 @@
 # Copyright 2014 Werner Dijkerman
 #
 class zabbix::javagateway(
-  $zabbix_version       = $zabbix::params::zabbix_version,
-  $zabbix_package_state = $zabbix::params::zabbix_package_state,
-  $manage_firewall      = $zabbix::params::manage_firewall,
-  $manage_repo          = $zabbix::params::manage_repo,
-  $pidfile              = $zabbix::params::javagateway_pidfile,
-  $listenip             = $zabbix::params::javagateway_listenip,
-  $listenport           = $zabbix::params::javagateway_listenport,
-  $startpollers         = $zabbix::params::javagateway_startpollers,
-  $timeout              = $zabbix::params::javagateway_timeout,
+  $zabbix_version           = $zabbix::params::zabbix_version,
+  $zabbix_package_state     = $zabbix::params::zabbix_package_state,
+  Boolean $manage_firewall  = $zabbix::params::manage_firewall,
+  Boolean $manage_repo      = $zabbix::params::manage_repo,
+  $pidfile                  = $zabbix::params::javagateway_pidfile,
+  $listenip                 = $zabbix::params::javagateway_listenip,
+  $listenport               = $zabbix::params::javagateway_listenport,
+  $startpollers             = $zabbix::params::javagateway_startpollers,
+  $timeout                  = $zabbix::params::javagateway_timeout,
 ) inherits zabbix::params  {
-
-  # Check some if they are boolean
-  validate_bool($manage_firewall)
-  validate_bool($manage_repo)
 
   # Only include the repo class if it has not yet been included
   unless defined(Class['Zabbix::Repo']) {

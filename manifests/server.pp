@@ -291,10 +291,10 @@ class zabbix::server (
   $database_path           = $zabbix::params::database_path,
   $zabbix_version          = $zabbix::params::zabbix_version,
   $zabbix_package_state    = $zabbix::params::zabbix_package_state,
-  $manage_firewall         = $zabbix::params::manage_firewall,
-  $manage_repo             = $zabbix::params::manage_repo,
-  $manage_database         = $zabbix::params::manage_database,
-  $manage_service          = $zabbix::params::manage_service,
+  Boolean $manage_firewall = $zabbix::params::manage_firewall,
+  Boolean $manage_repo     = $zabbix::params::manage_repo,
+  Boolean $manage_database = $zabbix::params::manage_database,
+  Boolean $manage_service  = $zabbix::params::manage_service,
   $server_configfile_path  = $zabbix::params::server_configfile_path,
   $server_config_owner     = $zabbix::params::server_config_owner,
   $server_config_group     = $zabbix::params::server_config_group,
@@ -370,7 +370,8 @@ class zabbix::server (
   $loadmodulepath          = $zabbix::params::server_loadmodulepath,
   $loadmodule              = $zabbix::params::server_loadmodule,
   $sslcertlocation_dir     = $zabbix::params::server_sslcertlocation,
-  $sslkeylocation_dir      = $zabbix::params::server_sslkeylocation,) inherits zabbix::params {
+  $sslkeylocation_dir      = $zabbix::params::server_sslkeylocation,
+) inherits zabbix::params {
   # Only include the repo class if it has not yet been included
   unless defined(Class['Zabbix::Repo']) {
     class { '::zabbix::repo':
@@ -379,9 +380,6 @@ class zabbix::server (
     }
   }
 
-  # Check some if they are boolean
-  validate_bool($manage_firewall)
-
   # Get the correct database_type. We need this for installing the
   # correct package and loading the sql files.
 
@@ -389,7 +387,7 @@ class zabbix::server (
     'postgresql' : {
       $db = 'pgsql'
 
-      if $manage_database == true {
+      if $manage_database {
         # Execute the postgresql scripts
         class { '::zabbix::database::postgresql':
           zabbix_type          => 'server',
@@ -407,7 +405,7 @@ class zabbix::server (
     'mysql'      : {
       $db = 'mysql'
 
-      if $manage_database == true {
+      if $manage_database {
         # Execute the mysql scripts
         class { '::zabbix::database::mysql':
           zabbix_type          => 'server',
