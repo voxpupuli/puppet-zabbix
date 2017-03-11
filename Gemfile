@@ -29,7 +29,7 @@ group :test do
   gem 'puppet-strings', '~> 1.0.0',                                 :require => false
   gem 'redcarpet',                                                  :require => false
   gem 'rubocop', '~> 0.47.0',                                       :require => false if RUBY_VERSION >= '2.3.0'
-  gem 'rubocop-rspec', '~> 1.10.0',                                 :require => false if RUBY_VERSION >= '2.3.0'
+  gem 'rubocop-rspec', '~> 1.13.0',                                 :require => false if RUBY_VERSION >= '2.3.0'
   gem 'mocha', '>= 1.2.1',                                          :require => false
   gem 'coveralls',                                                  :require => false
   gem 'simplecov-console',                                          :require => false
