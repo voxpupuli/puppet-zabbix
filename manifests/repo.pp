@@ -80,7 +80,6 @@ class zabbix::repo (
 
       }
       'Debian' : {
-        include ::apt
         if ($::architecture == 'armv6l') {
           apt::source { 'zabbix':
             location => 'http://naizvoru.com/raspbian/zabbix',
