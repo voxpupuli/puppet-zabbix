@@ -27,6 +27,7 @@
 #
 class zabbix::repo (
   $manage_repo    = $zabbix::params::manage_repo,
+  $manage_apt     = $zabbix::params::manage_apt,
   $repo_location  = $zabbix::params::repo_location,
   $zabbix_version = $zabbix::params::zabbix_version,
 ) inherits zabbix::params {
@@ -80,6 +81,10 @@ class zabbix::repo (
 
       }
       'Debian' : {
+        if ($manage_apt) {
+          include ::apt
+        }
+
         if ($::architecture == 'armv6l') {
           apt::source { 'zabbix':
             location => 'http://naizvoru.com/raspbian/zabbix',
