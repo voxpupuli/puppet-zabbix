@@ -18,7 +18,6 @@ class zabbix::params {
       $server_fping6location = '/usr/bin/fping6'
       $proxy_fpinglocation   = '/usr/bin/fping'
       $proxy_fping6location  = '/usr/bin/fping6'
-      $manage_apt            = true
       $manage_repo           = true
       $zabbix_package_agent  = 'zabbix-agent'
       $agent_configfile_path = '/etc/zabbix/zabbix_agentd.conf'
@@ -69,6 +68,7 @@ class zabbix::params {
   $manage_service                           = true
   $default_vhost                            = false
   $manage_firewall                          = false
+  $manage_apt                               = true
   $repo_location                            = ''
   $manage_resources                         = false
   $manage_vhost                             = true
