@@ -91,14 +91,14 @@ class zabbix::database::mysql (
         path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
         unless   => 'test -f /etc/zabbix/.schema.done',
         provider => 'shell',
-      } ->
-      exec { 'zabbix_server_images.sql':
+      }
+      -> exec { 'zabbix_server_images.sql':
         command  => $zabbix_server_images_sql,
         path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
         unless   => 'test -f /etc/zabbix/.images.done',
         provider => 'shell',
-      } ->
-      exec { 'zabbix_server_data.sql':
+      }
+      -> exec { 'zabbix_server_data.sql':
         command  => $zabbix_server_data_sql,
         path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
         unless   => 'test -f /etc/zabbix/.data.done',

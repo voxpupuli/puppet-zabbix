@@ -278,13 +278,13 @@ class zabbix::web (
       owner  => 'zabbix',
       group  => 'zabbix',
       mode   => '0755',
-    } ->
-    package { 'zabbixapi':
+    }
+    -> package { 'zabbixapi':
       ensure   => $zabbixapi_version,
       provider => $puppetgem,
       require  => Class['ruby::dev'],
-    } ->
-    class { '::zabbix::resources::web':
+    }
+    -> class { '::zabbix::resources::web':
       zabbix_url     => $zabbix_url,
       zabbix_user    => $zabbix_api_user,
       zabbix_pass    => $zabbix_api_pass,
