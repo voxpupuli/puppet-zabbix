@@ -334,6 +334,7 @@ class zabbix::proxy (
   Boolean $manage_firewall         = $zabbix::params::manage_firewall,
   Boolean $manage_repo             = $zabbix::params::manage_repo,
   Boolean $manage_resources        = $zabbix::params::manage_resources,
+  Boolean $manage_service          = $zabbix::params::manage_service,
   $zabbix_proxy                    = $zabbix::params::zabbix_proxy,
   $zabbix_proxy_ip                 = $zabbix::params::zabbix_proxy_ip,
   $use_ip                          = $zabbix::params::proxy_use_ip,
@@ -461,7 +462,7 @@ class zabbix::proxy (
     default      : { fail("Unrecognized database type for proxy: ${database_type}") }
   }
 
-  if $manage_database == true {
+  if $manage_database {
     case $database_type {
       'postgresql' : {
         # Execute the postgresql scripts
@@ -549,36 +550,48 @@ class zabbix::proxy (
   }
 
   # Controlling the 'zabbix-proxy' service
-  service { $proxy_service_name:
-    ensure     => running,
-    enable     => $enable,
-    hasstatus  => true,
-    hasrestart => true,
-    require    => [
-      Package["zabbix-proxy-${db}"],
-      File[$include_dir],
-      File[$proxy_configfile_path]],
+  if $manage_service {
+    service { $proxy_service_name:
+      ensure     => running,
+      hasstatus  => true,
+      hasrestart => true,
+      subscribe  => [
+        File[$proxy_configfile_path],
+        Class['::zabbix::database']
+        ],
+      require    => [
+        Package["zabbix-proxy-${db}"],
+        File[$include_dir],
+        File[$proxy_configfile_path],
+        Class['::zabbix::database']
+        ],
+    }
+  }
+
+
+  $before_database = $manage_service ? {
+    true  => [
+      Service[$proxy_service_name],
+      Class["zabbix::database::${database_type}"]
+      ],
+    false => Class["zabbix::database::${database_type}"],
   }
 
   # if we want to manage the databases, we do
   # some stuff. (for maintaining database only.)
-  if $manage_database == true {
-    class { '::zabbix::database':
-      database_type     => $database_type,
-      zabbix_type       => 'proxy',
-      database_name     => $database_name,
-      database_user     => $database_user,
-      database_password => $database_password,
-      database_host     => $database_host,
-      zabbix_proxy      => $zabbix_proxy,
-      zabbix_proxy_ip   => $zabbix_proxy_ip,
-      notify            => Service[$proxy_service_name],
-      before            => [
-        Service[$proxy_service_name],
-        Class["zabbix::database::${database_type}"],
-        ],
+  if $manage_database  {
+      class { '::zabbix::database':
+        database_type     => $database_type,
+        zabbix_type       => 'proxy',
+        database_name     => $database_name,
+        database_user     => $database_user,
+        database_password => $database_password,
+        database_host     => $database_host,
+        zabbix_proxy      => $zabbix_proxy,
+        zabbix_proxy_ip   => $zabbix_proxy_ip,
+        before            => $before_database,
+      }
     }
-  }
 
   # Configuring the zabbix-proxy configuration file
   file { $proxy_configfile_path:
@@ -586,7 +599,6 @@ class zabbix::proxy (
     owner   => 'zabbix',
     group   => 'zabbix',
     mode    => '0644',
-    notify  => Service[$proxy_service_name],
     require => Package["zabbix-proxy-${db}"],
     replace => true,
     content => template('zabbix/zabbix_proxy.conf.erb'),

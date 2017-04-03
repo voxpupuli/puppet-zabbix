@@ -80,7 +80,6 @@ describe 'zabbix::proxy' do
 
           it { is_expected.to contain_package('zabbix-proxy-pgsql').with_ensure('present') }
           it { is_expected.to contain_package('zabbix-proxy-pgsql').with_name('zabbix-proxy-pgsql') }
-          it { is_expected.to contain_service('zabbix-proxy').with_require(['Package[zabbix-proxy-pgsql]', 'File[/etc/zabbix/zabbix_proxy.conf.d]', 'File[/etc/zabbix/zabbix_proxy.conf]']) }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_require('Package[zabbix-proxy-pgsql]') }
         end
 
@@ -93,7 +92,6 @@ describe 'zabbix::proxy' do
 
           it { is_expected.to contain_package('zabbix-proxy-mysql').with_ensure('present') }
           it { is_expected.to contain_package('zabbix-proxy-mysql').with_name('zabbix-proxy-mysql') }
-          it { is_expected.to contain_service('zabbix-proxy').with_require(['Package[zabbix-proxy-mysql]', 'File[/etc/zabbix/zabbix_proxy.conf.d]', 'File[/etc/zabbix/zabbix_proxy.conf]']) }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_require('Package[zabbix-proxy-mysql]') }
         end
 
@@ -181,6 +179,30 @@ describe 'zabbix::proxy' do
           end
 
           it { is_expected.not_to contain_firewall('151 zabbix-proxy') }
+        end
+
+        # If manage_service is true (default), it should create a service
+        # and ensure that it is running.
+        context 'when declaring manage_service is true' do
+          let :params do
+            {
+              manage_service: true
+            }
+          end
+
+          it { is_expected.to contain_service('zabbix-proxy').with_ensure('running') }
+          it { is_expected.to contain_service('zabbix-proxy').with_require(['Package[zabbix-proxy-pgsql]', 'File[/etc/zabbix/zabbix_proxy.conf.d]', 'File[/etc/zabbix/zabbix_proxy.conf]', 'Class[Zabbix::Database]']) }
+        end
+
+        # When the manage_service is false, it may not make the service.
+        context 'when declaring manage_service is false' do
+          let :params do
+            {
+              manage_service: false
+            }
+          end
+
+          it { is_expected.not_to contain_service('zabbix-proxy') }
         end
 
         # Make sure we have set some vars in zabbix_proxy.conf file. This is configuration file is the same on all
