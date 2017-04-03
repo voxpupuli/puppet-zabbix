@@ -68,6 +68,7 @@ class zabbix::params {
   $manage_service                           = true
   $default_vhost                            = false
   $manage_firewall                          = false
+  $manage_apt                               = true
   $repo_location                            = ''
   $manage_resources                         = false
   $manage_vhost                             = true
