@@ -28,20 +28,20 @@ class zabbix::resources::web (
       Service['zabbix-server'],
       Package['zabbixapi'],
     ],
-  } ->
-  Zabbix_template <<| |>> {
+  }
+  -> Zabbix_template <<| |>> {
     zabbix_url     => $zabbix_url,
     zabbix_user    => $zabbix_user,
     zabbix_pass    => $zabbix_pass,
     apache_use_ssl => $apache_use_ssl,
-  } ->
-  Zabbix_host <<| |>> {
+  }
+  -> Zabbix_host <<| |>> {
     zabbix_url     => $zabbix_url,
     zabbix_user    => $zabbix_user,
     zabbix_pass    => $zabbix_pass,
     apache_use_ssl => $apache_use_ssl,
-  } ->
-  Zabbix_userparameters <<| |>> {
+  }
+  -> Zabbix_userparameters <<| |>> {
     zabbix_url     => $zabbix_url,
     zabbix_user    => $zabbix_user,
     zabbix_pass    => $zabbix_pass,

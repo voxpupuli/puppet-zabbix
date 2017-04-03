@@ -44,8 +44,8 @@ define zabbix::startup (
       ensure  => file,
       mode    => '0664',
       content => template("zabbix/${name}-systemd.init.erb"),
-    } ~>
-    Exec['systemctl-daemon-reload']
+    }
+    ~> Exec['systemctl-daemon-reload']
     file { "/etc/init.d/${name}":
       ensure  => absent,
     }
