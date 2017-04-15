@@ -4,11 +4,13 @@ describe 'zabbix::sender' do
   let :node do
     'agent.example.com'
   end
+
   on_supported_os.each do |os, facts|
     context "on #{os} " do
       let :facts do
         facts
       end
+
       context 'with all defaults' do
         it { is_expected.to contain_class('zabbix::sender') }
         it { is_expected.to compile.with_all_deps }
@@ -22,6 +24,7 @@ describe 'zabbix::sender' do
             manage_repo: true
           }
         end
+
         if facts[:osfamily] == 'Archlinux'
           it 'fails' do
             is_expected.to raise_error(Puppet::Error, %r{Managing a repo on Archlinux is currently not implemented})

@@ -34,6 +34,7 @@ describe 'zabbix::server' do
         let :facts do
           super().merge(selinux_config_mode: 'enforcing')
         end
+
         it { is_expected.to contain_selboolean('zabbix_can_network').with('value' => 'on', 'persistent' => true) }
       end
 
