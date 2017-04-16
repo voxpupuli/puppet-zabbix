@@ -14,6 +14,7 @@ describe 'zabbix::web' do
       zabbix_url: 'zabbix.example.com'
     }
   end
+
   on_supported_os.each do |os, facts|
     context "on #{os} " do
       let :facts do
@@ -34,6 +35,7 @@ describe 'zabbix::web' do
           let :facts do
             super().merge(selinux_config_mode: 'enforcing')
           end
+
           if facts[:osfamily] == 'RedHat'
             it { is_expected.to contain_selboolean('httpd_can_connect_zabbix').with('value' => 'on', 'persistent' => true) }
           else
@@ -41,11 +43,12 @@ describe 'zabbix::web' do
           end
         end
 
-        %w(permissive disabled).each do |mode|
+        %w[permissive disabled].each do |mode|
           describe "with #{mode} selinux" do
             let :facts do
               super().merge(selinux_config_mode: mode)
             end
+
             it { is_expected.not_to contain_selboolean('httpd_can_connect_zabbix') }
           end
         end
@@ -114,6 +117,7 @@ describe 'zabbix::web' do
           let :params do
             super().merge(web_config_owner: 'apache')
           end
+
           it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_owner('apache') }
         end
 
@@ -121,6 +125,7 @@ describe 'zabbix::web' do
           let :params do
             super().merge(web_config_group: 'apache')
           end
+
           it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_group('apache') }
         end
 
