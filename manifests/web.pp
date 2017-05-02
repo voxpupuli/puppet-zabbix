@@ -146,6 +146,8 @@
 # [*ldap_clientkey*]
 # Set location of client key used by LDAP authentication.
 #
+# [*ldap_reqcert *]
+# Specifies what checks to perform on a server certificate ( never | allow | try | demand,hard )
 # [*puppetgem*]
 # Provider for the zabbixapi gem package
 #
@@ -219,6 +221,7 @@ class zabbix::web (
   $ldap_cacert                              = $zabbix::params::ldap_cacert,
   $ldap_clientcert                          = $zabbix::params::ldap_clientcert,
   $ldap_clientkey                           = $zabbix::params::ldap_clientkey,
+  $ldap_reqcert                             = $zabbix::params::ldap_reqcert,
   $puppetgem                                = $zabbix::params::puppetgem,
 ) inherits zabbix::params {
 

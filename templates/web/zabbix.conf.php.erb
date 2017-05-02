@@ -33,4 +33,7 @@ putenv("LDAPTLS_CERT=<%= @ldap_clientcrt %>");
 <% if @ldap_clientkey %>
 putenv("LDAPTLS_KEY=<%= @ldap_clientkey %>");
 <% end %>
+<% if @ldap_reqcert %>
+putenv("TLS_REQCERT=<%= @ldap_reqcert %>");
+<% end %>
 ?>
