@@ -40,6 +40,14 @@ define zabbix::startup (
       fail('you have to provide a pidfile param')
     }
     contain ::systemd
+    case $::osfamily {
+      'Suse': {
+        $zabbix_agentd = '/usr/sbin/zabbix-agentd'
+      }
+      default: {
+        $zabbix_agentd = '/usr/sbin/zabbix_agentd'
+      }
+    }
     file { "/etc/systemd/system/${name}.service":
       ensure  => file,
       mode    => '0664',
