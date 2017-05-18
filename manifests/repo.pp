@@ -122,12 +122,12 @@ class zabbix::repo (
       'Suse': {
         $minorrelease = $facts['os']['release']['minor']
         zypprepo { 'monitoring':
-          baseurl      => "http://download.opensuse.org/repositories/server:/monitoring/SLE_${majorrelease}_SP${minorrelease}/",
-          enabled      => 1,
-          autorefresh  => 1,
-          gpgcheck     => 1,
-          gpgkey       => "http://download.opensuse.org/repositories/server:/monitoring/SLE_${majorrelease}_SP${minorrelease}/repodata/repomd.xml.key",
-          type         => 'rpm-md',
+          baseurl     => "http://download.opensuse.org/repositories/server:/monitoring/SLE_${majorrelease}_SP${minorrelease}/",
+          enabled     => 1,
+          autorefresh => 1,
+          gpgcheck    => 1,
+          gpgkey      => "http://download.opensuse.org/repositories/server:/monitoring/SLE_${majorrelease}_SP${minorrelease}/repodata/repomd.xml.key",
+          type        => 'rpm-md',
         }
       }
       default  : {

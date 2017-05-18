@@ -40,7 +40,7 @@ define zabbix::startup (
       fail('you have to provide a pidfile param')
     }
     contain ::systemd
-    case $::osfamily {
+    case $facts['osfamily'] {
       'Suse': {
         $zabbix_agentd = '/usr/sbin/zabbix-agentd'
       }
