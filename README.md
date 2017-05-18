@@ -571,3 +571,7 @@ Could not evaluate: Connection refused - connect(2)
 ```
 
 When running puppet again (for 3rd time) everything goes fine.
+
+### SuSE (SLES)
+
+Initial support for SLES has been added and makes use of the puppet-zypprepo forge module to add a repo containing Zabbix 2.2.  Because support ends for Zabbix 2.2 soon, it is recommended that only agents are installed on SuSE - the Zabbix server should be a newer version and installed on a Zabbix LLC-supported platform (RedHat/CentOS/Oracle, Debian, or Ubuntu).
