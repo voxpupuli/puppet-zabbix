@@ -120,12 +120,14 @@ class zabbix::repo (
         Class['Apt::Update']  -> Package<|tag == 'zabbix'|>
       }
       'Suse': {
-        $minorrelease = $facts[os][release][minor]
-        exec { 'zypper addrepo':
-          path    => ['/usr/bin'],
-          command => "zypper ar -f http://download.opensuse.org/repositories/server:/monitoring/SLE_${majorrelease}_SP${minorrelease}/ monitoring",
-          creates => '/etc/zypp/repos.d/monitoring.repo',
-        }
+        $minorrelease = $facts['os']['release']['minor']
+        zypprepo { 'monitoring':
+          baseurl      => "http://download.opensuse.org/repositories/server:/monitoring/SLE_${majorrelease}_SP${minorrelease}/",
+          enabled      => 1,
+          autorefresh  => 1,
+          gpgcheck     => 1,
+          gpgkey       => "http://download.opensuse.org/repositories/server:/monitoring/SLE_${majorrelease}_SP${minorrelease}/repodata/repomd.xml.key",
+          type         => 'rpm-md',
       }
       default  : {
         fail("Managing a repo on ${::osfamily} is currently not implemented")
