@@ -128,6 +128,7 @@ class zabbix::repo (
           gpgcheck     => 1,
           gpgkey       => "http://download.opensuse.org/repositories/server:/monitoring/SLE_${majorrelease}_SP${minorrelease}/repodata/repomd.xml.key",
           type         => 'rpm-md',
+        }
       }
       default  : {
         fail("Managing a repo on ${::osfamily} is currently not implemented")
