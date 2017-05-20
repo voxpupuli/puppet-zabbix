@@ -31,12 +31,7 @@ describe 'zabbix::agent' do
       end
 
       context 'with all defaults' do
-        package = case facts[:osfamily]
-                  when 'Archlinux'
-                    'zabbix3-agent'
-                  else
-                    'zabbix-agent'
-                  end
+        package = 'zabbix-agent'
         # Make sure package will be installed, service running and ensure of directory.
         it do
           is_expected.to contain_package(package).with(
