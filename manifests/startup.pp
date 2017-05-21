@@ -16,6 +16,7 @@ define zabbix::startup (
   Optional[Stdlib::Absolutepath] $agent_configfile_path  = undef,
   Optional[Stdlib::Absolutepath] $server_configfile_path = undef,
   Optional[String] $database_type                        = undef,
+  Optional[String] $zabbix_user                          = undef,
   ) {
 
   case $title {

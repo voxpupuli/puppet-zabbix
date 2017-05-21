@@ -314,6 +314,7 @@ class zabbix::agent (
   zabbix::startup {'zabbix-agent':
     pidfile               => $pidfile,
     agent_configfile_path => $agent_configfile_path,
+    zabbix_user           => $zabbix_user,
     require               => Package[$zabbix_package_agent],
   }
 
