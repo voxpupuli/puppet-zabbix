@@ -5,10 +5,11 @@
 
 ############ GENERAL PARAMETERS #################
 
+<% if @pidfile %>
 ### Option: PidFile
 #	Name of PID file.
 #
-PidFile=<%= @pidfile %>
+PidFile=<%= @pidfile %><% end %>
 
 <% if @zabbix_version.to_f >= 3.0 -%>
 ### Option: LogType
