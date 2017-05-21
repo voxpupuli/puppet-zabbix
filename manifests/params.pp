@@ -21,7 +21,9 @@ class zabbix::params {
       $manage_repo           = true
       $zabbix_package_agent  = 'zabbix-agent'
       $agent_configfile_path = '/etc/zabbix/zabbix_agentd.conf'
+      $agent_config_owner    = 'zabbix'
       $agent_zabbix_user     = 'zabbix'
+      $agent_config_group    = 'zabbix'
       $agent_pidfile         = '/var/run/zabbix/zabbix_agentd.pid'
     }
     'Archlinux': {
@@ -32,7 +34,9 @@ class zabbix::params {
       $manage_repo           = false
       $zabbix_package_agent  = 'zabbix-agent'
       $agent_configfile_path = '/etc/zabbix/zabbix_agentd.conf'
+      $agent_config_owner    = 'zabbix-agent'
       $agent_zabbix_user     = 'zabbix-agent'
+      $agent_config_group    = 'zabbix-agent'
       $agent_pidfile         = undef
     }
     'Fedora': {
@@ -43,7 +47,9 @@ class zabbix::params {
       $manage_repo           = false
       $zabbix_package_agent  = 'zabbix-agent'
       $agent_configfile_path = '/etc/zabbix_agentd.conf'
+      $agent_config_owner    = 'zabbix'
       $agent_zabbix_user     = 'zabbix'
+      $agent_config_group    = 'zabbix'
       $agent_pidfile         = '/var/run/zabbix/zabbix_agentd.pid'
     }
     default  : {
@@ -54,7 +60,9 @@ class zabbix::params {
       $manage_repo           = true
       $zabbix_package_agent  = 'zabbix-agent'
       $agent_configfile_path = '/etc/zabbix/zabbix_agentd.conf'
+      $agent_config_owner    = 'zabbix'
       $agent_zabbix_user     = 'zabbix'
+      $agent_config_group    = 'zabbix'
       $agent_pidfile         = '/var/run/zabbix/zabbix_agentd.pid'
     }
   }

@@ -253,7 +253,10 @@ class zabbix::agent (
   $tlspskfile            = $zabbix::params::agent_tlspskfile,
   $tlspskidentity        = $zabbix::params::agent_tlspskidentity,
   $tlsservercertissuer   = $zabbix::params::agent_tlsservercertissuer,
-  $tlsservercertsubject  = $zabbix::params::agent_tlsservercertsubject,) inherits zabbix::params {
+  $tlsservercertsubject                   = $zabbix::params::agent_tlsservercertsubject,
+  String $agent_config_owner              = $zabbix::params::agent_config_owner,
+  String $agent_config_group              = $zabbix::params::agent_config_group,
+) inherits zabbix::params {
   # Check some if they are boolean
 
   # Find if listenip is set. If not, we can set to specific ip or
@@ -343,8 +346,8 @@ class zabbix::agent (
   # Configuring the zabbix-agent configuration file
   file { $agent_configfile_path:
     ensure  => present,
-    owner   => 'zabbix',
-    group   => 'zabbix',
+    owner   => $agent_config_owner,
+    group   => $agent_config_group,
     mode    => '0644',
     notify  => Service['zabbix-agent'],
     require => Package[$zabbix_package_agent],
@@ -355,8 +358,8 @@ class zabbix::agent (
   # Include dir for specific zabbix-agent checks.
   file { $include_dir:
     ensure  => directory,
-    owner   => 'zabbix',
-    group   => 'zabbix',
+    owner   => $agent_config_owner,
+    group   => $agent_config_group,
     recurse => true,
     purge   => $include_dir_purge,
     notify  => Service['zabbix-agent'],
