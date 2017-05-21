@@ -1,12 +1,6 @@
 require 'spec_helper'
 
 describe 'zabbix::server' do
-  let :params do
-    {
-      zabbix_version: '3.0'
-    }
-  end
-
   let :node do
     'rspec.puppet.com'
   end
@@ -80,7 +74,7 @@ describe 'zabbix::server' do
         end
 
         it { is_expected.to contain_class('zabbix::database::postgresql').with_zabbix_type('server') }
-        it { is_expected.to contain_class('zabbix::database::postgresql').with_zabbix_version('3.0') }
+        it { is_expected.to contain_class('zabbix::database::postgresql').with_zabbix_version('3.2') }
         it { is_expected.to contain_class('zabbix::database::postgresql').with_database_name('zabbix-server') }
         it { is_expected.to contain_class('zabbix::database::postgresql').with_database_user('zabbix-server') }
         it { is_expected.to contain_class('zabbix::database::postgresql').with_database_password('zabbix-server') }
@@ -99,7 +93,7 @@ describe 'zabbix::server' do
         end
 
         it { is_expected.to contain_class('zabbix::database::mysql').with_zabbix_type('server') }
-        it { is_expected.to contain_class('zabbix::database::mysql').with_zabbix_version('3.0') }
+        it { is_expected.to contain_class('zabbix::database::mysql').with_zabbix_version('3.2') }
         it { is_expected.to contain_class('zabbix::database::mysql').with_database_name('zabbix-server') }
         it { is_expected.to contain_class('zabbix::database::mysql').with_database_user('zabbix-server') }
         it { is_expected.to contain_class('zabbix::database::mysql').with_database_password('zabbix-server') }
