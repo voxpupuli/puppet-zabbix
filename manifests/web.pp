@@ -223,7 +223,7 @@ class zabbix::web (
 ) inherits zabbix::params {
 
   # check osfamily, Arch is currently not supported for web
-  if $::osfamily == 'Archlinux' {
+  if $facts['os']['family'] == 'Archlinux' {
     fail('Archlinux is currently not supported for zabbix::web ')
   }
 
