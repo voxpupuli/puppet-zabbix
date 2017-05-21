@@ -12,13 +12,14 @@
 PidFile=<%= @pidfile %><% end %>
 
 <% if @zabbix_version.to_f >= 3.0 -%>
+<% if @logtype %>
 ### Option: LogType
 #	Specifies where log messages are written to:
 #		system  - syslog
 #		file    - file specified with LogFile parameter
 #		console - standard output
 #
-<% if @logtype %>LogType=<%= @logtype %><% end %>
+LogType=<%= @logtype %><% end %>
 
 ### Option: LogFile
 #	Log file name for LogType 'file' parameter.
