@@ -200,9 +200,6 @@ class zabbix::params {
   $agent_listenport                         = '10050'
   $agent_loadmodule                         = undef
   $agent_loadmodulepath                     = '/usr/lib/modules'
-  $agent_logtype                            = 'file'
-  $agent_logfile                            = '/var/log/zabbix/zabbix_agentd.log'
-  $agent_logfilesize                        = '100'
   $agent_logremotecommands                  = '0'
   $agent_maxlinespersecond                  = '100'
   $agent_refreshactivechecks                = '120'
@@ -232,6 +229,16 @@ class zabbix::params {
     'Template App SSH Service']
   $apache_status                            = false
   $monitored_by_proxy                       = undef
+  # provided by camp2camp/systemd
+  if $facts['systemd'] {
+    $agent_logtype                          = 'system'
+    $agent_logfile                          = undef
+    $agent_logfilesize                      = undef
+  } else {
+    $agent_logtype                          = 'file'
+    $agent_logfile                          = '/var/log/zabbix/zabbix_agentd.log'
+    $agent_logfilesize                      = '100'
+  }
 
   # Proxy specific params
   $proxy_allowroot                          = '0'
