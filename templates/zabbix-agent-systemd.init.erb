@@ -1,10 +1,9 @@
 [Unit]
 Description=Zabbix Agent
-After=syslog.target
 After=network.target
 
 [Service]
-Type=forking
+Type=simple
 Restart=on-failure
 PIDFile=<%= @pidfile %>
 KillMode=control-group
