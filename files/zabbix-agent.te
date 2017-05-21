@@ -1,0 +1,11 @@
+module zabbix-agent 1.0;
+
+require {
+	type zabbix_agent_t;
+	class process setrlimit;
+	class unix_dgram_socket create;
+}
+
+#============= zabbix_agent_t ==============
+allow zabbix_agent_t self:process setrlimit;
+allow zabbix_agent_t self:unix_dgram_socket create;

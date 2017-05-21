@@ -375,4 +375,13 @@ class zabbix::agent (
         'ESTABLISHED'],
     }
   }
+  # the agent doesn't work perfectly fine with selinux
+  # https://support.zabbix.com/browse/ZBX-11631
+  if $facts['os']['selinux']['config_mode'] == 'enforcing' {
+    selinux::module{'zabbix-agent':
+      ensure    => 'present',
+      source_te => 'puppet:///modules/zabbix/zabbix-agent.te',
+      before    => Service['zabbix-agent']
+    }
+  }
 }
