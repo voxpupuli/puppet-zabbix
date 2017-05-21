@@ -330,6 +330,7 @@ class zabbix::params {
   $javagateway_pidfile                      = '/var/run/zabbix/zabbix_java.pid'
   $javagateway_startpollers                 = '5'
   $javagateway_timeout                      = '3'
+  $manage_selinux                           = $facts['selinux']
 
   # Gem provider may vary based on version/type of puppet install.
   # This can be a little complicated and may need revisited over time.

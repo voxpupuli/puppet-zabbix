@@ -257,6 +257,7 @@ class zabbix::agent (
   $tlsservercertsubject                   = $zabbix::params::agent_tlsservercertsubject,
   String $agent_config_owner              = $zabbix::params::agent_config_owner,
   String $agent_config_group              = $zabbix::params::agent_config_group,
+  Boolean $manage_selinux                 = $zabbix::params::manage_selinux,
 ) inherits zabbix::params {
   # Check some if they are boolean
 
@@ -382,11 +383,11 @@ class zabbix::agent (
   }
   # the agent doesn't work perfectly fine with selinux
   # https://support.zabbix.com/browse/ZBX-11631
-  if $facts['os']['selinux']['config_mode'] == 'enforcing' {
+  if $facts['selinux'] == 'enforcing' and $manage_selinux {
     selinux::module{'zabbix-agent':
       ensure    => 'present',
       source_te => 'puppet:///modules/zabbix/zabbix-agent.te',
-      before    => Service['zabbix-agent']
+      before    => Service['zabbix-agent'],
     }
   }
 }
