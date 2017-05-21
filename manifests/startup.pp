@@ -12,11 +12,12 @@
 #  }
 #
 define zabbix::startup (
-  $pidfile                = undef,
-  $agent_configfile_path  = undef,
-  $server_configfile_path = undef,
-  $database_type          = undef,
+  Optional[Stdlib::Absolutepath] $pidfile                = undef,
+  Optional[Stdlib::Absolutepath] $agent_configfile_path  = undef,
+  Optional[Stdlib::Absolutepath] $server_configfile_path = undef,
+  Optional[String] $database_type                        = undef,
   ) {
+
   case $title {
     /agent/: {
       unless $agent_configfile_path {
