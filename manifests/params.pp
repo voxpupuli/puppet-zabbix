@@ -22,6 +22,7 @@ class zabbix::params {
       $zabbix_package_agent  = 'zabbix-agent'
       $agent_configfile_path = '/etc/zabbix/zabbix_agentd.conf'
       $agent_zabbix_user     = 'zabbix'
+      $agent_pidfile         = '/var/run/zabbix/zabbix_agentd.pid'
     }
     'Archlinux': {
       $server_fpinglocation  = '/usr/bin/fping'
@@ -32,6 +33,7 @@ class zabbix::params {
       $zabbix_package_agent  = 'zabbix-agent'
       $agent_configfile_path = '/etc/zabbix/zabbix_agentd.conf'
       $agent_zabbix_user     = 'zabbix-agent'
+      $agent_pidfile         = undef
     }
     'Fedora': {
       $server_fpinglocation  = '/usr/sbin/fping'
@@ -42,6 +44,7 @@ class zabbix::params {
       $zabbix_package_agent  = 'zabbix-agent'
       $agent_configfile_path = '/etc/zabbix_agentd.conf'
       $agent_zabbix_user     = 'zabbix'
+      $agent_pidfile         = '/var/run/zabbix/zabbix_agentd.pid'
     }
     default  : {
       $server_fpinglocation  = '/usr/sbin/fping'
@@ -52,6 +55,7 @@ class zabbix::params {
       $zabbix_package_agent  = 'zabbix-agent'
       $agent_configfile_path = '/etc/zabbix/zabbix_agentd.conf'
       $agent_zabbix_user     = 'zabbix'
+      $agent_pidfile         = '/var/run/zabbix/zabbix_agentd.pid'
     }
   }
 
@@ -201,7 +205,6 @@ class zabbix::params {
   $agent_logfilesize                        = '100'
   $agent_logremotecommands                  = '0'
   $agent_maxlinespersecond                  = '100'
-  $agent_pidfile                            = '/var/run/zabbix/zabbix_agentd.pid'
   $agent_refreshactivechecks                = '120'
   $agent_server                             = '127.0.0.1'
   $agent_serveractive                       = undef
