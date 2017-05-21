@@ -35,9 +35,10 @@ define zabbix::startup (
       fail('we currently only spport a title that contains agent or server')
     }
   }
-  if str2bool(getvar('::systemd')) {
-    unless $pidfile {
-      fail('you have to provide a pidfile param')
+  # provided by camp2camp/systemd
+  if $facts['systemd'] {
+    unless $zabbix_user {
+      fail('you have to provide a zabbix_user')
     }
     contain ::systemd
     file { "/etc/systemd/system/${name}.service":
