@@ -56,7 +56,9 @@ group :system_tests do
     gem 'beaker-rspec',  :require => false
   end
   gem 'serverspec',                    :require => false
-  gem 'puppet-module-posix-system-r2.3',  :require => false
+  gem 'beaker-module_install_helper',  :require => false
+  gem 'beaker-puppet_install_helper',  :require => false
+  gem 'master_manipulator',            :require => false
 end
 
 
