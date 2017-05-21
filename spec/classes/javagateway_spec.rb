@@ -4,18 +4,22 @@ describe 'zabbix::javagateway' do
   let :node do
     'rspec.puppet.com'
   end
+
   on_supported_os.each do |os, facts|
     context "on #{os} " do
       let :facts do
         facts
       end
 
-      it { is_expected.to contain_file('/etc/zabbix/zabbix_java_gateway.conf') }
-      it { is_expected.to contain_service('zabbix-java-gateway') }
-      it { is_expected.to contain_package('zabbix-java-gateway') }
-      it { is_expected.to compile.with_all_deps }
-      it { is_expected.to contain_class('zabbix::javagateway') }
-      it { is_expected.to contain_class('zabbix::params') }
+      context 'with all defaults' do
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_java_gateway.conf') }
+        it { is_expected.to contain_service('zabbix-java-gateway') }
+        it { is_expected.to contain_package('zabbix-java-gateway') }
+        it { is_expected.to compile.with_all_deps }
+        it { is_expected.to contain_class('zabbix::javagateway') }
+        it { is_expected.to contain_class('zabbix::params') }
+      end
+
       context 'when declaring manage_repo is true' do
         let :params do
           {
@@ -23,9 +27,20 @@ describe 'zabbix::javagateway' do
           }
         end
 
-        it { is_expected.to contain_class('Zabbix::Repo') }
-        it { is_expected.to contain_yumrepo('zabbix-nonsupported') }
-        it { is_expected.to contain_yumrepo('zabbix') }
+        case facts[:osfamily]
+        when 'Archlinux'
+          it { is_expected.not_to compile }
+        when 'RedHat'
+          # rubocop:disable RSpec/RepeatedExample
+          it { is_expected.to contain_yumrepo('zabbix-nonsupported') }
+          it { is_expected.to contain_yumrepo('zabbix') }
+          it { is_expected.to contain_class('Zabbix::Repo') }
+        when 'Debian'
+          it { is_expected.to contain_apt__source('zabbix') }
+          it { is_expected.to contain_class('Zabbix::Repo') }
+          it { is_expected.to contain_class('apt') }
+          # rubocop:enable RSpec/RepeatedExample
+        end
       end
 
       context 'when declaring manage_firewall is true' do
