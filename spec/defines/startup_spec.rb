@@ -80,18 +80,8 @@ describe 'zabbix::startup', type: :define do # rubocop:disable RSpec/MultipleDes
               mode:   '0664'
             ).that_notifies('Exec[systemctl-daemon-reload]')
           end
-          it { is_expected.to contain_file('/etc/systemd/system/zabbix-agent.service').with_content(%r{ExecStart=/usr/sbin/zabbix_agentd -c /something}) }
+          it { is_expected.to contain_file('/etc/systemd/system/zabbix-agent.service').with_content(%r{ExecStart=/usr/sbin/zabbix_agentd -f -c /something}) }
           it { is_expected.to contain_file('/etc/systemd/system/zabbix-agent.service').with_content(%r{PIDFile=/somethingelse}) }
-        end
-
-        context 'it fails when pidfile param is missing' do
-          let :params do
-            {
-              agent_configfile_path: '/something'
-            }
-          end
-
-          it { is_expected.to raise_error(Puppet::Error, %r{you have to provide a pidfile param}) }
         end
       end
     end
