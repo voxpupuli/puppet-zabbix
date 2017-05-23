@@ -415,6 +415,11 @@ class zabbix::proxy (
   $loadmodule               = $zabbix::params::proxy_loadmodule,
   ) inherits zabbix::params {
 
+  # check osfamily, Arch is currently not supported for web
+  if $facts['os']['family'] == 'Archlinux' {
+    fail('Archlinux is currently not supported for zabbix::proxy ')
+  }
+
   # Find if listenip is set. If not, we can set to specific ip or
   # to network name. If more than 1 interfaces are available, we
   # can find the ipaddress of this specific interface if listenip
