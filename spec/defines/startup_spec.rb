@@ -179,7 +179,7 @@ describe 'zabbix::startup', type: :define do
               mode:   '0664'
             ).that_notifies('Exec[systemctl-daemon-reload]')
           end
-          it { is_expected.to contain_file('/etc/systemd/system/zabbix-server.service').with_content(%r{ExecStart=/usr/sbin/zabbix_server -c /something}) }
+          it { is_expected.to contain_file('/etc/systemd/system/zabbix-server.service').with_content(%r{ExecStart=/usr/sbin/zabbix_server -f -c /something}) }
           it { is_expected.to contain_file('/etc/systemd/system/zabbix-server.service').with_content(%r{PIDFile=/somethingelse}) }
           it { is_expected.to contain_file('/etc/systemd/system/zabbix-server.service').with_content(%r{After=syslog.target network.target mysqld.service}) }
 
