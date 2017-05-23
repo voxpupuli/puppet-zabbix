@@ -609,7 +609,7 @@ class zabbix::proxy (
   }
 
   # check if selinux is active and allow zabbix
-  if $facts['os']['selinux']['config_mode'] == 'enforcing' and $manage_selinux {
+  if $facts['selinux'] == true and $manage_selinux {
     selboolean{'zabbix_can_network':
       persistent => true,
       value      => 'on',

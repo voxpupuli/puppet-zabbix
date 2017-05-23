@@ -464,7 +464,7 @@ class zabbix::web (
   } # END if $manage_vhost
 
   # check if selinux is active and allow zabbix
-  if $facts['selinux'] == 'enforcing' and $manage_selinux {
+  if $facts['selinux'] == true and $manage_selinux {
     selboolean{'httpd_can_connect_zabbix':
       persistent => true,
       value      => 'on',

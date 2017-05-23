@@ -20,16 +20,23 @@ describe 'zabbix::server' do
       describe 'with default settings' do
         it { is_expected.to contain_class('zabbix::repo') }
         it { is_expected.to contain_service('zabbix-server').with_ensure('running') }
-        it { is_expected.not_to contain_selboolean('zabbix_can_network') }
         it { is_expected.to contain_zabbix__startup('zabbix-server') }
       end
 
       describe 'with enabled selinux' do
         let :facts do
-          super().merge(selinux_config_mode: 'enforcing')
+          super().merge(selinux: true)
         end
 
         it { is_expected.to contain_selboolean('zabbix_can_network').with('value' => 'on', 'persistent' => true) }
+      end
+
+      describe 'with disabled selinux' do
+        let :facts do
+          super().merge(selinux: false)
+        end
+
+        it { is_expected.not_to contain_selboolean('zabbix_can_network').with('value' => 'on', 'persistent' => true) }
       end
 
       describe 'with database_type as postgresql' do

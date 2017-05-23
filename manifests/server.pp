@@ -534,7 +534,7 @@ class zabbix::server (
   }
 
   # check if selinux is active and allow zabbix
-  if $facts['selinux'] == 'enforcing' and $manage_selinux {
+  if $facts['selinux'] == true and $manage_selinux {
     selboolean{'zabbix_can_network':
       persistent => true,
       value      => 'on',

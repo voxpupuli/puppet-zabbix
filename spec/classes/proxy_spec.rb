@@ -64,7 +64,7 @@ describe 'zabbix::proxy' do
 
         describe 'with enabled selinux' do
           let :facts do
-            super().merge(selinux_config_mode: 'enforcing')
+            super().merge(selinux: true)
           end
 
           it { is_expected.to contain_selboolean('zabbix_can_network').with('value' => 'on', 'persistent' => true) }

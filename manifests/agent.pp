@@ -383,7 +383,7 @@ class zabbix::agent (
   }
   # the agent doesn't work perfectly fine with selinux
   # https://support.zabbix.com/browse/ZBX-11631
-  if $facts['selinux'] == 'enforcing' and $manage_selinux {
+  if $facts['selinux'] == true and $manage_selinux {
     selinux::module{'zabbix-agent':
       ensure    => 'present',
       source_te => 'puppet:///modules/zabbix/zabbix-agent.te',
