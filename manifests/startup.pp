@@ -39,9 +39,6 @@ define zabbix::startup (
   }
   # provided by camp2camp/systemd
   if $facts['systemd'] {
-    unless $zabbix_user {
-      fail('you have to provide a zabbix_user')
-    }
     contain ::systemd
     file { "/etc/systemd/system/${name}.service":
       ensure  => file,
