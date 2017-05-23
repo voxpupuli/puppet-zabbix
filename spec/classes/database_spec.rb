@@ -14,6 +14,7 @@ describe 'zabbix::database' do
       let :facts do
         facts
       end
+
       describe 'database_type is postgresql, zabbix_type is server and is multiple host setup' do
         let :params do
           {

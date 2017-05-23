@@ -14,6 +14,7 @@ describe 'zabbix::database::postgresql' do
       let :facts do
         facts
       end
+
       case facts[:os]['name']
       when 'CentOS', 'RedHat'
         describe 'when zabbix_type is server' do
