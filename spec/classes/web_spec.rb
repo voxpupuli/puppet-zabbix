@@ -39,13 +39,13 @@ describe 'zabbix::web' do
           it { is_expected.to contain_selboolean('httpd_can_connect_zabbix').with('value' => 'on', 'persistent' => true) }
         end
 
-          describe "with false selinux" do
-            let :facts do
-              super().merge(selinux: false)
-            end
-
-            it { is_expected.not_to contain_selboolean('httpd_can_connect_zabbix') }
+        describe 'with false selinux' do
+          let :facts do
+            super().merge(selinux: false)
           end
+
+          it { is_expected.not_to contain_selboolean('httpd_can_connect_zabbix') }
+        end
 
         describe 'with database_type as postgresql' do
           let :params do
