@@ -125,7 +125,7 @@ class zabbix::repo (
           baseurl     => "http://download.opensuse.org/repositories/server:/monitoring/SLE_${majorrelease}_SP${minorrelease}/",
           enabled     => 1,
           autorefresh => 1,
-          gpgcheck    => 1,
+          gpgcheck    => 0,
           gpgkey      => "http://download.opensuse.org/repositories/server:/monitoring/SLE_${majorrelease}_SP${minorrelease}/repodata/repomd.xml.key",
           type        => 'rpm-md',
         }
