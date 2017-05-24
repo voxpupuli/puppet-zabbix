@@ -371,6 +371,7 @@ class zabbix::server (
   $loadmodule              = $zabbix::params::server_loadmodule,
   $sslcertlocation_dir     = $zabbix::params::server_sslcertlocation,
   $sslkeylocation_dir      = $zabbix::params::server_sslkeylocation,
+  Boolean $manage_selinux  = $zabbix::params::manage_selinux,
 ) inherits zabbix::params {
   # Only include the repo class if it has not yet been included
   unless defined(Class['Zabbix::Repo']) {
@@ -533,7 +534,7 @@ class zabbix::server (
   }
 
   # check if selinux is active and allow zabbix
-  if getvar('::selinux_config_mode') == 'enforcing' {
+  if $facts['selinux'] == true and $manage_selinux {
     selboolean{'zabbix_can_network':
       persistent => true,
       value      => 'on',

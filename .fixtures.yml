@@ -10,5 +10,6 @@ fixtures:
     ruby: "git://github.com/puppetlabs/puppetlabs-ruby.git"
     pe_gem: "git://github.com/puppetlabs/puppetlabs-pe_gem.git"
     systemd: "git://github.com/camptocamp/puppet-systemd.git"
+    selinux: "git://github.com/voxpupuli/puppet-selinux.git"
   symlinks:
     zabbix: "#{source_dir}"

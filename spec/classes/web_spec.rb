@@ -33,24 +33,18 @@ describe 'zabbix::web' do
 
         describe 'with enforcing selinux' do
           let :facts do
-            super().merge(selinux_config_mode: 'enforcing')
+            super().merge(selinux: true)
           end
 
-          if facts[:osfamily] == 'RedHat'
-            it { is_expected.to contain_selboolean('httpd_can_connect_zabbix').with('value' => 'on', 'persistent' => true) }
-          else
-            it { is_expected.not_to contain_selboolean('httpd_can_connect_zabbix') }
-          end
+          it { is_expected.to contain_selboolean('httpd_can_connect_zabbix').with('value' => 'on', 'persistent' => true) }
         end
 
-        %w[permissive disabled].each do |mode|
-          describe "with #{mode} selinux" do
-            let :facts do
-              super().merge(selinux_config_mode: mode)
-            end
-
-            it { is_expected.not_to contain_selboolean('httpd_can_connect_zabbix') }
+        describe 'with false selinux' do
+          let :facts do
+            super().merge(selinux: false)
           end
+
+          it { is_expected.not_to contain_selboolean('httpd_can_connect_zabbix') }
         end
 
         describe 'with database_type as postgresql' do

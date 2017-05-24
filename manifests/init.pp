@@ -171,7 +171,9 @@ class zabbix (
   $allowroot                                = $zabbix::params::server_allowroot,
   $include_dir                              = $zabbix::params::server_include,
   $loadmodulepath                           = $zabbix::params::server_loadmodulepath,
-  $loadmodule                               = $zabbix::params::server_loadmodule,) inherits zabbix::params {
+  $loadmodule                               = $zabbix::params::server_loadmodule,
+  Boolean $manage_selinux                   = $zabbix::params::manage_selinux,
+) inherits zabbix::params {
   class { '::zabbix::web':
     zabbix_url                               => $zabbix_url,
     database_type                            => $database_type,
@@ -206,6 +208,7 @@ class zabbix (
     apache_php_upload_max_filesize           => $apache_php_upload_max_filesize,
     apache_php_max_input_time                => $apache_php_max_input_time,
     apache_php_always_populate_raw_post_data => $apache_php_always_populate_raw_post_data,
+    manage_selinux                           => $manage_selinux,
     require                                  => Class['zabbix::server'],
   }
 
@@ -283,6 +286,7 @@ class zabbix (
     include_dir             => $include_dir,
     loadmodulepath          => $loadmodulepath,
     loadmodule              => $loadmodule,
+    manage_selinux          => $manage_selinux,
     require                 => Class['zabbix::database'],
   }
 

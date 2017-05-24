@@ -413,6 +413,7 @@ class zabbix::proxy (
   $include_dir              = $zabbix::params::proxy_include,
   $loadmodulepath           = $zabbix::params::proxy_loadmodulepath,
   $loadmodule               = $zabbix::params::proxy_loadmodule,
+  Boolean $manage_selinux   = $zabbix::params::manage_selinux,
   ) inherits zabbix::params {
 
   # check osfamily, Arch is currently not supported for web
@@ -608,7 +609,7 @@ class zabbix::proxy (
   }
 
   # check if selinux is active and allow zabbix
-  if $::osfamily == 'RedHat' and getvar('::selinux_config_mode') == 'enforcing' {
+  if $facts['selinux'] == true and $manage_selinux {
     selboolean{'zabbix_can_network':
       persistent => true,
       value      => 'on',

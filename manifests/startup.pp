@@ -12,11 +12,13 @@
 #  }
 #
 define zabbix::startup (
-  $pidfile                = undef,
-  $agent_configfile_path  = undef,
-  $server_configfile_path = undef,
-  $database_type          = undef,
+  Optional[Stdlib::Absolutepath] $pidfile                = undef,
+  Optional[Stdlib::Absolutepath] $agent_configfile_path  = undef,
+  Optional[Stdlib::Absolutepath] $server_configfile_path = undef,
+  Optional[String] $database_type                        = undef,
+  Optional[String] $zabbix_user                          = undef,
   ) {
+
   case $title {
     /agent/: {
       unless $agent_configfile_path {
@@ -35,10 +37,8 @@ define zabbix::startup (
       fail('we currently only spport a title that contains agent or server')
     }
   }
-  if str2bool(getvar('::systemd')) {
-    unless $pidfile {
-      fail('you have to provide a pidfile param')
-    }
+  # provided by camp2camp/systemd
+  if $facts['systemd'] {
     contain ::systemd
     file { "/etc/systemd/system/${name}.service":
       ensure  => file,
