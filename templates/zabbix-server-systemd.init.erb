@@ -1,10 +1,10 @@
 [Unit]
 Description=Zabbix Server
 Documentation=man:zabbix_server
-<% if @database_type == "mysql" %>
-After=syslog.target network.target mysqld.service
-<% else %>
-After=syslog.target network.target postgresql.service
+<% if @database_type == "mysql" and @manage_database %>
+After=mysqld.service
+<% elsif @database_type == "postgresql" and @manage_database %>
+After=postgresql.service
 <% end -%>
 
 [Service]

@@ -19,6 +19,7 @@ define zabbix::startup (
   Optional[String] $zabbix_user                          = undef,
   String $additional_service_params                      = '',
   String $service_type                                   = 'simple',
+  Optional[Boolean] $manage_database                     = undef,
   ) {
 
   case $title {
@@ -33,6 +34,9 @@ define zabbix::startup (
       }
       unless $database_type {
         fail('you have to provide a database_type param')
+      }
+      unless $manage_database {
+        fail('you have to provide a manage_database param')
       }
     }
     default: {

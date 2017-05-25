@@ -460,6 +460,7 @@ class zabbix::server (
     server_configfile_path    => $server_configfile_path,
     zabbix_user               => $zabbix_user,
     additional_service_params => $real_additional_service_params,
+    manage_database           => $manage_database,
     require                   => Package["zabbix-server-${db}"],
   }
 
