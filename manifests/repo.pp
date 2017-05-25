@@ -55,10 +55,12 @@ class zabbix::repo (
       'RedHat' : {
         # Zabbix-3.2 and newer RPMs are signed with the GPG key
         if versioncmp($zabbix_version, '3.2') < 0 {
-          $gpgkey = 'http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX'
+          $gpgkey_zabbix = 'http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX'
+          $gpgkey_nonsupported = $gpgkey_zabbix
         }
         else {
-          $gpgkey = 'http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591'
+          $gpgkey_zabbix = 'http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591'
+          $gpgkey_nonsupported = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-79EA5ED4'
         }
 
         yumrepo { 'zabbix':
@@ -66,7 +68,7 @@ class zabbix::repo (
           descr    => "Zabbix_${reponame}_${::architecture}",
           baseurl  => "http://repo.zabbix.com/zabbix/${zabbix_version}/rhel/${majorrelease}/\$basearch/",
           gpgcheck => '1',
-          gpgkey   => $gpgkey,
+          gpgkey   => $gpgkey_zabbix,
           priority => '1',
         }
 
@@ -75,7 +77,7 @@ class zabbix::repo (
           descr    => "Zabbix_nonsupported_${reponame}_${::architecture}",
           baseurl  => "http://repo.zabbix.com/non-supported/rhel/${majorrelease}/\$basearch/",
           gpgcheck => '1',
-          gpgkey   => $gpgkey,
+          gpgkey   => $gpgkey_nonsupported,
           priority => '1',
         }
 
