@@ -16,6 +16,7 @@ PrivateDevices=yes
 PrivateTmp=yes
 ProtectSystem=full
 ProtectHome=yes
+<% if @zabbix_user %>User=<%= @zabbix_user %><% end %>
 
 [Install]
 WantedBy=multi-user.target

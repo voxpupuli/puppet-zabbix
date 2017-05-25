@@ -373,6 +373,7 @@ class zabbix::server (
   $sslkeylocation_dir               = $zabbix::params::server_sslkeylocation,
   Boolean $manage_selinux           = $zabbix::params::manage_selinux,
   String $additional_service_params = $zabbix::params::additional_service_params,
+  Optional[String[1]] $zabbix_user  = $zabbix::params::server_zabbix_user,
 ) inherits zabbix::params {
 
   # the following codeblock is a bit blargh. The correct default value for
@@ -457,6 +458,7 @@ class zabbix::server (
     pidfile                   => $pidfile,
     database_type             => $database_type,
     server_configfile_path    => $server_configfile_path,
+    zabbix_user               => $zabbix_user,
     additional_service_params => $real_additional_service_params,
     require                   => Package["zabbix-server-${db}"],
   }
