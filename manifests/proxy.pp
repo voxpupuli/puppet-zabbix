@@ -69,6 +69,9 @@
 # [*sourceip*]
 #   Source ip address for outgoing connections.
 #
+# [*logtype*]
+#   Where log messages are written to, only available on Zabbix>=3.0
+#
 # [*logfile*]
 #   Name of log file.
 #
@@ -346,6 +349,7 @@ class zabbix::proxy (
   $hostname                = $zabbix::params::proxy_hostname,
   $listenport              = $zabbix::params::proxy_listenport,
   $sourceip                = $zabbix::params::proxy_sourceip,
+  $logtype                 = $zabbix::params::logtype,
   $logfile                 = $zabbix::params::proxy_logfile,
   $logfilesize             = $zabbix::params::proxy_logfilesize,
   $debuglevel              = $zabbix::params::proxy_debuglevel,

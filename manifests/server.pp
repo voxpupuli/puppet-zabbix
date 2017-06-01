@@ -50,6 +50,9 @@
 # [*sourceip*]
 #   Source ip address for outgoing connections.
 #
+# [*logtype*]
+#   Where log messages are written to, only available on Zabbix>=3.0
+#
 # [*logfile*]
 #   Name of log file.
 #
@@ -304,6 +307,7 @@ class zabbix::server (
   $nodeid                  = $zabbix::params::server_nodeid,
   $listenport              = $zabbix::params::server_listenport,
   $sourceip                = $zabbix::params::server_sourceip,
+  $logtype                 = $zabbix::params::logtype,
   $logfile                 = $zabbix::params::server_logfile,
   $logfilesize             = $zabbix::params::server_logfilesize,
   $debuglevel              = $zabbix::params::server_debuglevel,

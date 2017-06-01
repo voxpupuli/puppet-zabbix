@@ -53,6 +53,9 @@
 # [*pidfile*]
 #   Name of pid file.
 #
+# [*logtype*]
+#   Where log messages are written to, only available on Zabbix>=3.0
+#
 # [*logfile*]
 #   Name of log file.
 #
@@ -82,8 +85,8 @@
 #   You can also specify which network interface it should listen on.
 #
 #   Example:
-#   listenip => 'eth0',  or
-#   listenip => 'bond0.73',
+#   listenip            => 'eth0',  or
+#   listenip            => 'bond0.73',
 #
 #   It will find out which ip is configured for this ipaddress. Can be handy
 #   if more than 1 interface is on the server.
@@ -181,8 +184,8 @@
 #
 #  Basic installation:
 #  class { 'zabbix::agent':
-#    zabbix_version => '2.2',
-#    server         => '192.168.1.1',
+#    zabbix_version     => '2.2',
+#    server             => '192.168.1.1',
 #  }
 #
 #  Exported resources:
@@ -214,7 +217,7 @@ class zabbix::agent (
   $zbx_templates         = $zabbix::params::agent_zbx_templates,
   $agent_configfile_path = $zabbix::params::agent_configfile_path,
   $pidfile               = $zabbix::params::agent_pidfile,
-  $logtype               = $zabbix::params::agent_logtype,
+  $logtype               = $zabbix::params::logtype,
   $logfile               = $zabbix::params::agent_logfile,
   $logfilesize           = $zabbix::params::agent_logfilesize,
   $debuglevel            = $zabbix::params::agent_debuglevel,

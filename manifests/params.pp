@@ -64,6 +64,7 @@ class zabbix::params {
   $zabbix_version                           = '3.0'
   $zabbix_web                               = 'localhost'
   $zabbix_web_ip                            = '127.0.0.1'
+  $logtype                                  = 'file'
   $manage_database                          = true
   $manage_service                           = true
   $default_vhost                            = false
@@ -193,7 +194,6 @@ class zabbix::params {
   $agent_listenport                         = '10050'
   $agent_loadmodule                         = undef
   $agent_loadmodulepath                     = '/usr/lib/modules'
-  $agent_logtype                            = 'file'
   $agent_logfile                            = '/var/log/zabbix/zabbix_agentd.log'
   $agent_logfilesize                        = '100'
   $agent_logremotecommands                  = '0'
