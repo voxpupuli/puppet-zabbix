@@ -332,6 +332,14 @@ class zabbix::params {
   $javagateway_timeout                      = '3'
   $manage_selinux                           = $facts['selinux']
 
+  # services should run foreground
+  # but this only works in 3.0 and newer
+  $additional_service_params = versioncmp($zabbix_version, '3.0') ? {
+    1  => '--foreground',
+    0  => '--foreground',
+    -1 => '',
+  }
+
   # Gem provider may vary based on version/type of puppet install.
   # This can be a little complicated and may need revisited over time.
   if str2bool($::is_pe) {

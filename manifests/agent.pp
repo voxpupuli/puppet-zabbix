@@ -258,6 +258,7 @@ class zabbix::agent (
   String $agent_config_owner              = $zabbix::params::agent_config_owner,
   String $agent_config_group              = $zabbix::params::agent_config_group,
   Boolean $manage_selinux                 = $zabbix::params::manage_selinux,
+  String $additional_service_params       = $zabbix::params::additional_service_params,
 ) inherits zabbix::params {
   # Check some if they are boolean
 
@@ -317,10 +318,11 @@ class zabbix::agent (
 
   # Ensure that the correct config file is used.
   zabbix::startup {'zabbix-agent':
-    pidfile               => $pidfile,
-    agent_configfile_path => $agent_configfile_path,
-    zabbix_user           => $zabbix_user,
-    require               => Package[$zabbix_package_agent],
+    pidfile                   => $pidfile,
+    agent_configfile_path     => $agent_configfile_path,
+    zabbix_user               => $zabbix_user,
+    additional_service_params => $additional_service_params,
+    require                   => Package[$zabbix_package_agent],
   }
 
   if $agent_configfile_path != '/etc/zabbix/zabbix_agentd.conf' {
