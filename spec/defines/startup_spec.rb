@@ -68,7 +68,8 @@ describe 'zabbix::startup', type: :define do # rubocop:disable RSpec/MultipleDes
           let :params do
             {
               agent_configfile_path: '/something',
-              pidfile: '/somethingelse'
+              pidfile: '/somethingelse',
+              additional_service_params: '--foreground'
             }
           end
 
@@ -80,7 +81,7 @@ describe 'zabbix::startup', type: :define do # rubocop:disable RSpec/MultipleDes
               mode:   '0664'
             ).that_notifies('Exec[systemctl-daemon-reload]')
           end
-          it { is_expected.to contain_file('/etc/systemd/system/zabbix-agent.service').with_content(%r{ExecStart=/usr/sbin/zabbix_agentd -f -c /something}) }
+          it { is_expected.to contain_file('/etc/systemd/system/zabbix-agent.service').with_content(%r{ExecStart=/usr/sbin/zabbix_agentd --foreground -c /something}) }
           it { is_expected.to contain_file('/etc/systemd/system/zabbix-agent.service').with_content(%r{PIDFile=/somethingelse}) }
         end
       end
@@ -157,7 +158,8 @@ describe 'zabbix::startup', type: :define do
             {
               server_configfile_path: '/something',
               pidfile: '/somethingelse',
-              database_type: 'mysql'
+              database_type: 'mysql',
+              additional_service_params: '--foreground'
             }
           end
 
@@ -169,7 +171,7 @@ describe 'zabbix::startup', type: :define do
               mode:   '0664'
             ).that_notifies('Exec[systemctl-daemon-reload]')
           end
-          it { is_expected.to contain_file('/etc/systemd/system/zabbix-server.service').with_content(%r{ExecStart=/usr/sbin/zabbix_server -f -c /something}) }
+          it { is_expected.to contain_file('/etc/systemd/system/zabbix-server.service').with_content(%r{ExecStart=/usr/sbin/zabbix_server --foreground -c /something}) }
           it { is_expected.to contain_file('/etc/systemd/system/zabbix-server.service').with_content(%r{PIDFile=/somethingelse}) }
           it { is_expected.to contain_file('/etc/systemd/system/zabbix-server.service').with_content(%r{After=syslog.target network.target mysqld.service}) }
 

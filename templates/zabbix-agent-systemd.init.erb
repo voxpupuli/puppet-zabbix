@@ -7,7 +7,7 @@ Type=simple
 Restart=on-failure
 <% if @pidfile %>PIDFile=<%= @pidfile %><% end %>
 KillMode=control-group
-ExecStart=/usr/sbin/zabbix_agentd -f -c <%= @agent_configfile_path %>
+ExecStart=/usr/sbin/zabbix_agentd <%= @additional_service_params %> -c <%= @agent_configfile_path %>
 <% if @zabbix_user %>User=<%= @zabbix_user %><% end %>
 RestartSec=10s
 
