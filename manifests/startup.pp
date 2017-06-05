@@ -18,6 +18,7 @@ define zabbix::startup (
   Optional[String] $database_type                        = undef,
   Optional[String] $zabbix_user                          = undef,
   String $additional_service_params                      = '',
+  String $service_type                                   = 'simple',
   ) {
 
   case $title {

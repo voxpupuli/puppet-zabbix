@@ -259,8 +259,34 @@ class zabbix::agent (
   String $agent_config_group              = $zabbix::params::agent_config_group,
   Boolean $manage_selinux                 = $zabbix::params::manage_selinux,
   String $additional_service_params       = $zabbix::params::additional_service_params,
+  String $service_type                    = $zabbix::params::service_type,
 ) inherits zabbix::params {
-  # Check some if they are boolean
+
+  # the following two codeblocks are a bit blargh. The correct default value for
+  # $real_additional_service_params and $type changes based on the value of $zabbix_version
+  # We handle this in the params.pp, but that doesn't work if somebody provides a specific
+  # value for $zabbix_version and overwrites our default :(
+  # the codeblocks set defaults for both variables if $zabbix_version got provided,
+  # but only if the variables aren't provided.
+
+  if $zabbix_version != $zabbix::params::zabbix_version and $additional_service_params == $zabbix::params::additional_service_params {
+    $real_additional_service_params = versioncmp($zabbix_version, '3.0') ? {
+      1  => '--foreground',
+      0  => '--foreground',
+      -1 => '',
+    }
+  } else {
+    $real_additional_service_params = $additional_service_params
+  }
+  if $zabbix_version != $zabbix::params::zabbix_version and $service_type == $zabbix::params::service_type {
+    $real_service_type = versioncmp($zabbix_version, '3.0') ? {
+      1  => 'simple',
+      0  => 'simple',
+      -1 => 'forking',
+    }
+  } else {
+    $real_service_type = $service_type
+  }
 
   # Find if listenip is set. If not, we can set to specific ip or
   # to network name. If more than 1 interfaces are available, we
@@ -321,7 +347,8 @@ class zabbix::agent (
     pidfile                   => $pidfile,
     agent_configfile_path     => $agent_configfile_path,
     zabbix_user               => $zabbix_user,
-    additional_service_params => $additional_service_params,
+    additional_service_params => $real_additional_service_params,
+    service_type              => $real_service_type,
     require                   => Package[$zabbix_package_agent],
   }
 

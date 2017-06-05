@@ -332,14 +332,16 @@ class zabbix::params {
   $javagateway_timeout                      = '3'
   $manage_selinux                           = $facts['selinux']
 
-  # services should run foreground
+  # services should run foreground and as simple type
   # but this only works in 3.0 and newer
-  $additional_service_params = versioncmp($zabbix_version, '3.0') ? {
-    1  => '--foreground',
-    0  => '--foreground',
-    -1 => '',
+  # https://www.freedesktop.org/software/systemd/man/systemd.service.html#Type=
+  if versioncmp($zabbix_version, '3.0') < 0 {
+    $additional_service_params = ''
+    $service_type              = 'forking'
+  } else {
+    $additional_service_params = '--foreground'
+    $service_type              = 'simple'
   }
-
   # Gem provider may vary based on version/type of puppet install.
   # This can be a little complicated and may need revisited over time.
   if str2bool($::is_pe) {

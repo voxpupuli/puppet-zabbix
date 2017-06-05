@@ -3,7 +3,7 @@ Description=Zabbix Agent
 After=network.target
 
 [Service]
-Type=simple
+<% if @service_type %>Type=<%= @service_type %><% end %>
 Restart=on-failure
 <% if @pidfile %>PIDFile=<%= @pidfile %><% end %>
 KillMode=control-group

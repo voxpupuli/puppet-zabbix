@@ -221,7 +221,7 @@ describe 'zabbix::repo' do
             it { is_expected.to contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/3.2/rhel/6/$basearch/') }
             it { is_expected.to contain_yumrepo('zabbix').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591') }
             it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/6/$basearch/') }
-            it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591') }
+            it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_gpgkey('https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-79EA5ED4') }
           end
         when '7'
 
@@ -250,7 +250,7 @@ describe 'zabbix::repo' do
             it { is_expected.to contain_yumrepo('zabbix').with_baseurl('http://repo.zabbix.com/zabbix/3.2/rhel/7/$basearch/') }
             it { is_expected.to contain_yumrepo('zabbix').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591') }
             it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_baseurl('http://repo.zabbix.com/non-supported/rhel/7/$basearch/') }
-            it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_gpgkey('http://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591') }
+            it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_gpgkey('https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-79EA5ED4') }
           end
         end
       end
