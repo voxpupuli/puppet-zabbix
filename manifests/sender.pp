@@ -21,7 +21,8 @@
 class zabbix::sender(
   $zabbix_version        = $zabbix::params::zabbix_version,
   $zabbix_package_state  = $zabbix::params::zabbix_package_state,
-  $manage_repo           = $zabbix::params::manage_repo,) inherits zabbix::params {
+  $manage_repo           = $zabbix::params::manage_repo,
+) inherits zabbix::params {
 
   # Only include the repo class if it has not yet been included
   unless defined(Class['Zabbix::Repo']) {
