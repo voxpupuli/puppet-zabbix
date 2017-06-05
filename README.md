@@ -320,6 +320,64 @@ zabbix::template { 'Template App MySQL':
 }
 ```
 
+## Zabbix Upgrades
+
+It is possible to do upgrades via this module. An example for the zabbix agent:
+
+```puppet
+class{'zabbix::agent':
+  zabbix_version => '2.4',
+  manage_repo    => true,
+}
+```
+
+This will install the latest zabbix 2.4 agent for you. The module won't to any upgrades nor install patch releases. If you want to get patch releases automatically:
+
+```puppet
+class{'zabbix::agent':
+  zabbix_version       => '2.4',
+  manage_repo          => true,
+  zabbix_package_state => 'latest',
+}
+```
+
+Let's asume zabbix just released version 3.4. Than you can do upgrades as follow:
+```puppet
+class{'zabbix::agent':
+  zabbix_version       => '3.4',
+  manage_repo          => true,
+  zabbix_package_state => 'latest',
+}
+```
+
+You can also tell the module to only create the new repository, but not to update the existing agent:
+
+```puppet
+class{'zabbix::agent':
+  zabbix_version       => '3.4',
+  manage_repo          => true,
+  zabbix_package_state => 'installed',
+}
+```
+
+Last but not least you can disable the repo management completely, which will than install zabbix from the present system repos:
+
+```puppet
+class{'zabbix::agent':
+  manage_repo          => false,
+  zabbix_package_state => 'present',
+}
+```
+
+Even in this scenario you can do automatic upgrades via the module (it is the job of the user to somehow bring updates into the repo, for example by managing the repo on their own):
+
+```puppet
+class{'zabbix::agent':
+  manage_repo          => false,
+  zabbix_package_state => 'latest',
+}
+```
+
 ## Reference
 There are some overall parameters which exists on all of the classes:
 * `zabbix_version`: You can specify which zabbix release needs to be installed. Default is '3.0'.

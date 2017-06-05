@@ -375,6 +375,23 @@ class zabbix::server (
   String $additional_service_params = $zabbix::params::additional_service_params,
 ) inherits zabbix::params {
 
+  # the following codeblock is a bit blargh. The correct default value for
+  # $real_additional_service_params changes based on the value of $zabbix_version
+  # We handle this in the params.pp, but that doesn't work if somebody provides a specific
+  # value for $zabbix_version and overwrites our default :(
+  # the codeblock sets a default value for $real_additional_service_params if $zabbix_version got provided,
+  # but only if the variable isn't provided.
+
+  if $zabbix_version != $zabbix::params::zabbix_version and $additional_service_params == $zabbix::params::additional_service_params {
+    $real_additional_service_params = versioncmp($zabbix_version, '3.0') ? {
+      1  => '--foreground',
+      0  => '--foreground',
+      -1 => '',
+    }
+  } else {
+    $real_additional_service_params = $additional_service_params
+  }
+
   # Only include the repo class if it has not yet been included
   unless defined(Class['Zabbix::Repo']) {
     class { '::zabbix::repo':
@@ -440,7 +457,7 @@ class zabbix::server (
     pidfile                   => $pidfile,
     database_type             => $database_type,
     server_configfile_path    => $server_configfile_path,
-    additional_service_params => $additional_service_params,
+    additional_service_params => $real_additional_service_params,
     require                   => Package["zabbix-server-${db}"],
   }
 
