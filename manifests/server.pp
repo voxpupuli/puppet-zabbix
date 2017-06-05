@@ -471,13 +471,6 @@ class zabbix::server (
     }
   }
 
-  # Workaround for: The redhat provider can not handle attribute enable
-  # This is only happening when using an redhat family version 5.x.
-  if $::osfamily == 'redhat' and $::operatingsystemrelease !~ /^5.*/ and $manage_service {
-    Service[$server_service_name] {
-      enable => true }
-  }
-
   # Controlling the 'zabbix-server' service
   if $pacemaker {
     exec { 'prevent zabbix boot-start':
@@ -512,6 +505,7 @@ class zabbix::server (
     if $manage_service {
       service { $server_service_name:
         ensure     => running,
+        enable     => true,
         hasstatus  => true,
         hasrestart => true,
         require    => [
