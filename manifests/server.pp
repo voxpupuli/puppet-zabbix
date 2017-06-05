@@ -561,6 +561,12 @@ class zabbix::server (
     selboolean{'zabbix_can_network':
       persistent => true,
       value      => 'on',
+      notify     => Service[$server_service_name],
+    }
+    -> selinux::module{'zabbix-server':
+      ensure    => 'present',
+      source_te => 'puppet:///modules/zabbix/zabbix-server.te',
+      before    => Service[$server_service_name],
     }
   }
 }
