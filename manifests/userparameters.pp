@@ -28,6 +28,10 @@
 #   When 'script' is used, this parameter can provide the directly where this script needs to
 #   be placed. Default: '/usr/bin'
 #
+# [*config_mode*]
+#   When 'config_mode' is used, this parameter can provide the mode of the config file who will be created 
+#   to keep some credidentials private. Default: '0644'
+#
 # === Example
 #
 #  zabbix::userparameters { 'mysql':
@@ -59,6 +63,7 @@ define zabbix::userparameters (
   $script_ext = '',
   $template   = '',
   $script_dir = '/usr/bin',
+  $config_mode = '0644',
 ) {
   $include_dir          = getvar('::zabbix::agent::include_dir')
   $zabbix_agent_package = getvar('::zabbix::agent::zabbix_package_agent')
@@ -68,7 +73,7 @@ define zabbix::userparameters (
       ensure  => present,
       owner   => 'zabbix',
       group   => 'zabbix',
-      mode    => '0644',
+      mode    => $config_mode,
       source  => $source,
       notify  => Service['zabbix-agent'],
       require => Package[$zabbix_agent_package],
@@ -80,7 +85,7 @@ define zabbix::userparameters (
       ensure  => present,
       owner   => 'zabbix',
       group   => 'zabbix',
-      mode    => '0644',
+      mode    => $config_mode,
       content => $content,
       notify  => Service['zabbix-agent'],
       require => Package[$zabbix_agent_package],
