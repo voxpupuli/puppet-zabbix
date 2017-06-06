@@ -373,6 +373,7 @@ class zabbix::server (
   $sslkeylocation_dir               = $zabbix::params::server_sslkeylocation,
   Boolean $manage_selinux           = $zabbix::params::manage_selinux,
   String $additional_service_params = $zabbix::params::additional_service_params,
+  Optional[String[1]] $zabbix_user  = $zabbix::params::server_zabbix_user,
 ) inherits zabbix::params {
 
   # the following codeblock is a bit blargh. The correct default value for
@@ -457,7 +458,9 @@ class zabbix::server (
     pidfile                   => $pidfile,
     database_type             => $database_type,
     server_configfile_path    => $server_configfile_path,
+    zabbix_user               => $zabbix_user,
     additional_service_params => $real_additional_service_params,
+    manage_database           => $manage_database,
     require                   => Package["zabbix-server-${db}"],
   }
 
@@ -466,13 +469,6 @@ class zabbix::server (
       ensure  => absent,
       require => Package["zabbix-server-${db}"],
     }
-  }
-
-  # Workaround for: The redhat provider can not handle attribute enable
-  # This is only happening when using an redhat family version 5.x.
-  if $::osfamily == 'redhat' and $::operatingsystemrelease !~ /^5.*/ and $manage_service {
-    Service[$server_service_name] {
-      enable => true }
   }
 
   # Controlling the 'zabbix-server' service
@@ -509,6 +505,7 @@ class zabbix::server (
     if $manage_service {
       service { $server_service_name:
         ensure     => running,
+        enable     => true,
         hasstatus  => true,
         hasrestart => true,
         require    => [
@@ -558,6 +555,12 @@ class zabbix::server (
     selboolean{'zabbix_can_network':
       persistent => true,
       value      => 'on',
+      notify     => Service[$server_service_name],
+    }
+    -> selinux::module{'zabbix-server':
+      ensure    => 'present',
+      source_te => 'puppet:///modules/zabbix/zabbix-server.te',
+      before    => Service[$server_service_name],
     }
   }
 }

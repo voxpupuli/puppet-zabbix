@@ -25,6 +25,7 @@ class zabbix::params {
       $agent_zabbix_user     = 'zabbix'
       $agent_config_group    = 'zabbix'
       $agent_pidfile         = '/var/run/zabbix/zabbix_agentd.pid'
+      $server_zabbix_user    = 'zabbix'
     }
     'Archlinux': {
       $server_fpinglocation  = '/usr/bin/fping'
@@ -38,6 +39,7 @@ class zabbix::params {
       $agent_zabbix_user     = 'zabbix-agent'
       $agent_config_group    = 'zabbix-agent'
       $agent_pidfile         = undef
+      $server_zabbix_user    = 'zabbix-server'
     }
     'Fedora': {
       $server_fpinglocation  = '/usr/sbin/fping'
@@ -51,6 +53,7 @@ class zabbix::params {
       $agent_zabbix_user     = 'zabbix'
       $agent_config_group    = 'zabbix'
       $agent_pidfile         = '/var/run/zabbix/zabbix_agentd.pid'
+      $server_zabbix_user    = 'zabbix'
     }
     default  : {
       $server_fpinglocation  = '/usr/sbin/fping'
@@ -64,6 +67,7 @@ class zabbix::params {
       $agent_zabbix_user     = 'zabbix'
       $agent_config_group    = 'zabbix'
       $agent_pidfile         = '/var/run/zabbix/zabbix_agentd.pid'
+      $server_zabbix_user    = 'zabbix'
     }
   }
 

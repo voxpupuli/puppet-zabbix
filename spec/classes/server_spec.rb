@@ -6,15 +6,10 @@ describe 'zabbix::server' do
   end
 
   on_supported_os.each do |os, facts|
+    next if facts[:osfamily] == 'Archlinux' # zabbix server is currently not supported on archlinux
     context "on #{os} " do
-      systemd_fact = case facts[:osfamily]
-                     when 'Archlinux'
-                       { systemd: true }
-                     else
-                       { systemd: false }
-                     end
       let :facts do
-        facts.merge(systemd_fact)
+        facts
       end
 
       describe 'with default settings' do
@@ -23,12 +18,14 @@ describe 'zabbix::server' do
         it { is_expected.to contain_zabbix__startup('zabbix-server') }
       end
 
-      describe 'with enabled selinux' do
-        let :facts do
-          super().merge(selinux: true)
-        end
+      if facts[:osfamily] == 'RedHat'
+        describe 'with enabled selinux' do
+          let :facts do
+            super().merge(selinux: true)
+          end
 
-        it { is_expected.to contain_selboolean('zabbix_can_network').with('value' => 'on', 'persistent' => true) }
+          it { is_expected.to contain_selboolean('zabbix_can_network').with('value' => 'on', 'persistent' => true) }
+        end
       end
 
       describe 'with disabled selinux' do
