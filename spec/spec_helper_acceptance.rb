@@ -10,4 +10,9 @@ install_module_dependencies_on(hosts)
 RSpec.configure do |c|
   # Readable test descriptions
   c.formatter = :documentation
+  hosts.each do |host|
+    if host[:platform] =~ %r{el-7-x86_64} && host[:hypervisor] =~ %r{docker}
+      on(host, "sed -i '/nodocs/d' /etc/yum.conf")
+    end
+  end
 end
