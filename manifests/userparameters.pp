@@ -1,6 +1,6 @@
 # == Define: zabbix::userparameters
 #
-#  This will install an userparameters file with keys for item that can be check
+#  This will install an userparameters file with keys for items that can be checked
 #  with zabbix.
 #
 # === Requirements
@@ -61,41 +61,43 @@ define zabbix::userparameters (
   $script_dir = '/usr/bin',
 ) {
   $include_dir          = getvar('::zabbix::agent::include_dir')
-  $zabbix_agent_package = getvar('::zabbix::agent::zabbix_package_agent')
+  $zabbix_package_agent = getvar('::zabbix::agent::zabbix_package_agent')
+  $agent_config_owner   = getvar('::zabbix::agent::agent_config_owner')
+  $agent_config_group   = getvar('::zabbix::agent::agent_config_group')
 
   if $source != '' {
     file { "${include_dir}/${name}.conf":
       ensure  => present,
-      owner   => 'zabbix',
-      group   => 'zabbix',
+      owner   => $agent_config_owner,
+      group   => $agent_config_group,
       mode    => '0644',
       source  => $source,
       notify  => Service['zabbix-agent'],
-      require => Package[$zabbix_agent_package],
+      require => Package[$zabbix_package_agent],
     }
   }
 
   if $content != '' {
     file { "${include_dir}/${name}.conf":
       ensure  => present,
-      owner   => 'zabbix',
-      group   => 'zabbix',
+      owner   => $agent_config_owner,
+      group   => $agent_config_group,
       mode    => '0644',
       content => $content,
       notify  => Service['zabbix-agent'],
-      require => Package[$zabbix_agent_package],
+      require => Package[$zabbix_package_agent],
     }
   }
 
   if $script != '' {
     file { "${script_dir}/${name}${script_ext}":
       ensure  => present,
-      owner   => 'zabbix',
-      group   => 'zabbix',
+      owner   => $agent_config_owner,
+      group   => $agent_config_group,
       mode    => '0755',
       source  => $script,
       notify  => Service['zabbix-agent'],
-      require => Package[$zabbix_agent_package],
+      require => Package[$zabbix_package_agent],
     }
   }
 
