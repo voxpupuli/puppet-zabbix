@@ -118,6 +118,7 @@ class zabbix::params {
   $ldap_clientkey                           = undef
   $server_api_pass                          = 'zabbix'
   $server_api_user                          = 'Admin'
+  $zabbix_web_title                         = undef
 
   # Zabbix-server
   $server_alertscriptspath                  = '/etc/zabbix/alertscripts'

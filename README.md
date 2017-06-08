@@ -409,6 +409,7 @@ This is the class for installing everything on a single host and thus all parame
 * `zabbix_api_user`: Username of user in Zabbix which is able to create hosts and edit hosts via the zabbix-api. Default: Admin
 * `zabbix_api_pass`: Password for the user in Zabbix for zabbix-api usage. Default: zabbix
 * `zabbix_template_dir`: The directory where all templates are stored before uploading via API
+* `zabbix_web_title`: The text to prepend to page titles. Default: Use value of $zabbix_server
 * `web_config_owner`: Which user should own the web interface configuration file.
 * `web_config_group`: Which group should own the web interface configuration file.
 * `ldap_cacert`: The location of the CA Cert to be used for Zabbix LDAP authentication. The module will not install this file so it must be present on the system.

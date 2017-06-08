@@ -113,6 +113,10 @@
 #   The fqdn name of the host running the zabbix-server. When single node:
 #   localhost
 #
+# [*zabbix_web_title*]
+#   The text that is prepended to the titles of zabbix web pages.
+#   Default: Use the value the zabbix_server parameter
+#
 # [*zabbix_listenport*]
 #   The port on which the zabbix-server is listening. Default: 10051
 #
@@ -185,6 +189,7 @@ class zabbix::web (
   $zabbix_timezone                          = $zabbix::params::zabbix_timezone,
   $zabbix_package_state                     = $zabbix::params::zabbix_package_state,
   $zabbix_template_dir                      = $zabbix::params::zabbix_template_dir,
+  $zabbix_web_title                         = $zabbix::params::zabbix_web_title,
   $web_config_owner                         = $zabbix::params::web_config_owner,
   $web_config_group                         = $zabbix::params::web_config_group,
   $manage_vhost                             = $zabbix::params::manage_vhost,
@@ -360,6 +365,13 @@ class zabbix::web (
     before  => File['/etc/zabbix/web/zabbix.conf.php'],
     require => Class['zabbix::repo'],
     tag     => 'zabbix',
+  }
+
+  if $zabbix_web_title {
+    $title_text = $zabbix_web_title
+  }
+  else {
+    $title_text = $zabbix_server
   }
 
   # Webinterface config file
