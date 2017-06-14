@@ -89,11 +89,10 @@ class zabbix::database::postgresql (
   }
 
   file { '/root/.pgpass':
-    ensure  => present,
-    mode    => '0600',
-    owner   => 'root',
-    group   => 'root',
-    require => Class['postgresql::client'],
+    ensure => present,
+    mode   => '0600',
+    owner  => 'root',
+    group  => 'root',
   }
 
   case $zabbix_type {

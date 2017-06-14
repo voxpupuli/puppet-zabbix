@@ -287,7 +287,7 @@
 # Copyright 2014 Werner Dijkerman
 #
 class zabbix::server (
-  $database_type                    = $zabbix::params::database_type,
+  Zabbix::Databases $database_type  = $zabbix::params::database_type,
   $database_path                    = $zabbix::params::database_path,
   $zabbix_version                   = $zabbix::params::zabbix_version,
   $zabbix_package_state             = $zabbix::params::zabbix_package_state,
