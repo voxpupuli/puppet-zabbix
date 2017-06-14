@@ -79,7 +79,7 @@ class zabbix (
   $zabbix_server_ip                         = $zabbix::params::zabbix_server_ip,
   $zabbix_template_dir                      = $zabbix::params::zabbix_template_dir,
   $zabbix_web_ip                            = $zabbix::params::zabbix_web_ip,
-  $database_type                            = $zabbix::params::database_type,
+  Zabbix::Databases $database_type          = $zabbix::params::database_type,
   $database_path                            = $zabbix::params::database_path,
   $manage_database                          = $zabbix::params::manage_database,
   $default_vhost                            = $zabbix::params::default_vhost,
