@@ -43,14 +43,6 @@ describe 'zabbix::startup', type: :define do # rubocop:disable RSpec/MultipleDes
             it { is_expected.not_to contain_class('systemd') }
             it { is_expected.not_to contain_file('/etc/systemd/system/zabbix-agent.service') }
           end
-
-          context 'it fails when agent_configfile_path param is missing' do
-            let :params do
-              {}
-            end
-
-            it { is_expected.to raise_error(Puppet::Error, %r{you have to provide a agent_configfile_path param}) }
-          end
         end
       end
     end
@@ -133,14 +125,6 @@ describe 'zabbix::startup', type: :define do
             it { is_expected.not_to contain_class('systemd') }
             it { is_expected.not_to contain_file('/etc/systemd/system/zabbix-server.service') }
           end
-
-          context 'it fails when server_configfile_path param is missing' do
-            let :params do
-              {}
-            end
-
-            it { is_expected.to raise_error(Puppet::Error, %r{you have to provide a server_configfile_path param}) }
-          end
         end
       end
     end
@@ -189,17 +173,6 @@ describe 'zabbix::startup', type: :define do
 
             it { is_expected.to contain_file('/etc/systemd/system/zabbix-server.service').with_content(%r{After=postgresql.service}) }
           end
-        end
-
-        context 'it fails when database_type param is missing' do
-          let :params do
-            {
-              server_configfile_path: '/something',
-              pidfile: '/somethingelse'
-            }
-          end
-
-          it { is_expected.to raise_error(Puppet::Error, %r{you have to provide a database_type param}) }
         end
       end
     end
