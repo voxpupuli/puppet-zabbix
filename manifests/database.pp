@@ -143,21 +143,22 @@ class zabbix::database(
           password => postgresql_password($database_user, $database_password),
           require  => Class['postgresql::server'],
         }
-
+        # This rule alway insert a pg_hba_rule to allow Zabbix Server to connect the
+        # the database even when Zabbix Server and Database are in same server
+        postgresql::server::pg_hba_rule { 'Allow zabbix-server to access database':
+          description => 'Open up postgresql for access from zabbix-server',
+          type        => 'host',
+          database    => $database_name,
+          user        => $database_user,
+          address     => "${zabbix_server_ip}/32",
+          auth_method => 'md5',
+        }
+     
         # When every component has its own server, we have to allow those servers to
         # access the database from the network. Postgresl allows this via the
         # pg_hba.conf file. As this file only accepts ip addresses, the ip address
         # of server and web has to be supplied as an parameter.
         if $zabbix_web_ip != $zabbix_server_ip {
-          postgresql::server::pg_hba_rule { 'Allow zabbix-server to access database':
-            description => 'Open up postgresql for access from zabbix-server',
-            type        => 'host',
-            database    => $database_name,
-            user        => $database_user,
-            address     => "${zabbix_server_ip}/32",
-            auth_method => 'md5',
-          }
-
           postgresql::server::pg_hba_rule { 'Allow zabbix-web to access database':
             description => 'Open up postgresql for access from zabbix-web',
             type        => 'host',
