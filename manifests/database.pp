@@ -153,7 +153,7 @@ class zabbix::database(
           address     => "${zabbix_server_ip}/32",
           auth_method => 'md5',
         }
-     
+
         # When every component has its own server, we have to allow those servers to
         # access the database from the network. Postgresl allows this via the
         # pg_hba.conf file. As this file only accepts ip addresses, the ip address
