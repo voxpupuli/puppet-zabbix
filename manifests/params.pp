@@ -258,6 +258,7 @@ class zabbix::params {
   $proxy_configfile_path                    = '/etc/zabbix/zabbix_proxy.conf'
   $proxy_configfrequency                    = '3600'
   $proxy_database_host                      = 'localhost'
+  $proxy_database_host_ip                   = '127.0.0.1'
   $proxy_database_name                      = 'zabbix_proxy'
   $proxy_database_password                  = 'zabbix-proxy'
   $proxy_database_port                      = undef

@@ -126,6 +126,7 @@ class zabbix::database(
   $database_user                   = $zabbix::params::server_database_user,
   $database_password               = $zabbix::params::server_database_password,
   $database_host                   = $zabbix::params::server_database_host,
+  $database_host_ip                = $zabbix::params::zabbix_server_ip,
   $database_charset                = $zabbix::params::server_database_charset,
   $database_collate                = $zabbix::params::server_database_collate,
 ) inherits zabbix::params {
