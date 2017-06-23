@@ -23,7 +23,8 @@ describe 'zabbix::database' do
             database_user: 'zabbix-server',
             zabbix_type: 'server',
             zabbix_web_ip: '127.0.0.2',
-            zabbix_server_ip: '127.0.0.1'
+            zabbix_server_ip: '127.0.0.1',
+            database_host_ip: '127.0.0.3'
           }
         end
 
