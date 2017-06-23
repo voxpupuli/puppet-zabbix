@@ -130,6 +130,7 @@ class zabbix::params {
   $server_database_charset                  = 'utf8'
   $server_database_collate                  = 'utf8_general_ci'
   $server_database_host                     = 'localhost'
+  $server_database_host_ip                  = '127.0.0.1'
   $server_database_name                     = 'zabbix_server'
   $server_database_password                 = 'zabbix_server'
   $server_database_port                     = undef
@@ -258,7 +259,6 @@ class zabbix::params {
   $proxy_configfile_path                    = '/etc/zabbix/zabbix_proxy.conf'
   $proxy_configfrequency                    = '3600'
   $proxy_database_host                      = 'localhost'
-  $proxy_database_host_ip                   = '127.0.0.1'
   $proxy_database_name                      = 'zabbix_proxy'
   $proxy_database_password                  = 'zabbix-proxy'
   $proxy_database_port                      = undef
