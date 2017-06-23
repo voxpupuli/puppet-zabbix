@@ -146,7 +146,7 @@ class zabbix::database(
         }
 
         # When database not in some server with zabbix server include pg_hba_rule to server
-        if $database_host_ip != $zabbix_server_ip {
+        if ($database_host_ip != $zabbix_server_ip) ||  $zabbix_web_ip != $zabbix_server_ip{
           postgresql::server::pg_hba_rule { 'Allow zabbix-server to access database':
             description => 'Open up postgresql for access from zabbix-server',
             type        => 'host',
