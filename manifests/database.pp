@@ -158,7 +158,7 @@ class zabbix::database(
         }
 
         # When every component has its own server, we have to allow those servers to
-        # access the database from the network. Postgresl allows this via the
+        # access the database from the network. Postgresql allows this via the
         # pg_hba.conf file. As this file only accepts ip addresses, the ip address
         # of server and web has to be supplied as an parameter.
         if $zabbix_web_ip != $zabbix_server_ip {
