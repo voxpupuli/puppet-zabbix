@@ -542,14 +542,16 @@ class zabbix::proxy (
 
   # Workaround for: The redhat provider can not handle attribute enable
   # This is only happening when using an redhat family version 5.x.
-  if $::osfamily == 'redhat' and $::operatingsystemrelease !~ /^5.*/ {
-    Service[$proxy_service_name] {
-      enable => true }
+  if $::osfamily == 'redhat' and $::operatingsystemrelease =~ /^5.*/ {
+    $enable = undef
+  }  else {
+    $enable = true
   }
 
   # Controlling the 'zabbix-proxy' service
   service { $proxy_service_name:
     ensure     => running,
+    enable     => $enable,
     hasstatus  => true,
     hasrestart => true,
     require    => [
