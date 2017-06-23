@@ -126,7 +126,7 @@ class zabbix::database(
   $database_user                   = $zabbix::params::server_database_user,
   $database_password               = $zabbix::params::server_database_password,
   $database_host                   = $zabbix::params::server_database_host,
-  $database_host_ip                = $zabbix::params::zabbix_server_ip,
+  $database_host_ip                = $zabbix::params::server_database_host_ip,
   $database_charset                = $zabbix::params::server_database_charset,
   $database_collate                = $zabbix::params::server_database_collate,
 ) inherits zabbix::params {
@@ -144,15 +144,17 @@ class zabbix::database(
           password => postgresql_password($database_user, $database_password),
           require  => Class['postgresql::server'],
         }
-        # This rule alway insert a pg_hba_rule to allow Zabbix Server to connect the
-        # the database even when Zabbix Server and Database are in same server
-        postgresql::server::pg_hba_rule { 'Allow zabbix-server to access database':
-          description => 'Open up postgresql for access from zabbix-server',
-          type        => 'host',
-          database    => $database_name,
-          user        => $database_user,
-          address     => "${zabbix_server_ip}/32",
-          auth_method => 'md5',
+
+        # When database not in some server with zabbix server include pg_hba_rule to server
+        if $database_host_ip != $zabbix_server_ip {
+          postgresql::server::pg_hba_rule { 'Allow zabbix-server to access database':
+            description => 'Open up postgresql for access from zabbix-server',
+            type        => 'host',
+            database    => $database_name,
+            user        => $database_user,
+            address     => "${zabbix_server_ip}/32",
+            auth_method => 'md5',
+          }
         }
 
         # When every component has its own server, we have to allow those servers to
