@@ -34,29 +34,29 @@ matrix:
     bundler_args: --without system_tests development
     env: PUPPET_VERSION="~> 4.0" CHECK=build DEPLOY_TO_FORGE=yes
   - rvm: 2.4.1
+    bundler_args: --without development
+    dist: trusty
     env: PUPPET_INSTALL_TYPE=agent CHECK=acceptance BEAKER_debug=true BEAKER_set=docker/centos-7
     services: docker
     sudo: required
+  - rvm: 2.4.1
     bundler_args: --without development
     dist: trusty
-  - rvm: 2.4.1
     env: PUPPET_INSTALL_TYPE=agent CHECK=acceptance BEAKER_debug=true BEAKER_set=docker/debian-8
     services: docker
     sudo: required
+  - rvm: 2.4.1
     bundler_args: --without development
     dist: trusty
-  - rvm: 2.4.1
     env: PUPPET_INSTALL_TYPE=agent CHECK=acceptance BEAKER_debug=true BEAKER_set=docker/ubuntu-14.04
     services: docker
     sudo: required
+  - rvm: 2.4.1
     bundler_args: --without development
     dist: trusty
-  - rvm: 2.4.1
     env: PUPPET_INSTALL_TYPE=agent CHECK=acceptance BEAKER_debug=true BEAKER_set=docker/ubuntu-16.04
     services: docker
     sudo: required
-    bundler_args: --without development
-    dist: trusty
 branches:
   only:
   - master
