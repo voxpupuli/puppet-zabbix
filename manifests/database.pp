@@ -126,6 +126,7 @@ class zabbix::database(
   $database_user                   = $zabbix::params::server_database_user,
   $database_password               = $zabbix::params::server_database_password,
   $database_host                   = $zabbix::params::server_database_host,
+  $database_host_ip                = $zabbix::params::server_database_host_ip,
   $database_charset                = $zabbix::params::server_database_charset,
   $database_collate                = $zabbix::params::server_database_collate,
 ) inherits zabbix::params {
@@ -144,11 +145,8 @@ class zabbix::database(
           require  => Class['postgresql::server'],
         }
 
-        # When every component has its own server, we have to allow those servers to
-        # access the database from the network. Postgresl allows this via the
-        # pg_hba.conf file. As this file only accepts ip addresses, the ip address
-        # of server and web has to be supplied as an parameter.
-        if $zabbix_web_ip != $zabbix_server_ip {
+        # When database not in some server with zabbix server include pg_hba_rule to server
+        if ($database_host_ip != $zabbix_server_ip) or ($zabbix_web_ip != $zabbix_server_ip){
           postgresql::server::pg_hba_rule { 'Allow zabbix-server to access database':
             description => 'Open up postgresql for access from zabbix-server',
             type        => 'host',
@@ -157,7 +155,13 @@ class zabbix::database(
             address     => "${zabbix_server_ip}/32",
             auth_method => 'md5',
           }
+        }
 
+        # When every component has its own server, we have to allow those servers to
+        # access the database from the network. Postgresql allows this via the
+        # pg_hba.conf file. As this file only accepts ip addresses, the ip address
+        # of server and web has to be supplied as an parameter.
+        if $zabbix_web_ip != $zabbix_server_ip {
           postgresql::server::pg_hba_rule { 'Allow zabbix-web to access database':
             description => 'Open up postgresql for access from zabbix-web',
             type        => 'host',

@@ -130,6 +130,7 @@ class zabbix::params {
   $server_database_charset                  = 'utf8'
   $server_database_collate                  = 'utf8_general_ci'
   $server_database_host                     = 'localhost'
+  $server_database_host_ip                  = '127.0.0.1'
   $server_database_name                     = 'zabbix_server'
   $server_database_password                 = 'zabbix_server'
   $server_database_port                     = undef
