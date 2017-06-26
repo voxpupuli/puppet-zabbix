@@ -6,7 +6,7 @@
   "dependencies": [
     {
       "name": "puppetlabs/postgresql",
-      "version_requirement": ">= 4.4.2 < 5.0.0"
+      "version_requirement": ">= 4.4.2 < 6.0.0"
     },
     {
       "name": "puppetlabs/stdlib",
