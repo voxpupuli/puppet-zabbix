@@ -66,7 +66,7 @@ describe 'zabbix::database' do
         it { is_expected.to contain_class('zabbix::params') }
       end
 
-      describe 'database_type is postgresql, zabbix_type is server and zabbbix_server anda zabbix_web in the some server but zabbix_database is on other server' do
+      describe 'database_type is postgresql, zabbix_type is server and zabbbix_server and a zabbix_web in the some server but zabbix_database is on other server' do
         let :params do
           {
             database_type: 'postgresql',
