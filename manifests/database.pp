@@ -16,14 +16,14 @@
 #   This will determine what sql files will be loaded into database.
 #
 # [*zabbix_web*]
-#   This is the hostname of the server which is running the
+#   This is a string or array of hostname(s) of server(s) running the
 #   zabbix-web package. This parameter is used when database_type =
 #   mysql. When single node: localhost
 #
 # [*zabbix_web_ip*]
-#   This is the ip address of the server which is running the
+#   This is a string or array of IP address(es) of server(s) running the
 #   zabbix-web package. This parameter is used when database_type =
-#   postgresql. When single node: 127.0.0.1
+#   postgresql. When single node: 127.0.0.1.
 #
 # [*zabbix_server*]
 #   This is the FQDN for the host running zabbix-server. This parameter
@@ -145,8 +145,8 @@ class zabbix::database(
           require  => Class['postgresql::server'],
         }
 
-        # When database not in some server with zabbix server include pg_hba_rule to server
-        if ($database_host_ip != $zabbix_server_ip) or ($zabbix_web_ip != $zabbix_server_ip){
+        # When database not in same server with zabbix server include pg_hba_rule to server
+        if ($database_host_ip != $zabbix_server_ip) {
           postgresql::server::pg_hba_rule { 'Allow zabbix-server to access database':
             description => 'Open up postgresql for access from zabbix-server',
             type        => 'host',
@@ -156,22 +156,22 @@ class zabbix::database(
             auth_method => 'md5',
           }
         }
-
-        # When every component has its own server, we have to allow those servers to
-        # access the database from the network. Postgresql allows this via the
-        # pg_hba.conf file. As this file only accepts ip addresses, the ip address
-        # of server and web has to be supplied as an parameter.
-        if $zabbix_web_ip != $zabbix_server_ip {
-          postgresql::server::pg_hba_rule { 'Allow zabbix-web to access database':
-            description => 'Open up postgresql for access from zabbix-web',
-            type        => 'host',
-            database    => $database_name,
-            user        => $database_user,
-            address     => "${zabbix_web_ip}/32",
-            auth_method => 'md5',
+        if (is_array($zabbix_web_ip)) {
+            $zabbix_web_array=$zabbix_web_ip
+        } else {
+            $zabbix_web_array=[ $zabbix_web_ip ]
+        }
+        $zabbix_web_array.filter |$ip| {
+          $ip != $database_host_ip }.each |$zweb_ip| {
+            postgresql::server::pg_hba_rule { 'Allow zabbix-web to access database':
+              description => 'Open up postgresql for access from zabbix-web',
+              type        => 'host',
+              database    => $database_name,
+              user        => $database_user,
+              address     => "${zweb_ip}/32",
+              auth_method => 'md5',
+            }
           }
-        } # END if $zabbix_web_ip != $zabbix_server_ip
-
         # This is some specific action for the zabbix-proxy. This is due to better
         # parameter naming.
         if $zabbix_type == 'proxy' {
@@ -219,29 +219,35 @@ class zabbix::database(
 
         # When the zabbix web and zabbix database aren't running on the same host, some
         # extra users/grants needs to be created.
-        if $zabbix_web != $zabbix_server {
-          mysql_user { "${database_user}@${zabbix_web}":
+        if (is_array($zabbix_web)) {
+          $zabbix_web_array=$zabbix_web
+        } else {
+          $zabbix_web_array=[ $zabbix_web ]
+        }
+        $zabbix_web_array.filter |$n| {
+          $n != $zabbix_server }.each |$zweb| {
+            mysql_user { "${database_user}@${zweb}":
             ensure        => 'present',
             password_hash => mysql_password($database_password),
-          }
+            }
 
-          # And this is the grant part. It will grant the users which is created earlier
-          # to the zabbix-server database with all rights, like the user for the zabbix
-          # -server itself.
-          mysql_grant { "${database_user}@${zabbix_web}/${database_name}.*":
+            # And this is the grant part. It will grant the users which is created earlier
+            # to the zabbix-server database with all rights, like the user for the zabbix
+            # -server itself.
+            mysql_grant { "${database_user}@${zweb}/${database_name}.*":
             ensure     => 'present',
             options    => ['GRANT'],
             privileges => ['ALL'],
             table      => "${database_name}.*",
-            user       => "${database_user}@${zabbix_web}",
+            user       => "${database_user}@${zweb}",
             require    => [
               Class['mysql::server'],
               Mysql::Db[$database_name],
-              Mysql_user["${database_user}@${zabbix_web}"]
+              Mysql_user["${database_user}@${zweb}"]
             ],
+            }
           }
-        } # END if $zabbix_web != $zabbix_server
-      }
+        }
       'sqlite': {
         class { '::zabbix::database::sqlite': }
       }
