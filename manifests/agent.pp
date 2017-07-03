@@ -177,6 +177,11 @@
 # [*loadmodule*]
 #   Module to load at agent startup.
 #
+# [*enabled*]
+# Used only when 'manage_resources' is true. If false, the host will be created
+# as 'disabled' in Zabbix. Useful if you don't want monitoring to start
+# immediately on newly-created hosts.
+#
 # === Example
 #
 #  Basic installation:
@@ -260,6 +265,7 @@ class zabbix::agent (
   Boolean $manage_selinux                 = $zabbix::params::manage_selinux,
   String $additional_service_params       = $zabbix::params::additional_service_params,
   String $service_type                    = $zabbix::params::service_type,
+  Boolean $enabled                        = $zabbix::params::enabled,
 ) inherits zabbix::params {
 
   # the following two codeblocks are a bit blargh. The correct default value for
@@ -324,6 +330,7 @@ class zabbix::agent (
       group_create => $zbx_group_create,
       templates    => $zbx_templates,
       proxy        => $use_proxy,
+      enabled      => $enabled,
     }
   }
 

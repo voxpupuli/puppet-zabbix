@@ -51,4 +51,8 @@ Puppet::Type.newtype(:zabbix_host) do
   newparam(:apache_use_ssl) do
     desc 'If apache is uses with ssl'
   end
+
+  newparam(:enabled) do
+    desc 'Is monitoring enabled for this host ?'
+  end
 end

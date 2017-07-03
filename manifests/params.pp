@@ -251,6 +251,7 @@ class zabbix::params {
     $agent_logtype                          = 'file'
     $agent_logfile                          = '/var/log/zabbix/zabbix_agentd.log'
     $agent_logfilesize                      = '100'
+    $enabled                                = true
   }
 
   # Proxy specific params

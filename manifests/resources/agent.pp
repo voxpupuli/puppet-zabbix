@@ -22,6 +22,7 @@ class zabbix::resources::agent (
   $group_create  = undef,
   $templates     = undef,
   $proxy         = undef,
+  $enabled       = undef,
 ) {
 
   @@zabbix_host { $hostname:
@@ -32,6 +33,7 @@ class zabbix::resources::agent (
     group_create   => $group_create,
     templates      => $templates,
     proxy          => $proxy,
+    enabled        => $enabled,
     zabbix_url     => '',
     zabbix_user    => '',
     zabbix_pass    => '',
