@@ -18,12 +18,6 @@ matrix:
   - rvm: 2.1.9
     bundler_args: --without system_tests development
     env: PUPPET_VERSION="~> 4.0" CHECK=test
-  - rvm: 2.2.7
-    bundler_args: --without system_tests development
-    env: PUPPET_VERSION="~> 4.0" CHECK=test
-  - rvm: 2.3.4
-    bundler_args: --without system_tests development
-    env: PUPPET_VERSION="~> 4.0" CHECK=test
   - rvm: 2.4.1
     bundler_args: --without system_tests development
     env: PUPPET_VERSION="~> 4.0" CHECK=test
