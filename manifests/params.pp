@@ -76,6 +76,7 @@ class zabbix::params {
   $zabbix_proxy                             = 'localhost'
   $zabbix_proxy_ip                          = '127.0.0.1'
   $zabbix_server                            = 'localhost'
+  $zabbix_server_name                       = 'localhost'
   $zabbix_server_ip                         = '127.0.0.1'
   $zabbix_template_dir                      = '/etc/zabbix/imported_templates'
   $zabbix_timezone                          = 'Europe/Amsterdam'
