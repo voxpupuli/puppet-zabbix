@@ -4,6 +4,73 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not impact the functionality of the module.
 
+## [v4.1.3](https://github.com/voxpupuli/puppet-zabbix/tree/v4.1.3) (2017-06-26)
+[Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v4.1.2...v4.1.3)
+
+**Fixed bugs:**
+
+- zabbix::agent LogType and User are not valid in 2.2 \(EPEL\) [\#417](https://github.com/voxpupuli/puppet-zabbix/issues/417)
+- Add pg\_hba rule to allow zabbix server \#411 [\#412](https://github.com/voxpupuli/puppet-zabbix/pull/412) ([RaphaelNeumann](https://github.com/RaphaelNeumann))
+
+**Merged pull requests:**
+
+- bump postgresql to allow 5.X [\#420](https://github.com/voxpupuli/puppet-zabbix/pull/420) ([bastelfreak](https://github.com/bastelfreak))
+
+## [v4.1.2](https://github.com/voxpupuli/puppet-zabbix/tree/v4.1.2) (2017-06-23)
+[Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v4.1.1...v4.1.2)
+
+**Implemented enhancements:**
+
+- Update metadata.json for correct stdlib/puppet version [\#415](https://github.com/voxpupuli/puppet-zabbix/pull/415) ([bastelfreak](https://github.com/bastelfreak))
+
+**Fixed bugs:**
+
+- Fix proxy service not being enabled [\#413](https://github.com/voxpupuli/puppet-zabbix/pull/413) ([stefanandres](https://github.com/stefanandres))
+
+**Merged pull requests:**
+
+- release 4.1.2 [\#416](https://github.com/voxpupuli/puppet-zabbix/pull/416) ([bastelfreak](https://github.com/bastelfreak))
+
+## [v4.1.1](https://github.com/voxpupuli/puppet-zabbix/tree/v4.1.1) (2017-06-14)
+[Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v4.1.0...v4.1.1)
+
+**Fixed bugs:**
+
+- unless $manage\_database interprets False wrong; and useless require breaks standalone database setups [\#409](https://github.com/voxpupuli/puppet-zabbix/pull/409) ([bastelfreak](https://github.com/bastelfreak))
+
+**Merged pull requests:**
+
+- release 4.1.1 [\#410](https://github.com/voxpupuli/puppet-zabbix/pull/410) ([bastelfreak](https://github.com/bastelfreak))
+
+## [v4.1.0](https://github.com/voxpupuli/puppet-zabbix/tree/v4.1.0) (2017-06-08)
+[Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v4.0.0...v4.1.0)
+
+**Implemented enhancements:**
+
+- Allow zabbix server to run on a dedicated machine [\#406](https://github.com/voxpupuli/puppet-zabbix/issues/406)
+- Zabbix server should not be started as root [\#405](https://github.com/voxpupuli/puppet-zabbix/issues/405)
+- Allow zabbix upgrades via the module [\#403](https://github.com/voxpupuli/puppet-zabbix/issues/403)
+- update rpm key urls to https [\#401](https://github.com/voxpupuli/puppet-zabbix/pull/401) ([bastelfreak](https://github.com/bastelfreak))
+
+**Fixed bugs:**
+
+- Zabbix agent should be started forking on 2.X and simple on 3.X [\#404](https://github.com/voxpupuli/puppet-zabbix/issues/404)
+- Fails to upgrade zabbix-agent if zabbix\_version is changed [\#398](https://github.com/voxpupuli/puppet-zabbix/issues/398)
+- Zabbix Repository \(zabbix-non-supported\) defined with incorrect gpgkey [\#397](https://github.com/voxpupuli/puppet-zabbix/issues/397)
+- define owner and group via parameters [\#400](https://github.com/voxpupuli/puppet-zabbix/pull/400) ([kBite](https://github.com/kBite))
+- only add --foreground on 3.0 and newer [\#396](https://github.com/voxpupuli/puppet-zabbix/pull/396) ([bastelfreak](https://github.com/bastelfreak))
+
+**Closed issues:**
+
+- Zabbix 3.0 on Centos 6.x [\#359](https://github.com/voxpupuli/puppet-zabbix/issues/359)
+- Integer 18455137360 too big to convert to "int" at manifests/params.pp:333:24 [\#329](https://github.com/voxpupuli/puppet-zabbix/issues/329)
+
+**Merged pull requests:**
+
+- release 4.1.0 [\#402](https://github.com/voxpupuli/puppet-zabbix/pull/402) ([bastelfreak](https://github.com/bastelfreak))
+- Fix rpm key handling + changing default values depending on zabbix version [\#399](https://github.com/voxpupuli/puppet-zabbix/pull/399) ([bastelfreak](https://github.com/bastelfreak))
+- Provide acceptance tests for zabbix server [\#392](https://github.com/voxpupuli/puppet-zabbix/pull/392) ([bastelfreak](https://github.com/bastelfreak))
+
 ## [v4.0.0](https://github.com/voxpupuli/puppet-zabbix/tree/v4.0.0) (2017-05-24)
 [Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v3.0.0...v4.0.0)
 
@@ -15,6 +82,7 @@ These should not impact the functionality of the module.
 
 **Merged pull requests:**
 
+- Release 4.0.0 [\#390](https://github.com/voxpupuli/puppet-zabbix/pull/390) ([dhollinger](https://github.com/dhollinger))
 - modulesync 0.21.3 [\#388](https://github.com/voxpupuli/puppet-zabbix/pull/388) ([bastelfreak](https://github.com/bastelfreak))
 - migrate userparameters tests to rspec-puppet-facts [\#387](https://github.com/voxpupuli/puppet-zabbix/pull/387) ([bastelfreak](https://github.com/bastelfreak))
 - migrate proxy tests to rspec-puppet-facts [\#386](https://github.com/voxpupuli/puppet-zabbix/pull/386) ([bastelfreak](https://github.com/bastelfreak))

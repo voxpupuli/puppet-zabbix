@@ -15,7 +15,7 @@ define zabbix::startup (
   Optional[Stdlib::Absolutepath] $pidfile                = undef,
   Optional[Stdlib::Absolutepath] $agent_configfile_path  = undef,
   Optional[Stdlib::Absolutepath] $server_configfile_path = undef,
-  Optional[String] $database_type                        = undef,
+  Optional[Zabbix::Databases] $database_type             = undef,
   Optional[String] $zabbix_user                          = undef,
   String $additional_service_params                      = '',
   String $service_type                                   = 'simple',
@@ -24,20 +24,12 @@ define zabbix::startup (
 
   case $title {
     /agent/: {
-      unless $agent_configfile_path {
-        fail('you have to provide a agent_configfile_path param')
-      }
+      assert_type(Stdlib::Absolutepath, $agent_configfile_path)
     }
     /server/: {
-      unless $server_configfile_path {
-        fail('you have to provide a server_configfile_path param')
-      }
-      unless $database_type {
-        fail('you have to provide a database_type param')
-      }
-      unless $manage_database {
-        fail('you have to provide a manage_database param')
-      }
+      assert_type(Stdlib::Absolutepath, $server_configfile_path)
+      assert_type(Zabbix::Databases, $database_type)
+      assert_type(Boolean, $manage_database)
     }
     default: {
       fail('we currently only spport a title that contains agent or server')

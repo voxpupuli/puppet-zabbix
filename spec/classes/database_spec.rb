@@ -23,7 +23,8 @@ describe 'zabbix::database' do
             database_user: 'zabbix-server',
             zabbix_type: 'server',
             zabbix_web_ip: '127.0.0.2',
-            zabbix_server_ip: '127.0.0.1'
+            zabbix_server_ip: '127.0.0.1',
+            database_host_ip: '127.0.0.3'
           }
         end
 
@@ -58,6 +59,32 @@ describe 'zabbix::database' do
         it { is_expected.not_to contain_postgresql__server__pg_hba_rule('Allow zabbix-server to access database').with_database('zabbix-server') }
         it { is_expected.not_to contain_postgresql__server__pg_hba_rule('Allow zabbix-server to access database').with_user('zabbix-server') }
         it { is_expected.not_to contain_postgresql__server__pg_hba_rule('Allow zabbix-server to access database').with_address('127.0.0.1/32') }
+
+        it { is_expected.not_to contain_postgresql__server__pg_hba_rule('Allow zabbix-web to access database').with_database('zabbix-server') }
+        it { is_expected.not_to contain_postgresql__server__pg_hba_rule('Allow zabbix-web to access database').with_user('zabbix-server') }
+        it { is_expected.not_to contain_postgresql__server__pg_hba_rule('Allow zabbix-web to access database').with_address('127.0.0.2/32') }
+        it { is_expected.to contain_class('zabbix::params') }
+      end
+
+      describe 'database_type is postgresql, zabbix_type is server and zabbbix_server and a zabbix_web in the some server but zabbix_database is on other server' do
+        let :params do
+          {
+            database_type: 'postgresql',
+            database_name: 'zabbix-server',
+            database_user: 'zabbix-server',
+            zabbix_type: 'server',
+            zabbix_web_ip: '127.0.0.1',
+            zabbix_server_ip: '127.0.0.1',
+            database_host_ip: '127.0.0.2'
+          }
+        end
+
+        it { is_expected.to contain_postgresql__server__db('zabbix-server').with_name('zabbix-server') }
+        it { is_expected.to contain_postgresql__server__db('zabbix-server').with_user('zabbix-server') }
+
+        it { is_expected.to contain_postgresql__server__pg_hba_rule('Allow zabbix-server to access database').with_database('zabbix-server') }
+        it { is_expected.to contain_postgresql__server__pg_hba_rule('Allow zabbix-server to access database').with_user('zabbix-server') }
+        it { is_expected.to contain_postgresql__server__pg_hba_rule('Allow zabbix-server to access database').with_address('127.0.0.1/32') }
 
         it { is_expected.not_to contain_postgresql__server__pg_hba_rule('Allow zabbix-web to access database').with_database('zabbix-server') }
         it { is_expected.not_to contain_postgresql__server__pg_hba_rule('Allow zabbix-web to access database').with_user('zabbix-server') }

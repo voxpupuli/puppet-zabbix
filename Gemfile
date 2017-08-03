@@ -11,7 +11,7 @@ def location_for(place, fake_version = nil)
 end
 
 group :test do
-  gem 'puppetlabs_spec_helper', '~> 2.1.1',                         :require => false
+  gem 'puppetlabs_spec_helper', '~> 2.2.0',                         :require => false
   gem 'rspec-puppet', '~> 2.5',                                     :require => false
   gem 'rspec-puppet-facts',                                         :require => false
   gem 'rspec-puppet-utils',                                         :require => false
@@ -24,10 +24,10 @@ group :test do
   gem 'puppet-lint-variable_contains_upcase',                       :require => false
   gem 'metadata-json-lint',                                         :require => false
   gem 'puppet-blacksmith',                                          :require => false
-  gem 'voxpupuli-release',                                          :require => false, :git => 'https://github.com/voxpupuli/voxpupuli-release-gem.git'
+  gem 'voxpupuli-release',                                          :require => false, :git => 'https://github.com/voxpupuli/voxpupuli-release-gem'
   gem 'puppet-strings', '~> 1.0',                                   :require => false
   gem 'redcarpet',                                                  :require => false
-  gem 'rubocop', '~> 0.48.0',                                       :require => false if RUBY_VERSION >= '2.3.0'
+  gem 'rubocop', '~> 0.49.1',                                       :require => false if RUBY_VERSION >= '2.3.0'
   gem 'rubocop-rspec', '~> 1.15.0',                                 :require => false if RUBY_VERSION >= '2.3.0'
   gem 'mocha', '>= 1.2.1',                                          :require => false
   gem 'coveralls',                                                  :require => false
@@ -43,7 +43,7 @@ group :development do
   gem 'travis',                   :require => false
   gem 'travis-lint',              :require => false
   gem 'guard-rake',               :require => false
-  gem 'overcommit', '~> 0.39.1',  :require => false
+  gem 'overcommit', '>= 0.39.1',  :require => false
 end
 
 group :system_tests do
