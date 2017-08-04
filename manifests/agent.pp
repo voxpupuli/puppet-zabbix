@@ -416,6 +416,9 @@ class zabbix::agent (
     selinux::module{'zabbix-agent':
       ensure    => 'present',
       source_te => 'puppet:///modules/zabbix/zabbix-agent.te',
+      source_if => 'puppet:///modules/zabbix/zabbix-agent.if',
+      source_fc => 'puppet:///modules/zabbix/zabbix-agent.fc',
+      builder   => 'refpolicy',
       before    => Service['zabbix-agent'],
     }
   }
