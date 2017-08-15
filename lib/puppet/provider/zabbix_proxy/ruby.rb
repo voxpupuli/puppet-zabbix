@@ -40,12 +40,10 @@ Puppet::Type.type(:zabbix_proxy).provide(:ruby, parent: Puppet::Provider::Zabbix
       host: host,
       status: proxy_mode,
       interfaces: [
-        {
-          ip: ipaddress,
-          dns: host,
-          useip: use_ip,
-          port: port
-        }
+        ip: ipaddress,
+        dns: host,
+        useip: use_ip,
+        port: port
       ]
     )
   end
