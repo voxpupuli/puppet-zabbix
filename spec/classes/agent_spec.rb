@@ -143,6 +143,28 @@ describe 'zabbix::agent' do
           it { is_expected.not_to contain_file('/etc/systemd/system/zabbix-agent.service') }
         end
       end
+
+      context 'when declaring zabbix_alias' do
+        let :params do
+          {
+            zabbix_alias: %w[testname]
+          }
+        end
+
+        it { is_expected.to contain_file(config_path).with_content %r{^Alias=testname$} }
+      end
+
+      context 'when declaring zabbix_alias as array' do
+        let :params do
+          {
+            zabbix_alias: %w[name1 name2]
+          }
+        end
+
+        it { is_expected.to contain_file(config_path).with_content %r{^Alias=name1$} }
+        it { is_expected.to contain_file(config_path).with_content %r{^Alias=name2$} }
+      end
+
       context 'configuration file with full options' do
         let :params do
           {
