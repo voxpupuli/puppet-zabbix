@@ -251,10 +251,12 @@ HousekeepingFrequency=<%= @housekeepingfrequency %>
 #
 MaxHousekeeperDelete=<%= @maxhousekeeperdelete %>
 
+<% if @zabbix_version.to_f < 3.4 %>
 ### Option: SenderFrequency
 #   How often Zabbix will try to send unsent alerts (in seconds).
 #
 SenderFrequency=<%= @senderfrequency %>
+<% end %>
 
 ### Option: CacheSize
 #   Size of configuration cache, in bytes.
