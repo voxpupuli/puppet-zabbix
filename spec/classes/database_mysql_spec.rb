@@ -5,6 +5,10 @@ describe 'zabbix::database::mysql' do
     'rspec.puppet.com'
   end
 
+  let :pre_condition do
+    "include 'mysql::server'"
+  end
+
   on_supported_os.each do |os, facts|
     context "on #{os} " do
       let :facts do
@@ -57,7 +61,6 @@ describe 'zabbix::database::mysql' do
             zabbix_version: '2.4'
           }
         end
-
         it { is_expected.to contain_class('zabbix::database::mysql') }
         # this doesn't make much sense because the class requires other classes
         # it { should compile.with_all_deps }
