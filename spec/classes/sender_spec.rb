@@ -30,7 +30,7 @@ describe 'zabbix::sender' do
             is_expected.to raise_error(Puppet::Error, %r{Managing a repo on Archlinux is currently not implemented})
           end
         else
-          it { is_expected.to contain_class('zabbix::repo').with_zabbix_version('3.2') }
+          it { is_expected.to contain_class('zabbix::repo').with_zabbix_version('3.4') }
           it { is_expected.to contain_package('zabbix-sender').with_require('Class[Zabbix::Repo]') }
         end
       end
