@@ -80,7 +80,7 @@ class zabbix::params {
   $zabbix_template_dir                      = '/etc/zabbix/imported_templates'
   $zabbix_timezone                          = 'Europe/Amsterdam'
   $zabbix_url                               = 'localhost'
-  $zabbix_version                           = '3.2'
+  $zabbix_version                           = '3.4'
   $zabbix_web                               = 'localhost'
   $zabbix_web_ip                            = '127.0.0.1'
   $manage_database                          = true
