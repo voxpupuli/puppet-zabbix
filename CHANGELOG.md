@@ -1,8 +1,23 @@
-# Change log
+# Changelog
 
 All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
-These should not impact the functionality of the module.
+These should not affect the functionality of the module.
+
+## [v5.0.0](https://github.com/voxpupuli/puppet-zabbix/tree/v5.0.0) (2017-09-17)
+[Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v4.1.3...v5.0.0)
+
+**Implemented enhancements:**
+
+- BREAKING: Bump default zabbix version to 3.4 + test on it [\#443](https://github.com/voxpupuli/puppet-zabbix/pull/443) ([bastelfreak](https://github.com/bastelfreak))
+- Fix for Zabbix 3.4 [\#436](https://github.com/voxpupuli/puppet-zabbix/pull/436) ([Menollo](https://github.com/Menollo))
+- Update testmatrix to puppet5 + new gems [\#430](https://github.com/voxpupuli/puppet-zabbix/pull/430) ([bastelfreak](https://github.com/bastelfreak))
+
+**Closed issues:**
+
+- override database\_schema\_path for AWS ami instance [\#428](https://github.com/voxpupuli/puppet-zabbix/issues/428)
+- Syntax Error at line 82 in file init.pp [\#423](https://github.com/voxpupuli/puppet-zabbix/issues/423)
+- pg\_hba problems in zabbix::database [\#411](https://github.com/voxpupuli/puppet-zabbix/issues/411)
 
 ## [v4.1.3](https://github.com/voxpupuli/puppet-zabbix/tree/v4.1.3) (2017-06-26)
 [Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v4.1.2...v4.1.3)
@@ -14,6 +29,7 @@ These should not impact the functionality of the module.
 
 **Merged pull requests:**
 
+- release 4.1.3 [\#421](https://github.com/voxpupuli/puppet-zabbix/pull/421) ([bastelfreak](https://github.com/bastelfreak))
 - bump postgresql to allow 5.X [\#420](https://github.com/voxpupuli/puppet-zabbix/pull/420) ([bastelfreak](https://github.com/bastelfreak))
 
 ## [v4.1.2](https://github.com/voxpupuli/puppet-zabbix/tree/v4.1.2) (2017-06-23)
@@ -367,8 +383,8 @@ These should not impact the functionality of the module.
 - Allow agent to listen on \* [\#138](https://github.com/voxpupuli/puppet-zabbix/pull/138) ([ekohl](https://github.com/ekohl))
 - enable apache\_php\_max\_input\_vars [\#137](https://github.com/voxpupuli/puppet-zabbix/pull/137) ([bastelfreak](https://github.com/bastelfreak))
 - Fix typo in zabbix-userparameters reference [\#136](https://github.com/voxpupuli/puppet-zabbix/pull/136) ([sgnl05](https://github.com/sgnl05))
-- Listen on all IPs [\#133](https://github.com/voxpupuli/puppet-zabbix/pull/133) ([z3rogate](https://github.com/z3rogate))
-- tap0 or tun0 \(OpenVPN interfaces\) interface as listenip [\#132](https://github.com/voxpupuli/puppet-zabbix/pull/132) ([z3rogate](https://github.com/z3rogate))
+- Listen on all IPs [\#133](https://github.com/voxpupuli/puppet-zabbix/pull/133) ([steinbrueckri](https://github.com/steinbrueckri))
+- tap0 or tun0 \(OpenVPN interfaces\) interface as listenip [\#132](https://github.com/voxpupuli/puppet-zabbix/pull/132) ([steinbrueckri](https://github.com/steinbrueckri))
 - Added zabbix\_template\_host type [\#154](https://github.com/voxpupuli/puppet-zabbix/pull/154) ([hkumarmk](https://github.com/hkumarmk))
 
 ## [1.7.0](https://github.com/voxpupuli/puppet-zabbix/tree/1.7.0) (2015-11-07)
