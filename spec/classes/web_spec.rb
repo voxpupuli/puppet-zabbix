@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 def package_provider_for_gems
-  Puppet.version =~ %r{^4} ? 'puppet_gem' : 'gem'
+  Puppet.version =~ %r{^4|^5} ? 'puppet_gem' : 'gem'
 end
 
 describe 'zabbix::web' do
