@@ -18,7 +18,8 @@ describe 'zabbix::proxy' do
         end
       when 'RedHat'
         let :pre_condition do
-          "class {'postgresql::server':}"
+          "include 'postgresql::server'
+           include 'mysql::server'"
         end
         let :params do
           {
