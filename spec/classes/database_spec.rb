@@ -6,7 +6,8 @@ describe 'zabbix::database' do
   end
 
   let :pre_condition do
-    "class {'postgresql::server':}"
+    "include 'postgresql::server'
+    include 'mysql::server'"
   end
 
   on_supported_os.each do |os, facts|
