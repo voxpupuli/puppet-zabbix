@@ -107,7 +107,6 @@ describe 'zabbix::proxy' do
 
           it { is_expected.to contain_class('zabbix::resources::proxy') }
           it { is_expected.to contain_zabbix__userparameters('Zabbix_Proxy') }
-          it { is_expected.to contain_zabbix__resources__userparameters('foo_Zabbix_Proxy') }
         end
 
         context 'with zabbix::database::postgresql class' do
