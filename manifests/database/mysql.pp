@@ -81,8 +81,6 @@ class zabbix::database::mysql (
         path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
         unless   => 'test -f /etc/zabbix/.schema.done',
         provider => 'shell',
-        require  => Package['zabbix-proxy-mysql'],
-        notify   => Service['zabbix-proxy'],
       }
     }
     'server' : {
