@@ -258,6 +258,8 @@ class zabbix::agent (
   String $agent_config_owner              = $zabbix::params::agent_config_owner,
   String $agent_config_group              = $zabbix::params::agent_config_group,
   Boolean $manage_selinux                 = $zabbix::params::manage_selinux,
+  Array[String] $selinux_require          = $zabbix::params::selinux_require,
+  Hash[String, Array] $selinux_rules      = $zabbix::params::selinux_rules,
   String $additional_service_params       = $zabbix::params::additional_service_params,
   String $service_type                    = $zabbix::params::service_type,
 ) inherits zabbix::params {
@@ -415,7 +417,7 @@ class zabbix::agent (
   if $facts['selinux'] == true and $manage_selinux {
     selinux::module{'zabbix-agent':
       ensure    => 'present',
-      source_te => 'puppet:///modules/zabbix/zabbix-agent.te',
+      content_te => template('zabbix/selinux/zabbix-agent.te.erb'),
       before    => Service['zabbix-agent'],
     }
   }
