@@ -602,6 +602,7 @@ Many thanks for this!
 On systems with SE Linux active and enforcing, Zabbix agent will be limited unless given proper rights with an SE Linux module.
 This Puppet module will apply some default SE Linux rules for it.
 More can be provided if needed by using two class parameters, for example in Hiera YAML:
+
 ```yaml
 zabbix::agent::selinux_require:
   - 'type zabbix_agent_t'
