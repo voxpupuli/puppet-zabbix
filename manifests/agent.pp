@@ -416,9 +416,9 @@ class zabbix::agent (
   # https://support.zabbix.com/browse/ZBX-11631
   if $facts['selinux'] == true and $manage_selinux {
     selinux::module{'zabbix-agent':
-      ensure    => 'present',
+      ensure     => 'present',
       content_te => template('zabbix/selinux/zabbix-agent.te.erb'),
-      before    => Service['zabbix-agent'],
+      before     => Service['zabbix-agent'],
     }
   }
 }
