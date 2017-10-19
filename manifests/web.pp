@@ -267,7 +267,7 @@ class zabbix::web (
         $zabbixapi_version = '2.4.4'
       }
       default : {
-        $zabbixapi_version = '2.4.7'
+        $zabbixapi_version = '3.2.1'
       }
     }
 
