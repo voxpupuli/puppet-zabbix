@@ -122,8 +122,8 @@ class zabbix::repo (
             ,
           }
         }
-        Apt::Source['zabbix'] -> Package<|tag == 'zabbix'|>
-        Class['Apt::Update']  -> Package<|tag == 'zabbix'|>
+        Apt::Source['zabbix'] -> Package<|tag == 'zabbix_package'|>
+        Exec['apt_update']  -> Package<|tag == 'zabbix_package'|>
       }
       default  : {
         fail("Managing a repo on ${::osfamily} is currently not implemented")

@@ -74,7 +74,7 @@ class zabbix::javagateway(
   package { 'zabbix-java-gateway':
     ensure  => $zabbix_package_state,
     require => Class['zabbix::repo'],
-    tag     => 'zabbix',
+    tag     => 'zabbix_package',
   }
 
   # Configuring the zabbix-javagateway configuration file

@@ -339,7 +339,7 @@ class zabbix::agent (
   package { $zabbix_package_agent:
     ensure  => $zabbix_package_state,
     require => Class['zabbix::repo'],
-    tag     => 'zabbix',
+    tag     => 'zabbix_package',
   }
 
   # Ensure that the correct config file is used.
