@@ -37,7 +37,7 @@ describe 'zabbix::agent' do
           is_expected.to contain_package(package).with(
             ensure:   'present',
             require:  'Class[Zabbix::Repo]',
-            tag:      'zabbix'
+            tag:      'zabbix_package'
           )
         end
 
