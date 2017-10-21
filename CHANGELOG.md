@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v5.0.1](https://github.com/voxpupuli/puppet-zabbix/tree/v5.0.1) (2017-10-21)
+[Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v5.0.0...v5.0.1)
+
+**Fixed bugs:**
+
+- add selinux workaround for IPC in zabbix-server3.4 [\#459](https://github.com/voxpupuli/puppet-zabbix/pull/459) ([bastelfreak](https://github.com/bastelfreak))
+- Remove updateExisting from applications in zabbix template provider. [\#450](https://github.com/voxpupuli/puppet-zabbix/pull/450) ([breaker1](https://github.com/breaker1))
+- Add missing proxy\_mode variable to zabbix\_proxy provider [\#447](https://github.com/voxpupuli/puppet-zabbix/pull/447) ([breaker1](https://github.com/breaker1))
+
+**Closed issues:**
+
+- Zabbix API errors when adding Templates in Zabbix 3.4 v2 [\#449](https://github.com/voxpupuli/puppet-zabbix/issues/449)
+- Zabbix API errors when adding Templates in Zabbix 3.4 [\#446](https://github.com/voxpupuli/puppet-zabbix/issues/446)
+- SenderFrequency parameter is deprecated in Zabbix 3.4 [\#437](https://github.com/voxpupuli/puppet-zabbix/issues/437)
+
+**Merged pull requests:**
+
+- Changed image to images in template provider. [\#448](https://github.com/voxpupuli/puppet-zabbix/pull/448) ([breaker1](https://github.com/breaker1))
+
 ## [v5.0.0](https://github.com/voxpupuli/puppet-zabbix/tree/v5.0.0) (2017-09-17)
 [Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v4.1.3...v5.0.0)
 
@@ -18,6 +37,10 @@ These should not affect the functionality of the module.
 - override database\_schema\_path for AWS ami instance [\#428](https://github.com/voxpupuli/puppet-zabbix/issues/428)
 - Syntax Error at line 82 in file init.pp [\#423](https://github.com/voxpupuli/puppet-zabbix/issues/423)
 - pg\_hba problems in zabbix::database [\#411](https://github.com/voxpupuli/puppet-zabbix/issues/411)
+
+**Merged pull requests:**
+
+- release 5.0.0 [\#444](https://github.com/voxpupuli/puppet-zabbix/pull/444) ([bastelfreak](https://github.com/bastelfreak))
 
 ## [v4.1.3](https://github.com/voxpupuli/puppet-zabbix/tree/v4.1.3) (2017-06-26)
 [Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v4.1.2...v4.1.3)
