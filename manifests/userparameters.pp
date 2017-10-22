@@ -28,6 +28,9 @@
 #   When 'script' is used, this parameter can provide the directly where this script needs to
 #   be placed. Default: '/usr/bin'
 #
+# [*mode*]
+#   Change the file mode if needed. Default: 644 or 755 for scripts
+#
 # === Example
 #
 #  zabbix::userparameters { 'mysql':
@@ -59,6 +62,7 @@ define zabbix::userparameters (
   $script_ext = '',
   $template   = '',
   $script_dir = '/usr/bin',
+  $mode       = '0644',
 ) {
   $include_dir          = getvar('::zabbix::agent::include_dir')
   $zabbix_package_agent = getvar('::zabbix::agent::zabbix_package_agent')
@@ -70,7 +74,7 @@ define zabbix::userparameters (
       ensure  => present,
       owner   => $agent_config_owner,
       group   => $agent_config_group,
-      mode    => '0644',
+      mode    => $mode,
       source  => $source,
       notify  => Service['zabbix-agent'],
       require => Package[$zabbix_package_agent],
@@ -82,7 +86,7 @@ define zabbix::userparameters (
       ensure  => present,
       owner   => $agent_config_owner,
       group   => $agent_config_group,
-      mode    => '0644',
+      mode    => $mode,
       content => $content,
       notify  => Service['zabbix-agent'],
       require => Package[$zabbix_package_agent],
@@ -90,11 +94,18 @@ define zabbix::userparameters (
   }
 
   if $script != '' {
+
+    if $mode == '0644' {
+        $exec_mode = '0755'
+    } else {
+        $exec_mode = $mode
+    }
+
     file { "${script_dir}/${name}${script_ext}":
       ensure  => present,
       owner   => $agent_config_owner,
       group   => $agent_config_group,
-      mode    => '0755',
+      mode    => $mode,
       source  => $script,
       notify  => Service['zabbix-agent'],
       require => Package[$zabbix_package_agent],
