@@ -116,7 +116,7 @@ class zabbix::repo (
             repos    => 'main',
             release  => $releasename,
             key      => {
-              'id'     => 'FBABD5FB20255ECAB22EE194D13D58E479EA5ED4',
+              'id'     => 'A1848F5352D022B9471D83D0082AB56BA14FE591',
               'source' => 'https://repo.zabbix.com/zabbix-official-repo.key',
             }
             ,
