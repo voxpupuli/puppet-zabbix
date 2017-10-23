@@ -597,8 +597,23 @@ Many thanks for this!
 ### Standard usage
 *	Not specified as required but for working correctly, the epel repository should be available for the 'fping'|'fping6' packages.
 *	Make sure you have sudo installed and configured with: !requiretty.
-*   Make sure that selinux is permissive or disabled.
 
+### SE Linux
+
+On systems with SE Linux active and enforcing, Zabbix agent will be limited unless given proper rights with an SE Linux module.
+This Puppet module will apply some default SE Linux rules for it.
+More can be provided if needed by using two class parameters, for example in Hiera YAML:
+
+```yaml
+zabbix::agent::selinux_require:
+  - 'type zabbix_agent_t'
+  - 'class process setrlimit'
+zabbix::agent::selinux_rules:
+  zabbix_agent_t:
+    - 'allow zabbix_agent_t self:process setrlimit'
+  zabbix_script_t:
+    - 'allow zabbix_script_t zabbix_agent_t:process sigchld'
+```
 
 ### When using exported resources
 

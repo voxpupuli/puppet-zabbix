@@ -335,7 +335,11 @@ class zabbix::params {
   $javagateway_pidfile                      = '/var/run/zabbix/zabbix_java.pid'
   $javagateway_startpollers                 = '5'
   $javagateway_timeout                      = '3'
+
+  # SE Linux specific params
   $manage_selinux                           = $facts['selinux']
+  $selinux_require                          = ['type zabbix_agent_t', 'class process setrlimit', 'class unix_dgram_socket create']
+  $selinux_rules                            = { 'zabbix_agent_t' => ['allow zabbix_agent_t self:process setrlimit', 'allow zabbix_agent_t self:unix_dgram_socket create']}
 
   # services should run foreground and as simple type
   # but this only works in 3.0 and newer
