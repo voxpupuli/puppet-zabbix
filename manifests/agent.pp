@@ -235,7 +235,7 @@ class zabbix::agent (
   $buffersend                             = $zabbix::params::agent_buffersend,
   $buffersize                             = $zabbix::params::agent_buffersize,
   $maxlinespersecond                      = $zabbix::params::agent_maxlinespersecond,
-  $zabbix_alias                           = $zabbix::params::agent_zabbix_alias,
+  Optional[Array] $zabbix_alias           = $zabbix::params::agent_zabbix_alias,
   $timeout                                = $zabbix::params::agent_timeout,
   $allowroot                              = $zabbix::params::agent_allowroot,
   $zabbix_user                            = $zabbix::params::agent_zabbix_user,
