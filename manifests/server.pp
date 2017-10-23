@@ -566,5 +566,14 @@ class zabbix::server (
       source_te => 'puppet:///modules/zabbix/zabbix-server.te',
       before    => $dependency,
     }
+    # zabbix-server 3.4 introduced IPC via a socket in /tmp
+    # https://support.zabbix.com/browse/ZBX-12567
+    if versioncmp($zabbix_version, '3.3') > 1  {
+      selinux::module{'zabbix-server-ipc':
+        ensure    => 'present',
+        source_te => 'puppet:///modules/zabbix/zabbix-server-ips.te',
+        before    => $dependency,
+      }
+    }
   }
 }

@@ -10,6 +10,10 @@ Puppet::Type.type(:zabbix_proxy).provide(:ruby, parent: Puppet::Provider::Zabbix
     # Set some vars
     host = @resource[:hostname]
     ipaddress = @resource[:ipaddress]
+
+    # Normally 0 is active and 1 is passive, in the API, its 5 and 6
+    proxy_mode = @resource[:mode] + 5
+
     use_ip = @resource[:use_ip]
     port = @resource[:port]
     templates = @resource[:templates]
