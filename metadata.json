@@ -71,8 +71,8 @@
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "6.0",
-        "7.0"
+        "6",
+        "7"
       ]
     },
     {
@@ -92,22 +92,22 @@
     {
       "operatingsystem": "Scientific",
       "operatingsystemrelease": [
-        "6.0",
-        "7.0"
+        "6",
+        "7"
       ]
     },
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
-        "6.0",
-        "7.0"
+        "6",
+        "7"
       ]
     },
     {
       "operatingsystem": "CloudLinux",
       "operatingsystemrelease": [
-        "6.0",
-        "7.0"
+        "6",
+        "7"
       ]
     },
     {
@@ -126,8 +126,8 @@
     {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
-        "7.0",
-        "8.0"
+        "7",
+        "8"
       ]
     },
     {
