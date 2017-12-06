@@ -293,6 +293,8 @@ describe 'zabbix::server' do
         it { is_expected.not_to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeID=0$} }
         it { is_expected.not_to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeNoEvents=0} }
         it { is_expected.not_to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeNoHistory=0} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SSLCertLocation=/usr/lib/zabbix/ssl/certs} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SSLKeyLocation=/usr/lib/zabbix/ssl/keys} }
       end
 
       context 'with zabbix_server.conf and version 3.0' do
@@ -310,6 +312,8 @@ describe 'zabbix::server' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCRLFile=/etc/zabbix/keys/zabbix-server.crl$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCertFile=/etc/zabbix/keys/zabbix-server.crt$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSKeyFile=/etc/zabbix/keys/zabbix-server.key$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SSLCertLocation=/usr/lib/zabbix/ssl/certs} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SSLKeyLocation=/usr/lib/zabbix/ssl/keys} }
       end
       context 'with zabbix_server.conf and version 3.2' do
         let :params do
