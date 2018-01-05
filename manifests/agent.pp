@@ -302,7 +302,7 @@ class zabbix::agent (
       $listen_ip = $::ipaddress
     }
   } else {
-    notify { 'listenip is undef and will not be written to the configuration file' : }
+    # leave ipaddress blank because it's undef
   }
 
   # So if manage_resources is set to true, we can send some data
