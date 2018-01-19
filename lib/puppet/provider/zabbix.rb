@@ -11,7 +11,9 @@ class Puppet::Provider::Zabbix < Puppet::Provider
     zbx = ZabbixApi.connect(
       url: "#{protocol}://#{zabbix_url}/api_jsonrpc.php",
       user: zabbix_user,
-      password: zabbix_pass
+      password: zabbix_pass,
+      http_user: zabbix_user,
+      http_password: zabbix_pass
     )
     zbx
   end
