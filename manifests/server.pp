@@ -125,6 +125,9 @@
 # [*vmwarecachesize*]
 #   Size of vmware cache, in bytes.
 #
+# [*vmwaretimeout*]
+#   The maximum number of seconds vmware collector will wait for a response from VMware service.
+#
 # [*snmptrapperfile*]
 #   Temporary file used for passing data from snmp trap daemon to the server.
 #
@@ -330,6 +333,7 @@ class zabbix::server (
   $startvmwarecollectors            = $zabbix::params::server_startvmwarecollectors,
   $vmwarefrequency                  = $zabbix::params::server_vmwarefrequency,
   $vmwarecachesize                  = $zabbix::params::server_vmwarecachesize,
+  $vmwaretimeout                    = $zabbix::params::server_vmwaretimeout,
   $snmptrapperfile                  = $zabbix::params::server_snmptrapperfile,
   $startsnmptrapper                 = $zabbix::params::server_startsnmptrapper,
   $listenip                         = $zabbix::params::server_listenip,
