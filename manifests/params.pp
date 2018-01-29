@@ -196,6 +196,7 @@ class zabbix::params {
   $server_valuecachesize                    = '8M'
   $server_vmwarecachesize                   = '8M'
   $server_vmwarefrequency                   = '60'
+  $server_vmwaretimeout                     = undef
 
   # Agent specific params
   $agent_allowroot                          = '0'
