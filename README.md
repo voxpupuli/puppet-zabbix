@@ -170,9 +170,9 @@ Everything will be installed on the same server. There is also an possibility to
 https://github.com/voxpupuli/puppet-zabbix/wiki/Multi-node-Zabbix-Server-setup
 
 Please note that if you use apache as the frontend (which is the default) and SELinux is enabled, you need to set these SEBooleans (preferably in a profile) to allow apache to connect to the database:
-```ruby
+```puppet
 if $facts['selinux'] {
-  selboolean { ['httpd_can_network_connect', 'httpd_can_network_connect_db']
+  selboolean { ['httpd_can_network_connect', 'httpd_can_network_connect_db']:
     persistent => true,
     value      => 'on',
   }
