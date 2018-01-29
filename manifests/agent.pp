@@ -85,8 +85,7 @@
 #   listenip => 'eth0',  or
 #   listenip => 'bond0.73',
 #
-#   It will find out which ip is configured for this ipaddress. Can be handy
-#   if more than 1 interface is on the server.
+#   If left blank, ListenIP will not be in the configuration file and and the agent will pick.
 #
 # [*startagents*]
 #   Number of pre-forked instances of zabbix_agentd that process passive checks.
@@ -303,7 +302,7 @@ class zabbix::agent (
       $listen_ip = $::ipaddress
     }
   } else {
-    $listen_ip = $::ipaddress
+    # leave ipaddress blank because it's undef
   }
 
   # So if manage_resources is set to true, we can send some data
