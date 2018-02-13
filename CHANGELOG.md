@@ -4,6 +4,30 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v6.2.0](https://github.com/voxpupuli/puppet-zabbix/tree/v6.2.0) (2018-02-13)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v6.1.0...v6.2.0)
+
+**Implemented enhancements:**
+
+- add vmwaretimeout as possible server-param [\#482](https://github.com/voxpupuli/puppet-zabbix/pull/482) ([b014651](https://github.com/b014651))
+- \#476 Pass credentials for HTTP auth [\#479](https://github.com/voxpupuli/puppet-zabbix/pull/479) ([tux-o-matic](https://github.com/tux-o-matic))
+
+**Fixed bugs:**
+
+- Dependencies need update [\#453](https://github.com/voxpupuli/puppet-zabbix/issues/453)
+- Fixed versioncmp compare and fixed typo in file zabbix-server-ips.te [\#480](https://github.com/voxpupuli/puppet-zabbix/pull/480) ([Fabian1976](https://github.com/Fabian1976))
+
+**Closed issues:**
+
+- stard "firewalld" [\#478](https://github.com/voxpupuli/puppet-zabbix/issues/478)
+- Support HTTP auth for API calls [\#476](https://github.com/voxpupuli/puppet-zabbix/issues/476)
+
+**Merged pull requests:**
+
+- Update module dependencies [\#485](https://github.com/voxpupuli/puppet-zabbix/pull/485) ([alexjfisher](https://github.com/alexjfisher))
+- Document needed sebooleans for httpd/zabbix-web [\#481](https://github.com/voxpupuli/puppet-zabbix/pull/481) ([Fabian1976](https://github.com/Fabian1976))
+
 ## [v6.1.0](https://github.com/voxpupuli/puppet-zabbix/tree/v6.1.0) (2017-12-18)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v6.0.0...v6.1.0)
@@ -457,8 +481,8 @@ These should not affect the functionality of the module.
 **Merged pull requests:**
 
 - Type to manage zabbix application [\#155](https://github.com/voxpupuli/puppet-zabbix/pull/155) ([hkumarmk](https://github.com/hkumarmk))
-- Fixed previous error in merge [\#152](https://github.com/voxpupuli/puppet-zabbix/pull/152) ([elricsfate](https://github.com/elricsfate))
-- Added support for adding LDAP certificate location to Zabbix Web. Upd… [\#150](https://github.com/voxpupuli/puppet-zabbix/pull/150) ([elricsfate](https://github.com/elricsfate))
+- Fixed previous error in merge [\#152](https://github.com/voxpupuli/puppet-zabbix/pull/152) ([rtizzy](https://github.com/rtizzy))
+- Added support for adding LDAP certificate location to Zabbix Web. Upd… [\#150](https://github.com/voxpupuli/puppet-zabbix/pull/150) ([rtizzy](https://github.com/rtizzy))
 - Allow agent\_serveractive value to be blank [\#147](https://github.com/voxpupuli/puppet-zabbix/pull/147) ([ericsysmin](https://github.com/ericsysmin))
 - allow serveractive to be optional [\#146](https://github.com/voxpupuli/puppet-zabbix/pull/146) ([ericsysmin](https://github.com/ericsysmin))
 - fixed typo for comment mysql [\#145](https://github.com/voxpupuli/puppet-zabbix/pull/145) ([ghost](https://github.com/ghost))
@@ -540,7 +564,7 @@ These should not affect the functionality of the module.
 - merge of hiera hashes from entire hierarchy [\#98](https://github.com/voxpupuli/puppet-zabbix/pull/98) ([szemlyanoy](https://github.com/szemlyanoy))
 - Added support to Amazon Linux with epel 6. [\#96](https://github.com/voxpupuli/puppet-zabbix/pull/96) ([Wprosdocimo](https://github.com/Wprosdocimo))
 - import templates and create hostgroup if missing [\#95](https://github.com/voxpupuli/puppet-zabbix/pull/95) ([1n](https://github.com/1n))
-- Added Support For Zapache monitoring script [\#94](https://github.com/voxpupuli/puppet-zabbix/pull/94) ([elricsfate](https://github.com/elricsfate))
+- Added Support For Zapache monitoring script [\#94](https://github.com/voxpupuli/puppet-zabbix/pull/94) ([rtizzy](https://github.com/rtizzy))
 
 ## [1.4.0](https://github.com/voxpupuli/puppet-zabbix/tree/1.4.0) (2015-05-18)
 
@@ -583,7 +607,7 @@ These should not affect the functionality of the module.
 **Merged pull requests:**
 
 - better default parameter for userparameter [\#73](https://github.com/voxpupuli/puppet-zabbix/pull/73) ([sbaryakov](https://github.com/sbaryakov))
-- Fixed small error regarding manage\_resources and it's usage with classes [\#71](https://github.com/voxpupuli/puppet-zabbix/pull/71) ([elricsfate](https://github.com/elricsfate))
+- Fixed small error regarding manage\_resources and it's usage with classes [\#71](https://github.com/voxpupuli/puppet-zabbix/pull/71) ([rtizzy](https://github.com/rtizzy))
 - bugfix for vhosts in apache 2.4 [\#67](https://github.com/voxpupuli/puppet-zabbix/pull/67) ([ju5t](https://github.com/ju5t))
 - Update apt key to full 40characters [\#66](https://github.com/voxpupuli/puppet-zabbix/pull/66) ([exptom](https://github.com/exptom))
 - rename ListenIp =\> ListenIP [\#65](https://github.com/voxpupuli/puppet-zabbix/pull/65) ([sbaryakov](https://github.com/sbaryakov))
