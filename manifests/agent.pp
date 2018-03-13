@@ -303,7 +303,7 @@ class zabbix::agent (
       $listen_ip = $::ipaddress
     }
   } else {
-    $listen_ip = $::ipaddress
+    $listen_ip = undef
   }
 
   # So if manage_resources is set to true, we can send some data
