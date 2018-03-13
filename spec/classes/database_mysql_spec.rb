@@ -17,7 +17,7 @@ describe 'zabbix::database::mysql' do
 
       context 'with all defaults' do
         it 'fails' do
-          is_expected.to raise_error(Puppet::Error, %r{We do not work.})
+          is_expected.not_to compile.with_all_deps
         end
       end
       path2 = if facts[:osfamily] == 'RedHat'
