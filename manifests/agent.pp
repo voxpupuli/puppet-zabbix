@@ -295,9 +295,9 @@ class zabbix::agent (
   # can find the ipaddress of this specific interface if listenip
   # is set to for example "eth1" or "bond0.73".
   $listen_ip = $listenip ? {
-    /^(eth|lo|bond|lxc|eno|tap|tun|virbr).*/ => fact("networking.interfaces.${listen_ip}.ip"), # the stdlib fact function still returns undef if the fact can't be found.  This keeps the behaviour similar to how getvar would have worked, but now we use the modern networking fact instead of the legacy ipaddress_INTERFACE one
+    /^(eth|lo|bond|lxc|eno|tap|tun|virbr).*/ => fact("networking.interfaces.${listen_ip}.ip"),
     '*' => undef,
-    default => $listenip, # I think this is then right for all other possibilities (an ip address, or undef)
+    default => $listenip,
   }
 
   # So if manage_resources is set to true, we can send some data

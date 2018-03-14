@@ -235,27 +235,13 @@ describe 'zabbix::agent' do
       end
 
       context 'without ListenIP' do
-        package = 'zabbix-agent'
-        # Make sure package will be installed, service running and ensure of directory.
-        it do
-          is_expected.to contain_package(package).with(
-            ensure:   'present',
-            require:  'Class[Zabbix::Repo]',
-            tag:      'zabbix'
-          )
+        let :params do
+          {
+            listenip: '*'
+          }
         end
 
-        it do
-          is_expected.to contain_service('zabbix-agent').with(
-            ensure:     'running',
-            enable:     true,
-            hasstatus:  true,
-            hasrestart: true,
-            require:    "Package[#{package}]"
-          )
-        end
-
-        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').without_content %r{^ListenIP=127.0.0.1$} }
+        it { is_expected.to contain_file(config_path).without_content %r{^ListenIP=} }
       end
     end
   end
