@@ -294,16 +294,10 @@ class zabbix::agent (
   # to network name. If more than 1 interfaces are available, we
   # can find the ipaddress of this specific interface if listenip
   # is set to for example "eth1" or "bond0.73".
-  if ($listenip != undef) {
-    if ($listenip =~ /^(eth|lo|bond|lxc|eno|tap|tun|virbr).*/) {
-      $listen_ip = getvar("::ipaddress_${listenip}")
-    } elsif is_ip_address($listenip) or $listenip == '*' {
-      $listen_ip = $listenip
-    } else {
-      $listen_ip = $::ipaddress
-    }
-  } else {
-    $listen_ip = $::ipaddress
+  $listen_ip = $listenip ? {
+    /^(eth|lo|bond|lxc|eno|tap|tun|virbr).*/ => fact("networking.interfaces.${listen_ip}.ip"),
+    '*' => undef,
+    default => $listenip,
   }
 
   # So if manage_resources is set to true, we can send some data

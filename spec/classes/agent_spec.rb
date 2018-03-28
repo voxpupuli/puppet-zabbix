@@ -177,6 +177,7 @@ describe 'zabbix::agent' do
             hostname: '10050',
             include_dir: '/etc/zabbix/zabbix_agentd.d',
             listenport: '10050',
+            listenip: '127.0.0.1',
             loadmodulepath: '${libdir}/modules',
             logfilesize: '4',
             logfile: '/var/log/zabbix/zabbix_agentd.log',
@@ -209,6 +210,7 @@ describe 'zabbix::agent' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^Hostname=10050$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^Include=/etc/zabbix/zabbix_agentd.d$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^ListenPort=10050$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^ListenIP=127.0.0.1$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LoadModulePath=\$\{libdir\}/modules$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LogFileSize=4$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LogFile=/var/log/zabbix/zabbix_agentd.log$} }
@@ -230,6 +232,16 @@ describe 'zabbix::agent' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSKeyFile=/etc/zabbix/keys/tls.key$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSPSKIdentity=/etc/zabbix/keys/tlspskidentity.id$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSPSKFile=/etc/zabbix/keys/tlspskfile.key$} }
+      end
+
+      context 'without ListenIP' do
+        let :params do
+          {
+            listenip: '*'
+          }
+        end
+
+        it { is_expected.to contain_file(config_path).without_content %r{^ListenIP=} }
       end
     end
   end
