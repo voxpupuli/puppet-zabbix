@@ -295,7 +295,7 @@ class zabbix::agent (
   # can find the ipaddress of this specific interface if listenip
   # is set to for example "eth1" or "bond0.73".
   $listen_ip = $listenip ? {
-    /^(eth|lo|bond|lxc|eno|tap|tun|virbr).*/ => fact("networking.interfaces.${listen_ip}.ip"),
+    /^(e|lo|bond|lxc|tap|tun|virbr).*/ => fact("networking.interfaces.${listenip}.ip"),
     '*' => undef,
     default => $listenip,
   }
