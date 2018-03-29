@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v6.3.1](https://github.com/voxpupuli/puppet-zabbix/tree/v6.3.1) (2018-03-29)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v6.3.0...v6.3.1)
+
+**Fixed bugs:**
+
+- listenip in agent not resolving to IP address from network interface name [\#493](https://github.com/voxpupuli/puppet-zabbix/issues/493)
+- Fix listen\_ip bug and relax interface regex [\#494](https://github.com/voxpupuli/puppet-zabbix/pull/494) ([bastelfreak](https://github.com/bastelfreak))
+
 ## [v6.3.0](https://github.com/voxpupuli/puppet-zabbix/tree/v6.3.0) (2018-03-28)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v6.2.0...v6.3.0)
