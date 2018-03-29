@@ -30,6 +30,47 @@ require 'spec_helper_acceptance'
         it { is_expected.to be_running }
         it { is_expected.to be_enabled }
       end
+
+      describe file('/etc/zabbix/zabbix_agentd.conf') do
+        its(:content) { is_expected.not_to match %r{ListenIP=} }
+      end
+    end
+  end
+end
+
+describe 'zabbix::agent class' do
+  context 'With ListenIP set to an IP-Address' do
+    it 'works idempotently with no errors' do
+      pp = <<-EOS
+      class { 'zabbix::agent':
+        server               => '192.168.20.11',
+        zabbix_package_state => 'latest',
+        listenip             => '127.0.0.1',
+        zabbix_version       => '3.4'
+      }
+      EOS
+      apply_manifest(pp, catch_failures: true)
+      apply_manifest(pp, catch_changes: true)
+    end
+    describe file('/etc/zabbix/zabbix_agentd.conf') do
+      its(:content) { is_expected.to match %r{ListenIP=127.0.0.1} }
+    end
+  end
+  context 'With ListenIP set to lo' do
+    it 'works idempotently with no errors' do
+      pp = <<-EOS
+      class { 'zabbix::agent':
+        server               => '192.168.20.11',
+        zabbix_package_state => 'latest',
+        listenip             => 'lo',
+        zabbix_version       => '3.4'
+      }
+      EOS
+      apply_manifest(pp, catch_failures: true)
+      apply_manifest(pp, catch_changes: true)
+    end
+    describe file('/etc/zabbix/zabbix_agentd.conf') do
+      its(:content) { is_expected.to match %r{ListenIP=127.0.0.1} }
     end
   end
 end
