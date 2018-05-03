@@ -6,6 +6,10 @@ After=mysqld.service
 <% elsif @database_type == "postgresql" and @manage_database %>
 After=postgresql.service
 <% end -%>
+# Wait for network-online and not just network:
+# - Required in case of a remote database.
+# - Avoids missing data at boot on all network-based checks.
+After=network-online.target
 
 [Service]
 ExecStart=/usr/sbin/zabbix_server <%= @additional_service_params %> -c <%= @server_configfile_path %>
