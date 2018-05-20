@@ -126,7 +126,6 @@
     {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
-        "7.0",
         "8.0"
       ]
     },
@@ -140,12 +139,6 @@
       "operatingsystem": "PCS",
       "operatingsystemrelease": [
         "6.0"
-      ]
-    },
-    {
-      "operatingsystem": "Fedora",
-      "operatingsystemrelease": [
-        "24"
       ]
     },
     {
