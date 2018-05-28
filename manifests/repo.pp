@@ -60,8 +60,8 @@ class zabbix::repo (
         }
 
         yumrepo { 'zabbix':
-          name     => "Zabbix_${majorrelease}_${::architecture}",
-          descr    => "Zabbix_${majorrelease}_${::architecture}",
+          name     => "Zabbix_${majorrelease}_${facts['os']['architecture']}",
+          descr    => "Zabbix_${majorrelease}_${facts['os']['architecture']}",
           baseurl  => "https://repo.zabbix.com/zabbix/${zabbix_version}/rhel/${majorrelease}/\$basearch/",
           gpgcheck => '1',
           gpgkey   => $gpgkey_zabbix,
@@ -69,8 +69,8 @@ class zabbix::repo (
         }
 
         yumrepo { 'zabbix-nonsupported':
-          name     => "Zabbix_nonsupported_${majorrelease}_${::architecture}",
-          descr    => "Zabbix_nonsupported_${majorrelease}_${::architecture}",
+          name     => "Zabbix_nonsupported_${majorrelease}_${facts['os']['architecture']}",
+          descr    => "Zabbix_nonsupported_${majorrelease}_${facts['os']['architecture']}",
           baseurl  => "https://repo.zabbix.com/non-supported/rhel/${majorrelease}/\$basearch/",
           gpgcheck => '1',
           gpgkey   => $gpgkey_nonsupported,
@@ -87,7 +87,7 @@ class zabbix::repo (
           include ::apt
         }
 
-        if ($::architecture == 'armv6l') {
+        if ($facts['os']['architecture'] == 'armv6l') {
           apt::source { 'zabbix':
             location => 'http://naizvoru.com/raspbian/zabbix',
             repos    => 'main',
