@@ -513,7 +513,7 @@ class zabbix::proxy (
   }
 
   # Now we are going to install the correct packages.
-  case $::operatingsystem {
+  case $facts['os']['name'] {
     'redhat', 'centos', 'oraclelinux' : {
       #There is no zabbix-proxy package in 3.0
       if versioncmp('3.0',$zabbix_version) > 0 {
@@ -537,7 +537,7 @@ class zabbix::proxy (
         tag    => 'zabbix',
       }
     } # END default
-  } # END case $::operatingsystem
+  } # END case $facts['os']['name']
 
   # Controlling the 'zabbix-proxy' service
   if $manage_service {
@@ -548,13 +548,13 @@ class zabbix::proxy (
       enable     => true,
       subscribe  => [
         File[$proxy_configfile_path],
-        Class['::zabbix::database']
+        Class['zabbix::database']
         ],
       require    => [
         Package["zabbix-proxy-${db}"],
         File[$include_dir],
         File[$proxy_configfile_path],
-        Class['::zabbix::database']
+        Class['zabbix::database']
         ],
     }
   }
@@ -571,7 +571,7 @@ class zabbix::proxy (
   # if we want to manage the databases, we do
   # some stuff. (for maintaining database only.)
   if $manage_database  {
-      class { '::zabbix::database':
+      class { 'zabbix::database':
         database_type     => $database_type,
         zabbix_type       => 'proxy',
         database_name     => $database_name,

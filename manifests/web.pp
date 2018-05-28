@@ -236,7 +236,7 @@ class zabbix::web (
 
   # Only include the repo class if it has not yet been included
   unless defined(Class['Zabbix::Repo']) {
-    class { '::zabbix::repo':
+    class { 'zabbix::repo':
       manage_repo    => $manage_repo,
       zabbix_version => $zabbix_version,
     }
@@ -291,7 +291,7 @@ class zabbix::web (
       provider => $puppetgem,
       require  => Class['ruby::dev'],
     }
-    -> class { '::zabbix::resources::web':
+    -> class { 'zabbix::resources::web':
       zabbix_url     => $zabbix_url,
       zabbix_user    => $zabbix_api_user,
       zabbix_pass    => $zabbix_api_pass,
@@ -299,21 +299,14 @@ class zabbix::web (
     }
   }
 
-  case $::operatingsystem {
+  case $facts['os']['name'] {
     'ubuntu', 'debian' : {
-      case $::operatingsystemmajrelease {
-        '8' : {
-          $zabbix_web_package = 'zabbix-frontend-php'
-        }
-        default : {
-          $zabbix_web_package = 'zabbix-frontend-php'
-        }
-      }
+      $zabbix_web_package = 'zabbix-frontend-php'
 
       # Check OS release for proper prefix
-      case $::operatingsystem {
+      case $facts['os']['name'] {
         'Ubuntu' : {
-          if versioncmp($::operatingsystemmajrelease, '16.04') >= 0 {
+          if versioncmp($facts['os']['release']['major'], '16.04') >= 0 {
             $php_db_package = "php-${db}"
           }
           else {
@@ -321,7 +314,7 @@ class zabbix::web (
           }
         }
         'Debian' : {
-          if versioncmp($::operatingsystemmajrelease, '9') >= 0 {
+          if versioncmp($facts['os']['release']['major'], '9') >= 0 {
             $php_db_package = "php-${db}"
           }
           else {
@@ -351,7 +344,7 @@ class zabbix::web (
         tag     => 'zabbix',
       }
     }
-  } # END case $::operatingsystem
+  } # END case $facts['os']['name']
 
   file { '/etc/zabbix/web':
     ensure  => directory,
@@ -410,7 +403,7 @@ class zabbix::web (
     }
 
     # Check which version of Apache we're using
-    if versioncmp($::apache::apache_version, '2.4') >= 0 {
+    if versioncmp($apache::apache_version, '2.4') >= 0 {
       $directory_allow = { 'require' => 'all granted', }
       $directory_deny = { 'require' => 'all denied', }
     } else {

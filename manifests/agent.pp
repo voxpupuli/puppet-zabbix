@@ -311,8 +311,8 @@ class zabbix::agent (
       $use_proxy = ''
     }
 
-    class { '::zabbix::resources::agent':
-      hostname     => $::fqdn,
+    class { 'zabbix::resources::agent':
+      hostname     => $facts['fqdn'],
       ipaddress    => $listen_ip,
       use_ip       => $agent_use_ip,
       port         => $listenport,
@@ -325,7 +325,7 @@ class zabbix::agent (
 
   # Only include the repo class if it has not yet been included
   unless defined(Class['Zabbix::Repo']) {
-    class { '::zabbix::repo':
+    class { 'zabbix::repo':
       manage_repo    => $manage_repo,
       zabbix_version => $zabbix_version,
     }

@@ -273,7 +273,7 @@ class zabbix::params {
   $proxy_historycachesize                   = '8M'
   $proxy_historyindexcachesize              = undef
   $proxy_historytextcachesize               = '16M'
-  $proxy_hostname                           = $::fqdn
+  $proxy_hostname                           = $facts['fqdn']
   $proxy_housekeepingfrequency              = '1'
   $proxy_include                            = '/etc/zabbix/zabbix_proxy.conf.d'
   $proxy_javagateway                        = undef
@@ -354,21 +354,21 @@ class zabbix::params {
   }
   # Gem provider may vary based on version/type of puppet install.
   # This can be a little complicated and may need revisited over time.
-  if str2bool($::is_pe) {
-    if $::pe_version and versioncmp("${::pe_version}", '3.7.0') >= 0 { # lint:ignore:only_variable_string
+  if str2bool($facts['is_pe']) {
+    if $facts['pe_version'] and versioncmp($facts['pe_version'], '3.7.0') >= 0 { # lint:ignore:only_variable_string
       $puppetgem = 'pe_puppetserver_gem'
     } else {
       $puppetgem = 'pe_gem'
     }
   } else {
-    if $::puppetversion and versioncmp($::puppetversion, '4.0.0') >= 0 {
+    if $facts['puppetversion'] and versioncmp($facts['puppetversion'], '4.0.0') >= 0 {
       $puppetgem = 'puppet_gem'
     } else {
       $puppetgem = 'gem'
     }
   }
 
-  $default_web_config_owner = $::operatingsystem ? {
+  $default_web_config_owner = $facts['os']['name'] ? {
     /(Ubuntu|Debian)/ => 'www-data',
     default           => 'apache',
   }
