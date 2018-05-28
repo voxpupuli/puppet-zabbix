@@ -35,19 +35,15 @@ class zabbix::repo (
     case $facts['os']['name'] {
       'PSBM'        : {
         $majorrelease = '6'
-        $reponame     = $majorrelease
       }
       'Amazon'        : {
         $majorrelease = '6'
-        $reponame     = $majorrelease
       }
       'oraclelinux' : {
-        $majorrelease = $::operatingsystemmajrelease
-        $reponame     = $majorrelease
+        $majorrelease = $facts['os']['release']['major']
       }
       default       : {
-        $majorrelease = $::operatingsystemmajrelease
-        $reponame     = $::operatingsystemmajrelease
+        $majorrelease = $facts['os']['release']['major']
       }
     }
 
@@ -64,8 +60,8 @@ class zabbix::repo (
         }
 
         yumrepo { 'zabbix':
-          name     => "Zabbix_${reponame}_${::architecture}",
-          descr    => "Zabbix_${reponame}_${::architecture}",
+          name     => "Zabbix_${majorrelease}_${::architecture}",
+          descr    => "Zabbix_${majorrelease}_${::architecture}",
           baseurl  => "https://repo.zabbix.com/zabbix/${zabbix_version}/rhel/${majorrelease}/\$basearch/",
           gpgcheck => '1',
           gpgkey   => $gpgkey_zabbix,
@@ -73,8 +69,8 @@ class zabbix::repo (
         }
 
         yumrepo { 'zabbix-nonsupported':
-          name     => "Zabbix_nonsupported_${reponame}_${::architecture}",
-          descr    => "Zabbix_nonsupported_${reponame}_${::architecture}",
+          name     => "Zabbix_nonsupported_${majorrelease}_${::architecture}",
+          descr    => "Zabbix_nonsupported_${majorrelease}_${::architecture}",
           baseurl  => "https://repo.zabbix.com/non-supported/rhel/${majorrelease}/\$basearch/",
           gpgcheck => '1',
           gpgkey   => $gpgkey_nonsupported,
