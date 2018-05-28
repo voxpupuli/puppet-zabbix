@@ -47,9 +47,9 @@ define zabbix::startup (
     file { "/etc/init.d/${name}":
       ensure  => absent,
     }
-  } elsif $::osfamily in ['Debian', 'RedHat'] {
+  } elsif $facts['os']['family'] in ['Debian', 'RedHat'] {
     # Currently other osfamily without systemd is not supported
-    $osfamily_downcase = downcase($::osfamily)
+    $osfamily_downcase = downcase($facts['os']['family'])
     file { "/etc/init.d/${name}":
       ensure  => file,
       mode    => '0755',

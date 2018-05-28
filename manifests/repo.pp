@@ -129,7 +129,7 @@ class zabbix::repo (
         Class['Apt::Update']  -> Package<|tag == 'zabbix'|>
       }
       default  : {
-        fail("Managing a repo on ${::osfamily} is currently not implemented")
+        fail("Managing a repo on ${facts['os']['family']} is currently not implemented")
       }
     }
   } # end if ($manage_repo)

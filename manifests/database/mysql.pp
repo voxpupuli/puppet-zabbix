@@ -51,7 +51,7 @@ class zabbix::database::mysql (
     }
     default: {
       if ($database_schema_path == false) or ($database_schema_path == '') {
-        case $::osfamily {
+        case $facts['os']['family'] {
           'RedHat': {
             $schema_path   = "/usr/share/doc/zabbix-*-mysql-${zabbix_version}*/create"
           }
