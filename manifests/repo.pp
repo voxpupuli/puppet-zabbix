@@ -84,7 +84,7 @@ class zabbix::repo (
           # this requires the apt-transport-https package, but we don't want to manage
           # that package here. That should be handled in a profile :(
           # somebody should implement https here but make it optional
-          include ::apt
+          include apt
         }
 
         if ($facts['os']['architecture'] == 'armv6l') {

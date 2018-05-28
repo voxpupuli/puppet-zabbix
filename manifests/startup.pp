@@ -37,7 +37,7 @@ define zabbix::startup (
   }
   # provided by camp2camp/systemd
   if $facts['systemd'] {
-    contain ::systemd
+    contain systemd
     file { "/etc/systemd/system/${name}.service":
       ensure  => file,
       mode    => '0664',

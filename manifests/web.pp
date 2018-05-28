@@ -262,7 +262,7 @@ class zabbix::web (
   # is set to false, you'll get warnings like this:
   # "Warning: You cannot collect without storeconfigs being set"
   if $manage_resources {
-    include ::ruby::dev
+    include ruby::dev
 
     # Determine correct zabbixapi version.
     case $zabbix_version {
@@ -380,7 +380,7 @@ class zabbix::web (
 
   # Is set to true, it will create the apache vhost.
   if $manage_vhost {
-    include ::apache
+    include apache
     # Check if we use ssl. If so, we also create an non ssl
     # vhost for redirect traffic from non ssl to ssl site.
     if $apache_use_ssl {
