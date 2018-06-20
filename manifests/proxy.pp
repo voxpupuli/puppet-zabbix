@@ -555,6 +555,7 @@ class zabbix::proxy (
       ensure     => running,
       hasstatus  => true,
       hasrestart => true,
+      enable     => $enable,
       subscribe  => [
         File[$proxy_configfile_path],
         Class['::zabbix::database']

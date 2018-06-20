@@ -191,6 +191,7 @@ describe 'zabbix::proxy' do
           end
 
           it { is_expected.to contain_service('zabbix-proxy').with_ensure('running') }
+          it { is_expected.to contain_service('zabbix-proxy').with_enable('true') }
           it { is_expected.to contain_service('zabbix-proxy').with_require(['Package[zabbix-proxy-pgsql]', 'File[/etc/zabbix/zabbix_proxy.conf.d]', 'File[/etc/zabbix/zabbix_proxy.conf]', 'Class[Zabbix::Database]']) }
         end
 
