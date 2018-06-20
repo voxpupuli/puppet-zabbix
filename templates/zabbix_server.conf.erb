@@ -431,7 +431,7 @@ AllowRoot=<%= @allowroot %>
 #
 Include=<%= @include_dir %>
 
-<% if @zabbix_version == '2.4' %>
+<% if @zabbix_version.to_f >= 2.4 %>
 ### Option: SSLCertLocation
 #   Location of SSL client certificates.
 #   This parameter is used only in web monitoring.
