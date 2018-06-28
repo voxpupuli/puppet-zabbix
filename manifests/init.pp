@@ -176,6 +176,7 @@ class zabbix (
   Boolean $manage_selinux                   = $zabbix::params::manage_selinux,
   String $additional_service_params         = $zabbix::params::additional_service_params,
   Optional[String[1]] $zabbix_user          = $zabbix::params::server_zabbix_user,
+  Optional[String] $zabbix_server_name      = $zabbix::params::zabbix_server,
 ) inherits zabbix::params {
 
   class { '::zabbix::web':
@@ -205,6 +206,7 @@ class zabbix (
     database_socket                          => $database_socket,
     database_port                            => $database_port,
     zabbix_server                            => $zabbix_server,
+    zabbix_server_name                       => $zabbix_server_name,
     zabbix_listenport                        => $listenport,
     apache_php_max_execution_time            => $apache_php_max_execution_time,
     apache_php_memory_limit                  => $apache_php_memory_limit,
