@@ -11,7 +11,7 @@ def location_for(place, fake_version = nil)
 end
 
 group :test do
-  gem 'puppetlabs_spec_helper', '~> 2.6.0',                         :require => false
+  gem 'puppetlabs_spec_helper', '~> 2.6',                           :require => false
   gem 'rspec-puppet', '~> 2.5',                                     :require => false
   gem 'rspec-puppet-facts',                                         :require => false
   gem 'rspec-puppet-utils',                                         :require => false
@@ -30,7 +30,8 @@ group :test do
   gem 'simplecov-console',                                          :require => false
   gem 'rack', '~> 1.0',                                             :require => false if RUBY_VERSION < '2.2.2'
   gem 'parallel_tests',                                             :require => false
-  gem 'fakefs',                                                     :require => false
+  gem 'fakefs', '0.13.3',                                           :require => false if RUBY_VERSION < '2.3.0'
+  gem 'fakefs',                                                     :require => false if RUBY_VERSION >= '2.3.0'
 end
 
 group :development do
