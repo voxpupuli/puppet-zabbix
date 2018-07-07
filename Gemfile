@@ -57,6 +57,9 @@ group :system_tests do
   gem 'beaker-hostgenerator', '>= 1.1.10',  :require => false
   gem 'beaker-puppet_install_helper',       :require => false
   gem 'beaker-module_install_helper',       :require => false
+  gem 'rbnacl', '~> 4',                     :require => false if RUBY_VERSION >= '2.2.6'
+  gem 'rbnacl-libsodium',                   :require => false if RUBY_VERSION >= '2.2.6'
+  gem 'bcrypt_pbkdf',                       :require => false
 end
 
 group :release do
