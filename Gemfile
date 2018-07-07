@@ -11,7 +11,7 @@ def location_for(place, fake_version = nil)
 end
 
 group :test do
-  gem 'puppetlabs_spec_helper', '~> 2.6.0',                         :require => false
+  gem 'puppetlabs_spec_helper', '~> 2.6',                           :require => false
   gem 'rspec-puppet', '~> 2.5',                                     :require => false
   gem 'rspec-puppet-facts',                                         :require => false
   gem 'rspec-puppet-utils',                                         :require => false
@@ -56,6 +56,9 @@ group :system_tests do
   gem 'beaker-hostgenerator', '>= 1.1.10',  :require => false
   gem 'beaker-puppet_install_helper',       :require => false
   gem 'beaker-module_install_helper',       :require => false
+  gem 'rbnacl', '~> 4',                     :require => false if RUBY_VERSION >= '2.2.6'
+  gem 'rbnacl-libsodium',                   :require => false if RUBY_VERSION >= '2.2.6'
+  gem 'bcrypt_pbkdf',                       :require => false
 end
 
 group :release do
