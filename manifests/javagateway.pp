@@ -89,15 +89,10 @@ class zabbix::javagateway(
     content => template('zabbix/zabbix_java_gateway.conf.erb'),
   }
 
-  # Workaround for: The redhat provider can not handle attribute enable
-  # This is only happening when using an redhat family version 5.x.
-  if $::osfamily == 'redhat' and $::operatingsystemrelease !~ /^5.*/ {
-    Service['zabbix-java-gateway'] { enable     => true }
-  }
-
   # Controlling the 'zabbix-java-gateway' service
   service { 'zabbix-java-gateway':
     ensure     => running,
+    enable     => true,
     hasstatus  => true,
     hasrestart => true,
     require    => [
