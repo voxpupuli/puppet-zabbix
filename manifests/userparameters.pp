@@ -105,8 +105,8 @@ define zabbix::userparameters (
   # which needs to be loaded for this host. When exported resources is
   # used/enabled, we do this automatically.
   if $template != '' {
-    zabbix::resources::userparameters { "${::hostname}_${name}":
-      hostname => $::fqdn,
+    zabbix::resources::userparameters { "${facts['hostname']}_${name}":
+      hostname => $facts['fqdn'],
       template => $template,
     }
   }

@@ -35,19 +35,15 @@ class zabbix::repo (
     case $facts['os']['name'] {
       'PSBM'        : {
         $majorrelease = '6'
-        $reponame     = $majorrelease
       }
       'Amazon'        : {
         $majorrelease = '6'
-        $reponame     = $majorrelease
       }
       'oraclelinux' : {
-        $majorrelease = $::operatingsystemmajrelease
-        $reponame     = $majorrelease
+        $majorrelease = $facts['os']['release']['major']
       }
       default       : {
-        $majorrelease = $::operatingsystemmajrelease
-        $reponame     = $::operatingsystemmajrelease
+        $majorrelease = $facts['os']['release']['major']
       }
     }
 
@@ -64,8 +60,8 @@ class zabbix::repo (
         }
 
         yumrepo { 'zabbix':
-          name     => "Zabbix_${reponame}_${::architecture}",
-          descr    => "Zabbix_${reponame}_${::architecture}",
+          name     => "Zabbix_${majorrelease}_${facts['os']['architecture']}",
+          descr    => "Zabbix_${majorrelease}_${facts['os']['architecture']}",
           baseurl  => "https://repo.zabbix.com/zabbix/${zabbix_version}/rhel/${majorrelease}/\$basearch/",
           gpgcheck => '1',
           gpgkey   => $gpgkey_zabbix,
@@ -73,8 +69,8 @@ class zabbix::repo (
         }
 
         yumrepo { 'zabbix-nonsupported':
-          name     => "Zabbix_nonsupported_${reponame}_${::architecture}",
-          descr    => "Zabbix_nonsupported_${reponame}_${::architecture}",
+          name     => "Zabbix_nonsupported_${majorrelease}_${facts['os']['architecture']}",
+          descr    => "Zabbix_nonsupported_${majorrelease}_${facts['os']['architecture']}",
           baseurl  => "https://repo.zabbix.com/non-supported/rhel/${majorrelease}/\$basearch/",
           gpgcheck => '1',
           gpgkey   => $gpgkey_nonsupported,
@@ -88,10 +84,10 @@ class zabbix::repo (
           # this requires the apt-transport-https package, but we don't want to manage
           # that package here. That should be handled in a profile :(
           # somebody should implement https here but make it optional
-          include ::apt
+          include apt
         }
 
-        if ($::architecture == 'armv6l') {
+        if ($facts['os']['architecture'] == 'armv6l') {
           apt::source { 'zabbix':
             location => 'http://naizvoru.com/raspbian/zabbix',
             repos    => 'main',
@@ -106,10 +102,10 @@ class zabbix::repo (
             ,
           }
         } else {
-          $operatingsystem = downcase($::operatingsystem)
-          case $::operatingsystemrelease {
-            /\/sid$/ : { $releasename = regsubst($::operatingsystemrelease, '/sid$', '') }
-            default  : { $releasename = $::lsbdistcodename }
+          $operatingsystem = downcase($facts['os']['name'])
+          case $facts['os']['release']['full'] {
+            /\/sid$/ : { $releasename = regsubst(facts['os']['release']['full'], '/sid$', '') }
+            default  : { $releasename = $facts['lsbdistcodename'] }
           }
           apt::key { 'zabbix-FBABD5F':
             id     => 'FBABD5FB20255ECAB22EE194D13D58E479EA5ED4',
@@ -133,7 +129,7 @@ class zabbix::repo (
         Class['Apt::Update']  -> Package<|tag == 'zabbix'|>
       }
       default  : {
-        fail("Managing a repo on ${::osfamily} is currently not implemented")
+        fail("Managing a repo on ${facts['os']['family']} is currently not implemented")
       }
     }
   } # end if ($manage_repo)

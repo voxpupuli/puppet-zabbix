@@ -37,7 +37,7 @@ define zabbix::startup (
   }
   # provided by camp2camp/systemd
   if $facts['systemd'] {
-    contain ::systemd
+    contain systemd
     file { "/etc/systemd/system/${name}.service":
       ensure  => file,
       mode    => '0664',
@@ -47,9 +47,9 @@ define zabbix::startup (
     file { "/etc/init.d/${name}":
       ensure  => absent,
     }
-  } elsif $::osfamily in ['Debian', 'RedHat'] {
+  } elsif $facts['os']['family'] in ['Debian', 'RedHat'] {
     # Currently other osfamily without systemd is not supported
-    $osfamily_downcase = downcase($::osfamily)
+    $osfamily_downcase = downcase($facts['os']['family'])
     file { "/etc/init.d/${name}":
       ensure  => file,
       mode    => '0755',

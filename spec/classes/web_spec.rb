@@ -138,7 +138,7 @@ describe 'zabbix::web' do
 
         describe 'when manage_resources and is_pe are true' do
           let :facts do
-            super().merge(
+            facts.merge(
               is_pe: true,
               pe_version: '3.7.0'
             )
