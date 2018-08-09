@@ -20,6 +20,7 @@ define zabbix::startup (
   String $additional_service_params                      = '',
   String $service_type                                   = 'simple',
   Optional[Boolean] $manage_database                     = undef,
+  Optional[Boolean] $privatetmp                          = undef,
   ) {
 
   case $title {

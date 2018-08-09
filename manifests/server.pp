@@ -376,6 +376,7 @@ class zabbix::server (
   $sslcertlocation_dir              = $zabbix::params::server_sslcertlocation,
   $sslkeylocation_dir               = $zabbix::params::server_sslkeylocation,
   Boolean $manage_selinux           = $zabbix::params::manage_selinux,
+  Boolean $privatetmp               = $zabbix::params::server_privatetmp,
   String $additional_service_params = $zabbix::params::additional_service_params,
   Optional[String[1]] $zabbix_user  = $zabbix::params::server_zabbix_user,
 ) inherits zabbix::params {
@@ -466,6 +467,7 @@ class zabbix::server (
     additional_service_params => $real_additional_service_params,
     manage_database           => $manage_database,
     require                   => Package["zabbix-server-${db}"],
+    privatetmp                => $privatetmp,
   }
 
   if $server_configfile_path != '/etc/zabbix/zabbix_server.conf' {

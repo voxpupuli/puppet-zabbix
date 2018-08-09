@@ -164,6 +164,7 @@ class zabbix::params {
   $server_service_name                      = 'zabbix-server'
   $server_pacemaker                         = false
   $server_pacemaker_resource                = undef
+  $server_privatetmp                        = true
   $server_snmptrapperfile                   = '/tmp/zabbix_traps.tmp'
   $server_sourceip                          = undef
   $server_sshkeylocation                    = undef
