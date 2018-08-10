@@ -60,6 +60,7 @@ group :system_tests do
   gem 'rbnacl', '~> 4',                     :require => false if RUBY_VERSION >= '2.2.6'
   gem 'rbnacl-libsodium',                   :require => false if RUBY_VERSION >= '2.2.6'
   gem 'bcrypt_pbkdf',                       :require => false
+  gem 'beaker-docker',                      :require => false
 end
 
 group :release do
