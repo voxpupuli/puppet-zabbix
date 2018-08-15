@@ -4,7 +4,17 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
-## [v6.4.0](https://github.com/voxpupuli/puppet-zabbix/tree/v6.4.0) (2018-08-04)
+## [v6.4.1](https://github.com/voxpupuli/puppet-zabbix/tree/v6.4.1) (2018-08-15)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v6.4.0...v6.4.1)
+
+**Merged pull requests:**
+
+- fix beaker support [\#524](https://github.com/voxpupuli/puppet-zabbix/pull/524) ([bastelfreak](https://github.com/bastelfreak))
+- install beaker-rspec 6 or newer [\#523](https://github.com/voxpupuli/puppet-zabbix/pull/523) ([bastelfreak](https://github.com/bastelfreak))
+- Add support for latest puppetlabs/{apt,apache/mysql} modules [\#519](https://github.com/voxpupuli/puppet-zabbix/pull/519) ([bastelfreak](https://github.com/bastelfreak))
+
+## [v6.4.0](https://github.com/voxpupuli/puppet-zabbix/tree/v6.4.0) (2018-08-05)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v6.3.2...v6.4.0)
 
