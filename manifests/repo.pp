@@ -104,7 +104,7 @@ class zabbix::repo (
         } else {
           $operatingsystem = downcase($facts['os']['name'])
           case $facts['os']['release']['full'] {
-            /\/sid$/ : { $releasename = regsubst(facts['os']['release']['full'], '/sid$', '') }
+            /\/sid$/ : { $releasename = regsubst($facts['os']['release']['full'], '/sid$', '') }
             default  : { $releasename = $facts['lsbdistcodename'] }
           }
           apt::key { 'zabbix-FBABD5F':
