@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v6.4.2](https://github.com/voxpupuli/puppet-zabbix/tree/v6.4.2) (2018-08-18)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v6.4.1...v6.4.2)
+
+**Fixed bugs:**
+
+- Fix missing $ in repo definition for Debian sid [\#528](https://github.com/voxpupuli/puppet-zabbix/pull/528) ([isbear](https://github.com/isbear))
+
 ## [v6.4.1](https://github.com/voxpupuli/puppet-zabbix/tree/v6.4.1) (2018-08-15)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v6.4.0...v6.4.1)
