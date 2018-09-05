@@ -8,8 +8,6 @@ before_install:
 script:
   - 'bundle exec rake $CHECK'
 matrix:
-  allow_failures:
-    - env: BEAKER_PUPPET_COLLECTION=puppet6-nightly
   fast_finish: true
   include:
   - rvm: 2.1.9
