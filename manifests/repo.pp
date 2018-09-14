@@ -14,6 +14,8 @@
 # [*zabbix_version*]
 #   This is the zabbix version.
 #
+# [*repo_location*]
+#   A custom repo location (e.g. your own mirror)
 #
 # === Authors
 #
@@ -26,10 +28,10 @@
 # Copyright 2014 Werner Dijkerman
 #
 class zabbix::repo (
-  $manage_repo    = $zabbix::params::manage_repo,
-  $manage_apt     = $zabbix::params::manage_apt,
-  $repo_location  = $zabbix::params::repo_location,
-  $zabbix_version = $zabbix::params::zabbix_version,
+  Boolean                                              $manage_repo    = $zabbix::params::manage_repo,
+  Boolean                                              $manage_apt     = $zabbix::params::manage_apt,
+  Variant[String[0],Stdlib::HTTPUrl, Stdlib::HTTPSUrl] $repo_location  = $zabbix::params::repo_location,
+  String[1]                                            $zabbix_version = $zabbix::params::zabbix_version,
 ) inherits zabbix::params {
   if ($manage_repo) {
     case $facts['os']['name'] {
@@ -46,7 +48,6 @@ class zabbix::repo (
         $majorrelease = $facts['os']['release']['major']
       }
     }
-
     case $facts['os']['family'] {
       'RedHat' : {
         # Zabbix-3.2 and newer RPMs are signed with the GPG key
@@ -59,10 +60,15 @@ class zabbix::repo (
           $gpgkey_nonsupported = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-79EA5ED4'
         }
 
+        $_repo_location = $repo_location ? {
+          ''      => "https://repo.zabbix.com/zabbix/${zabbix_version}/rhel/${majorrelease}/\$basearch/",
+          default => $repo_location,
+        }
+
         yumrepo { 'zabbix':
           name     => "Zabbix_${majorrelease}_${facts['os']['architecture']}",
           descr    => "Zabbix_${majorrelease}_${facts['os']['architecture']}",
-          baseurl  => "https://repo.zabbix.com/zabbix/${zabbix_version}/rhel/${majorrelease}/\$basearch/",
+          baseurl  => $_repo_location,
           gpgcheck => '1',
           gpgkey   => $gpgkey_zabbix,
           priority => '1',
@@ -88,8 +94,13 @@ class zabbix::repo (
         }
 
         if ($facts['os']['architecture'] == 'armv6l') {
+          $_repo_location = $repo_location ? {
+            ''      => 'http://naizvoru.com/raspbian/zabbix',
+            default => $repo_location,
+          }
+
           apt::source { 'zabbix':
-            location => 'http://naizvoru.com/raspbian/zabbix',
+            location => $_repo_location,
             repos    => 'main',
             key      => {
               'id'     => 'BC274A7EA7FD5DD267C9A18FD54A213C80E871A7',
@@ -107,6 +118,12 @@ class zabbix::repo (
             /\/sid$/ : { $releasename = regsubst($facts['os']['release']['full'], '/sid$', '') }
             default  : { $releasename = $facts['lsbdistcodename'] }
           }
+
+          $_repo_location = $repo_location ? {
+            ''      => "http://repo.zabbix.com/zabbix/${zabbix_version}/${operatingsystem}/",
+            default => $repo_location,
+          }
+
           apt::key { 'zabbix-FBABD5F':
             id     => 'FBABD5FB20255ECAB22EE194D13D58E479EA5ED4',
             source => 'https://repo.zabbix.com/zabbix-official-repo.key',
@@ -116,7 +133,7 @@ class zabbix::repo (
             source => 'https://repo.zabbix.com/zabbix-official-repo.key',
           }
           apt::source { 'zabbix':
-            location => "http://repo.zabbix.com/zabbix/${zabbix_version}/${operatingsystem}/",
+            location => $_repo_location,
             repos    => 'main',
             release  => $releasename,
             require  => [
