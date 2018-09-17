@@ -65,11 +65,12 @@ define zabbix::userparameters (
   $script_dir = '/usr/bin',
   $config_mode = '0644',
 ) {
-  $include_dir          = getvar('::zabbix::agent::include_dir')
-  $zabbix_package_agent = getvar('::zabbix::agent::zabbix_package_agent')
-  $agent_config_owner   = getvar('::zabbix::agent::agent_config_owner')
-  $agent_config_group   = getvar('::zabbix::agent::agent_config_group')
-  $agent_servicename    = getvar('::zabbix::agent::agent_servicename')
+  include zabbix::agent
+  $include_dir          = $zabbix::agent::include_dir
+  $zabbix_package_agent = $zabbix::agent::zabbix_package_agent
+  $agent_config_owner   = $zabbix::agent::agent_config_owner
+  $agent_config_group   = $zabbix::agent::agent_config_group
+  $agent_servicename    = $zabbix::agent::agent_servicename
 
   if $source != '' {
     file { "${include_dir}/${name}.conf":
