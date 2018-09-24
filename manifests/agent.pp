@@ -215,6 +215,7 @@ class zabbix::agent (
   $zbx_templates                          = $zabbix::params::agent_zbx_templates,
   $agent_configfile_path                  = $zabbix::params::agent_configfile_path,
   $pidfile                                = $zabbix::params::agent_pidfile,
+  $servicename                            = $zabbix::params::agent_servicename,
   String $logtype                         = $zabbix::params::agent_logtype,
   Optional[Stdlib::Absolutepath] $logfile = $zabbix::params::agent_logfile,
   $logfilesize                            = $zabbix::params::agent_logfilesize,
@@ -339,7 +340,7 @@ class zabbix::agent (
   }
 
   # Ensure that the correct config file is used.
-  zabbix::startup {'zabbix-agent':
+  zabbix::startup {$servicename:
     pidfile                   => $pidfile,
     agent_configfile_path     => $agent_configfile_path,
     zabbix_user               => $zabbix_user,

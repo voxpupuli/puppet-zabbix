@@ -25,6 +25,7 @@ class zabbix::params {
       $agent_zabbix_user     = 'zabbix'
       $agent_config_group    = 'zabbix'
       $agent_pidfile         = '/var/run/zabbix/zabbix_agentd.pid'
+      $agent_servicename     = 'zabbix-agent'
       $server_zabbix_user    = 'zabbix'
     }
     'Archlinux': {
@@ -39,6 +40,7 @@ class zabbix::params {
       $agent_zabbix_user     = 'zabbix-agent'
       $agent_config_group    = 'zabbix-agent'
       $agent_pidfile         = undef
+      $agent_servicename     = 'zabbix-agent'
       $server_zabbix_user    = 'zabbix-server'
     }
     'Fedora': {
@@ -53,6 +55,22 @@ class zabbix::params {
       $agent_zabbix_user     = 'zabbix'
       $agent_config_group    = 'zabbix'
       $agent_pidfile         = '/var/run/zabbix/zabbix_agentd.pid'
+      $agent_servicename     = 'zabbix-agent'
+      $server_zabbix_user    = 'zabbix'
+    }
+    'Gentoo': {
+      $server_fpinglocation  = '/usr/sbin/fping'
+      $server_fping6location = '/usr/sbin/fping6'
+      $proxy_fpinglocation   = '/usr/sbin/fping'
+      $proxy_fping6location  = '/usr/sbin/fping6'
+      $manage_repo           = false
+      $zabbix_package_agent  = 'zabbix'
+      $agent_configfile_path = '/etc/zabbix/zabbix_agentd.conf'
+      $agent_config_owner    = 'zabbix'
+      $agent_zabbix_user     = 'zabbix'
+      $agent_config_group    = 'zabbix'
+      $agent_pidfile         = '/var/run/zabbix/zabbix_agentd.pid'
+      $agent_servicename     = 'zabbix-agentd'
       $server_zabbix_user    = 'zabbix'
     }
     default  : {
@@ -67,6 +85,7 @@ class zabbix::params {
       $agent_zabbix_user     = 'zabbix'
       $agent_config_group    = 'zabbix'
       $agent_pidfile         = '/var/run/zabbix/zabbix_agentd.pid'
+      $agent_servicename     = 'zabbix-agent'
       $server_zabbix_user    = 'zabbix'
     }
   }

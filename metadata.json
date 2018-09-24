@@ -143,6 +143,9 @@
     },
     {
       "operatingsystem": "Archlinux"
+    },
+    {
+      "operatingsystem": "Gentoo"
     }
   ]
 }
