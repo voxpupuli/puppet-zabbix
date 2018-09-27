@@ -346,6 +346,7 @@ class zabbix::agent (
     zabbix_user               => $zabbix_user,
     additional_service_params => $real_additional_service_params,
     service_type              => $real_service_type,
+    service_name              => 'zabbix-agent',
     require                   => Package[$zabbix_package_agent],
   }
 
@@ -362,7 +363,7 @@ class zabbix::agent (
   } else {
     $service_provider = undef
   }
-  service { 'zabbix-agent':
+  service { $servicename:
     ensure     => running,
     enable     => true,
     provider   => $service_provider,
@@ -377,7 +378,7 @@ class zabbix::agent (
     owner   => $agent_config_owner,
     group   => $agent_config_group,
     mode    => '0644',
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$servicename],
     require => Package[$zabbix_package_agent],
     replace => true,
     content => template('zabbix/zabbix_agentd.conf.erb'),
@@ -390,7 +391,7 @@ class zabbix::agent (
     group   => $agent_config_group,
     recurse => true,
     purge   => $include_dir_purge,
-    notify  => Service['zabbix-agent'],
+    notify  => Service[$servicename],
     require => File[$agent_configfile_path],
   }
 
@@ -413,7 +414,7 @@ class zabbix::agent (
     selinux::module{'zabbix-agent':
       ensure     => 'present',
       content_te => template('zabbix/selinux/zabbix-agent.te.erb'),
-      before     => Service['zabbix-agent'],
+      before     => Service[$servicename],
     }
   }
 }
