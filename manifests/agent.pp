@@ -378,7 +378,7 @@ class zabbix::agent (
     group   => $agent_config_group,
     mode    => '0644',
     notify  => Service['zabbix-agent'],
-    require => Package[$zabbix_package_agent],
+    require => Zabbix::Startup['zabbix-agent'],
     replace => true,
     content => template('zabbix/zabbix_agentd.conf.erb'),
   }
