@@ -17,3 +17,6 @@ fixtures:
     selinux_core:
       repo: https://github.com/puppetlabs/puppetlabs-selinux_core.git
       puppet_version: ">= 6.0.0"
+    augeas_core:
+      repo: https://github.com/puppetlabs/puppetlabs-augeas_core.git
+      puppet_version: ">= 6.0.0"
