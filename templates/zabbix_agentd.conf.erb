@@ -5,38 +5,43 @@
 
 ############ GENERAL PARAMETERS #################
 
+<% if @pidfile %>
 ### Option: PidFile
 #	Name of PID file.
 #
-PidFile=<%= @pidfile %>
+PidFile=<%= @pidfile %><% end %>
 
 <% if @zabbix_version.to_f >= 3.0 -%>
+<% if @logtype %>
 ### Option: LogType
 #	Specifies where log messages are written to:
 #		system  - syslog
 #		file    - file specified with LogFile parameter
 #		console - standard output
 #
-<% if @logtype %>LogType=<%= @logtype %><% end %>
+LogType=<%= @logtype %><% end %>
 
+<% if @logfile %>
 ### Option: LogFile
 #	Log file name for LogType 'file' parameter.
 #
-LogFile=<%= @logfile %>
+LogFile=<%= @logfile %><% end %>
 
 <% else %>
+<% if @logfile %>
 ### Option: LogFile
 #	Name of log file.
 #	If not set, syslog is used.
 #
-LogFile=<%= @logfile %>
+LogFile=<%= @logfile %><% end %>
 <% end %>
 
+<% if @logfilesize %>
 ### Option: LogFileSize
 #	Maximum size of log file in MB.
 #	0 - disable automatic log rotation.
 #
-LogFileSize=<%= @logfilesize %>
+LogFileSize=<%= @logfilesize %><% end %>
 
 ### Option: DebugLevel
 #	Specifies debug level
@@ -174,7 +179,11 @@ MaxLinesPerSecond=<%= @maxlinespersecond %>
 #	Now shorthand key zabbix.userid may be used to retrieve data.
 #	Aliases can be used in HostMetadataItem but not in HostnameItem parameters.
 #
-<% if @zabbix_alias %>Alias=<%= @zabbix_alias %><% end %>
+<% if @zabbix_alias %>
+        <%- @zabbix_alias.each do |zalias| -%>Alias=<%= zalias %>
+        <%- end -%>
+<% end %>
+
 
 ### Option: Timeout
 #	Spend no more than Timeout seconds on processing

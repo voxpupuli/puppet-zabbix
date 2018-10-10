@@ -125,6 +125,9 @@
 # [*vmwarecachesize*]
 #   Size of vmware cache, in bytes.
 #
+# [*vmwaretimeout*]
+#   The maximum number of seconds vmware collector will wait for a response from VMware service.
+#
 # [*snmptrapperfile*]
 #   Temporary file used for passing data from snmp trap daemon to the server.
 #
@@ -287,91 +290,113 @@
 # Copyright 2014 Werner Dijkerman
 #
 class zabbix::server (
-  $database_type           = $zabbix::params::database_type,
-  $database_path           = $zabbix::params::database_path,
-  $zabbix_version          = $zabbix::params::zabbix_version,
-  $zabbix_package_state    = $zabbix::params::zabbix_package_state,
-  Boolean $manage_firewall = $zabbix::params::manage_firewall,
-  Boolean $manage_repo     = $zabbix::params::manage_repo,
-  Boolean $manage_database = $zabbix::params::manage_database,
-  Boolean $manage_service  = $zabbix::params::manage_service,
-  $server_configfile_path  = $zabbix::params::server_configfile_path,
-  $server_config_owner     = $zabbix::params::server_config_owner,
-  $server_config_group     = $zabbix::params::server_config_group,
-  $server_service_name     = $zabbix::params::server_service_name,
-  $pacemaker               = $zabbix::params::server_pacemaker,
-  $pacemaker_resource      = $zabbix::params::server_pacemaker_resource,
-  $nodeid                  = $zabbix::params::server_nodeid,
-  $listenport              = $zabbix::params::server_listenport,
-  $sourceip                = $zabbix::params::server_sourceip,
-  $logfile                 = $zabbix::params::server_logfile,
-  $logfilesize             = $zabbix::params::server_logfilesize,
-  $debuglevel              = $zabbix::params::server_debuglevel,
-  $pidfile                 = $zabbix::params::server_pidfile,
-  $database_schema_path    = $zabbix::params::database_schema_path,
-  $database_host           = $zabbix::params::server_database_host,
-  $database_name           = $zabbix::params::server_database_name,
-  $database_schema         = $zabbix::params::server_database_schema,
-  $database_user           = $zabbix::params::server_database_user,
-  $database_password       = $zabbix::params::server_database_password,
-  $database_socket         = $zabbix::params::server_database_socket,
-  $database_port           = $zabbix::params::server_database_port,
-  $startpollers            = $zabbix::params::server_startpollers,
-  $startipmipollers        = $zabbix::params::server_startipmipollers,
-  $startpollersunreachable = $zabbix::params::server_startpollersunreachable,
-  $starttrappers           = $zabbix::params::server_starttrappers,
-  $startpingers            = $zabbix::params::server_startpingers,
-  $startdiscoverers        = $zabbix::params::server_startdiscoverers,
-  $starthttppollers        = $zabbix::params::server_starthttppollers,
-  $starttimers             = $zabbix::params::server_starttimers,
-  $javagateway             = $zabbix::params::server_javagateway,
-  $javagatewayport         = $zabbix::params::server_javagatewayport,
-  $startjavapollers        = $zabbix::params::server_startjavapollers,
-  $startvmwarecollectors   = $zabbix::params::server_startvmwarecollectors,
-  $vmwarefrequency         = $zabbix::params::server_vmwarefrequency,
-  $vmwarecachesize         = $zabbix::params::server_vmwarecachesize,
-  $snmptrapperfile         = $zabbix::params::server_snmptrapperfile,
-  $startsnmptrapper        = $zabbix::params::server_startsnmptrapper,
-  $listenip                = $zabbix::params::server_listenip,
-  $housekeepingfrequency   = $zabbix::params::server_housekeepingfrequency,
-  $maxhousekeeperdelete    = $zabbix::params::server_maxhousekeeperdelete,
-  $senderfrequency         = $zabbix::params::server_senderfrequency,
-  $cachesize               = $zabbix::params::server_cachesize,
-  $cacheupdatefrequency    = $zabbix::params::server_cacheupdatefrequency,
-  $startdbsyncers          = $zabbix::params::server_startdbsyncers,
-  $historycachesize        = $zabbix::params::server_historycachesize,
-  $historyindexcachesize   = $zabbix::params::server_historyindexcachesize,
-  $trendcachesize          = $zabbix::params::server_trendcachesize,
-  $historytextcachesize    = $zabbix::params::server_historytextcachesize,
-  $valuecachesize          = $zabbix::params::server_valuecachesize,
-  $nodenoevents            = $zabbix::params::server_nodenoevents,
-  $nodenohistory           = $zabbix::params::server_nodenohistory,
-  $timeout                 = $zabbix::params::server_timeout,
-  $tlscafile               = $zabbix::params::server_tlscafile,
-  $tlscertfile             = $zabbix::params::server_tlscertfile,
-  $tlscrlfile              = $zabbix::params::server_tlscrlfile,
-  $tlskeyfile              = $zabbix::params::server_tlskeyfile,
-  $trappertimeout          = $zabbix::params::server_trappertimeout,
-  $unreachableperiod       = $zabbix::params::server_unreachableperiod,
-  $unavailabledelay        = $zabbix::params::server_unavailabledelay,
-  $unreachabledelay        = $zabbix::params::server_unreachabledelay,
-  $alertscriptspath        = $zabbix::params::server_alertscriptspath,
-  $externalscripts         = $zabbix::params::server_externalscripts,
-  $fpinglocation           = $zabbix::params::server_fpinglocation,
-  $fping6location          = $zabbix::params::server_fping6location,
-  $sshkeylocation          = $zabbix::params::server_sshkeylocation,
-  $logslowqueries          = $zabbix::params::server_logslowqueries,
-  $tmpdir                  = $zabbix::params::server_tmpdir,
-  $startproxypollers       = $zabbix::params::server_startproxypollers,
-  $proxyconfigfrequency    = $zabbix::params::server_proxyconfigfrequency,
-  $proxydatafrequency      = $zabbix::params::server_proxydatafrequency,
-  $allowroot               = $zabbix::params::server_allowroot,
-  $include_dir             = $zabbix::params::server_include,
-  $loadmodulepath          = $zabbix::params::server_loadmodulepath,
-  $loadmodule              = $zabbix::params::server_loadmodule,
-  $sslcertlocation_dir     = $zabbix::params::server_sslcertlocation,
-  $sslkeylocation_dir      = $zabbix::params::server_sslkeylocation,
+  Zabbix::Databases $database_type  = $zabbix::params::database_type,
+  $database_path                    = $zabbix::params::database_path,
+  $zabbix_version                   = $zabbix::params::zabbix_version,
+  $zabbix_package_state             = $zabbix::params::zabbix_package_state,
+  Boolean $manage_firewall          = $zabbix::params::manage_firewall,
+  Boolean $manage_repo              = $zabbix::params::manage_repo,
+  Boolean $manage_database          = $zabbix::params::manage_database,
+  Boolean $manage_service           = $zabbix::params::manage_service,
+  $server_configfile_path           = $zabbix::params::server_configfile_path,
+  $server_config_owner              = $zabbix::params::server_config_owner,
+  $server_config_group              = $zabbix::params::server_config_group,
+  $server_service_name              = $zabbix::params::server_service_name,
+  $pacemaker                        = $zabbix::params::server_pacemaker,
+  $pacemaker_resource               = $zabbix::params::server_pacemaker_resource,
+  $nodeid                           = $zabbix::params::server_nodeid,
+  $listenport                       = $zabbix::params::server_listenport,
+  $sourceip                         = $zabbix::params::server_sourceip,
+  $logfile                          = $zabbix::params::server_logfile,
+  $logfilesize                      = $zabbix::params::server_logfilesize,
+  $debuglevel                       = $zabbix::params::server_debuglevel,
+  $pidfile                          = $zabbix::params::server_pidfile,
+  $database_schema_path             = $zabbix::params::database_schema_path,
+  $database_host                    = $zabbix::params::server_database_host,
+  $database_name                    = $zabbix::params::server_database_name,
+  $database_schema                  = $zabbix::params::server_database_schema,
+  $database_user                    = $zabbix::params::server_database_user,
+  $database_password                = $zabbix::params::server_database_password,
+  $database_socket                  = $zabbix::params::server_database_socket,
+  $database_port                    = $zabbix::params::server_database_port,
+  $startpollers                     = $zabbix::params::server_startpollers,
+  $startipmipollers                 = $zabbix::params::server_startipmipollers,
+  $startpollersunreachable          = $zabbix::params::server_startpollersunreachable,
+  $starttrappers                    = $zabbix::params::server_starttrappers,
+  $startpingers                     = $zabbix::params::server_startpingers,
+  $startdiscoverers                 = $zabbix::params::server_startdiscoverers,
+  $starthttppollers                 = $zabbix::params::server_starthttppollers,
+  $starttimers                      = $zabbix::params::server_starttimers,
+  $javagateway                      = $zabbix::params::server_javagateway,
+  $javagatewayport                  = $zabbix::params::server_javagatewayport,
+  $startjavapollers                 = $zabbix::params::server_startjavapollers,
+  $startvmwarecollectors            = $zabbix::params::server_startvmwarecollectors,
+  $vmwarefrequency                  = $zabbix::params::server_vmwarefrequency,
+  $vmwarecachesize                  = $zabbix::params::server_vmwarecachesize,
+  $vmwaretimeout                    = $zabbix::params::server_vmwaretimeout,
+  $snmptrapperfile                  = $zabbix::params::server_snmptrapperfile,
+  $startsnmptrapper                 = $zabbix::params::server_startsnmptrapper,
+  $listenip                         = $zabbix::params::server_listenip,
+  $housekeepingfrequency            = $zabbix::params::server_housekeepingfrequency,
+  $maxhousekeeperdelete             = $zabbix::params::server_maxhousekeeperdelete,
+  $senderfrequency                  = $zabbix::params::server_senderfrequency,
+  $cachesize                        = $zabbix::params::server_cachesize,
+  $cacheupdatefrequency             = $zabbix::params::server_cacheupdatefrequency,
+  $startdbsyncers                   = $zabbix::params::server_startdbsyncers,
+  $historycachesize                 = $zabbix::params::server_historycachesize,
+  $historyindexcachesize            = $zabbix::params::server_historyindexcachesize,
+  $trendcachesize                   = $zabbix::params::server_trendcachesize,
+  $historytextcachesize             = $zabbix::params::server_historytextcachesize,
+  $valuecachesize                   = $zabbix::params::server_valuecachesize,
+  $nodenoevents                     = $zabbix::params::server_nodenoevents,
+  $nodenohistory                    = $zabbix::params::server_nodenohistory,
+  $timeout                          = $zabbix::params::server_timeout,
+  $tlscafile                        = $zabbix::params::server_tlscafile,
+  $tlscertfile                      = $zabbix::params::server_tlscertfile,
+  $tlscrlfile                       = $zabbix::params::server_tlscrlfile,
+  $tlskeyfile                       = $zabbix::params::server_tlskeyfile,
+  $trappertimeout                   = $zabbix::params::server_trappertimeout,
+  $unreachableperiod                = $zabbix::params::server_unreachableperiod,
+  $unavailabledelay                 = $zabbix::params::server_unavailabledelay,
+  $unreachabledelay                 = $zabbix::params::server_unreachabledelay,
+  $alertscriptspath                 = $zabbix::params::server_alertscriptspath,
+  $externalscripts                  = $zabbix::params::server_externalscripts,
+  $fpinglocation                    = $zabbix::params::server_fpinglocation,
+  $fping6location                   = $zabbix::params::server_fping6location,
+  $sshkeylocation                   = $zabbix::params::server_sshkeylocation,
+  $logslowqueries                   = $zabbix::params::server_logslowqueries,
+  $tmpdir                           = $zabbix::params::server_tmpdir,
+  $startproxypollers                = $zabbix::params::server_startproxypollers,
+  $proxyconfigfrequency             = $zabbix::params::server_proxyconfigfrequency,
+  $proxydatafrequency               = $zabbix::params::server_proxydatafrequency,
+  $allowroot                        = $zabbix::params::server_allowroot,
+  $include_dir                      = $zabbix::params::server_include,
+  $loadmodulepath                   = $zabbix::params::server_loadmodulepath,
+  $loadmodule                       = $zabbix::params::server_loadmodule,
+  $sslcertlocation_dir              = $zabbix::params::server_sslcertlocation,
+  $sslkeylocation_dir               = $zabbix::params::server_sslkeylocation,
+  Boolean $manage_selinux           = $zabbix::params::manage_selinux,
+  String $additional_service_params = $zabbix::params::additional_service_params,
+  Optional[String[1]] $zabbix_user  = $zabbix::params::server_zabbix_user,
 ) inherits zabbix::params {
+
+  # the following codeblock is a bit blargh. The correct default value for
+  # $real_additional_service_params changes based on the value of $zabbix_version
+  # We handle this in the params.pp, but that doesn't work if somebody provides a specific
+  # value for $zabbix_version and overwrites our default :(
+  # the codeblock sets a default value for $real_additional_service_params if $zabbix_version got provided,
+  # but only if the variable isn't provided.
+
+  if $zabbix_version != $zabbix::params::zabbix_version and $additional_service_params == $zabbix::params::additional_service_params {
+    $real_additional_service_params = versioncmp($zabbix_version, '3.0') ? {
+      1  => '--foreground',
+      0  => '--foreground',
+      -1 => '',
+    }
+  } else {
+    $real_additional_service_params = $additional_service_params
+  }
+
   # Only include the repo class if it has not yet been included
   unless defined(Class['Zabbix::Repo']) {
     class { '::zabbix::repo':
@@ -434,10 +459,13 @@ class zabbix::server (
 
   # Ensure that the correct config file is used.
   zabbix::startup {'zabbix-server':
-    pidfile                => $pidfile,
-    database_type          => $database_type,
-    server_configfile_path => $server_configfile_path,
-    require                => Package["zabbix-server-${db}"],
+    pidfile                   => $pidfile,
+    database_type             => $database_type,
+    server_configfile_path    => $server_configfile_path,
+    zabbix_user               => $zabbix_user,
+    additional_service_params => $real_additional_service_params,
+    manage_database           => $manage_database,
+    require                   => Package["zabbix-server-${db}"],
   }
 
   if $server_configfile_path != '/etc/zabbix/zabbix_server.conf' {
@@ -445,13 +473,6 @@ class zabbix::server (
       ensure  => absent,
       require => Package["zabbix-server-${db}"],
     }
-  }
-
-  # Workaround for: The redhat provider can not handle attribute enable
-  # This is only happening when using an redhat family version 5.x.
-  if $::osfamily == 'redhat' and $::operatingsystemrelease !~ /^5.*/ and $manage_service {
-    Service[$server_service_name] {
-      enable => true }
   }
 
   # Controlling the 'zabbix-server' service
@@ -488,6 +509,7 @@ class zabbix::server (
     if $manage_service {
       service { $server_service_name:
         ensure     => running,
+        enable     => true,
         hasstatus  => true,
         hasrestart => true,
         require    => [
@@ -532,11 +554,30 @@ class zabbix::server (
     }
   }
 
+  $dependency = $manage_service ? {
+    true  => Service[$server_service_name],
+    false => undef,
+  }
   # check if selinux is active and allow zabbix
-  if getvar('::selinux_config_mode') == 'enforcing' {
+  if $facts['selinux'] == true and $manage_selinux {
     selboolean{'zabbix_can_network':
       persistent => true,
       value      => 'on',
+      notify     => $dependency,
+    }
+    -> selinux::module{'zabbix-server':
+      ensure    => 'present',
+      source_te => 'puppet:///modules/zabbix/zabbix-server.te',
+      before    => $dependency,
+    }
+    # zabbix-server 3.4 introduced IPC via a socket in /tmp
+    # https://support.zabbix.com/browse/ZBX-12567
+    if versioncmp($zabbix_version, '3.3') > 0  {
+      selinux::module{'zabbix-server-ipc':
+        ensure    => 'present',
+        source_te => 'puppet:///modules/zabbix/zabbix-server-ipc.te',
+        before    => $dependency,
+      }
     }
   }
 }

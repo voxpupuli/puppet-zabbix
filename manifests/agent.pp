@@ -200,76 +200,105 @@
 #
 # Copyright 2014 Werner Dijkerman
 #
+
 class zabbix::agent (
-  $zabbix_version        = $zabbix::params::zabbix_version,
-  $zabbix_package_state  = $zabbix::params::zabbix_package_state,
-  $zabbix_package_agent  = $zabbix::params::zabbix_package_agent,
-  Boolean $manage_firewall  = $zabbix::params::manage_firewall,
-  Boolean $manage_repo      = $zabbix::params::manage_repo,
-  Boolean $manage_resources = $zabbix::params::manage_resources,
-  $monitored_by_proxy    = $zabbix::params::monitored_by_proxy,
-  $agent_use_ip          = $zabbix::params::agent_use_ip,
-  $zbx_group             = $zabbix::params::agent_zbx_group,
-  $zbx_group_create      = $zabbix::params::agent_zbx_group_create,
-  $zbx_templates         = $zabbix::params::agent_zbx_templates,
-  $agent_configfile_path = $zabbix::params::agent_configfile_path,
-  $pidfile               = $zabbix::params::agent_pidfile,
-  $logtype               = $zabbix::params::agent_logtype,
-  $logfile               = $zabbix::params::agent_logfile,
-  $logfilesize           = $zabbix::params::agent_logfilesize,
-  $debuglevel            = $zabbix::params::agent_debuglevel,
-  $sourceip              = $zabbix::params::agent_sourceip,
-  $enableremotecommands  = $zabbix::params::agent_enableremotecommands,
-  $logremotecommands     = $zabbix::params::agent_logremotecommands,
-  $server                = $zabbix::params::agent_server,
-  $listenport            = $zabbix::params::agent_listenport,
-  $listenip              = $zabbix::params::agent_listenip,
-  $startagents           = $zabbix::params::agent_startagents,
-  $serveractive          = $zabbix::params::agent_serveractive,
-  $hostname              = $zabbix::params::agent_hostname,
-  $hostnameitem          = $zabbix::params::agent_hostnameitem,
-  $hostmetadata          = $zabbix::params::agent_hostmetadata,
-  $hostmetadataitem      = $zabbix::params::agent_hostmetadataitem,
-  $refreshactivechecks   = $zabbix::params::agent_refreshactivechecks,
-  $buffersend            = $zabbix::params::agent_buffersend,
-  $buffersize            = $zabbix::params::agent_buffersize,
-  $maxlinespersecond     = $zabbix::params::agent_maxlinespersecond,
-  $zabbix_alias          = $zabbix::params::agent_zabbix_alias,
-  $timeout               = $zabbix::params::agent_timeout,
-  $allowroot             = $zabbix::params::agent_allowroot,
-  $zabbix_user           = $zabbix::params::agent_zabbix_user,
-  $include_dir           = $zabbix::params::agent_include,
-  $include_dir_purge     = $zabbix::params::agent_include_purge,
-  $unsafeuserparameters  = $zabbix::params::agent_unsafeuserparameters,
-  $userparameter         = $zabbix::params::agent_userparameter,
-  $loadmodulepath        = $zabbix::params::agent_loadmodulepath,
-  $loadmodule            = $zabbix::params::agent_loadmodule,
-  $tlsaccept             = $zabbix::params::agent_tlsaccept,
-  $tlscafile             = $zabbix::params::agent_tlscafile,
-  $tlscertfile           = $zabbix::params::agent_tlscertfile,
-  $tlsconnect            = $zabbix::params::agent_tlsconnect,
-  $tlscrlfile            = $zabbix::params::agent_tlscrlfile,
-  $tlskeyfile            = $zabbix::params::agent_tlskeyfile,
-  $tlspskfile            = $zabbix::params::agent_tlspskfile,
-  $tlspskidentity        = $zabbix::params::agent_tlspskidentity,
-  $tlsservercertissuer   = $zabbix::params::agent_tlsservercertissuer,
-  $tlsservercertsubject  = $zabbix::params::agent_tlsservercertsubject,) inherits zabbix::params {
-  # Check some if they are boolean
+  $zabbix_version                         = $zabbix::params::zabbix_version,
+  $zabbix_package_state                   = $zabbix::params::zabbix_package_state,
+  $zabbix_package_agent                   = $zabbix::params::zabbix_package_agent,
+  Boolean $manage_firewall                = $zabbix::params::manage_firewall,
+  Boolean $manage_repo                    = $zabbix::params::manage_repo,
+  Boolean $manage_resources               = $zabbix::params::manage_resources,
+  $monitored_by_proxy                     = $zabbix::params::monitored_by_proxy,
+  $agent_use_ip                           = $zabbix::params::agent_use_ip,
+  $zbx_group                              = $zabbix::params::agent_zbx_group,
+  $zbx_group_create                       = $zabbix::params::agent_zbx_group_create,
+  $zbx_templates                          = $zabbix::params::agent_zbx_templates,
+  $agent_configfile_path                  = $zabbix::params::agent_configfile_path,
+  $pidfile                                = $zabbix::params::agent_pidfile,
+  $servicename                            = $zabbix::params::agent_servicename,
+  String $logtype                         = $zabbix::params::agent_logtype,
+  Optional[Stdlib::Absolutepath] $logfile = $zabbix::params::agent_logfile,
+  $logfilesize                            = $zabbix::params::agent_logfilesize,
+  $debuglevel                             = $zabbix::params::agent_debuglevel,
+  $sourceip                               = $zabbix::params::agent_sourceip,
+  $enableremotecommands                   = $zabbix::params::agent_enableremotecommands,
+  $logremotecommands                      = $zabbix::params::agent_logremotecommands,
+  $server                                 = $zabbix::params::agent_server,
+  $listenport                             = $zabbix::params::agent_listenport,
+  $listenip                               = $zabbix::params::agent_listenip,
+  $startagents                            = $zabbix::params::agent_startagents,
+  $serveractive                           = $zabbix::params::agent_serveractive,
+  $hostname                               = $zabbix::params::agent_hostname,
+  $hostnameitem                           = $zabbix::params::agent_hostnameitem,
+  $hostmetadata                           = $zabbix::params::agent_hostmetadata,
+  $hostmetadataitem                       = $zabbix::params::agent_hostmetadataitem,
+  $refreshactivechecks                    = $zabbix::params::agent_refreshactivechecks,
+  $buffersend                             = $zabbix::params::agent_buffersend,
+  $buffersize                             = $zabbix::params::agent_buffersize,
+  $maxlinespersecond                      = $zabbix::params::agent_maxlinespersecond,
+  Optional[Array] $zabbix_alias           = $zabbix::params::agent_zabbix_alias,
+  $timeout                                = $zabbix::params::agent_timeout,
+  $allowroot                              = $zabbix::params::agent_allowroot,
+  $zabbix_user                            = $zabbix::params::agent_zabbix_user,
+  $include_dir                            = $zabbix::params::agent_include,
+  $include_dir_purge                      = $zabbix::params::agent_include_purge,
+  $unsafeuserparameters                   = $zabbix::params::agent_unsafeuserparameters,
+  $userparameter                          = $zabbix::params::agent_userparameter,
+  $loadmodulepath                         = $zabbix::params::agent_loadmodulepath,
+  $loadmodule                             = $zabbix::params::agent_loadmodule,
+  $tlsaccept                              = $zabbix::params::agent_tlsaccept,
+  $tlscafile                              = $zabbix::params::agent_tlscafile,
+  $tlscertfile                            = $zabbix::params::agent_tlscertfile,
+  $tlsconnect                             = $zabbix::params::agent_tlsconnect,
+  $tlscrlfile                             = $zabbix::params::agent_tlscrlfile,
+  $tlskeyfile                             = $zabbix::params::agent_tlskeyfile,
+  $tlspskfile                             = $zabbix::params::agent_tlspskfile,
+  $tlspskidentity                         = $zabbix::params::agent_tlspskidentity,
+  $tlsservercertissuer                    = $zabbix::params::agent_tlsservercertissuer,
+  $tlsservercertsubject                   = $zabbix::params::agent_tlsservercertsubject,
+  String $agent_config_owner              = $zabbix::params::agent_config_owner,
+  String $agent_config_group              = $zabbix::params::agent_config_group,
+  Boolean $manage_selinux                 = $zabbix::params::manage_selinux,
+  Array[String] $selinux_require          = $zabbix::params::selinux_require,
+  Hash[String, Array] $selinux_rules      = $zabbix::params::selinux_rules,
+  String $additional_service_params       = $zabbix::params::additional_service_params,
+  String $service_type                    = $zabbix::params::service_type,
+) inherits zabbix::params {
+
+  # the following two codeblocks are a bit blargh. The correct default value for
+  # $real_additional_service_params and $type changes based on the value of $zabbix_version
+  # We handle this in the params.pp, but that doesn't work if somebody provides a specific
+  # value for $zabbix_version and overwrites our default :(
+  # the codeblocks set defaults for both variables if $zabbix_version got provided,
+  # but only if the variables aren't provided.
+
+  if $zabbix_version != $zabbix::params::zabbix_version and $additional_service_params == $zabbix::params::additional_service_params {
+    $real_additional_service_params = versioncmp($zabbix_version, '3.0') ? {
+      1  => '--foreground',
+      0  => '--foreground',
+      -1 => '',
+    }
+  } else {
+    $real_additional_service_params = $additional_service_params
+  }
+  if $zabbix_version != $zabbix::params::zabbix_version and $service_type == $zabbix::params::service_type {
+    $real_service_type = versioncmp($zabbix_version, '3.0') ? {
+      1  => 'simple',
+      0  => 'simple',
+      -1 => 'forking',
+    }
+  } else {
+    $real_service_type = $service_type
+  }
 
   # Find if listenip is set. If not, we can set to specific ip or
   # to network name. If more than 1 interfaces are available, we
   # can find the ipaddress of this specific interface if listenip
   # is set to for example "eth1" or "bond0.73".
-  if ($listenip != undef) {
-    if ($listenip =~ /^(eth|lo|bond|lxc|eno|tap|tun|virbr).*/) {
-      $listen_ip = getvar("::ipaddress_${listenip}")
-    } elsif is_ip_address($listenip) or $listenip == '*' {
-      $listen_ip = $listenip
-    } else {
-      $listen_ip = $::ipaddress
-    }
-  } else {
-    $listen_ip = $::ipaddress
+  $listen_ip = $listenip ? {
+    /^(e|lo|bond|lxc|tap|tun|virbr).*/ => fact("networking.interfaces.${listenip}.ip"),
+    '*' => undef,
+    default => $listenip,
   }
 
   # So if manage_resources is set to true, we can send some data
@@ -283,8 +312,8 @@ class zabbix::agent (
       $use_proxy = ''
     }
 
-    class { '::zabbix::resources::agent':
-      hostname     => $::fqdn,
+    class { 'zabbix::resources::agent':
+      hostname     => $facts['fqdn'],
       ipaddress    => $listen_ip,
       use_ip       => $agent_use_ip,
       port         => $listenport,
@@ -297,7 +326,7 @@ class zabbix::agent (
 
   # Only include the repo class if it has not yet been included
   unless defined(Class['Zabbix::Repo']) {
-    class { '::zabbix::repo':
+    class { 'zabbix::repo':
       manage_repo    => $manage_repo,
       zabbix_version => $zabbix_version,
     }
@@ -311,10 +340,13 @@ class zabbix::agent (
   }
 
   # Ensure that the correct config file is used.
-  zabbix::startup {'zabbix-agent':
-    pidfile               => $pidfile,
-    agent_configfile_path => $agent_configfile_path,
-    require               => Package[$zabbix_package_agent],
+  zabbix::startup {$servicename:
+    pidfile                   => $pidfile,
+    agent_configfile_path     => $agent_configfile_path,
+    zabbix_user               => $zabbix_user,
+    additional_service_params => $real_additional_service_params,
+    service_type              => $real_service_type,
+    require                   => Package[$zabbix_package_agent],
   }
 
   if $agent_configfile_path != '/etc/zabbix/zabbix_agentd.conf' {
@@ -342,8 +374,8 @@ class zabbix::agent (
   # Configuring the zabbix-agent configuration file
   file { $agent_configfile_path:
     ensure  => present,
-    owner   => 'zabbix',
-    group   => 'zabbix',
+    owner   => $agent_config_owner,
+    group   => $agent_config_group,
     mode    => '0644',
     notify  => Service['zabbix-agent'],
     require => Package[$zabbix_package_agent],
@@ -354,8 +386,8 @@ class zabbix::agent (
   # Include dir for specific zabbix-agent checks.
   file { $include_dir:
     ensure  => directory,
-    owner   => 'zabbix',
-    group   => 'zabbix',
+    owner   => $agent_config_owner,
+    group   => $agent_config_group,
     recurse => true,
     purge   => $include_dir_purge,
     notify  => Service['zabbix-agent'],
@@ -373,6 +405,15 @@ class zabbix::agent (
         'NEW',
         'RELATED',
         'ESTABLISHED'],
+    }
+  }
+  # the agent doesn't work perfectly fine with selinux
+  # https://support.zabbix.com/browse/ZBX-11631
+  if $facts['selinux'] == true and $manage_selinux {
+    selinux::module{'zabbix-agent':
+      ensure     => 'present',
+      content_te => template('zabbix/selinux/zabbix-agent.te.erb'),
+      before     => Service['zabbix-agent'],
     }
   }
 }

@@ -4,14 +4,20 @@ describe 'zabbix::database::mysql' do
   let :node do
     'rspec.puppet.com'
   end
+
+  let :pre_condition do
+    "include 'mysql::server'"
+  end
+
   on_supported_os.each do |os, facts|
     context "on #{os} " do
       let :facts do
         facts
       end
+
       context 'with all defaults' do
         it 'fails' do
-          is_expected.to raise_error(Puppet::Error, %r{We do not work.})
+          is_expected.not_to compile.with_all_deps
         end
       end
       path2 = if facts[:osfamily] == 'RedHat'
@@ -55,9 +61,9 @@ describe 'zabbix::database::mysql' do
             zabbix_version: '2.4'
           }
         end
+
         it { is_expected.to contain_class('zabbix::database::mysql') }
-        # this doesn't make much sense because the class requires other classes
-        # it { should compile.with_all_deps }
+        it { is_expected.to compile.with_all_deps }
         it { is_expected.to contain_exec('zabbix_proxy_create.sql').with_command("cd #{path2} && if [ -f schema.sql.gz ]; then gunzip -f schema.sql.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-proxy' -p'zabbix-proxy' -D 'zabbix-proxy' < schema.sql && touch /etc/zabbix/.schema.done") }
       end
       context 'when zabbix_type is server and zabbix version is 3.0' do
@@ -71,6 +77,7 @@ describe 'zabbix::database::mysql' do
             zabbix_version: '3.0'
           }
         end
+
         it { is_expected.to contain_class('zabbix::database::mysql') }
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to contain_exec('zabbix_server_create.sql').with_command("cd #{path3} && if [ -f create.sql.gz ]; then gunzip -f create.sql.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-server' -p'zabbix-server' -D 'zabbix-server' < create.sql && touch /etc/zabbix/.schema.done") }
@@ -89,9 +96,9 @@ describe 'zabbix::database::mysql' do
             zabbix_version: '3.0'
           }
         end
+
         it { is_expected.to contain_class('zabbix::database::mysql') }
-        # this doesn't make much sense because the class requires other classes
-        # it { should compile.with_all_deps }
+        it { is_expected.to compile.with_all_deps }
         it { is_expected.to contain_exec('zabbix_proxy_create.sql').with_command("cd #{path3} && if [ -f schema.sql.gz ]; then gunzip -f schema.sql.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-proxy' -p'zabbix-proxy' -D 'zabbix-proxy' < schema.sql && touch /etc/zabbix/.schema.done") }
       end
       context 'when zabbix_type is server and zabbix version is 3.2' do
@@ -105,6 +112,7 @@ describe 'zabbix::database::mysql' do
             zabbix_version: '3.2'
           }
         end
+
         it { is_expected.to contain_class('zabbix::database::mysql') }
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to contain_exec('zabbix_server_create.sql').with_command("cd #{path3} && if [ -f create.sql.gz ]; then gunzip -f create.sql.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-server' -p'zabbix-server' -D 'zabbix-server' < create.sql && touch /etc/zabbix/.schema.done") }
@@ -123,9 +131,9 @@ describe 'zabbix::database::mysql' do
             zabbix_version: '3.2'
           }
         end
+
         it { is_expected.to contain_class('zabbix::database::mysql') }
-        # this doesn't make much sense because the class requires other classes
-        # it { should compile.with_all_deps }
+        it { is_expected.to compile.with_all_deps }
         it { is_expected.to contain_exec('zabbix_proxy_create.sql').with_command("cd #{path3} && if [ -f schema.sql.gz ]; then gunzip -f schema.sql.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-proxy' -p'zabbix-proxy' -D 'zabbix-proxy' < schema.sql && touch /etc/zabbix/.schema.done") }
       end
     end

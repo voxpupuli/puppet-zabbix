@@ -1,4 +1,4 @@
-#puppet-zabbix
+# puppet-zabbix
 
 [![Build Status](https://travis-ci.org/voxpupuli/puppet-zabbix.svg?branch=master)](https://travis-ci.org/voxpupuli/puppet-zabbix)
 [![Code Coverage](https://coveralls.io/repos/github/voxpupuli/puppet-zabbix/badge.svg?branch=master)](https://coveralls.io/github/voxpupuli/puppet-zabbix)
@@ -7,12 +7,12 @@
 [![Puppet Forge - endorsement](https://img.shields.io/puppetforge/e/puppet/zabbix.svg)](https://forge.puppetlabs.com/puppet/zabbix)
 [![Puppet Forge - scores](https://img.shields.io/puppetforge/f/puppet/zabbix.svg)](https://forge.puppetlabs.com/puppet/zabbix)
 
-####Table of Contents
+#### Table of Contents
 
 1. [Overview](#overview)
 2. [Upgrade](#upgrade)
-    * [to 1.0.0] (#100)
-    * [to 2.0.0] (#200)
+    * [to 1.0.0](#100)
+    * [to 2.0.0](#200)
 3. [Module Description - What the module does and why it is useful](#module-description)
 4. [Setup - The basics of getting started with the zabbix module](#setup)
     * [zabbix-server](#setup-zabbix-server)
@@ -37,7 +37,7 @@
     * [Some overall notes](#standard-usage)
     * [When using exported resources | manage_resources is true](#when-using-exported-resources)
 
-##Overview
+## Overview
 
 This module contains the classes for installing and configuring the following zabbix components:
 
@@ -50,7 +50,7 @@ This module contains the classes for installing and configuring the following za
 This readme will contain all basic information to get you started. Some more information can be found on the github wiki, location: https://github.com/voxpupuli/puppet-zabbix/wiki
 
 
-##Module Description
+## Module Description
 When using this module, you can monitor your whole environment with zabbix. It can install the various zabbix components like the server and agent, but you will also be able to install specific "userparameter" file which zabbix can use for monitoring.
 
 With the 0.4.0 release, you can - when you have configured exported resources - configure agents and proxies in the webinterface. So when you add an zabbix::agent to an host, it first install the agent onto the host. It will send some data to the puppetdb and when puppet runs on the zabbix-server it will create this new host via the zabbix-api.
@@ -60,8 +60,8 @@ Be aware when you have a lot of hosts, it will increase the puppet runtime on th
 This module make uses of this gem: https://github.com/express42/zabbixapi
 With this gem it is possible to create/update hosts/proxy in ruby easy.
 
-##Upgrade
-###1.0.0
+## Upgrade
+### 1.0.0
 With release 1.0.0 the zabbix::server class is split into 3 classes:
 
   - zabbix::web
@@ -93,7 +93,7 @@ When upgrading from 0.x.x to 1.x.x, be aware of the following changes:
 
 In case I missed something, please let me know and will update this document.
 
-###2.0.0
+### 2.0.0
 Altough this is an major update, there is only one small change that we need to discuss and is specifically for the Zabbix Proxy.
 
 The following properties for the zabbix::proxy needs to have the sizes:
@@ -105,10 +105,10 @@ The following properties for the zabbix::proxy needs to have the sizes:
 
 Before 2.0.0 these could be used with an single integer, as in the template was hardcoded the 'M'. With release 2.0.0 you'll have to use the correct full size like: 8M, 16M or 2G.
 
-##Setup
+## Setup
 As this puppet module contains specific components for zabbix, you'll need to specify which you want to install. Every zabbix component has his own zabbix:: class. Here you'll find each component.
 
-###Setup zabbix-server
+### Setup zabbix-server
 This will install an basic zabbix-server instance. You'll have to decide if you want to run everything on a single host or multiple hosts. When installing on a single host, the 'zabbix' class can be used. When you want to use more than 1 host, you'll need the following classes:
   - zabbix::web
   - zabbix::server
@@ -123,10 +123,10 @@ When installed succesfully, zabbix web interface will be accessable and you can 
 Username: Admin
 Password: zabbix
 
-##Usage
+## Usage
 The following will provide an basic usage of the zabbix components.
 
-###Usage zabbix-server
+### Usage zabbix-server
 
 The zabbix-server can be used in 2 ways:
 * one node setup
@@ -169,7 +169,17 @@ node 'zabbix.example.com' {
 Everything will be installed on the same server. There is also an possibility to seperate the components, please check the following wiki:
 https://github.com/voxpupuli/puppet-zabbix/wiki/Multi-node-Zabbix-Server-setup
 
-###Usage zabbix-agent
+Please note that if you use apache as the frontend (which is the default) and SELinux is enabled, you need to set these SEBooleans (preferably in a profile) to allow apache to connect to the database:
+```puppet
+if $facts['selinux'] {
+  selboolean { ['httpd_can_network_connect', 'httpd_can_network_connect_db']:
+    persistent => true,
+    value      => 'on',
+  }
+}
+```
+
+### Usage zabbix-agent
 
 Basic one way of setup, wheter it is monitored by zabbix-server or zabbix-proxy:
 ```ruby
@@ -178,7 +188,7 @@ class { 'zabbix::agent':
 }
 ```
 
-###Usage zabbix-proxy
+### Usage zabbix-proxy
 
 Like the zabbix-server, the zabbix-proxy can also be used in 2 ways:
 * single node
@@ -223,7 +233,7 @@ You'll have to specify the location to the file in the `database_name` parameter
 Everything will be installed on the same server. There is also an possibility to seperate the components, please check the following wiki:
 https://github.com/voxpupuli/puppet-zabbix/wiki/Multi-node-Zabbix-Proxy-setup
 
-###Usage zabbix-javagateway
+### Usage zabbix-javagateway
 
 The zabbix-javagateway can be used with an zabbix-server or zabbix-proxy. You'll need to install it on an server. (Can be together with zabbix-server or zabbix-proxy, you can even install it on a sperate machine.). The following example shows you to use it on a seperate machine.
 
@@ -255,13 +265,13 @@ node 'server11.example.com' {
   }
 }
 ```
-###Usage zabbix-sender
+### Usage zabbix-sender
 
 The zabbix-sender installation is quite simple and straightforward:
 ```ruby
 include zabbix::sender
 ```
-###Usage zabbix-userparameters
+### Usage zabbix-userparameters
 Using an 'source' file:
 
 ```ruby
@@ -307,7 +317,7 @@ Screenshot from The Foreman (With thanks to "inspired-geek" )
 
 When running the puppet-agent command, it will install the mongo.conf file on the host.
 
-###Usage zabbix-template
+### Usage zabbix-template
 
 With the 'zabbix::template' define, you can install Zabbix templates via the API. You'll have to make sure you store the XML file somewere on your puppet server or in your module.
 
@@ -320,7 +330,65 @@ zabbix::template { 'Template App MySQL':
 }
 ```
 
-##Reference
+## Zabbix Upgrades
+
+It is possible to do upgrades via this module. An example for the zabbix agent:
+
+```puppet
+class{'zabbix::agent':
+  zabbix_version => '2.4',
+  manage_repo    => true,
+}
+```
+
+This will install the latest zabbix 2.4 agent for you. The module won't to any upgrades nor install patch releases. If you want to get patch releases automatically:
+
+```puppet
+class{'zabbix::agent':
+  zabbix_version       => '2.4',
+  manage_repo          => true,
+  zabbix_package_state => 'latest',
+}
+```
+
+Let's asume zabbix just released version 3.4. Than you can do upgrades as follow:
+```puppet
+class{'zabbix::agent':
+  zabbix_version       => '3.4',
+  manage_repo          => true,
+  zabbix_package_state => 'latest',
+}
+```
+
+You can also tell the module to only create the new repository, but not to update the existing agent:
+
+```puppet
+class{'zabbix::agent':
+  zabbix_version       => '3.4',
+  manage_repo          => true,
+  zabbix_package_state => 'installed',
+}
+```
+
+Last but not least you can disable the repo management completely, which will than install zabbix from the present system repos:
+
+```puppet
+class{'zabbix::agent':
+  manage_repo          => false,
+  zabbix_package_state => 'present',
+}
+```
+
+Even in this scenario you can do automatic upgrades via the module (it is the job of the user to somehow bring updates into the repo, for example by managing the repo on their own):
+
+```puppet
+class{'zabbix::agent':
+  manage_repo          => false,
+  zabbix_package_state => 'latest',
+}
+```
+
+## Reference
 There are some overall parameters which exists on all of the classes:
 * `zabbix_version`: You can specify which zabbix release needs to be installed. Default is '3.0'.
 * `manage_firewall`: Wheter you want to manage the firewall. If true, iptables will be configured to allow communications to zabbix ports. (Default: False)
@@ -331,10 +399,10 @@ The following is only availabe for the following classes: zabbix::web, zabbix::p
 * `database_type`: Which database is used for zabbix. Default is postgresql.
 * `manage_database`: When the parameter 'manage_database' is set to true (Which is default), it will create the database and loads the sql files. Default the postgresql will be used as backend, mentioned in the params.pp file. You'll have to include the postgresql (or mysql) module yourself, as this module will require it.
 
-###Reference zabbix (init.pp)
+### Reference zabbix (init.pp)
 This is the class for installing everything on a single host and thus all parameters described earlier and those below can be used with this class.
 
-###Reference zabbix-web
+### Reference zabbix-web
 * `zabbix_url`: This is the url on which Zabbix should be available. Please make sure that the entry exists in the DNS configuration.
 * `zabbix_timezone`: On which timezone the machine is placed. This information is needed for the apache virtual host.
 * `manage_vhost`: Will create an apache virtual host. Default is true.
@@ -359,7 +427,7 @@ This is the class for installing everything on a single host and thus all parame
 
 There are some more zabbix specific parameters, please check them by opening the manifest file.
 
-###Reference zabbix-server
+### Reference zabbix-server
 * `database_path`: When database binaries are not in $PATH, you can use this parameter to append `database_path` to $PATH
 * `tlscafile`: Full pathname of a file containing the top-level CA(s) certificates for peer certificate verification.
 * `tlscertfile`: Full pathname of a file containing the server certificate or certificate chain.
@@ -368,7 +436,7 @@ There are some more zabbix specific parameters, please check them by opening the
 
 There are some more zabbix specific parameters, please check them by opening the manifest file.
 
-###Reference zabbix-agent
+### Reference zabbix-agent
 * `server`: This is the ipaddress of the zabbix-server or zabbix-proxy.
 * `tlsaccept`: What incoming connections to accept from Zabbix server. Used for a passive proxy, ignored on an active proxy.
 * `tlscafile`: Full pathname of a file containing the top-level CA(s) certificates for peer certificate verification.
@@ -389,7 +457,7 @@ The following parameters is only needed when `manage_resources` is set to true:
 
 There are some more zabbix specific parameters, please check them by opening the manifest file.
 
-###Reference zabbix-proxy
+### Reference zabbix-proxy
 * `zabbix_server_host`: The ipaddress or fqdn of the zabbix server.
 * `database_path`: When database binaries are not in $PATH, you can use this parameter to append `database_path` to $PATH
 * `tlsaccept`: What incoming connections to accept from Zabbix server. Used for a passive proxy, ignored on an active proxy.
@@ -410,10 +478,10 @@ The following parameters is only needed when `manage_resources` is set to true:
 
 There are some more zabbix specific parameters, please check them by opening the manifest file.
 
-###Reference zabbix-javagateway
+### Reference zabbix-javagateway
 There are some zabbix specific parameters, please check them by opening the manifest file.
 
-###Reference zabbix-userparameters
+### Reference zabbix-userparameters
 
 * `source`: File which holds several userparameter entries.
 * `content`: When you have 1 userparameter entry which you want to install.
@@ -422,12 +490,12 @@ There are some zabbix specific parameters, please check them by opening the mani
 * `template`: When you use exported resources (when manage_resources on other components is set to true) you'll can add the name of the template which correspondents with the 'content' or 'source' which you add. The template will be added to the host.
 * `script_dir`: When `script` is used, this parameter can provide the directly where this script needs to be placed. Default: '/usr/bin'
 
-###Reference zabbix-template
+### Reference zabbix-template
 
 * `templ_name`: The name of the template. This name will be found in the Web interface.
 * `templ_source`: The location of the XML file wich needs to be imported.
 
-##limitations
+## Limitations
 The module is only supported on the following operating systems:
 
 Zabbix 3.0:
@@ -474,7 +542,7 @@ This module is supported on both the community as the Enterprise version of Pupp
 
 Please be aware, that when manage_resources is enabled, it can increase an puppet run on the zabbix-server a lot when you have a lot of hosts.
 
-##Contributors
+## Contributors
 
 **ericsysmin** will be helping and maintaining this puppet module. In Github terms he is an Collaborator. So don't be suprised if he acceps/rejects Pull Requests and comment in issues.
 
@@ -535,14 +603,29 @@ The following have contributed to this puppet module:
 Many thanks for this!
 (If I have forgotten you, please let me know and put you in the list of fame. :-))
 
-##Note
-###Standard usage
+## Note
+### Standard usage
 *	Not specified as required but for working correctly, the epel repository should be available for the 'fping'|'fping6' packages.
 *	Make sure you have sudo installed and configured with: !requiretty.
-*   Make sure that selinux is permissive or disabled.
 
+### SE Linux
 
-###When using exported resources
+On systems with SE Linux active and enforcing, Zabbix agent will be limited unless given proper rights with an SE Linux module.
+This Puppet module will apply some default SE Linux rules for it.
+More can be provided if needed by using two class parameters, for example in Hiera YAML:
+
+```yaml
+zabbix::agent::selinux_require:
+  - 'type zabbix_agent_t'
+  - 'class process setrlimit'
+zabbix::agent::selinux_rules:
+  zabbix_agent_t:
+    - 'allow zabbix_agent_t self:process setrlimit'
+  zabbix_script_t:
+    - 'allow zabbix_script_t zabbix_agent_t:process sigchld'
+```
+
+### When using exported resources
 
 At the moment of writing, the puppet run will fail one or more times when `manage_resources` is set to true when you install an fresh Zabbix server. It is an issue and I'm aware of it. Don't know yet how to solve this, but someone suggested to try puppet stages and for know I haven't made it work yet.
 

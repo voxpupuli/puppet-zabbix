@@ -12,46 +12,44 @@
 #  }
 #
 define zabbix::startup (
-  $pidfile                = undef,
-  $agent_configfile_path  = undef,
-  $server_configfile_path = undef,
-  $database_type          = undef,
+  Optional[Stdlib::Absolutepath] $pidfile                = undef,
+  Optional[Stdlib::Absolutepath] $agent_configfile_path  = undef,
+  Optional[Stdlib::Absolutepath] $server_configfile_path = undef,
+  Optional[Zabbix::Databases] $database_type             = undef,
+  Optional[String] $zabbix_user                          = undef,
+  String $additional_service_params                      = '',
+  String $service_type                                   = 'simple',
+  Optional[Boolean] $manage_database                     = undef,
   ) {
+
   case $title {
     /agent/: {
-      unless $agent_configfile_path {
-        fail('you have to provide a agent_configfile_path param')
-      }
+      assert_type(Stdlib::Absolutepath, $agent_configfile_path)
     }
     /server/: {
-      unless $server_configfile_path {
-        fail('you have to provide a server_configfile_path param')
-      }
-      unless $database_type {
-        fail('you have to provide a database_type param')
-      }
+      assert_type(Stdlib::Absolutepath, $server_configfile_path)
+      assert_type(Zabbix::Databases, $database_type)
+      assert_type(Boolean, $manage_database)
     }
     default: {
       fail('we currently only spport a title that contains agent or server')
     }
   }
-  if str2bool(getvar('::systemd')) {
-    unless $pidfile {
-      fail('you have to provide a pidfile param')
-    }
-    contain ::systemd
+  # provided by camp2camp/systemd
+  if $facts['systemd'] {
+    contain systemd
     file { "/etc/systemd/system/${name}.service":
       ensure  => file,
       mode    => '0664',
       content => template("zabbix/${name}-systemd.init.erb"),
-    } ~>
-    Exec['systemctl-daemon-reload']
+    }
+    ~> Exec['systemctl-daemon-reload']
     file { "/etc/init.d/${name}":
       ensure  => absent,
     }
-  } elsif $::osfamily in ['Debian', 'RedHat'] {
+  } elsif $facts['os']['family'] in ['Debian', 'RedHat'] {
     # Currently other osfamily without systemd is not supported
-    $osfamily_downcase = downcase($::osfamily)
+    $osfamily_downcase = downcase($facts['os']['family'])
     file { "/etc/init.d/${name}":
       ensure  => file,
       mode    => '0755',

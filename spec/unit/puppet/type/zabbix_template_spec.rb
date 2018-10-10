@@ -65,39 +65,39 @@ describe Puppet::Type.type(:zabbix_template) do
 
     describe '.template_xmls_match?' do
       mock_source_xml = <<-EOS
-<?xml version="1.0" encoding="UTF-8"?>
-<zabbix_export>
-    <version>3.2</version>
-    <date>2016-11-29T09:27:09Z</date>
-    <groups>
-        <group>
-            <name>Templates</name>
-        </group>
-    </groups>
-    <templates>
-        <template>
-            <template>MyTemplate</template>
-            <name>MyTemplate</name>
-            <description>foo</description>
+        <?xml version="1.0" encoding="UTF-8"?>
+        <zabbix_export>
+            <version>3.2</version>
+            <date>2016-11-29T09:27:09Z</date>
             <groups>
                 <group>
                     <name>Templates</name>
                 </group>
             </groups>
-            <applications/>
-            <items/>
-            <discovery_rules/>
-            <httptests/>
-            <macros/>
-            <templates/>
-            <screens/>
-        </template>
-    </templates>
-</zabbix_export>
+            <templates>
+                <template>
+                    <template>MyTemplate</template>
+                    <name>MyTemplate</name>
+                    <description>foo</description>
+                    <groups>
+                        <group>
+                            <name>Templates</name>
+                        </group>
+                    </groups>
+                    <applications/>
+                    <items/>
+                    <discovery_rules/>
+                    <httptests/>
+                    <macros/>
+                    <templates/>
+                    <screens/>
+                </template>
+            </templates>
+        </zabbix_export>
       EOS
       mock_provider_xml = <<-EOS
-<?xml version="1.0" encoding="UTF-8"?>
-<zabbix_export><version>3.2</version><date>2016-11-30T12:06:25Z</date><groups><group><name>Templates</name></group></groups><templates><template><template>MyTemplate</template><name>MyTemplate</name><description>foo</description><groups><group><name>Templates</name></group></groups><applications/><items/><discovery_rules/><httptests/><macros/><templates/><screens/></template></templates></zabbix_export>
+        <?xml version="1.0" encoding="UTF-8"?>
+        <zabbix_export><version>3.2</version><date>2016-11-30T12:06:25Z</date><groups><group><name>Templates</name></group></groups><templates><template><template>MyTemplate</template><name>MyTemplate</name><description>foo</description><groups><group><name>Templates</name></group></groups><applications/><items/><discovery_rules/><httptests/><macros/><templates/><screens/></template></templates></zabbix_export>
       EOS
       it 'returns true when cleaned source xml matches cleaned server xml' do
         provider_class.stubs(:new).returns(provider)
@@ -112,9 +112,9 @@ describe Puppet::Type.type(:zabbix_template) do
       it 'returns content of :template_source as string' do
         mock_template_source_file = '/path/to/template.xml'
         mock_file_content = <<-EOS
-mock
-file
-content
+          mock
+          file
+          content
         EOS
         FileUtils.mkdir_p '/path/to'
         File.open(mock_template_source_file, 'w') do |f|

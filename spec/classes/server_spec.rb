@@ -1,40 +1,39 @@
 require 'spec_helper'
 
 describe 'zabbix::server' do
-  let :params do
-    {
-      zabbix_version: '3.0'
-    }
-  end
-
   let :node do
     'rspec.puppet.com'
   end
 
   on_supported_os.each do |os, facts|
+    next if facts[:osfamily] == 'Archlinux' # zabbix server is currently not supported on archlinux
     context "on #{os} " do
-      systemd_fact = case facts[:osfamily]
-                     when 'Archlinux'
-                       { systemd: true }
-                     else
-                       { systemd: false }
-                     end
       let :facts do
-        facts.merge(systemd_fact)
+        facts
       end
 
       describe 'with default settings' do
         it { is_expected.to contain_class('zabbix::repo') }
         it { is_expected.to contain_service('zabbix-server').with_ensure('running') }
-        it { is_expected.not_to contain_selboolean('zabbix_can_network') }
         it { is_expected.to contain_zabbix__startup('zabbix-server') }
       end
 
-      describe 'with enabled selinux' do
-        let :facts do
-          super().merge(selinux_config_mode: 'enforcing')
+      if facts[:osfamily] == 'RedHat'
+        describe 'with enabled selinux' do
+          let :facts do
+            super().merge(selinux: true)
+          end
+
+          it { is_expected.to contain_selboolean('zabbix_can_network').with('value' => 'on', 'persistent' => true) }
         end
-        it { is_expected.to contain_selboolean('zabbix_can_network').with('value' => 'on', 'persistent' => true) }
+      end
+
+      describe 'with disabled selinux' do
+        let :facts do
+          super().merge(selinux: false)
+        end
+
+        it { is_expected.not_to contain_selboolean('zabbix_can_network').with('value' => 'on', 'persistent' => true) }
       end
 
       describe 'with database_type as postgresql' do
@@ -79,7 +78,7 @@ describe 'zabbix::server' do
         end
 
         it { is_expected.to contain_class('zabbix::database::postgresql').with_zabbix_type('server') }
-        it { is_expected.to contain_class('zabbix::database::postgresql').with_zabbix_version('3.0') }
+        it { is_expected.to contain_class('zabbix::database::postgresql').with_zabbix_version('3.4') }
         it { is_expected.to contain_class('zabbix::database::postgresql').with_database_name('zabbix-server') }
         it { is_expected.to contain_class('zabbix::database::postgresql').with_database_user('zabbix-server') }
         it { is_expected.to contain_class('zabbix::database::postgresql').with_database_password('zabbix-server') }
@@ -98,7 +97,7 @@ describe 'zabbix::server' do
         end
 
         it { is_expected.to contain_class('zabbix::database::mysql').with_zabbix_type('server') }
-        it { is_expected.to contain_class('zabbix::database::mysql').with_zabbix_version('3.0') }
+        it { is_expected.to contain_class('zabbix::database::mysql').with_zabbix_version('3.4') }
         it { is_expected.to contain_class('zabbix::database::mysql').with_database_name('zabbix-server') }
         it { is_expected.to contain_class('zabbix::database::mysql').with_database_user('zabbix-server') }
         it { is_expected.to contain_class('zabbix::database::mysql').with_database_password('zabbix-server') }
@@ -294,6 +293,8 @@ describe 'zabbix::server' do
         it { is_expected.not_to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeID=0$} }
         it { is_expected.not_to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeNoEvents=0} }
         it { is_expected.not_to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeNoHistory=0} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SSLCertLocation=/usr/lib/zabbix/ssl/certs} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SSLKeyLocation=/usr/lib/zabbix/ssl/keys} }
       end
 
       context 'with zabbix_server.conf and version 3.0' do
@@ -311,6 +312,8 @@ describe 'zabbix::server' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCRLFile=/etc/zabbix/keys/zabbix-server.crl$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCertFile=/etc/zabbix/keys/zabbix-server.crt$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSKeyFile=/etc/zabbix/keys/zabbix-server.key$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SSLCertLocation=/usr/lib/zabbix/ssl/certs} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SSLKeyLocation=/usr/lib/zabbix/ssl/keys} }
       end
       context 'with zabbix_server.conf and version 3.2' do
         let :params do

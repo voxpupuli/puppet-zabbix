@@ -326,94 +326,101 @@
 # Copyright 2014 Werner Dijkerman
 #
 class zabbix::proxy (
-  $database_type            = $zabbix::params::database_type,
-  $database_path            = $zabbix::params::database_path,
-  $zabbix_version           = $zabbix::params::zabbix_version,
-  $zabbix_package_state     = $zabbix::params::zabbix_package_state,
-  Boolean $manage_database  = $zabbix::params::manage_database,
-  Boolean $manage_firewall  = $zabbix::params::manage_firewall,
-  Boolean $manage_repo      = $zabbix::params::manage_repo,
-  Boolean $manage_resources = $zabbix::params::manage_resources,
-  $zabbix_proxy             = $zabbix::params::zabbix_proxy,
-  $zabbix_proxy_ip          = $zabbix::params::zabbix_proxy_ip,
-  $use_ip                   = $zabbix::params::proxy_use_ip,
-  $zbx_templates            = $zabbix::params::proxy_zbx_templates,
-  $proxy_configfile_path    = $zabbix::params::proxy_configfile_path,
-  $proxy_service_name       = $zabbix::params::proxy_service_name,
-  $mode                     = $zabbix::params::proxy_mode,
-  $zabbix_server_host       = $zabbix::params::proxy_zabbix_server_host,
-  $zabbix_server_port       = $zabbix::params::proxy_zabbix_server_port,
-  $hostname                 = $zabbix::params::proxy_hostname,
-  $listenport               = $zabbix::params::proxy_listenport,
-  $sourceip                 = $zabbix::params::proxy_sourceip,
-  $logfile                  = $zabbix::params::proxy_logfile,
-  $logfilesize              = $zabbix::params::proxy_logfilesize,
-  $debuglevel               = $zabbix::params::proxy_debuglevel,
-  $pidfile                  = $zabbix::params::proxy_pidfile,
-  $database_schema_path     = $zabbix::params::database_schema_path,
-  $database_host            = $zabbix::params::proxy_database_host,
-  $database_name            = $zabbix::params::proxy_database_name,
-  $database_schema          = $zabbix::params::proxy_database_schema,
-  $database_user            = $zabbix::params::proxy_database_user,
-  $database_password        = $zabbix::params::proxy_database_password,
-  $database_socket          = $zabbix::params::proxy_database_socket,
-  $database_port            = $zabbix::params::proxy_database_port,
-  $localbuffer              = $zabbix::params::proxy_localbuffer,
-  $offlinebuffer            = $zabbix::params::proxy_offlinebuffer,
-  $heartbeatfrequency       = $zabbix::params::proxy_heartbeatfrequency,
-  $configfrequency          = $zabbix::params::proxy_configfrequency,
-  $datasenderfrequency      = $zabbix::params::proxy_datasenderfrequency,
-  $startpollers             = $zabbix::params::proxy_startpollers,
-  $startipmipollers         = $zabbix::params::proxy_startipmipollers,
-  $startpollersunreachable  = $zabbix::params::proxy_startpollersunreachable,
-  $starttrappers            = $zabbix::params::proxy_starttrappers,
-  $startpingers             = $zabbix::params::proxy_startpingers,
-  $startdiscoverers         = $zabbix::params::proxy_startdiscoverers,
-  $starthttppollers         = $zabbix::params::proxy_starthttppollers,
-  $javagateway              = $zabbix::params::proxy_javagateway,
-  $javagatewayport          = $zabbix::params::proxy_javagatewayport,
-  $startjavapollers         = $zabbix::params::proxy_startjavapollers,
-  $startvmwarecollectors    = $zabbix::params::proxy_startvmwarecollectors,
-  $vmwarefrequency          = $zabbix::params::proxy_vmwarefrequency,
-  $vmwareperffrequency      = $zabbix::params::proxy_vmwareperffrequency,
-  $vmwarecachesize          = $zabbix::params::proxy_vmwarecachesize,
-  $vmwaretimeout            = $zabbix::params::proxy_vmwaretimeout,
-  $enablesnmpbulkrequests   = $zabbix::params::proxy_enablesnmpbulkrequests,
-  $snmptrapperfile          = $zabbix::params::proxy_snmptrapperfile,
-  $snmptrapper              = $zabbix::params::proxy_snmptrapper,
-  $listenip                 = $zabbix::params::proxy_listenip,
-  $housekeepingfrequency    = $zabbix::params::proxy_housekeepingfrequency,
-  $cachesize                = $zabbix::params::proxy_cachesize,
-  $startdbsyncers           = $zabbix::params::proxy_startdbsyncers,
-  $historycachesize         = $zabbix::params::proxy_historycachesize,
-  $historyindexcachesize    = $zabbix::params::proxy_historyindexcachesize,
-  $historytextcachesize     = $zabbix::params::proxy_historytextcachesize,
-  $timeout                  = $zabbix::params::proxy_timeout,
-  $tlsaccept                = $zabbix::params::proxy_tlsaccept,
-  $tlscafile                = $zabbix::params::proxy_tlscafile,
-  $tlscertfile              = $zabbix::params::proxy_tlscertfile,
-  $tlsconnect               = $zabbix::params::proxy_tlsconnect,
-  $tlscrlfile               = $zabbix::params::proxy_tlscrlfile,
-  $tlskeyfile               = $zabbix::params::proxy_tlskeyfile,
-  $tlspskfile               = $zabbix::params::proxy_tlspskfile,
-  $tlspskidentity           = $zabbix::params::proxy_tlspskidentity,
-  $tlsservercertissuer      = $zabbix::params::proxy_tlsservercertissuer,
-  $tlsservercertsubject     = $zabbix::params::proxy_tlsservercertsubject,
-  $trappertimeout           = $zabbix::params::proxy_trappertimeout,
-  $unreachableperiod        = $zabbix::params::proxy_unreachableperiod,
-  $unavaliabledelay         = $zabbix::params::proxy_unavaliabledelay,
-  $unreachabedelay          = $zabbix::params::proxy_unreachabedelay,
-  $externalscripts          = $zabbix::params::proxy_externalscripts,
-  $fpinglocation            = $zabbix::params::proxy_fpinglocation,
-  $fping6location           = $zabbix::params::proxy_fping6location,
-  $sshkeylocation           = $zabbix::params::proxy_sshkeylocation,
-  $logslowqueries           = $zabbix::params::proxy_logslowqueries,
-  $tmpdir                   = $zabbix::params::proxy_tmpdir,
-  $allowroot                = $zabbix::params::proxy_allowroot,
-  $include_dir              = $zabbix::params::proxy_include,
-  $loadmodulepath           = $zabbix::params::proxy_loadmodulepath,
-  $loadmodule               = $zabbix::params::proxy_loadmodule,
+  Zabbix::Databases $database_type = $zabbix::params::database_type,
+  $database_path                   = $zabbix::params::database_path,
+  $zabbix_version                  = $zabbix::params::zabbix_version,
+  $zabbix_package_state            = $zabbix::params::zabbix_package_state,
+  Boolean $manage_database         = $zabbix::params::manage_database,
+  Boolean $manage_firewall         = $zabbix::params::manage_firewall,
+  Boolean $manage_repo             = $zabbix::params::manage_repo,
+  Boolean $manage_resources        = $zabbix::params::manage_resources,
+  Boolean $manage_service          = $zabbix::params::manage_service,
+  $zabbix_proxy                    = $zabbix::params::zabbix_proxy,
+  $zabbix_proxy_ip                 = $zabbix::params::zabbix_proxy_ip,
+  $use_ip                          = $zabbix::params::proxy_use_ip,
+  $zbx_templates                   = $zabbix::params::proxy_zbx_templates,
+  $proxy_configfile_path           = $zabbix::params::proxy_configfile_path,
+  $proxy_service_name              = $zabbix::params::proxy_service_name,
+  $mode                            = $zabbix::params::proxy_mode,
+  $zabbix_server_host              = $zabbix::params::proxy_zabbix_server_host,
+  $zabbix_server_port              = $zabbix::params::proxy_zabbix_server_port,
+  $hostname                        = $zabbix::params::proxy_hostname,
+  $listenport                      = $zabbix::params::proxy_listenport,
+  $sourceip                        = $zabbix::params::proxy_sourceip,
+  $logfile                         = $zabbix::params::proxy_logfile,
+  $logfilesize                     = $zabbix::params::proxy_logfilesize,
+  $debuglevel                      = $zabbix::params::proxy_debuglevel,
+  $pidfile                         = $zabbix::params::proxy_pidfile,
+  $database_schema_path            = $zabbix::params::database_schema_path,
+  $database_host                   = $zabbix::params::proxy_database_host,
+  $database_name                   = $zabbix::params::proxy_database_name,
+  $database_schema                 = $zabbix::params::proxy_database_schema,
+  $database_user                   = $zabbix::params::proxy_database_user,
+  $database_password               = $zabbix::params::proxy_database_password,
+  $database_socket                 = $zabbix::params::proxy_database_socket,
+  $database_port                   = $zabbix::params::proxy_database_port,
+  $localbuffer                     = $zabbix::params::proxy_localbuffer,
+  $offlinebuffer                   = $zabbix::params::proxy_offlinebuffer,
+  $heartbeatfrequency              = $zabbix::params::proxy_heartbeatfrequency,
+  $configfrequency                 = $zabbix::params::proxy_configfrequency,
+  $datasenderfrequency             = $zabbix::params::proxy_datasenderfrequency,
+  $startpollers                    = $zabbix::params::proxy_startpollers,
+  $startipmipollers                = $zabbix::params::proxy_startipmipollers,
+  $startpollersunreachable         = $zabbix::params::proxy_startpollersunreachable,
+  $starttrappers                   = $zabbix::params::proxy_starttrappers,
+  $startpingers                    = $zabbix::params::proxy_startpingers,
+  $startdiscoverers                = $zabbix::params::proxy_startdiscoverers,
+  $starthttppollers                = $zabbix::params::proxy_starthttppollers,
+  $javagateway                     = $zabbix::params::proxy_javagateway,
+  $javagatewayport                 = $zabbix::params::proxy_javagatewayport,
+  $startjavapollers                = $zabbix::params::proxy_startjavapollers,
+  $startvmwarecollectors           = $zabbix::params::proxy_startvmwarecollectors,
+  $vmwarefrequency                 = $zabbix::params::proxy_vmwarefrequency,
+  $vmwareperffrequency             = $zabbix::params::proxy_vmwareperffrequency,
+  $vmwarecachesize                 = $zabbix::params::proxy_vmwarecachesize,
+  $vmwaretimeout                   = $zabbix::params::proxy_vmwaretimeout,
+  $enablesnmpbulkrequests          = $zabbix::params::proxy_enablesnmpbulkrequests,
+  $snmptrapperfile                 = $zabbix::params::proxy_snmptrapperfile,
+  $snmptrapper                     = $zabbix::params::proxy_snmptrapper,
+  $listenip                        = $zabbix::params::proxy_listenip,
+  $housekeepingfrequency           = $zabbix::params::proxy_housekeepingfrequency,
+  $cachesize                       = $zabbix::params::proxy_cachesize,
+  $startdbsyncers                  = $zabbix::params::proxy_startdbsyncers,
+  $historycachesize                = $zabbix::params::proxy_historycachesize,
+  $historyindexcachesize           = $zabbix::params::proxy_historyindexcachesize,
+  $historytextcachesize            = $zabbix::params::proxy_historytextcachesize,
+  $timeout                         = $zabbix::params::proxy_timeout,
+  $tlsaccept                       = $zabbix::params::proxy_tlsaccept,
+  $tlscafile                       = $zabbix::params::proxy_tlscafile,
+  $tlscertfile                     = $zabbix::params::proxy_tlscertfile,
+  $tlsconnect                      = $zabbix::params::proxy_tlsconnect,
+  $tlscrlfile                      = $zabbix::params::proxy_tlscrlfile,
+  $tlskeyfile                      = $zabbix::params::proxy_tlskeyfile,
+  $tlspskfile                      = $zabbix::params::proxy_tlspskfile,
+  $tlspskidentity                  = $zabbix::params::proxy_tlspskidentity,
+  $tlsservercertissuer             = $zabbix::params::proxy_tlsservercertissuer,
+  $tlsservercertsubject            = $zabbix::params::proxy_tlsservercertsubject,
+  $trappertimeout                  = $zabbix::params::proxy_trappertimeout,
+  $unreachableperiod               = $zabbix::params::proxy_unreachableperiod,
+  $unavaliabledelay                = $zabbix::params::proxy_unavaliabledelay,
+  $unreachabedelay                 = $zabbix::params::proxy_unreachabedelay,
+  $externalscripts                 = $zabbix::params::proxy_externalscripts,
+  $fpinglocation                   = $zabbix::params::proxy_fpinglocation,
+  $fping6location                  = $zabbix::params::proxy_fping6location,
+  $sshkeylocation                  = $zabbix::params::proxy_sshkeylocation,
+  $logslowqueries                  = $zabbix::params::proxy_logslowqueries,
+  $tmpdir                          = $zabbix::params::proxy_tmpdir,
+  $allowroot                       = $zabbix::params::proxy_allowroot,
+  $include_dir                     = $zabbix::params::proxy_include,
+  $loadmodulepath                  = $zabbix::params::proxy_loadmodulepath,
+  $loadmodule                      = $zabbix::params::proxy_loadmodule,
+  Boolean $manage_selinux          = $zabbix::params::manage_selinux,
   ) inherits zabbix::params {
+
+  # check osfamily, Arch is currently not supported for web
+  if $facts['os']['family'] == 'Archlinux' {
+    fail('Archlinux is currently not supported for zabbix::proxy ')
+  }
 
   # Find if listenip is set. If not, we can set to specific ip or
   # to network name. If more than 1 interfaces are available, we
@@ -455,7 +462,7 @@ class zabbix::proxy (
     default      : { fail("Unrecognized database type for proxy: ${database_type}") }
   }
 
-  if $manage_database == true {
+  if $manage_database {
     case $database_type {
       'postgresql' : {
         # Execute the postgresql scripts
@@ -506,7 +513,7 @@ class zabbix::proxy (
   }
 
   # Now we are going to install the correct packages.
-  case $::operatingsystem {
+  case $facts['os']['name'] {
     'redhat', 'centos', 'oraclelinux' : {
       #There is no zabbix-proxy package in 3.0
       if versioncmp('3.0',$zabbix_version) > 0 {
@@ -530,46 +537,52 @@ class zabbix::proxy (
         tag    => 'zabbix',
       }
     } # END default
-  } # END case $::operatingsystem
-
-
-
-  # Workaround for: The redhat provider can not handle attribute enable
-  # This is only happening when using an redhat family version 5.x.
-  if $::osfamily == 'redhat' and $::operatingsystemrelease !~ /^5.*/ {
-    Service[$proxy_service_name] {
-      enable => true }
-  }
+  } # END case $facts['os']['name']
 
   # Controlling the 'zabbix-proxy' service
-  service { $proxy_service_name:
-    ensure     => running,
-    hasstatus  => true,
-    hasrestart => true,
-    require    => [
-      Package["zabbix-proxy-${db}"],
-      File[$include_dir],
-      File[$proxy_configfile_path]],
+  if $manage_service {
+    service { $proxy_service_name:
+      ensure     => running,
+      hasstatus  => true,
+      hasrestart => true,
+      enable     => true,
+      subscribe  => [
+        File[$proxy_configfile_path],
+        Class['zabbix::database']
+        ],
+      require    => [
+        Package["zabbix-proxy-${db}"],
+        File[$include_dir],
+        File[$proxy_configfile_path],
+        Class['zabbix::database']
+        ],
+    }
+  }
+
+
+  $before_database = $manage_service ? {
+    true  => [
+      Service[$proxy_service_name],
+      Class["zabbix::database::${database_type}"]
+      ],
+    false => Class["zabbix::database::${database_type}"],
   }
 
   # if we want to manage the databases, we do
   # some stuff. (for maintaining database only.)
-  if $manage_database == true {
-    class { '::zabbix::database':
-      database_type     => $database_type,
-      zabbix_type       => 'proxy',
-      database_name     => $database_name,
-      database_user     => $database_user,
-      database_password => $database_password,
-      database_host     => $database_host,
-      zabbix_proxy      => $zabbix_proxy,
-      zabbix_proxy_ip   => $zabbix_proxy_ip,
-      before            => [
-        Service[$proxy_service_name],
-        Class["zabbix::database::${database_type}"],
-        ],
+  if $manage_database  {
+      class { 'zabbix::database':
+        database_type     => $database_type,
+        zabbix_type       => 'proxy',
+        database_name     => $database_name,
+        database_user     => $database_user,
+        database_password => $database_password,
+        database_host     => $database_host,
+        zabbix_proxy      => $zabbix_proxy,
+        zabbix_proxy_ip   => $zabbix_proxy_ip,
+        before            => $before_database,
+      }
     }
-  }
 
   # Configuring the zabbix-proxy configuration file
   file { $proxy_configfile_path:
@@ -577,7 +590,6 @@ class zabbix::proxy (
     owner   => 'zabbix',
     group   => 'zabbix',
     mode    => '0644',
-    notify  => Service[$proxy_service_name],
     require => Package["zabbix-proxy-${db}"],
     replace => true,
     content => template('zabbix/zabbix_proxy.conf.erb'),
@@ -603,7 +615,7 @@ class zabbix::proxy (
   }
 
   # check if selinux is active and allow zabbix
-  if $::osfamily == 'RedHat' and getvar('::selinux_config_mode') == 'enforcing' {
+  if $facts['selinux'] == true and $manage_selinux {
     selboolean{'zabbix_can_network':
       persistent => true,
       value      => 'on',

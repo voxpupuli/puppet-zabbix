@@ -1,0 +1,15 @@
+module zabbix-agent 1.0;
+
+require {
+  <% @selinux_require.each do |sel_require| -%>
+  <%= sel_require %>;
+  <% end -%>
+}
+
+<% @selinux_rules.keys.each do |key| -%>
+#============= <%= key  %> ==============
+<% @selinux_rules[key].each do |rule| -%>
+<%= rule  %>;
+<% end -%>
+
+<% end -%>

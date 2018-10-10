@@ -14,8 +14,7 @@ Puppet::Type.type(:zabbix_template).provide(:ruby, parent: Puppet::Provider::Zab
       format: 'xml',
       rules: {
         applications: {
-          createMissing: true,
-          updateExisting: true
+          createMissing: true
         },
         discoveryRules: {
           createMissing: true,
@@ -28,7 +27,7 @@ Puppet::Type.type(:zabbix_template).provide(:ruby, parent: Puppet::Provider::Zab
         groups: {
           createMissing: true
         },
-        image: {
+        images: {
           createMissing: true,
           updateExisting: true
         },

@@ -31,12 +31,7 @@ describe 'zabbix::agent' do
       end
 
       context 'with all defaults' do
-        package = case facts[:osfamily]
-                  when 'Archlinux'
-                    'zabbix3-agent'
-                  else
-                    'zabbix-agent'
-                  end
+        package = 'zabbix-agent'
         # Make sure package will be installed, service running and ensure of directory.
         it do
           is_expected.to contain_package(package).with(
@@ -74,11 +69,11 @@ describe 'zabbix::agent' do
           it { is_expected.to raise_error(Puppet::Error, %r{Managing a repo on Archlinux is currently not implemented}) }
         when 'Debian'
           # rubocop:disable RSpec/RepeatedExample
-          it { is_expected.to contain_class('zabbix::repo').with_zabbix_version('3.0') }
+          it { is_expected.to contain_class('zabbix::repo').with_zabbix_version('3.4') }
           it { is_expected.to contain_package('zabbix-agent').with_require('Class[Zabbix::Repo]') }
           it { is_expected.to contain_apt__source('zabbix') }
         when 'RedHat'
-          it { is_expected.to contain_class('zabbix::repo').with_zabbix_version('3.0') }
+          it { is_expected.to contain_class('zabbix::repo').with_zabbix_version('3.4') }
           it { is_expected.to contain_package('zabbix-agent').with_require('Class[Zabbix::Repo]') }
           it { is_expected.to contain_yumrepo('zabbix-nonsupported') }
           it { is_expected.to contain_yumrepo('zabbix') }
@@ -148,6 +143,28 @@ describe 'zabbix::agent' do
           it { is_expected.not_to contain_file('/etc/systemd/system/zabbix-agent.service') }
         end
       end
+
+      context 'when declaring zabbix_alias' do
+        let :params do
+          {
+            zabbix_alias: %w[testname]
+          }
+        end
+
+        it { is_expected.to contain_file(config_path).with_content %r{^Alias=testname$} }
+      end
+
+      context 'when declaring zabbix_alias as array' do
+        let :params do
+          {
+            zabbix_alias: %w[name1 name2]
+          }
+        end
+
+        it { is_expected.to contain_file(config_path).with_content %r{^Alias=name1$} }
+        it { is_expected.to contain_file(config_path).with_content %r{^Alias=name2$} }
+      end
+
       context 'configuration file with full options' do
         let :params do
           {
@@ -160,6 +177,7 @@ describe 'zabbix::agent' do
             hostname: '10050',
             include_dir: '/etc/zabbix/zabbix_agentd.d',
             listenport: '10050',
+            listenip: '127.0.0.1',
             loadmodulepath: '${libdir}/modules',
             logfilesize: '4',
             logfile: '/var/log/zabbix/zabbix_agentd.log',
@@ -192,6 +210,7 @@ describe 'zabbix::agent' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^Hostname=10050$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^Include=/etc/zabbix/zabbix_agentd.d$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^ListenPort=10050$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^ListenIP=127.0.0.1$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LoadModulePath=\$\{libdir\}/modules$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LogFileSize=4$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LogFile=/var/log/zabbix/zabbix_agentd.log$} }
@@ -213,6 +232,16 @@ describe 'zabbix::agent' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSKeyFile=/etc/zabbix/keys/tls.key$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSPSKIdentity=/etc/zabbix/keys/tlspskidentity.id$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSPSKFile=/etc/zabbix/keys/tlspskfile.key$} }
+      end
+
+      context 'without ListenIP' do
+        let :params do
+          {
+            listenip: '*'
+          }
+        end
+
+        it { is_expected.to contain_file(config_path).without_content %r{^ListenIP=} }
       end
     end
   end

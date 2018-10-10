@@ -1,15 +1,14 @@
 [Unit]
 Description=Zabbix Agent
-After=syslog.target
 After=network.target
 
 [Service]
-Type=forking
+<% if @service_type %>Type=<%= @service_type %><% end %>
 Restart=on-failure
-PIDFile=<%= @pidfile %>
+<% if @pidfile %>PIDFile=<%= @pidfile %><% end %>
 KillMode=control-group
-ExecStart=/usr/sbin/zabbix_agentd -c <%= @agent_configfile_path %>
-ExecStop=/bin/kill -SIGTERM $MAINPID
+ExecStart=/usr/sbin/zabbix_agentd <%= @additional_service_params %> -c <%= @agent_configfile_path %>
+<% if @zabbix_user %>User=<%= @zabbix_user %><% end %>
 RestartSec=10s
 
 [Install]

@@ -113,6 +113,11 @@
 #   The fqdn name of the host running the zabbix-server. When single node:
 #   localhost
 #
+# [*zabbix_server_name*]
+#   The fqdn name of the host running the zabbix-server. When single node:
+#   localhost
+#   This can also be used to upave a different name such as "Zabbix DEV"
+#
 # [*zabbix_listenport*]
 #   The port on which the zabbix-server is listening. Default: 10051
 #
@@ -208,6 +213,7 @@ class zabbix::web (
   $database_socket                          = $zabbix::params::server_database_socket,
   $database_port                            = $zabbix::params::server_database_port,
   $zabbix_server                            = $zabbix::params::zabbix_server,
+  Optional[String] $zabbix_server_name      = $zabbix::params::zabbix_server,
   $zabbix_listenport                        = $zabbix::params::server_listenport,
   $apache_php_max_execution_time            = $zabbix::params::apache_php_max_execution_time,
   $apache_php_memory_limit                  = $zabbix::params::apache_php_memory_limit,
@@ -220,16 +226,17 @@ class zabbix::web (
   $ldap_clientcert                          = $zabbix::params::ldap_clientcert,
   $ldap_clientkey                           = $zabbix::params::ldap_clientkey,
   $puppetgem                                = $zabbix::params::puppetgem,
+  Boolean $manage_selinux                   = $zabbix::params::manage_selinux,
 ) inherits zabbix::params {
 
   # check osfamily, Arch is currently not supported for web
-  if $::osfamily == 'Archlinux' {
+  if $facts['os']['family'] == 'Archlinux' {
     fail('Archlinux is currently not supported for zabbix::web ')
   }
 
   # Only include the repo class if it has not yet been included
   unless defined(Class['Zabbix::Repo']) {
-    class { '::zabbix::repo':
+    class { 'zabbix::repo':
       manage_repo    => $manage_repo,
       zabbix_version => $zabbix_version,
     }
@@ -255,7 +262,7 @@ class zabbix::web (
   # is set to false, you'll get warnings like this:
   # "Warning: You cannot collect without storeconfigs being set"
   if $manage_resources {
-    include ::ruby::dev
+    include ruby::dev
 
     # Determine correct zabbixapi version.
     case $zabbix_version {
@@ -266,7 +273,7 @@ class zabbix::web (
         $zabbixapi_version = '2.4.4'
       }
       default : {
-        $zabbixapi_version = '2.4.7'
+        $zabbixapi_version = '3.2.1'
       }
     }
 
@@ -278,13 +285,13 @@ class zabbix::web (
       owner  => 'zabbix',
       group  => 'zabbix',
       mode   => '0755',
-    } ->
-    package { 'zabbixapi':
+    }
+    -> package { 'zabbixapi':
       ensure   => $zabbixapi_version,
       provider => $puppetgem,
       require  => Class['ruby::dev'],
-    } ->
-    class { '::zabbix::resources::web':
+    }
+    -> class { 'zabbix::resources::web':
       zabbix_url     => $zabbix_url,
       zabbix_user    => $zabbix_api_user,
       zabbix_pass    => $zabbix_api_pass,
@@ -292,21 +299,14 @@ class zabbix::web (
     }
   }
 
-  case $::operatingsystem {
+  case $facts['os']['name'] {
     'ubuntu', 'debian' : {
-      case $::operatingsystemmajrelease {
-        '8' : {
-          $zabbix_web_package = 'zabbix-frontend-php'
-        }
-        default : {
-          $zabbix_web_package = 'zabbix-frontend-php'
-        }
-      }
+      $zabbix_web_package = 'zabbix-frontend-php'
 
       # Check OS release for proper prefix
-      case $::operatingsystem {
+      case $facts['os']['name'] {
         'Ubuntu' : {
-          if versioncmp($::operatingsystemmajrelease, '16.04') >= 0 {
+          if versioncmp($facts['os']['release']['major'], '16.04') >= 0 {
             $php_db_package = "php-${db}"
           }
           else {
@@ -314,7 +314,7 @@ class zabbix::web (
           }
         }
         'Debian' : {
-          if versioncmp($::operatingsystemmajrelease, '9') >= 0 {
+          if versioncmp($facts['os']['release']['major'], '9') >= 0 {
             $php_db_package = "php-${db}"
           }
           else {
@@ -344,7 +344,7 @@ class zabbix::web (
         tag     => 'zabbix',
       }
     }
-  } # END case $::operatingsystem
+  } # END case $facts['os']['name']
 
   file { '/etc/zabbix/web':
     ensure  => directory,
@@ -373,7 +373,7 @@ class zabbix::web (
 
   # Is set to true, it will create the apache vhost.
   if $manage_vhost {
-    include ::apache
+    include apache
     # Check if we use ssl. If so, we also create an non ssl
     # vhost for redirect traffic from non ssl to ssl site.
     if $apache_use_ssl {
@@ -403,7 +403,7 @@ class zabbix::web (
     }
 
     # Check which version of Apache we're using
-    if versioncmp($::apache::apache_version, '2.4') >= 0 {
+    if versioncmp($apache::apache_version, '2.4') >= 0 {
       $directory_allow = { 'require' => 'all granted', }
       $directory_deny = { 'require' => 'all denied', }
     } else {
@@ -463,7 +463,7 @@ class zabbix::web (
   } # END if $manage_vhost
 
   # check if selinux is active and allow zabbix
-  if $::osfamily == 'RedHat' and getvar('::selinux_config_mode') == 'enforcing' {
+  if $facts['selinux'] == true and $manage_selinux {
     selboolean{'httpd_can_connect_zabbix':
       persistent => true,
       value      => 'on',
