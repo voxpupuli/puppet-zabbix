@@ -4,7 +4,29 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
-## [v6.4.2](https://github.com/voxpupuli/puppet-zabbix/tree/v6.4.2) (2018-08-18)
+## [v6.5.0](https://github.com/voxpupuli/puppet-zabbix/tree/v6.5.0) (2018-10-17)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v6.4.2...v6.5.0)
+
+**Implemented enhancements:**
+
+- Add Zabbix 4.0 compatibility and new `config\_mode` parameter [\#548](https://github.com/voxpupuli/puppet-zabbix/pull/548) ([Lord-Y](https://github.com/Lord-Y))
+- Gentoo service fix [\#545](https://github.com/voxpupuli/puppet-zabbix/pull/545) ([lordievader](https://github.com/lordievader))
+- Add Gentoo support [\#535](https://github.com/voxpupuli/puppet-zabbix/pull/535) ([lordievader](https://github.com/lordievader))
+
+**Closed issues:**
+
+- Module cannot install puppetlabs-mysql dependency [\#536](https://github.com/voxpupuli/puppet-zabbix/issues/536)
+- Running the puppet-zabbix module on Gentoo gives an ExecutionFailure [\#531](https://github.com/voxpupuli/puppet-zabbix/issues/531)
+- The topic is wrong! [\#517](https://github.com/voxpupuli/puppet-zabbix/issues/517)
+
+**Merged pull requests:**
+
+- fix wrong version schema in metadata.json [\#547](https://github.com/voxpupuli/puppet-zabbix/pull/547) ([bastelfreak](https://github.com/bastelfreak))
+- Add Puppet 6.x support [\#542](https://github.com/voxpupuli/puppet-zabbix/pull/542) ([bastelfreak](https://github.com/bastelfreak))
+- allow puppetlabs/stdlib 5.x, puppetlabs/apt 6.x and puppetlabs/concat 5.x [\#530](https://github.com/voxpupuli/puppet-zabbix/pull/530) ([bastelfreak](https://github.com/bastelfreak))
+
+## [v6.4.2](https://github.com/voxpupuli/puppet-zabbix/tree/v6.4.2) (2018-08-20)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v6.4.1...v6.4.2)
 
@@ -577,8 +599,8 @@ These should not affect the functionality of the module.
 
 **Merged pull requests:**
 
-- Generalise the zabbix\_url [\#129](https://github.com/voxpupuli/puppet-zabbix/pull/129) ([DjxDeaf](https://github.com/DjxDeaf))
-- Added supporting new Zabbix params [\#128](https://github.com/voxpupuli/puppet-zabbix/pull/128) ([akostetsky](https://github.com/akostetsky))
+- Generalise the zabbix\_url [\#129](https://github.com/voxpupuli/puppet-zabbix/pull/129) ([eliranbz](https://github.com/eliranbz))
+- Added supporting new Zabbix params [\#128](https://github.com/voxpupuli/puppet-zabbix/pull/128) ([akostetskiy](https://github.com/akostetskiy))
 - refactoring of repo.pp [\#126](https://github.com/voxpupuli/puppet-zabbix/pull/126) ([bastelfreak](https://github.com/bastelfreak))
 - Fping wrong path in debian [\#124](https://github.com/voxpupuli/puppet-zabbix/pull/124) ([Oyabi](https://github.com/Oyabi))
 - add support for CloudLinux [\#122](https://github.com/voxpupuli/puppet-zabbix/pull/122) ([bastelfreak](https://github.com/bastelfreak))
@@ -680,7 +702,7 @@ These should not affect the functionality of the module.
 - rename ListenIp =\> ListenIP [\#65](https://github.com/voxpupuli/puppet-zabbix/pull/65) ([sbaryakov](https://github.com/sbaryakov))
 - Fix manage\_repo parameter on the zabbix class [\#63](https://github.com/voxpupuli/puppet-zabbix/pull/63) ([roidelapluie](https://github.com/roidelapluie))
 - minor typo [\#60](https://github.com/voxpupuli/puppet-zabbix/pull/60) ([andresvia](https://github.com/andresvia))
-- Fix with previous fix with listenip [\#58](https://github.com/voxpupuli/puppet-zabbix/pull/58) ([meganuke-tech](https://github.com/meganuke-tech))
+- Fix with previous fix with listenip [\#58](https://github.com/voxpupuli/puppet-zabbix/pull/58) ([ghost](https://github.com/ghost))
 
 ## [1.2.0](https://github.com/voxpupuli/puppet-zabbix/tree/1.2.0) (2015-02-26)
 
@@ -702,7 +724,7 @@ These should not affect the functionality of the module.
 
 **Merged pull requests:**
 
-- Fixed bug with listenip & add lxc interface [\#46](https://github.com/voxpupuli/puppet-zabbix/pull/46) ([meganuke-tech](https://github.com/meganuke-tech))
+- Fixed bug with listenip & add lxc interface [\#46](https://github.com/voxpupuli/puppet-zabbix/pull/46) ([ghost](https://github.com/ghost))
 - notify zabbix-agent service when userparameters change [\#57](https://github.com/voxpupuli/puppet-zabbix/pull/57) ([rleemorlang](https://github.com/rleemorlang))
 - Fix in params.pp with default parameter of zabbix proxy for ubuntu [\#56](https://github.com/voxpupuli/puppet-zabbix/pull/56) ([fredprod](https://github.com/fredprod))
 - Jvd w fix defined [\#53](https://github.com/voxpupuli/puppet-zabbix/pull/53) ([JvdW](https://github.com/JvdW))
