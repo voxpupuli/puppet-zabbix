@@ -20,6 +20,7 @@ define zabbix::startup (
   String $additional_service_params                      = '',
   String $service_type                                   = 'simple',
   Optional[Boolean] $manage_database                     = undef,
+  Optional[String] $service_name                         = $name,
   ) {
 
   case $title {
@@ -41,7 +42,7 @@ define zabbix::startup (
     file { "/etc/systemd/system/${name}.service":
       ensure  => file,
       mode    => '0664',
-      content => template("zabbix/${name}-systemd.init.erb"),
+      content => template("zabbix/${service_name}-systemd.init.erb"),
     }
     ~> Exec['systemctl-daemon-reload']
     file { "/etc/init.d/${name}":
@@ -50,7 +51,7 @@ define zabbix::startup (
   } elsif $facts['os']['family'] in ['Debian', 'RedHat'] {
     # Currently other osfamily without systemd is not supported
     $osfamily_downcase = downcase($facts['os']['family'])
-    file { "/etc/init.d/${name}":
+    file { "/etc/init.d/${service_name}":
       ensure  => file,
       mode    => '0755',
       content => template("zabbix/${name}-${osfamily_downcase}.init.erb"),

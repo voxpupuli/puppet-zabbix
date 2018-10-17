@@ -465,6 +465,7 @@ class zabbix::server (
     zabbix_user               => $zabbix_user,
     additional_service_params => $real_additional_service_params,
     manage_database           => $manage_database,
+    service_name              => 'zabbix-server',
     require                   => Package["zabbix-server-${db}"],
   }
 
