@@ -53,6 +53,7 @@ describe 'zabbix::startup', type: :define do # rubocop:disable RSpec/MultipleDes
           {
             path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
             osfamily: osfamily,
+            operatingsystem: osfamily,
             systemd: systemd_fact_state,
             os: { family: osfamily }
           }
