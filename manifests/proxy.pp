@@ -429,7 +429,7 @@ class zabbix::proxy (
   if ($listenip != undef) {
     if ($listenip =~ /^(eth|lo|bond|lxc|eno|tap|tun).*/) {
       $listen_ip = getvar("::ipaddress_${listenip}")
-    } elsif is_ip_address($listenip) {
+    } elsif $listenip =~ Stdlib::IP::Address {
       $listen_ip = $listenip
     } else {
       $listen_ip = undef
