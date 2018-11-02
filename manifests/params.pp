@@ -239,6 +239,8 @@ class zabbix::params {
   $agent_refreshactivechecks                = '120'
   $agent_server                             = '127.0.0.1'
   $agent_serveractive                       = undef
+  $agent_service_state                      = 'running'
+  $agent_service_enable                     = true
   $agent_sourceip                           = undef
   $agent_startagents                        = '3'
   $agent_timeout                            = '3'
