@@ -89,12 +89,22 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
 
     templates = [templates] unless templates.is_a?(Array)
 
-    res = []
-    res.push(self.class.check_host(host, zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl))
-    templates.each do |template|
-      res.push(self.class.check_template_in_host(host, template, zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl))
+    host = self.class.check_host(host, zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
+    if host.any?
+      template_ids   = host[0]['parentTemplates'].map { |x| x['templateid'] }
+      template_names = host[0]['parentTemplates'].map { |x| x['host'] }
+      res = []
+      templates.each do |template|
+        if self.class.a_number?(template)
+          res.push(template_ids.include?(template))
+        else
+          res.push(template_names.include?(template))
+        end
+      end
+      res.all?
+    else
+      false
     end
-    res.all?
   end
 
   def destroy
