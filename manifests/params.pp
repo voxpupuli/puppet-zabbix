@@ -135,6 +135,7 @@ class zabbix::params {
   $ldap_cacert                              = undef
   $ldap_clientcert                          = undef
   $ldap_clientkey                           = undef
+  $ldap_reqcert                             = undef
   $server_api_pass                          = 'zabbix'
   $server_api_user                          = 'Admin'
 
