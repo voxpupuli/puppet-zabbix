@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v6.6.0](https://github.com/voxpupuli/puppet-zabbix/tree/v6.6.0) (2018-11-02)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v6.5.0...v6.6.0)
+
+**Implemented enhancements:**
+
+- Add ldap reqcert [\#560](https://github.com/voxpupuli/puppet-zabbix/pull/560) ([bastelfreak](https://github.com/bastelfreak))
+- Improve performance of zabbix\_host [\#559](https://github.com/voxpupuli/puppet-zabbix/pull/559) ([baurmatt](https://github.com/baurmatt))
+
+**Closed issues:**
+
+- Improve performance of zabbix\_host [\#558](https://github.com/voxpupuli/puppet-zabbix/issues/558)
+- Feature Request: ProxyOfflineBuffer setting for zabbix proxies missing [\#554](https://github.com/voxpupuli/puppet-zabbix/issues/554)
+
+**Merged pull requests:**
+
+- Fix tests by adding missing `operatingsystem` fact [\#557](https://github.com/voxpupuli/puppet-zabbix/pull/557) ([alexjfisher](https://github.com/alexjfisher))
+- Replace is\_ip\_address with Puppet 4 native comparision [\#555](https://github.com/voxpupuli/puppet-zabbix/pull/555) ([baurmatt](https://github.com/baurmatt))
+- Fix proxy documentation [\#552](https://github.com/voxpupuli/puppet-zabbix/pull/552) ([frenchtoasters](https://github.com/frenchtoasters))
+
 ## [v6.5.0](https://github.com/voxpupuli/puppet-zabbix/tree/v6.5.0) (2018-10-17)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v6.4.2...v6.5.0)
