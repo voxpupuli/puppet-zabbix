@@ -21,7 +21,16 @@ class Puppet::Provider::Zabbix < Puppet::Provider
   # Check if host exists. When error raised, return false.
   def self.check_host(host, zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
     zbx = create_connection(zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
-    zbx.hosts.get_id(host: host)
+    zbx.query(
+      method: 'host.get',
+      params: {
+        filter: {
+          'host' => [host]
+        },
+        selectParentTemplates: ['host'],
+        output: ['host']
+      }
+    )
   rescue Puppet::ExecutionFailure
     false
   end
