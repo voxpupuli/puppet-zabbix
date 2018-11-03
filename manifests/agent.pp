@@ -237,7 +237,7 @@ class zabbix::agent (
   $listenip                               = $zabbix::params::agent_listenip,
   $startagents                            = $zabbix::params::agent_startagents,
   $serveractive                           = $zabbix::params::agent_serveractive,
-  Enum['running','stopped'] $service_state  = $zabbix::params::agent_service_state,
+  Stdlib::Ensure::Service $service_state  = $zabbix::params::agent_service_state,
   Boolean $service_enable                 = $zabbix::params::agent_service_enable,
   $hostname                               = $zabbix::params::agent_hostname,
   $hostnameitem                           = $zabbix::params::agent_hostnameitem,
