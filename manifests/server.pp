@@ -258,6 +258,9 @@
 # [*sslkeylocation_dir*]
 #   Location of SSL private key files for client authentication.
 #
+# [*manage_startup_script*]
+#  If the init script should be managed by this module. Attention: This might cause problems with some config options of this module (e.g server_configfile_path)
+#
 # === Example
 #
 #   When running everything on a single node, please check
@@ -378,6 +381,7 @@ class zabbix::server (
   Boolean $manage_selinux           = $zabbix::params::manage_selinux,
   String $additional_service_params = $zabbix::params::additional_service_params,
   Optional[String[1]] $zabbix_user  = $zabbix::params::server_zabbix_user,
+  Boolean $manage_startup_script    = $zabbix::params::manage_startup_script,
 ) inherits zabbix::params {
 
   # the following codeblock is a bit blargh. The correct default value for
@@ -458,15 +462,17 @@ class zabbix::server (
   }
 
   # Ensure that the correct config file is used.
-  zabbix::startup {'zabbix-server':
-    pidfile                   => $pidfile,
-    database_type             => $database_type,
-    server_configfile_path    => $server_configfile_path,
-    zabbix_user               => $zabbix_user,
-    additional_service_params => $real_additional_service_params,
-    manage_database           => $manage_database,
-    service_name              => 'zabbix-server',
-    require                   => Package["zabbix-server-${db}"],
+  if $manage_startup_script {
+    zabbix::startup {'zabbix-server':
+      pidfile                   => $pidfile,
+      database_type             => $database_type,
+      server_configfile_path    => $server_configfile_path,
+      zabbix_user               => $zabbix_user,
+      additional_service_params => $real_additional_service_params,
+      manage_database           => $manage_database,
+      service_name              => 'zabbix-server',
+      require                   => Package["zabbix-server-${db}"],
+    }
   }
 
   if $server_configfile_path != '/etc/zabbix/zabbix_server.conf' {

@@ -126,6 +126,27 @@ describe 'zabbix::server' do
         it { is_expected.not_to contain_firewall('151 zabbix-server') }
       end
 
+      context 'it creates a startup script' do
+        case facts[:osfamily]
+        when 'Archlinux', 'Fedora'
+          it { is_expected.to contain_file('/etc/init.d/zabbix-server').with_ensure('absent') }
+          it { is_expected.to contain_file('/etc/systemd/system/zabbix-server.service').with_ensure('file') }
+        else
+          it { is_expected.to contain_file('/etc/init.d/zabbix-server').with_ensure('file') }
+          it { is_expected.not_to contain_file('/etc/systemd/system/zabbix-server.service') }
+        end
+      end
+
+      context 'when declaring manage_startup_script is false' do
+        let :params do
+          {
+            manage_startup_script: false
+          }
+        end
+
+        it { is_expected.not_to contain_zabbix__startup('zabbix-server') }
+      end
+
       # If manage_service is true (default), it should create a service
       # and ensure that it is running.
       context 'when declaring manage_service is true' do

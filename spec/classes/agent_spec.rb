@@ -144,6 +144,16 @@ describe 'zabbix::agent' do
         end
       end
 
+      context 'when declaring manage_startup_script is false' do
+        let :params do
+          {
+            manage_startup_script: false
+          }
+        end
+
+        it { is_expected.not_to contain_zabbix__startup('zabbix-agent') }
+      end
+
       context 'when declaring zabbix_alias' do
         let :params do
           {

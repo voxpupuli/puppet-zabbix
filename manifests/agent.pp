@@ -177,6 +177,9 @@
 # [*loadmodule*]
 #   Module to load at agent startup.
 #
+# [*manage_startup_script*]
+#  If the init script should be managed by this module. Attention: This might cause problems with some config options of this module (e.g agent_configfile_path)
+#
 # === Example
 #
 #  Basic installation:
@@ -263,6 +266,7 @@ class zabbix::agent (
   Hash[String, Array] $selinux_rules      = $zabbix::params::selinux_rules,
   String $additional_service_params       = $zabbix::params::additional_service_params,
   String $service_type                    = $zabbix::params::service_type,
+  Boolean $manage_startup_script          = $zabbix::params::manage_startup_script,
 ) inherits zabbix::params {
 
   # the following two codeblocks are a bit blargh. The correct default value for
@@ -340,14 +344,16 @@ class zabbix::agent (
   }
 
   # Ensure that the correct config file is used.
-  zabbix::startup {$servicename:
-    pidfile                   => $pidfile,
-    agent_configfile_path     => $agent_configfile_path,
-    zabbix_user               => $zabbix_user,
-    additional_service_params => $real_additional_service_params,
-    service_type              => $real_service_type,
-    service_name              => 'zabbix-agent',
-    require                   => Package[$zabbix_package_agent],
+  if $manage_startup_script {
+    zabbix::startup {$servicename:
+      pidfile                   => $pidfile,
+      agent_configfile_path     => $agent_configfile_path,
+      zabbix_user               => $zabbix_user,
+      additional_service_params => $real_additional_service_params,
+      service_type              => $real_service_type,
+      service_name              => 'zabbix-agent',
+      require                   => Package[$zabbix_package_agent],
+    }
   }
 
   if $agent_configfile_path != '/etc/zabbix/zabbix_agentd.conf' {
