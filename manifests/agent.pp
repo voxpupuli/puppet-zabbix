@@ -315,9 +315,10 @@ class zabbix::agent (
     } else {
       $use_proxy = ''
     }
+    $_hostname = pick($hostname, $facts['fqdn'])
 
     class { 'zabbix::resources::agent':
-      hostname     => $facts['fqdn'],
+      hostname     => $_hostname,
       ipaddress    => $listen_ip,
       use_ip       => $agent_use_ip,
       port         => $listenport,
