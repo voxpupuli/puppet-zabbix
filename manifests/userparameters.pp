@@ -57,13 +57,13 @@
 # Copyright 2014 Werner Dijkerman
 #
 define zabbix::userparameters (
-  $source     = '',
-  $content    = '',
-  $script     = '',
-  $script_ext = '',
-  $template   = '',
-  $script_dir = '/usr/bin',
-  $config_mode = '0644',
+  Optional[Stdlib::Filesource] $source      = undef,
+  Optional[String[1]]          $content     = undef,
+  Optional[Stdlib::Filesource] $script      = undef,
+  Optional[String[1]]          $script_ext  = undef,
+  Optional[String[1]]          $template    = undef,
+  Stdlib::Absolutepath         $script_dir  = '/usr/bin',
+  Stdlib::Filemode             $config_mode = '0644',
 ) {
   include zabbix::agent
   $include_dir          = $zabbix::agent::include_dir
@@ -72,7 +72,7 @@ define zabbix::userparameters (
   $agent_config_group   = $zabbix::agent::agent_config_group
   $agent_servicename    = $zabbix::agent::agent_servicename
 
-  if $source != '' {
+  if $source {
     file { "${include_dir}/${name}.conf":
       ensure  => present,
       owner   => $agent_config_owner,
@@ -84,7 +84,7 @@ define zabbix::userparameters (
     }
   }
 
-  if $content != '' {
+  if $content {
     file { "${include_dir}/${name}.conf":
       ensure  => present,
       owner   => $agent_config_owner,
@@ -96,7 +96,7 @@ define zabbix::userparameters (
     }
   }
 
-  if $script != '' {
+  if $script {
     file { "${script_dir}/${name}${script_ext}":
       ensure  => present,
       owner   => $agent_config_owner,
@@ -111,7 +111,7 @@ define zabbix::userparameters (
   # If template is defined, it means we have an template in zabbix
   # which needs to be loaded for this host. When exported resources is
   # used/enabled, we do this automatically.
-  if $template != '' {
+  if $template {
     zabbix::resources::userparameters { "${facts['hostname']}_${name}":
       hostname => $facts['fqdn'],
       template => $template,
