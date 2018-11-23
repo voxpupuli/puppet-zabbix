@@ -253,6 +253,25 @@ describe 'zabbix::agent' do
 
         it { is_expected.to contain_file(config_path).without_content %r{^ListenIP=} }
       end
+
+      context 'when declaring service_ensure is stopped and service_enable false' do
+        package = 'zabbix-agent'
+
+        let :params do
+          {
+            service_ensure: 'stopped',
+            service_enable: false
+          }
+        end
+
+        it do
+          is_expected.to contain_service('zabbix-agent').with(
+            ensure:     'stopped',
+            enable:     false,
+            require:    "Package[#{package}]"
+          )
+        end
+      end
     end
   end
 end

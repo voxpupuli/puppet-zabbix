@@ -94,6 +94,15 @@
 # [*serveractive*]
 #   List of comma delimited ip:port (or hostname:port) pairs of zabbix servers for active checks.
 #
+# [*service_ensure*]
+#   Start / stop the agent service. E.g. to preconfigure a hosts agent and turn on the service
+#   at a later time (when the server reaches production SLA)
+#   Default: 'running'
+#
+# [*service_enable*]
+#   Automatically start the agent on system boot
+#   Default: true
+#
 # [*hostname*]
 #   Unique, case sensitive hostname.
 #
@@ -231,6 +240,8 @@ class zabbix::agent (
   $listenip                               = $zabbix::params::agent_listenip,
   $startagents                            = $zabbix::params::agent_startagents,
   $serveractive                           = $zabbix::params::agent_serveractive,
+  Stdlib::Ensure::Service $service_ensure = $zabbix::params::agent_service_ensure,
+  Boolean $service_enable                 = $zabbix::params::agent_service_enable,
   $hostname                               = $zabbix::params::agent_hostname,
   $hostnameitem                           = $zabbix::params::agent_hostnameitem,
   $hostmetadata                           = $zabbix::params::agent_hostmetadata,
@@ -371,8 +382,8 @@ class zabbix::agent (
     $service_provider = undef
   }
   service { $servicename:
-    ensure     => running,
-    enable     => true,
+    ensure     => $service_ensure,
+    enable     => $service_enable,
     provider   => $service_provider,
     hasstatus  => true,
     hasrestart => true,
