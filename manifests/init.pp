@@ -271,6 +271,7 @@ class zabbix (
     historycachesize          => $historycachesize,
     trendcachesize            => $trendcachesize,
     historytextcachesize      => $historytextcachesize,
+    historyindexcachesize     => $historyindexcachesize,
     valuecachesize            => $valuecachesize,
     nodenoevents              => $nodenoevents,
     nodenohistory             => $nodenohistory,
