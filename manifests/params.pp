@@ -161,7 +161,7 @@ class zabbix::params {
   $server_debuglevel                        = '3'
   $server_externalscripts                   = '/usr/lib/zabbix/externalscripts'
   $server_historycachesize                  = '8M'
-  $server_historyindexcachesize             = undef
+  $server_historyindexcachesize             = '4M'
   $server_historytextcachesize              = '16M'
   $server_housekeepingfrequency             = '1'
   $server_include                           = '/etc/zabbix/zabbix_server.conf.d'
