@@ -73,6 +73,7 @@
 class zabbix (
   $zabbix_url                               = '',
   $zabbix_version                           = $zabbix::params::zabbix_version,
+  $zabbix_package_state                     = $zabbix::params::zabbix_package_state,
   $zabbix_timezone                          = $zabbix::params::zabbix_timezone,
   $zabbix_web                               = $zabbix::params::zabbix_web,
   $zabbix_server                            = $zabbix::params::zabbix_server,
@@ -184,6 +185,7 @@ class zabbix (
     database_type                            => $database_type,
     manage_repo                              => $manage_repo,
     zabbix_version                           => $zabbix_version,
+    zabbix_package_state                     => $zabbix_package_state,
     zabbix_timezone                          => $zabbix_timezone,
     zabbix_template_dir                      => $zabbix_template_dir,
     manage_vhost                             => $manage_vhost,
@@ -222,6 +224,7 @@ class zabbix (
     database_type             => $database_type,
     database_path             => $database_path,
     zabbix_version            => $zabbix_version,
+    zabbix_package_state      => $zabbix_package_state,
     manage_firewall           => $manage_firewall,
     manage_repo               => $manage_repo,
     manage_database           => $manage_database,
