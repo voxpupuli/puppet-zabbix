@@ -189,7 +189,6 @@ describe 'zabbix::server' do
             fping6location: '/usr/sbin/fping6',
             fpinglocation: '/usr/sbin/fping',
             historycachesize: '4M',
-            historyindexcachesize: '4M',
             historytextcachesize: '4M',
             housekeepingfrequency: '1',
             include_dir: '/etc/zabbix/zabbix_server.conf.d',
@@ -326,6 +325,7 @@ describe 'zabbix::server' do
             tlscrlfile: '/etc/zabbix/keys/zabbix-server.crl',
             tlscertfile: '/etc/zabbix/keys/zabbix-server.crt',
             tlskeyfile: '/etc/zabbix/keys/zabbix-server.key',
+            historyindexcachesize: '4M',
             zabbix_version: '3.0'
           }
         end
@@ -346,6 +346,7 @@ describe 'zabbix::server' do
             tlscrlfile: '/etc/zabbix/keys/zabbix-server.crl',
             tlscertfile: '/etc/zabbix/keys/zabbix-server.crt',
             tlskeyfile: '/etc/zabbix/keys/zabbix-server.key',
+            historyindexcachesize: '4M',
             zabbix_version: '3.2'
           }
         end
