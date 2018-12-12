@@ -1,10 +1,8 @@
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'zabbix'))
+require_relative '../zabbix'
 Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix) do
+  confine feature: :aws
+
   def create
-    zabbix_url = @resource[:zabbix_url]
-
-    self.class.require_zabbix if zabbix_url != ''
-
     # Set some vars
     host = @resource[:hostname]
     ipaddress = @resource[:ipaddress]
@@ -77,11 +75,8 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
   end
 
   def exists?
-    zabbix_url = @resource[:zabbix_url]
-
-    self.class.require_zabbix if zabbix_url != ''
-
     host = @resource[:hostname]
+    zabbix_url = @resource[:zabbix_url]
     zabbix_user = @resource[:zabbix_user]
     zabbix_pass = @resource[:zabbix_pass]
     apache_use_ssl = @resource[:apache_use_ssl]
@@ -108,11 +103,8 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
   end
 
   def destroy
-    zabbix_url = @resource[:zabbix_url]
-
-    self.class.require_zabbix if zabbix_url != ''
-
     host = @resource[:hostname]
+    zabbix_url = @resource[:zabbix_url]
     zabbix_user = @resource[:zabbix_user]
     zabbix_pass = @resource[:zabbix_pass]
     apache_use_ssl = @resource[:apache_use_ssl]

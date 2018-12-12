@@ -1,5 +1,6 @@
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'zabbix'))
+require_relative '../zabbix'
 Puppet::Type.type(:zabbix_template_host).provide(:ruby, parent: Puppet::Provider::Zabbix) do
+  confine feature: :aws
   def template_name
     @template_name ||= @resource[:name].split('@')[0]
   end
@@ -19,8 +20,6 @@ Puppet::Type.type(:zabbix_template_host).provide(:ruby, parent: Puppet::Provider
   end
 
   def connect
-    self.class.require_zabbix if @resource[:zabbix_url] != ''
-
     @zbx ||= self.class.create_connection(@resource[:zabbix_url], @resource[:zabbix_user], @resource[:zabbix_pass], @resource[:apache_use_ssl])
     @zbx
   end

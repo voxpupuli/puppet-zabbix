@@ -1,10 +1,5 @@
 # zabbix provider type for puppet
 class Puppet::Provider::Zabbix < Puppet::Provider
-  # Require the zabbixapi gem
-  def self.require_zabbix
-    require 'zabbixapi'
-  end
-
   # Create the api connection
   def self.create_connection(zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
     protocol = apache_use_ssl ? 'https' : 'http'
@@ -37,7 +32,6 @@ class Puppet::Provider::Zabbix < Puppet::Provider
 
   # Check if proxy exists. When error raised, return false.
   def self.check_proxy(host, zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
-    require_zabbix
     zbx = create_connection(zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
     zbx.proxies.get_id(host: host)
   rescue Puppet::ExecutionFailure
