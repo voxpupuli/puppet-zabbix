@@ -1,12 +1,11 @@
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'zabbix'))
+require_relative '../zabbix'
 Puppet::Type.type(:zabbix_userparameters).provide(:ruby, parent: Puppet::Provider::Zabbix) do
+  confine feature: :zabbixapi
+
   def create
-    zabbix_url = @resource[:zabbix_url]
-
-    self.class.require_zabbix if zabbix_url != ''
-
     host = @resource[:hostname]
     template = @resource[:template]
+    zabbix_url = @resource[:zabbix_url]
     zabbix_user = @resource[:zabbix_user]
     zabbix_pass = @resource[:zabbix_pass]
     apache_use_ssl = @resource[:apache_use_ssl]
@@ -23,12 +22,9 @@ Puppet::Type.type(:zabbix_userparameters).provide(:ruby, parent: Puppet::Provide
   end
 
   def exists?
-    zabbix_url = @resource[:zabbix_url]
-
-    self.class.require_zabbix if zabbix_url != ''
-
     host = @resource[:hostname]
     template = @resource[:template]
+    zabbix_url = @resource[:zabbix_url]
     zabbix_user = @resource[:zabbix_user]
     zabbix_pass = @resource[:zabbix_pass]
     apache_use_ssl = @resource[:apache_use_ssl]
@@ -37,7 +33,7 @@ Puppet::Type.type(:zabbix_userparameters).provide(:ruby, parent: Puppet::Provide
   end
 
   def destroy
-    zabbix_url = @resource[:zabbix_url]
-    self.class.require_zabbix if zabbix_url != ''
+    # TODO: Implement?!
+    true
   end
 end
