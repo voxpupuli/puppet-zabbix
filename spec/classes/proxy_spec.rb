@@ -353,6 +353,19 @@ describe 'zabbix::proxy' do
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSPSKIdentity=/etc/zabbix/keys/identity.file$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSPSKFile=/etc/zabbix/keys/file.key$} }
         end
+
+        context 'with zabbix_proxy.conf and version 3.4' do
+          let :params do
+            {
+              enableremotecommands: 1,
+              logremotecommands: 1,
+              zabbix_version: '3.4'
+            }
+          end
+
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^EnableRemoteCommands=1$} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LogRemoteCommands=1$} }
+        end
       end
     end
   end
