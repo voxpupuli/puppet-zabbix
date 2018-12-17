@@ -25,9 +25,9 @@ describe 'zabbix::sender' do
           }
         end
 
-        if facts[:osfamily] == 'Archlinux'
+        if %w[Archlinux Gentoo].include?(facts[:osfamily])
           it 'fails' do
-            is_expected.to raise_error(Puppet::Error, %r{Managing a repo on Archlinux is currently not implemented})
+            is_expected.to raise_error(Puppet::Error, %r{Managing a repo on #{facts[:osfamily]} is currently not implemented})
           end
         else
           it { is_expected.to contain_class('zabbix::repo').with_zabbix_version('3.4') }

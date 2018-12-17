@@ -17,7 +17,7 @@ describe 'zabbix::web' do
         facts
       end
 
-      if facts[:osfamily] == 'Archlinux'
+      if facts[:osfamily] == 'Archlinux' || facts[:osfamily] == 'Gentoo'
         context 'with all defaults' do
           it { is_expected.not_to compile }
         end
