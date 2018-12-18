@@ -23,18 +23,13 @@ class zabbix::resources::agent (
   $templates     = undef,
   $proxy         = undef,
 ) {
-
   @@zabbix_host { $hostname:
-    ipaddress      => $ipaddress,
-    use_ip         => $use_ip,
-    port           => $port,
-    group          => $group,
-    group_create   => $group_create,
-    templates      => $templates,
-    proxy          => $proxy,
-    zabbix_url     => '',
-    zabbix_user    => '',
-    zabbix_pass    => '',
-    apache_use_ssl => '',
+    ipaddress    => $ipaddress,
+    use_ip       => $use_ip,
+    port         => $port,
+    group        => $group,
+    group_create => $group_create,
+    templates    => $templates,
+    proxy        => $proxy,
   }
 }

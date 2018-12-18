@@ -1,15 +1,5 @@
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', '..'))
-require 'puppet/util/zabbix'
-
 Puppet::Type.newtype(:zabbix_application) do
   @doc = %q(Manage zabbix applications
-
-    Example.
-      Zabbix_application {
-        zabbix_url => 'zabbix_server1',
-        zabbix_user => 'admin',
-        zabbix_pass => 'zabbix',
-      }
 
       zabbix_application{"app1":
         ensure   => present,
@@ -33,5 +23,5 @@ Puppet::Type.newtype(:zabbix_application) do
     desc 'template to which the application is linked'
   end
 
-  Puppet::Util::Zabbix.add_zabbix_type_methods(self)
+  autorequire(:file) { '/etc/zabbix/api.conf' }
 end

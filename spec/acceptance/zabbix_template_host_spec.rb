@@ -16,44 +16,30 @@ describe 'zabbix_template_host type' do
         class { 'zabbix':
           zabbix_version   => '3.0', # zabbixapi gem doesn't currently support higher versions
           zabbix_url       => 'localhost',
+          zabbix_api_user  => 'Admin',
+          zabbix_api_pass  => 'zabbix',
+          apache_use_ssl   => false,
           manage_resources => true,
           require          => [ Class['postgresql::server'], Class['apache'], ],
         }
 
-        $zabbix_user    = 'Admin'
-        $zabbix_pass    = 'zabbix'
-        $zabbix_url     = 'localhost'
-        $apache_use_ssl = false
-
         zabbix_host { 'test1.example.com':
-          ipaddress      => '127.0.0.1',
-          use_ip         => true,
-          port           => 10050,
-          group          => 'TestgroupOne',
-          group_create   => true,
-          zabbix_user    => $zabbix_user,
-          zabbix_pass    => $zabbix_pass,
-          zabbix_url     => $zabbix_url,
-          apache_use_ssl => $apache_use_ssl,
-          templates      => [ 'Template OS Linux', ],
-          require        => [ Service['zabbix-server'], Package['zabbixapi'], ],
+          ipaddress    => '127.0.0.1',
+          use_ip       => true,
+          port         => 10050,
+          group        => 'TestgroupOne',
+          group_create => true,
+          templates    => [ 'Template OS Linux', ],
+          require      => [ Service['zabbix-server'], Package['zabbixapi'], ],
         }
 
         zabbix_template { 'TestTemplate1':
           template_source => '/root/TestTemplate1.xml',
-          zabbix_user     => $zabbix_user,
-          zabbix_pass     => $zabbix_pass,
-          zabbix_url      => $zabbix_url,
-          apache_use_ssl  => $apache_use_ssl,
           require         => [ Service['zabbix-server'], Package['zabbixapi'], ],
         }
 
         zabbix_template_host{"TestTemplate1@test1.example.com":
-          zabbix_user    => $zabbix_user,
-          zabbix_pass    => $zabbix_pass,
-          zabbix_url     => $zabbix_url,
-          apache_use_ssl => $apache_use_ssl,
-          require        => [ Service['zabbix-server'], Package['zabbixapi'], ],
+          require => [ Service['zabbix-server'], Package['zabbixapi'], ],
         }
       EOS
 

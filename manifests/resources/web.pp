@@ -13,38 +13,32 @@
 # for loading this class manually.
 #
 class zabbix::resources::web (
-  $zabbix_url     = undef,
-  $zabbix_user    = undef,
-  $zabbix_pass    = undef,
-  $apache_use_ssl = undef,
+  String[1] $zabbix_url,
+  String[1] $zabbix_user,
+  String[1] $zabbix_pass,
+  Boolean   $apache_use_ssl,
 ) {
+  file { '/etc/zabbix/api.conf':
+    ensure  => file,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0400',
+    content => epp('zabbix/api.conf.epp', {
+      zabbix_url     => $zabbix_url,
+      zabbix_user    => $zabbix_user,
+      zabbix_pass    => $zabbix_pass,
+      apache_use_ssl => $apache_use_ssl,
+    }),
+  }
 
   Zabbix_proxy <<| |>> {
-    zabbix_url     => $zabbix_url,
-    zabbix_user    => $zabbix_user,
-    zabbix_pass    => $zabbix_pass,
-    apache_use_ssl => $apache_use_ssl,
     require        => [
       Service['zabbix-server'],
       Package['zabbixapi'],
+      File['/etc/zabbix/api.conf'],
     ],
   }
-  -> Zabbix_template <<| |>> {
-    zabbix_url     => $zabbix_url,
-    zabbix_user    => $zabbix_user,
-    zabbix_pass    => $zabbix_pass,
-    apache_use_ssl => $apache_use_ssl,
-  }
-  -> Zabbix_host <<| |>> {
-    zabbix_url     => $zabbix_url,
-    zabbix_user    => $zabbix_user,
-    zabbix_pass    => $zabbix_pass,
-    apache_use_ssl => $apache_use_ssl,
-  }
-  -> Zabbix_userparameters <<| |>> {
-    zabbix_url     => $zabbix_url,
-    zabbix_user    => $zabbix_user,
-    zabbix_pass    => $zabbix_pass,
-    apache_use_ssl => $apache_use_ssl,
-  }
+  -> Zabbix_template <<| |>>
+  -> Zabbix_host <<| |>>
+  -> Zabbix_userparameters <<| |>>
 }

@@ -16,16 +16,11 @@ describe 'zabbix_proxy type' do
         class { 'zabbix':
           zabbix_version   => '3.0', # zabbixapi gem doesn't currently support higher versions
           zabbix_url       => 'localhost',
+          zabbix_api_user  => 'Admin',
+          zabbix_api_pass  => 'zabbix',
+          apache_use_ssl   => false,
           manage_resources => true,
           require          => [ Class['postgresql::server'], Class['apache'], ],
-        }
-
-        Zabbix_proxy {
-          zabbix_user    => 'Admin',
-          zabbix_pass    => 'zabbix',
-          zabbix_url     => 'localhost',
-          apache_use_ssl => false,
-          require        => [ Service['zabbix-server'], Package['zabbixapi'], ],
         }
 
         zabbix_proxy { 'ZabbixProxy1':
@@ -33,12 +28,14 @@ describe 'zabbix_proxy type' do
           use_ip    => true,
           mode      => 0,
           port      => 10051,
+          require   => [ Service['zabbix-server'], Package['zabbixapi'], ],
         }
         zabbix_proxy { 'ZabbixProxy2':
           ipaddress => '127.0.0.3',
           use_ip    => false,
           mode      => 1,
           port      => 10055,
+          require   => [ Service['zabbix-server'], Package['zabbixapi'], ],
         }
       EOS
 

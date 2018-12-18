@@ -16,16 +16,11 @@ describe 'zabbix_host type' do
         class { 'zabbix':
           zabbix_version   => '3.0', # zabbixapi gem doesn't currently support higher versions
           zabbix_url       => 'localhost',
+          zabbix_api_user  => 'Admin',
+          zabbix_api_pass  => 'zabbix',
+          apache_use_ssl   => false,
           manage_resources => true,
           require          => [ Class['postgresql::server'], Class['apache'], ],
-        }
-
-        Zabbix_host {
-          zabbix_user    => 'Admin',
-          zabbix_pass    => 'zabbix',
-          zabbix_url     => 'localhost',
-          apache_use_ssl => false,
-          require        => [ Service['zabbix-server'], Package['zabbixapi'], ],
         }
 
         zabbix_host { 'test1.example.com':
@@ -35,13 +30,15 @@ describe 'zabbix_host type' do
           group        => 'TestgroupOne',
           group_create => true,
           templates    => [ 'Template OS Linux', ],
+          require      => [ Service['zabbix-server'], Package['zabbixapi'], ],
         }
         zabbix_host { 'test2.example.com':
-          ipaddress    => '127.0.0.2',
-          use_ip       => false,
-          port         => 1050,
-          group        => 'Virtual machines',
-          templates    => [ 'Template OS Linux', 'Template ICMP Ping', ],
+          ipaddress => '127.0.0.2',
+          use_ip    => false,
+          port      => 1050,
+          group     => 'Virtual machines',
+          templates => [ 'Template OS Linux', 'Template ICMP Ping', ],
+          require   => [ Service['zabbix-server'], Package['zabbixapi'], ],
         }
       EOS
 

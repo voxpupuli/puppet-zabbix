@@ -16,20 +16,16 @@ describe 'zabbix_template type' do
         class { 'zabbix':
           zabbix_version   => '3.0', # zabbixapi gem doesn't currently support higher versions
           zabbix_url       => 'localhost',
+          zabbix_api_user  => 'Admin',
+          zabbix_api_pass  => 'zabbix',
+          apache_use_ssl   => false,
           manage_resources => true,
           require          => [ Class['postgresql::server'], Class['apache'], ],
         }
 
-        Zabbix_template {
-          zabbix_user    => 'Admin',
-          zabbix_pass    => 'zabbix',
-          zabbix_url     => 'localhost',
-          apache_use_ssl => false,
-          require        => [ Service['zabbix-server'], Package['zabbixapi'], ],
-        }
-
         zabbix_template { 'TestTemplate1':
           template_source => '/root/TestTemplate1.xml',
+          require         => [ Service['zabbix-server'], Package['zabbixapi'], ],
         }
       EOS
 

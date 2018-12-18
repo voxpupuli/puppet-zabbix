@@ -1,0 +1,11 @@
+<%- | String[1] $zabbix_url,
+      String[1] $zabbix_user,
+      String[1] $zabbix_pass,
+      Boolean   $apache_use_ssl,
+| -%>
+# MANAGED BY PUPPET
+[default]
+zabbix_url     = <%= $zabbix_url %>
+zabbix_user    = <%= $zabbix_user %>
+zabbix_pass    = <%= $zabbix_pass %>
+apache_use_ssl = <%= $apache_use_ssl %>

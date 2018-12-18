@@ -20,17 +20,11 @@ class zabbix::resources::proxy (
   $port      = undef,
   $templates = undef,
 ) {
-
-    @@zabbix_proxy { $hostname:
-      ipaddress      => $ipaddress,
-      use_ip         => $use_ip,
-      mode           => $mode,
-      port           => $port,
-      templates      => $templates,
-      zabbix_url     => '',
-      zabbix_user    => '',
-      zabbix_pass    => '',
-      apache_use_ssl => '',
-    }
-
+  @@zabbix_proxy { $hostname:
+    ipaddress => $ipaddress,
+    use_ip    => $use_ip,
+    mode      => $mode,
+    port      => $port,
+    templates => $templates,
+  }
 }

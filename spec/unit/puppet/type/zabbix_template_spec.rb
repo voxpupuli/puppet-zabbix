@@ -13,10 +13,6 @@ describe Puppet::Type.type(:zabbix_template) do
 
   describe 'when validating attributes' do
     [
-      :zabbix_url,
-      :zabbix_user,
-      :zabbix_pass,
-      :apache_use_ssl,
       :template_name,
       :template_source,
       :provider
