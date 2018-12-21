@@ -4,6 +4,40 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v6.7.0](https://github.com/voxpupuli/puppet-zabbix/tree/v6.7.0) (2018-12-21)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v6.6.0...v6.7.0)
+
+**Implemented enhancements:**
+
+- Add Zabbix 3.4 and 4.0 support [\#577](https://github.com/voxpupuli/puppet-zabbix/pull/577) ([gdubicki](https://github.com/gdubicki))
+- Add ability to stop the agent [\#562](https://github.com/voxpupuli/puppet-zabbix/pull/562) ([mkilchhofer](https://github.com/mkilchhofer))
+- Make repo\_location usable [\#538](https://github.com/voxpupuli/puppet-zabbix/pull/538) ([baurmatt](https://github.com/baurmatt))
+
+**Fixed bugs:**
+
+- zabbix\_template resource doesn't work with Zabbix 4.0 [\#556](https://github.com/voxpupuli/puppet-zabbix/issues/556)
+- Properly require zabbixapi gem [\#572](https://github.com/voxpupuli/puppet-zabbix/pull/572) ([baurmatt](https://github.com/baurmatt))
+- Add zabbix\_package\_state to the zabbix class to allow upgrade of se… [\#568](https://github.com/voxpupuli/puppet-zabbix/pull/568) ([r-catania](https://github.com/r-catania))
+
+**Closed issues:**
+
+- Incompatibility with puppetlabs-apt \(starting from 6.1.0 version \) [\#569](https://github.com/voxpupuli/puppet-zabbix/issues/569)
+- Make zabbix::resources::agent::hostname configurable in zabbix::agent [\#563](https://github.com/voxpupuli/puppet-zabbix/issues/563)
+- Drop management of Init script [\#541](https://github.com/voxpupuli/puppet-zabbix/issues/541)
+- zabbix::userparameters has to require zabbix::agent [\#539](https://github.com/voxpupuli/puppet-zabbix/issues/539)
+- zabbix::repo::repo\_location isn't used [\#537](https://github.com/voxpupuli/puppet-zabbix/issues/537)
+- Make types run in puppet 4 [\#182](https://github.com/voxpupuli/puppet-zabbix/issues/182)
+
+**Merged pull requests:**
+
+- Fix rspec tests for Gentoo [\#576](https://github.com/voxpupuli/puppet-zabbix/pull/576) ([baurmatt](https://github.com/baurmatt))
+- Feature/acceptance test custom types [\#573](https://github.com/voxpupuli/puppet-zabbix/pull/573) ([baurmatt](https://github.com/baurmatt))
+- Add data types for zabbix::userparameters [\#565](https://github.com/voxpupuli/puppet-zabbix/pull/565) ([baurmatt](https://github.com/baurmatt))
+- Make hostname within exported resources configurable [\#564](https://github.com/voxpupuli/puppet-zabbix/pull/564) ([baurmatt](https://github.com/baurmatt))
+- Add manage\_init\_script parameter [\#553](https://github.com/voxpupuli/puppet-zabbix/pull/553) ([baurmatt](https://github.com/baurmatt))
+- Include zabbix::agent for better relationship ordering [\#540](https://github.com/voxpupuli/puppet-zabbix/pull/540) ([baurmatt](https://github.com/baurmatt))
+
 ## [v6.6.0](https://github.com/voxpupuli/puppet-zabbix/tree/v6.6.0) (2018-11-02)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v6.5.0...v6.6.0)
