@@ -17,6 +17,16 @@ describe 'zabbix::repo' do
         it { is_expected.to contain_class('zabbix::params') }
         it { is_expected.to contain_class('zabbix::repo') }
 
+        context 'when repo_location is "https://example.com/foo"' do
+          let :params do
+            {
+              repo_location: 'https://example.com/foo'
+            }
+          end
+
+          it { is_expected.to contain_apt__source('zabbix').with_location('https://example.com/foo') }
+        end
+
         case facts[:os]['release']['major']
         when '6'
           context 'on Debian 6 and Zabbix 2.0' do
@@ -137,6 +147,16 @@ describe 'zabbix::repo' do
         it { is_expected.to contain_class('zabbix::params') }
         it { is_expected.to contain_class('zabbix::repo') }
         # rubocop:enable RSpec/RepeatedExample
+
+        context 'when repo_location is "https://example.com/foo"' do
+          let :params do
+            {
+              repo_location: 'https://example.com/foo'
+            }
+          end
+
+          it { is_expected.to contain_yumrepo('zabbix').with_baseurl('https://example.com/foo') }
+        end
 
         case facts[:os]['release']['major']
         when '5'
