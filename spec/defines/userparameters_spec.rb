@@ -5,7 +5,7 @@ describe 'zabbix::userparameters', type: :define do
     context "on #{os} " do
       let :facts do
         systemd_fact = case facts[:os]['family']
-                       when 'Archlinux', 'Fedora'
+                       when 'Archlinux', 'Fedora', 'Gentoo'
                          { systemd: true }
                        else
                          { systemd: false }
@@ -15,6 +15,9 @@ describe 'zabbix::userparameters', type: :define do
       let(:title) { 'mysqld' }
       let(:pre_condition) { 'class { "zabbix::agent": include_dir => "/etc/zabbix/zabbix_agentd.d" }' }
 
+      package = facts[:osfamily] == 'Gentoo' ? 'zabbix' : 'zabbix-agent'
+      service = facts[:osfamily] == 'Gentoo' ? 'zabbix-agentd' : 'zabbix-agent'
+
       context 'with an content' do
         let(:params) { { content: 'UserParameter=mysql.ping,mysqladmin -uroot ping | grep -c alive' } }
 
@@ -23,12 +26,12 @@ describe 'zabbix::userparameters', type: :define do
         it { is_expected.to contain_class('zabbix::params') }
         it { is_expected.to contain_class('zabbix::repo') }
         it { is_expected.to compile.with_all_deps }
-        it { is_expected.to contain_file('/etc/init.d/zabbix-agent') }
+        it { is_expected.to contain_file("/etc/init.d/#{service}") }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf') }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.d') }
-        it { is_expected.to contain_package('zabbix-agent') }
-        it { is_expected.to contain_service('zabbix-agent') }
-        it { is_expected.to contain_zabbix__startup('zabbix-agent') }
+        it { is_expected.to contain_package(package) }
+        it { is_expected.to contain_service(service) }
+        it { is_expected.to contain_zabbix__startup(service) }
       end
     end
   end

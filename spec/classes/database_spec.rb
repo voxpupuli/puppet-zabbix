@@ -5,15 +5,23 @@ describe 'zabbix::database' do
     'rspec.puppet.com'
   end
 
-  let :pre_condition do
-    "include 'postgresql::server'
-    include 'mysql::server'"
-  end
-
   on_supported_os.each do |os, facts|
     context "on #{os} " do
       let :facts do
         facts
+      end
+
+      let :pre_condition do
+        <<-EOS
+          include 'postgresql::server'
+          if $::osfamily == 'Gentoo' {
+            # We don't need the package to be installed as its the same for the server.
+            class { 'mysql::client':
+              package_manage => false,
+            }
+          }
+          include 'mysql::server'
+        EOS
       end
 
       describe 'database_type is postgresql, zabbix_type is server and is multiple host setup' do

@@ -8,8 +8,14 @@ describe 'zabbix::server' do
   on_supported_os.each do |os, facts|
     next if facts[:osfamily] == 'Archlinux' # zabbix server is currently not supported on archlinux
     context "on #{os} " do
+      systemd_fact = case facts[:osfamily]
+                     when 'Archlinux', 'Fedora', 'Gentoo'
+                       { systemd: true }
+                     else
+                       { systemd: false }
+                     end
       let :facts do
-        facts
+        facts.merge(systemd_fact)
       end
 
       describe 'with default settings' do
@@ -128,7 +134,7 @@ describe 'zabbix::server' do
 
       context 'it creates a startup script' do
         case facts[:osfamily]
-        when 'Archlinux', 'Fedora'
+        when 'Archlinux', 'Fedora', 'Gentoo'
           it { is_expected.to contain_file('/etc/init.d/zabbix-server').with_ensure('absent') }
           it { is_expected.to contain_file('/etc/systemd/system/zabbix-server.service').with_ensure('file') }
         else

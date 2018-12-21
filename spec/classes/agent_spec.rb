@@ -15,7 +15,7 @@ describe 'zabbix::agent' do
   on_supported_os.each do |os, facts|
     context "on #{os} " do
       systemd_fact = case facts[:osfamily]
-                     when 'Archlinux', 'Fedora'
+                     when 'Archlinux', 'Fedora', 'Gentoo'
                        { systemd: true }
                      else
                        { systemd: false }
@@ -30,11 +30,20 @@ describe 'zabbix::agent' do
         facts.merge(systemd_fact)
       end
 
+      if facts[:osfamily] == 'Gentoo'
+        package_name = 'zabbix'
+        service_name = 'zabbix-agentd'
+      else
+        package_name = 'zabbix-agent'
+        service_name = 'zabbix-agent'
+      end
+      # package = facts[:osfamily] == 'Gentoo' ? 'zabbix' : 'zabbix-agent'
+      # service = facts[:osfamily] == 'Gentoo' ? 'zabbix-agentd' : 'zabbix-agent'
+
       context 'with all defaults' do
-        package = 'zabbix-agent'
         # Make sure package will be installed, service running and ensure of directory.
         it do
-          is_expected.to contain_package(package).with(
+          is_expected.to contain_package(package_name).with(
             ensure:   'present',
             require:  'Class[Zabbix::Repo]',
             tag:      'zabbix'
@@ -42,17 +51,17 @@ describe 'zabbix::agent' do
         end
 
         it do
-          is_expected.to contain_service('zabbix-agent').with(
+          is_expected.to contain_service(service_name).with(
             ensure:     'running',
             enable:     true,
             hasstatus:  true,
             hasrestart: true,
-            require:    "Package[#{package}]"
+            require:    "Package[#{package_name}]"
           )
         end
 
         it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.d').with_ensure('directory') }
-        it { is_expected.to contain_zabbix__startup('zabbix-agent').that_requires("Package[#{package}]") }
+        it { is_expected.to contain_zabbix__startup(service_name).that_requires("Package[#{package_name}]") }
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to contain_class('zabbix::params') }
       end
@@ -135,12 +144,12 @@ describe 'zabbix::agent' do
 
       context 'it creates a startup script' do
         case facts[:osfamily]
-        when 'Archlinux', 'Fedora'
-          it { is_expected.to contain_file('/etc/init.d/zabbix-agent').with_ensure('absent') }
-          it { is_expected.to contain_file('/etc/systemd/system/zabbix-agent.service').with_ensure('file') }
+        when 'Archlinux', 'Fedora', 'Gentoo'
+          it { is_expected.to contain_file("/etc/init.d/#{service_name}").with_ensure('absent') }
+          it { is_expected.to contain_file("/etc/systemd/system/#{service_name}.service").with_ensure('file') }
         else
-          it { is_expected.to contain_file('/etc/init.d/zabbix-agent').with_ensure('file') }
-          it { is_expected.not_to contain_file('/etc/systemd/system/zabbix-agent.service') }
+          it { is_expected.to contain_file("/etc/init.d/#{service_name}").with_ensure('file') }
+          it { is_expected.not_to contain_file("/etc/systemd/system/#{service_name}.service") }
         end
       end
 
@@ -151,7 +160,7 @@ describe 'zabbix::agent' do
           }
         end
 
-        it { is_expected.not_to contain_zabbix__startup('zabbix-agent') }
+        it { is_expected.not_to contain_zabbix__startup(service_name) }
       end
 
       context 'when declaring zabbix_alias' do
@@ -255,8 +264,6 @@ describe 'zabbix::agent' do
       end
 
       context 'when declaring service_ensure is stopped and service_enable false' do
-        package = 'zabbix-agent'
-
         let :params do
           {
             service_ensure: 'stopped',
@@ -265,10 +272,10 @@ describe 'zabbix::agent' do
         end
 
         it do
-          is_expected.to contain_service('zabbix-agent').with(
+          is_expected.to contain_service(service_name).with(
             ensure:     'stopped',
             enable:     false,
-            require:    "Package[#{package}]"
+            require:    "Package[#{package_name}]"
           )
         end
       end

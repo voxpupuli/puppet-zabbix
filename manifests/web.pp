@@ -234,8 +234,8 @@ class zabbix::web (
 ) inherits zabbix::params {
 
   # check osfamily, Arch is currently not supported for web
-  if $facts['os']['family'] == 'Archlinux' {
-    fail('Archlinux is currently not supported for zabbix::web ')
+  if $facts['os']['family'] in [ 'Archlinux', 'Gentoo', ] {
+    fail("${facts['os']['family']} is currently not supported for zabbix::web")
   }
 
   # Only include the repo class if it has not yet been included
