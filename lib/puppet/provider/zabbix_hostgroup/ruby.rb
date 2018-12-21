@@ -1,5 +1,7 @@
 require_relative '../zabbix'
 Puppet::Type.type(:zabbix_hostgroup).provide(:ruby, parent: Puppet::Provider::Zabbix) do
+  confine feature: :zabbixapi
+
   def connect
     @zbx ||= self.class.create_connection(@resource[:zabbix_url], @resource[:zabbix_user], @resource[:zabbix_pass], @resource[:apache_use_ssl])
     @zbx
