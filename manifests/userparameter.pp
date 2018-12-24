@@ -32,5 +32,9 @@ class zabbix::userparameter (
   Hash $data = {},
 ) {
   $_data = hiera_hash('zabbix::userparameter::data', $data)
-  create_resources('zabbix::userparameters', $_data)
+  $_data.each |$key,$value| {
+    zabbix::userparameters { $key:
+      * => $value,
+    }
+  }
 }
