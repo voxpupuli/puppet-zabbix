@@ -13,11 +13,13 @@
 # no need for loading this class manually.
 #
 define zabbix::resources::userparameters (
+  $ensure,
   $hostname,
   $template,
 ) {
 
   @@zabbix_userparameters { "${hostname}_${name}":
+    ensure         => $ensure,
     hostname       => $hostname,
     template       => $template,
     zabbix_url     => '',

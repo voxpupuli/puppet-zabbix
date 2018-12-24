@@ -7,6 +7,9 @@
 #
 # === Parameters
 #
+# [*ensure*]
+#   If the userparameter should be `present` or `absent`
+#
 # [*source*]
 #   File which holds several userparameter entries.
 #
@@ -29,7 +32,7 @@
 #   be placed. Default: '/usr/bin'
 #
 # [*config_mode*]
-#   When 'config_mode' is used, this parameter can provide the mode of the config file who will be created 
+#   When 'config_mode' is used, this parameter can provide the mode of the config file who will be created
 #   to keep some credidentials private. Default: '0644'
 #
 # === Example
@@ -57,6 +60,7 @@
 # Copyright 2014 Werner Dijkerman
 #
 define zabbix::userparameters (
+  Enum['present', 'absent']    $ensure      = 'present',
   Optional[Stdlib::Filesource] $source      = undef,
   Optional[String[1]]          $content     = undef,
   Optional[Stdlib::Filesource] $script      = undef,
@@ -74,7 +78,7 @@ define zabbix::userparameters (
 
   if $source {
     file { "${include_dir}/${name}.conf":
-      ensure  => present,
+      ensure  => $ensure,
       owner   => $agent_config_owner,
       group   => $agent_config_group,
       mode    => $config_mode,
@@ -86,7 +90,7 @@ define zabbix::userparameters (
 
   if $content {
     file { "${include_dir}/${name}.conf":
-      ensure  => present,
+      ensure  => $ensure,
       owner   => $agent_config_owner,
       group   => $agent_config_group,
       mode    => $config_mode,
@@ -98,7 +102,7 @@ define zabbix::userparameters (
 
   if $script {
     file { "${script_dir}/${name}${script_ext}":
-      ensure  => present,
+      ensure  => $ensure,
       owner   => $agent_config_owner,
       group   => $agent_config_group,
       mode    => '0755',
@@ -113,6 +117,7 @@ define zabbix::userparameters (
   # used/enabled, we do this automatically.
   if $template {
     zabbix::resources::userparameters { "${facts['hostname']}_${name}":
+      ensure   => $ensure,
       hostname => $facts['fqdn'],
       template => $template,
     }
