@@ -33,6 +33,14 @@ describe 'zabbix::userparameters', type: :define do
         it { is_expected.to contain_service(service) }
         it { is_expected.to contain_zabbix__startup(service) }
       end
+
+      context 'with ensure => absent' do
+        let(:params) { { ensure: 'absent', content: 'UserParameter=mysql.ping,mysqladmin -uroot ping | grep -c alive' } }
+
+        it { is_expected.to compile.with_all_deps }
+
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.d/mysqld.conf').with_ensure('absent') }
+      end
     end
   end
 end
