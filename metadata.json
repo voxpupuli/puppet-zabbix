@@ -14,7 +14,7 @@
     },
     {
       "name": "puppetlabs/mysql",
-      "version_requirement": ">= 3.5.0 < 7.0.0"
+      "version_requirement": ">= 3.5.0 < 8.0.0"
     },
     {
       "name": "puppetlabs/apache",
