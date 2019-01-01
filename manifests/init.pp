@@ -146,7 +146,7 @@ class zabbix (
   $cacheupdatefrequency                     = $zabbix::params::server_cacheupdatefrequency,
   $startdbsyncers                           = $zabbix::params::server_startdbsyncers,
   $historycachesize                         = $zabbix::params::server_historycachesize,
-  String $historyindexcachesize                    = $zabbix::params::server_historyindexcachesize
+  String $historyindexcachesize             = $zabbix::params::server_historyindexcachesize,
   $trendcachesize                           = $zabbix::params::server_trendcachesize,
   $historytextcachesize                     = $zabbix::params::server_historytextcachesize,
   $valuecachesize                           = $zabbix::params::server_valuecachesize,
