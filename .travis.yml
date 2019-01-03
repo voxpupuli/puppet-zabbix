@@ -5,6 +5,7 @@ cache: bundler
 before_install:
   - rm -f Gemfile.lock
   - gem update --system
+  - gem update bundler
   - bundle --version
 script:
   - 'bundle exec rake $CHECK'
