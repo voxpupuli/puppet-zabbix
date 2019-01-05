@@ -41,7 +41,7 @@ desc 'Check for trailing whitespace'
 task :trailing_whitespace do
   puts "\nChecking for trailing whitespace"
   Dir.glob('**/*.md', File::FNM_DOTMATCH).sort.each do |f|
-    if not f =~ /^(modules\/|acceptance\/.*|\/vendor\/)/
+    if not f =~ /^(modules\/|acceptance\/|\/vendor\/|\.vendor\/|spec\/fixtures\/|pkg\/)/
       puts "  #{f}"
       cnt=0
       File.foreach(f) do |line|
