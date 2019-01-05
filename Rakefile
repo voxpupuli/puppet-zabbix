@@ -37,10 +37,29 @@ RSpec::Core::RakeTask.new(:acceptance) do |t|
   t.pattern = 'spec/acceptance'
 end
 
-desc 'Run tests metadata_lint, release_checks'
+desc 'Check for trailing whitespace'
+task :trailing_whitespace do
+  puts "\nChecking for trailing whitespace"
+  Dir.glob('**/*.md', File::FNM_DOTMATCH).sort.each do |f|
+    if not f =~ /^(modules\/|acceptance\/.*|\/vendor\/)/
+      puts "  #{f}"
+      cnt=0
+      File.foreach(f) do |line|
+        cnt += 1
+        if line =~ /\s\n$/
+          puts "  #{f} has trailing whitespace on line #{cnt}"
+          exit 1
+        end
+      end
+    end
+  end
+end
+
+desc 'Run tests metadata_lint, release_checks, trailing_whitespace'
 task test: [
   :metadata_lint,
   :release_checks,
+  :trailing_whitespace,
 ]
 
 desc "Run main 'test' task and report merged results to coveralls"
