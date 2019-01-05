@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 
 ['2.4', '3.2', '3.4', '4.0'].each do |version|

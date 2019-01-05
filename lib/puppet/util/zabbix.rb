@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # this module adds additional params to a puppet type
 module Puppet::Util::Zabbix
   def self.add_zabbix_type_methods(type)

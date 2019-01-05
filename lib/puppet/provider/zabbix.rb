@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # zabbix provider type for puppet
 class Puppet::Provider::Zabbix < Puppet::Provider
   # Create the api connection

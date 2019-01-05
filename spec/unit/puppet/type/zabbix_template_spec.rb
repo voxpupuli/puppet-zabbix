@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require 'fakefs/spec_helpers'
 
@@ -12,14 +14,14 @@ describe Puppet::Type.type(:zabbix_template) do
   let(:provider) { stub('provider', class: provider_class, clear: nil) }
 
   describe 'when validating attributes' do
-    [
-      :zabbix_url,
-      :zabbix_user,
-      :zabbix_pass,
-      :apache_use_ssl,
-      :template_name,
-      :template_source,
-      :provider
+    %i[
+      zabbix_url
+      zabbix_user
+      zabbix_pass
+      apache_use_ssl
+      template_name
+      template_source
+      provider
     ].each do |param|
       it "should have a #{param} parameter" do
         expect(described_class.attrtype(param)).to eq(:param)
@@ -36,7 +38,7 @@ describe Puppet::Type.type(:zabbix_template) do
   describe 'ensure' do
     let(:property) { resource.property(:ensure) }
 
-    [:present, :absent].each do |value|
+    %i[present absent].each do |value|
       it "suppports #{value} as a value to :ensure" do
         expect { described_class.new(template_name: 'My template', ensure: value) }.not_to raise_error
       end

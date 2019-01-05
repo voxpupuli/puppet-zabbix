@@ -73,7 +73,7 @@ task test_with_coveralls: [:test] do
 end
 
 desc 'Print supported beaker sets'
-task 'beaker_sets', [:directory] do |_t, args|
+task :beaker_sets, [:directory] do |_t, args|
   directory = args[:directory]
 
   metadata = JSON.load(File.read('metadata.json'))

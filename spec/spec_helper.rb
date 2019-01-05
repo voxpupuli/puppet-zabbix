@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This file is managed via modulesync
 # https://github.com/voxpupuli/modulesync
 # https://github.com/voxpupuli/modulesync_config
@@ -7,10 +9,8 @@ include RspecPuppetFacts
 
 if File.exist?(File.join(__dir__, 'default_module_facts.yml'))
   facts = YAML.load(File.read(File.join(__dir__, 'default_module_facts.yml')))
-  if facts
-    facts.each do |name, value|
-      add_custom_fact name.to_sym, value
-    end
+  facts&.each do |name, value|
+    add_custom_fact name.to_sym, value
   end
 end
 
