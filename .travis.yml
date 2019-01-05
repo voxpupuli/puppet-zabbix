@@ -3,7 +3,7 @@ dist: xenial
 language: ruby
 cache: bundler
 before_install:
-  - ./prepare_travis.sh
+  - sh ./prepare_travis.sh
 script:
   - 'bundle exec rake $CHECK'
 matrix:
