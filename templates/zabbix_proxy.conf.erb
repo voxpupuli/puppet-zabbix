@@ -135,6 +135,22 @@ DBPassword=<%= @database_password %>
 #
 <% if @database_port %>DBPort=<%= @database_port %><% end %>
 
+<% if @zabbix_version.to_f >= 3.4 %>
+### Option: EnableRemoteCommands
+#	Whether remote commands from Zabbix server are allowed.
+#	0 - not allowed
+#	1 - allowed
+#
+EnableRemoteCommands=<%= @enableremotecommands %>
+
+### Option: LogRemoteCommands
+#	Enable logging of executed shell commands as warnings.
+#	0 - disabled
+#	1 - enabled
+#
+LogRemoteCommands=<%= @logremotecommands %>
+<% end %>
+
 ######### PROXY SPECIFIC PARAMETERS #############
 
 ### Option: ProxyLocalBuffer

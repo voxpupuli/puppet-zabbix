@@ -291,6 +291,7 @@ class zabbix::params {
   $proxy_database_user                      = 'zabbix-proxy'
   $proxy_datasenderfrequency                = '1'
   $proxy_debuglevel                         = '3'
+  $proxy_enableremotecommands               = 0
   $proxy_externalscripts                    = '/usr/lib/zabbix/externalscripts'
   $proxy_heartbeatfrequency                 = '60'
   $proxy_historycachesize                   = '8M'
@@ -308,6 +309,7 @@ class zabbix::params {
   $proxy_localbuffer                        = '0'
   $proxy_logfile                            = '/var/log/zabbix/zabbix_proxy.log'
   $proxy_logfilesize                        = '10'
+  $proxy_logremotecommands                  = 0
   $proxy_logslowqueries                     = '0'
   $proxy_mode                               = '0'
   $proxy_offlinebuffer                      = '1'

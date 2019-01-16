@@ -69,6 +69,12 @@
 # [*sourceip*]
 #   Source ip address for outgoing connections.
 #
+# [*enableremotecommands*]
+#   Whether remote commands from zabbix server are allowed.
+#
+# [*logremotecommands*]
+#   Enable logging of executed shell commands as warnings.
+#
 # [*logfile*]
 #   Name of log file.
 #
@@ -347,6 +353,8 @@ class zabbix::proxy (
   $hostname                        = $zabbix::params::proxy_hostname,
   $listenport                      = $zabbix::params::proxy_listenport,
   $sourceip                        = $zabbix::params::proxy_sourceip,
+  Integer[0] $enableremotecommands = $zabbix::params::proxy_enableremotecommands,
+  Integer[0] $logremotecommands    = $zabbix::params::proxy_logremotecommands,
   $logfile                         = $zabbix::params::proxy_logfile,
   $logfilesize                     = $zabbix::params::proxy_logfilesize,
   $debuglevel                      = $zabbix::params::proxy_debuglevel,
