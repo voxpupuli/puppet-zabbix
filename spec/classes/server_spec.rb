@@ -331,6 +331,7 @@ describe 'zabbix::server' do
             tlscrlfile: '/etc/zabbix/keys/zabbix-server.crl',
             tlscertfile: '/etc/zabbix/keys/zabbix-server.crt',
             tlskeyfile: '/etc/zabbix/keys/zabbix-server.key',
+            historyindexcachesize: '4M',
             zabbix_version: '3.0'
           }
         end
@@ -341,6 +342,7 @@ describe 'zabbix::server' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSKeyFile=/etc/zabbix/keys/zabbix-server.key$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SSLCertLocation=/usr/lib/zabbix/ssl/certs} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SSLKeyLocation=/usr/lib/zabbix/ssl/keys} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^HistoryIndexCacheSize=4M} }
       end
       context 'with zabbix_server.conf and version 3.2' do
         let :params do
@@ -349,6 +351,7 @@ describe 'zabbix::server' do
             tlscrlfile: '/etc/zabbix/keys/zabbix-server.crl',
             tlscertfile: '/etc/zabbix/keys/zabbix-server.crt',
             tlskeyfile: '/etc/zabbix/keys/zabbix-server.key',
+            historyindexcachesize: '4M',
             zabbix_version: '3.2'
           }
         end
@@ -357,6 +360,7 @@ describe 'zabbix::server' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCRLFile=/etc/zabbix/keys/zabbix-server.crl$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCertFile=/etc/zabbix/keys/zabbix-server.crt$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSKeyFile=/etc/zabbix/keys/zabbix-server.key$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^HistoryIndexCacheSize=4M} }
       end
     end
   end
