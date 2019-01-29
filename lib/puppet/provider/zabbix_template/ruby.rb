@@ -2,15 +2,7 @@ require_relative '../zabbix'
 Puppet::Type.type(:zabbix_template).provide(:ruby, parent: Puppet::Provider::Zabbix) do
   confine feature: :zabbixapi
 
-  def connect
-    @zbx ||= self.class.create_connection(@resource[:zabbix_url], @resource[:zabbix_user], @resource[:zabbix_pass], @resource[:apache_use_ssl])
-    @zbx
-  end
-
   def create
-    # Connect to zabbix api
-    zbx = connect
-
     zbx.configurations.import(
       format: 'xml',
       rules: {
@@ -65,18 +57,15 @@ Puppet::Type.type(:zabbix_template).provide(:ruby, parent: Puppet::Provider::Zab
   end
 
   def destroy
-    zbx = connect
     id = zbx.templates.get_id(host: @resource[:template_name])
     zbx.templates.delete(id)
   end
 
   def exists?
-    zbx = connect
     zbx.templates.get_id(host: @resource[:template_name])
   end
 
   def xml
-    zbx = connect
     zbx.configurations.export(
       format: 'xml',
       options: {

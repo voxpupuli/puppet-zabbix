@@ -12,23 +12,16 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
     hostgroup_create = @resource[:group_create]
     templates = @resource[:templates]
     proxy = @resource[:proxy]
-    zabbix_url = @resource[:zabbix_url]
-    zabbix_user = @resource[:zabbix_user]
-    zabbix_pass = @resource[:zabbix_pass]
-    apache_use_ssl = @resource[:apache_use_ssl]
-
-    # Connect to zabbix api
-    zbx = self.class.create_connection(zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
 
     # Get the template ids.
     template_array = []
     if templates.is_a?(Array)
       templates.each do |template|
-        template_id = self.class.get_template_id(zbx, template)
+        template_id = get_template_id(zbx, template)
         template_array.push template_id
       end
     else
-      template_array.push self.class.get_template_id(zbx, templates)
+      template_array.push get_template_id(zbx, templates)
     end
 
     # Check if we need to connect via ip or fqdn
@@ -76,21 +69,17 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
 
   def exists?
     host = @resource[:hostname]
-    zabbix_url = @resource[:zabbix_url]
-    zabbix_user = @resource[:zabbix_user]
-    zabbix_pass = @resource[:zabbix_pass]
-    apache_use_ssl = @resource[:apache_use_ssl]
     templates = @resource[:templates]
 
     templates = [templates] unless templates.is_a?(Array)
 
-    host = self.class.check_host(host, zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
+    host = check_host(host)
     if host.any?
       template_ids   = host[0]['parentTemplates'].map { |x| x['templateid'] }
       template_names = host[0]['parentTemplates'].map { |x| x['host'] }
       res = []
       templates.each do |template|
-        if self.class.a_number?(template)
+        if a_number?(template)
           res.push(template_ids.include?(template))
         else
           res.push(template_names.include?(template))
@@ -104,12 +93,6 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
 
   def destroy
     host = @resource[:hostname]
-    zabbix_url = @resource[:zabbix_url]
-    zabbix_user = @resource[:zabbix_user]
-    zabbix_pass = @resource[:zabbix_pass]
-    apache_use_ssl = @resource[:apache_use_ssl]
-
-    zbx = self.class.create_connection(zabbix_url, zabbix_user, zabbix_pass, apache_use_ssl)
     zbx.hosts.delete(zbx.hosts.get_id(host: host))
   end
 end

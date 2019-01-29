@@ -17,15 +17,9 @@ define zabbix::resources::userparameters (
   $hostname,
   $template,
 ) {
-
   @@zabbix_userparameters { "${hostname}_${name}":
-    ensure         => $ensure,
-    hostname       => $hostname,
-    template       => $template,
-    zabbix_url     => '',
-    zabbix_user    => '',
-    zabbix_pass    => '',
-    apache_use_ssl => '',
+    ensure   => $ensure,
+    hostname => $hostname,
+    template => $template,
   }
-
 }

@@ -18,7 +18,6 @@ define zabbix::resources::template (
   $template_name   = $title,
   $template_source = '',
 ) {
-
   file { "${template_dir}/${template_name}.xml":
     ensure => present,
     owner  => 'zabbix',
@@ -29,10 +28,6 @@ define zabbix::resources::template (
   @@zabbix_template { $template_name:
     #template_source => $template_source,
     template_source => "${template_dir}/${template_name}.xml",
-    zabbix_url      => '',
-    zabbix_user     => '',
-    zabbix_pass     => '',
-    apache_use_ssl  => '',
     require         => File["${template_dir}/${template_name}.xml"],
   }
 }
