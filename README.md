@@ -198,11 +198,11 @@ The following is an example for using the PostgreSQL as database:
 ```ruby
 node 'proxy.example.com' {
   class { 'postgresql::server': }
-  
+
   class { 'zabbix::database':
     database_type => 'postgresql',
   }
-  
+
   class { 'zabbix::proxy':
     zabbix_server_host => '192.168.20.11',
     database_type      => 'postgresql',
@@ -215,7 +215,7 @@ When you want to make use of an MySQL database as backend:
 node 'proxy.example.com' {
   class { 'mysql::server': }
 
-  class { 'zabbix::database': 
+  class { 'zabbix::database':
     database_type => 'mysql',
   }
 
