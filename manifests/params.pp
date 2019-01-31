@@ -26,6 +26,7 @@ class zabbix::params {
       $agent_config_group    = 'zabbix'
       $agent_pidfile         = '/var/run/zabbix/zabbix_agentd.pid'
       $agent_servicename     = 'zabbix-agent'
+      $agent_include         = '/etc/zabbix/zabbix_agentd.d'
       $server_zabbix_user    = 'zabbix'
     }
     'Archlinux': {
@@ -41,6 +42,7 @@ class zabbix::params {
       $agent_config_group    = 'zabbix-agent'
       $agent_pidfile         = undef
       $agent_servicename     = 'zabbix-agent'
+      $agent_include         = '/etc/zabbix/zabbix_agentd.d'
       $server_zabbix_user    = 'zabbix-server'
     }
     'Fedora': {
@@ -56,6 +58,7 @@ class zabbix::params {
       $agent_config_group    = 'zabbix'
       $agent_pidfile         = '/var/run/zabbix/zabbix_agentd.pid'
       $agent_servicename     = 'zabbix-agent'
+      $agent_include         = '/etc/zabbix/zabbix_agentd.d'
       $server_zabbix_user    = 'zabbix'
     }
     'Gentoo': {
@@ -71,7 +74,20 @@ class zabbix::params {
       $agent_config_group    = 'zabbix'
       $agent_pidfile         = '/var/run/zabbix/zabbix_agentd.pid'
       $agent_servicename     = 'zabbix-agentd'
+      $agent_include         = '/etc/zabbix/zabbix_agentd.d'
       $server_zabbix_user    = 'zabbix'
+    }
+    'windows': {
+      $manage_repo             = false
+      $zabbix_package_agent    = 'zabbix-agent'
+      $zabbix_package_provider = chocolatey
+      $agent_configfile_path   = 'C:/ProgramData/zabbix/zabbix_agentd.conf'
+      $agent_config_owner      = 'zabbix'
+      $agent_zabbix_user       = 'zabbix'
+      $agent_config_group      = 'zabbix'
+      $agent_pidfile           = 'C:/ProgramData/zabbix/zabbix_agentd.pid'
+      $agent_servicename       = 'zabbix-agentd'
+      $agent_include           = 'C:/ProgramData/zabbix/zabbix_agentd.d'
     }
     default  : {
       $server_fpinglocation  = '/usr/sbin/fping'
@@ -85,6 +101,7 @@ class zabbix::params {
       $agent_zabbix_user     = 'zabbix'
       $agent_config_group    = 'zabbix'
       $agent_pidfile         = '/var/run/zabbix/zabbix_agentd.pid'
+      $agent_include         = '/etc/zabbix/zabbix_agentd.d'
       $agent_servicename     = 'zabbix-agent'
       $server_zabbix_user    = 'zabbix'
     }
@@ -108,6 +125,7 @@ class zabbix::params {
   $default_vhost                            = false
   $manage_firewall                          = false
   $manage_apt                               = true
+  $manage_choco                             = true
   $repo_location                            = ''
   $manage_resources                         = false
   $manage_vhost                             = true
@@ -229,7 +247,6 @@ class zabbix::params {
   $agent_hostmetadataitem                   = undef
   $agent_hostname                           = undef
   $agent_hostnameitem                       = 'system.hostname'
-  $agent_include                            = '/etc/zabbix/zabbix_agentd.d'
   $agent_include_purge                      = true
   $agent_listenip                           = undef
   $agent_listenport                         = '10050'

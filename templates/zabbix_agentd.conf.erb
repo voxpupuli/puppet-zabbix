@@ -5,7 +5,7 @@
 
 ############ GENERAL PARAMETERS #################
 
-<% if @pidfile %>
+<% if @pidfile and @kernel != 'windows'%>
 ### Option: PidFile
 #	Name of PID file.
 #
@@ -190,6 +190,7 @@ MaxLinesPerSecond=<%= @maxlinespersecond %>
 #
 Timeout=<%= @timeout %>
 
+<% if @kernel != 'windows' %>
 ### Option: AllowRoot
 #	Allow the agent to run as 'root'. If disabled and the agent is started by 'root', the agent
 #	will try to switch to the user specified by the User configuration option instead.
@@ -198,8 +199,9 @@ Timeout=<%= @timeout %>
 #	1 - allow
 #
 AllowRoot=<%= @allowroot %>
+<% end %>
 
-<% if @zabbix_version.to_f >= 2.4 %>
+<% if @zabbix_version.to_f >= 2.4 and @kernel != 'windows' %>
 ### Option: User
 #	Drop privileges to a specific, existing user on the system.
 #	Only has effect if run as 'root' and AllowRoot is disabled.
@@ -234,7 +236,7 @@ UnsafeUserParameters=<%= @unsafeuserparameters %>
 # 	Disabled. A configuration file should be placed on directory: <%= @include %>
 
 ####### LOADABLE MODULES #######
-<% if @zabbix_version.to_f >= 2.4 %>
+<% if @zabbix_version.to_f >= 2.4  and @kernel != 'windows' %>
 ### Option: LoadModulePath
 #	Full path to location of agent modules.
 #	Default depends on compilation options.

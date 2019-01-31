@@ -21,9 +21,10 @@ define zabbix::startup (
   String $service_type                                   = 'simple',
   Optional[Boolean] $manage_database                     = undef,
   Optional[String] $service_name                         = $name,
+
   ) {
 
-  case $title {
+  case downcase($title) {
     /agent/: {
       assert_type(Stdlib::Absolutepath, $agent_configfile_path)
     }
@@ -56,7 +57,14 @@ define zabbix::startup (
       mode    => '0755',
       content => template("zabbix/${name}-${osfamily_downcase}.init.erb"),
     }
-  } else {
+  } elsif ($facts['os']['family'] == 'windows') {
+    exec { "install_agent_${name}":
+      command  => "& 'C:\\Program Files\\Zabbix Agent\\zabbix_agentd.exe' --config ${agent_configfile_path} --install --multiple-agents",
+      onlyif   => "if (Get-WmiObject -Class Win32_Service -Filter \"Name='${name}'\"){exit 1}",
+      provider => powershell,
+      notify   => Service[$name],
+    }
+  }else {
     fail('We currently only support Debian and RedHat osfamily as non-systemd')
   }
 }

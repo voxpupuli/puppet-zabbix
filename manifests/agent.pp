@@ -217,6 +217,7 @@ class zabbix::agent (
   $zabbix_version                         = $zabbix::params::zabbix_version,
   $zabbix_package_state                   = $zabbix::params::zabbix_package_state,
   $zabbix_package_agent                   = $zabbix::params::zabbix_package_agent,
+  $zabbix_package_provider                = $zabbix::params::zabbix_package_provider,
   Boolean $manage_firewall                = $zabbix::params::manage_firewall,
   Boolean $manage_repo                    = $zabbix::params::manage_repo,
   Boolean $manage_resources               = $zabbix::params::manage_resources,
@@ -272,7 +273,7 @@ class zabbix::agent (
   $tlsservercertsubject                   = $zabbix::params::agent_tlsservercertsubject,
   String $agent_config_owner              = $zabbix::params::agent_config_owner,
   String $agent_config_group              = $zabbix::params::agent_config_group,
-  Boolean $manage_selinux                 = $zabbix::params::manage_selinux,
+  Optional[Boolean] $manage_selinux       = $zabbix::params::manage_selinux,
   Array[String] $selinux_require          = $zabbix::params::selinux_require,
   Hash[String, Array] $selinux_rules      = $zabbix::params::selinux_rules,
   String $additional_service_params       = $zabbix::params::additional_service_params,
@@ -350,9 +351,10 @@ class zabbix::agent (
 
   # Installing the package
   package { $zabbix_package_agent:
-    ensure  => $zabbix_package_state,
-    require => Class['zabbix::repo'],
-    tag     => 'zabbix',
+    ensure   => $zabbix_package_state,
+    require  => Class['zabbix::repo'],
+    provider => $zabbix_package_provider,
+    tag      => 'zabbix',
   }
 
   # Ensure that the correct config file is used.
@@ -368,7 +370,7 @@ class zabbix::agent (
     }
   }
 
-  if $agent_configfile_path != '/etc/zabbix/zabbix_agentd.conf' {
+  if $agent_configfile_path != '/etc/zabbix/zabbix_agentd.conf' and $::kernel != 'windows' {
     file { '/etc/zabbix/zabbix_agentd.conf':
       ensure  => absent,
       require => Package[$zabbix_package_agent],
@@ -395,7 +397,7 @@ class zabbix::agent (
     ensure  => present,
     owner   => $agent_config_owner,
     group   => $agent_config_group,
-    mode    => '0644',
+    mode    => '0664',
     notify  => Service[$servicename],
     require => Package[$zabbix_package_agent],
     replace => true,
