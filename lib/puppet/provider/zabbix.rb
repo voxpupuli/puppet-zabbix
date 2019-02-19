@@ -3,7 +3,7 @@ class Puppet::Provider::Zabbix < Puppet::Provider
   # This method is vendored from the AWS SDK, rather than including an
   # extra library just to parse an ini file
   # Copied from https://github.com/puppetlabs/puppetlabs-aws/blob/2d34b1602bdd564b3f882f683dc000878f539343/lib/puppet_x/puppetlabs/aws.rb#L120
-  def ini_parse(file)
+  def self.ini_parse(file)
     current_section = {}
     map = {}
     file.rewind
@@ -23,16 +23,28 @@ class Puppet::Provider::Zabbix < Puppet::Provider
     map
   end
 
-  def api_config
+  def ini_parse(file)
+    self.class.ini_parse(file)
+  end
+
+  def self.api_config
     @api_config ||= ini_parse(File.new('/etc/zabbix/api.conf'))
   end
 
-  def zbx
+  def api_config
+    self.class.api_config
+  end
+
+  def self.zbx
     @zbx ||= create_connection
   end
 
+  def zbx
+    self.class.zbx
+  end
+
   # Create the api connection
-  def create_connection
+  def self.create_connection
     protocol = api_config['default']['apache_use_ssl'] == 'true' ? 'https' : 'http'
     zbx = ZabbixApi.connect(
       url: "#{protocol}://#{api_config['default']['zabbix_url']}/api_jsonrpc.php",
@@ -42,6 +54,10 @@ class Puppet::Provider::Zabbix < Puppet::Provider
       http_password: api_config['default']['zabbix_pass']
     )
     zbx
+  end
+
+  def create_connection
+    self.class.create_connection
   end
 
   # Check if host exists. When error raised, return false.
@@ -78,6 +94,10 @@ class Puppet::Provider::Zabbix < Puppet::Provider
     template_id = get_template_id(zbx, template)
     template_array = zbx.templates.get_ids_by_host(hostids: [zbx.hosts.get_id(host: host)])
     template_array.include?(template_id.to_s)
+  end
+
+  def transform_to_array_hash(key, value_array)
+    value_array.map { |a| { key => a } }
   end
 
   # Is it a number?

@@ -260,6 +260,7 @@ class zabbix::params {
   $agent_userparameter                      = undef
   $agent_zabbix_alias                       = undef
   $agent_zbx_group                          = 'Linux servers'
+  $agent_zbx_groups                         = [ 'Linux servers', ]
   $agent_zbx_group_create                   = true
   $agent_zbx_templates                      = [
     'Template OS Linux',
