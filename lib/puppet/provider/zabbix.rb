@@ -90,7 +90,7 @@ class Puppet::Provider::Zabbix < Puppet::Provider
   end
 
   # Check if given template name exists in current host.
-  def check_template_in_host(host)
+  def check_template_in_host(host, template)
     template_id = get_template_id(zbx, template)
     template_array = zbx.templates.get_ids_by_host(hostids: [zbx.hosts.get_id(host: host)])
     template_array.include?(template_id.to_s)
