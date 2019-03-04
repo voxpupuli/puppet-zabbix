@@ -380,7 +380,10 @@ class zabbix::params {
   $javagateway_timeout                      = '3'
 
   # SE Linux specific params
-  $manage_selinux                           = $facts['selinux']
+  $manage_selinux = $facts['selinux'] ? {
+    true    => true,
+    default => false,
+  }
   $selinux_require                          = ['type zabbix_agent_t', 'class process setrlimit', 'class unix_dgram_socket create']
   $selinux_rules                            = { 'zabbix_agent_t' => ['allow zabbix_agent_t self:process setrlimit', 'allow zabbix_agent_t self:unix_dgram_socket create']}
 

@@ -273,7 +273,7 @@ class zabbix::agent (
   $tlsservercertsubject                   = $zabbix::params::agent_tlsservercertsubject,
   String $agent_config_owner              = $zabbix::params::agent_config_owner,
   String $agent_config_group              = $zabbix::params::agent_config_group,
-  Optional[Boolean] $manage_selinux       = $zabbix::params::manage_selinux,
+  Boolean $manage_selinux                 = $zabbix::params::manage_selinux,
   Array[String] $selinux_require          = $zabbix::params::selinux_require,
   Hash[String, Array] $selinux_rules      = $zabbix::params::selinux_rules,
   String $additional_service_params       = $zabbix::params::additional_service_params,
