@@ -567,15 +567,18 @@ class zabbix::server (
   }
   # check if selinux is active and allow zabbix
   if $facts['selinux'] == true and $manage_selinux {
-    selboolean{'zabbix_can_network':
-      persistent => true,
-      value      => 'on',
-      notify     => $dependency,
-    }
-    -> selinux::module{'zabbix-server':
+    ensure_resource ('selboolean',
+      [
+        'zabbix_can_network',
+      ], {
+        persistent => true,
+        value      => 'on',
+      })
+    selinux::module{'zabbix-server':
       ensure    => 'present',
       source_te => 'puppet:///modules/zabbix/zabbix-server.te',
       before    => $dependency,
+      require   => Selboolean['zabbix_can_network']
     }
     # zabbix-server 3.4 introduced IPC via a socket in /tmp
     # https://support.zabbix.com/browse/ZBX-12567
