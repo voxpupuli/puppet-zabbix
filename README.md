@@ -662,3 +662,4 @@ Could not evaluate: Connection refused - connect(2)
 ```
 
 When running puppet again (for 3rd time) everything goes fine.
+
