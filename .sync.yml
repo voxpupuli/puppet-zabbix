@@ -17,3 +17,5 @@ Gemfile:
         ruby-operator: '>='
         ruby-version: '2.3.0'
       - gem: 'zabbixapi'
+spec/spec_helper.rb:
+  mock_with: ':mocha'
