@@ -243,7 +243,7 @@ class zabbix::database(
         } # END if $zabbix_web != $zabbix_server
       }
       'sqlite': {
-        class { '::zabbix::database::sqlite': }
+        class { 'zabbix::database::sqlite': }
       }
       default: {
         fail('Unrecognized database type for server.')
