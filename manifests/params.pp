@@ -109,6 +109,7 @@ class zabbix::params {
   $manage_firewall                          = false
   $manage_apt                               = true
   $repo_location                            = ''
+  $unsupported_repo_location                = ''
   $manage_resources                         = false
   $manage_vhost                             = true
   $database_path                            = '/usr/sbin'
