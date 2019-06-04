@@ -449,7 +449,7 @@ class zabbix::proxy (
   # is set to false, you'll get warnings like this:
   # "Warning: You cannot collect without storeconfigs being set"
   if $manage_resources {
-    class { '::zabbix::resources::proxy':
+    class { 'zabbix::resources::proxy':
       hostname  => $hostname,
       ipaddress => $listen_ip,
       use_ip    => $use_ip,
@@ -474,7 +474,7 @@ class zabbix::proxy (
     case $database_type {
       'postgresql' : {
         # Execute the postgresql scripts
-        class { '::zabbix::database::postgresql':
+        class { 'zabbix::database::postgresql':
           zabbix_type          => 'proxy',
           zabbix_version       => $zabbix_version,
           database_schema_path => $database_schema_path,
@@ -488,7 +488,7 @@ class zabbix::proxy (
       }
       'mysql'      : {
         # Execute the mysql scripts
-        class { '::zabbix::database::mysql':
+        class { 'zabbix::database::mysql':
           zabbix_type          => 'proxy',
           zabbix_version       => $zabbix_version,
           database_schema_path => $database_schema_path,
@@ -511,7 +511,7 @@ class zabbix::proxy (
 
   # Only include the repo class if it has not yet been included
   unless defined(Class['Zabbix::Repo']) {
-    class { '::zabbix::repo':
+    class { 'zabbix::repo':
       manage_repo    => $manage_repo,
       zabbix_version => $zabbix_version,
     }
