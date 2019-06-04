@@ -24,6 +24,10 @@ describe 'zabbix::database' do
         EOS
       end
 
+      # The zabbix server was never supposed to work on Gentoo, just the agent
+      # We need to skip through those tests
+      next if facts[:os]['name'] == 'Gentoo'
+
       describe 'database_type is postgresql, zabbix_type is server and is multiple host setup' do
         let :params do
           {
