@@ -144,8 +144,7 @@ describe 'zabbix::web' do
               with_content(%r{zabbix_pass    = zabbix}).
               with_content(%r{apache_use_ssl = false})
           end
-          it { is_expected.to contain_package('zabbixapi').that_requires('Class[ruby::dev]').with_provider('puppet_gem') }
-          it { is_expected.to contain_class('ruby::dev') }
+          it { is_expected.to contain_package('zabbixapi').with_provider('puppet_gem') }
           it { is_expected.to contain_file('/etc/zabbix/imported_templates').with_ensure('directory') }
         end
 
