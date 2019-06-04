@@ -637,7 +637,7 @@ zabbix::agent::selinux_rules:
 
 At the moment of writing, the puppet run will fail one or more times when `manage_resources` is set to true when you install an fresh Zabbix server. It is an issue and I'm aware of it. Don't know yet how to solve this, but someone suggested to try puppet stages and for know I haven't made it work yet.
 
-*	Please be aware, that when `manage_resources` is enabled, it can increase an puppet run on the zabbix-server a lot when you have a lot of hosts.
+*	Please be aware, that when `manage_resources` is enabled, it can increase an puppet run on the zabbix-server a lot when you have a lot of hosts. You also need to ensure that you've got ruby installed on your machine, and related packages to compile native extensions for gems (usually gcc and make).
 *	First run of puppet on the zabbix-server can result in this error:
 
 ```ruby

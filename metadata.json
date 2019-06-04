@@ -25,10 +25,6 @@
       "version_requirement": ">= 1.7.0 < 3.0.0"
     },
     {
-      "name": "puppetlabs/ruby",
-      "version_requirement": ">= 0.6.0 < 2.0.0"
-    },
-    {
       "name": "puppetlabs/pe_gem",
       "version_requirement": ">= 0.2.0 < 2.0.0"
     },
