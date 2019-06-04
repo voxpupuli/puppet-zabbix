@@ -17,6 +17,10 @@
 # [*repo_location*]
 #   A custom repo location (e.g. your own mirror)
 #
+# [*unsupported_repo_location*]
+#   A custom repo location for unsupported content (e.g. your own mirror)
+#   Currently only supported under RedHat based systems.
+#
 # === Authors
 #
 # Author Name:
@@ -28,10 +32,11 @@
 # Copyright 2014 Werner Dijkerman
 #
 class zabbix::repo (
-  Boolean                                              $manage_repo    = $zabbix::params::manage_repo,
-  Boolean                                              $manage_apt     = $zabbix::params::manage_apt,
-  Variant[String[0],Stdlib::HTTPUrl, Stdlib::HTTPSUrl] $repo_location  = $zabbix::params::repo_location,
-  String[1]                                            $zabbix_version = $zabbix::params::zabbix_version,
+  Boolean                                              $manage_repo                = $zabbix::params::manage_repo,
+  Boolean                                              $manage_apt                 = $zabbix::params::manage_apt,
+  Variant[String[0],Stdlib::HTTPUrl, Stdlib::HTTPSUrl] $repo_location              = $zabbix::params::repo_location,
+  Variant[String[0],Stdlib::HTTPUrl, Stdlib::HTTPSUrl] $unsupported_repo_location  = $zabbix::params::unsupported_repo_location,
+  String[1]                                            $zabbix_version             = $zabbix::params::zabbix_version,
 ) inherits zabbix::params {
   if ($manage_repo) {
     case $facts['os']['name'] {
@@ -74,10 +79,15 @@ class zabbix::repo (
           priority => '1',
         }
 
+        $_unsupported_repo_location = $unsupported_repo_location ? {
+          ''      => "https://repo.zabbix.com/non-supported/rhel/${majorrelease}/\$basearch/",
+          default => $unsupported_repo_location,
+        }
+
         yumrepo { 'zabbix-nonsupported':
           name     => "Zabbix_nonsupported_${majorrelease}_${facts['os']['architecture']}",
           descr    => "Zabbix_nonsupported_${majorrelease}_${facts['os']['architecture']}",
-          baseurl  => "https://repo.zabbix.com/non-supported/rhel/${majorrelease}/\$basearch/",
+          baseurl  => $_unsupported_repo_location,
           gpgcheck => '1',
           gpgkey   => $gpgkey_nonsupported,
           priority => '1',

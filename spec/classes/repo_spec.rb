@@ -158,6 +158,16 @@ describe 'zabbix::repo' do
           it { is_expected.to contain_yumrepo('zabbix').with_baseurl('https://example.com/foo') }
         end
 
+        context 'when unsupported_repo_location is "https://example.com/foo"' do
+          let :params do
+            {
+              unsupported_repo_location: 'https://example.com/foo'
+            }
+          end
+
+          it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_baseurl('https://example.com/foo') }
+        end
+
         case facts[:os]['release']['major']
         when '5'
           context 'on RedHat 5 and Zabbix 2.0' do
