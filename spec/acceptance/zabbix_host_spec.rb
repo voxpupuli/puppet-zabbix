@@ -3,51 +3,66 @@ require 'serverspec_type_zabbixapi'
 
 describe 'zabbix_host type' do
   context 'create zabbix_host resources' do
-    it 'runs successfully' do
-      # This will deploy a running Zabbix setup (server, web, db) which we can
-      # use for custom type tests
-      pp = <<-EOS
-        class { 'apache':
-            mpm_module => 'prefork',
-        }
-        include apache::mod::php
-        include postgresql::server
+    # This will deploy a running Zabbix setup (server, web, db) which we can
+    # use for custom type tests
+    pp1 = <<-EOS
+$compile_packages = $facts['os']['family'] ? {
+  'RedHat' => [ 'make', 'gcc-c++', 'rubygems', 'ruby'],
+  'Debian' => [ 'make', 'g++', 'ruby-dev', 'ruby', 'pkg-config',],
+  default  => [],
+}
+ensure_packages($compile_packages, { before => Package['zabbixapi'], })
+class { 'apache':
+  mpm_module => 'prefork',
+}
+include apache::mod::php
+include postgresql::server
 
-        class { 'zabbix':
-          zabbix_version   => '3.0', # zabbixapi gem doesn't currently support higher versions
-          zabbix_url       => 'localhost',
-          zabbix_api_user  => 'Admin',
-          zabbix_api_pass  => 'zabbix',
-          apache_use_ssl   => false,
-          manage_resources => true,
-          require          => [ Class['postgresql::server'], Class['apache'], ],
-        }
-
-        zabbix_host { 'test1.example.com':
-          ipaddress    => '127.0.0.1',
-          use_ip       => true,
-          port         => 10050,
-          group        => 'TestgroupOne',
-          group_create => true,
-          templates    => [ 'Template OS Linux', ],
-          require      => [ Service['zabbix-server'], Package['zabbixapi'], ],
-        }
-        zabbix_host { 'test2.example.com':
-          ipaddress => '127.0.0.2',
-          use_ip    => false,
-          port      => 1050,
-          group     => 'Virtual machines',
-          templates => [ 'Template OS Linux', 'Template ICMP Ping', ],
-          require   => [ Service['zabbix-server'], Package['zabbixapi'], ],
-        }
-      EOS
-
-      shell('yum clean metadata') if fact('os.family') == 'RedHat'
-
+class { 'zabbix':
+  zabbix_version   => '3.0',
+  zabbix_url       => 'localhost',
+  zabbix_api_user  => 'Admin',
+  zabbix_api_pass  => 'zabbix',
+  apache_use_ssl   => false,
+  manage_resources => true,
+  require          => [ Class['postgresql::server'], Class['apache'], ],
+}
+    EOS
+    # setup zabbix. Apache module isn't idempotent and requires a second run
+    it 'works with no error on the first apply' do
       # Cleanup old database
       shell('/opt/puppetlabs/bin/puppet resource service zabbix-server ensure=stopped; /opt/puppetlabs/bin/puppet resource package zabbix-server-pgsql ensure=purged; rm -f /etc/zabbix/.*done; su - postgres -c "psql -c \'drop database if exists zabbix_server;\'"')
 
-      apply_manifest(pp, catch_failures: true)
+      apply_manifest(pp1, catch_failures: true)
+    end
+    it 'works with no error on the second apply' do
+      apply_manifest(pp1, catch_failures: true)
+    end
+
+    # setup hosts within zabbix
+    pp2 = <<-EOS
+zabbix_host { 'test1.example.com':
+  ipaddress    => '127.0.0.1',
+  use_ip       => true,
+  port         => 10050,
+  groups       => ['TestgroupOne'],
+  group_create => true,
+  templates    => [ 'Template OS Linux', ],
+}
+zabbix_host { 'test2.example.com':
+  ipaddress => '127.0.0.2',
+  use_ip    => false,
+  port      => 1050,
+  groups    => ['Virtual machines'],
+  templates => [ 'Template OS Linux', 'Template ICMP Ping', ],
+}
+    EOS
+
+    it 'works with no error on the third apply' do
+      apply_manifest(pp2, catch_failures: true)
+    end
+    it 'works without changes on the fourth apply' do
+      apply_manifest(pp2, catch_changes: true)
     end
 
     let(:result_hosts) do
