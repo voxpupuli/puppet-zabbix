@@ -32,11 +32,11 @@
 # Copyright 2014 Werner Dijkerman
 #
 class zabbix::repo (
-  Boolean                                              $manage_repo                = $zabbix::params::manage_repo,
-  Boolean                                              $manage_apt                 = $zabbix::params::manage_apt,
-  Variant[String[0],Stdlib::HTTPUrl, Stdlib::HTTPSUrl] $repo_location              = $zabbix::params::repo_location,
-  Variant[String[0],Stdlib::HTTPUrl, Stdlib::HTTPSUrl] $unsupported_repo_location  = $zabbix::params::unsupported_repo_location,
-  String[1]                                            $zabbix_version             = $zabbix::params::zabbix_version,
+  Boolean         $manage_repo                = $zabbix::params::manage_repo,
+  Boolean         $manage_apt                 = $zabbix::params::manage_apt,
+  Stdlib::HTTPUrl $repo_location              = $zabbix::params::repo_location,
+  Stdlib::HTTPUrl $unsupported_repo_location  = $zabbix::params::unsupported_repo_location,
+  String[1]       $zabbix_version             = $zabbix::params::zabbix_version,
 ) inherits zabbix::params {
   if ($manage_repo) {
     case $facts['os']['name'] {
@@ -66,7 +66,7 @@ class zabbix::repo (
         }
 
         $_repo_location = $repo_location ? {
-          ''      => "https://repo.zabbix.com/zabbix/${zabbix_version}/rhel/${majorrelease}/\$basearch/",
+          undef   => "https://repo.zabbix.com/zabbix/${zabbix_version}/rhel/${majorrelease}/\$basearch/",
           default => $repo_location,
         }
 
@@ -80,7 +80,7 @@ class zabbix::repo (
         }
 
         $_unsupported_repo_location = $unsupported_repo_location ? {
-          ''      => "https://repo.zabbix.com/non-supported/rhel/${majorrelease}/\$basearch/",
+          undef   => "https://repo.zabbix.com/non-supported/rhel/${majorrelease}/\$basearch/",
           default => $unsupported_repo_location,
         }
 
@@ -105,7 +105,7 @@ class zabbix::repo (
 
         if ($facts['os']['architecture'] == 'armv6l') {
           $_repo_location = $repo_location ? {
-            ''      => 'http://naizvoru.com/raspbian/zabbix',
+            undef   => 'http://naizvoru.com/raspbian/zabbix',
             default => $repo_location,
           }
 
@@ -130,7 +130,7 @@ class zabbix::repo (
           }
 
           $_repo_location = $repo_location ? {
-            ''      => "http://repo.zabbix.com/zabbix/${zabbix_version}/${operatingsystem}/",
+            undef   => "http://repo.zabbix.com/zabbix/${zabbix_version}/${operatingsystem}/",
             default => $repo_location,
           }
 
