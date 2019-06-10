@@ -266,14 +266,6 @@ class zabbix::web (
   # is set to false, you'll get warnings like this:
   # "Warning: You cannot collect without storeconfigs being set"
   if $manage_resources {
-    include ruby::dev
-    $compile_packages = $facts['os']['family'] ? {
-      'RedHat' => [ 'make', 'gcc-c++', ],
-      'Debian' => [ 'make', 'g++', ],
-      default  => [],
-    }
-    ensure_packages($compile_packages, { before => Package['zabbixapi'], })
-
     # Determine correct zabbixapi version.
     case $zabbix_version {
       '2.2': {
@@ -302,7 +294,6 @@ class zabbix::web (
     -> package { 'zabbixapi':
       ensure   => $zabbixapi_version,
       provider => $puppetgem,
-      require  => Class['ruby::dev'],
     }
     -> class { 'zabbix::resources::web':
       zabbix_url     => $zabbix_url,

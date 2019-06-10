@@ -10,23 +10,19 @@
     },
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.25.0 < 6.0.0"
+      "version_requirement": ">= 4.25.0 < 7.0.0"
     },
     {
       "name": "puppetlabs/mysql",
-      "version_requirement": ">= 3.5.0 < 8.0.0"
+      "version_requirement": ">= 3.5.0 < 10.0.0"
     },
     {
       "name": "puppetlabs/apache",
-      "version_requirement": ">= 1.6.0 < 5.0.0"
+      "version_requirement": ">= 1.6.0 < 6.0.0"
     },
     {
       "name": "puppetlabs/firewall",
-      "version_requirement": ">= 1.7.0 < 2.0.0"
-    },
-    {
-      "name": "puppetlabs/ruby",
-      "version_requirement": ">= 0.6.0 < 2.0.0"
+      "version_requirement": ">= 1.7.0 < 3.0.0"
     },
     {
       "name": "puppetlabs/pe_gem",
@@ -38,7 +34,7 @@
     },
     {
       "name": "puppetlabs/concat",
-      "version_requirement": ">= 2.2.1 < 6.0.0"
+      "version_requirement": ">= 4.1.0 < 7.0.0"
     },
     {
       "name": "camptocamp/systemd",
@@ -46,7 +42,7 @@
     },
     {
       "name": "puppet/selinux",
-      "version_requirement": ">= 1.1.0 < 2.0.0"
+      "version_requirement": ">= 1.1.0 < 3.0.0"
     }
   ],
   "source": "https://github.com/voxpupuli/puppet-zabbix.git",
