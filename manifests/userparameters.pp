@@ -74,7 +74,7 @@ define zabbix::userparameters (
   $zabbix_package_agent = $zabbix::agent::zabbix_package_agent
   $agent_config_owner   = $zabbix::agent::agent_config_owner
   $agent_config_group   = $zabbix::agent::agent_config_group
-  $agent_servicename    = $zabbix::agent::agent_servicename
+  $agent_servicename    = $zabbix::agent::servicename
 
   if $source {
     file { "${include_dir}/${name}.conf":
