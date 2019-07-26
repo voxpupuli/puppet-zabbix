@@ -17,7 +17,6 @@ ExecStart=/usr/sbin/zabbix_server <%= @additional_service_params %> -c <%= @serv
 ExecReload=/usr/sbin/zabbix_server -R config_cache_reload
 <% if @pidfile %>PIDFile=<%= @pidfile %><% end %>
 Restart=on-abnormal
-PrivateDevices=yes
 PrivateTmp=yes
 ProtectSystem=full
 ProtectHome=yes
