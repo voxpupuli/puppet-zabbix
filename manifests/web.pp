@@ -152,7 +152,7 @@
 # Set location of client key used by LDAP authentication.
 #
 # [*ldap_reqcert *]
-# Specifies what checks to perform on a server certificate 
+# Specifies what checks to perform on a server certificate
 #
 # [*puppetgem*]
 # Provider for the zabbixapi gem package
@@ -367,7 +367,7 @@ class zabbix::web (
 
   # Webinterface config file
   file { '/etc/zabbix/web/zabbix.conf.php':
-    ensure  => present,
+    ensure  => file,
     owner   => $web_config_owner,
     group   => $web_config_group,
     mode    => '0640',
