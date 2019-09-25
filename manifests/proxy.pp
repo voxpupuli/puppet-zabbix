@@ -594,7 +594,7 @@ class zabbix::proxy (
 
   # Configuring the zabbix-proxy configuration file
   file { $proxy_configfile_path:
-    ensure  => present,
+    ensure  => file,
     owner   => 'zabbix',
     group   => 'zabbix',
     mode    => '0644',

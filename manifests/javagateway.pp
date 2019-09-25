@@ -79,7 +79,7 @@ class zabbix::javagateway(
 
   # Configuring the zabbix-javagateway configuration file
   file { '/etc/zabbix/zabbix_java_gateway.conf':
-    ensure  => present,
+    ensure  => file,
     owner   => 'zabbix',
     group   => 'zabbix',
     mode    => '0640',

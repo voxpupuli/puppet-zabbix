@@ -531,7 +531,7 @@ class zabbix::server (
 
   # Configuring the zabbix-server configuration file
   file { $server_configfile_path:
-    ensure  => present,
+    ensure  => file,
     owner   => $server_config_owner,
     group   => $server_config_group,
     mode    => '0640',

@@ -92,7 +92,7 @@ class zabbix::database::postgresql (
   }
 
   file { '/root/.pgpass':
-    ensure => present,
+    ensure => file,
     mode   => '0600',
     owner  => 'root',
     group  => 'root',

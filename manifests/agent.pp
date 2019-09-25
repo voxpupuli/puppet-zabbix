@@ -412,7 +412,7 @@ class zabbix::agent (
 
   # Configuring the zabbix-agent configuration file
   file { $agent_configfile_path:
-    ensure  => present,
+    ensure  => file,
     owner   => $agent_config_owner,
     group   => $agent_config_group,
     mode    => '0644',

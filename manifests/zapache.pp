@@ -55,14 +55,14 @@ class zabbix::zapache (
       mode   => '0755',
     }
     file { '/var/lib/zabbixsrv/externalscripts/zapache':
-      ensure => present,
+      ensure => file,
       source => 'puppet:///modules/zabbix/zapache/zapache',
       owner  => 'root',
       group  => 'root',
       mode   => '0755',
     }
     file { '/etc/zabbix/zabbix_agentd.d/userparameter_zapache.conf':
-      ensure  => present,
+      ensure  => file,
       source  => 'puppet:///modules/zabbix/zapache/userparameter_zapache.conf.sample',
       owner   => 'root',
       group   => 'root',
@@ -71,7 +71,7 @@ class zabbix::zapache (
       notify  => Service['zabbix-agent'],
     }
     file { '/etc/httpd/conf.d/httpd-server-status.conf':
-      ensure  => present,
+      ensure  => file,
       source  => 'puppet:///modules/zabbix/zapache/httpd-server-status.conf.sample',
       owner   => 'root',
       group   => 'root',
