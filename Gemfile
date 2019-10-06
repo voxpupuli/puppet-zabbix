@@ -33,6 +33,7 @@ group :test do
   gem 'fakefs', '0.13.3',                                           :require => false if RUBY_VERSION < '2.3.0'
   gem 'fakefs',                                                     :require => false if RUBY_VERSION >= '2.3.0'
   gem 'zabbixapi',                                                  :require => false
+  gem 'puppet-lint-legacy_facts-check',                             :require => false
 end
 
 group :development do
