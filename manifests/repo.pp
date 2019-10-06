@@ -126,7 +126,7 @@ class zabbix::repo (
           $operatingsystem = downcase($facts['os']['name'])
           case $facts['os']['release']['full'] {
             /\/sid$/ : { $releasename = regsubst($facts['os']['release']['full'], '/sid$', '') }
-            default  : { $releasename = $facts['lsbdistcodename'] }
+            default  : { $releasename = $facts['os']['distro']['codename'] }
           }
 
           $_repo_location = $repo_location ? {
