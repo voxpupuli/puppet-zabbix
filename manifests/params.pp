@@ -379,21 +379,6 @@ class zabbix::params {
     $additional_service_params = '--foreground'
     $service_type              = 'simple'
   }
-  # Gem provider may vary based on version/type of puppet install.
-  # This can be a little complicated and may need revisited over time.
-  if str2bool($facts['is_pe']) {
-    if $facts['pe_version'] and versioncmp($facts['pe_version'], '3.7.0') >= 0 { # lint:ignore:only_variable_string
-      $puppetgem = 'pe_puppetserver_gem'
-    } else {
-      $puppetgem = 'pe_gem'
-    }
-  } else {
-    if $facts['puppetversion'] and versioncmp($facts['puppetversion'], '4.0.0') >= 0 {
-      $puppetgem = 'puppet_gem'
-    } else {
-      $puppetgem = 'gem'
-    }
-  }
 
   $default_web_config_owner = $facts['os']['name'] ? {
     /(Ubuntu|Debian)/ => 'www-data',
@@ -425,4 +410,8 @@ class zabbix::params {
     # getvar returned undef
     $web_config_group = $default_web_config_owner
   }
+
+  # the package provider we use to install the zabbixapi gem
+  # The puppet agent needs to access it. So it's `puppet_gem` for AIO systems.
+  $puppetgem = 'puppet_gem'
 }
