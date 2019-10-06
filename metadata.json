@@ -25,10 +25,6 @@
       "version_requirement": ">= 1.7.0 < 3.0.0"
     },
     {
-      "name": "puppetlabs/pe_gem",
-      "version_requirement": ">= 0.2.0 < 2.0.0"
-    },
-    {
       "name": "puppetlabs/apt",
       "version_requirement": ">= 2.1.0 < 8.0.0"
     },

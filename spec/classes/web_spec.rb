@@ -148,21 +148,6 @@ describe 'zabbix::web' do
           it { is_expected.to contain_file('/etc/zabbix/imported_templates').with_ensure('directory') }
         end
 
-        describe 'when manage_resources and is_pe are true' do
-          let :facts do
-            facts.merge(
-              is_pe: true,
-              pe_version: '3.7.0'
-            )
-          end
-
-          let :params do
-            super().merge(manage_resources: true)
-          end
-
-          it { is_expected.to contain_package('zabbixapi').with_provider('pe_puppetserver_gem') }
-        end
-
         describe 'when manage_resources is false' do
           let :params do
             super().merge(manage_resources: false)
