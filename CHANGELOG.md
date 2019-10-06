@@ -4,6 +4,53 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v7.0.0](https://github.com/voxpupuli/puppet-zabbix/tree/v7.0.0) (2019-10-06)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v6.7.0...v7.0.0)
+
+**Breaking changes:**
+
+- drop legacy puppetlabs/pe\_gem dependency & cleanup code [\#628](https://github.com/voxpupuli/puppet-zabbix/pull/628) ([bastelfreak](https://github.com/bastelfreak))
+- Allow puppetlabs/apache 5.x, puppetlabs/concat 6.x, puppetlabs/firewall 2.x, puppetlabs/mysql 9.x, puppetlabs/stdlib 6.x; drop puppetlabs/ruby dependency [\#610](https://github.com/voxpupuli/puppet-zabbix/pull/610) ([dhoppe](https://github.com/dhoppe))
+- modulesync 2.5.1 and drop Puppet 4 [\#589](https://github.com/voxpupuli/puppet-zabbix/pull/589) ([bastelfreak](https://github.com/bastelfreak))
+
+**Implemented enhancements:**
+
+- Add historyindexcachesize to class zabbix [\#566](https://github.com/voxpupuli/puppet-zabbix/issues/566)
+- Add support for specifying unsupported repo location. [\#612](https://github.com/voxpupuli/puppet-zabbix/pull/612) ([jadestorm](https://github.com/jadestorm))
+- Put selboolean{'zabbix\_can\_network'} inside ensure\_resources [\#599](https://github.com/voxpupuli/puppet-zabbix/pull/599) ([KrzysztofHajdamowicz](https://github.com/KrzysztofHajdamowicz))
+- Implement self.prefetch for zabbix\_host [\#591](https://github.com/voxpupuli/puppet-zabbix/pull/591) ([baurmatt](https://github.com/baurmatt))
+- Added historyindexcachesize to class zabbix \(part2\) [\#586](https://github.com/voxpupuli/puppet-zabbix/pull/586) ([Ordnaxz](https://github.com/Ordnaxz))
+- Add Remote Commands capabilities on Zabbix Proxy [\#575](https://github.com/voxpupuli/puppet-zabbix/pull/575) ([Safranil](https://github.com/Safranil))
+
+**Fixed bugs:**
+
+- PrivateDevices=yes stops fping from working on Ubuntu 18.04 [\#609](https://github.com/voxpupuli/puppet-zabbix/issues/609)
+- zabbix::userparameters::data doesn't notify correctly the zabbix-agent service [\#607](https://github.com/voxpupuli/puppet-zabbix/issues/607)
+- puppetlabs/mysql: allow 10.x & zabbix-server: start service after initfile is created [\#624](https://github.com/voxpupuli/puppet-zabbix/pull/624) ([bastelfreak](https://github.com/bastelfreak))
+- Delete PrivateDevices attribute in systemd service template file [\#618](https://github.com/voxpupuli/puppet-zabbix/pull/618) ([jordips](https://github.com/jordips))
+- Fix minor typo in agent\_servicename param [\#616](https://github.com/voxpupuli/puppet-zabbix/pull/616) ([ljeromets](https://github.com/ljeromets))
+
+**Closed issues:**
+
+- Cannot declare Selboolean zabbix\_can\_network elsewhere [\#598](https://github.com/voxpupuli/puppet-zabbix/issues/598)
+- check\_template\_in\_host function missing parameter [\#594](https://github.com/voxpupuli/puppet-zabbix/issues/594)
+- Fails to apply manifest for zabbix-agent 3.0 [\#590](https://github.com/voxpupuli/puppet-zabbix/issues/590)
+- zabbix 3.0 vs php version  [\#429](https://github.com/voxpupuli/puppet-zabbix/issues/429)
+
+**Merged pull requests:**
+
+- add `managed by puppet` header to unit files [\#615](https://github.com/voxpupuli/puppet-zabbix/pull/615) ([bastelfreak](https://github.com/bastelfreak))
+- Allow puppet-selinux 3.x [\#613](https://github.com/voxpupuli/puppet-zabbix/pull/613) ([ekohl](https://github.com/ekohl))
+- Allow puppetlabs/apache 4.x, puppetlabs/apt 7.x, puppetlabs/postgresql 6.x [\#605](https://github.com/voxpupuli/puppet-zabbix/pull/605) ([dhoppe](https://github.com/dhoppe))
+- Fix check\_template\_in\_host function missing parameter [\#595](https://github.com/voxpupuli/puppet-zabbix/pull/595) ([fgallese](https://github.com/fgallese))
+- Implement self.prefetch for zabbix\_hostgroup [\#593](https://github.com/voxpupuli/puppet-zabbix/pull/593) ([baurmatt](https://github.com/baurmatt))
+- switch acceptance tests from trusty to xenial [\#585](https://github.com/voxpupuli/puppet-zabbix/pull/585) ([bastelfreak](https://github.com/bastelfreak))
+- Allow puppetlabs-mysql 7.x [\#584](https://github.com/voxpupuli/puppet-zabbix/pull/584) ([ekohl](https://github.com/ekohl))
+- update travis distro from trusty to xenial [\#582](https://github.com/voxpupuli/puppet-zabbix/pull/582) ([bastelfreak](https://github.com/bastelfreak))
+- Feature/userparameters ensure [\#581](https://github.com/voxpupuli/puppet-zabbix/pull/581) ([baurmatt](https://github.com/baurmatt))
+- Move api configuration to a config file [\#579](https://github.com/voxpupuli/puppet-zabbix/pull/579) ([baurmatt](https://github.com/baurmatt))
+
 ## [v6.7.0](https://github.com/voxpupuli/puppet-zabbix/tree/v6.7.0) (2018-12-21)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v6.6.0...v6.7.0)
@@ -128,7 +175,6 @@ These should not affect the functionality of the module.
 - Zabbix Repository \(zabbix-non-supported\) defined with incorrect gpgkey [\#397](https://github.com/voxpupuli/puppet-zabbix/issues/397)
 - Clarify dependency for database handling [\#508](https://github.com/voxpupuli/puppet-zabbix/pull/508) ([stefanandres](https://github.com/stefanandres))
 - Fix missing enable attribut for zabbix::proxy service [\#507](https://github.com/voxpupuli/puppet-zabbix/pull/507) ([stefanandres](https://github.com/stefanandres))
-- Support SSL parameters for web monitoring in all versions \>= 2.4 [\#469](https://github.com/voxpupuli/puppet-zabbix/pull/469) ([anotherfigo](https://github.com/anotherfigo))
 - wait for network connectivity before Zabbix Server startup [\#454](https://github.com/voxpupuli/puppet-zabbix/pull/454) ([tequeter](https://github.com/tequeter))
 
 **Closed issues:**
@@ -182,6 +228,7 @@ These should not affect the functionality of the module.
 
 - Dependencies need update [\#453](https://github.com/voxpupuli/puppet-zabbix/issues/453)
 - Fixed versioncmp compare and fixed typo in file zabbix-server-ips.te [\#480](https://github.com/voxpupuli/puppet-zabbix/pull/480) ([Fabian1976](https://github.com/Fabian1976))
+- Support SSL parameters for web monitoring in all versions \>= 2.4 [\#469](https://github.com/voxpupuli/puppet-zabbix/pull/469) ([anotherfigo](https://github.com/anotherfigo))
 
 **Closed issues:**
 
@@ -232,8 +279,8 @@ These should not affect the functionality of the module.
 **Fixed bugs:**
 
 - add selinux workaround for IPC in zabbix-server3.4 [\#459](https://github.com/voxpupuli/puppet-zabbix/pull/459) ([bastelfreak](https://github.com/bastelfreak))
-- Remove updateExisting from applications in zabbix template provider. [\#450](https://github.com/voxpupuli/puppet-zabbix/pull/450) ([breaker1](https://github.com/breaker1))
-- Add missing proxy\_mode variable to zabbix\_proxy provider [\#447](https://github.com/voxpupuli/puppet-zabbix/pull/447) ([breaker1](https://github.com/breaker1))
+- Remove updateExisting from applications in zabbix template provider. [\#450](https://github.com/voxpupuli/puppet-zabbix/pull/450) ([ghost](https://github.com/ghost))
+- Add missing proxy\_mode variable to zabbix\_proxy provider [\#447](https://github.com/voxpupuli/puppet-zabbix/pull/447) ([ghost](https://github.com/ghost))
 
 **Closed issues:**
 
@@ -243,7 +290,7 @@ These should not affect the functionality of the module.
 
 **Merged pull requests:**
 
-- Changed image to images in template provider. [\#448](https://github.com/voxpupuli/puppet-zabbix/pull/448) ([breaker1](https://github.com/breaker1))
+- Changed image to images in template provider. [\#448](https://github.com/voxpupuli/puppet-zabbix/pull/448) ([ghost](https://github.com/ghost))
 
 ## [v5.0.0](https://github.com/voxpupuli/puppet-zabbix/tree/v5.0.0) (2017-09-17)
 
@@ -779,7 +826,7 @@ These should not affect the functionality of the module.
 **Merged pull requests:**
 
 - Fixed bug with listenip & add lxc interface [\#46](https://github.com/voxpupuli/puppet-zabbix/pull/46) ([ghost](https://github.com/ghost))
-- notify zabbix-agent service when userparameters change [\#57](https://github.com/voxpupuli/puppet-zabbix/pull/57) ([rleemorlang](https://github.com/rleemorlang))
+- notify zabbix-agent service when userparameters change [\#57](https://github.com/voxpupuli/puppet-zabbix/pull/57) ([rmorlang](https://github.com/rmorlang))
 - Fix in params.pp with default parameter of zabbix proxy for ubuntu [\#56](https://github.com/voxpupuli/puppet-zabbix/pull/56) ([fredprod](https://github.com/fredprod))
 - Jvd w fix defined [\#53](https://github.com/voxpupuli/puppet-zabbix/pull/53) ([JvdW](https://github.com/JvdW))
 - Fix agent listenip [\#52](https://github.com/voxpupuli/puppet-zabbix/pull/52) ([JvdW](https://github.com/JvdW))
