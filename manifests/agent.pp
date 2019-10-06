@@ -346,7 +346,7 @@ class zabbix::agent (
     } else {
       $use_proxy = ''
     }
-    $_hostname = pick($hostname, $facts['fqdn'])
+    $_hostname = pick($hostname, $facts['networking']['fqdn'])
 
     class { 'zabbix::resources::agent':
       hostname     => $_hostname,
@@ -448,7 +448,7 @@ class zabbix::agent (
   }
   # the agent doesn't work perfectly fine with selinux
   # https://support.zabbix.com/browse/ZBX-11631
-  if $facts['selinux'] == true and $manage_selinux {
+  if facts('os.selinux.enabled') == true and $manage_selinux {
     selinux::module{'zabbix-agent':
       ensure     => 'present',
       content_te => template('zabbix/selinux/zabbix-agent.te.erb'),

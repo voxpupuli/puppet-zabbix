@@ -566,7 +566,7 @@ class zabbix::server (
     false => undef,
   }
   # check if selinux is active and allow zabbix
-  if $facts['selinux'] == true and $manage_selinux {
+  if fact('os.selinux.enabled') == true and $manage_selinux {
     ensure_resource ('selboolean',
       [
         'zabbix_can_network',
