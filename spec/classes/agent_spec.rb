@@ -75,7 +75,7 @@ describe 'zabbix::agent' do
 
         case facts[:osfamily]
         when 'Archlinux'
-          it { is_expected.to raise_error(Puppet::Error, %r{Managing a repo on Archlinux is currently not implemented}) }
+          it { is_expected.not_to compile.with_all_deps }
         when 'Debian'
           # rubocop:disable RSpec/RepeatedExample
           it { is_expected.to contain_class('zabbix::repo').with_zabbix_version('3.4') }

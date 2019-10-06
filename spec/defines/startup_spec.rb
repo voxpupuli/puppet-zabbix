@@ -38,7 +38,7 @@ describe 'zabbix::startup', type: :define do # rubocop:disable RSpec/MultipleDes
                 )
               end
             else
-              it { is_expected.to raise_error(Puppet::Error, %r{We currently only support Debian and RedHat osfamily as non-systemd}) }
+              it { is_expected.not_to compile.with_all_deps }
               next
             end
             it { is_expected.not_to contain_class('systemd') }
@@ -123,7 +123,7 @@ describe 'zabbix::startup', type: :define do
                 )
               end
             else
-              it { is_expected.to raise_error(Puppet::Error, %r{We currently only support Debian and RedHat osfamily as non-systemd}) }
+              it { is_expected.not_to compile.with_all_deps }
               next
             end
             it { is_expected.not_to contain_class('systemd') }
