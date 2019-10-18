@@ -134,6 +134,13 @@
       ]
     },
     {
+      "operatingsystem": "VirtuozzoLinux",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
       "operatingsystem": "Archlinux"
     },
     {
