@@ -34,7 +34,7 @@ class zabbix::database::postgresql (
     /^(3|4).\d+$/: {
       if ($database_schema_path == false) or ($database_schema_path == '') {
         case $facts['os']['name'] {
-          'CentOS', 'RedHat', 'OracleLinux': {
+          'CentOS', 'RedHat', 'OracleLinux', 'VirtuozzoLinux': {
             $schema_path   = "/usr/share/doc/zabbix-*-pgsql-${zabbix_version}*/"
           }
           default : {
@@ -60,7 +60,7 @@ class zabbix::database::postgresql (
     default: {
       if ($database_schema_path == false) or ($database_schema_path == '') {
         case $facts['os']['name'] {
-          'CentOS', 'RedHat', 'OracleLinux': {
+          'CentOS', 'RedHat', 'OracleLinux', 'VirtuozzoLinux': {
             $schema_path   = "/usr/share/doc/zabbix-*-pgsql-${zabbix_version}*/create"
           }
           default : {
