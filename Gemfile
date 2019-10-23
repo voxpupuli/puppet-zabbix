@@ -33,6 +33,7 @@ group :test do
   gem 'parallel_tests',                                             :require => false
   gem 'fakefs', '0.13.3',                                           :require => false if RUBY_VERSION < '2.3.0'
   gem 'fakefs',                                                     :require => false if RUBY_VERSION >= '2.3.0'
+  gem 'facterdb',                                                   :require => false, :git => 'https://github.com/camptocamp/facterdb.git', :ref => 'master'
   gem 'zabbixapi',                                                  :require => false
 end
 
