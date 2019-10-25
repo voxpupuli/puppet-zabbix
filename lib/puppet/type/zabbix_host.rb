@@ -101,6 +101,10 @@ Puppet::Type.newtype(:zabbix_host) do
     desc 'Whether it is monitored by an proxy or not.'
   end
 
+  newproperty(:jmx_port) do
+    desc 'Should a JMX interface be added and which port should it connect to.'
+  end
+
   autorequire(:file) { '/etc/zabbix/api.conf' }
 
   validate do

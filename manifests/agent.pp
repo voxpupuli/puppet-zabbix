@@ -192,6 +192,9 @@
 # [*manage_startup_script*]
 #  If the init script should be managed by this module. Attention: This might cause problems with some config options of this module (e.g agent_configfile_path)
 #
+# [*jmx_port*]
+#  When specified, a JMX interface will be created which will connect to the port specified here
+#
 # === Example
 #
 #  Basic installation:
@@ -282,6 +285,7 @@ class zabbix::agent (
   String $additional_service_params               = $zabbix::params::additional_service_params,
   String $service_type                            = $zabbix::params::service_type,
   Boolean $manage_startup_script                  = $zabbix::params::manage_startup_script,
+  Integer $jmx_port                               = $zabbix::params::agent_jmx_port,
 ) inherits zabbix::params {
 
   # the following two codeblocks are a bit blargh. The correct default value for
@@ -357,6 +361,7 @@ class zabbix::agent (
       group_create => $zbx_group_create,
       templates    => $zbx_templates,
       proxy        => $use_proxy,
+      jmx_port     => $jmx_port,
     }
   }
 

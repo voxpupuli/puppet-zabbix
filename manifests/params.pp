@@ -278,6 +278,7 @@ class zabbix::params {
     $agent_logfile                          = '/var/log/zabbix/zabbix_agentd.log'
     $agent_logfilesize                      = '100'
   }
+  $agent_jmx_port                           = 0
 
   # Proxy specific params
   $proxy_allowroot                          = '0'

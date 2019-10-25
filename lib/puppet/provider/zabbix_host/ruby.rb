@@ -51,19 +51,34 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
     proxy_hostid = @resource[:proxy].nil? || @resource[:proxy].empty? ? nil : zbx.proxies.get_id(host: @resource[:proxy])
 
     # Now we create the host
-    zbx.hosts.create(
-      host: @resource[:hostname],
-      proxy_hostid: proxy_hostid,
-      interfaces: [
+    default_interface = [
+      {
+        type: 1,
+        main: 1,
+        ip: @resource[:ipaddress],
+        dns: @resource[:hostname],
+        port: @resource[:port],
+        useip: @resource[:use_ip] ? 1 : 0
+      }
+    ]
+    if jmx_port != 0 and !jmx_port.nil?
+      host_interfaces = default_interface + [
         {
-          type: 1,
+          type: 4,
           main: 1,
           ip: @resource[:ipaddress],
           dns: @resource[:hostname],
-          port: @resource[:port],
+          port: @resource[:jmx_port],
           useip: @resource[:use_ip] ? 1 : 0
         }
-      ],
+      ]
+    else
+      host_interfaces = default_interface
+    end
+    zbx.hosts.create(
+      host: @resource[:hostname],
+      proxy_hostid: proxy_hostid,
+      interfaces: host_interfaces,
       templates: templates,
       groups: groups
     )

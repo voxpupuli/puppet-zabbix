@@ -23,6 +23,7 @@ class zabbix::resources::agent (
   $group_create            = undef,
   $templates               = undef,
   $proxy                   = undef,
+  $jmx_port                = undef,
 ) {
   if $group and $groups {
     fail("Got group and groups. This isn't support! Please use groups only.")
@@ -43,5 +44,6 @@ class zabbix::resources::agent (
     group_create => $group_create,
     templates    => $templates,
     proxy        => $proxy,
+    jmx_port     => $jmx_port,
   }
 }
