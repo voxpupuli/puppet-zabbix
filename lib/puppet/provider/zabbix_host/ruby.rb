@@ -61,20 +61,20 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
         useip: @resource[:use_ip] ? 1 : 0
       }
     ]
-    if jmx_port != 0 and !jmx_port.nil?
-      host_interfaces = default_interface + [
-        {
-          type: 4,
-          main: 1,
-          ip: @resource[:ipaddress],
-          dns: @resource[:hostname],
-          port: @resource[:jmx_port],
-          useip: @resource[:use_ip] ? 1 : 0
-        }
-      ]
-    else
-      host_interfaces = default_interface
-    end
+    host_interfaces = if jmx_port != 0 && !jmx_port.nil?
+                        default_interface + [
+                          {
+                            type: 4,
+                            main: 1,
+                            ip: @resource[:ipaddress],
+                            dns: @resource[:hostname],
+                            port: @resource[:jmx_port],
+                            useip: @resource[:use_ip] ? 1 : 0
+                          }
+                        ]
+                      else
+                        default_interface
+                      end
     zbx.hosts.create(
       host: @resource[:hostname],
       proxy_hostid: proxy_hostid,
