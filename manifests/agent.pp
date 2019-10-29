@@ -285,7 +285,7 @@ class zabbix::agent (
   String $additional_service_params               = $zabbix::params::additional_service_params,
   String $service_type                            = $zabbix::params::service_type,
   Boolean $manage_startup_script                  = $zabbix::params::manage_startup_script,
-  Integer $jmx_port                               = $zabbix::params::agent_jmx_port,
+  Stdlib::Port $jmx_port                          = $zabbix::params::agent_jmx_port,
 ) inherits zabbix::params {
 
   # the following two codeblocks are a bit blargh. The correct default value for
