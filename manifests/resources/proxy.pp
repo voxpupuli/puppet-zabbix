@@ -18,13 +18,11 @@ class zabbix::resources::proxy (
   $use_ip    = undef,
   $mode      = undef,
   $port      = undef,
-  $templates = undef,
 ) {
   @@zabbix_proxy { $hostname:
     ipaddress => $ipaddress,
     use_ip    => $use_ip,
     mode      => $mode,
     port      => $port,
-    templates => $templates,
   }
 }
