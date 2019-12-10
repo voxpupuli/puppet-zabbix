@@ -455,7 +455,6 @@ class zabbix::proxy (
       use_ip    => $use_ip,
       mode      => $mode,
       port      => $listenport,
-      templates => $zbx_templates,
     }
 
     zabbix::userparameters { 'Zabbix_Proxy': template => 'Template App Zabbix Proxy', }
