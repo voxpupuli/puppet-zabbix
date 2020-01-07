@@ -299,7 +299,7 @@ class zabbix::params {
   $proxy_historycachesize                   = '8M'
   $proxy_historyindexcachesize              = undef
   $proxy_historytextcachesize               = '16M'
-  $proxy_hostname                           = $facts['fqdn']
+  $proxy_hostname                           = $facts['networking']['fqdn']
   $proxy_housekeepingfrequency              = '1'
   $proxy_include                            = '/etc/zabbix/zabbix_proxy.conf.d'
   $proxy_javagateway                        = undef
@@ -365,9 +365,13 @@ class zabbix::params {
   $javagateway_timeout                      = '3'
 
   # SE Linux specific params
-  $manage_selinux                           = $facts['selinux']
   $selinux_require                          = ['type zabbix_agent_t', 'class process setrlimit', 'class unix_dgram_socket create']
   $selinux_rules                            = { 'zabbix_agent_t' => ['allow zabbix_agent_t self:process setrlimit', 'allow zabbix_agent_t self:unix_dgram_socket create']}
+
+  $manage_selinux = fact('os.selinux.enabled') ? {
+    true    => true,
+    default => false,
+  }
 
   # services should run foreground and as simple type
   # but this only works in 3.0 and newer

@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'deep_merge'
 
 describe 'zabbix::server' do
   let :node do
@@ -26,8 +27,14 @@ describe 'zabbix::server' do
 
       if facts[:osfamily] == 'RedHat'
         describe 'with enabled selinux' do
+          let :params do
+            {
+              manage_selinux: true
+            }
+          end
+
           let :facts do
-            super().merge(selinux: true)
+            facts.deep_merge(os: { selinux: { enabled: true } })
           end
 
           it { is_expected.to contain_selboolean('zabbix_can_network').with('value' => 'on', 'persistent' => true) }
@@ -35,8 +42,10 @@ describe 'zabbix::server' do
       end
 
       describe 'with disabled selinux' do
-        let :facts do
-          super().merge(selinux: false)
+        let :params do
+          {
+            manage_selinux: false
+          }
         end
 
         it { is_expected.not_to contain_selboolean('zabbix_can_network').with('value' => 'on', 'persistent' => true) }
