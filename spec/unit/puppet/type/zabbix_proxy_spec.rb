@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe Puppet::Type.type(:zabbix_proxy) do
   describe 'when validating params' do
-    [
-      :hostname,
-      :provider
+    %i[
+      hostname
+      provider
     ].each do |param|
       it "should have a #{param} parameter" do
         expect(described_class.attrtype(param)).to eq(:param)
@@ -13,11 +13,11 @@ describe Puppet::Type.type(:zabbix_proxy) do
   end
 
   describe 'when validating properties' do
-    [
-      :ipaddress,
-      :use_ip,
-      :mode,
-      :port
+    %i[
+      ipaddress
+      use_ip
+      mode
+      port
     ].each do |param|
       it "should have a #{param} property" do
         expect(described_class.attrtype(param)).to eq(:property)
