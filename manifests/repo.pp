@@ -123,7 +123,11 @@ class zabbix::repo (
             ,
           }
         } else {
-          $operatingsystem = downcase($facts['os']['name'])
+          if ($facts['os']['distro'][id] == 'Raspbian') {
+            $operatingsystem = 'raspbian'
+          } else {
+            $operatingsystem = downcase($facts['os']['name'])
+          }
           case $facts['os']['release']['full'] {
             /\/sid$/ : { $releasename = regsubst($facts['os']['release']['full'], '/sid$', '') }
             default  : { $releasename = $facts['os']['distro']['codename'] }
