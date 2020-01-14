@@ -159,6 +159,7 @@ class zabbix::params {
   $server_database_schema                   = undef
   $server_database_socket                   = undef
   $server_database_user                     = 'zabbix_server'
+  $server_database_tablespace               = undef
   $server_debuglevel                        = '3'
   $server_externalscripts                   = '/usr/lib/zabbix/externalscripts'
   $server_historycachesize                  = '8M'
