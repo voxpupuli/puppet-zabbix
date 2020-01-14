@@ -123,6 +123,33 @@ describe 'zabbix::database' do
         it { is_expected.to contain_class('zabbix::params') }
       end
 
+      describe 'database_type is postgresql, tablespace is not explicitly set' do
+        let :params do
+          {
+            database_type: 'postgresql',
+            database_name: 'zabbix-server',
+            database_user: 'zabbix-server',
+            zabbix_type: 'server'
+          }
+        end
+
+        it { is_expected.to contain_postgresql__server__db('zabbix-server').with_tablespace(nil) }
+      end
+
+      describe 'database_type is postgresql, tablespace is explicitly set' do
+        let :params do
+          {
+            database_type: 'postgresql',
+            database_name: 'zabbix-server',
+            database_user: 'zabbix-server',
+            zabbix_type: 'server',
+            database_tablespace: 'zabbix'
+          }
+        end
+
+        it { is_expected.to contain_postgresql__server__db('zabbix-server').with_tablespace('zabbix') }
+      end
+
       describe 'database_type is mysql, zabbix_type is server and is multiple host setup' do
         let :params do
           {
