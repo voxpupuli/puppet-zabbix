@@ -371,6 +371,16 @@ describe 'zabbix::server' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSKeyFile=/etc/zabbix/keys/zabbix-server.key$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^HistoryIndexCacheSize=4M} }
       end
+
+      context 'with zabbix_server.conf and system as logtype' do
+        let :params do
+          {
+            logtype: 'system'
+          }
+        end
+
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^LogType=system$} }
+      end
     end
   end
 end

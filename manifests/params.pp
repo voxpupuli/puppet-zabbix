@@ -173,8 +173,16 @@ class zabbix::params {
   $server_listenport                        = '10051'
   $server_loadmodule                        = undef
   $server_loadmodulepath                    = '/usr/lib/modules'
-  $server_logfile                           = '/var/log/zabbix/zabbix_server.log'
-  $server_logfilesize                       = '10'
+  # provided by camp2camp/systemd
+  if $facts['systemd'] {
+    $server_logtype                          = 'system'
+    $server_logfile                          = undef
+    $server_logfilesize                      = undef
+  } else {
+    $server_logtype                          = 'file'
+    $server_logfile                          = '/var/log/zabbix/zabbix_server.log'
+    $server_logfilesize                      = '10'
+  }
   $server_logslowqueries                    = '0'
   $server_maxhousekeeperdelete              = '500'
   $server_nodeid                            = '0'
