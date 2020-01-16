@@ -144,6 +144,13 @@
     },
     {
       "operatingsystem": "Gentoo"
+    },
+    {
+      "operatingsystem": "Raspbian",
+      "operatingsystemrelease": [
+        "9",
+        "10"
+      ]
     }
   ]
 }
