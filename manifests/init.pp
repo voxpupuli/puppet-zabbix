@@ -121,6 +121,7 @@ class zabbix (
   $database_port                            = $zabbix::params::server_database_port,
   $database_charset                         = $zabbix::params::server_database_charset,
   $database_collate                         = $zabbix::params::server_database_collate,
+  $database_tablespace                      = $zabbix::params::server_database_tablespace,
   $startpollers                             = $zabbix::params::server_startpollers,
   $startipmipollers                         = $zabbix::params::server_startipmipollers,
   $startpollersunreachable                  = $zabbix::params::server_startpollersunreachable,
@@ -304,19 +305,20 @@ class zabbix (
   }
 
   class { 'zabbix::database':
-    zabbix_type       => 'server',
-    zabbix_web        => $zabbix_web,
-    zabbix_server     => $zabbix_server,
-    zabbix_web_ip     => $zabbix_web_ip,
-    zabbix_server_ip  => $zabbix_server_ip,
-    manage_database   => $manage_database,
-    database_type     => $database_type,
-    database_name     => $database_name,
-    database_user     => $database_user,
-    database_password => $database_password,
-    database_host     => $database_host,
-    database_charset  => $database_charset,
-    database_collate  => $database_collate,
+    zabbix_type         => 'server',
+    zabbix_web          => $zabbix_web,
+    zabbix_server       => $zabbix_server,
+    zabbix_web_ip       => $zabbix_web_ip,
+    zabbix_server_ip    => $zabbix_server_ip,
+    manage_database     => $manage_database,
+    database_type       => $database_type,
+    database_name       => $database_name,
+    database_user       => $database_user,
+    database_password   => $database_password,
+    database_host       => $database_host,
+    database_charset    => $database_charset,
+    database_collate    => $database_collate,
+    database_tablespace => $database_tablespace,
   }
 
 }
