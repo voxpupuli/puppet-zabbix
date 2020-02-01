@@ -4,6 +4,37 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v8.0.0](https://github.com/voxpupuli/puppet-zabbix/tree/v8.0.0) (2020-02-01)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v7.0.0...v8.0.0)
+
+**Breaking changes:**
+
+- Implement self.prefetch for zabbix\_proxy [\#642](https://github.com/voxpupuli/puppet-zabbix/pull/642) ([baurmatt](https://github.com/baurmatt))
+
+**Implemented enhancements:**
+
+- Allow to delete a zabbix\_proxy [\#653](https://github.com/voxpupuli/puppet-zabbix/pull/653) ([baurmatt](https://github.com/baurmatt))
+- Add logtype parameter for zabbix server \(issue \#394\) [\#650](https://github.com/voxpupuli/puppet-zabbix/pull/650) ([dpavlotzky](https://github.com/dpavlotzky))
+- Add zabbix.com repository for Raspbian Linux [\#648](https://github.com/voxpupuli/puppet-zabbix/pull/648) ([emetriqChris](https://github.com/emetriqChris))
+- Explicitly use 'ensure =\> file' for normal file resources [\#626](https://github.com/voxpupuli/puppet-zabbix/pull/626) ([baurmatt](https://github.com/baurmatt))
+
+**Closed issues:**
+
+- Test for CentOS 7 current failing due to bug in docker [\#645](https://github.com/voxpupuli/puppet-zabbix/issues/645)
+- Service started before database is required [\#632](https://github.com/voxpupuli/puppet-zabbix/issues/632)
+- Place agent config file if config file is a symlink [\#625](https://github.com/voxpupuli/puppet-zabbix/issues/625)
+
+**Merged pull requests:**
+
+- update repo links to https [\#652](https://github.com/voxpupuli/puppet-zabbix/pull/652) ([bastelfreak](https://github.com/bastelfreak))
+- Make the tablespace parameter available in the zabbix class. [\#651](https://github.com/voxpupuli/puppet-zabbix/pull/651) ([dpavlotzky](https://github.com/dpavlotzky))
+- Add tablespace parameter [\#649](https://github.com/voxpupuli/puppet-zabbix/pull/649) ([dpavlotzky](https://github.com/dpavlotzky))
+- Pin CentOS acceptance tests 7.6.1810 [\#646](https://github.com/voxpupuli/puppet-zabbix/pull/646) ([baurmatt](https://github.com/baurmatt))
+- Remove duplicate CONTRIBUTING.md file [\#641](https://github.com/voxpupuli/puppet-zabbix/pull/641) ([dhoppe](https://github.com/dhoppe))
+- drop Ubuntu 14.04 support [\#639](https://github.com/voxpupuli/puppet-zabbix/pull/639) ([bastelfreak](https://github.com/bastelfreak))
+- add 'VirtuozzoLinux' support [\#635](https://github.com/voxpupuli/puppet-zabbix/pull/635) ([kBite](https://github.com/kBite))
+
 ## [v7.0.0](https://github.com/voxpupuli/puppet-zabbix/tree/v7.0.0) (2019-10-06)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v6.7.0...v7.0.0)
@@ -111,7 +142,7 @@ These should not affect the functionality of the module.
 
 **Implemented enhancements:**
 
-- Add Zabbix 4.0 compatibility and new `config\_mode` parameter [\#548](https://github.com/voxpupuli/puppet-zabbix/pull/548) ([Lord-Y](https://github.com/Lord-Y))
+- Add Zabbix 4.0 compatibility and new `config_mode` parameter [\#548](https://github.com/voxpupuli/puppet-zabbix/pull/548) ([Lord-Y](https://github.com/Lord-Y))
 - Gentoo service fix [\#545](https://github.com/voxpupuli/puppet-zabbix/pull/545) ([lordievader](https://github.com/lordievader))
 - Add Gentoo support [\#535](https://github.com/voxpupuli/puppet-zabbix/pull/535) ([lordievader](https://github.com/lordievader))
 
@@ -175,6 +206,7 @@ These should not affect the functionality of the module.
 - Zabbix Repository \(zabbix-non-supported\) defined with incorrect gpgkey [\#397](https://github.com/voxpupuli/puppet-zabbix/issues/397)
 - Clarify dependency for database handling [\#508](https://github.com/voxpupuli/puppet-zabbix/pull/508) ([stefanandres](https://github.com/stefanandres))
 - Fix missing enable attribut for zabbix::proxy service [\#507](https://github.com/voxpupuli/puppet-zabbix/pull/507) ([stefanandres](https://github.com/stefanandres))
+- Support SSL parameters for web monitoring in all versions \>= 2.4 [\#469](https://github.com/voxpupuli/puppet-zabbix/pull/469) ([anotherfigo](https://github.com/anotherfigo))
 - wait for network connectivity before Zabbix Server startup [\#454](https://github.com/voxpupuli/puppet-zabbix/pull/454) ([tequeter](https://github.com/tequeter))
 
 **Closed issues:**
@@ -228,7 +260,6 @@ These should not affect the functionality of the module.
 
 - Dependencies need update [\#453](https://github.com/voxpupuli/puppet-zabbix/issues/453)
 - Fixed versioncmp compare and fixed typo in file zabbix-server-ips.te [\#480](https://github.com/voxpupuli/puppet-zabbix/pull/480) ([Fabian1976](https://github.com/Fabian1976))
-- Support SSL parameters for web monitoring in all versions \>= 2.4 [\#469](https://github.com/voxpupuli/puppet-zabbix/pull/469) ([anotherfigo](https://github.com/anotherfigo))
 
 **Closed issues:**
 
