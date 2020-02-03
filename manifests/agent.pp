@@ -118,6 +118,14 @@
 # [*hostmetadataitem*]
 #   Optional parameter that defines an item used for getting host metadata.
 #
+# [*hostinterface*]
+#   Optional parameter that defines host metadata. Host metadata is used only at host
+#   auto-registration process (active agent).
+#
+# [*hostinterfaceitem*]
+#   Optional parameter that defines an item used for getting host interface.
+#   Host interface is used at host auto-registration process.
+#
 # [*refreshactivechecks*]
 #   How often list of active checks is refreshed, in seconds.
 #
@@ -190,7 +198,9 @@
 #   Module to load at agent startup.
 #
 # [*manage_startup_script*]
-#  If the init script should be managed by this module. Attention: This might cause problems with some config options of this module (e.g agent_configfile_path)
+#  If the init script should be managed by this module. Attention: This might
+#  cause problems with some config options of this module (e.g
+#  agent_configfile_path)
 #
 # === Example
 #
@@ -250,6 +260,8 @@ class zabbix::agent (
   $hostnameitem                                   = $zabbix::params::agent_hostnameitem,
   $hostmetadata                                   = $zabbix::params::agent_hostmetadata,
   $hostmetadataitem                               = $zabbix::params::agent_hostmetadataitem,
+  Optional[Stdlib::Fqdn] $hostinterface           = $zabbix::params::agent_hostinterface,
+  Optional[Stdlib::Fqdn] $hostinterfaceitem       = $zabbix::params::agent_hostinterfaceitem,
   $refreshactivechecks                            = $zabbix::params::agent_refreshactivechecks,
   $buffersend                                     = $zabbix::params::agent_buffersend,
   $buffersize                                     = $zabbix::params::agent_buffersize,
