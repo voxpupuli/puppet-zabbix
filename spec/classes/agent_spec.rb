@@ -122,6 +122,26 @@ describe 'zabbix::agent' do
         it { is_expected.to contain_file(config_path).with_content %r{^Hostname=test$} }
       end
 
+      context 'configuration file with hostinterfaceitem' do
+        let :params do
+          {
+            hostinterfaceitem: 'system.hostname'
+          }
+        end
+
+        it { is_expected.to contain_file(config_path).with_content %r{^HostInterfaceItem=system.hostname$} }
+      end
+
+      context 'configuration file with hostinterface' do
+        let :params do
+          {
+            hostinterface: 'testinterface'
+          }
+        end
+
+        it { is_expected.to contain_file(config_path).with_content %r{^HostInterface=testinterface$} }
+      end
+
       context 'when declaring manage_firewall is true' do
         let :params do
           {

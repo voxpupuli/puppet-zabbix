@@ -239,6 +239,8 @@ class zabbix::params {
   $agent_hostmetadataitem                   = undef
   $agent_hostname                           = undef
   $agent_hostnameitem                       = 'system.hostname'
+  $agent_hostinterface                      = undef
+  $agent_hostinterfaceitem                  = undef
   $agent_include                            = '/etc/zabbix/zabbix_agentd.d'
   $agent_include_purge                      = true
   $agent_listenip                           = undef
