@@ -56,7 +56,13 @@ define zabbix::startup (
       mode    => '0755',
       content => template("zabbix/${name}-${osfamily_downcase}.init.erb"),
     }
+  } elsif $facts['os']['family'] in ['AIX'] {
+    file { "/etc/rc.d/init.d/${service_name}":
+      ensure  => file,
+      mode    => '0755',
+      content => template("zabbix/${name}-${osfamily_downcase}.init.erb"),
+    }
   } else {
-    fail('We currently only support Debian and RedHat osfamily as non-systemd')
+    fail('We currently only support Debian, RedHat, and AIX osfamily as non-systemd')
   }
 }
