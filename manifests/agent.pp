@@ -230,6 +230,7 @@ class zabbix::agent (
   $zabbix_version                                 = $zabbix::params::zabbix_version,
   $zabbix_package_state                           = $zabbix::params::zabbix_package_state,
   $zabbix_package_agent                           = $zabbix::params::zabbix_package_agent,
+  $package_provider                               = $zabbix::params::package_provider,
   Boolean $manage_firewall                        = $zabbix::params::manage_firewall,
   Boolean $manage_repo                            = $zabbix::params::manage_repo,
   Boolean $manage_resources                       = $zabbix::params::manage_resources,
@@ -382,9 +383,10 @@ class zabbix::agent (
 
   # Installing the package
   package { $zabbix_package_agent:
-    ensure  => $zabbix_package_state,
-    require => Class['zabbix::repo'],
-    tag     => 'zabbix',
+    ensure   => $zabbix_package_state,
+    require  => Class['zabbix::repo'],
+    tag      => 'zabbix',
+    provider =>  $package_provider,
   }
 
   # Ensure that the correct config file is used.
@@ -410,12 +412,18 @@ class zabbix::agent (
   # Controlling the 'zabbix-agent' service
   if str2bool(getvar('::systemd')) {
     $service_provider = 'systemd'
+    $service_path = undef
+  } elsif $facts['os']['name'] == 'AIX' {
+    $service_provider = 'init'
+    $service_path = '/etc/rc.d/init.d'
   } else {
     $service_provider = undef
+    $service_path = undef
   }
   service { $servicename:
     ensure     => $service_ensure,
     enable     => $service_enable,
+    path       => $service_path,
     provider   => $service_provider,
     hasstatus  => true,
     hasrestart => true,

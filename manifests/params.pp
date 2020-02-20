@@ -14,6 +14,7 @@ class zabbix::params {
   # It seems that ubuntu has an different fping path...
   case $facts['os']['name'] {
     'Ubuntu', 'Debian' : {
+      $package_provider      = undef
       $server_fpinglocation  = '/usr/bin/fping'
       $server_fping6location = '/usr/bin/fping6'
       $proxy_fpinglocation   = '/usr/bin/fping'
@@ -29,6 +30,7 @@ class zabbix::params {
       $server_zabbix_user    = 'zabbix'
     }
     'Archlinux': {
+      $package_provider      = undef
       $server_fpinglocation  = '/usr/bin/fping'
       $server_fping6location = '/usr/bin/fping6'
       $proxy_fpinglocation   = '/usr/bin/fping'
@@ -44,6 +46,7 @@ class zabbix::params {
       $server_zabbix_user    = 'zabbix-server'
     }
     'Fedora': {
+      $package_provider      = undef
       $server_fpinglocation  = '/usr/sbin/fping'
       $server_fping6location = '/usr/sbin/fping6'
       $proxy_fpinglocation   = '/usr/sbin/fping'
@@ -59,10 +62,11 @@ class zabbix::params {
       $server_zabbix_user    = 'zabbix'
     }
     'Gentoo': {
+      $package_provider      = undef
       $server_fpinglocation  = '/usr/sbin/fping'
       $server_fping6location = '/usr/sbin/fping6'
       $proxy_fpinglocation   = '/usr/sbin/fping'
-      $proxy_fping6location  = '/usr/sbin/fping6'
+      $proxy_fping7location  = '/usr/sbin/fping6'
       $manage_repo           = false
       $zabbix_package_agent  = 'zabbix'
       $agent_configfile_path = '/etc/zabbix/zabbix_agentd.conf'
@@ -75,15 +79,17 @@ class zabbix::params {
     }
     'AIX': {
       $manage_repo           = false
-      $zabbix_package_agent  = 'zabbix'
+      $package_provider      = 'yum'
+      $zabbix_package_agent  = 'zabbix-agent'
       $agent_configfile_path = '/etc/zabbix/zabbix_agentd.conf'
       $agent_config_owner    = 'zabbix'
       $agent_zabbix_user     = 'zabbix'
       $agent_config_group    = 'zabbix'
       $agent_pidfile         = '/var/run/zabbix/zabbix_agentd.pid'
-      $agent_servicename     = 'zabbix-agentd'
+      $agent_servicename     = 'zabbix-agent'
     }
     default  : {
+      $package_provider      = undef
       $server_fpinglocation  = '/usr/sbin/fping'
       $server_fping6location = '/usr/sbin/fping6'
       $proxy_fpinglocation   = '/usr/sbin/fping'

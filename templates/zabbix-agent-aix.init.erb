@@ -1,167 +1,40 @@
-#!/usr/bin/ksh
+#!/bin/ksh
 
-######################################
-#   S99zabbix-agentd
-#   script to start/stop/restart zabbix_agentd
-#   on AIX
-#
-#####################################
-#    Change these per os if necessary
+##################################################
+# name: start zabbix agent
+# purpose: zabbix agent start script
+# author: V.Danhelka IBM 11.2.2016; B. Schafer 2020-02-26
+##################################################
 
-#PATH=/usr/bin:/bin
-ZPATH=/usr
-CONFPATH=/etc/zabbix
+PID=<%= @pidfile %>
+BIN=/usr/sbin/zabbix_agentd
+CONF=<%= @agent_configfile_path %>
+LOGFILE=/var/log/zabbix/zabbix_agentd.log
+ARGS="-c $CONF"
+USER=<%= @zabbix_user %>
 
-#
-##################################
+test -d $(dirname $LOGFILE) || mkdir -p $(dirname $LOGFILE)
+chown -R $USER $LOGDIR
 
-SUDO=`which sudo`
-PS=`which ps`
-GREP=`which grep`
-ECHO=`which echo`
-KILL=`which kill`
-CAT=`which cat`
-HEAD=`which head`
-AWK=`which awk`
-CUT=`which cut`
-SLEEP=`which sleep`
-SVCADM='/usr/sbin/svcadm'
-SVCS='/usr/bin/svcs'
-RM=`which rm`
-ID=`which id`
-LSLPP=`which lslpp`
-PROCTREE=`which proctree`
-START=startAIX
-STOP=stopAIX
-RESTART=restartAIX
-
-start() {
-	($PS -ef | $GREP -q '[z]abbix_agentd') || $SUDO -u svc_zbx $ZPATH/sbin/zabbix_agentd -c $CONFPATH/zabbix_agentd.conf
-	RETURN=$?
-	return $RETURN
-}
-
-setupVarRunZabbix() {
-	MKDIR=/usr/bin/mkdir
-	CHOWN=/usr/bin/chown
-	if [ ! -d /var/run/zabbix ]
-	then
-		$MKDIR /var/run/zabbix
-	fi
-	$CHOWN svc_zbx:svc_zbx /var/run/zabbix
-	RETURN=$?
-	return $RETURN
-}
-
-
-##############################################
-#
-# startAIX():
-# If zabbix_agentd isn't already running, start it
-# Arguments: None
-# Assumes: 				a proper $ZPATH
-# Effects: starts zabbix_agentd
-# Input: process list
-# Output: None
-# Returns: 0 or return code from zabbix_agentd
-# 
-##############################################
-
-
-startAIX() {
-	start
-	RETURN=$?
-	return $RETURN
-}
-
-###############################################
-#
-# stopAIX():
-# Get location of conf file from installp package
-# get location of pid file from conf file
-# if pid file exists, kill whatever's in it
-# if not, try to find parent zabbix process and kill it
-# Arguments: None
-# Assumes:	zabbix_agent.rte
-#				zabbix_agentd.conf is in original location
-# Effects: stops zabbix_agentd
-# Input:		package info from lslpp,
-#				pid file location from zabbix_agentd.conf
-# Output:	status
-# Returns:	0 or exit status of kill
-#
-###############################################
-
-stopAIX() {
-	CONFFILE=$($LSLPP -f zabbix_agent.rte | $GREP zabbix_agentd.conf)
-	if test -f $CONFFILE
-	then
-		PIDFILE=$($GREP -v '^#' $CONFFILE | $GREP PidFile | $CUT -d= -f2)
-		if [ -e "$PIDFILE" ]
-		then
-			if [ "$($CAT $PIDFILE)" -eq 1 ]
-			then
-				$ECHO "Parent is init. Not killing." 1>&2
-				exit
-			else
-				$SUDO -u svc_zbx $KILL $($CAT $PIDFILE)
-				$RM $PIDFILE
-			fi
-		else
-			TRY=$($PS -ef|$GREP '[z]abbix_agentd'|$HEAD -1|$AWK '{print $2}')
-			if [ -z "$TRY" ]
-			then
-				$ECHO "zabbix_agentd doesn't appear to be running?" 1>&2
-				return $RETURN
-			else
-				PARENT=$($PROCTREE $TRY | $GREP ^[1-9] | $AWK '{print $1}')
-				if [ "$PARENT" -eq 1 ]
-				then
-					$ECHO "Parent is init. Not killing." 1>&2
-				else
-					$SUDO -u svc_zbx $KILL $PARENT
-				fi
-			fi
-		fi
-	else
-		$ECHO "zabbix_agentd.conf not found."
-		exit $RETURN
-	fi
-	RETURN=$?
-	return $RETURN
-}
-
+test -d $(dirname $PID) || mkdir -p $(dirname $PID)
+chown -R $USER $(dirname $PID)
 
 case "$1" in
-	start)
-		$START
-		;;
-	stop)
-		$STOP
-		;;
-	restart)
-		$STOP
-		$SLEEP 5
-		$START
-		;;
-	*)
-		$CAT <<USAGE
-
-Usage: S99zabbix-agentd start|stop|restart
-USAGE
-		exit
-		;;
+start )
+        sudo -u $USER $BIN $ARGS
+        ;;
+stop )
+        [ -f $PID ] && kill $(cat $PID)
+        ;;
+restart )
+        [ -f $PID ] && kill $(cat $PID)
+        sleep 5
+        sudo -u $USER $BIN $ARGS
+        ;;
+status)
+        [ -f $PID ] && echo "running as $(cat $PID)" || echo "stopped"
+        ;;
+* )
+        echo "Usage: $0 (start | stop | restart | status)"
+        exit 1
 esac
-
-NAME=zabbix_agentd
-DAEMON=/usr/sbin/$NAME
-DAEMON_OPTS="-c <%= @agent_configfile_path %>"
-DESC="Zabbix agent"
-
-test -x $DAEMON || exit 0
-
-if [ -r "/etc/default/zabbix-agent" ]; then
-    . /etc/default/zabbix-agent
-fi
-
-exit 0
