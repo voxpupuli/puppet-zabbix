@@ -10,6 +10,7 @@ fixtures:
     ruby: https://github.com/puppetlabs/puppetlabs-ruby.git
     systemd: https://github.com/camptocamp/puppet-systemd.git
     selinux: https://github.com/voxpupuli/puppet-selinux.git
+    chocolatey: https://github.com/puppetlabs/puppetlabs-chocolatey.git
     yumrepo_core:
       repo: https://github.com/puppetlabs/puppetlabs-yumrepo_core.git
       puppet_version: ">= 6.0.0"

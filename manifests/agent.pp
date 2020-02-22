@@ -27,6 +27,14 @@
 # [*manage_repo*]
 #   When true, it will create repository for installing the agent.
 #
+# [*manage_choco*]
+#   When true on windows, it will use chocolatey to install the agent.
+#   The module chocolatey is required https://forge.puppet.com/puppetlabs/chocolatey.
+#
+# [*zabbix_package_provider*]
+#   Which package's provider to use to install the agent.
+#   It is undef for all linux os and set to 'chocolatey' on windows.
+#
 # [*manage_resources*]
 #   When true, it will export resources to something like puppetdb.
 #   When set to true, you'll need to configure 'storeconfigs' to make
@@ -230,6 +238,8 @@ class zabbix::agent (
   $zabbix_version                                 = $zabbix::params::zabbix_version,
   $zabbix_package_state                           = $zabbix::params::zabbix_package_state,
   $zabbix_package_agent                           = $zabbix::params::zabbix_package_agent,
+  Optional[String[1]] $zabbix_package_provider    = $zabbix::params::zabbix_package_provider,
+  Boolean $manage_choco                           = $zabbix::params::manage_choco,
   Boolean $manage_firewall                        = $zabbix::params::manage_firewall,
   Boolean $manage_repo                            = $zabbix::params::manage_repo,
   Boolean $manage_resources                       = $zabbix::params::manage_resources,
@@ -269,12 +279,12 @@ class zabbix::agent (
   Optional[Array] $zabbix_alias                   = $zabbix::params::agent_zabbix_alias,
   $timeout                                        = $zabbix::params::agent_timeout,
   $allowroot                                      = $zabbix::params::agent_allowroot,
-  $zabbix_user                                    = $zabbix::params::agent_zabbix_user,
+  Optional[String[1]] $zabbix_user                = $zabbix::params::agent_zabbix_user,
   $include_dir                                    = $zabbix::params::agent_include,
   $include_dir_purge                              = $zabbix::params::agent_include_purge,
   $unsafeuserparameters                           = $zabbix::params::agent_unsafeuserparameters,
   $userparameter                                  = $zabbix::params::agent_userparameter,
-  $loadmodulepath                                 = $zabbix::params::agent_loadmodulepath,
+  Optional[String[1]] $loadmodulepath             = $zabbix::params::agent_loadmodulepath,
   $loadmodule                                     = $zabbix::params::agent_loadmodule,
   $tlsaccept                                      = $zabbix::params::agent_tlsaccept,
   $tlscafile                                      = $zabbix::params::agent_tlscafile,
@@ -286,8 +296,8 @@ class zabbix::agent (
   $tlspskidentity                                 = $zabbix::params::agent_tlspskidentity,
   $tlsservercertissuer                            = $zabbix::params::agent_tlsservercertissuer,
   $tlsservercertsubject                           = $zabbix::params::agent_tlsservercertsubject,
-  String $agent_config_owner                      = $zabbix::params::agent_config_owner,
-  String $agent_config_group                      = $zabbix::params::agent_config_group,
+  Optional[String[1]] $agent_config_owner         = $zabbix::params::agent_config_owner,
+  Optional[String[1]] $agent_config_group         = $zabbix::params::agent_config_group,
   Boolean $manage_selinux                         = $zabbix::params::manage_selinux,
   Array[String] $selinux_require                  = $zabbix::params::selinux_require,
   Hash[String, Array] $selinux_rules              = $zabbix::params::selinux_rules,
@@ -380,11 +390,20 @@ class zabbix::agent (
     }
   }
 
-  # Installing the package
-  package { $zabbix_package_agent:
-    ensure  => $zabbix_package_state,
-    require => Class['zabbix::repo'],
-    tag     => 'zabbix',
+  if $facts['kernel'] == 'windows' and $manage_choco {
+    package { $zabbix_package_agent:
+      ensure   => $zabbix_version,
+      provider => $zabbix_package_provider,
+      tag      => 'zabbix',
+    }
+  }
+  else {
+    # Installing the package
+    package { $zabbix_package_agent:
+      ensure  => $zabbix_package_state,
+      require => Class['zabbix::repo'],
+      tag     => 'zabbix',
+    }
   }
 
   # Ensure that the correct config file is used.
@@ -400,7 +419,7 @@ class zabbix::agent (
     }
   }
 
-  if $agent_configfile_path != '/etc/zabbix/zabbix_agentd.conf' {
+  if $agent_configfile_path != '/etc/zabbix/zabbix_agentd.conf' and $facts['kernel'] != 'windows' {
     file { '/etc/zabbix/zabbix_agentd.conf':
       ensure  => absent,
       require => Package[$zabbix_package_agent],

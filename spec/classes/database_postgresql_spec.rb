@@ -10,6 +10,7 @@ describe 'zabbix::database::postgresql' do
   end
 
   on_supported_os.each do |os, facts|
+    next if facts[:os]['name'] == 'windows'
     context "on #{os} " do
       let :facts do
         facts

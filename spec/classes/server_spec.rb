@@ -8,6 +8,7 @@ describe 'zabbix::server' do
 
   on_supported_os.each do |os, facts|
     next if facts[:osfamily] == 'Archlinux' # zabbix server is currently not supported on archlinux
+    next if facts[:os]['name'] == 'windows'
     context "on #{os} " do
       systemd_fact = case facts[:osfamily]
                      when 'Archlinux', 'Fedora', 'Gentoo'

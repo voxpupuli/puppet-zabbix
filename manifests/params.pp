@@ -14,83 +14,127 @@ class zabbix::params {
   # It seems that ubuntu has an different fping path...
   case $facts['os']['name'] {
     'Ubuntu', 'Debian' : {
-      $server_fpinglocation  = '/usr/bin/fping'
-      $server_fping6location = '/usr/bin/fping6'
-      $proxy_fpinglocation   = '/usr/bin/fping'
-      $proxy_fping6location  = '/usr/bin/fping6'
-      $manage_repo           = true
-      $zabbix_package_agent  = 'zabbix-agent'
-      $agent_configfile_path = '/etc/zabbix/zabbix_agentd.conf'
-      $agent_config_owner    = 'zabbix'
-      $agent_zabbix_user     = 'zabbix'
-      $agent_config_group    = 'zabbix'
-      $agent_pidfile         = '/var/run/zabbix/zabbix_agentd.pid'
-      $agent_servicename     = 'zabbix-agent'
-      $server_zabbix_user    = 'zabbix'
+      $server_fpinglocation     = '/usr/bin/fping'
+      $server_fping6location    = '/usr/bin/fping6'
+      $proxy_fpinglocation      = '/usr/bin/fping'
+      $proxy_fping6location     = '/usr/bin/fping6'
+      $manage_repo              = true
+      $manage_choco             = false
+      $zabbix_package_agent     = 'zabbix-agent'
+      $agent_configfile_path    = '/etc/zabbix/zabbix_agentd.conf'
+      $agent_config_owner       = 'zabbix'
+      $agent_zabbix_user        = 'zabbix'
+      $agent_config_group       = 'zabbix'
+      $agent_pidfile            = '/var/run/zabbix/zabbix_agentd.pid'
+      $agent_servicename        = 'zabbix-agent'
+      $agent_include            = '/etc/zabbix/zabbix_agentd.d'
+      $server_zabbix_user       = 'zabbix'
+      $zabbix_package_provider  = undef
+      $agent_loadmodulepath     = '/usr/lib/modules'
     }
     'Archlinux': {
-      $server_fpinglocation  = '/usr/bin/fping'
-      $server_fping6location = '/usr/bin/fping6'
-      $proxy_fpinglocation   = '/usr/bin/fping'
-      $proxy_fping6location  = '/usr/bin/fping6'
-      $manage_repo           = false
-      $zabbix_package_agent  = 'zabbix-agent'
-      $agent_configfile_path = '/etc/zabbix/zabbix_agentd.conf'
-      $agent_config_owner    = 'zabbix-agent'
-      $agent_zabbix_user     = 'zabbix-agent'
-      $agent_config_group    = 'zabbix-agent'
-      $agent_pidfile         = undef
-      $agent_servicename     = 'zabbix-agent'
-      $server_zabbix_user    = 'zabbix-server'
+      $server_fpinglocation     = '/usr/bin/fping'
+      $server_fping6location    = '/usr/bin/fping6'
+      $proxy_fpinglocation      = '/usr/bin/fping'
+      $proxy_fping6location     = '/usr/bin/fping6'
+      $manage_repo              = false
+      $manage_choco             = false
+      $zabbix_package_agent     = 'zabbix-agent'
+      $agent_configfile_path    = '/etc/zabbix/zabbix_agentd.conf'
+      $agent_config_owner       = 'zabbix-agent'
+      $agent_zabbix_user        = 'zabbix-agent'
+      $agent_config_group       = 'zabbix-agent'
+      $agent_pidfile            = undef
+      $agent_servicename        = 'zabbix-agent'
+      $agent_include            = '/etc/zabbix/zabbix_agentd.d'
+      $server_zabbix_user       = 'zabbix-server'
+      $zabbix_package_provider  = undef
+      $agent_loadmodulepath     = '/usr/lib/modules'
     }
     'Fedora': {
-      $server_fpinglocation  = '/usr/sbin/fping'
-      $server_fping6location = '/usr/sbin/fping6'
-      $proxy_fpinglocation   = '/usr/sbin/fping'
-      $proxy_fping6location  = '/usr/sbin/fping6'
-      $manage_repo           = false
-      $zabbix_package_agent  = 'zabbix-agent'
-      $agent_configfile_path = '/etc/zabbix_agentd.conf'
-      $agent_config_owner    = 'zabbix'
-      $agent_zabbix_user     = 'zabbix'
-      $agent_config_group    = 'zabbix'
-      $agent_pidfile         = '/var/run/zabbix/zabbix_agentd.pid'
-      $agent_servicename     = 'zabbix-agent'
-      $server_zabbix_user    = 'zabbix'
+      $server_fpinglocation     = '/usr/sbin/fping'
+      $server_fping6location    = '/usr/sbin/fping6'
+      $proxy_fpinglocation      = '/usr/sbin/fping'
+      $proxy_fping6location     = '/usr/sbin/fping6'
+      $manage_repo              = false
+      $manage_choco             = false
+      $zabbix_package_agent     = 'zabbix-agent'
+      $agent_configfile_path    = '/etc/zabbix_agentd.conf'
+      $agent_config_owner       = 'zabbix'
+      $agent_zabbix_user        = 'zabbix'
+      $agent_config_group       = 'zabbix'
+      $agent_pidfile            = '/var/run/zabbix/zabbix_agentd.pid'
+      $agent_servicename        = 'zabbix-agent'
+      $agent_include            = '/etc/zabbix/zabbix_agentd.d'
+      $server_zabbix_user       = 'zabbix'
+      $zabbix_package_provider  = undef
+      $agent_loadmodulepath     = '/usr/lib/modules'
     }
     'Gentoo': {
-      $server_fpinglocation  = '/usr/sbin/fping'
-      $server_fping6location = '/usr/sbin/fping6'
-      $proxy_fpinglocation   = '/usr/sbin/fping'
-      $proxy_fping6location  = '/usr/sbin/fping6'
-      $manage_repo           = false
-      $zabbix_package_agent  = 'zabbix'
-      $agent_configfile_path = '/etc/zabbix/zabbix_agentd.conf'
-      $agent_config_owner    = 'zabbix'
-      $agent_zabbix_user     = 'zabbix'
-      $agent_config_group    = 'zabbix'
-      $agent_pidfile         = '/var/run/zabbix/zabbix_agentd.pid'
-      $agent_servicename     = 'zabbix-agentd'
-      $server_zabbix_user    = 'zabbix'
+      $server_fpinglocation     = '/usr/sbin/fping'
+      $server_fping6location    = '/usr/sbin/fping6'
+      $proxy_fpinglocation      = '/usr/sbin/fping'
+      $proxy_fping6location     = '/usr/sbin/fping6'
+      $manage_repo              = false
+      $manage_choco             = false
+      $zabbix_package_agent     = 'zabbix'
+      $agent_configfile_path    = '/etc/zabbix/zabbix_agentd.conf'
+      $agent_config_owner       = 'zabbix'
+      $agent_zabbix_user        = 'zabbix'
+      $agent_config_group       = 'zabbix'
+      $agent_pidfile            = '/var/run/zabbix/zabbix_agentd.pid'
+      $agent_servicename        = 'zabbix-agentd'
+      $agent_include            = '/etc/zabbix/zabbix_agentd.d'
+      $server_zabbix_user       = 'zabbix'
+      $zabbix_package_provider  = undef
+      $agent_loadmodulepath     = '/usr/lib/modules'
+    }
+    'windows': {
+      $manage_repo             = false
+      $manage_choco            = true
+      $zabbix_package_agent    = 'zabbix-agent'
+      $zabbix_package_provider = 'chocolatey'
+      $agent_configfile_path   = 'C:/ProgramData/zabbix/zabbix_agentd.conf'
+      $agent_config_owner      = undef
+      $agent_zabbix_user       = undef
+      $agent_config_group      = undef
+      $agent_pidfile           = 'C:/ProgramData/zabbix/zabbix_agentd.pid'
+      $agent_servicename       = 'Zabbix Agent'
+      $agent_include           = 'C:/ProgramData/zabbix/zabbix_agentd.d'
+      $agent_loadmodulepath    = undef
     }
     default  : {
-      $server_fpinglocation  = '/usr/sbin/fping'
-      $server_fping6location = '/usr/sbin/fping6'
-      $proxy_fpinglocation   = '/usr/sbin/fping'
-      $proxy_fping6location  = '/usr/sbin/fping6'
-      $manage_repo           = true
-      $zabbix_package_agent  = 'zabbix-agent'
-      $agent_configfile_path = '/etc/zabbix/zabbix_agentd.conf'
-      $agent_config_owner    = 'zabbix'
-      $agent_zabbix_user     = 'zabbix'
-      $agent_config_group    = 'zabbix'
-      $agent_pidfile         = '/var/run/zabbix/zabbix_agentd.pid'
-      $agent_servicename     = 'zabbix-agent'
-      $server_zabbix_user    = 'zabbix'
+      $server_fpinglocation     = '/usr/sbin/fping'
+      $server_fping6location    = '/usr/sbin/fping6'
+      $proxy_fpinglocation      = '/usr/sbin/fping'
+      $proxy_fping6location     = '/usr/sbin/fping6'
+      $manage_repo              = true
+      $manage_choco             = false
+      $zabbix_package_agent     = 'zabbix-agent'
+      $agent_configfile_path    = '/etc/zabbix/zabbix_agentd.conf'
+      $agent_config_owner       = 'zabbix'
+      $agent_zabbix_user        = 'zabbix'
+      $agent_config_group       = 'zabbix'
+      $agent_pidfile            = '/var/run/zabbix/zabbix_agentd.pid'
+      $agent_include            = '/etc/zabbix/zabbix_agentd.d'
+      $agent_servicename        = 'zabbix-agent'
+      $server_zabbix_user       = 'zabbix'
+      $zabbix_package_provider  = undef
+      $agent_loadmodulepath     = '/usr/lib/modules'
     }
   }
 
   # Zabbix overall params. Is used by all components.
+  $zabbix_version = downcase($facts['kernel']) ? {
+    'windows' => '4.4.5',
+    default   => '3.4',
+  }
+
+  $manage_startup_script = downcase($facts['kernel']) ? {
+    'windows' => false,
+    default   => true,
+  }
+
   $zabbix_package_state                     = 'present'
   $zabbix_proxy                             = 'localhost'
   $zabbix_proxy_ip                          = '127.0.0.1'
@@ -99,12 +143,10 @@ class zabbix::params {
   $zabbix_template_dir                      = '/etc/zabbix/imported_templates'
   $zabbix_timezone                          = 'Europe/Amsterdam'
   $zabbix_url                               = 'localhost'
-  $zabbix_version                           = '3.4'
   $zabbix_web                               = 'localhost'
   $zabbix_web_ip                            = '127.0.0.1'
   $manage_database                          = true
   $manage_service                           = true
-  $manage_startup_script                    = true
   $default_vhost                            = false
   $manage_firewall                          = false
   $manage_apt                               = true
@@ -241,12 +283,10 @@ class zabbix::params {
   $agent_hostnameitem                       = 'system.hostname'
   $agent_hostinterface                      = undef
   $agent_hostinterfaceitem                  = undef
-  $agent_include                            = '/etc/zabbix/zabbix_agentd.d'
   $agent_include_purge                      = true
   $agent_listenip                           = undef
   $agent_listenport                         = '10050'
   $agent_loadmodule                         = undef
-  $agent_loadmodulepath                     = '/usr/lib/modules'
   $agent_logremotecommands                  = '0'
   $agent_maxlinespersecond                  = '100'
   $agent_refreshactivechecks                = '120'
@@ -284,7 +324,13 @@ class zabbix::params {
     $agent_logtype                          = 'system'
     $agent_logfile                          = undef
     $agent_logfilesize                      = undef
-  } else {
+  }
+  elsif $facts['kernel'] == 'windows' {
+    $agent_logtype                          = 'file'
+    $agent_logfile                          = 'C:/ProgramData/zabbix/zabbix_agentd.log'
+    $agent_logfilesize                      = '100'
+  }
+  else {
     $agent_logtype                          = 'file'
     $agent_logfile                          = '/var/log/zabbix/zabbix_agentd.log'
     $agent_logfilesize                      = '100'
