@@ -33,7 +33,7 @@ define zabbix::startup (
       assert_type(Boolean, $manage_database)
     }
     default: {
-      fail('we currently only spport a title that contains agent or server')
+      fail('we currently only support a title that contains agent or server')
     }
   }
   # provided by camp2camp/systemd
@@ -56,7 +56,14 @@ define zabbix::startup (
       mode    => '0755',
       content => template("zabbix/${name}-${osfamily_downcase}.init.erb"),
     }
+  } elsif ($facts['os']['family'] == 'windows') {
+    exec { "install_agent_${name}":
+      command  => "& 'C:\\Program Files\\Zabbix Agent\\zabbix_agentd.exe' --config ${agent_configfile_path} --install",
+      onlyif   => "if (Get-WmiObject -Class Win32_Service -Filter \"Name='${name}'\"){exit 1}",
+      provider => powershell,
+      notify   => Service[$name],
+    }
   } else {
-    fail('We currently only support Debian and RedHat osfamily as non-systemd')
+    fail('We currently only support Debian, Redhat and Windows osfamily as non-systemd')
   }
 }
