@@ -64,7 +64,7 @@ Puppet::Type.type(:zabbix_proxy).provide(:ruby, parent: Puppet::Provider::Zabbix
   end
 
   def destroy
-    zbx.proxies.delete(zbx.proxies.get_id(host: @resource[:hostname]))
+    zbx.proxies.delete([zbx.proxies.get_id(host: @resource[:hostname])].flatten)
   end
 
   mk_resource_methods
