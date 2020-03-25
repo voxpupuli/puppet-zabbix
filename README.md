@@ -1,5 +1,7 @@
 # puppet-zabbix
 
+# TEST With Facter 4
+
 [![Build Status](https://travis-ci.org/voxpupuli/puppet-zabbix.svg?branch=master)](https://travis-ci.org/voxpupuli/puppet-zabbix)
 [![Code Coverage](https://coveralls.io/repos/github/voxpupuli/puppet-zabbix/badge.svg?branch=master)](https://coveralls.io/github/voxpupuli/puppet-zabbix)
 [![Puppet Forge](https://img.shields.io/puppetforge/v/puppet/zabbix.svg)](https://forge.puppetlabs.com/puppet/zabbix)
