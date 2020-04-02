@@ -381,6 +381,14 @@ class zabbix::agent (
     }
   }
 
+  if $zabbix::params::manage_package {
+    # Installing the package
+    package { $zabbix_package_agent:
+      ensure  => $zabbix_package_state,
+      require => Class['zabbix::repo'],
+      tag     => 'zabbix',
+    }
+
   # Installing the package
   package { $zabbix_package_agent:
     ensure   => $zabbix_package_state,

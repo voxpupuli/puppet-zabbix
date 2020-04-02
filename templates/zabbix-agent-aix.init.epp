@@ -1,4 +1,10 @@
 #!/bin/ksh
+# THIS FILE IS MANAGED BY PUPPET
+
+<%- | String $pidfile,
+      String $agent_configfile_path,
+      String $zabbix_user
+| -%>
 
 ##################################################
 # name: start zabbix agent
@@ -6,12 +12,12 @@
 # author: V.Danhelka IBM 11.2.2016; B. Schafer 2020-02-26
 ##################################################
 
-PID=<%= @pidfile %>
+PID=<%= $pidfile %>
 BIN=/usr/sbin/zabbix_agentd
-CONF=<%= @agent_configfile_path %>
+CONF=<%= $agent_configfile_path %>
 LOGFILE=/var/log/zabbix/zabbix_agentd.log
 ARGS="-c $CONF"
-USER=<%= @zabbix_user %>
+USER=<%= $zabbix_user %>
 
 test -d $(dirname $LOGFILE) || mkdir -p $(dirname $LOGFILE)
 chown -R $USER $LOGDIR

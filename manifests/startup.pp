@@ -65,7 +65,8 @@ define zabbix::startup (
     file { "/etc/rc.d/rc2.d/S999${service_name}":
       ensure => 'link',
       target => "/etc/rc.d/init.d/${service_name}",
-  } else {
+    }
+  }  else {
     fail('We currently only support Debian, RedHat, and AIX osfamily as non-systemd')
-  }
+ }
 }
