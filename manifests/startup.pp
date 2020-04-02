@@ -62,6 +62,9 @@ define zabbix::startup (
       mode    => '0755',
       content => template('zabbix/zabbix-agent-aix.init.erb'),
     }
+    file { "/etc/rc.d/rc2.d/S999${service_name}":
+      ensure => 'link',
+      target => "/etc/rc.d/init.d/${service_name}",
   } else {
     fail('We currently only support Debian, RedHat, and AIX osfamily as non-systemd')
   }
