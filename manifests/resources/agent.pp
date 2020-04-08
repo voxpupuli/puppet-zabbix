@@ -22,6 +22,7 @@ class zabbix::resources::agent (
   Array[String[1]] $groups = undef,
   $group_create            = undef,
   $templates               = undef,
+  $macros                  = undef,
   $proxy                   = undef,
 ) {
   if $group and $groups {
@@ -42,6 +43,7 @@ class zabbix::resources::agent (
     groups       => $groups,
     group_create => $group_create,
     templates    => $templates,
+    macros       => $macros,
     proxy        => $proxy,
   }
 }

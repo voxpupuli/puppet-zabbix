@@ -58,6 +58,9 @@
 # [*zbx_templates*]
 #   List of templates which will be added when host is configured.
 #
+# [*zbx_macros*]
+#   List of macros which will be added when host is configured.
+#
 # [*agent_configfile_path*]
 #   Agent config file path defaults to /etc/zabbix/zabbix_agentd.conf
 #
@@ -249,6 +252,7 @@ class zabbix::agent (
   Variant[String[1],Array[String[1]]] $zbx_groups = $zabbix::params::agent_zbx_groups,
   $zbx_group_create                               = $zabbix::params::agent_zbx_group_create,
   $zbx_templates                                  = $zabbix::params::agent_zbx_templates,
+  $zbx_macros                                     = $zabbix::params::agent_zbx_macros,
   $agent_configfile_path                          = $zabbix::params::agent_configfile_path,
   $pidfile                                        = $zabbix::params::agent_pidfile,
   $servicename                                    = $zabbix::params::agent_servicename,
@@ -378,6 +382,7 @@ class zabbix::agent (
       groups       => [$groups].flatten(),
       group_create => $zbx_group_create,
       templates    => $zbx_templates,
+      macros       => $zbx_macros,
       proxy        => $use_proxy,
     }
   }

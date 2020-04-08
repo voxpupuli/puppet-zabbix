@@ -97,6 +97,13 @@ Puppet::Type.newtype(:zabbix_host) do
     end
   end
 
+  newproperty(:macros, array_matching: :all) do
+    desc 'Array of hashes (macros) which should be loaded for this host.'
+    def insync?(is)
+      is.sort_by { |h| h.first } == should.sort_by { |g| g.first }
+    end
+  end
+
   newproperty(:proxy) do
     desc 'Whether it is monitored by an proxy or not.'
   end
