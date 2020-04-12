@@ -3,9 +3,9 @@ require 'unit/puppet/x/spec_zabbix_types'
 
 describe Puppet::Type.type(:zabbix_host) do
   describe 'when validating params' do
-    %i[
-      group_create
-      hostname
+    [
+      :group_create,
+      :hostname
     ].each do |param|
       it "should have a #{param} parameter" do
         expect(described_class.attrtype(param)).to eq(:param)
@@ -14,16 +14,16 @@ describe Puppet::Type.type(:zabbix_host) do
   end
 
   describe 'when validating properties' do
-    %i[
-      group
-      groups
-      id
-      interfaceid
-      ipaddress
-      port
-      proxy
-      templates
-      use_ip
+    [
+      :group,
+      :groups,
+      :id,
+      :interfaceid,
+      :ipaddress,
+      :port,
+      :proxy,
+      :templates,
+      :use_ip
     ].each do |param|
       it "should have a #{param} property" do
         expect(described_class.attrtype(param)).to eq(:property)
