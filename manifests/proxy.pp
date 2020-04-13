@@ -449,12 +449,20 @@ class zabbix::proxy (
   # is set to false, you'll get warnings like this:
   # "Warning: You cannot collect without storeconfigs being set"
   if $manage_resources {
-    class { 'zabbix::resources::proxy':
-      hostname  => $hostname,
-      ipaddress => $listen_ip,
-      use_ip    => $use_ip,
-      mode      => $mode,
-      port      => $listenport,
+    if String($mode) == '0' {
+      # Active proxies don't use `ipaddress`, `use_ip` or `port`.
+      class { 'zabbix::resources::proxy':
+        hostname => $hostname,
+        mode     => $mode,
+      }
+    } else {
+      class { 'zabbix::resources::proxy':
+        hostname  => $hostname,
+        ipaddress => $listen_ip,
+        use_ip    => $use_ip,
+        mode      => $mode,
+        port      => $listenport,
+      }
     }
 
     zabbix::userparameters { 'Zabbix_Proxy': template => 'Template App Zabbix Proxy', }
