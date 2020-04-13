@@ -66,7 +66,7 @@ describe 'zabbix::web' do
                              'php5-pgsql'
                            end
                          when 'Debian'
-                           if facts[:operatingsystemmajrelease] >= '9'
+                           if facts[:operatingsystemmajrelease].to_i >= 9
                              'php-pgsql'
                            else
                              'php5-pgsql'
@@ -95,7 +95,7 @@ describe 'zabbix::web' do
                              'php5-mysql'
                            end
                          when 'Debian'
-                           if facts[:operatingsystemmajrelease] >= '9'
+                           if facts[:operatingsystemmajrelease].to_i >= 9
                              'php-mysql'
                            else
                              'php5-mysql'

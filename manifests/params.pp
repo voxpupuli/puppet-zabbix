@@ -124,10 +124,12 @@ class zabbix::params {
     }
   }
 
-  # Zabbix overall params. Is used by all components.
-  $zabbix_version = downcase($facts['kernel']) ? {
-    'windows' => '4.4.5',
-    default   => '3.4',
+  if downcase($facts['kernel']) == 'windows' {
+    $zabbix_version = '4.4.5'
+  } elsif $facts['os']['name'] == 'Debian' and Integer($facts['os']['release']['major']) == 10 {
+    $zabbix_version =  '4.0'
+  } else {
+    $zabbix_version = '3.4'
   }
 
   $manage_startup_script = downcase($facts['kernel']) ? {
