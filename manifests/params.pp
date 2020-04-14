@@ -317,7 +317,6 @@ class zabbix::params {
   $agent_zbx_templates                      = [
     'Template OS Linux',
     'Template App SSH Service']
-  $agent_zbx_macros                         = undef
   $apache_status                            = false
   $monitored_by_proxy                       = undef
   # provided by camp2camp/systemd
