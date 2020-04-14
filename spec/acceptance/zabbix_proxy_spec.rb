@@ -86,4 +86,49 @@ describe 'zabbix_proxy type' do
       end
     end
   end
+
+  context 'delete zabbix_proxy resources' do
+    it 'runs successfully' do
+      # This will delete the Zabbix proxies create above
+      pp = <<-EOS
+        zabbix_proxy { 'ZabbixProxy1':
+          ensure    => absent,
+          ipaddress => '127.0.0.1',
+          use_ip    => true,
+          mode      => 0,
+          port      => 10051,
+        }
+        zabbix_proxy { 'ZabbixProxy2':
+          ensure    => absent,
+          ipaddress => '127.0.0.3',
+          use_ip    => false,
+          mode      => 1,
+          port      => 10055,
+        }
+      EOS
+
+      apply_manifest(pp, catch_failures: true)
+    end
+
+    let(:result_proxies) do
+      zabbixapi('localhost', 'Admin', 'zabbix', 'proxy.get', selectInterface: %w[dns ip port useip],
+                                                             output: ['host']).result
+    end
+
+    context 'ZabbixProxy1' do
+      let(:proxy1) { result_proxies.select { |h| h['host'] == 'ZabbixProxy1' }.first }
+
+      it "doesn't exist" do
+        expect(proxy1).to eq(nil)
+      end
+    end
+
+    context 'ZabbixProxy2' do
+      let(:proxy2) { result_proxies.select { |h| h['host'] == 'ZabbixProxy2' }.first }
+
+      it "doesn't exist" do
+        expect(proxy2).to eq(nil)
+      end
+    end
+  end
 end
