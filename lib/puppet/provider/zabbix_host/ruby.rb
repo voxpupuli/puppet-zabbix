@@ -10,7 +10,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
         selectParentTemplates: ['host'],
         selectInterfaces: %w[interfaceid type main ip port useip],
         selectGroups: ['name'],
-        selectMacros: %w['macro', 'value'],
+        selectMacros: %w[macro value],
         output: %w[host proxy_hostid]
       }
     )
