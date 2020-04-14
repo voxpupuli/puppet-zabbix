@@ -15,6 +15,7 @@ describe 'zabbix_host' do
     it { is_expected.to be_valid_type.with_properties('port') }
     it { is_expected.to be_valid_type.with_properties('proxy') }
     it { is_expected.to be_valid_type.with_properties('templates') }
+    it { is_expected.to be_valid_type.with_properties('macros') }
     it { is_expected.to be_valid_type.with_properties('use_ip') }
 
     it { is_expected.to be_valid_type.with_parameters('hostname') }

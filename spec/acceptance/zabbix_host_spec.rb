@@ -48,6 +48,7 @@ zabbix_host { 'test1.example.com':
   groups       => ['TestgroupOne'],
   group_create => true,
   templates    => [ 'Template OS Linux', ],
+  macros       => [],
 }
 zabbix_host { 'test2.example.com':
   ipaddress => '127.0.0.2',
@@ -55,6 +56,7 @@ zabbix_host { 'test2.example.com':
   port      => 1050,
   groups    => ['Virtual machines'],
   templates => [ 'Template OS Linux', 'Template ICMP Ping', ],
+  macros    => [],
 }
     EOS
 

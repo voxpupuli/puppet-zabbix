@@ -19,7 +19,7 @@ describe Puppet::Type.type(:zabbix_host).provider(:ruby) do
     end
   end
 
-  [:create, :exists?, :destroy, :get_groupids, :get_templateids, :ipaddress, :use_ip, :port, :groups, :templates, :proxy].each do |method|
+  [:create, :exists?, :destroy, :get_groupids, :get_templateids, :ipaddress, :use_ip, :port, :groups, :templates, :macros, :proxy].each do |method|
     it "should respond to the instance method #{method}" do
       expect(described_class.new).to respond_to(method)
     end
