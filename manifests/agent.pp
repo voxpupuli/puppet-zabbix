@@ -252,7 +252,7 @@ class zabbix::agent (
   Variant[String[1],Array[String[1]]] $zbx_groups = $zabbix::params::agent_zbx_groups,
   $zbx_group_create                               = $zabbix::params::agent_zbx_group_create,
   $zbx_templates                                  = $zabbix::params::agent_zbx_templates,
-  $zbx_macros                                     = $zabbix::params::agent_zbx_macros,
+  Optional[Array[Hash]] $zbx_macros               = $zabbix::params::agent_zbx_macros,
   $agent_configfile_path                          = $zabbix::params::agent_configfile_path,
   $pidfile                                        = $zabbix::params::agent_pidfile,
   $servicename                                    = $zabbix::params::agent_servicename,
