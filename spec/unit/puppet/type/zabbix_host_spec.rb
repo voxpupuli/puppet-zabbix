@@ -125,13 +125,13 @@ describe Puppet::Type.type(:zabbix_host) do
     end
 
     describe 'macros' do
-      it_behaves_like 'validated property', :macros, nil, [{'macro1' => 'value1'}, {'macro2' => 'value2'}]
+      it_behaves_like 'validated property', :macros, nil, [{ 'macro1' => 'value1' }, { 'macro2' => 'value2' }]
       it_behaves_like 'array_matching property', :macros
 
-      let(:object) { described_class.new(name: 'nobody', macros: [{'macro1' => 'value1'}, {'macro2' => 'value2'}]) }
+      let(:object) { described_class.new(name: 'nobody', macros: [{ 'macro1' => 'value1' }, { 'macro2' => 'value2' }]) }
 
       it 'ignores order of array' do
-        expect(object.property(:macros).insync?([{'macro1' => 'value1'}, {'macro2' => 'value2'}])).to be true
+        expect(object.property(:macros).insync?([{ 'macro1' => 'value1' }, { 'macro2' => 'value2' }])).to be true
       end
     end
 

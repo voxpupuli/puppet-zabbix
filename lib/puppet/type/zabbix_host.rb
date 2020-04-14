@@ -100,7 +100,7 @@ Puppet::Type.newtype(:zabbix_host) do
   newproperty(:macros, array_matching: :all) do
     desc 'Array of hashes (macros) which should be loaded for this host.'
     def insync?(is)
-      is.sort_by { |h| h.first } == should.sort_by { |g| g.first }
+      is.sort_by(&:first) == should.sort_by(&:first)
     end
   end
 
