@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-['2.4', '3.2', '3.4', '4.0'].each do |version|
+['2.4', '3.2', '3.4', '4.0', '4.2', '4.4'].each do |version|
   if version == '2.4' && default[:platform] =~ %r{(ubuntu-16.04-amd64|debian-9-amd64)}
     next
   end
