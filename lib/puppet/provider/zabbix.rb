@@ -76,13 +76,6 @@ class Puppet::Provider::Zabbix < Puppet::Provider
     false
   end
 
-  # Check if proxy exists. When error raised, return false.
-  def check_proxy(host)
-    zbx.proxies.get_id(host: host)
-  rescue Puppet::ExecutionFailure
-    false
-  end
-
   # Get the template id from the name.
   def get_template_id(zbx, template)
     return template if a_number?(template)

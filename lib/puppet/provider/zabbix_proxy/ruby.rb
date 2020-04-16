@@ -16,6 +16,7 @@ Puppet::Type.type(:zabbix_proxy).provide(:ruby, parent: Puppet::Provider::Zabbix
       # p['interface'] is a Hash if the host is a passive proxy
       new(
         ensure: :present,
+        id: p['proxyid'].to_i,
         name: p['host'],
         ipaddress: p['interface'].is_a?(Hash) ? p['interface']['ip'] : nil,
         use_ip: p['interface'].is_a?(Hash) ? p['interface']['use_ip'] : nil,
@@ -34,37 +35,33 @@ Puppet::Type.type(:zabbix_proxy).provide(:ruby, parent: Puppet::Provider::Zabbix
   end
 
   def create
-    # Set some vars
-    host = @resource[:hostname]
-    ipaddress = @resource[:ipaddress]
-
-    # Normally 0 is active and 1 is passive, in the API, its 5 and 6
-    proxy_mode = @resource[:mode] + 5
-
-    use_ip = @resource[:use_ip]
-    port = @resource[:port]
-
-    # Check if we need to connect via ip or fqdn
-    use_ip = use_ip ? 1 : 0
-
-    zbx.proxies.create_or_update(
-      host: host,
-      status: proxy_mode,
-      interfaces: [
-        ip: ipaddress,
-        dns: host,
-        useip: use_ip,
-        port: port
-      ]
-    )
+    @property_hash[:ensure] = :present
   end
 
   def exists?
-    check_proxy(@resource[:hostname])
+    @property_hash[:ensure] == :present
   end
 
   def destroy
-    zbx.proxies.delete([zbx.proxies.get_id(host: @resource[:hostname])].flatten)
+    @property_hash[:ensure] = :absent
+  end
+
+  def flush
+    if @property_hash[:ensure] == :present
+      puts @property_hash[:ensure]
+      zbx.proxies.create_or_update(
+        host: @resource[:hostname],
+        status: @resource[:mode] + 5, # Normally 0 is active and 1 is passive, in the API, its 5 and 6
+        interface: {
+          ip: @resource[:ipaddress],
+          dns: @resource[:hostname],
+          useip: @resource[:use_ip] ? 1 : 0,
+          port: @resource[:port]
+        }
+      )
+    else
+      zbx.proxies.delete([zbx.proxies.get_id(host: @resource[:hostname])].flatten)
+    end
   end
 
   mk_resource_methods
