@@ -42,7 +42,7 @@ describe 'zabbix_proxy type' do
       shell('yum clean metadata') if fact('os.family') == 'RedHat'
 
       # Cleanup old database
-      shell('/opt/puppetlabs/bin/puppet resource service zabbix-server ensure=stopped; /opt/puppetlabs/bin/puppet resource package zabbix-server-pgsql ensure=purged; rm -f /etc/zabbix/.*done; su - postgres -c "psql -c \'drop database if exists zabbix_server;\'"')
+      cleanup_zabbix
 
       apply_manifest(pp, catch_failures: true)
     end

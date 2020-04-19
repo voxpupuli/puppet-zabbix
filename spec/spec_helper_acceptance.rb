@@ -17,3 +17,5 @@ RSpec.configure do |c|
     end
   end
 end
+
+Dir['./spec/support/acceptance/**/*.rb'].sort.each { |f| require f }

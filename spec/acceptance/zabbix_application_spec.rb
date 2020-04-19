@@ -38,7 +38,7 @@ describe 'zabbix_application type' do
     # setup zabbix. Apache module isn't idempotent and requires a second run
     it 'works with no error on the first apply' do
       # Cleanup old database
-      shell('/opt/puppetlabs/bin/puppet resource service zabbix-server ensure=stopped; /opt/puppetlabs/bin/puppet resource package zabbix-server-pgsql ensure=purged; rm -f /etc/zabbix/.*done; su - postgres -c "psql -c \'drop database if exists zabbix_server;\'"')
+      cleanup_zabbix
 
       apply_manifest(pp1, catch_failures: true)
     end
