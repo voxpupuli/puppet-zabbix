@@ -33,8 +33,6 @@ describe 'zabbix_hostgroup type', unless: default[:platform] =~ %r{debian-10-amd
         }
       EOS
 
-      shell('yum clean metadata') if fact('os.family') == 'RedHat'
-
       # Cleanup old database
       cleanup_zabbix
 
