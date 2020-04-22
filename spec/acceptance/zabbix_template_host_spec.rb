@@ -1,7 +1,7 @@
 require 'spec_helper_acceptance'
 require 'serverspec_type_zabbixapi'
 
-describe 'zabbix_template_host type' do
+describe 'zabbix_template_host type', unless: default[:platform] =~ %r{debian-10-amd64} do
   context 'create zabbix_template_host resources' do
     it 'runs successfully' do
       # This will deploy a running Zabbix setup (server, web, db) which we can
@@ -43,7 +43,6 @@ describe 'zabbix_template_host type' do
         }
       EOS
 
-      shell('yum clean metadata') if fact('os.family') == 'RedHat'
       shell("echo '<?xml version=\"1.0\" encoding=\"UTF-8\"?><zabbix_export><version>3.0</version><date>2018-12-13T15:00:46Z</date><groups><group><name>Templates/Applications</name></group></groups><templates><template><template>TestTemplate1</template><name>TestTemplate1</name><description/><groups><group><name>Templates/Applications</name></group></groups><applications/><items/><discovery_rules/><macros/><templates/><screens/></template></templates></zabbix_export>' > /root/TestTemplate1.xml")
 
       # Cleanup old database

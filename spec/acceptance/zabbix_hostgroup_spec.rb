@@ -1,7 +1,7 @@
 require 'spec_helper_acceptance'
 require 'serverspec_type_zabbixapi'
 
-describe 'zabbix_hostgroup type' do
+describe 'zabbix_hostgroup type', unless: default[:platform] =~ %r{debian-10-amd64} do
   context 'create zabbix_hostgroup resources' do
     it 'runs successfully' do
       # This will deploy a running Zabbix setup (server, web, db) which we can
@@ -32,8 +32,6 @@ describe 'zabbix_hostgroup type' do
           ensure => absent,
         }
       EOS
-
-      shell('yum clean metadata') if fact('os.family') == 'RedHat'
 
       # Cleanup old database
       cleanup_zabbix

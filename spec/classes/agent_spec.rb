@@ -34,6 +34,11 @@ describe 'zabbix::agent' do
                     else
                       '/etc/zabbix/zabbix_agentd.d'
                     end
+      zabbix_version = if facts[:os]['name'] == 'Debian' && facts[:os]['release']['major'].to_i == 10
+                         '4.0'
+                       else
+                         '3.4'
+                       end
       let :facts do
         facts.merge(systemd_fact)
       end
@@ -98,11 +103,11 @@ describe 'zabbix::agent' do
           it { is_expected.not_to compile.with_all_deps }
         when 'Debian'
           # rubocop:disable RSpec/RepeatedExample
-          it { is_expected.to contain_class('zabbix::repo').with_zabbix_version('3.4') }
+          it { is_expected.to contain_class('zabbix::repo').with_zabbix_version(zabbix_version) }
           it { is_expected.to contain_package('zabbix-agent').with_require('Class[Zabbix::Repo]') }
           it { is_expected.to contain_apt__source('zabbix') }
         when 'RedHat'
-          it { is_expected.to contain_class('zabbix::repo').with_zabbix_version('3.4') }
+          it { is_expected.to contain_class('zabbix::repo').with_zabbix_version(zabbix_version) }
           it { is_expected.to contain_package('zabbix-agent').with_require('Class[Zabbix::Repo]') }
           it { is_expected.to contain_yumrepo('zabbix-nonsupported') }
           it { is_expected.to contain_yumrepo('zabbix') }
