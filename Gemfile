@@ -17,7 +17,7 @@ group :test do
   gem 'fakefs', '0.13.3',            :require => false if RUBY_VERSION < '2.3.0'
   gem 'fakefs',                      :require => false if RUBY_VERSION >= '2.3.0'
   gem 'zabbixapi',                   :require => false
-  gem 'rspec-puppet-facts',          :require => false, :git => 'https://github.com/ekohl/rspec-puppet-facts', :ref => '7674437d8d48af3a910ac3858c9eb63853dc1821'
+  gem 'rspec-puppet-facts',          :require => false, :git => 'https://github.com/mcanevet/rspec-puppet-facts', :ref => '9541292d4fc35db3be1badace673c1108154b571'
 end
 
 group :development do
