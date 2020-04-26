@@ -17,7 +17,7 @@ group :test do
   gem 'fakefs', '0.13.3',            :require => false if RUBY_VERSION < '2.3.0'
   gem 'fakefs',                      :require => false if RUBY_VERSION >= '2.3.0'
   gem 'zabbixapi',                   :require => false
-  gem 'rspec-puppet-facts',          :require => false, :git => 'https://github.com/ekohl/rspec-puppet-facts', :ref => '7674437d8d48af3a910ac3858c9eb63853dc1821'
+  gem 'rspec-puppet-facts',          :require => false, :git => 'https://github.com/mcanevet/rspec-puppet-facts', :ref => '9541292d4fc35db3be1badace673c1108154b571'
 end
 
 group :development do
@@ -28,27 +28,7 @@ group :development do
 end
 
 group :system_tests do
-  gem 'winrm',                              :require => false
-  if beaker_version = ENV['BEAKER_VERSION']
-    gem 'beaker', *location_for(beaker_version)
-  else
-    gem 'beaker', '>= 4.2.0', :require => false
-  end
-  if beaker_rspec_version = ENV['BEAKER_RSPEC_VERSION']
-    gem 'beaker-rspec', *location_for(beaker_rspec_version)
-  else
-    gem 'beaker-rspec',  :require => false
-  end
-  gem 'serverspec',                         :require => false
-  gem 'beaker-hostgenerator', '>= 1.1.22',  :require => false
-  gem 'beaker-docker',                      :require => false
-  gem 'beaker-puppet',                      :require => false
-  gem 'beaker-puppet_install_helper',       :require => false
-  gem 'beaker-module_install_helper',       :require => false
-  gem 'rbnacl', '>= 4',                     :require => false
-  gem 'rbnacl-libsodium',                   :require => false
-  gem 'bcrypt_pbkdf',                       :require => false
-  gem 'ed25519',                            :require => false
+  gem 'voxpupuli-acceptance',  :require => false
 end
 
 group :release do
