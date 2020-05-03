@@ -10,12 +10,6 @@ Gemfile:
   optional:
     ':test':
       - gem: 'fakefs'
-        version: '0.13.3'
-        ruby-operator: '<'
-        ruby-version: '2.3.0'
-      - gem: 'fakefs'
-        ruby-operator: '>='
-        ruby-version: '2.3.0'
       - gem: 'zabbixapi'
 spec/spec_helper.rb:
   mock_with: ':mocha'
