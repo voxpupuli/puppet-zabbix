@@ -14,8 +14,7 @@ group :test do
   gem 'voxpupuli-test', '>= 1.0.0',  :require => false
   gem 'coveralls',                   :require => false
   gem 'simplecov-console',           :require => false
-  gem 'fakefs', '0.13.3',            :require => false if RUBY_VERSION < '2.3.0'
-  gem 'fakefs',                      :require => false if RUBY_VERSION >= '2.3.0'
+  gem 'fakefs',                      :require => false
   gem 'zabbixapi',                   :require => false
   gem 'rspec-puppet-facts',          :require => false, :git => 'https://github.com/mcanevet/rspec-puppet-facts', :ref => '9541292d4fc35db3be1badace673c1108154b571'
 end
