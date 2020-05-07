@@ -6,6 +6,7 @@ describe 'zabbix::sender' do
   end
 
   on_supported_os.each do |os, facts|
+    next if facts[:os]['name'] == 'windows'
     context "on #{os} " do
       let :facts do
         facts
@@ -13,6 +14,7 @@ describe 'zabbix::sender' do
 
       context 'with all defaults' do
         it { is_expected.to contain_class('zabbix::sender') }
+        it { is_expected.to contain_class('zabbix::params') }
         it { is_expected.to compile.with_all_deps }
         # Make sure package will be installed, service running and ensure of directory.
         it { is_expected.to contain_package('zabbix-sender').with_ensure('present') }
@@ -28,8 +30,23 @@ describe 'zabbix::sender' do
         if %w[Archlinux Gentoo].include?(facts[:osfamily])
           it { is_expected.not_to compile.with_all_deps }
         else
-          it { is_expected.to contain_class('zabbix::repo').with_zabbix_version('3.4') }
+          zabbix_version = if facts[:os]['name'] == 'Debian' && facts[:os]['release']['major'].to_i == 10
+                             '4.0'
+                           else
+                             '3.4'
+                           end
+          it { is_expected.to contain_class('zabbix::repo').with_zabbix_version(zabbix_version) }
           it { is_expected.to contain_package('zabbix-sender').with_require('Class[Zabbix::Repo]') }
+        end
+
+        case facts[:os]['family']
+        when 'RedHat'
+          it { is_expected.to contain_yumrepo('zabbix-nonsupported') }
+          it { is_expected.to contain_yumrepo('zabbix') }
+        when 'Debian'
+          it { is_expected.to contain_apt__source('zabbix') }
+          it { is_expected.to contain_apt__key('zabbix-A1848F5') }
+          it { is_expected.to contain_apt__key('zabbix-FBABD5F') }
         end
       end
     end

@@ -468,7 +468,13 @@ class zabbix::web (
 
   # check if selinux is active and allow zabbix
   if fact('os.selinux.enabled') == true and $manage_selinux {
+    # allow httpd to speak to the zabbix service
     selboolean{'httpd_can_connect_zabbix':
+      persistent => true,
+      value      => 'on',
+    }
+    # allow httpd to speak to the database
+    selboolean{'httpd_can_network_connect_db':
       persistent => true,
       value      => 'on',
     }

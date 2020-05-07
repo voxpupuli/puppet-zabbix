@@ -29,10 +29,6 @@
       "version_requirement": ">= 2.1.0 < 8.0.0"
     },
     {
-      "name": "puppetlabs/concat",
-      "version_requirement": ">= 4.1.0 < 7.0.0"
-    },
-    {
       "name": "camptocamp/systemd",
       "version_requirement": ">= 0.4.0 < 3.0.0"
     },
@@ -117,7 +113,8 @@
     {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
-        "8"
+        "9",
+        "10"
       ]
     },
     {
@@ -150,6 +147,14 @@
       "operatingsystemrelease": [
         "9",
         "10"
+      ]
+    },
+    {
+      "operatingsystem": "windows",
+      "operatingsystemrelease": [
+        "2012",
+        "2012 R2",
+        "2016"
       ]
     }
   ]
