@@ -60,7 +60,7 @@ define zabbix::startup (
     file { "/etc/rc.d/init.d/${service_name}":
       ensure  => file,
       mode    => '0755',
-      content => epp('zabbix/zabbix-agent-aix.init.epp', { 'pidfile' => $pidfile, 'agent_configfile_path' => $agent_configfile_path, 'zabbix_user' => $zabbix_user }), 
+      content => epp('zabbix/zabbix-agent-aix.init.epp', { 'pidfile' => $pidfile, 'agent_configfile_path' => $agent_configfile_path, 'zabbix_user' => $zabbix_user }),
     }
     file { "/etc/rc.d/rc2.d/S999${service_name}":
       ensure => 'link',

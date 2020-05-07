@@ -32,7 +32,7 @@ class zabbix::params {
       $zabbix_package_provider  = undef
       $agent_loadmodulepath     = '/usr/lib/modules'
     }
-   'AIX': {
+    'AIX': {
       $manage_repo              = false
       $zabbix_package_provider  = 'yum'
       $zabbix_package_agent     = 'zabbix-agent'

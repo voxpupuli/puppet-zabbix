@@ -408,7 +408,7 @@ class zabbix::agent (
       ensure   => $zabbix_package_state,
       require  => Class['zabbix::repo'],
       tag      => 'zabbix',
-      provider =>  $package_provider,
+      provider =>  $zabbix_package_provider,
     }
   }
 
