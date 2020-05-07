@@ -1,10 +1,10 @@
-#!/bin/ksh
-# THIS FILE IS MANAGED BY PUPPET
-
 <%- | String $pidfile,
       String $agent_configfile_path,
       String $zabbix_user
 | -%>
+#!/bin/ksh
+# THIS FILE IS MANAGED BY PUPPET
+
 
 ##################################################
 # name: start zabbix agent
