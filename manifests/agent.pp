@@ -471,15 +471,18 @@ class zabbix::agent (
 
   # Manage firewall
   if $manage_firewall {
-    firewall { '150 zabbix-agent':
-      dport  => $listenport,
-      proto  => 'tcp',
-      action => 'accept',
-      source => $server,
-      state  => [
-        'NEW',
-        'RELATED',
-        'ESTABLISHED'],
+    $servers = split($server, ',')
+    $servers.each |$_server| {
+      firewall { "150 zabbix-agent from ${_server}":
+        dport  => $listenport,
+        proto  => 'tcp',
+        action => 'accept',
+        source => $_server,
+        state  => [
+          'NEW',
+          'RELATED',
+          'ESTABLISHED'],
+      }
     }
   }
   # the agent doesn't work perfectly fine with selinux
