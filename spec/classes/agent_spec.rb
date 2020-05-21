@@ -167,24 +167,50 @@ describe 'zabbix::agent' do
         it { is_expected.to contain_file(config_path).with_content %r{^HostInterface=testinterface$} }
       end
 
-      context 'when declaring manage_firewall is true' do
+      context 'when declaring manage_firewall is true with single server' do
         let :params do
           {
+            server: '192.168.1.1',
             manage_firewall: true
           }
         end
 
-        it { is_expected.to contain_firewall('150 zabbix-agent') }
+        it { is_expected.to contain_firewall('150 zabbix-agent from 192.168.1.1') }
       end
 
-      context 'when declaring manage_firewall is false' do
+      context 'when declaring manage_firewall is false with single server' do
         let :params do
           {
+            server: '192.168.1.1',
             manage_firewall: false
           }
         end
 
-        it { is_expected.not_to contain_firewall('150 zabbix-agent') }
+        it { is_expected.not_to contain_firewall('150 zabbix-agent from 192.168.1.1') }
+      end
+
+      context 'when declaring manage_firewall is true with multiple servers' do
+        let :params do
+          {
+            server: '192.168.1.1,10.11.12.13',
+            manage_firewall: true
+          }
+        end
+
+        it { is_expected.to contain_firewall('150 zabbix-agent from 192.168.1.1') }
+        it { is_expected.to contain_firewall('150 zabbix-agent from 10.11.12.13') }
+      end
+
+      context 'when declaring manage_firewall is false with multiple servers' do
+        let :params do
+          {
+            server: '192.168.1.1,10.11.12.13',
+            manage_firewall: false
+          }
+        end
+
+        it { is_expected.not_to contain_firewall('150 zabbix-agent from 192.168.1.1') }
+        it { is_expected.not_to contain_firewall('150 zabbix-agent from 10.11.12.13') }
       end
 
       context 'it creates a startup script' do
