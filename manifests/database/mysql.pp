@@ -30,7 +30,7 @@ class zabbix::database::mysql (
   #
   # Adjustments for version 3.0/4.0 - structure of package with sqls differs from previous versions
   case $zabbix_version {
-    /^(3|4).\d+$/: {
+    /^[345]\.\d+$/: {
       if ($database_schema_path == false) or ($database_schema_path == '') {
         $schema_path   = '/usr/share/doc/zabbix-*-mysql*'
       }
