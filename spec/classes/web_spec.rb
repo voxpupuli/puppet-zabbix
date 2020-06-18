@@ -177,8 +177,8 @@ describe 'zabbix::web' do
             super().merge(database_schema: 'zabbix')
           end
 
-          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['SCHEMA'\]   = 'zabbix'}) }
-          
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['SCHEMA'\] = 'zabbix'}) }
+
         end
 
         it { is_expected.to contain_apache__vhost('zabbix.example.com').with_name('zabbix.example.com') }
