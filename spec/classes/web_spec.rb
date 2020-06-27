@@ -166,6 +166,14 @@ describe 'zabbix::web' do
           it { is_expected.not_to contain_class('zabbix::resources::web') }
         end
 
+        describe 'with parameter: database_schema' do
+          let :params do
+            super().merge(database_schema: 'zabbix')
+          end
+
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['SCHEMA'\] = 'zabbix'}) }
+        end
+
         it { is_expected.to contain_apache__vhost('zabbix.example.com').with_name('zabbix.example.com') }
 
         context 'with database_* settings' do
