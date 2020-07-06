@@ -11,7 +11,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
         selectInterfaces: %w[interfaceid type main ip port useip],
         selectGroups: ['name'],
         selectMacros: %w[macro value],
-        output: %w[host proxy_hostid]
+        output: %w[host proxy_hostid tls_accept tls_connect tls_issuer tls_subject tls_psk tls_psk_identity]
       }
     )
 
@@ -23,6 +23,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
         id: h['hostid'].to_i,
         name: h['host'],
         interfaceid: interface['interfaceid'].to_i,
+        interfacetype: interface['type'].to_i,
         ipaddress: interface['ip'],
         use_ip: use_ip,
         port: interface['port'].to_i,
@@ -30,7 +31,13 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
         group_create: nil,
         templates: h['parentTemplates'].map { |x| x['host'] },
         macros: h['macros'].map { |macro| { macro['macro'] => macro['value'] } },
-        proxy: proxies.select { |_name, id| id == h['proxy_hostid'] }.keys.first
+        proxy: proxies.select { |_name, id| id == h['proxy_hostid'] }.keys.first,
+        tls_accept: h['tls_accept'].to_i,
+        tls_connect: h['tls_connect'].to_i,
+        tls_issuer: h['tls_issuer'],
+        tls_subject: h['tls_subject'],
+        tls_psk: h['tls_psk'],
+        tls_psk_identity: h['tls_psk_identity']
       )
     end
   end
@@ -58,7 +65,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
       proxy_hostid: proxy_hostid,
       interfaces: [
         {
-          type: 1,
+          type: @resource[:interfacetype],
           main: 1,
           ip: @resource[:ipaddress],
           dns: @resource[:hostname],
@@ -67,7 +74,13 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
         }
       ],
       templates: templates,
-      groups: groups
+      groups: groups,
+      tls_connect: @resource[:tls_connect],
+      tls_accept: @resource[:tls_accept],
+      tls_issuer: @resource[:tls_issuer],
+      tls_subject: @resource[:tls_subject],
+      tls_psk_identity: @resource[:tls_psk_identity],
+      tls_psk: @resource[:tls_psk]
     )
   end
 
@@ -110,6 +123,16 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
   # zabbix_host properties
   #
   mk_resource_methods
+
+  def interfacetype=(int)
+    zbx.query(
+      method: 'hostinterface.update',
+      params: {
+        interfaceid: @property_hash[:interfaceid],
+        type: int
+      }
+    )
+  end
 
   def ipaddress=(string)
     zbx.query(
@@ -193,4 +216,41 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
       proxy_hostid: zbx.proxies.get_id(host: string)
     )
   end
+
+  def tls_connect=(int)
+    @property_hash[:tls_connect]=int
+  end
+
+  def tls_accept=(int)
+    @property_hash[:tls_accept]=int
+  end
+
+  def tls_issuer=(string)
+    @property_hash[:tls_issuer]=string
+  end
+
+  def tls_subject=(string)
+    @property_hash[:tls_subject]=string
+  end
+
+  def tls_psk_identity=(string)
+    @property_hash[:tls_psk_identity]=string
+  end
+
+  def tls_psk=(string)
+    @property_hash[:tls_psk]=string
+  end
+
+  def flush
+    zbx.hosts.create_or_update(
+      host: @resource[:hostname],
+      tls_accept: @property_hash[:tls_accept],
+      tls_connect: @property_hash[:tls_connect],
+      tls_psk: @property_hash[:tls_psk],
+      tls_psk_identity: @property_hash[:tls_psk_identity],
+      tls_subject: @property_hash[:tls_subject],
+      tls_issuer: @property_hash[:tls_issuer],
+     )
+  end
+
 end

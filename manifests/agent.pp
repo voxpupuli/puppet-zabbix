@@ -172,6 +172,14 @@
 # [*tlscertfile*]
 #   Full pathname of a file containing the proxy certificate or certificate chain.
 #
+# [*tlscertissuer*]
+#   If you want to configure the resource (i.e. manage_resources is true) you have to specifiy the issuer.
+#   it must match the issuer of tlscertfile.
+#
+# [*tlscertsubject*]
+#   If you want to configure the resource (i.e. manage_resources is true) you have to specifiy the subject.
+#   it must match the subject of tlscertfile.
+#
 # [*tlsconnect*]
 #   How the proxy should connect to Zabbix server. Used for an active proxy, ignored on a passive proxy.
 #
@@ -183,6 +191,10 @@
 #
 # [*tlspskfile*]
 #   Full pathname of a file containing the pre-shared key.
+#
+# [*tlspsk*]
+#   If you want to configure the resource (i.e manage_resources is true) you have to specifiy the PSK that.
+#   tlspskfile will be created with the correct content.
 #
 # [*tlspskidentity*]
 #   Unique, case sensitive string used to identify the pre-shared key.
@@ -293,10 +305,13 @@ class zabbix::agent (
   $tlsaccept                                      = $zabbix::params::agent_tlsaccept,
   $tlscafile                                      = $zabbix::params::agent_tlscafile,
   $tlscertfile                                    = $zabbix::params::agent_tlscertfile,
+  $tlscertissuer                                  = $zabbix::params::agent_tlscertissuer,
+  $tlscertsubject                                 = $zabbix::params::agent_tlscertsubject,
   $tlsconnect                                     = $zabbix::params::agent_tlsconnect,
   $tlscrlfile                                     = $zabbix::params::agent_tlscrlfile,
   $tlskeyfile                                     = $zabbix::params::agent_tlskeyfile,
   $tlspskfile                                     = $zabbix::params::agent_tlspskfile,
+  $tlspsk                                         = $zabbix::params::agent_tlspsk,
   $tlspskidentity                                 = $zabbix::params::agent_tlspskidentity,
   $tlsservercertissuer                            = $zabbix::params::agent_tlsservercertissuer,
   $tlsservercertsubject                           = $zabbix::params::agent_tlsservercertsubject,
@@ -346,6 +361,29 @@ class zabbix::agent (
     default => $listenip,
   }
 
+  # If the user specified a psk but no file we will use the default filename.
+  # If only the file is specified we configure it.
+  # If neither file nor psk is specified nothing is configured.
+  if $tlspsk and ! $tlspskfile {
+    $real_tlspskfile = $zabbix::params::default_pskfile_path
+  }else{
+    $real_tlspskfile = $tlspskfile
+  }
+
+  # Ensure the content of the psk file
+  if $real_tlspskfile and $tlspsk {
+    file { $real_tlspskfile:
+      ensure  => file,
+      owner   => $agent_config_owner,
+      group   => $agent_config_group,
+      mode    => '0440',
+      notify  => Service[$servicename],
+      require => Package[$zabbix_package_agent],
+      replace => true,
+      content => $tlspsk,
+    }
+  }
+
   # So if manage_resources is set to true, we can send some data
   # to the puppetdb. We will include an class, otherwise when it
   # is set to false, you'll get warnings like this:
@@ -375,15 +413,21 @@ class zabbix::agent (
     $_hostname = pick($hostname, $facts['networking']['fqdn'])
 
     class { 'zabbix::resources::agent':
-      hostname     => $_hostname,
-      ipaddress    => $listen_ip,
-      use_ip       => $agent_use_ip,
-      port         => $listenport,
-      groups       => [$groups].flatten(),
-      group_create => $zbx_group_create,
-      templates    => $zbx_templates,
-      macros       => $zbx_macros,
-      proxy        => $use_proxy,
+      hostname         => $_hostname,
+      ipaddress        => $listen_ip,
+      use_ip           => $agent_use_ip,
+      port             => $listenport,
+      groups           => [$groups].flatten(),
+      group_create     => $zbx_group_create,
+      templates        => $zbx_templates,
+      macros           => $zbx_macros,
+      proxy            => $use_proxy,
+      tls_accept       => $tlsaccept,
+      tls_connect      => $tlsconnect,
+      tls_issuer       => $tlscertissuer,
+      tls_subject      => $tlscertsubject,
+      tls_psk_identity => $tlspskidentity,
+      tls_psk          => $tlspsk,
     }
   }
 
