@@ -58,6 +58,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
     groups = transform_to_array_hash('groupid', gids)
 
     proxy_hostid = @resource[:proxy].nil? || @resource[:proxy].empty? ? nil : zbx.proxies.get_id(host: @resource[:proxy])
+    interfacetype = @resource[:interfacetype].nil? ? 1 : @resource[:interfacetype]
 
     # Now we create the host
     zbx.hosts.create(
@@ -65,7 +66,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
       proxy_hostid: proxy_hostid,
       interfaces: [
         {
-          type: @resource[:interfacetype],
+          type: interfacetype,
           main: 1,
           ip: @resource[:ipaddress],
           dns: @resource[:hostname],
