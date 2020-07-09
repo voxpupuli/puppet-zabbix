@@ -31,7 +31,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
         templates: h['parentTemplates'].map { |x| x['host'] },
         macros: h['macros'].map { |macro| { macro['macro'] => macro['value'] } },
         proxy: proxies.select { |_name, id| id == h['proxy_hostid'] }.keys.first,
-        type: interface['type'].to_i,
+        type: interface['type'].to_i
       )
     end
   end
