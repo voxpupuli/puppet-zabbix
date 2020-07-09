@@ -16,7 +16,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
     )
 
     api_hosts.map do |h|
-      interface = h['interfaces'].select { |i| i['type'].to_i == 1 && i['main'].to_i == 1 }.first
+      interface = h['interfaces'].select { |i| i['main'].to_i == 1 }.first
       use_ip = !interface['useip'].to_i.zero?
       new(
         ensure: :present,
