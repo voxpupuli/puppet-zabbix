@@ -38,14 +38,14 @@ class zabbix::resources::agent (
   }
 
   @@zabbix_host { $hostname:
-    ipaddress      => $ipaddress,
-    use_ip         => $use_ip,
-    port           => $port,
-    groups         => $groups,
-    group_create   => $group_create,
-    templates      => $templates,
-    macros         => $macros,
-    proxy          => $proxy,
-    interfacetype  => $interfacetype,
+    ipaddress     => $ipaddress,
+    use_ip        => $use_ip,
+    port          => $port,
+    groups        => $groups,
+    group_create  => $group_create,
+    templates     => $templates,
+    macros        => $macros,
+    proxy         => $proxy,
+    interfacetype => $interfacetype,
   }
 }
