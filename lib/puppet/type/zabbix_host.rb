@@ -48,6 +48,10 @@ Puppet::Type.newtype(:zabbix_host) do
     desc 'The IP address of the machine running zabbix agent.'
   end
 
+  newproperty(:interfacetype, int: 1) do
+    desc 'Interface type. 1 for zabbix agent.'
+  end
+
   newproperty(:use_ip, boolean: true) do
     desc 'Using ipadress instead of dns to connect.'
 
