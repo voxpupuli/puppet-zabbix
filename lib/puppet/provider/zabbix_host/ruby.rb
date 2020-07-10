@@ -2,6 +2,11 @@ require_relative '../zabbix'
 Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix) do
   confine feature: :zabbixapi
 
+  def initialize(value = {})
+    super(value)
+    @property_flush = {}
+  end
+
   def self.instances
     proxies = zbx.proxies.all
     api_hosts = zbx.query(
@@ -59,6 +64,10 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
 
     proxy_hostid = @resource[:proxy].nil? || @resource[:proxy].empty? ? nil : zbx.proxies.get_id(host: @resource[:proxy])
     interfacetype = @resource[:interfacetype].nil? ? 1 : @resource[:interfacetype]
+    ipaddress = @resource[:ipaddress].nil? ? "" : @resource[:ipaddress]
+
+    tls_accept = @resource[:tls_accept].nil? ? 1 : @resource[:tls_accept] 
+    tls_connect = @resource[:tls_connect].nil? ? 1 : @resource[:tls_connect] 
 
     # Now we create the host
     zbx.hosts.create(
@@ -68,7 +77,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
         {
           type: interfacetype,
           main: 1,
-          ip: @resource[:ipaddress],
+          ip: ipaddress,
           dns: @resource[:hostname],
           port: @resource[:port],
           useip: @resource[:use_ip] ? 1 : 0
@@ -76,13 +85,14 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
       ],
       templates: templates,
       groups: groups,
-      tls_connect: @resource[:tls_connect],
-      tls_accept: @resource[:tls_accept],
+      tls_connect: tls_connect,
+      tls_accept: tls_accept,
       tls_issuer: @resource[:tls_issuer],
       tls_subject: @resource[:tls_subject],
       tls_psk_identity: @resource[:tls_psk_identity],
       tls_psk: @resource[:tls_psk]
     )
+    @property_flush[:created] = true
   end
 
   def exists?
@@ -91,6 +101,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
 
   def destroy
     zbx.hosts.delete(zbx.hosts.get_id(host: @resource[:hostname]))
+    @property_flush[:destroyed] = true
   end
 
   #
@@ -243,10 +254,23 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
   end
 
   def flush
-    zbx.hosts.create_or_update(
+    update unless @property_flush[:created] || @property_flush[:destroyed]
+
+    # Update @property_hash so that the output of puppet resource is correct
+    if @property_flush[:destroyed]
+      @property_hash.clear
+      @property_hash[:ensure] = :absent
+    end
+  end
+
+  def update
+    tls_accept = @property_hash[:tls_accept].nil? ? 1 : @property_hash[:tls_accept] 
+    tls_connect = @property_hash[:tls_connect].nil? ? 1 : @property_hash[:tls_connect] 
+
+    zbx.hosts.update(
       host: @resource[:hostname],
-      tls_accept: @property_hash[:tls_accept],
-      tls_connect: @property_hash[:tls_connect],
+      tls_accept: tls_accept,
+      tls_connect: tls_connect,
       tls_psk: @property_hash[:tls_psk],
       tls_psk_identity: @property_hash[:tls_psk_identity],
       tls_subject: @property_hash[:tls_subject],
