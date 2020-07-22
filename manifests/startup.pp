@@ -56,6 +56,16 @@ define zabbix::startup (
       mode    => '0755',
       content => template("zabbix/${name}-${osfamily_downcase}.init.erb"),
     }
+  } elsif $facts['os']['family'] in ['AIX'] {
+    file { "/etc/rc.d/init.d/${service_name}":
+      ensure  => file,
+      mode    => '0755',
+      content => epp('zabbix/zabbix-agent-aix.init.epp', { 'pidfile' => $pidfile, 'agent_configfile_path' => $agent_configfile_path, 'zabbix_user' => $zabbix_user }),
+    }
+    file { "/etc/rc.d/rc2.d/S999${service_name}":
+      ensure => 'link',
+      target => "/etc/rc.d/init.d/${service_name}",
+    }
   } elsif ($facts['os']['family'] == 'windows') {
     exec { "install_agent_${name}":
       command  => "& 'C:\\Program Files\\Zabbix Agent\\zabbix_agentd.exe' --config ${agent_configfile_path} --install",
@@ -64,6 +74,6 @@ define zabbix::startup (
       notify   => Service[$name],
     }
   } else {
-    fail('We currently only support Debian, Redhat and Windows osfamily as non-systemd')
+    fail('We currently only support Debian, Redhat, AIX and Windows osfamily as non-systemd')
   }
 }

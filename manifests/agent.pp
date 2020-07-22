@@ -405,9 +405,10 @@ class zabbix::agent (
   else {
     # Installing the package
     package { $zabbix_package_agent:
-      ensure  => $zabbix_package_state,
-      require => Class['zabbix::repo'],
-      tag     => 'zabbix',
+      ensure   => $zabbix_package_state,
+      require  => Class['zabbix::repo'],
+      tag      => 'zabbix',
+      provider =>  $zabbix_package_provider,
     }
   }
 
@@ -434,12 +435,18 @@ class zabbix::agent (
   # Controlling the 'zabbix-agent' service
   if str2bool(getvar('::systemd')) {
     $service_provider = 'systemd'
+    $service_path = undef
+  } elsif $facts['os']['name'] == 'AIX' {
+    $service_provider = 'init'
+    $service_path = '/etc/rc.d/init.d'
   } else {
     $service_provider = undef
+    $service_path = undef
   }
   service { $servicename:
     ensure     => $service_ensure,
     enable     => $service_enable,
+    path       => $service_path,
     provider   => $service_provider,
     hasstatus  => true,
     hasrestart => true,

@@ -32,6 +32,18 @@ class zabbix::params {
       $zabbix_package_provider  = undef
       $agent_loadmodulepath     = '/usr/lib/modules'
     }
+    'AIX': {
+      $manage_repo              = false
+      $zabbix_package_provider  = 'yum'
+      $zabbix_package_agent     = 'zabbix-agent'
+      $agent_configfile_path    = '/etc/zabbix/zabbix_agentd.conf'
+      $agent_config_owner       = 'zabbix'
+      $agent_zabbix_user        = 'zabbix'
+      $agent_config_group       = 'zabbix'
+      $agent_pidfile            = '/var/run/zabbix/zabbix_agentd.pid'
+      $agent_servicename        = 'zabbix-agent'
+    }
+
     'Archlinux': {
       $server_fpinglocation     = '/usr/bin/fping'
       $server_fping6location    = '/usr/bin/fping6'
