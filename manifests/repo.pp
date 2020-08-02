@@ -92,7 +92,6 @@ class zabbix::repo (
           gpgkey   => $gpgkey_nonsupported,
           priority => '1',
         }
-
       }
       'Debian' : {
         if ($manage_apt) {

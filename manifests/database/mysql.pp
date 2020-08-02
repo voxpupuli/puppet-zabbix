@@ -23,8 +23,8 @@ class zabbix::database::mysql (
   $database_user        = '',
   $database_password    = '',
   $database_host        = '',
-  $database_path        = $zabbix::params::database_path,) inherits zabbix::params {
-
+  $database_path        = $zabbix::params::database_path,
+) inherits zabbix::params {
   assert_private()
 
   #

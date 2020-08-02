@@ -423,8 +423,7 @@ class zabbix::proxy (
   $loadmodulepath                  = $zabbix::params::proxy_loadmodulepath,
   $loadmodule                      = $zabbix::params::proxy_loadmodule,
   Boolean $manage_selinux          = $zabbix::params::manage_selinux,
-  ) inherits zabbix::params {
-
+) inherits zabbix::params {
   # check osfamily, Arch is currently not supported for web
   if $facts['os']['family'] == 'Archlinux' {
     fail('Archlinux is currently not supported for zabbix::proxy ')
@@ -524,7 +523,8 @@ class zabbix::proxy (
     }
 
     Package["zabbix-proxy-${db}"] {
-      require => Class['zabbix::repo'] }
+      require => Class['zabbix::repo']
+    }
   }
 
   # Now we are going to install the correct packages.
@@ -564,40 +564,39 @@ class zabbix::proxy (
       subscribe  => [
         File[$proxy_configfile_path],
         Class['zabbix::database']
-        ],
+      ],
       require    => [
         Package["zabbix-proxy-${db}"],
         File[$include_dir],
         File[$proxy_configfile_path],
         Class['zabbix::database']
-        ],
+      ],
     }
   }
-
 
   $before_database = $manage_service ? {
     true  => [
       Service[$proxy_service_name],
       Class["zabbix::database::${database_type}"]
-      ],
+    ],
     false => Class["zabbix::database::${database_type}"],
   }
 
   # if we want to manage the databases, we do
   # some stuff. (for maintaining database only.)
-  if $manage_database  {
-      class { 'zabbix::database':
-        database_type     => $database_type,
-        zabbix_type       => 'proxy',
-        database_name     => $database_name,
-        database_user     => $database_user,
-        database_password => $database_password,
-        database_host     => $database_host,
-        zabbix_proxy      => $zabbix_proxy,
-        zabbix_proxy_ip   => $zabbix_proxy_ip,
-        before            => $before_database,
-      }
+  if $manage_database {
+    class { 'zabbix::database':
+      database_type     => $database_type,
+      zabbix_type       => 'proxy',
+      database_name     => $database_name,
+      database_user     => $database_user,
+      database_password => $database_password,
+      database_host     => $database_host,
+      zabbix_proxy      => $zabbix_proxy,
+      zabbix_proxy_ip   => $zabbix_proxy_ip,
+      before            => $before_database,
     }
+  }
 
   # Configuring the zabbix-proxy configuration file
   file { $proxy_configfile_path:
@@ -625,16 +624,16 @@ class zabbix::proxy (
       state  => [
         'NEW',
         'RELATED',
-        'ESTABLISHED'],
+        'ESTABLISHED',
+      ],
     }
   }
 
   # check if selinux is active and allow zabbix
   if fact('os.selinux.enabled') == true and $manage_selinux {
-    selboolean{'zabbix_can_network':
+    selboolean { 'zabbix_can_network':
       persistent => true,
       value      => 'on',
     }
   }
-
 }

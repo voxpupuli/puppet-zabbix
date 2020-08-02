@@ -41,14 +41,12 @@
 # Copyright (c) [2015] [Robert Tisdale]
 #
 
-
 # Check if apache_status is true, installs Zapache scripts. Defaults to false.
 class zabbix::zapache (
   Boolean $apache_status = $zabbix::params::apache_status,
-  ) inherits zabbix::params {
-
+) inherits zabbix::params {
   if $apache_status {
-    file { [ '/var/lib/zabbixsrv/','/var/lib/zabbixsrv/externalscripts/']:
+    file { ['/var/lib/zabbixsrv/','/var/lib/zabbixsrv/externalscripts/']:
       ensure => directory,
       owner  => 'root',
       group  => 'root',
@@ -76,7 +74,7 @@ class zabbix::zapache (
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      require => [ Package['zabbix-agent'],Package['httpd'] ],
+      require => [Package['zabbix-agent'],Package['httpd']],
       notify  => Service['httpd'],
     }
   }

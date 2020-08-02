@@ -309,7 +309,6 @@ class zabbix::agent (
   String $service_type                            = $zabbix::params::service_type,
   Boolean $manage_startup_script                  = $zabbix::params::manage_startup_script,
 ) inherits zabbix::params {
-
   # the following two codeblocks are a bit blargh. The correct default value for
   # $real_additional_service_params and $type changes based on the value of $zabbix_version
   # We handle this in the params.pp, but that doesn't work if somebody provides a specific
@@ -408,13 +407,13 @@ class zabbix::agent (
       ensure   => $zabbix_package_state,
       require  => Class['zabbix::repo'],
       tag      => 'zabbix',
-      provider =>  $zabbix_package_provider,
+      provider => $zabbix_package_provider,
     }
   }
 
   # Ensure that the correct config file is used.
   if $manage_startup_script {
-    zabbix::startup {$servicename:
+    zabbix::startup { $servicename:
       pidfile                   => $pidfile,
       agent_configfile_path     => $agent_configfile_path,
       zabbix_user               => $zabbix_user,
@@ -488,14 +487,15 @@ class zabbix::agent (
         state  => [
           'NEW',
           'RELATED',
-          'ESTABLISHED'],
+          'ESTABLISHED',
+        ],
       }
     }
   }
   # the agent doesn't work perfectly fine with selinux
   # https://support.zabbix.com/browse/ZBX-11631
   if fact('os.selinux.enabled') == true and $manage_selinux {
-    selinux::module{'zabbix-agent':
+    selinux::module { 'zabbix-agent':
       ensure     => 'present',
       content_te => template('zabbix/selinux/zabbix-agent.te.erb'),
       before     => Service[$servicename],
