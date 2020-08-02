@@ -34,7 +34,7 @@ describe 'zabbix_hostgroup type', unless: default[:platform] =~ %r{debian-10-amd
       EOS
 
       # Cleanup old database
-      cleanup_zabbix
+      prepare_host
 
       apply_manifest(pp, catch_failures: true)
     end
