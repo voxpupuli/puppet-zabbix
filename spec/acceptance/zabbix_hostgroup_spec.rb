@@ -1,6 +1,7 @@
 require 'spec_helper_acceptance'
 require 'serverspec_type_zabbixapi'
 
+# rubocop:disable RSpec/LetBeforeExamples
 describe 'zabbix_hostgroup type', unless: default[:platform] =~ %r{debian-10-amd64} do
   context 'create zabbix_hostgroup resources' do
     it 'runs successfully' do

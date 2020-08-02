@@ -1,6 +1,7 @@
 require 'spec_helper_acceptance'
 require 'serverspec_type_zabbixapi'
 
+# rubocop:disable RSpec/LetBeforeExamples
 describe 'zabbix_application type', unless: default[:platform] =~ %r{debian-10-amd64} do
   context 'create zabbix_application resources' do
     # This will deploy a running Zabbix setup (server, web, db) which we can

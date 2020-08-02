@@ -1,6 +1,7 @@
 require 'spec_helper'
 require 'unit/puppet/x/spec_zabbix_types'
 
+# rubocop:disable RSpec/LetBeforeExamples
 describe Puppet::Type.type(:zabbix_host) do
   describe 'when validating params' do
     [
