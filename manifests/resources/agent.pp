@@ -30,6 +30,7 @@ class zabbix::resources::agent (
   $tls_subject             = undef,
   $tls_psk_identity        = undef,
   $tls_psk                 = undef,
+  $purge_templates         = undef,
 ) {
   if $group and $groups {
     fail("Got group and groups. This isn't support! Please use groups only.")
@@ -57,5 +58,6 @@ class zabbix::resources::agent (
     tls_subject      => $tls_subject,
     tls_psk_identity => $tls_psk_identity,
     tls_psk          => $tls_psk,
+    purge_templates  => $purge_templates,
   }
 }

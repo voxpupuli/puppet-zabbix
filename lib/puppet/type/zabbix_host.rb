@@ -185,6 +185,16 @@ Puppet::Type.newtype(:zabbix_host) do
     desc 'The PSK identity to identify this host.'
   end
 
+  newproperty(:purge_templates, boolean: true) do
+    desc 'Should we remove additional templates.'
+
+    newvalues(true, false)
+
+    munge do |value|
+      @resource.munge_boolean(value)
+    end
+  end
+
   autorequire(:file) { '/etc/zabbix/api.conf' }
 
   validate do

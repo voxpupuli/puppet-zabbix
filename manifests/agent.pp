@@ -323,6 +323,7 @@ class zabbix::agent (
   String $additional_service_params               = $zabbix::params::additional_service_params,
   String $service_type                            = $zabbix::params::service_type,
   Boolean $manage_startup_script                  = $zabbix::params::manage_startup_script,
+  Optional[Boolean] $purge_templates              = $zabbix::params::agent_purge_templates,
 ) inherits zabbix::params {
 
   # the following two codeblocks are a bit blargh. The correct default value for
@@ -428,6 +429,7 @@ class zabbix::agent (
       tls_subject      => $tlscertsubject,
       tls_psk_identity => $tlspskidentity,
       tls_psk          => $tlspsk,
+      purge_templates  => $purge_templates,
     }
   }
 

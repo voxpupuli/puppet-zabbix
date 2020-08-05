@@ -187,6 +187,14 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
     )
   end
 
+  def templates()
+    if @resource[:purge_templates] == true
+      @property_hash[:templates]
+    else
+      @property_hash[:templates] & @resource[:templates]
+    end
+  end
+
   def templates=(array)
     should_template_ids = get_templateids(array)
 
@@ -199,13 +207,19 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
         output: ['host']
       }
     ).first['parentTemplates'].map { |t| t['templateid'].to_i }
-    templates_clear = is_template_ids - should_template_ids
+    if @resource[:purge_templates] == true
+      templates_clear = is_template_ids - should_template_ids
+      new_template_ids = should_template_ids
+    else 
+      templates_clear = Array.new
+      new_template_ids = (is_template_ids + should_template_ids).uniq
+    end
 
     zbx.query(
       method: 'host.update',
       params: {
         hostid: @property_hash[:id],
-        templates: transform_to_array_hash('templateid', should_template_ids),
+        templates: transform_to_array_hash('templateid', new_template_ids),
         templates_clear: transform_to_array_hash('templateid', templates_clear)
       }
     )
@@ -251,6 +265,10 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
 
   def tls_psk=(string)
     @property_hash[:tls_psk]=string
+  end
+
+  def purge_templates()
+    @resource[:purge_templates]
   end
 
   def flush
