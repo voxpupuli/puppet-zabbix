@@ -440,7 +440,7 @@ class zabbix::agent (
     $service_provider = 'init'
     $service_path = '/etc/rc.d/init.d'
   } else {
-    $service_provider = undef
+    $service_provider = $::service_provider
     $service_path = undef
   }
   service { $servicename:
