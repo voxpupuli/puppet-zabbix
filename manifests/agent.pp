@@ -356,11 +356,16 @@ class zabbix::agent (
   # to network name. If more than 1 interfaces are available, we
   # can find the ipaddress of this specific interface if listenip
   # is set to for example "eth1" or "bond0.73".
-  $listen_ip = $listenip ? {
-    /^(e|lo|bond|lxc|tap|tun|virbr).*/ => fact("networking.interfaces.${listenip}.ip"),
-    '*' => undef,
-    default => $listenip,
+  $listen_array = flatten([$listenip])
+  $listen_ips = $listen_array.map |$listenip| {
+    $listenip ? {
+      /^(e|lo|bond|lxc|tap|tun|virbr).*/ => fact("networking.interfaces.${listenip}.ip"),
+      '*' => undef,
+      default => $listenip,
+    }
   }
+  $listen_ip = join($listen_ips,',')
+
 
   # If the user specified a psk but no file we will use the default filename.
   # If only the file is specified we configure it.
@@ -415,7 +420,7 @@ class zabbix::agent (
 
     class { 'zabbix::resources::agent':
       hostname         => $_hostname,
-      ipaddress        => $listen_ip,
+      ipaddress        => $listen_ips[0],
       use_ip           => $agent_use_ip,
       port             => $listenport,
       groups           => [$groups].flatten(),
