@@ -213,6 +213,10 @@
 #  cause problems with some config options of this module (e.g
 #  agent_configfile_path)
 #
+# [*service_provider*]
+#   Manually set the service provider for the agent service (override provider
+#   auto-detection).
+#
 # === Example
 #
 #  Basic installation:
@@ -308,6 +312,7 @@ class zabbix::agent (
   String $additional_service_params               = $zabbix::params::additional_service_params,
   String $service_type                            = $zabbix::params::service_type,
   Boolean $manage_startup_script                  = $zabbix::params::manage_startup_script,
+  Optional[String[1]] $service_provider           = $zabbix::params::service_provider,
 ) inherits zabbix::params {
 
   # the following two codeblocks are a bit blargh. The correct default value for
@@ -433,21 +438,26 @@ class zabbix::agent (
   }
 
   # Controlling the 'zabbix-agent' service
-  if str2bool(getvar('::systemd')) {
-    $service_provider = 'systemd'
-    $service_path = undef
-  } elsif $facts['os']['name'] == 'AIX' {
-    $service_provider = 'init'
-    $service_path = '/etc/rc.d/init.d'
+  if $service_provider == undef {
+    if str2bool(getvar('::systemd')) {
+      $real_service_provider = 'systemd'
+      $service_path = undef
+    } elsif $facts['os']['name'] == 'AIX' {
+      $real_service_provider = 'init'
+      $service_path = '/etc/rc.d/init.d'
+    } else {
+      $real_service_provider = undef
+      $service_path = undef
+    }
   } else {
-    $service_provider = $facts['service_provider']
+    $real_service_provider = $service_provider
     $service_path = undef
   }
   service { $servicename:
     ensure     => $service_ensure,
     enable     => $service_enable,
     path       => $service_path,
-    provider   => $service_provider,
+    provider   => $real_service_provider,
     hasstatus  => true,
     hasrestart => true,
     require    => Package[$zabbix_package_agent],

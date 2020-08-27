@@ -37,6 +37,10 @@
 #   When false, it does not care about service
 #   Default: true
 #
+# [*service_provider*]
+#   Manually set the service provider for the Zabbix server service (override
+#   provider auto-detection).
+#
 # [*server_configfile_path*]
 #   Server config file path defaults to /etc/zabbix/zabbix_server.conf
 #
@@ -301,6 +305,7 @@ class zabbix::server (
   Boolean $manage_repo                       = $zabbix::params::manage_repo,
   Boolean $manage_database                   = $zabbix::params::manage_database,
   Boolean $manage_service                    = $zabbix::params::manage_service,
+  Optional[String[1]] $service_provider      = $zabbix::params::service_provider,
   $server_configfile_path                    = $zabbix::params::server_configfile_path,
   $server_config_owner                       = $zabbix::params::server_config_owner,
   $server_config_group                       = $zabbix::params::server_config_group,
@@ -522,6 +527,7 @@ class zabbix::server (
       service { $server_service_name:
         ensure     => running,
         enable     => true,
+        provider   => $service_provider,
         hasstatus  => true,
         hasrestart => true,
         require    => $require_for_service,

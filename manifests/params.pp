@@ -161,6 +161,7 @@ class zabbix::params {
   $zabbix_web_ip                            = '127.0.0.1'
   $manage_database                          = true
   $manage_service                           = true
+  $service_provider                         = undef
   $default_vhost                            = false
   $manage_firewall                          = false
   $manage_apt                               = true
