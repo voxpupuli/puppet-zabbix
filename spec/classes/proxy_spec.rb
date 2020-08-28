@@ -207,6 +207,18 @@ describe 'zabbix::proxy' do
           it { is_expected.not_to contain_service('zabbix-proxy') }
         end
 
+        context 'when declaring a custom service provider' do
+          let :params do
+            {
+              service_provider: "#{facts['service_provider']}"
+            }
+          end
+
+          it { is_expected.to contain_service('zabbix-proxy').with(
+            provider: "#{facts['service_provider']}"
+          )}
+        end
+
         # Make sure we have set some vars in zabbix_proxy.conf file. This is configuration file is the same on all
         # operating systems. So we aren't testing this for all opeating systems, just this one.
         context 'with zabbix_proxy.conf settings' do

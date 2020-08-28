@@ -236,6 +236,18 @@ describe 'zabbix::agent' do
         it { is_expected.not_to contain_zabbix__startup(service_name) }
       end
 
+      context 'when declaring a custom service provider' do
+        let :params do
+          {
+            service_provider: "#{facts['service_provider']}"
+          }
+        end
+
+        it { is_expected.to contain_service(service_name).with(
+          provider: "#{facts['service_provider']}"
+        )}
+      end
+
       context 'when declaring zabbix_alias' do
         let :params do
           {

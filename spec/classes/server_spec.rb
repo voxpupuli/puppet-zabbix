@@ -198,6 +198,18 @@ describe 'zabbix::server' do
         it { is_expected.not_to contain_service('zabbix-server') }
       end
 
+      context 'when declaring a custom service provider' do
+        let :params do
+          {
+            service_provider: "#{facts['service_provider']}"
+          }
+        end
+
+        it { is_expected.to contain_service('zabbix-server').with(
+          provider: "#{facts['service_provider']}"
+        )}
+      end
+
       context 'with all zabbix_server.conf-related parameters' do
         let :params do
           {

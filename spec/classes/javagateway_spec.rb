@@ -85,6 +85,18 @@ describe 'zabbix::javagateway' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_java_gateway.conf').with_content %r{^START_POLLERS=5$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_java_gateway.conf').with_content %r{^TIMEOUT=15$} }
       end
+
+      context 'when declaring a custom service provider' do
+        let :params do
+          {
+            service_provider: "#{facts['service_provider']}"
+          }
+        end
+
+        it { is_expected.to contain_service('zabbix-java-gateway').with(
+          provider: "#{facts['service_provider']}"
+        )}
+      end
     end
   end
 end
