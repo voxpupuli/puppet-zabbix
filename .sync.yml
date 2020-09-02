@@ -13,3 +13,5 @@ Gemfile:
       - gem: 'zabbixapi'
 spec/spec_helper.rb:
   mock_with: ':mocha'
+spec/spec_helper_acceptance.rb:
+  unmanaged: false

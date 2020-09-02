@@ -232,9 +232,8 @@ class zabbix::web (
   $puppetgem                                                          = $zabbix::params::puppetgem,
   Boolean $manage_selinux                                             = $zabbix::params::manage_selinux,
 ) inherits zabbix::params {
-
   # check osfamily, Arch is currently not supported for web
-  if $facts['os']['family'] in [ 'Archlinux', 'Gentoo', ] {
+  if $facts['os']['family'] in ['Archlinux', 'Gentoo',] {
     fail("${facts['os']['family']} is currently not supported for zabbix::web")
   }
 
@@ -422,25 +421,25 @@ class zabbix::web (
       default_vhost   => $default_vhost,
       add_listen      => true,
       directories     => [
-        merge({
-          path     => '/usr/share/zabbix',
-          provider => 'directory',
+        merge( {
+            path     => '/usr/share/zabbix',
+            provider => 'directory',
         }, $directory_allow),
-        merge({
-          path     => '/usr/share/zabbix/conf',
-          provider => 'directory',
+        merge( {
+            path     => '/usr/share/zabbix/conf',
+            provider => 'directory',
         }, $directory_deny),
-        merge({
-          path     => '/usr/share/zabbix/api',
-          provider => 'directory',
+        merge( {
+            path     => '/usr/share/zabbix/api',
+            provider => 'directory',
         }, $directory_deny),
-        merge({
-          path     => '/usr/share/zabbix/include',
-          provider => 'directory',
+        merge( {
+            path     => '/usr/share/zabbix/include',
+            provider => 'directory',
         }, $directory_deny),
-        merge({
-          path     => '/usr/share/zabbix/include/classes',
-          provider => 'directory',
+        merge( {
+            path     => '/usr/share/zabbix/include/classes',
+            provider => 'directory',
         }, $directory_deny),
       ],
       custom_fragment => "
@@ -455,7 +454,7 @@ class zabbix::web (
    php_value date.timezone ${zabbix_timezone}",
       rewrites        => [
         {
-          rewrite_rule => ['^$ /index.php [L]'] }
+        rewrite_rule => ['^$ /index.php [L]'] }
       ],
       ssl             => $apache_use_ssl,
       ssl_cert        => $apache_ssl_cert,
@@ -469,12 +468,12 @@ class zabbix::web (
   # check if selinux is active and allow zabbix
   if fact('os.selinux.enabled') == true and $manage_selinux {
     # allow httpd to speak to the zabbix service
-    selboolean{'httpd_can_connect_zabbix':
+    selboolean { 'httpd_can_connect_zabbix':
       persistent => true,
       value      => 'on',
     }
     # allow httpd to speak to the database
-    selboolean{'httpd_can_network_connect_db':
+    selboolean { 'httpd_can_network_connect_db':
       persistent => true,
       value      => 'on',
     }

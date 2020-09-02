@@ -21,8 +21,7 @@ define zabbix::startup (
   String $service_type                                   = 'simple',
   Optional[Boolean] $manage_database                     = undef,
   Optional[String] $service_name                         = $name,
-  ) {
-
+) {
   case $title {
     /agent/: {
       assert_type(Stdlib::Absolutepath, $agent_configfile_path)

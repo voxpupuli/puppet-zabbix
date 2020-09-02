@@ -20,7 +20,7 @@ describe 'zabbix::server class' do
         class { 'zabbix::server': }
       EOS
 
-      cleanup_zabbix
+      prepare_host
 
       # Run it twice and test for idempotency
       apply_manifest(pp, catch_failures: true)

@@ -181,7 +181,6 @@ class zabbix (
   Optional[String[1]] $zabbix_user          = $zabbix::params::server_zabbix_user,
   Optional[String] $zabbix_server_name      = $zabbix::params::zabbix_server,
 ) inherits zabbix::params {
-
   class { 'zabbix::web':
     zabbix_url                               => $zabbix_url,
     database_type                            => $database_type,
@@ -320,5 +319,4 @@ class zabbix (
     database_collate    => $database_collate,
     database_tablespace => $database_tablespace,
   }
-
 }

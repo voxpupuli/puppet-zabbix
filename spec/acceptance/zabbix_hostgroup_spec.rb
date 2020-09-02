@@ -1,6 +1,7 @@
 require 'spec_helper_acceptance'
 require 'serverspec_type_zabbixapi'
 
+# rubocop:disable RSpec/LetBeforeExamples
 describe 'zabbix_hostgroup type', unless: default[:platform] =~ %r{debian-10-amd64} do
   context 'create zabbix_hostgroup resources' do
     it 'runs successfully' do
@@ -34,7 +35,7 @@ describe 'zabbix_hostgroup type', unless: default[:platform] =~ %r{debian-10-amd
       EOS
 
       # Cleanup old database
-      cleanup_zabbix
+      prepare_host
 
       apply_manifest(pp, catch_failures: true)
     end

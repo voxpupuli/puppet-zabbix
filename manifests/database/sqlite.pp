@@ -16,4 +16,4 @@
 #
 # Copyright 2014 Werner Dijkerman
 #
-class zabbix::database::sqlite () { }
+class zabbix::database::sqlite () {}

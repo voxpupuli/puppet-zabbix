@@ -23,12 +23,14 @@ class zabbix::resources::web (
     owner   => 'root',
     group   => 'root',
     mode    => '0400',
-    content => epp('zabbix/api.conf.epp', {
-      zabbix_url     => $zabbix_url,
-      zabbix_user    => $zabbix_user,
-      zabbix_pass    => $zabbix_pass,
-      apache_use_ssl => $apache_use_ssl,
-    }),
+    content => epp('zabbix/api.conf.epp',
+      {
+        zabbix_url     => $zabbix_url,
+        zabbix_user    => $zabbix_user,
+        zabbix_pass    => $zabbix_pass,
+        apache_use_ssl => $apache_use_ssl,
+      }
+    ),
   }
 
   Zabbix_proxy <<| |>> {

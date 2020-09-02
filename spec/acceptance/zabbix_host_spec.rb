@@ -1,6 +1,7 @@
 require 'spec_helper_acceptance'
 require 'serverspec_type_zabbixapi'
 
+# rubocop:disable RSpec/LetBeforeExamples
 describe 'zabbix_host type', unless: default[:platform] =~ %r{debian-10-amd64} do
   context 'create zabbix_host resources' do
     # This will deploy a running Zabbix setup (server, web, db) which we can
@@ -31,7 +32,7 @@ class { 'zabbix':
     # setup zabbix. Apache module isn't idempotent and requires a second run
     it 'works with no error on the first apply' do
       # Cleanup old database
-      cleanup_zabbix
+      prepare_host
 
       apply_manifest(pp1, catch_failures: true)
     end

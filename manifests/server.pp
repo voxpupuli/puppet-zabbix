@@ -384,7 +384,6 @@ class zabbix::server (
   Optional[String[1]] $zabbix_user           = $zabbix::params::server_zabbix_user,
   Boolean $manage_startup_script             = $zabbix::params::manage_startup_script,
 ) inherits zabbix::params {
-
   # the following codeblock is a bit blargh. The correct default value for
   # $real_additional_service_params changes based on the value of $zabbix_version
   # We handle this in the params.pp, but that doesn't work if somebody provides a specific
@@ -464,7 +463,7 @@ class zabbix::server (
 
   # Ensure that the correct config file is used.
   if $manage_startup_script {
-    zabbix::startup {'zabbix-server':
+    zabbix::startup { 'zabbix-server':
       pidfile                   => $pidfile,
       database_type             => $database_type,
       server_configfile_path    => $server_configfile_path,
@@ -515,7 +514,7 @@ class zabbix::server (
         Package["zabbix-server-${db}"],
         File[$include_dir],
         File[$server_configfile_path],
-        ],
+      ],
     }
   } else {
     if $manage_service {
@@ -558,7 +557,8 @@ class zabbix::server (
       state  => [
         'NEW',
         'RELATED',
-        'ESTABLISHED'],
+        'ESTABLISHED',
+      ],
     }
   }
 
@@ -574,8 +574,8 @@ class zabbix::server (
       ], {
         persistent => true,
         value      => 'on',
-      })
-    selinux::module{'zabbix-server':
+    })
+    selinux::module { 'zabbix-server':
       ensure    => 'present',
       source_te => 'puppet:///modules/zabbix/zabbix-server.te',
       before    => $dependency,
@@ -583,8 +583,8 @@ class zabbix::server (
     }
     # zabbix-server 3.4 introduced IPC via a socket in /tmp
     # https://support.zabbix.com/browse/ZBX-12567
-    if versioncmp($zabbix_version, '3.3') > 0  {
-      selinux::module{'zabbix-server-ipc':
+    if versioncmp($zabbix_version, '3.3') > 0 {
+      selinux::module { 'zabbix-server-ipc':
         ensure    => 'present',
         source_te => 'puppet:///modules/zabbix/zabbix-server-ipc.te',
         before    => $dependency,

@@ -1,6 +1,7 @@
 require 'spec_helper_acceptance'
 require 'serverspec_type_zabbixapi'
 
+# rubocop:disable RSpec/LetBeforeExamples
 describe 'zabbix_template_host type', unless: default[:platform] =~ %r{debian-10-amd64} do
   context 'create zabbix_template_host resources' do
     it 'runs successfully' do
@@ -46,7 +47,7 @@ describe 'zabbix_template_host type', unless: default[:platform] =~ %r{debian-10
       shell("echo '<?xml version=\"1.0\" encoding=\"UTF-8\"?><zabbix_export><version>3.0</version><date>2018-12-13T15:00:46Z</date><groups><group><name>Templates/Applications</name></group></groups><templates><template><template>TestTemplate1</template><name>TestTemplate1</name><description/><groups><group><name>Templates/Applications</name></group></groups><applications/><items/><discovery_rules/><macros/><templates/><screens/></template></templates></zabbix_export>' > /root/TestTemplate1.xml")
 
       # Cleanup old database
-      cleanup_zabbix
+      prepare_host
 
       apply_manifest(pp, catch_failures: true)
     end
