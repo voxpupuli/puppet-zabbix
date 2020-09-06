@@ -1,6 +1,8 @@
 def prepare_host
   if fact('os.family') == 'RedHat'
     shell('rm -rf /etc/yum.repos.d/Zabbix*.repo; rm -rf /var/cache/yum/x86_64/*/Zabbix*; yum clean all --verbose')
+    # The CentOS docker image has a yum config that won't install docs, to keep used space low
+    # zabbix packages their SQL file as doc, we need that for bootstrapping the database
     if fact('os.release.major').to_i == 7
       shell('sed -i "/nodocs/d" /etc/yum.conf')
     end
