@@ -212,8 +212,6 @@ class zabbix::params {
   $server_database_name                     = 'zabbix_server'
   $server_database_password                 = 'zabbix_server'
   $server_database_port                     = undef
-  $server_database_tlsconnect               = undef
-  $server_database_tlscafile                = undef
   $server_database_schema                   = undef
   $server_database_socket                   = undef
   $server_database_user                     = 'zabbix_server'
@@ -361,8 +359,6 @@ class zabbix::params {
   $proxy_database_name                      = 'zabbix_proxy'
   $proxy_database_password                  = 'zabbix-proxy'
   $proxy_database_port                      = undef
-  $proxy_database_tlsconnect                = undef
-  $proxy_database_tlscafile                 = undef
   $proxy_database_schema                    = undef
   $proxy_database_socket                    = undef
   $proxy_database_user                      = 'zabbix-proxy'
