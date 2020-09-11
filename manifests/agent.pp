@@ -81,6 +81,17 @@
 #
 # [*enableremotecommands*]
 #   Whether remote commands from zabbix server are allowed.
+#   Depreciated on zabbix 5. See allowkey/denykey below.
+#
+# [*allowkey*]
+#   Allow execution of those item keys that match a pattern.
+#   Key pattern is a wildcard expression that supports “*” character to match any number of any characters.
+#   Supported from zabbix 5.0. To allow remote commands set to system.run[*]
+#
+# [*denykey*]
+#   deny execution of those item keys that match a pattern.
+#   Key pattern is a wildcard expression that supports “*” character to match any number of any characters.
+#   Supported from zabbix 5.0 & defaults to system.run[*] (deny remote commands)
 #
 # [*logremotecommands*]
 #   Enable logging of executed shell commands as warnings.
@@ -262,6 +273,8 @@ class zabbix::agent (
   $debuglevel                                     = $zabbix::params::agent_debuglevel,
   $sourceip                                       = $zabbix::params::agent_sourceip,
   $enableremotecommands                           = $zabbix::params::agent_enableremotecommands,
+  $allowkey                                       = $zabbix::params::agent_allowkey,
+  $denykey                                        = $zabbix::params::agent_denykey,
   $logremotecommands                              = $zabbix::params::agent_logremotecommands,
   $server                                         = $zabbix::params::agent_server,
   $listenport                                     = $zabbix::params::agent_listenport,
