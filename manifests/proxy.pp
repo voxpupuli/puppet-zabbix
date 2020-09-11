@@ -108,6 +108,17 @@
 # [*database_port*]
 #   Database port when not using local socket. Ignored for sqlite.
 #
+# [*database_tlsconnect*]
+#   Setting this option enforces the use of TLS on connection to the database:
+#   required - connect using TLS
+#   verify_ca - connect using TLS and verify certificate
+#   verify_full - connect using TLS, verify certificate and verify that database identity specified by DBHost matches its certificate
+#   This parameter is supported since Zabbix 5.0.0.
+#
+# [*database_tlscafile*]
+#   Full pathname of a file containing the top-level CA(s) certificates for database certificate verification.
+#   This parameter is supported since Zabbix 5.0.0.
+#
 # [*localbuffer*]
 #   Proxy will keep data locally for N hours, even if the data have already been synced with the server
 #
@@ -367,6 +378,8 @@ class zabbix::proxy (
   $database_password               = $zabbix::params::proxy_database_password,
   $database_socket                 = $zabbix::params::proxy_database_socket,
   $database_port                   = $zabbix::params::proxy_database_port,
+  $database_tlsconnect             = $zabbix::params::proxy_database_tlsconnect,
+  $database_tlscafile              = $zabbix::params::proxy_database_tlscafile,
   $localbuffer                     = $zabbix::params::proxy_localbuffer,
   $offlinebuffer                   = $zabbix::params::proxy_offlinebuffer,
   $heartbeatfrequency              = $zabbix::params::proxy_heartbeatfrequency,
