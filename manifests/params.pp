@@ -169,6 +169,7 @@ class zabbix::params {
   $manage_resources                         = false
   $manage_vhost                             = true
   $database_path                            = '/usr/sbin'
+  $database_import_timeout                  = '600'
   $database_schema_path                     = false
   $database_type                            = 'postgresql'
   $apache_php_always_populate_raw_post_data = '-1'
