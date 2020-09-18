@@ -432,24 +432,19 @@ class zabbix::agent (
   }
 
   # Controlling the 'zabbix-agent' service
-  if str2bool(getvar('::systemd')) {
-    $service_provider = 'systemd'
-    $service_path = undef
-  } elsif $facts['os']['name'] == 'AIX' {
-    $service_provider = 'init'
-    $service_path = '/etc/rc.d/init.d'
-  } else {
-    $service_provider = undef
-    $service_path = undef
-  }
   service { $servicename:
-    ensure     => $service_ensure,
-    enable     => $service_enable,
-    path       => $service_path,
-    provider   => $service_provider,
-    hasstatus  => true,
-    hasrestart => true,
-    require    => Package[$zabbix_package_agent],
+    ensure  => $service_ensure,
+    enable  => $service_enable,
+    require => Package[$zabbix_package_agent],
+  }
+
+  # Override the service provider on AIX
+  # Doing it this way allows overriding it on other platforms
+  if $facts['os']['name'] == 'AIX' {
+    Service[$servicename] {
+      service_provider => 'init',
+      service_path     => '/etc/rc.d/init.d',
+    }
   }
 
   # Configuring the zabbix-agent configuration file

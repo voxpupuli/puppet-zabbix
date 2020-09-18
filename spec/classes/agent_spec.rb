@@ -68,24 +68,21 @@ describe 'zabbix::agent' do
           end
         else
           it do
-            is_expected.to contain_package(package_name).with(
-              ensure:   'present',
-              require:  'Class[Zabbix::Repo]',
-              tag:      'zabbix'
-            )
+            is_expected.to contain_package(package_name).
+              with_ensure('present').
+              with_tag('zabbix').
+              that_requires('Class[zabbix::repo]')
           end
           it do
-            is_expected.to contain_service(service_name).with(
-              ensure:     'running',
-              enable:     true,
-              hasstatus:  true,
-              hasrestart: true,
-              require:    "Package[#{package_name}]"
-            )
+            is_expected.to contain_service(service_name).
+              with_ensure('running').
+              with_enable(true).
+              with_service_provider(facts[:osfamily] == 'AIX' ? 'init' : nil).
+              that_requires("Package[#{package_name}]")
           end
 
           it { is_expected.to contain_file(include_dir).with_ensure('directory') }
-          it { is_expected.to contain_zabbix__startup(service_name).with(require: "Package[#{package_name}]") }
+          it { is_expected.to contain_zabbix__startup(service_name).that_requires("Package[#{package_name}]") }
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to contain_class('zabbix::params') }
         end
@@ -104,11 +101,11 @@ describe 'zabbix::agent' do
         when 'Debian'
           # rubocop:disable RSpec/RepeatedExample
           it { is_expected.to contain_class('zabbix::repo').with_zabbix_version(zabbix_version) }
-          it { is_expected.to contain_package('zabbix-agent').with_require('Class[Zabbix::Repo]') }
+          it { is_expected.to contain_package('zabbix-agent').that_requires('Class[Zabbix::Repo]') }
           it { is_expected.to contain_apt__source('zabbix') }
         when 'RedHat'
           it { is_expected.to contain_class('zabbix::repo').with_zabbix_version(zabbix_version) }
-          it { is_expected.to contain_package('zabbix-agent').with_require('Class[Zabbix::Repo]') }
+          it { is_expected.to contain_package('zabbix-agent').that_requires('Class[Zabbix::Repo]') }
           it { is_expected.to contain_yumrepo('zabbix-nonsupported') }
           it { is_expected.to contain_yumrepo('zabbix') }
           # rubocop:enable RSpec/RepeatedExample
@@ -347,11 +344,10 @@ describe 'zabbix::agent' do
         end
 
         it do
-          is_expected.to contain_service(service_name).with(
-            ensure:     'stopped',
-            enable:     false,
-            require:    "Package[#{package_name}]"
-          )
+          is_expected.to contain_service(service_name).
+            with_ensure('stopped').
+            with_enable(false).
+            that_requires("Package[#{package_name}]")
         end
       end
     end
