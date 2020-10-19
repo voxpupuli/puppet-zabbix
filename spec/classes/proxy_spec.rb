@@ -367,6 +367,17 @@ describe 'zabbix::proxy' do
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^EnableRemoteCommands=1$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LogRemoteCommands=1$} }
         end
+
+        context 'with zabbix_proxy.conf and version 5.0' do
+          let :params do
+            {
+              socketdir: '/var/run/zabbix',
+              zabbix_version: '5.0'
+            }
+          end
+
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^SocketDir=/var/run/zabbix} }
+        end
       end
     end
   end

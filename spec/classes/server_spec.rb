@@ -385,6 +385,17 @@ describe 'zabbix::server' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^HistoryIndexCacheSize=4M} }
       end
 
+      context 'with zabbix_server.conf and version 5.0' do
+        let :params do
+          {
+            socketdir: '/var/run/zabbix',
+            zabbix_version: '5.0'
+          }
+        end
+
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SocketDir=/var/run/zabbix} }
+      end
+
       context 'with zabbix_server.conf and system as logtype' do
         let :params do
           {
