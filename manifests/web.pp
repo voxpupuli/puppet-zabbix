@@ -157,6 +157,15 @@
 # [*puppetgem*]
 # Provider for the zabbixapi gem package
 #
+# [*sso_sp_cert*]
+# Path for SAML Service Provider (SP) certificate
+#
+# [*sso_sp_key*]
+# Path for SAML Service Provider (SP) private key
+#
+# [*sso_idp_cert*]
+# Path for SAML Identity Provider (IdP) certifiate
+#
 # === Example
 #
 #   When running everything on a single node, please check
@@ -231,6 +240,9 @@ class zabbix::web (
   Optional[Enum['never','allow','try','demand','hard']] $ldap_reqcert = $zabbix::params::ldap_reqcert,
   $puppetgem                                                          = $zabbix::params::puppetgem,
   Boolean $manage_selinux                                             = $zabbix::params::manage_selinux,
+  $sso_sp_cert                                                        = $zabbix::params::sso_sp_cert,
+  $sso_sp_key                                                         = $zabbix::params::sso_sp_key,
+  $sso_idp_cert                                                       = $zabbix::params::sso_idp_cert,
 ) inherits zabbix::params {
   # check osfamily, Arch is currently not supported for web
   if $facts['os']['family'] in ['Archlinux', 'Gentoo',] {

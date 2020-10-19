@@ -487,4 +487,10 @@ class zabbix::params {
   # the package provider we use to install the zabbixapi gem
   # The puppet agent needs to access it. So it's `puppet_gem` for AIO systems.
   $puppetgem = 'puppet_gem'
+
+  # paths for SAML certificates in zabbix.conf.php
+  $sso_sp_cert = undef
+  $sso_sp_key = undef
+  $sso_idp_cert = undef
+
 }

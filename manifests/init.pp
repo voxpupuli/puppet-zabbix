@@ -180,6 +180,9 @@ class zabbix (
   String $additional_service_params         = $zabbix::params::additional_service_params,
   Optional[String[1]] $zabbix_user          = $zabbix::params::server_zabbix_user,
   Optional[String] $zabbix_server_name      = $zabbix::params::zabbix_server,
+  Optional[String] $sso_sp_cert             = $zabbix::params::sso_sp_cert,
+  Optional[String] $sso_sp_key              = $zabbix::params::sso_sp_key,
+  Optional[String] $sso_idp_cert            = $zabbix::params::sso_idp_cert,
 ) inherits zabbix::params {
   class { 'zabbix::web':
     zabbix_url                               => $zabbix_url,
@@ -218,6 +221,9 @@ class zabbix (
     apache_php_max_input_time                => $apache_php_max_input_time,
     apache_php_always_populate_raw_post_data => $apache_php_always_populate_raw_post_data,
     manage_selinux                           => $manage_selinux,
+    sso_sp_cert                              => $sso_sp_cert,
+    sso_sp_key                               => $sso_sp_key,
+    sso_idp_cert                             => $sso_idp_cert,
     require                                  => Class['zabbix::server'],
   }
 

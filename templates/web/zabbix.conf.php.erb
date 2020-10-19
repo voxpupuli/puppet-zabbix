@@ -40,4 +40,14 @@ putenv("LDAPTLS_KEY=<%= @ldap_clientkey %>");
 <% if @ldap_reqcert %>
 putenv("TLS_REQCERT=<%= @ldap_reqcert %>");
 <% end %>
+
+<% if @sso_sp_cert %>
+$SSO['SP_CERT'] = '<%= @sso_sp_cert %>';
+<% end %>
+<% if @sso_sp_key %>
+$SSO['SP_KEY'] = '<%= @sso_sp_key %>';
+<% end %>
+<% if @sso_idp_cert %>
+$SSO['IDP_CERT'] = '<%= @sso_idp_cert %>';
+<% end %>
 ?>
