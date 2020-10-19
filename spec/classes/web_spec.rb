@@ -75,7 +75,7 @@ describe 'zabbix::web' do
                            'php5-pgsql'
                          end
 
-          packages = facts[:osfamily] == 'RedHat' ? ['zabbix-web-pgsql', 'zabbix-web'] : ['zabbix-frontend-php', pgsqlpackage]
+          packages = (facts[:operatingsystem] == 'CentOS' and facts[:operatingsystemmajrelease] == 7 and :zabbix_version >= 5) ? ['zabbix-web-pgsql-scl', 'zabbix-web'] : (facts[:osfamily] == 'RedHat' ? ['zabbix-web-pgsql', 'zabbix-web'] : ['zabbix-frontend-php', pgsqlpackage])
           packages.each do |package|
             it { is_expected.to contain_package(package) }
           end
@@ -104,7 +104,7 @@ describe 'zabbix::web' do
                            'php5-mysql'
                          end
 
-          packages = facts[:osfamily] == 'RedHat' ? ['zabbix-web-mysql', 'zabbix-web'] : ['zabbix-frontend-php', mysqlpackage]
+          packages = (facts[:operatingsystem] == 'CentOS' and facts[:operatingsystemmajrelease] == 7 and :zabbix_version >= 5) ? ['zabbix-web-mysql-scl', 'zabbix-web'] : (facts[:osfamily] == 'RedHat' ? ['zabbix-web-mysql', 'zabbix-web'] : ['zabbix-frontend-php', pgsqlpackage])
           packages.each do |package|
             it { is_expected.to contain_package(package) }
           end
