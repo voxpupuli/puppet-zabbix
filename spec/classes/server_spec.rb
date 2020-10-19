@@ -385,6 +385,17 @@ describe 'zabbix::server' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^HistoryIndexCacheSize=4M} }
       end
 
+      context 'with zabbix_server.conf and version 3.4' do
+        let :params do
+          {
+            startpreprocessors: '3',
+            zabbix_version: '3.4'
+          }
+        end
+
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartPreprocessors=3} }
+      end
+
       context 'with zabbix_server.conf and system as logtype' do
         let :params do
           {

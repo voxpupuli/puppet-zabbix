@@ -128,6 +128,16 @@ StartPollers=<%= @startpollers %>
 #
 StartIPMIPollers=<%= @startipmipollers %>
 
+<% if @zabbix_version.to_f >= 3.4 %>
+### Option: StartPreprocessors
+#       Number of pre-forked instances of preprocessing workers.
+#               The preprocessing manager process is automatically started when preprocessor worker is started.
+#
+# Mandatory: no
+# Range: 1-1000
+StartPreprocessors=<%= @startpreprocessors %>
+<% end %>
+
 ### Option: StartPollersUnreachable
 #	Number of pre-forked instances of pollers for unreachable hosts (including IPMI and Java).
 #	At least one poller for unreachable hosts must be running if regular, IPMI or Java pollers
