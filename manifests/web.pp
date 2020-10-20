@@ -337,37 +337,27 @@ class zabbix::web (
         ],
       }
     }
-    'CentOS': {
+    'CentOS', 'RedHat': {
       if versioncmp($facts['os']['release']['major'], '7') == 0 and versioncmp($zabbix_version, '5') >= 0 {
         #fix for rh-php72
         $zabbix_web_package = 'zabbix-web'
+
         package { "zabbix-web-${db}-scl":
           ensure  => $zabbix_package_state,
           before  => Package[$zabbix_web_package],
           require => Class['zabbix::repo'],
           tag     => 'zabbix',
         }
+      }
+      else {
+        $zabbix_web_package = 'zabbix-web'
 
-        include apache::mod::proxy
-        include apache::mod::proxy_fcgi
-        $apache_vhost_custom_fragment = ''
-      }
-      $fcgi_filematch = {
-          path     => '/usr/share/zabbix',
-          provider => 'directory',
-          addhandlers => [
-            {
-              extensions => [
-                'php',
-                'phar',
-              ],
-              handler => 'proxy:unix:/var/opt/rh/rh-php72/run/php-fpm/zabbix.sock|fcgi://localhost',
-            },
-          ],
-      }
-      $proxy_directory = {
-        path => 'fcgi://localhost:9000',
-        provider => 'proxy',
+        package { "zabbix-web-${db}":
+          ensure  => $zabbix_package_state,
+          before  => Package[$zabbix_web_package],
+          require => Class['zabbix::repo'],
+          tag     => 'zabbix',
+        }
       }
     }
     default: {
@@ -380,18 +370,6 @@ class zabbix::web (
         tag     => 'zabbix',
       }
 
-      $apache_vhost_custom_fragment = "
-   php_value max_execution_time ${apache_php_max_execution_time}
-   php_value memory_limit ${apache_php_memory_limit}
-   php_value post_max_size ${apache_php_post_max_size}
-   php_value upload_max_filesize ${apache_php_upload_max_filesize}
-   php_value max_input_time ${apache_php_max_input_time}
-   php_value always_populate_raw_post_data ${apache_php_always_populate_raw_post_data}
-   php_value max_input_vars ${apache_php_max_input_vars}
-   # Set correct timezone
-   php_value date.timezone ${zabbix_timezone}"
-    $fcgi_filematch = {}
-    $proxy_directory = {}
     }
   } # END case $facts['os']['name']
 
@@ -423,6 +401,47 @@ class zabbix::web (
   # Is set to true, it will create the apache vhost.
   if $manage_vhost {
     include apache
+    if facts['os']['family'] == 'RedHat' and versioncmp($facts['os']['release']['major'], '7') == 0 and versioncmp($zabbix_version, '5') >= 0 {
+      include apache::mod::proxy
+      include apache::mod::proxy_fcgi
+      $apache_vhost_custom_fragment = ''
+      #php parameters are moved to /etc/opt/rh/rh-php72/php-fpm.d/zabbix.conf per package zabbix-web-deps-scl
+      file { '/etc/opt/rh/rh-php72/php-fpm.d/zabbix.conf':
+        ensure  => file,
+        content => epp('zabbix/web/php-fpm.d.zabbix.conf.epp'),
+      }
+      $fcgi_filematch = {
+          path     => '/usr/share/zabbix',
+          provider => 'directory',
+          addhandlers => [
+            {
+              extensions => [
+                'php',
+                'phar',
+              ],
+              handler => 'proxy:unix:/var/opt/rh/rh-php72/run/php-fpm/zabbix.sock|fcgi://localhost',
+            },
+          ],
+      }
+      $proxy_directory = {
+        path => 'fcgi://localhost:9000',
+        provider => 'proxy',
+      }
+    }
+    else {
+      $apache_vhost_custom_fragment = "
+        php_value max_execution_time ${apache_php_max_execution_time}
+        php_value memory_limit ${apache_php_memory_limit}
+        php_value post_max_size ${apache_php_post_max_size}
+        php_value upload_max_filesize ${apache_php_upload_max_filesize}
+        php_value max_input_time ${apache_php_max_input_time}
+        php_value always_populate_raw_post_data ${apache_php_always_populate_raw_post_data}
+        php_value max_input_vars ${apache_php_max_input_vars}
+        # Set correct timezone
+        php_value date.timezone ${zabbix_timezone}"
+      $fcgi_filematch = {}
+      $proxy_directory = {}
+    }
     # Check if we use ssl. If so, we also create an non ssl
     # vhost for redirect traffic from non ssl to ssl site.
     if $apache_use_ssl {
@@ -469,12 +488,12 @@ class zabbix::web (
       directories     => [
         $proxy_directory,
         merge(
-          merge({
+          merge( {
             path     => '/usr/share/zabbix',
             provider => 'directory',
           }, $directory_allow),
         $fcgi_filematch),
-        merge({
+        merge( {
           path     => '/usr/share/zabbix/conf',
           provider => 'directory',
         }, $directory_deny),

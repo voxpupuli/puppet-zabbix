@@ -75,7 +75,15 @@ describe 'zabbix::web' do
                            'php5-pgsql'
                          end
 
-          packages = (facts[:operatingsystem] == 'CentOS' and facts[:operatingsystemmajrelease] == 7 and :zabbix_version >= 5) ? ['zabbix-web-pgsql-scl', 'zabbix-web'] : (facts[:osfamily] == 'RedHat' ? ['zabbix-web-pgsql', 'zabbix-web'] : ['zabbix-frontend-php', pgsqlpackage])
+          if facts[:osfamily] == 'RedHat'
+            if facts[:operatingsystemmajrelease] == 7 and :zabbix_version >= 5
+              packages = ['zabbix-web-pgsql-scl', 'zabbix-web']
+            else
+              packages = ['zabbix-web-pgsql', 'zabbix-web']
+            end
+          else
+            packages = ['zabbix-frontend-php', pgsqlpackage]
+          end
           packages.each do |package|
             it { is_expected.to contain_package(package) }
           end
@@ -104,7 +112,15 @@ describe 'zabbix::web' do
                            'php5-mysql'
                          end
 
-          packages = (facts[:operatingsystem] == 'CentOS' and facts[:operatingsystemmajrelease] == 7 and :zabbix_version >= 5) ? ['zabbix-web-mysql-scl', 'zabbix-web'] : (facts[:osfamily] == 'RedHat' ? ['zabbix-web-mysql', 'zabbix-web'] : ['zabbix-frontend-php', pgsqlpackage])
+          if facts[:osfamily] == 'RedHat'
+            if facts[:operatingsystemmajrelease] == 7 and :zabbix_version >= 5
+              packages = ['zabbix-web-pgsql-scl', 'zabbix-web']
+            else
+              packages = ['zabbix-web-pgsql', 'zabbix-web']
+            end
+          else
+            packages = ['zabbix-frontend-php', mysqlpackage]
+          end
           packages.each do |package|
             it { is_expected.to contain_package(package) }
           end
@@ -197,6 +213,31 @@ describe 'zabbix::web' do
           it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$ZBX_SERVER_PORT = '3306'}) }
           it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$ZBX_SERVER_NAME = 'localhost'}) }
         end
+        if facts[:osfamily] == 'RedHat'
+          if facts[:operatingsystemmajrelease].to_i == 7
+            context 'when zabbix_version is 5.0 and OS is CentOS 7 validate php-fpm.d configuration'
+              let :params do
+                super().merge(
+                  apache_php_max_execution_time: '300'
+                  apache_php_memory_limit: '128M'
+                  apache_php_post_max_size: '16M'
+                  apache_php_upload_max_filesize: '2M'
+                  apache_php_max_input_time: '300'
+                  apache_php_always_populate_raw_post_data: '-1'
+                  apache_php_max_input_vars: 10000
+                  zabbix_timezone: 'America/New_York'
+                  zabbix_version: '5.0'
+                )
+              end
+
+              it { is_expected.to contain_file('/etc/opt/rh/rh-php72/php-fpm.d/zabbix.conf').with_content(%r{^php_value\[max_execution_time\] = 300}) }
+              it { is_expected.to contain_file('/etc/opt/rh/rh-php72/php-fpm.d/zabbix.conf').with_content(%r{^php_value\[memory_limit\] = 128M}) }
+              it { is_expected.to contain_file('/etc/opt/rh/rh-php72/php-fpm.d/zabbix.conf').with_content(%r{^php_value\[post_max_size\] = 128M}) }
+              it { is_expected.to contain_file('/etc/opt/rh/rh-php72/php-fpm.d/zabbix.conf').with_content(%r{^php_value\[upload_max_filesize\] = 2M}) }
+              it { is_expected.to contain_file('/etc/opt/rh/rh-php72/php-fpm.d/zabbix.conf').with_content(%r{^php_value\[max_input_vars\] = 10000}) }
+              it { is_expected.to contain_file('/etc/opt/rh/rh-php72/php-fpm.d/zabbix.conf').with_content(%r{^php_value\[date\.timezone\] = America/New_York}) }
+            end
+          end
       end
     end
   end
