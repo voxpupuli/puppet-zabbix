@@ -240,9 +240,9 @@ class zabbix::web (
   Optional[Enum['never','allow','try','demand','hard']] $ldap_reqcert = $zabbix::params::ldap_reqcert,
   $puppetgem                                                          = $zabbix::params::puppetgem,
   Boolean $manage_selinux                                             = $zabbix::params::manage_selinux,
-  $sso_sp_cert                                                        = $zabbix::params::sso_sp_cert,
-  $sso_sp_key                                                         = $zabbix::params::sso_sp_key,
-  $sso_idp_cert                                                       = $zabbix::params::sso_idp_cert,
+  Optional[Stdlib::Absolutepath] $sso_sp_cert                         = $zabbix::params::sso_sp_cert,
+  Optional[Stdlib::Absolutepath] $sso_sp_key                          = $zabbix::params::sso_sp_key,
+  Optional[Stdlib::Absolutepath] $sso_idp_cert                        = $zabbix::params::sso_idp_cert,
 ) inherits zabbix::params {
   # check osfamily, Arch is currently not supported for web
   if $facts['os']['family'] in ['Archlinux', 'Gentoo',] {

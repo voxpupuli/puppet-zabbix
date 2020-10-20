@@ -492,5 +492,4 @@ class zabbix::params {
   $sso_sp_cert = undef
   $sso_sp_key = undef
   $sso_idp_cert = undef
-
 }
