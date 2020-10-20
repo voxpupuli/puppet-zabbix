@@ -176,22 +176,6 @@ describe 'zabbix::web' do
 
         it { is_expected.to contain_apache__vhost('zabbix.example.com').with_name('zabbix.example.com') }
 
-        describe 'with SAML certificate parameters defined' do
-          let :params do
-            super().merge(
-              sso_sp_cert: '/etc/pki/tls/certs/zabbix.pem',
-              sso_sp_key: '/etc/pki/tls/private/zabbix.key',
-              sso_idp_cert: '/etc/pki/tls/certs/idp.pem'
-            )
-          end
-
-          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$SSO\['SP_CERT'\] = '/etc/pki/tls/certs/zabbix.pem'}) }
-          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$SSO\['SP_KEY'\] = '/etc/pki/tls/private/zabbix.key'}) }
-          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$SSO\['IDP_CERT'\] = '/etc/pki/tls/certs/idp.pem'}) }
-        end
-
-        it { is_expected.to contain_apache__vhost('zabbix.example.com').with_name('zabbix.example.com') }
-
         context 'with database_* settings' do
           let :params do
             super().merge(
@@ -212,6 +196,20 @@ describe 'zabbix::web' do
           it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$ZBX_SERVER      = 'localhost'}) }
           it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$ZBX_SERVER_PORT = '3306'}) }
           it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$ZBX_SERVER_NAME = 'localhost'}) }
+        end
+
+        describe 'with SAML certificate parameters defined' do
+          let :params do
+            super().merge(
+              sso_sp_cert: '/etc/pki/tls/certs/zabbix.pem',
+              sso_sp_key: '/etc/pki/tls/private/zabbix.key',
+              sso_idp_cert: '/etc/pki/tls/certs/idp.pem'
+            )
+          end
+
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$SSO\['SP_CERT'\] = '/etc/pki/tls/certs/zabbix.pem'}) }
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$SSO\['SP_KEY'\] = '/etc/pki/tls/private/zabbix.key'}) }
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$SSO\['IDP_CERT'\] = '/etc/pki/tls/certs/idp.pem'}) }
         end
       end
     end
