@@ -369,7 +369,6 @@ class zabbix::web (
         require => Class['zabbix::repo'],
         tag     => 'zabbix',
       }
-
     }
   } # END case $facts['os']['name']
 
@@ -401,7 +400,7 @@ class zabbix::web (
   # Is set to true, it will create the apache vhost.
   if $manage_vhost {
     include apache
-    if facts['os']['family'] == 'RedHat' and versioncmp($facts['os']['release']['major'], '7') == 0 and versioncmp($zabbix_version, '5') >= 0 {
+    if $facts['os']['family'] == 'RedHat' and versioncmp($facts['os']['release']['major'], '7') == 0 and versioncmp($zabbix_version, '5') >= 0 {
       include apache::mod::proxy
       include apache::mod::proxy_fcgi
       $apache_vhost_custom_fragment = ''

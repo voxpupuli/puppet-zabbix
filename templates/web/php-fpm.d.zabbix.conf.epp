@@ -1,3 +1,4 @@
+# THIS FILE IS MANAGED BY PUPPET
 [zabbix]
 user = apache
 group = apache
