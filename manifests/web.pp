@@ -410,17 +410,17 @@ class zabbix::web (
         content => epp('zabbix/web/php-fpm.d.zabbix.conf.epp'),
       }
       $fcgi_filematch = {
-          path     => '/usr/share/zabbix',
-          provider => 'directory',
-          addhandlers => [
-            {
-              extensions => [
-                'php',
-                'phar',
-              ],
-              handler => 'proxy:unix:/var/opt/rh/rh-php72/run/php-fpm/zabbix.sock|fcgi://localhost',
-            },
-          ],
+        path     => '/usr/share/zabbix',
+        provider => 'directory',
+        addhandlers => [
+          {
+            extensions => [
+              'php',
+              'phar',
+            ],
+            handler => 'proxy:unix:/var/opt/rh/rh-php72/run/php-fpm/zabbix.sock|fcgi://localhost',
+          },
+        ],
       }
       $proxy_directory = {
         path => 'fcgi://localhost:9000',
@@ -488,13 +488,13 @@ class zabbix::web (
         $proxy_directory,
         merge(
           merge( {
-            path     => '/usr/share/zabbix',
-            provider => 'directory',
+              path     => '/usr/share/zabbix',
+              provider => 'directory',
           }, $directory_allow),
         $fcgi_filematch),
         merge( {
-          path     => '/usr/share/zabbix/conf',
-          provider => 'directory',
+            path     => '/usr/share/zabbix/conf',
+            provider => 'directory',
         }, $directory_deny),
         merge( {
             path     => '/usr/share/zabbix/api',
@@ -512,7 +512,7 @@ class zabbix::web (
       aliases         => [
         { alias => '/zabbix',
           path  => '/usr/share/zabbix',
-        }
+        },
       ],
       custom_fragment => $apache_vhost_custom_fragment,
       rewrites        => [

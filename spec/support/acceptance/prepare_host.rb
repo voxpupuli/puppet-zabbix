@@ -10,7 +10,15 @@ def prepare_host
   cleanup_script = <<-SHELL
   /opt/puppetlabs/bin/puppet resource service zabbix-server ensure=stopped
   /opt/puppetlabs/bin/puppet resource package zabbix-server-pgsql ensure=purged
+  /opt/puppetlabs/bin/puppet resource package zabbix-server-pgsql-scl ensure=purged
+  /opt/puppetlabs/bin/puppet resource package zabbix-web ensure=purged
+  /opt/puppetlabs/bin/puppet resource package zabbix-frontend-php ensure=purged
+  /opt/puppetlabs/bin/puppet resource package apache2 ensure=purged
+  /opt/puppetlabs/bin/puppet resource package httpd ensure=purged
   rm -f /etc/zabbix/.*done
+  rm -rf /etc/httpd
+  rm -rf /etc/apache2
+  rm -rf /var/www
   if id postgres > /dev/null 2>&1; then
     su - postgres -c "psql -c 'drop database if exists zabbix_server;'"
   fi
