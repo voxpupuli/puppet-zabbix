@@ -375,10 +375,10 @@ describe 'zabbix::proxy' do
               zabbix_version: '5.0'
             }
           end
-  
+
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartPreprocessors=3$} }
         end
-        
+
       end
     end
   end
