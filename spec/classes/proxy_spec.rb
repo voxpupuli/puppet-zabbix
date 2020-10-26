@@ -371,7 +371,7 @@ describe 'zabbix::proxy' do
         context 'with zabbix_proxy.conf and version 5.0' do
           let :params do
             {
-              startpreprocessors: '3',
+              startpreprocessors: 3,
               zabbix_version: '5.0'
             }
           end

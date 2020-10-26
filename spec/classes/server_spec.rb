@@ -388,7 +388,7 @@ describe 'zabbix::server' do
       context 'with zabbix_server.conf and version 3.4' do
         let :params do
           {
-            startpreprocessors: '3',
+            startpreprocessors: 3,
             zabbix_version: '3.4'
           }
         end
