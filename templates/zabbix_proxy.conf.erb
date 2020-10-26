@@ -204,7 +204,7 @@ StartIPMIPollers=<%= @startipmipollers %>
 #
 # Mandatory: no
 # Range: 1-1000
-StartPreprocessors=<%= @startpreprocessors %>
+<% if @startpreprocessors %>StartPreprocessors=<%= @startpreprocessors %><% end %>
 <% end %>
 
 ### Option: StartPollersUnreachable
