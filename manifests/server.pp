@@ -387,7 +387,7 @@ class zabbix::server (
   String $additional_service_params          = $zabbix::params::additional_service_params,
   Optional[String[1]] $zabbix_user           = $zabbix::params::server_zabbix_user,
   Boolean $manage_startup_script             = $zabbix::params::manage_startup_script,
-  Stdlib::Absolutepath $socketdir            = $zabbix::params::server_socketdir,
+  Optional[Stdlib::Absolutepath] $socketdir  = $zabbix::params::server_socketdir,
 ) inherits zabbix::params {
   # the following codeblock is a bit blargh. The correct default value for
   # $real_additional_service_params changes based on the value of $zabbix_version

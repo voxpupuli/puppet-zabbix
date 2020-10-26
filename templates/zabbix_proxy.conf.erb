@@ -103,7 +103,7 @@ PidFile=<%= @pidfile %>
 # Mandatory: no
 # Default:
 
-SocketDir=<%= @socketdir %>
+<% if @socketdir %>SocketDir=<%= @socketdir %><% end %>
 <% end %>
 
 ### Option: DBHost
