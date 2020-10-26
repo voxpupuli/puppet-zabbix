@@ -92,6 +92,21 @@ class zabbix::repo (
           gpgkey   => $gpgkey_nonsupported,
           priority => '1',
         }
+
+        # Zabbix 5.0 for Centos/RHEL 7 puts the frontend packages in a separate repo called frontend
+        # under the main repo due to the php 7.2 requirement
+        if defined('zabbix::web') {
+          if versioncmp($facts['os']['release']['major'], '7') == 0 and versioncmp($zabbix_version, '5') >= 0 {
+            yumrepo { 'zabbix-frontend':
+              name     => "Zabbix_${majorrelease}_${facts['os']['architecture']}_frontend",
+              descr    => "Zabbix_${majorrelease}_${facts['os']['architecture']}_frontend",
+              baseurl  => "${_repo_location}/frontend",
+              gpgcheck => '1',
+              gpgkey   => $gpgkey_zabbix,
+              priority => '1',
+            }
+          }
+        }
       }
       'Debian' : {
         if ($manage_apt) {

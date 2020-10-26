@@ -32,7 +32,8 @@ end
 
       prepare_host
 
-      # Run it twice and test for idempotency
+      # Works without changes on the third apply
+      apply_manifest(pp, catch_failures: true)
       apply_manifest(pp, catch_failures: true)
       apply_manifest(pp, catch_changes: true)
     end
@@ -84,6 +85,7 @@ end
         it { should be_listening }
       end
 
+      #if this comes back as <?php, the php handler for the frontend is not configured correctly
       describe command('curl http://localhost:80') do
         its(:stdout) { should match /!DOCTYPE html/ }
       end
