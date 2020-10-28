@@ -261,6 +261,10 @@
 # [*manage_startup_script*]
 #  If the init script should be managed by this module. Attention: This might cause problems with some config options of this module (e.g server_configfile_path)
 #
+# [*socketdir*]
+#   IPC socket directory.
+#     Directory to store IPC sockets used by internal Zabbix services.
+#
 # === Example
 #
 #   When running everything on a single node, please check
@@ -383,6 +387,7 @@ class zabbix::server (
   String $additional_service_params          = $zabbix::params::additional_service_params,
   Optional[String[1]] $zabbix_user           = $zabbix::params::server_zabbix_user,
   Boolean $manage_startup_script             = $zabbix::params::manage_startup_script,
+  Optional[Stdlib::Absolutepath] $socketdir  = $zabbix::params::server_socketdir,
 ) inherits zabbix::params {
   # the following codeblock is a bit blargh. The correct default value for
   # $real_additional_service_params changes based on the value of $zabbix_version

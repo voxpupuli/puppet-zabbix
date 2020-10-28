@@ -284,6 +284,7 @@ class zabbix::params {
   $server_vmwarecachesize                   = '8M'
   $server_vmwarefrequency                   = '60'
   $server_vmwaretimeout                     = undef
+  $server_socketdir                         = undef
 
   # Agent specific params
   $agent_allowroot                          = '0'
@@ -425,6 +426,10 @@ class zabbix::params {
   $proxy_zabbix_server_host                 = undef
   $proxy_zabbix_server_port                 = '10051'
   $proxy_zbx_templates                      = ['Template App Zabbix Proxy']
+  $proxy_socketdir                          = versioncmp($zabbix_version, '5.0') ? {
+    -1      => undef,
+    default => '/var/run/zabbix',
+  }
 
   # Java Gateway specific params
   $javagateway_listenip                     = '0.0.0.0'

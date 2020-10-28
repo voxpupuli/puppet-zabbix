@@ -77,6 +77,17 @@ DebugLevel=<%= @debuglevel %>
 #
 PidFile=<%= @pidfile %>
 
+<% if @zabbix_version.to_f >= 3.4 %>
+### Option: SocketDir
+#       IPC socket directory.
+#               Directory to store IPC sockets used by internal Zabbix services.
+#
+# Mandatory: no
+# Default:
+
+<% if @socketdir %>SocketDir=<%= @socketdir %><% end %>
+<% end %>
+
 ### Option: DBHost
 #	Database host name.
 #	If set to localhost, socket is used for MySQL.

@@ -176,6 +176,7 @@ class zabbix (
   $include_dir                              = $zabbix::params::server_include,
   $loadmodulepath                           = $zabbix::params::server_loadmodulepath,
   $loadmodule                               = $zabbix::params::server_loadmodule,
+  Optional[Stdlib::Absolutepath] $socketdir = $zabbix::params::server_socketdir,
   Boolean $manage_selinux                   = $zabbix::params::manage_selinux,
   String $additional_service_params         = $zabbix::params::additional_service_params,
   Optional[String[1]] $zabbix_user          = $zabbix::params::server_zabbix_user,
