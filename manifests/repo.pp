@@ -105,6 +105,12 @@ class zabbix::repo (
               gpgkey   => $gpgkey_zabbix,
               priority => '1',
             }
+            #scl repos are required for Zabbix 5 on EL7
+            if $facts['os']['name'] == 'CentOS' {
+              package { 'centos-release-scl':
+                ensure => present,
+              }
+            }
           }
         }
       }

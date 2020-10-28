@@ -218,14 +218,14 @@ describe 'zabbix::web' do
             context 'when zabbix_version is 5.0 and OS is CentOS 7 validate php-fpm.d configuration'
               let :params do
                 super().merge(
-                  apache_php_max_execution_time: '300'
-                  apache_php_memory_limit: '128M'
-                  apache_php_post_max_size: '16M'
-                  apache_php_upload_max_filesize: '2M'
-                  apache_php_max_input_time: '300'
-                  apache_php_always_populate_raw_post_data: '-1'
-                  apache_php_max_input_vars: 10000
-                  zabbix_timezone: 'America/New_York'
+                  apache_php_max_execution_time: '300',
+                  apache_php_memory_limit: '128M',
+                  apache_php_post_max_size: '16M',
+                  apache_php_upload_max_filesize: '2M',
+                  apache_php_max_input_time: '300',
+                  apache_php_always_populate_raw_post_data: '-1',
+                  apache_php_max_input_vars: 10000,
+                  zabbix_timezone: 'America/New_York',
                   zabbix_version: '5.0'
                 )
               end
