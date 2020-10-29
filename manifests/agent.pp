@@ -275,7 +275,7 @@ class zabbix::agent (
   $hostmetadata                                   = $zabbix::params::agent_hostmetadata,
   $hostmetadataitem                               = $zabbix::params::agent_hostmetadataitem,
   Optional[Stdlib::Fqdn] $hostinterface           = $zabbix::params::agent_hostinterface,
-  Optional[Stdlib::Fqdn] $hostinterfaceitem       = $zabbix::params::agent_hostinterfaceitem,
+  $hostinterfaceitem                              = $zabbix::params::agent_hostinterfaceitem,
   $refreshactivechecks                            = $zabbix::params::agent_refreshactivechecks,
   $buffersend                                     = $zabbix::params::agent_buffersend,
   $buffersize                                     = $zabbix::params::agent_buffersize,
