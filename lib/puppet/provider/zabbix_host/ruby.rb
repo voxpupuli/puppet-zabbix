@@ -18,6 +18,10 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
     api_hosts.map do |h|
       interface = h['interfaces'].select { |i| i['main'].to_i == 1 }.first
       use_ip = !interface['useip'].to_i.zero?
+      proxy_select = proxies.select { |_name, id| id == h['proxy_hostid'] }.keys.first
+      if proxy_select == nil
+          proxy_select = ''
+      end
       new(
         ensure: :present,
         id: h['hostid'].to_i,
@@ -30,8 +34,8 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
         group_create: nil,
         templates: h['parentTemplates'].map { |x| x['host'] },
         macros: h['macros'].map { |macro| { macro['macro'] => macro['value'] } },
-        proxy: proxies.select { |_name, id| id == h['proxy_hostid'] }.keys.first,
-        type: interface['type'].to_i
+        proxy: proxy_select,
+        interfacetype: interface['type'].to_i,
       )
     end
   end
