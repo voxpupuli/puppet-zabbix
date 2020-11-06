@@ -24,6 +24,7 @@ class zabbix::resources::agent (
   $templates               = undef,
   $macros                  = undef,
   $proxy                   = undef,
+  $interfacetype           = 1,
 ) {
   if $group and $groups {
     fail("Got group and groups. This isn't support! Please use groups only.")
@@ -37,13 +38,14 @@ class zabbix::resources::agent (
   }
 
   @@zabbix_host { $hostname:
-    ipaddress    => $ipaddress,
-    use_ip       => $use_ip,
-    port         => $port,
-    groups       => $groups,
-    group_create => $group_create,
-    templates    => $templates,
-    macros       => $macros,
-    proxy        => $proxy,
+    ipaddress     => $ipaddress,
+    use_ip        => $use_ip,
+    port          => $port,
+    groups        => $groups,
+    group_create  => $group_create,
+    templates     => $templates,
+    macros        => $macros,
+    proxy         => $proxy,
+    interfacetype => $interfacetype,
   }
 }

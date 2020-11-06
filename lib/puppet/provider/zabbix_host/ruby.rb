@@ -16,8 +16,12 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
     )
 
     api_hosts.map do |h|
-      interface = h['interfaces'].select { |i| i['type'].to_i == 1 && i['main'].to_i == 1 }.first
+      # only select the default interface for given host
+      # there is only 1 interface that can be default
+      interface = h['interfaces'].select { |i| i['main'].to_i == 1 }.first
       use_ip = !interface['useip'].to_i.zero?
+      proxy_select = proxies.select { |_name, id| id == h['proxy_hostid'] }.keys.first
+      proxy_select = '' if proxy_select.nil?
       new(
         ensure: :present,
         id: h['hostid'].to_i,
@@ -30,7 +34,8 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
         group_create: nil,
         templates: h['parentTemplates'].map { |x| x['host'] },
         macros: h['macros'].map { |macro| { macro['macro'] => macro['value'] } },
-        proxy: proxies.select { |_name, id| id == h['proxy_hostid'] }.keys.first
+        proxy: proxy_select,
+        interfacetype: interface['type'].to_i
       )
     end
   end
@@ -58,7 +63,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
       proxy_hostid: proxy_hostid,
       interfaces: [
         {
-          type: 1,
+          type: @resource[:interfacetype].nil? ? 1 : @resource[:interfacetype],
           main: 1,
           ip: @resource[:ipaddress],
           dns: @resource[:hostname],
@@ -138,6 +143,16 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
       params: {
         interfaceid: @property_hash[:interfaceid],
         port: int
+      }
+    )
+  end
+
+  def interfacetype=(int)
+    zbx.query(
+      method: 'hostinterface.update',
+      params: {
+        interfaceid: @property_hash[:interfaceid],
+        type: int
       }
     )
   end

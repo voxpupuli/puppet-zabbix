@@ -61,6 +61,9 @@
 # [*zbx_macros*]
 #   List of macros which will be added when host is configured.
 #
+# [*zbx_interface_type*]
+#   Integer specifying type of interface to be created
+#
 # [*agent_configfile_path*]
 #   Agent config file path defaults to /etc/zabbix/zabbix_agentd.conf
 #
@@ -253,6 +256,7 @@ class zabbix::agent (
   $zbx_group_create                               = $zabbix::params::agent_zbx_group_create,
   $zbx_templates                                  = $zabbix::params::agent_zbx_templates,
   Array[Hash] $zbx_macros                         = [],
+  Integer[1,4] $zbx_interface_type                = 1,
   $agent_configfile_path                          = $zabbix::params::agent_configfile_path,
   $pidfile                                        = $zabbix::params::agent_pidfile,
   $servicename                                    = $zabbix::params::agent_servicename,
@@ -374,15 +378,16 @@ class zabbix::agent (
     $_hostname = pick($hostname, $facts['networking']['fqdn'])
 
     class { 'zabbix::resources::agent':
-      hostname     => $_hostname,
-      ipaddress    => $listen_ip,
-      use_ip       => $agent_use_ip,
-      port         => $listenport,
-      groups       => [$groups].flatten(),
-      group_create => $zbx_group_create,
-      templates    => $zbx_templates,
-      macros       => $zbx_macros,
-      proxy        => $use_proxy,
+      hostname      => $_hostname,
+      ipaddress     => $listen_ip,
+      use_ip        => $agent_use_ip,
+      port          => $listenport,
+      groups        => [$groups].flatten(),
+      group_create  => $zbx_group_create,
+      templates     => $zbx_templates,
+      macros        => $zbx_macros,
+      interfacetype => $zbx_interface_type,
+      proxy         => $use_proxy,
     }
   }
 
