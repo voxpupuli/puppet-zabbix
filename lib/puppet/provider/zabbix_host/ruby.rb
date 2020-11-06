@@ -16,6 +16,8 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
     )
 
     api_hosts.map do |h|
+      # only select the default interface for given host
+      # there is only 1 interface that can be default
       interface = h['interfaces'].select { |i| i['main'].to_i == 1 }.first
       use_ip = !interface['useip'].to_i.zero?
       proxy_select = proxies.select { |_name, id| id == h['proxy_hostid'] }.keys.first
