@@ -256,7 +256,7 @@ class zabbix::agent (
   $zbx_group_create                               = $zabbix::params::agent_zbx_group_create,
   $zbx_templates                                  = $zabbix::params::agent_zbx_templates,
   Array[Hash] $zbx_macros                         = [],
-  Integer $zbx_interface_type                     = 1,
+  Integer[1,4] $zbx_interface_type                = 1,
   $agent_configfile_path                          = $zabbix::params::agent_configfile_path,
   $pidfile                                        = $zabbix::params::agent_pidfile,
   $servicename                                    = $zabbix::params::agent_servicename,
