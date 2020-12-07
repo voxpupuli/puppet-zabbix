@@ -56,7 +56,7 @@ zabbix_host { 'test2.example.com':
   use_ip    => false,
   port      => 1050,
   groups    => ['Virtual machines'],
-  templates => [ 'Template OS Linux', 'Template ICMP Ping', ],
+  templates => [ 'Template OS Linux', 'Template Module ICMP Ping', ],
   macros    => [],
 }
     EOS
@@ -134,7 +134,7 @@ zabbix_host { 'test2.example.com':
         expect(test2['interfaces'][0]['useip']).to eq('0')
       end
       it 'has templates attached' do
-        expect(test2['parentTemplates'].map { |t| t['host'] }.sort).to eq(['Template ICMP Ping', 'Template OS Linux'])
+        expect(test2['parentTemplates'].map { |t| t['host'] }.sort).to eq(['Template Module ICMP Ping', 'Template OS Linux'])
       end
     end
   end
