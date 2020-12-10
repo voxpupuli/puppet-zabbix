@@ -415,7 +415,7 @@ class zabbix::proxy (
   $trappertimeout                           = $zabbix::params::proxy_trappertimeout,
   $unreachableperiod                        = $zabbix::params::proxy_unreachableperiod,
   $unavailabledelay                         = $zabbix::params::proxy_unavailabledelay,
-  $unreachabedelay                          = $zabbix::params::proxy_unreachabedelay,
+  $unreachabledelay                          = $zabbix::params::proxy_unreachabledelay,
   $externalscripts                          = $zabbix::params::proxy_externalscripts,
   $fpinglocation                            = $zabbix::params::proxy_fpinglocation,
   $fping6location                           = $zabbix::params::proxy_fping6location,

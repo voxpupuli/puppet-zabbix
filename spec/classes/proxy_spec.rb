@@ -261,7 +261,7 @@ describe 'zabbix::proxy' do
               tmpdir: '/tmp',
               trappertimeout: '16',
               unavailabledelay: '60',
-              unreachabedelay: '15',
+              unreachabledelay: '15',
               unreachableperiod: '45',
               vmwarecachesize: '8M',
               vmwarefrequency: '60',

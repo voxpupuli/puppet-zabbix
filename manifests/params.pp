@@ -418,7 +418,7 @@ class zabbix::params {
   $proxy_tmpdir                             = '/tmp'
   $proxy_trappertimeout                     = '300'
   $proxy_unavailabledelay                   = '60'
-  $proxy_unreachabedelay                    = '15'
+  $proxy_unreachabledelay                    = '15'
   $proxy_unreachableperiod                  = '45'
   $proxy_use_ip                             = true
   $proxy_vmwarecachesize                    = '8M'
