@@ -417,7 +417,7 @@ class zabbix::params {
   $proxy_tlsservercertsubject               = undef
   $proxy_tmpdir                             = '/tmp'
   $proxy_trappertimeout                     = '300'
-  $proxy_unavaliabledelay                   = '60'
+  $proxy_unavailabledelay                   = '60'
   $proxy_unreachabedelay                    = '15'
   $proxy_unreachableperiod                  = '45'
   $proxy_use_ip                             = true

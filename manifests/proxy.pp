@@ -414,7 +414,7 @@ class zabbix::proxy (
   $tlsservercertsubject                     = $zabbix::params::proxy_tlsservercertsubject,
   $trappertimeout                           = $zabbix::params::proxy_trappertimeout,
   $unreachableperiod                        = $zabbix::params::proxy_unreachableperiod,
-  $unavaliabledelay                         = $zabbix::params::proxy_unavaliabledelay,
+  $unavailabledelay                         = $zabbix::params::proxy_unavailabledelay,
   $unreachabedelay                          = $zabbix::params::proxy_unreachabedelay,
   $externalscripts                          = $zabbix::params::proxy_externalscripts,
   $fpinglocation                            = $zabbix::params::proxy_fpinglocation,

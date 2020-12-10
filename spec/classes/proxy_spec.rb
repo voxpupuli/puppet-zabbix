@@ -260,7 +260,7 @@ describe 'zabbix::proxy' do
               timeout: '20',
               tmpdir: '/tmp',
               trappertimeout: '16',
-              unavaliabledelay: '60',
+              unavailabledelay: '60',
               unreachabedelay: '15',
               unreachableperiod: '45',
               vmwarecachesize: '8M',
