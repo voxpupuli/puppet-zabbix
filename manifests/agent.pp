@@ -232,7 +232,7 @@ class zabbix::agent (
   $agent_configfile_path                          = $zabbix::params::agent_configfile_path,
   $pidfile                                        = $zabbix::params::agent_pidfile,
   $servicename                                    = $zabbix::params::agent_servicename,
-  String $logtype                                 = $zabbix::params::agent_logtype,
+  Enum['console', 'file', 'system'] $logtype      = $zabbix::params::agent_logtype,
   Optional[Stdlib::Absolutepath] $logfile         = $zabbix::params::agent_logfile,
   $logfilesize                                    = $zabbix::params::agent_logfilesize,
   $debuglevel                                     = $zabbix::params::agent_debuglevel,
