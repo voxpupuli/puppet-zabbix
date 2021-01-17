@@ -15,7 +15,7 @@ describe 'zabbix_template_host type', unless: default[:platform] =~ %r{debian-10
         include postgresql::server
 
         class { 'zabbix':
-          zabbix_version   => '4.0', # Only run tests on LTS releases.
+          zabbix_version   => '4.4',
           zabbix_url       => 'localhost',
           zabbix_api_user  => 'Admin',
           zabbix_api_pass  => 'zabbix',
@@ -30,7 +30,7 @@ describe 'zabbix_template_host type', unless: default[:platform] =~ %r{debian-10
           port         => 10050,
           group        => 'TestgroupOne',
           group_create => true,
-          templates    => [ 'Template OS Linux', ],
+          templates    => [ 'Template OS Linux by Zabbix agent', ],
           require      => [ Service['zabbix-server'], Package['zabbixapi'], ],
         }
 

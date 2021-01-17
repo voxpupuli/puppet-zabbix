@@ -20,7 +20,7 @@ include apache::mod::php
 include postgresql::server
 
 class { 'zabbix':
-  zabbix_version   => '4.0', # Only run tests on LTS releases.
+  zabbix_version   => '4.4',
   zabbix_url       => 'localhost',
   zabbix_api_user  => 'Admin',
   zabbix_api_pass  => 'zabbix',
@@ -48,7 +48,7 @@ zabbix_host { 'test1.example.com':
   port         => 10050,
   groups       => ['TestgroupOne'],
   group_create => true,
-  templates    => [ 'Template OS Linux', ],
+  templates    => [ 'Template OS Linux by Zabbix agent', ],
   macros       => [],
 }
 zabbix_host { 'test2.example.com':
@@ -56,7 +56,7 @@ zabbix_host { 'test2.example.com':
   use_ip    => false,
   port      => 1050,
   groups    => ['Virtual machines'],
-  templates => [ 'Template OS Linux', 'Template Module ICMP Ping', ],
+  templates => [ 'Template OS Linux by Zabbix agent', 'Template Module ICMP Ping', ],
   macros    => [],
 }
     EOS
@@ -102,7 +102,7 @@ zabbix_host { 'test2.example.com':
         expect(test1['interfaces'][0]['useip']).to eq('1')
       end
       it 'has templates attached' do
-        expect(test1['parentTemplates'].map { |t| t['host'] }.sort).to eq(['Template OS Linux'])
+        expect(test1['parentTemplates'].map { |t| t['host'] }.sort).to eq(['Template OS Linux by Zabbix agent'])
       end
     end
 
@@ -134,7 +134,7 @@ zabbix_host { 'test2.example.com':
         expect(test2['interfaces'][0]['useip']).to eq('0')
       end
       it 'has templates attached' do
-        expect(test2['parentTemplates'].map { |t| t['host'] }.sort).to eq(['Template Module ICMP Ping', 'Template OS Linux'])
+        expect(test2['parentTemplates'].map { |t| t['host'] }.sort).to eq(['Template Module ICMP Ping', 'Template OS Linux by Zabbix agent'])
       end
     end
   end
