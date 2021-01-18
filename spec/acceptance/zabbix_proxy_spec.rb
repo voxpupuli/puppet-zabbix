@@ -20,7 +20,7 @@ describe 'zabbix_proxy type', unless: default[:platform] =~ %r{debian-10-amd64} 
       include postgresql::server
 
       class { 'zabbix':
-        zabbix_version   => '3.0', # zabbixapi gem doesn't currently support higher versions
+        zabbix_version   => '4.4',
         zabbix_url       => 'localhost',
         zabbix_api_user  => 'Admin',
         zabbix_api_pass  => 'zabbix',

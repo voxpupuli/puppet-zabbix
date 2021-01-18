@@ -15,7 +15,7 @@ describe 'zabbix_template type', unless: default[:platform] =~ %r{debian-10-amd6
         include postgresql::server
 
         class { 'zabbix':
-          zabbix_version   => '3.0', # zabbixapi gem doesn't currently support higher versions
+          zabbix_version   => '4.4',
           zabbix_url       => 'localhost',
           zabbix_api_user  => 'Admin',
           zabbix_api_pass  => 'zabbix',
@@ -30,7 +30,7 @@ describe 'zabbix_template type', unless: default[:platform] =~ %r{debian-10-amd6
         }
       EOS
 
-      shell("echo '<?xml version=\"1.0\" encoding=\"UTF-8\"?><zabbix_export><version>3.0</version><date>2018-12-13T15:00:46Z</date><groups><group><name>Templates/Applications</name></group></groups><templates><template><template>TestTemplate1</template><name>TestTemplate1</name><description/><groups><group><name>Templates/Applications</name></group></groups><applications/><items/><discovery_rules/><macros/><templates/><screens/></template></templates></zabbix_export>' > /root/TestTemplate1.xml")
+      shell("echo '<?xml version=\"1.0\" encoding=\"UTF-8\"?><zabbix_export><version>4.0</version><date>2018-12-13T15:00:46Z</date><groups><group><name>Templates/Applications</name></group></groups><templates><template><template>TestTemplate1</template><name>TestTemplate1</name><description/><groups><group><name>Templates/Applications</name></group></groups><applications/><items/><discovery_rules/><macros/><templates/><screens/></template></templates></zabbix_export>' > /root/TestTemplate1.xml")
 
       # Cleanup old database
       prepare_host

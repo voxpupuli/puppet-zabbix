@@ -20,7 +20,7 @@ describe 'zabbix_application type', unless: default[:platform] =~ %r{debian-10-a
       include postgresql::server
 
       class { 'zabbix':
-        zabbix_version   => '3.0',
+        zabbix_version   => '4.4',
         zabbix_url       => 'localhost',
         zabbix_api_user  => 'Admin',
         zabbix_api_pass  => 'zabbix',
@@ -33,7 +33,7 @@ describe 'zabbix_application type', unless: default[:platform] =~ %r{debian-10-a
 
     pp2 = <<-EOS
       zabbix_application { 'TestApplication1':
-        template => 'Template OS Linux',
+        template => 'Template OS Linux by Zabbix agent',
       }
     EOS
     # setup zabbix. Apache module isn't idempotent and requires a second run
@@ -62,9 +62,9 @@ describe 'zabbix_application type', unless: default[:platform] =~ %r{debian-10-a
   end
 
   context 'TestApplication1' do
-    let(:template1) { result_templates.select { |t| t['host'] == 'Template OS Linux' }.first }
+    let(:template1) { result_templates.select { |t| t['host'] == 'Template OS Linux by Zabbix agent' }.first }
 
-    it 'is attached to Template OS Linux' do
+    it 'is attached to Template OS Linux by Zabbix agent' do
       expect(template1['applications'].map { |a| a['name'] }).to include('TestApplication1')
     end
   end
