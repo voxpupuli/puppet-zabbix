@@ -59,42 +59,36 @@
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "6",
         "7"
       ]
     },
     {
       "operatingsystem": "Amazon",
       "operatingsystemrelease": [
-        "6",
         "7"
       ]
     },
     {
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
-        "6",
         "7"
       ]
     },
     {
       "operatingsystem": "Scientific",
       "operatingsystemrelease": [
-        "6",
         "7"
       ]
     },
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
-        "6",
         "7"
       ]
     },
     {
       "operatingsystem": "CloudLinux",
       "operatingsystemrelease": [
-        "6",
         "7"
       ]
     },
@@ -118,21 +112,8 @@
       ]
     },
     {
-      "operatingsystem": "PSBM",
-      "operatingsystemrelease": [
-        "5"
-      ]
-    },
-    {
-      "operatingsystem": "PCS",
-      "operatingsystemrelease": [
-        "6"
-      ]
-    },
-    {
       "operatingsystem": "VirtuozzoLinux",
       "operatingsystemrelease": [
-        "6",
         "7"
       ]
     },
