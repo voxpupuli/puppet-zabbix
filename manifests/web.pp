@@ -97,6 +97,11 @@
 # [*database_schema*]
 #   Schema name. used for ibm db2.
 #
+# [*database_double_ieee754*]
+#   Enable extended range of float values for new installs of Zabbix >= 5.0 and
+#   after patching upgraded installs to 5.0 or greater.
+#   https://www.zabbix.com/documentation/5.0/manual/installation/upgrade_notes_500#enabling_extended_range_of_numeric_float_values
+#
 # [*database_user*]
 #   Database user. ignored for sqlite.
 #
@@ -211,6 +216,7 @@ class zabbix::web (
   $database_host                                                      = $zabbix::params::server_database_host,
   $database_name                                                      = $zabbix::params::server_database_name,
   $database_schema                                                    = $zabbix::params::server_database_schema,
+  $database_double_ieee754                                            = $zabbix::params::server_database_double_ieee754,
   $database_user                                                      = $zabbix::params::server_database_user,
   $database_password                                                  = $zabbix::params::server_database_password,
   $database_socket                                                    = $zabbix::params::server_database_socket,
