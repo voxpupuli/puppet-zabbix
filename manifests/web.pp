@@ -340,6 +340,33 @@ class zabbix::web (
         ],
       }
     }
+    'CentOS': {
+      $zabbix_web_package = 'zabbix-web'
+      if ($facts['os']['release']['major'] == '7'){
+
+        package { 'zabbix-required-scl-repo':
+          name => 'centos-release-scl',
+          ensure => 'latest'
+        }
+
+        package { "zabbix-web-${db}-scl":
+          ensure  => $zabbix_package_state,
+          before  => Package[$zabbix_web_package],
+          require => Class['zabbix::repo'],
+          tag     => 'zabbix',
+        }
+      
+      } else {
+       
+        package { "zabbix-web-${db}":
+          ensure  => $zabbix_package_state,
+          before  => Package[$zabbix_web_package],
+          require => Class['zabbix::repo'],
+          tag     => 'zabbix',
+        }
+      
+      }
+    }
     default: {
       $zabbix_web_package = 'zabbix-web'
 

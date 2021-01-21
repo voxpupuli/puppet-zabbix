@@ -92,6 +92,22 @@ class zabbix::repo (
           gpgkey   => $gpgkey_nonsupported,
           priority => '1',
         }
+
+        if ($facts['os']['name'] == 'CentOS' and $majorrelease == '7'){
+          $_frontend_repo_location = $frontend_repo_location ? {
+            undef   => "https://repo.zabbix.com/zabbix/${zabbix_version}/rhel/${majorrelease}/\$basearch/frontend",
+            default => $frontend_repo_location,
+          }
+
+          yumrepo { 'zabbix-frontend':
+            name     => "Zabbix_frontend_${majorrelease}_${facts['os']['architecture']}",
+            descr    => "Zabbix_frontend_${majorrelease}_${facts['os']['architecture']}",
+            baseurl  => $_frontend_repo_location,
+            gpgcheck => '1',
+            gpgkey   => $gpgkey_zabbix,
+            priority => '1',
+          }        
+        }
       }
       'Debian' : {
         if ($manage_apt) {
