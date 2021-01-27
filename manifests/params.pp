@@ -166,6 +166,7 @@ class zabbix::params {
   $manage_apt                               = true
   $repo_location                            = undef
   $unsupported_repo_location                = undef
+  $frontend_repo_location                   = undef
   $manage_resources                         = false
   $manage_vhost                             = true
   $database_path                            = '/usr/sbin'

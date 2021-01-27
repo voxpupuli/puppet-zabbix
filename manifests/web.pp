@@ -340,13 +340,12 @@ class zabbix::web (
         ],
       }
     }
-    'CentOS': {
+    'CentOS', 'RedHat': {
       $zabbix_web_package = 'zabbix-web'
-      if ($facts['os']['release']['major'] == '7'){
-
+      if ($facts['os']['release']['major'] == '7' and $zabbix_version == '5.0') {
         package { 'zabbix-required-scl-repo':
-          name => 'centos-release-scl',
-          ensure => 'latest'
+          ensure => 'latest',
+          name   => 'centos-release-scl',
         }
 
         package { "zabbix-web-${db}-scl":
@@ -362,7 +361,6 @@ class zabbix::web (
           require => Class['zabbix::repo'],
           tag     => 'zabbix',
         }
-
       }
     }
     default: {
@@ -409,11 +407,19 @@ class zabbix::web (
       include apache::mod::proxy
       include apache::mod::proxy_fcgi
       $apache_vhost_custom_fragment = ''
-      #php parameters are moved to /etc/opt/rh/rh-php72/php-fpm.d/zabbix.conf per package zabbix-web-deps-scl
+
+      service { 'rh-php72-php-fpm':
+        ensure => 'running',
+        enable => true,
+      }
+
+      # PHP parameters are moved to /etc/opt/rh/rh-php72/php-fpm.d/zabbix.conf per package zabbix-web-deps-scl
       file { '/etc/opt/rh/rh-php72/php-fpm.d/zabbix.conf':
         ensure  => file,
+        notify  => Service['rh-php72-php-fpm'],
         content => epp('zabbix/web/php-fpm.d.zabbix.conf.epp'),
       }
+
       $fcgi_filematch = {
         path     => '/usr/share/zabbix',
         provider => 'directory',

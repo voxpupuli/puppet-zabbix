@@ -35,6 +35,7 @@ class zabbix::repo (
   Boolean                   $manage_repo               = $zabbix::params::manage_repo,
   Boolean                   $manage_apt                = $zabbix::params::manage_apt,
   Optional[Stdlib::HTTPUrl] $repo_location             = $zabbix::params::repo_location,
+  Optional[Stdlib::HTTPUrl] $frontend_repo_location    = $zabbix::params::frontend_repo_location,
   Optional[Stdlib::HTTPUrl] $unsupported_repo_location = $zabbix::params::unsupported_repo_location,
   String[1]                 $zabbix_version            = $zabbix::params::zabbix_version,
 ) inherits zabbix::params {
@@ -93,7 +94,8 @@ class zabbix::repo (
           priority => '1',
         }
 
-        if ($facts['os']['name'] == 'CentOS' and $majorrelease == '7') {
+        # Zabbix 5.0 frontend on CentOS 7 has different location.
+        if ($facts['os']['name'] == 'CentOS' and $majorrelease == '7' and $zabbix_version == '5.0') {
           $_frontend_repo_location = $frontend_repo_location ? {
             undef   => "https://repo.zabbix.com/zabbix/${zabbix_version}/rhel/${majorrelease}/\$basearch/frontend",
             default => $frontend_repo_location,
