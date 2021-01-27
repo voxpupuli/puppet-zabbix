@@ -355,16 +355,14 @@ class zabbix::web (
           require => Class['zabbix::repo'],
           tag     => 'zabbix',
         }
-      
       } else {
-       
         package { "zabbix-web-${db}":
           ensure  => $zabbix_package_state,
           before  => Package[$zabbix_web_package],
           require => Class['zabbix::repo'],
           tag     => 'zabbix',
         }
-      
+
       }
     }
     default: {

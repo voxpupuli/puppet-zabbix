@@ -40,21 +40,21 @@ class zabbix::repo (
 ) inherits zabbix::params {
   if ($manage_repo) {
     case $facts['os']['name'] {
-      'PSBM'        : {
+      'PSBM': {
         $majorrelease = '6'
       }
-      'Amazon'        : {
+      'Amazon': {
         $majorrelease = '6'
       }
-      'oraclelinux' : {
+      'oraclelinux': {
         $majorrelease = $facts['os']['release']['major']
       }
-      default       : {
+      default: {
         $majorrelease = $facts['os']['release']['major']
       }
     }
     case $facts['os']['family'] {
-      'RedHat' : {
+      'RedHat': {
         # Zabbix-3.2 and newer RPMs are signed with the GPG key
         if versioncmp($zabbix_version, '3.2') < 0 {
           $gpgkey_zabbix = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX'
@@ -93,7 +93,7 @@ class zabbix::repo (
           priority => '1',
         }
 
-        if ($facts['os']['name'] == 'CentOS' and $majorrelease == '7'){
+        if ($facts['os']['name'] == 'CentOS' and $majorrelease == '7') {
           $_frontend_repo_location = $frontend_repo_location ? {
             undef   => "https://repo.zabbix.com/zabbix/${zabbix_version}/rhel/${majorrelease}/\$basearch/frontend",
             default => $frontend_repo_location,
@@ -106,10 +106,10 @@ class zabbix::repo (
             gpgcheck => '1',
             gpgkey   => $gpgkey_zabbix,
             priority => '1',
-          }        
+          }
         }
       }
-      'Debian' : {
+      'Debian': {
         if ($manage_apt) {
           # We would like to provide the repos with https urls instead of http
           # this requires the apt-transport-https package, but we don't want to manage
@@ -144,8 +144,8 @@ class zabbix::repo (
             $operatingsystem = downcase($facts['os']['name'])
           }
           case $facts['os']['release']['full'] {
-            /\/sid$/ : { $releasename = regsubst($facts['os']['release']['full'], '/sid$', '') }
-            default  : { $releasename = $facts['os']['distro']['codename'] }
+            /\/sid$/: { $releasename = regsubst($facts['os']['release']['full'], '/sid$', '') }
+            default: { $releasename = $facts['os']['distro']['codename'] }
           }
 
           $_repo_location = $repo_location ? {
@@ -172,9 +172,9 @@ class zabbix::repo (
           }
         }
         Apt::Source['zabbix'] -> Package<|tag == 'zabbix'|>
-        Class['Apt::Update']  -> Package<|tag == 'zabbix'|>
+        Class['Apt::Update'] -> Package<|tag == 'zabbix'|>
       }
-      default  : {
+      default: {
         fail("Managing a repo on ${facts['os']['family']} is currently not implemented")
       }
     }

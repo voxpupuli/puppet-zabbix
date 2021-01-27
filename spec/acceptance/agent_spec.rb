@@ -6,7 +6,7 @@ def agent_supported(version)
   true
 end
 
-['2.4', '3.2', '3.4', '4.0', '4.2', '4.4'].each do |version|
+['2.4', '3.2', '3.4', '4.0', '4.2', '4.4', '5.0', '5.2'].each do |version|
   describe "zabbix::agent class with zabbix_version #{version}", if: agent_supported(version) do
     it 'works idempotently with no errors' do
       pp = <<-EOS
