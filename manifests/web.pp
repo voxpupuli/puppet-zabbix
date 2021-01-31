@@ -237,6 +237,14 @@ class zabbix::web (
     fail("${facts['os']['family']} is currently not supported for zabbix::web")
   }
 
+  # zabbix frontend 5.x is not supported, among others, on stretch and xenial.
+  # https://www.zabbix.com/documentation/current/manual/installation/frontend/frontend_on_debian
+  if $facts['os']['name'] in ['ubuntu', 'debian'] and versioncmp($zabbix_version, '5') >= 0 {
+    if versioncmp($facts['os']['release']['major'], '16.04') == 0 or versioncmp($facts['os']['release']['major'], '9') == 0 {
+      fail("${facts['os']['family']} ${$facts['os']['release']['major']} is not supported for zabbix::web")
+    }
+  }
+
   # Only include the repo class if it has not yet been included
   unless defined(Class['Zabbix::Repo']) {
     class { 'zabbix::repo':
@@ -279,7 +287,10 @@ class zabbix::web (
       '3.4' : {
         $zabbixapi_version = '4.0.0'
       }
-      /^4\.\d{1}$/: {
+      /^4\.[02]$/: {
+        $zabbixapi_version = '4.1.2'
+      }
+      '4.4': {
         $zabbixapi_version = '4.2.0'
       }
       default : {
@@ -345,7 +356,7 @@ class zabbix::web (
     }
     'CentOS', 'RedHat': {
       $zabbix_web_package = 'zabbix-web'
-      if ($facts['os']['release']['major'] == '7' and $zabbix_version == '5.0') {
+      if ($facts['os']['release']['major'] == '7' and versioncmp($zabbix_version, '5') >= 0) {
         package { 'zabbix-required-scl-repo':
           ensure => 'latest',
           name   => 'centos-release-scl',
@@ -401,6 +412,17 @@ class zabbix::web (
     mode    => '0640',
     replace => true,
     content => template('zabbix/web/zabbix.conf.php.erb'),
+  }
+
+  # For API to work on Zabbix 5.x zabbix.conf.php needs to be in the root folder.
+  if versioncmp($zabbix_version, '5') >= 0 {
+    file { '/etc/zabbix/zabbix.conf.php':
+      ensure => link,
+      target => '/etc/zabbix/web/zabbix.conf.php',
+      owner  => $web_config_owner,
+      group  => $web_config_group,
+      mode   => '0640',
+    }
   }
 
   # Is set to true, it will create the apache vhost.

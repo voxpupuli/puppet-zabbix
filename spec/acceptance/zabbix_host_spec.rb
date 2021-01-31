@@ -2,7 +2,7 @@ require 'spec_helper_acceptance'
 require 'serverspec_type_zabbixapi'
 
 # rubocop:disable RSpec/LetBeforeExamples
-describe 'zabbix_host type', unless: default[:platform] =~ %r{debian-10-amd64} do
+describe 'zabbix_host type', unless: default[:platform] =~ %r{(ubuntu-16.04|debian-9|debian-10)-amd64} do
   context 'create zabbix_host resources' do
     # This will deploy a running Zabbix setup (server, web, db) which we can
     # use for custom type tests
@@ -20,7 +20,7 @@ class { 'postgresql::globals':
 -> class { 'postgresql::server': }
 
 class { 'zabbix':
-  zabbix_version   => '4.4',
+  zabbix_version   => '5.0',
   zabbix_url       => 'localhost',
   zabbix_api_user  => 'Admin',
   zabbix_api_pass  => 'zabbix',
