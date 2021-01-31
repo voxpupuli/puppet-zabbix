@@ -78,7 +78,7 @@ describe 'zabbix::database::mysql' do
               database_host: 'rspec.puppet.com',
               zabbix_type: 'server',
               zabbix_version: zabbix_version
-           }
+            }
           end
 
           it { is_expected.to contain_class('zabbix::database::mysql') }
@@ -90,12 +90,12 @@ describe 'zabbix::database::mysql' do
           describe "when zabbix_type is proxy and zabbix version is #{zabbix_version}" do
             let :params do
               {
-                  database_name: 'zabbix-proxy',
-                  database_user: 'zabbix-proxy',
-                  database_password: 'zabbix-proxy',
-                  database_host: 'rspec.puppet.com',
-                  zabbix_type: 'proxy',
-                  zabbix_version: zabbix_version
+                database_name: 'zabbix-proxy',
+                database_user: 'zabbix-proxy',
+                database_password: 'zabbix-proxy',
+                database_host: 'rspec.puppet.com',
+                zabbix_type: 'proxy',
+                zabbix_version: zabbix_version
               }
             end
 
