@@ -270,6 +270,10 @@
 # [*loadmodule*]
 #   Module to load at server startup.
 #
+# [*socketdir*]
+#   IPC socket directory.
+#     Directory to store IPC sockets used by internal Zabbix services.
+#
 # === Example
 #
 #  When you want to run everything on one machine, you can use the following
@@ -432,8 +436,8 @@ class zabbix::proxy (
   $loadmodulepath                            = $zabbix::params::proxy_loadmodulepath,
   $loadmodule                                = $zabbix::params::proxy_loadmodule,
   Boolean $manage_selinux                    = $zabbix::params::manage_selinux,
-  ) inherits zabbix::params {
-
+  Optional[Stdlib::Absolutepath] $socketdir  = $zabbix::params::proxy_socketdir,
+) inherits zabbix::params {
   # check osfamily, Arch is currently not supported for web
   if $facts['os']['family'] == 'Archlinux' {
     fail('Archlinux is currently not supported for zabbix::proxy ')
@@ -458,12 +462,20 @@ class zabbix::proxy (
   # is set to false, you'll get warnings like this:
   # "Warning: You cannot collect without storeconfigs being set"
   if $manage_resources {
-    class { 'zabbix::resources::proxy':
-      hostname  => $hostname,
-      ipaddress => $listen_ip,
-      use_ip    => $use_ip,
-      mode      => $mode,
-      port      => $listenport,
+    if String($mode) == '0' {
+      # Active proxies don't use `ipaddress`, `use_ip` or `port`.
+      class { 'zabbix::resources::proxy':
+        hostname => $hostname,
+        mode     => $mode,
+      }
+    } else {
+      class { 'zabbix::resources::proxy':
+        hostname  => $hostname,
+        ipaddress => $listen_ip,
+        use_ip    => $use_ip,
+        mode      => $mode,
+        port      => $listenport,
+      }
     }
 
     zabbix::userparameters { 'Zabbix_Proxy': template => 'Template App Zabbix Proxy', }
@@ -525,7 +537,8 @@ class zabbix::proxy (
     }
 
     Package["zabbix-proxy-${db}"] {
-      require => Class['zabbix::repo'] }
+      require => Class['zabbix::repo']
+    }
   }
 
   # Now we are going to install the correct packages.
@@ -565,40 +578,39 @@ class zabbix::proxy (
       subscribe  => [
         File[$proxy_configfile_path],
         Class['zabbix::database']
-        ],
+      ],
       require    => [
         Package["zabbix-proxy-${db}"],
         File[$include_dir],
         File[$proxy_configfile_path],
         Class['zabbix::database']
-        ],
+      ],
     }
   }
-
 
   $before_database = $manage_service ? {
     true  => [
       Service[$proxy_service_name],
       Class["zabbix::database::${database_type}"]
-      ],
+    ],
     false => Class["zabbix::database::${database_type}"],
   }
 
   # if we want to manage the databases, we do
   # some stuff. (for maintaining database only.)
-  if $manage_database  {
-      class { 'zabbix::database':
-        database_type     => $database_type,
-        zabbix_type       => 'proxy',
-        database_name     => $database_name,
-        database_user     => $database_user,
-        database_password => $database_password,
-        database_host     => $database_host,
-        zabbix_proxy      => $zabbix_proxy,
-        zabbix_proxy_ip   => $zabbix_proxy_ip,
-        before            => $before_database,
-      }
+  if $manage_database {
+    class { 'zabbix::database':
+      database_type     => $database_type,
+      zabbix_type       => 'proxy',
+      database_name     => $database_name,
+      database_user     => $database_user,
+      database_password => $database_password,
+      database_host     => $database_host,
+      zabbix_proxy      => $zabbix_proxy,
+      zabbix_proxy_ip   => $zabbix_proxy_ip,
+      before            => $before_database,
     }
+  }
 
   # Configuring the zabbix-proxy configuration file
   file { $proxy_configfile_path:
@@ -626,16 +638,16 @@ class zabbix::proxy (
       state  => [
         'NEW',
         'RELATED',
-        'ESTABLISHED'],
+        'ESTABLISHED',
+      ],
     }
   }
 
   # check if selinux is active and allow zabbix
   if fact('os.selinux.enabled') == true and $manage_selinux {
-    selboolean{'zabbix_can_network':
+    selboolean { 'zabbix_can_network':
       persistent => true,
       value      => 'on',
     }
   }
-
 }

@@ -48,6 +48,10 @@ Puppet::Type.newtype(:zabbix_host) do
     desc 'The IP address of the machine running zabbix agent.'
   end
 
+  newproperty(:interfacetype, int: 1) do
+    desc 'Interface type. 1 for zabbix agent.'
+  end
+
   newproperty(:use_ip, boolean: true) do
     desc 'Using ipadress instead of dns to connect.'
 
@@ -94,6 +98,13 @@ Puppet::Type.newtype(:zabbix_host) do
     desc 'List of templates which should be loaded for this host.'
     def insync?(is)
       is.sort == should.sort
+    end
+  end
+
+  newproperty(:macros, array_matching: :all) do
+    desc 'Array of hashes (macros) which should be loaded for this host.'
+    def insync?(is)
+      is.sort_by(&:first) == should.sort_by(&:first)
     end
   end
 

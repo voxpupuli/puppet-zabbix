@@ -25,7 +25,6 @@ class zabbix::database::postgresql (
   $database_host        = '',
   $database_path        = $zabbix::params::database_path,
 ) inherits zabbix::params {
-
   assert_private()
 
   #
@@ -99,46 +98,38 @@ class zabbix::database::postgresql (
   }
 
   case $zabbix_type {
-      'proxy': {
-        exec { 'zabbix_proxy_create.sql':
-          command  => $zabbix_proxy_create_sql,
-          path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
-          unless   => 'test -f /etc/zabbix/.schema.done',
-          provider => 'shell',
-          require  => [
-            Exec['update_pgpass'],
-          ],
-        }
+    'proxy': {
+      exec { 'zabbix_proxy_create.sql':
+        command  => $zabbix_proxy_create_sql,
+        path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
+        unless   => 'test -f /etc/zabbix/.schema.done',
+        provider => 'shell',
+        require  => Exec['update_pgpass'],
       }
-      'server': {
-        exec { 'zabbix_server_create.sql':
-          command  => $zabbix_server_create_sql,
-          path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
-          unless   => 'test -f /etc/zabbix/.schema.done',
-          provider => 'shell',
-          require  => [
-            Exec['update_pgpass'],
-          ],
-        }
-        -> exec { 'zabbix_server_images.sql':
-          command  => $zabbix_server_images_sql,
-          path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
-          unless   => 'test -f /etc/zabbix/.images.done',
-          provider => 'shell',
-          require  => [
-            Exec['update_pgpass'],
-          ],
-        }
-        -> exec { 'zabbix_server_data.sql':
-          command  => $zabbix_server_data_sql,
-          path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
-          unless   => 'test -f /etc/zabbix/.data.done',
-          provider => 'shell',
-          require  => [
-            Exec['update_pgpass'],
-          ],
-        }
+    }
+    'server': {
+      exec { 'zabbix_server_create.sql':
+        command  => $zabbix_server_create_sql,
+        path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
+        unless   => 'test -f /etc/zabbix/.schema.done',
+        provider => 'shell',
+        require  => Exec['update_pgpass'],
       }
+      -> exec { 'zabbix_server_images.sql':
+        command  => $zabbix_server_images_sql,
+        path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
+        unless   => 'test -f /etc/zabbix/.images.done',
+        provider => 'shell',
+        require  => Exec['update_pgpass'],
+      }
+      -> exec { 'zabbix_server_data.sql':
+        command  => $zabbix_server_data_sql,
+        path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
+        unless   => 'test -f /etc/zabbix/.data.done',
+        provider => 'shell',
+        require  => Exec['update_pgpass'],
+      }
+    }
     default: {
       fail 'We do not work.'
     }

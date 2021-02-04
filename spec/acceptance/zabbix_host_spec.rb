@@ -1,7 +1,8 @@
 require 'spec_helper_acceptance'
 require 'serverspec_type_zabbixapi'
 
-describe 'zabbix_host type' do
+# rubocop:disable RSpec/LetBeforeExamples
+describe 'zabbix_host type', unless: default[:platform] =~ %r{debian-10-amd64} do
   context 'create zabbix_host resources' do
     # This will deploy a running Zabbix setup (server, web, db) which we can
     # use for custom type tests
@@ -31,7 +32,7 @@ class { 'zabbix':
     # setup zabbix. Apache module isn't idempotent and requires a second run
     it 'works with no error on the first apply' do
       # Cleanup old database
-      shell('/opt/puppetlabs/bin/puppet resource service zabbix-server ensure=stopped; /opt/puppetlabs/bin/puppet resource package zabbix-server-pgsql ensure=purged; rm -f /etc/zabbix/.*done; su - postgres -c "psql -c \'drop database if exists zabbix_server;\'"')
+      prepare_host
 
       apply_manifest(pp1, catch_failures: true)
     end
@@ -48,6 +49,7 @@ zabbix_host { 'test1.example.com':
   groups       => ['TestgroupOne'],
   group_create => true,
   templates    => [ 'Template OS Linux', ],
+  macros       => [],
 }
 zabbix_host { 'test2.example.com':
   ipaddress => '127.0.0.2',
@@ -55,6 +57,7 @@ zabbix_host { 'test2.example.com':
   port      => 1050,
   groups    => ['Virtual machines'],
   templates => [ 'Template OS Linux', 'Template ICMP Ping', ],
+  macros    => [],
 }
     EOS
 

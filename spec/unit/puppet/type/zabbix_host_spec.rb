@@ -1,11 +1,12 @@
 require 'spec_helper'
 require 'unit/puppet/x/spec_zabbix_types'
 
+# rubocop:disable RSpec/LetBeforeExamples
 describe Puppet::Type.type(:zabbix_host) do
   describe 'when validating params' do
-    %i[
-      group_create
-      hostname
+    [
+      :group_create,
+      :hostname
     ].each do |param|
       it "should have a #{param} parameter" do
         expect(described_class.attrtype(param)).to eq(:param)
@@ -14,16 +15,17 @@ describe Puppet::Type.type(:zabbix_host) do
   end
 
   describe 'when validating properties' do
-    %i[
-      group
-      groups
-      id
-      interfaceid
-      ipaddress
-      port
-      proxy
-      templates
-      use_ip
+    [
+      :group,
+      :groups,
+      :id,
+      :interfaceid,
+      :ipaddress,
+      :port,
+      :proxy,
+      :templates,
+      :macros,
+      :use_ip
     ].each do |param|
       it "should have a #{param} property" do
         expect(described_class.attrtype(param)).to eq(:property)
@@ -120,6 +122,17 @@ describe Puppet::Type.type(:zabbix_host) do
 
       it 'ignores order of array' do
         expect(object.property(:templates).insync?(['Template One', 'Template1'])).to be true
+      end
+    end
+
+    describe 'macros' do
+      it_behaves_like 'validated property', :macros, nil, [{ 'macro1' => 'value1' }, { 'macro2' => 'value2' }]
+      it_behaves_like 'array_matching property', :macros
+
+      let(:object) { described_class.new(name: 'nobody', macros: [{ 'macro1' => 'value1' }, { 'macro2' => 'value2' }]) }
+
+      it 'ignores order of array' do
+        expect(object.property(:macros).insync?([{ 'macro1' => 'value1' }, { 'macro2' => 'value2' }])).to be true
       end
     end
 

@@ -114,7 +114,7 @@
 #
 # Copyright 2014 Werner Dijkerman
 #
-class zabbix::database(
+class zabbix::database (
   $zabbix_type                     = 'server',
   $zabbix_web                      = $zabbix::params::zabbix_web,
   $zabbix_web_ip                   = $zabbix::params::zabbix_web_ip,
@@ -134,7 +134,6 @@ class zabbix::database(
   $database_collate                = $zabbix::params::server_database_collate,
   Optional[String[1]] $database_tablespace = $zabbix::params::server_database_tablespace,
 ) inherits zabbix::params {
-
   # So lets create the databases and load all files. This can only be
   # happen when manage_database is set to true (Default).
   if $manage_database == true {
@@ -156,7 +155,7 @@ class zabbix::database(
         }
 
         # When database not in some server with zabbix server include pg_hba_rule to server
-        if ($database_host_ip != $zabbix_server_ip) or ($zabbix_web_ip != $zabbix_server_ip){
+        if ($database_host_ip != $zabbix_server_ip) or ($zabbix_web_ip != $zabbix_server_ip) {
           postgresql::server::pg_hba_rule { 'Allow zabbix-server to access database':
             description => 'Open up postgresql for access from zabbix-server',
             type        => 'host',

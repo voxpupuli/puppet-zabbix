@@ -1,7 +1,8 @@
 require 'spec_helper_acceptance'
 require 'serverspec_type_zabbixapi'
 
-describe 'zabbix_hostgroup type' do
+# rubocop:disable RSpec/LetBeforeExamples
+describe 'zabbix_hostgroup type', unless: default[:platform] =~ %r{debian-10-amd64} do
   context 'create zabbix_hostgroup resources' do
     it 'runs successfully' do
       # This will deploy a running Zabbix setup (server, web, db) which we can
@@ -33,10 +34,8 @@ describe 'zabbix_hostgroup type' do
         }
       EOS
 
-      shell('yum clean metadata') if fact('os.family') == 'RedHat'
-
       # Cleanup old database
-      shell('/opt/puppetlabs/bin/puppet resource service zabbix-server ensure=stopped; /opt/puppetlabs/bin/puppet resource package zabbix-server-pgsql ensure=purged; rm -f /etc/zabbix/.*done; su - postgres -c "psql -c \'drop database if exists zabbix_server;\'"')
+      prepare_host
 
       apply_manifest(pp, catch_failures: true)
     end

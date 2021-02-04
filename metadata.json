@@ -1,6 +1,6 @@
 {
   "name": "puppet-zabbix",
-  "version": "8.0.0",
+  "version": "8.0.1-rc0",
   "summary": "Installing and maintaining Zabbix. Will install server, proxy, java-gateway and agent on RedHat/Debian/Ubuntu (Incl. exported resources).",
   "author": "Vox Pupuli",
   "dependencies": [
@@ -27,10 +27,6 @@
     {
       "name": "puppetlabs/apt",
       "version_requirement": ">= 2.1.0 < 8.0.0"
-    },
-    {
-      "name": "puppetlabs/concat",
-      "version_requirement": ">= 4.1.0 < 7.0.0"
     },
     {
       "name": "camptocamp/systemd",
@@ -117,7 +113,8 @@
     {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
-        "8"
+        "9",
+        "10"
       ]
     },
     {
@@ -151,6 +148,17 @@
         "9",
         "10"
       ]
+    },
+    {
+      "operatingsystem": "windows",
+      "operatingsystemrelease": [
+        "2012",
+        "2012 R2",
+        "2016"
+      ]
+    },
+    {
+      "operatingsystem": "AIX"
     }
   ]
 }

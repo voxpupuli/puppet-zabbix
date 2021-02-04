@@ -1,7 +1,8 @@
 require 'spec_helper_acceptance'
 require 'serverspec_type_zabbixapi'
 
-describe 'zabbix_application type' do
+# rubocop:disable RSpec/LetBeforeExamples
+describe 'zabbix_application type', unless: default[:platform] =~ %r{debian-10-amd64} do
   context 'create zabbix_application resources' do
     # This will deploy a running Zabbix setup (server, web, db) which we can
     # use for custom type tests
@@ -38,7 +39,7 @@ describe 'zabbix_application type' do
     # setup zabbix. Apache module isn't idempotent and requires a second run
     it 'works with no error on the first apply' do
       # Cleanup old database
-      shell('/opt/puppetlabs/bin/puppet resource service zabbix-server ensure=stopped; /opt/puppetlabs/bin/puppet resource package zabbix-server-pgsql ensure=purged; rm -f /etc/zabbix/.*done; su - postgres -c "psql -c \'drop database if exists zabbix_server;\'"')
+      prepare_host
 
       apply_manifest(pp1, catch_failures: true)
     end

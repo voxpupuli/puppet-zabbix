@@ -37,6 +37,8 @@ describe 'zabbix::startup', type: :define do # rubocop:disable RSpec/MultipleDes
                   content: %r{OPTS="/something"}
                 )
               end
+            elsif osfamily == 'windows'
+              it { is_expected.to have_exec_resource_count(1) }
             else
               it { is_expected.not_to compile.with_all_deps }
               next

@@ -13,6 +13,7 @@ describe 'zabbix::web' do
   end
 
   on_supported_os.each do |os, facts|
+    next if facts[:os]['name'] == 'windows'
     context "on #{os} " do
       let :facts do
         facts
@@ -65,7 +66,7 @@ describe 'zabbix::web' do
                              'php5-pgsql'
                            end
                          when 'Debian'
-                           if facts[:operatingsystemmajrelease] >= '9'
+                           if facts[:operatingsystemmajrelease].to_i >= 9
                              'php-pgsql'
                            else
                              'php5-pgsql'
@@ -94,7 +95,7 @@ describe 'zabbix::web' do
                              'php5-mysql'
                            end
                          when 'Debian'
-                           if facts[:operatingsystemmajrelease] >= '9'
+                           if facts[:operatingsystemmajrelease].to_i >= 9
                              'php-mysql'
                            else
                              'php5-mysql'
@@ -163,6 +164,14 @@ describe 'zabbix::web' do
           end
 
           it { is_expected.not_to contain_class('zabbix::resources::web') }
+        end
+
+        describe 'with parameter: database_schema' do
+          let :params do
+            super().merge(database_schema: 'zabbix')
+          end
+
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['SCHEMA'\] = 'zabbix'}) }
         end
 
         it { is_expected.to contain_apache__vhost('zabbix.example.com').with_name('zabbix.example.com') }

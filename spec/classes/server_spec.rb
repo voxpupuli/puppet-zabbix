@@ -8,6 +8,7 @@ describe 'zabbix::server' do
 
   on_supported_os.each do |os, facts|
     next if facts[:osfamily] == 'Archlinux' # zabbix server is currently not supported on archlinux
+    next if facts[:os]['name'] == 'windows'
     context "on #{os} " do
       systemd_fact = case facts[:osfamily]
                      when 'Archlinux', 'Fedora', 'Gentoo'
@@ -19,8 +20,15 @@ describe 'zabbix::server' do
         facts.merge(systemd_fact)
       end
 
+      zabbix_version = if facts[:os]['name'] == 'Debian' && facts[:os]['release']['major'].to_i == 10
+                         '4.0'
+                       else
+                         '3.4'
+                       end
+
       describe 'with default settings' do
         it { is_expected.to contain_class('zabbix::repo') }
+        it { is_expected.to contain_class('zabbix::params') }
         it { is_expected.to contain_service('zabbix-server').with_ensure('running') }
         it { is_expected.to contain_zabbix__startup('zabbix-server') }
       end
@@ -38,6 +46,11 @@ describe 'zabbix::server' do
           end
 
           it { is_expected.to contain_selboolean('zabbix_can_network').with('value' => 'on', 'persistent' => true) }
+        end
+
+        describe 'with defaults' do
+          it { is_expected.to contain_yumrepo('zabbix-nonsupported') }
+          it { is_expected.to contain_yumrepo('zabbix') }
         end
       end
 
@@ -93,7 +106,7 @@ describe 'zabbix::server' do
         end
 
         it { is_expected.to contain_class('zabbix::database::postgresql').with_zabbix_type('server') }
-        it { is_expected.to contain_class('zabbix::database::postgresql').with_zabbix_version('3.4') }
+        it { is_expected.to contain_class('zabbix::database::postgresql').with_zabbix_version(zabbix_version) }
         it { is_expected.to contain_class('zabbix::database::postgresql').with_database_name('zabbix-server') }
         it { is_expected.to contain_class('zabbix::database::postgresql').with_database_user('zabbix-server') }
         it { is_expected.to contain_class('zabbix::database::postgresql').with_database_password('zabbix-server') }
@@ -112,7 +125,7 @@ describe 'zabbix::server' do
         end
 
         it { is_expected.to contain_class('zabbix::database::mysql').with_zabbix_type('server') }
-        it { is_expected.to contain_class('zabbix::database::mysql').with_zabbix_version('3.4') }
+        it { is_expected.to contain_class('zabbix::database::mysql').with_zabbix_version(zabbix_version) }
         it { is_expected.to contain_class('zabbix::database::mysql').with_database_name('zabbix-server') }
         it { is_expected.to contain_class('zabbix::database::mysql').with_database_user('zabbix-server') }
         it { is_expected.to contain_class('zabbix::database::mysql').with_database_password('zabbix-server') }
@@ -370,6 +383,17 @@ describe 'zabbix::server' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCertFile=/etc/zabbix/keys/zabbix-server.crt$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSKeyFile=/etc/zabbix/keys/zabbix-server.key$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^HistoryIndexCacheSize=4M} }
+      end
+
+      context 'with zabbix_server.conf and version 5.0' do
+        let :params do
+          {
+            socketdir: '/var/run/zabbix',
+            zabbix_version: '5.0'
+          }
+        end
+
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SocketDir=/var/run/zabbix} }
       end
 
       context 'with zabbix_server.conf and system as logtype' do
