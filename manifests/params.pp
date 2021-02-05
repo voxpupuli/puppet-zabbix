@@ -379,8 +379,6 @@ class zabbix::params {
   $proxy_loadmodule                         = undef
   $proxy_loadmodulepath                     = '/usr/lib/modules'
   $proxy_localbuffer                        = '0'
-  $proxy_logfile                            = '/var/log/zabbix/zabbix_proxy.log'
-  $proxy_logfilesize                        = '10'
   $proxy_logremotecommands                  = 0
   $proxy_logslowqueries                     = '0'
   $proxy_mode                               = '0'
@@ -392,6 +390,8 @@ class zabbix::params {
   $proxy_snmptrapperfile                    = '/tmp/zabbix_traps.tmp'
   $proxy_sourceip                           = undef
   $proxy_sshkeylocation                     = undef
+  $proxy_sslcertlocation                    = '/usr/lib/zabbix/ssl/certs'
+  $proxy_sslkeylocation                     = '/usr/lib/zabbix/ssl/keys'
   $proxy_startdbsyncers                     = '4'
   $proxy_startdiscoverers                   = '1'
   $proxy_starthttppollers                   = '1'
@@ -429,6 +429,17 @@ class zabbix::params {
   $proxy_socketdir                          = versioncmp($zabbix_version, '5.0') ? {
     -1      => undef,
     default => '/var/run/zabbix',
+  }
+
+  # provided by camp2camp/systemd
+  if $facts['systemd'] {
+    $proxy_logtype                          = 'system'
+    $proxy_logfile                          = undef
+    $proxy_logfilesize                      = undef
+  } else {
+    $proxy_logtype                          = 'file'
+    $proxy_logfile                          = '/var/log/zabbix/zabbix_proxy.log'
+    $proxy_logfilesize                      = '10'
   }
 
   # Java Gateway specific params

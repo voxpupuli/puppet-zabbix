@@ -85,9 +85,9 @@ LogFileSize=<%= @logfilesize %>
 #	2 - error information
 #	3 - warnings
 #	4 - for debugging (produces lots of information)
-<% if @zabbix_version.to_f >= 3.0 %>
+<% if @zabbix_version.to_f >= 3.0 -%>
 #	5 - extended debugging (produces even more information)
-<% end %>
+<% end -%>
 DebugLevel=<%= @debuglevel %>
 
 ### Option: PidFile
@@ -313,11 +313,11 @@ StartSNMPTrapper=<%= @snmptrapper %>
 #	To prevent Housekeeper from being overloaded, no more than 4 times HousekeepingFrequency
 #	hours of outdated information are deleted in one housekeeping cycle.
 #	To lower load on proxy startup housekeeping is postponed for 30 minutes after proxy start.
-<% if @zabbix_version.to_f >= 3.0 %>
+<% if @zabbix_version.to_f >= 3.0 -%>
 #	With HousekeepingFrequency=0 the housekeeper can be only executed using the runtime control option.
 #	In this case the period of outdated information deleted in one housekeeping cycle is 4 times the
 #	period since the last housekeeping cycle, but not less than 4 hours and not greater than 4 days.
-<% end %>
+<% end -%>
 #
 HousekeepingFrequency=<%= @housekeepingfrequency %>
 
@@ -443,13 +443,13 @@ Include=<%= @include_dir %>
 #	Location of SSL client certificates.
 #	This parameter is used only in web monitoring.
 #
-<% if @sslcertlocation %>SSLCertLocation=<%= @sslcertlocation %><% end %>
+<% if @sslcertlocation_dir %>SSLCertLocation=<%= @sslcertlocation_dir %><% end %>
 
 ### Option: SSLKeyLocation
 #	Location of private keys for SSL client certificates.
 #	This parameter is used only in web monitoring.
 #
-<% if @sslkeylocation %>SSLKeyLocation=<%= @sslkeylocation %><% end %>
+<% if @sslkeylocation_dir %>SSLKeyLocation=<%= @sslkeylocation_dir %><% end %>
 
 ### Option: SSLCALocation
 #	Location of certificate authority (CA) files for SSL server certificate verification.
