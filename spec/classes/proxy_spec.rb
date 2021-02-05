@@ -242,7 +242,6 @@ describe 'zabbix::proxy' do
               logfilesize: '15',
               logfile: '/var/log/zabbix/proxy_server.log',
               logslowqueries: '0',
-              logtype: 'file',
               mode: '0',
               offlinebuffer: '1',
               pidfile: '/var/run/zabbix/proxy_server.pid',
@@ -277,7 +276,6 @@ describe 'zabbix::proxy' do
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^ServerPort=10051$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^Hostname=rspec.puppet.com$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^ListenPort=10051$} }
-          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LogType=file$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LogFile=/var/log/zabbix/proxy_server.log$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LogFileSize=15$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^DebugLevel=4$} }
@@ -333,6 +331,7 @@ describe 'zabbix::proxy' do
         context 'with zabbix_proxy.conf and version 3.0' do
           let :params do
             {
+              logtype: 'system',
               sslcertlocation_dir: '/usr/lib/zabbix/ssl/certs',
               sslkeylocation_dir: '/usr/lib/zabbix/ssl/keys',
               tlsaccept: 'cert',
@@ -348,6 +347,7 @@ describe 'zabbix::proxy' do
             }
           end
 
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LogType=system$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSAccept=cert$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSCAFile=/etc/zabbix/keys/zabbix-server.ca$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSCRLFile=/etc/zabbix/keys/zabbix-server.crl$} }
