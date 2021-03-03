@@ -389,6 +389,14 @@ class zabbix::server (
   Boolean $manage_startup_script             = $zabbix::params::manage_startup_script,
   Optional[Stdlib::Absolutepath] $socketdir  = $zabbix::params::server_socketdir,
 ) inherits zabbix::params {
+  # zabbix server 5.2 is not supported on RHEL 7.
+  # https://www.zabbix.com/documentation/current/manual/installation/install_from_packages/rhel_centos
+  if $facts['os']['family'] == 'RedHat' and versioncmp($zabbix_version, '5.2') == 0 {
+    if versioncmp($facts['os']['release']['major'], '7') == 0 {
+      fail("${facts['os']['family']} ${$facts['os']['release']['major']} is not supported for zabbix::server (yet)")
+    }
+  }
+
   # the following codeblock is a bit blargh. The correct default value for
   # $real_additional_service_params changes based on the value of $zabbix_version
   # We handle this in the params.pp, but that doesn't work if somebody provides a specific

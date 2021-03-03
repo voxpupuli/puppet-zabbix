@@ -19,6 +19,7 @@ def prepare_host
   /opt/puppetlabs/bin/puppet resource package zabbix-web-pgsql-scl ensure=purged
   /opt/puppetlabs/bin/puppet resource package zabbix-web-mysql-scl ensure=purged
   /opt/puppetlabs/bin/puppet resource package zabbix-frontend-php ensure=purged
+  /opt/puppetlabs/bin/puppet/gem uninstall zabbixapi -a
   rm -f /etc/zabbix/.*done
   if id postgres > /dev/null 2>&1; then
     su - postgres -c "psql -c 'drop database if exists zabbix_server;'"
