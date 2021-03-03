@@ -545,16 +545,7 @@ class zabbix::web (
             provider => 'directory',
         }, $directory_deny),
       ],
-      custom_fragment => "
-   php_value max_execution_time ${apache_php_max_execution_time}
-   php_value memory_limit ${apache_php_memory_limit}
-   php_value post_max_size ${apache_php_post_max_size}
-   php_value upload_max_filesize ${apache_php_upload_max_filesize}
-   php_value max_input_time ${apache_php_max_input_time}
-   php_value always_populate_raw_post_data ${apache_php_always_populate_raw_post_data}
-   php_value max_input_vars ${apache_php_max_input_vars}
-   # Set correct timezone
-   php_value date.timezone ${zabbix_timezone}",
+      custom_fragment => $apache_vhost_custom_fragment,
       rewrites        => [
         {
         rewrite_rule => ['^$ /index.php [L]'] }
