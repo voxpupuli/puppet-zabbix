@@ -42,8 +42,20 @@ define zabbix::startup (
       ensure  => file,
       mode    => '0664',
       content => template("zabbix/${service_name}-systemd.init.erb"),
+      notify  => Exec['systemctl-daemon-reload'],
     }
-    ~> Exec['systemctl-daemon-reload']
+    # camptocamp systemd removed the exec in an actual release due
+    # to changed behavior of service type in puppet > 6.1
+    # we need to check if we run an older version of systemd module
+    # and add the exec resource type if running with an older version.
+    if !defined(Exec['systemctl-daemon-reload']) {
+      exec { 'systemctl-daemon-reload':
+        command     => "systemctl daemon-reload",
+        refreshonly => true,
+        path        => $facts['path'],
+      }
+    }
+
     file { "/etc/init.d/${name}":
       ensure  => absent,
     }
