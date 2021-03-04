@@ -16,14 +16,15 @@
 # Copyright 2014 Werner Dijkerman
 #
 class zabbix::database::postgresql (
-  $zabbix_type          = '',
-  $zabbix_version       = $zabbix::params::zabbix_version,
-  $database_schema_path = '',
-  $database_name        = '',
-  $database_user        = '',
-  $database_password    = '',
-  $database_host        = '',
-  $database_path        = $zabbix::params::database_path,
+  $zabbix_type                = '',
+  $zabbix_version             = $zabbix::params::zabbix_version,
+  $database_schema_path       = '',
+  $database_name              = '',
+  $database_user              = '',
+  $database_password          = '',
+  $database_host              = '',
+  $database_path              = $zabbix::params::database_path,
+  $database_import_timeout    = $zabbix::params::database_import_timeout,
 ) inherits zabbix::params {
   assert_private()
 
@@ -104,6 +105,7 @@ class zabbix::database::postgresql (
         path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
         unless   => 'test -f /etc/zabbix/.schema.done',
         provider => 'shell',
+        timeout  => $database_import_timeout,
         require  => Exec['update_pgpass'],
       }
     }
@@ -113,6 +115,7 @@ class zabbix::database::postgresql (
         path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
         unless   => 'test -f /etc/zabbix/.schema.done',
         provider => 'shell',
+        timeout  => $database_import_timeout,
         require  => Exec['update_pgpass'],
       }
       -> exec { 'zabbix_server_images.sql':
@@ -120,6 +123,7 @@ class zabbix::database::postgresql (
         path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
         unless   => 'test -f /etc/zabbix/.images.done',
         provider => 'shell',
+        timeout  => $database_import_timeout,
         require  => Exec['update_pgpass'],
       }
       -> exec { 'zabbix_server_data.sql':
@@ -127,6 +131,7 @@ class zabbix::database::postgresql (
         path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
         unless   => 'test -f /etc/zabbix/.data.done',
         provider => 'shell',
+        timeout  => $database_import_timeout,
         require  => Exec['update_pgpass'],
       }
     }
