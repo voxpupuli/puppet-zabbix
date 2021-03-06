@@ -18,6 +18,8 @@ describe 'zabbix::server class' do
         class { 'postgresql::globals':
           encoding => 'UTF-8',
           locale   => 'en_US.UTF-8',
+          manage_package_repo => true,
+          version => '12',
         }
         -> class { 'postgresql::server': }
         -> class { 'zabbix::database': }

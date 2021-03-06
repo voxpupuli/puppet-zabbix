@@ -20,6 +20,8 @@ describe 'zabbix_proxy type', unless: default[:platform] =~ %r{debian-10-amd64} 
       class { 'postgresql::globals':
         encoding => 'UTF-8',
         locale   => 'en_US.UTF-8',
+        manage_package_repo => true,
+        version => '12',
       }
       -> class { 'postgresql::server': }
 
