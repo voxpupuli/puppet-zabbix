@@ -7,12 +7,6 @@ describe 'zabbix_host type', unless: default[:platform] =~ %r{debian-10-amd64} d
     # This will deploy a running Zabbix setup (server, web, db) which we can
     # use for custom type tests
     pp1 = <<-EOS
-$compile_packages = $facts['os']['family'] ? {
-  'RedHat' => [ 'make', 'gcc-c++', 'rubygems', 'ruby'],
-  'Debian' => [ 'make', 'g++', 'ruby-dev', 'ruby', 'pkg-config',],
-  default  => [],
-}
-ensure_packages($compile_packages, { before => Package['zabbixapi'], })
 class { 'apache':
   mpm_module => 'prefork',
 }
