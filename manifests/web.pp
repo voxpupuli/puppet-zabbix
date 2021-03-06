@@ -281,10 +281,10 @@ class zabbix::web (
       '2.4': {
         $zabbixapi_version = '2.4.4'
       }
-      '3.2': {
+      '3.2' : {
         $zabbixapi_version = '3.2.1'
       }
-      '3.4': {
+      '3.4' : {
         $zabbixapi_version = '4.0.0'
       }
       '4.0': {
@@ -293,8 +293,11 @@ class zabbix::web (
       '4.4': {
         $zabbixapi_version = '4.2.0'
       }
-      default : {
+      /^5\.[02]/: {
         $zabbixapi_version = '5.0.0-alpha1'
+      }
+      default: {
+        fail("Zabbix ${zabbix_version} is not supported!")
       }
     }
 
