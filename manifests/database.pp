@@ -149,7 +149,7 @@ class zabbix::database (
         postgresql::server::db { $database_name:
           user       => $database_user,
           owner      => $database_user,
-          password   => postgresql_password($database_user, $database_password),
+          password   => postgresql::postgresql_password($database_user, $database_password),
           require    => Class['postgresql::server'],
           tablespace => $database_tablespace,
         }
