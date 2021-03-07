@@ -17,7 +17,13 @@ describe 'zabbix_application type', unless: default[:platform] =~ %r{debian-10-a
           mpm_module => 'prefork',
       }
       include apache::mod::php
-      include postgresql::server
+      class { 'postgresql::globals':
+        encoding => 'UTF-8',
+        locale   => 'en_US.UTF-8',
+        manage_package_repo => true,
+        version => '12',
+      }
+      -> class { 'postgresql::server': }
 
       class { 'zabbix':
         zabbix_version   => '4.4',

@@ -38,12 +38,9 @@ define zabbix::startup (
   # provided by camp2camp/systemd
   if $facts['systemd'] {
     contain systemd
-    file { "/etc/systemd/system/${name}.service":
-      ensure  => file,
-      mode    => '0664',
+    systemd::unit_file { "${name}.service":
       content => template("zabbix/${service_name}-systemd.init.erb"),
     }
-    ~> Exec['systemctl-daemon-reload']
     file { "/etc/init.d/${name}":
       ensure  => absent,
     }

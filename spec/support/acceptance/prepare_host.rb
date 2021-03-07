@@ -16,4 +16,15 @@ def prepare_host
   fi
   SHELL
   shell(cleanup_script)
+  install_deps = <<-SHELL
+      $compile_packages = $facts['os']['family'] ? {
+        'RedHat' => [ 'make', 'gcc-c++', 'rubygems', 'ruby'],
+        'Debian' => [ 'make', 'g++', 'ruby-dev', 'ruby', 'pkg-config',],
+        default  => [],
+      }
+      package { $compile_packages:
+        ensure => 'present',
+      }
+  SHELL
+  apply_manifest(install_deps)
 end

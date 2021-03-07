@@ -71,12 +71,13 @@ describe 'zabbix::startup', type: :define do # rubocop:disable RSpec/MultipleDes
           end
 
           it { is_expected.to contain_class('systemd') }
+          it { is_expected.to contain_systemd__unit_file('zabbix-agent.service') }
           it { is_expected.to contain_file('/etc/init.d/zabbix-agent').with_ensure('absent') }
           it do
             is_expected.to contain_file('/etc/systemd/system/zabbix-agent.service').with(
               ensure: 'file',
-              mode:   '0664'
-            ).that_notifies('Exec[systemctl-daemon-reload]')
+              mode:   '0444'
+            )
           end
           it { is_expected.to contain_file('/etc/systemd/system/zabbix-agent.service').with_content(%r{ExecStart=/usr/sbin/zabbix_agentd --foreground -c /something}) }
           it { is_expected.to contain_file('/etc/systemd/system/zabbix-agent.service').with_content(%r{PIDFile=/somethingelse}) }
@@ -157,12 +158,13 @@ describe 'zabbix::startup', type: :define do
           end
 
           it { is_expected.to contain_class('systemd') }
+          it { is_expected.to contain_systemd__unit_file('zabbix-server.service') }
           it { is_expected.to contain_file('/etc/init.d/zabbix-server').with_ensure('absent') }
           it do
             is_expected.to contain_file('/etc/systemd/system/zabbix-server.service').with(
               ensure: 'file',
-              mode:   '0664'
-            ).that_notifies('Exec[systemctl-daemon-reload]')
+              mode:   '0444'
+            )
           end
           it { is_expected.to contain_file('/etc/systemd/system/zabbix-server.service').with_content(%r{ExecStart=/usr/sbin/zabbix_server --foreground -c /something}) }
           it { is_expected.to contain_file('/etc/systemd/system/zabbix-server.service').with_content(%r{PIDFile=/somethingelse}) }
