@@ -44,4 +44,21 @@ putenv("LDAPTLS_KEY=<%= @ldap_clientkey %>");
 <% if @ldap_reqcert %>
 putenv("TLS_REQCERT=<%= @ldap_reqcert %>");
 <% end %>
+
+<% if @saml_sp_key %>
+$SSO['SP_KEY'] = '<%= @saml_sp_key -%>';
+<% end %>
+<% if @saml_sp_cert %>
+$SSO['SP_CERT'] = '<%= @saml_sp_cert -%>';
+<% end %>
+<% if @saml_idp_cert %>
+$SSO['IDP_CERT'] = '<%= @saml_idp_cert -%>';
+<% end %>
+<% if @saml_settings %>
+$SSO['SETTINGS'] = [ <%= JSON.pretty_generate(@saml_settings, space_before: " ")
+                             .sub("{", "")
+                             .gsub(" : ", " => ")
+                             .gsub("{", "[")
+                             .gsub("}", "]") -%>;
+<% end %>
 ?>

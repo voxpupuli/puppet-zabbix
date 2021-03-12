@@ -148,16 +148,28 @@
 #   Max amount of vars for GET/POST requests
 #
 # [*ldap_cacert*]
-#  Set location of ca_cert used by LDAP authentication.
+#   Set location of ca_cert used by LDAP authentication.
 #
 # [*ldap_clientcrt*]
-#  Set location of client cert used by LDAP authentication.
+#   Set location of client cert used by LDAP authentication.
 #
 # [*ldap_clientkey*]
-# Set location of client key used by LDAP authentication.
+#   Set location of client key used by LDAP authentication.
 #
 # [*ldap_reqcert *]
-# Specifies what checks to perform on a server certificate
+#   Specifies what checks to perform on a server certificate
+#
+# [*saml_sp_key*]
+#   The location of the SAML Service Provider Key file.
+#
+# [*saml_sp_cert*]
+#   The location of the SAML Service Provider Certificate.
+#
+# [*saml_idp_cert*]
+#   The location of the SAML Identity Provider Certificate.
+#
+# [*saml_settings*]
+#   A hash of additional SAML SSO settings.
 #
 # [*puppetgem*]
 # Provider for the zabbixapi gem package
@@ -235,6 +247,10 @@ class zabbix::web (
   Optional[Stdlib::Absolutepath] $ldap_clientcert                     = $zabbix::params::ldap_clientcert,
   Optional[Stdlib::Absolutepath] $ldap_clientkey                      = $zabbix::params::ldap_clientkey,
   Optional[Enum['never','allow','try','demand','hard']] $ldap_reqcert = $zabbix::params::ldap_reqcert,
+  Optional[Stdlib::Absolutepath] $saml_sp_key                         = $zabbix::params::saml_sp_key,
+  Optional[Stdlib::Absolutepath] $saml_sp_cert                        = $zabbix::params::saml_sp_cert,
+  Optional[Stdlib::Absolutepath] $saml_idp_cert                       = $zabbix::params::saml_idp_cert,
+  Hash[String[1], Variant[ScalarData, Hash]] $saml_settings           = $zabbix::params::saml_settings,
   $puppetgem                                                          = $zabbix::params::puppetgem,
   Boolean $manage_selinux                                             = $zabbix::params::manage_selinux,
 ) inherits zabbix::params {

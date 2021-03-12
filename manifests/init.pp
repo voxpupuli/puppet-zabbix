@@ -182,6 +182,10 @@ class zabbix (
   String $additional_service_params                                       = $zabbix::params::additional_service_params,
   Optional[String[1]] $zabbix_user                                        = $zabbix::params::server_zabbix_user,
   Optional[String] $zabbix_server_name                                    = $zabbix::params::zabbix_server,
+  Optional[Stdlib::Absolutepath] $saml_sp_key                             = $zabbix::params::saml_sp_key,
+  Optional[Stdlib::Absolutepath] $saml_sp_cert                            = $zabbix::params::saml_sp_cert,
+  Optional[Stdlib::Absolutepath] $saml_idp_cert                           = $zabbix::params::saml_idp_cert,
+  Hash[String[1], Variant[ScalarData, Hash]] $saml_settings               = $zabbix::params::saml_settings,
 ) inherits zabbix::params {
   class { 'zabbix::web':
     zabbix_url                               => $zabbix_url,
@@ -224,6 +228,10 @@ class zabbix (
     ldap_clientcert                          => $ldap_clientcert,
     ldap_clientkey                           => $ldap_clientkey,
     ldap_reqcert                             => $ldap_reqcert,
+    saml_sp_key                              => $saml_sp_key,
+    saml_sp_cert                             => $saml_sp_cert,
+    saml_idp_cert                            => $saml_idp_cert,
+    saml_settings                            => $saml_settings,
     manage_selinux                           => $manage_selinux,
     require                                  => Class['zabbix::server'],
   }
