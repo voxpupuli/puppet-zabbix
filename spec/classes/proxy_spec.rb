@@ -25,7 +25,6 @@ describe 'zabbix::proxy' do
         let :params do
           {
             zabbix_server_host: '192.168.1.1',
-            zabbix_version: '2.4'
           }
         end
 
@@ -45,23 +44,22 @@ describe 'zabbix::proxy' do
             }
           end
 
-          it { is_expected.to contain_class('zabbix::repo').with_zabbix_version('3.4') }
+          it { is_expected.to contain_class('zabbix::repo').with_zabbix_version('5.0') }
           it { is_expected.to contain_package('zabbix-proxy-pgsql').with_require('Class[Zabbix::Repo]') }
           it { is_expected.to contain_yumrepo('zabbix-nonsupported') }
           it { is_expected.to contain_yumrepo('zabbix') }
         end
 
-        describe 'when manage_repo is true and zabbix version is 2.4' do
+        describe 'when manage_repo is true and zabbix version is 4.0' do
           let :params do
             {
               manage_repo: true,
-              zabbix_version: '2.4'
+              zabbix_version: '4.0'
             }
           end
 
-          it { is_expected.to contain_class('zabbix::repo').with_zabbix_version('2.4') }
+          it { is_expected.to contain_class('zabbix::repo').with_zabbix_version('4.0') }
           it { is_expected.to contain_package('zabbix-proxy-pgsql').with_require('Class[Zabbix::Repo]') }
-          it { is_expected.to contain_package('zabbix-proxy').with_ensure('present') }
         end
 
         describe 'with enabled selinux' do
@@ -117,7 +115,7 @@ describe 'zabbix::proxy' do
           end
 
           it { is_expected.to contain_class('zabbix::database::postgresql').with_zabbix_type('proxy') }
-          it { is_expected.to contain_class('zabbix::database::postgresql').with_zabbix_version('3.4') }
+          it { is_expected.to contain_class('zabbix::database::postgresql').with_zabbix_version('5.0') }
           it { is_expected.to contain_class('zabbix::database::postgresql').with_database_name('zabbix_proxy') }
           it { is_expected.to contain_class('zabbix::database::postgresql').with_database_user('zabbix-proxy') }
           it { is_expected.to contain_class('zabbix::database::postgresql').with_database_password('zabbix-proxy') }
@@ -137,7 +135,7 @@ describe 'zabbix::proxy' do
           end
 
           it { is_expected.to contain_class('zabbix::database::mysql').with_zabbix_type('proxy') }
-          it { is_expected.to contain_class('zabbix::database::mysql').with_zabbix_version('3.4') }
+          it { is_expected.to contain_class('zabbix::database::mysql').with_zabbix_version('5.0') }
           it { is_expected.to contain_class('zabbix::database::mysql').with_database_name('zabbix_proxy') }
           it { is_expected.to contain_class('zabbix::database::mysql').with_database_user('zabbix-proxy') }
           it { is_expected.to contain_class('zabbix::database::mysql').with_database_password('zabbix-proxy') }
@@ -267,7 +265,7 @@ describe 'zabbix::proxy' do
               vmwarefrequency: '60',
               zabbix_server_host: '192.168.1.1',
               zabbix_server_port: '10051',
-              zabbix_version: '2.2'
+              zabbix_version: '5.0'
             }
           end
 
@@ -310,7 +308,6 @@ describe 'zabbix::proxy' do
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^CacheSize=8M$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartDBSyncers=4$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^HistoryCacheSize=16M$} }
-          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^HistoryTextCacheSize=8M$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^Timeout=20$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TrapperTimeout=16$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^UnreachablePeriod=45$} }
@@ -328,7 +325,7 @@ describe 'zabbix::proxy' do
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LoadModule=pizza$} }
         end
 
-        context 'with zabbix_proxy.conf and version 3.0' do
+        context 'with zabbix_proxy.conf and version 4.0' do
           let :params do
             {
               tlsaccept: 'cert',
@@ -340,7 +337,7 @@ describe 'zabbix::proxy' do
               tlsservercertsubject: 'MyZabbix',
               tlspskidentity: '/etc/zabbix/keys/identity.file',
               tlspskfile: '/etc/zabbix/keys/file.key',
-              zabbix_version: '3.0'
+              zabbix_version: '4.0'
             }
           end
 
@@ -353,19 +350,6 @@ describe 'zabbix::proxy' do
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSServerCertSubject=MyZabbix$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSPSKIdentity=/etc/zabbix/keys/identity.file$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSPSKFile=/etc/zabbix/keys/file.key$} }
-        end
-
-        context 'with zabbix_proxy.conf and version 3.4' do
-          let :params do
-            {
-              enableremotecommands: 1,
-              logremotecommands: 1,
-              zabbix_version: '3.4'
-            }
-          end
-
-          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^EnableRemoteCommands=1$} }
-          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LogRemoteCommands=1$} }
         end
 
         context 'with zabbix_proxy.conf and version 5.0' do
