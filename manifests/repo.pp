@@ -35,26 +35,27 @@ class zabbix::repo (
   Boolean                   $manage_repo               = $zabbix::params::manage_repo,
   Boolean                   $manage_apt                = $zabbix::params::manage_apt,
   Optional[Stdlib::HTTPUrl] $repo_location             = $zabbix::params::repo_location,
+  Optional[Stdlib::HTTPUrl] $frontend_repo_location    = $zabbix::params::frontend_repo_location,
   Optional[Stdlib::HTTPUrl] $unsupported_repo_location = $zabbix::params::unsupported_repo_location,
   String[1]                 $zabbix_version            = $zabbix::params::zabbix_version,
 ) inherits zabbix::params {
   if ($manage_repo) {
     case $facts['os']['name'] {
-      'PSBM'        : {
+      'PSBM': {
         $majorrelease = '6'
       }
-      'Amazon'        : {
+      'Amazon': {
         $majorrelease = '6'
       }
-      'oraclelinux' : {
+      'oraclelinux': {
         $majorrelease = $facts['os']['release']['major']
       }
-      default       : {
+      default: {
         $majorrelease = $facts['os']['release']['major']
       }
     }
     case $facts['os']['family'] {
-      'RedHat' : {
+      'RedHat': {
         # Zabbix-3.2 and newer RPMs are signed with the GPG key
         if versioncmp($zabbix_version, '3.2') < 0 {
           $gpgkey_zabbix = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX'
@@ -92,8 +93,25 @@ class zabbix::repo (
           gpgkey   => $gpgkey_nonsupported,
           priority => '1',
         }
+
+        # Zabbix 5.0 frontend on CentOS 7 has different location.
+        if ($facts['os']['name'] == 'CentOS' and $majorrelease == '7' and $zabbix_version == '5.0') {
+          $_frontend_repo_location = $frontend_repo_location ? {
+            undef   => "https://repo.zabbix.com/zabbix/${zabbix_version}/rhel/${majorrelease}/\$basearch/frontend",
+            default => $frontend_repo_location,
+          }
+
+          yumrepo { 'zabbix-frontend':
+            name     => "Zabbix_frontend_${majorrelease}_${facts['os']['architecture']}",
+            descr    => "Zabbix_frontend_${majorrelease}_${facts['os']['architecture']}",
+            baseurl  => $_frontend_repo_location,
+            gpgcheck => '1',
+            gpgkey   => $gpgkey_zabbix,
+            priority => '1',
+          }
+        }
       }
-      'Debian' : {
+      'Debian': {
         if ($manage_apt) {
           # We would like to provide the repos with https urls instead of http
           # this requires the apt-transport-https package, but we don't want to manage
@@ -128,8 +146,8 @@ class zabbix::repo (
             $operatingsystem = downcase($facts['os']['name'])
           }
           case $facts['os']['release']['full'] {
-            /\/sid$/ : { $releasename = regsubst($facts['os']['release']['full'], '/sid$', '') }
-            default  : { $releasename = $facts['os']['distro']['codename'] }
+            /\/sid$/: { $releasename = regsubst($facts['os']['release']['full'], '/sid$', '') }
+            default: { $releasename = $facts['os']['distro']['codename'] }
           }
 
           $_repo_location = $repo_location ? {
@@ -156,9 +174,9 @@ class zabbix::repo (
           }
         }
         Apt::Source['zabbix'] -> Package<|tag == 'zabbix'|>
-        Class['Apt::Update']  -> Package<|tag == 'zabbix'|>
+        Class['Apt::Update'] -> Package<|tag == 'zabbix'|>
       }
-      default  : {
+      default: {
         fail("Managing a repo on ${facts['os']['family']} is currently not implemented")
       }
     }

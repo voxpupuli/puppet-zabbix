@@ -53,33 +53,49 @@ describe 'zabbix::web' do
           it { is_expected.not_to contain_selboolean('httpd_can_connect_zabbix') }
         end
 
-        describe 'with database_type as postgresql' do
-          let :params do
-            super().merge(database_type: 'postgresql')
-          end
+        %w[4.4 5.0].each do |zabbix_version|
+          describe "with database_type as postgresql and zabbix_version #{zabbix_version}" do
+            next if zabbix_version == '5.0' and %w[Debian Ubuntu].include?(facts[:osfamily]) and
+                %w[16.04 9].include?(facts[:operatingsystemmajrelease])
+            let :params do
+              super().merge(database_type: 'postgresql')
+              super().merge(zabbix_version: zabbix_version)
+            end
 
-          pgsqlpackage = case facts[:operatingsystem]
-                         when 'Ubuntu'
-                           if facts[:operatingsystemmajrelease] >= '16.04'
-                             'php-pgsql'
+            pgsqlpackage = case facts[:operatingsystem]
+                           when 'Ubuntu'
+                             if facts[:operatingsystemmajrelease] >= '16.04'
+                               'php-pgsql'
+                             else
+                               'php5-pgsql'
+                             end
+                           when 'Debian'
+                             if facts[:operatingsystemmajrelease].to_i >= 9
+                               'php-pgsql'
+                             else
+                               'php5-pgsql'
+                             end
                            else
                              'php5-pgsql'
                            end
-                         when 'Debian'
-                           if facts[:operatingsystemmajrelease].to_i >= 9
-                             'php-pgsql'
-                           else
-                             'php5-pgsql'
-                           end
+
+            packages = if facts[:osfamily] == 'RedHat'
+                         if facts[:operatingsystemmajrelease].to_i == 7 &&
+                            !%w[VirtuozzoLinux OracleLinux Scientific].include?(facts[:os]['name']) &&
+                            zabbix_version == '5.0'
+                           ['zabbix-web-pgsql-scl', 'zabbix-web']
                          else
-                           'php5-pgsql'
+                           ['zabbix-web-pgsql', 'zabbix-web']
                          end
+                       else
+                         ['zabbix-frontend-php', pgsqlpackage]
+                       end
 
-          packages = facts[:osfamily] == 'RedHat' ? ['zabbix-web-pgsql', 'zabbix-web'] : ['zabbix-frontend-php', pgsqlpackage]
-          packages.each do |package|
-            it { is_expected.to contain_package(package) }
+            packages.each do |package|
+              it { is_expected.to contain_package(package) }
+            end
+            it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['TYPE'\]     = 'POSTGRESQL'}) }
           end
-          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['TYPE'\]     = 'POSTGRESQL'}) }
         end
 
         describe 'with database_type as mysql' do

@@ -1,0 +1,27 @@
+;THIS FILE IS MANAGED BY PUPPET
+[zabbix]
+user = apache
+group = apache
+
+listen = /var/opt/rh/rh-php72/run/php-fpm/zabbix.sock
+listen.acl_users = apache
+listen.allowed_clients = 127.0.0.1
+
+pm = dynamic
+pm.max_children = 50
+pm.start_servers = 5
+pm.min_spare_servers = 5
+pm.max_spare_servers = 35
+
+php_value[session.save_handler] = files
+php_value[session.save_path]    = /var/opt/rh/rh-php72/lib/php/session/
+
+php_value[max_execution_time] = <%= $zabbix::web::apache_php_max_execution_time %>
+php_value[memory_limit] = <%= $zabbix::web::apache_php_memory_limit %>
+php_value[post_max_size] = <%= $zabbix::web::apache_php_post_max_size %>
+php_value[upload_max_filesize] = <%= $zabbix::web::apache_php_upload_max_filesize %>
+php_value[max_input_time] = <%= $zabbix::web::apache_php_max_input_time %>
+php_value[always_populate_raw_post_data] = <%= $zabbix::web::apache_php_always_populate_raw_post_data %>
+php_value[max_input_vars] = <%= $zabbix::web::apache_php_max_input_vars %>
+;Set correct timezone
+php_value[date.timezone] = <%= $zabbix::web::zabbix_timezone %>

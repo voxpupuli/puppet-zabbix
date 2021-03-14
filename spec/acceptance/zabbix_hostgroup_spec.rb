@@ -2,18 +2,19 @@ require 'spec_helper_acceptance'
 require 'serverspec_type_zabbixapi'
 
 # rubocop:disable RSpec/LetBeforeExamples
-describe 'zabbix_hostgroup type', unless: default[:platform] =~ %r{debian-10-amd64} do
-  context 'create zabbix_hostgroup resources' do
-    it 'runs successfully' do
+describe 'zabbix_hostgroup type', unless: default[:platform] =~ %r{(ubuntu-16.04|debian-9|debian-10)-amd64} do
+  %w[4.0 5.0 5.2].each do |zabbix_version|
+    # 5.2 server packages are not available for RHEL 7
+    next if zabbix_version == '5.2' and default[:platform] == 'el-7-x86_64'
+    context "create zabbix_hostgroup resources with zabbix version #{zabbix_version}" do
       # This will deploy a running Zabbix setup (server, web, db) which we can
       # use for custom type tests
-      pp = <<-EOS
+      pp1 = <<-EOS
         class { 'apache':
             mpm_module => 'prefork',
         }
         include apache::mod::php
         class { 'postgresql::globals':
-          encoding => 'UTF-8',
           locale   => 'en_US.UTF-8',
           manage_package_repo => true,
           version => '12',
@@ -21,7 +22,7 @@ describe 'zabbix_hostgroup type', unless: default[:platform] =~ %r{debian-10-amd
         -> class { 'postgresql::server': }
 
         class { 'zabbix':
-          zabbix_version   => '4.4',
+          zabbix_version   => "#{zabbix_version}",
           zabbix_url       => 'localhost',
           zabbix_api_user  => 'Admin',
           zabbix_api_pass  => 'zabbix',
@@ -29,10 +30,10 @@ describe 'zabbix_hostgroup type', unless: default[:platform] =~ %r{debian-10-amd
           manage_resources => true,
           require          => [ Class['postgresql::server'], Class['apache'], ],
         }
+      EOS
 
-        Zabbix_hostgroup {
-          require => [ Service['zabbix-server'], Package['zabbixapi'], ],
-        }
+      pp2 = <<-EOS
+        Zabbix_hostgroup { }
 
         zabbix_hostgroup { 'Testgroup2': }
         zabbix_hostgroup { 'Linux servers':
@@ -40,10 +41,21 @@ describe 'zabbix_hostgroup type', unless: default[:platform] =~ %r{debian-10-amd
         }
       EOS
 
-      # Cleanup old database
-      prepare_host
+      # setup zabbix. Apache module isn't idempotent and requires a second run
+      it 'works with no error on the first apply' do
+        # Cleanup old database
+        prepare_host
 
-      apply_manifest(pp, catch_failures: true)
+        apply_manifest(pp1, catch_failures: true)
+      end
+
+      it 'works with no error on the second apply' do
+        apply_manifest(pp1, catch_failures: true)
+      end
+
+      it 'works with no error on the third apply' do
+        apply_manifest(pp2, catch_failures: true)
+      end
     end
 
     let(:result_hostgroups) do
