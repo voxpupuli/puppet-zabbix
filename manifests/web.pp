@@ -275,22 +275,7 @@ class zabbix::web (
   if $manage_resources {
     # Determine correct zabbixapi version.
     case $zabbix_version {
-      '2.2': {
-        $zabbixapi_version = '2.2.2'
-      }
-      '2.4': {
-        $zabbixapi_version = '2.4.4'
-      }
-      '3.2' : {
-        $zabbixapi_version = '3.2.1'
-      }
-      '3.4' : {
-        $zabbixapi_version = '4.0.0'
-      }
       '4.0': {
-        $zabbixapi_version = '4.2.0'
-      }
-      '4.4': {
         $zabbixapi_version = '4.2.0'
       }
       /^5\.[02]/: {

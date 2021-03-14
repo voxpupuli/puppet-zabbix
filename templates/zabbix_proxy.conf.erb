@@ -50,7 +50,6 @@ ListenPort=<%= @listenport %>
 # SourceIP=
 <% if @sourceip %>SourceIP=<%= @sourceip %><% end %>
 
-<% if @zabbix_version.to_f >= 3.0 -%>
 ### Option: LogType
 #	Specifies where log messages are written to:
 #		system  - syslog
@@ -63,14 +62,6 @@ ListenPort=<%= @listenport %>
 #	Log file name for LogType 'file' parameter.
 #
 LogFile=<%= @logfile %>
-
-<% else %>
-### Option: LogFile
-#	Name of log file.
-#	If not set, syslog is used.
-#
-LogFile=<%= @logfile %>
-<% end %>
 
 ### Option: LogFileSize
 #	Maximum size of log file in MB.
@@ -85,9 +76,7 @@ LogFileSize=<%= @logfilesize %>
 #	2 - error information
 #	3 - warnings
 #	4 - for debugging (produces lots of information)
-<% if @zabbix_version.to_f >= 3.0 %>
 #	5 - extended debugging (produces even more information)
-<% end %>
 DebugLevel=<%= @debuglevel %>
 
 ### Option: PidFile
@@ -146,7 +135,6 @@ DBPassword=<%= @database_password %>
 #
 <% if @database_port %>DBPort=<%= @database_port %><% end %>
 
-<% if @zabbix_version.to_f >= 3.4 %>
 ### Option: EnableRemoteCommands
 #	Whether remote commands from Zabbix server are allowed.
 #	0 - not allowed
@@ -160,7 +148,6 @@ EnableRemoteCommands=<%= @enableremotecommands %>
 #	1 - enabled
 #
 LogRemoteCommands=<%= @logremotecommands %>
-<% end %>
 
 ######### PROXY SPECIFIC PARAMETERS #############
 
@@ -281,15 +268,6 @@ VMwareCacheSize=<%= @vmwarecachesize %>
 #
 <% if @vmwaretimeout %>VMwareTimeout=<%= @vmwaretimeout %><% end %>
 
-<% if @zabbix_version.to_f < 2.4 %>
-### Option: EnableSNMPBulkRequests
-#	Enable or disable SNMP bulk requests.
-#	0 - disable
-#	1 - enable
-#
-<% if @enablesnmpbulkrequests %>EnableSNMPBulkRequests=<%= @enablesnmpbulkrequests %><% end %>
-<% end %>
-
 ### Option: SNMPTrapperFile
 #	Temporary file used for passing data from SNMP trap daemon to the proxy.
 #	Must be the same as in zabbix_trap_receiver.pl or SNMPTT configuration file.
@@ -313,11 +291,9 @@ StartSNMPTrapper=<%= @snmptrapper %>
 #	To prevent Housekeeper from being overloaded, no more than 4 times HousekeepingFrequency
 #	hours of outdated information are deleted in one housekeeping cycle.
 #	To lower load on proxy startup housekeeping is postponed for 30 minutes after proxy start.
-<% if @zabbix_version.to_f >= 3.0 %>
 #	With HousekeepingFrequency=0 the housekeeper can be only executed using the runtime control option.
 #	In this case the period of outdated information deleted in one housekeeping cycle is 4 times the
 #	period since the last housekeeping cycle, but not less than 4 hours and not greater than 4 days.
-<% end %>
 #
 HousekeepingFrequency=<%= @housekeepingfrequency %>
 
@@ -338,21 +314,11 @@ StartDBSyncers=<%= @startdbsyncers %>
 #
 HistoryCacheSize=<%= @historycachesize %>
 
-<% if @zabbix_version.to_f <= 2.4 %>
-### Option: HistoryTextCacheSize
-#   Size of text history cache, in bytes.
-#   Shared memory size for storing character, text or log history data.
-#
-HistoryTextCacheSize=<%= @historytextcachesize %>
-<% end %>
-
-<% if @zabbix_version.to_f >= 3.0 %>
 ### Option: HistoryIndexCacheSize
 #   Size of history index cache, in bytes.
 #   Shared memory size for indexing history cache.
 #
 <% if @historyindexcachesize %>HistoryIndexCacheSize=<%= @historyindexcachesize %><% end %>
-<% end %>
 
 ### Option: Timeout
 #	Specifies how long we wait for agent, SNMP device or external check (in seconds).
@@ -424,13 +390,11 @@ TmpDir=<%= @tmpdir %>
 #
 AllowRoot=<%= @allowroot %>
 
-<% if @zabbix_version.to_f >= 2.4 %>
 ### Option: User
 #	Drop privileges to a specific, existing user on the system.
 #	Only has effect if run as 'root' and AllowRoot is disabled.
 #
 <% if @zabbix_user %>User=<%= @zabbix_user %><% end %>
-<% end %>
 
 ### Option: Include
 #	You may include individual files or all files in a directory in the configuration file.
@@ -438,7 +402,6 @@ AllowRoot=<%= @allowroot %>
 #
 Include=<%= @include_dir %>
 
-<% if @zabbix_version.to_f >= 2.4 %>
 ### Option: SSLCertLocation
 #	Location of SSL client certificates.
 #	This parameter is used only in web monitoring.
@@ -457,7 +420,6 @@ Include=<%= @include_dir %>
 #	This parameter is used only in web monitoring.
 #
 <% if @sslcalocation %>SSLCALocation=<%= @sslcalocation %><% end %>
-<% end %>
 
 ####### LOADABLE MODULES #######
 
@@ -475,8 +437,6 @@ LoadModulePath=<%= @loadmodulepath %>
 #
 <% if @loadmodule %>LoadModule=<%= @loadmodule %><% end %>
 
-
-<% if @zabbix_version.to_f >= 3.0 %>
 ####### TLS-RELATED PARAMETERS #######
 
 ### Option: TLSConnect
@@ -543,5 +503,3 @@ LoadModulePath=<%= @loadmodulepath %>
 #	Full pathname of a file containing the pre-shared key.
 #
 <% if @tlspskfile %>TLSPSKFile=<%= @tlspskfile %><% end %>
-
-<% end %>

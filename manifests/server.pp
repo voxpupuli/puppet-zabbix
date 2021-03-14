@@ -40,10 +40,6 @@
 # [*server_configfile_path*]
 #   Server config file path defaults to /etc/zabbix/zabbix_server.conf
 #
-# [*nodeid*]
-#   Unique nodeid in distributed setup.
-#   (Deprecated since 2.4)
-#
 # [*listenport*]
 #   Listen port for the zabbix-server. Default: 10051
 #
@@ -148,9 +144,6 @@
 #   sqlite3 does not use this parameter, deletes all corresponding rows without a limit.
 #   if set to 0 then no limit is used at all. in this case you must know what you are doing!
 #
-# [*senderfrequency*]
-#   How often zabbix will try to send unsent alerts (in seconds).
-#
 # [*cachesize*]
 #   Size of configuration cache, in bytes.
 #
@@ -169,19 +162,8 @@
 # [*trendcachesize*]
 #   Size of trend cache, in bytes.
 #
-# [*historytextcachesize*]
-#   Size of text history cache, in bytes.
-#
 # [*valuecachesize*]
 #   Size of history value cache, in bytes.
-#
-# [*nodenoevents*]
-#   If set to '1' local events won't be sent to master node.
-#   (Deprecated since 2.4)
-#
-# [*nodenohistory*]
-#   If set to '1' local history won't be sent to master node.
-#   (Deprecated since 2.4)
 #
 # [*timeout*]
 #   Specifies how long we wait for agent, snmp device or external check (in seconds).
@@ -311,7 +293,6 @@ class zabbix::server (
   $server_service_name                       = $zabbix::params::server_service_name,
   $pacemaker                                 = $zabbix::params::server_pacemaker,
   $pacemaker_resource                        = $zabbix::params::server_pacemaker_resource,
-  $nodeid                                    = $zabbix::params::server_nodeid,
   $listenport                                = $zabbix::params::server_listenport,
   $sourceip                                  = $zabbix::params::server_sourceip,
   Enum['console', 'file', 'system'] $logtype = $zabbix::params::server_logtype,
@@ -347,17 +328,13 @@ class zabbix::server (
   $listenip                                  = $zabbix::params::server_listenip,
   $housekeepingfrequency                     = $zabbix::params::server_housekeepingfrequency,
   $maxhousekeeperdelete                      = $zabbix::params::server_maxhousekeeperdelete,
-  $senderfrequency                           = $zabbix::params::server_senderfrequency,
   $cachesize                                 = $zabbix::params::server_cachesize,
   $cacheupdatefrequency                      = $zabbix::params::server_cacheupdatefrequency,
   $startdbsyncers                            = $zabbix::params::server_startdbsyncers,
   $historycachesize                          = $zabbix::params::server_historycachesize,
   $historyindexcachesize                     = $zabbix::params::server_historyindexcachesize,
   $trendcachesize                            = $zabbix::params::server_trendcachesize,
-  $historytextcachesize                      = $zabbix::params::server_historytextcachesize,
   $valuecachesize                            = $zabbix::params::server_valuecachesize,
-  $nodenoevents                              = $zabbix::params::server_nodenoevents,
-  $nodenohistory                             = $zabbix::params::server_nodenohistory,
   $timeout                                   = $zabbix::params::server_timeout,
   $tlscafile                                 = $zabbix::params::server_tlscafile,
   $tlscertfile                               = $zabbix::params::server_tlscertfile,
@@ -395,23 +372,6 @@ class zabbix::server (
     if versioncmp($facts['os']['release']['major'], '7') == 0 {
       fail("${facts['os']['family']} ${$facts['os']['release']['major']} is not supported for zabbix::server (yet)")
     }
-  }
-
-  # the following codeblock is a bit blargh. The correct default value for
-  # $real_additional_service_params changes based on the value of $zabbix_version
-  # We handle this in the params.pp, but that doesn't work if somebody provides a specific
-  # value for $zabbix_version and overwrites our default :(
-  # the codeblock sets a default value for $real_additional_service_params if $zabbix_version got provided,
-  # but only if the variable isn't provided.
-
-  if $zabbix_version != $zabbix::params::zabbix_version and $additional_service_params == $zabbix::params::additional_service_params {
-    $real_additional_service_params = versioncmp($zabbix_version, '3.0') ? {
-      1  => '--foreground',
-      0  => '--foreground',
-      -1 => '',
-    }
-  } else {
-    $real_additional_service_params = $additional_service_params
   }
 
   # Only include the repo class if it has not yet been included
@@ -481,7 +441,7 @@ class zabbix::server (
       database_type             => $database_type,
       server_configfile_path    => $server_configfile_path,
       zabbix_user               => $zabbix_user,
-      additional_service_params => $real_additional_service_params,
+      additional_service_params => $additional_service_params,
       manage_database           => $manage_database,
       service_name              => 'zabbix-server',
       require                   => Package["zabbix-server-${db}"],
@@ -594,14 +554,10 @@ class zabbix::server (
       before    => $dependency,
       require   => Selboolean['zabbix_can_network'],
     }
-    # zabbix-server 3.4 introduced IPC via a socket in /tmp
-    # https://support.zabbix.com/browse/ZBX-12567
-    if versioncmp($zabbix_version, '3.3') > 0 {
-      selinux::module { 'zabbix-server-ipc':
-        ensure    => 'present',
-        source_te => 'puppet:///modules/zabbix/zabbix-server-ipc.te',
-        before    => $dependency,
-      }
+    selinux::module { 'zabbix-server-ipc':
+      ensure    => 'present',
+      source_te => 'puppet:///modules/zabbix/zabbix-server-ipc.te',
+      before    => $dependency,
     }
   }
 }

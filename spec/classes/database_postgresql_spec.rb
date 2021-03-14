@@ -25,7 +25,7 @@ describe 'zabbix::database::postgresql' do
         path_for2 = '/usr/share/zabbix-*-pgsql'
       end
 
-      %w[2.4 3.2 3.4 4.0 4.2 4.4 5.0 5.2].each do |zabbix_version|
+      %w[4.0 5.0 5.2].each do |zabbix_version|
         case facts[:os]['name']
         when 'CentOS', 'RedHat', 'OracleLinux', 'VirtuozzoLinux'
           # Path for versions >= 3.x on RedHat
@@ -49,15 +49,9 @@ describe 'zabbix::database::postgresql' do
 
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to contain_exec('update_pgpass').with_command('echo node01.example.com:5432:zabbix-server:zabbix-server:zabbix-server >> /root/.pgpass') }
-          if zabbix_version != '2.4'
-            it { is_expected.to contain_exec('zabbix_server_create.sql').with_command("cd #{path_for3_and_up} && if [ -f create.sql.gz ]; then gunzip -f create.sql.gz ; fi && psql -h 'node01.example.com' -U 'zabbix-server' -d 'zabbix-server' -f create.sql && touch /etc/zabbix/.schema.done") }
-            it { is_expected.to contain_exec('zabbix_server_images.sql').with_command('touch /etc/zabbix/.images.done') }
-            it { is_expected.to contain_exec('zabbix_server_data.sql').with_command('touch /etc/zabbix/.data.done') }
-          else
-            it { is_expected.to contain_exec('zabbix_server_create.sql').with_command("cd #{path_for2} && if [ -f schema.sql.gz ]; then gunzip -f schema.sql.gz ; fi && psql -h 'node01.example.com' -U 'zabbix-server' -d 'zabbix-server' -f schema.sql && touch /etc/zabbix/.schema.done") }
-            it { is_expected.to contain_exec('zabbix_server_images.sql').with_command("cd #{path_for2} && if [ -f images.sql.gz ]; then gunzip -f images.sql.gz ; fi && psql -h 'node01.example.com' -U 'zabbix-server' -d 'zabbix-server' -f images.sql && touch /etc/zabbix/.images.done") }
-            it { is_expected.to contain_exec('zabbix_server_data.sql').with_command("cd #{path_for2} && if [ -f data.sql.gz ]; then gunzip -f data.sql.gz ; fi && psql -h 'node01.example.com' -U 'zabbix-server' -d 'zabbix-server' -f data.sql && touch /etc/zabbix/.data.done") }
-          end
+          it { is_expected.to contain_exec('zabbix_server_create.sql').with_command("cd #{path_for3_and_up} && if [ -f create.sql.gz ]; then gunzip -f create.sql.gz ; fi && psql -h 'node01.example.com' -U 'zabbix-server' -d 'zabbix-server' -f create.sql && touch /etc/zabbix/.schema.done") }
+          it { is_expected.to contain_exec('zabbix_server_images.sql').with_command('touch /etc/zabbix/.images.done') }
+          it { is_expected.to contain_exec('zabbix_server_data.sql').with_command('touch /etc/zabbix/.data.done') }
           it { is_expected.to contain_file('/root/.pgpass') }
           it { is_expected.to contain_class('zabbix::params') }
         end
@@ -76,11 +70,7 @@ describe 'zabbix::database::postgresql' do
 
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to contain_exec('update_pgpass').with_command('echo node01.example.com:5432:zabbix-proxy:zabbix-proxy:zabbix-proxy >> /root/.pgpass') }
-          if zabbix_version != '2.4'
-            it { is_expected.to contain_exec('zabbix_proxy_create.sql').with_command("cd #{path_for3_and_up} && if [ -f schema.sql.gz ]; then gunzip -f schema.sql.gz ; fi && psql -h 'node01.example.com' -U 'zabbix-proxy' -d 'zabbix-proxy' -f schema.sql && touch /etc/zabbix/.schema.done") }
-          else
-            it { is_expected.to contain_exec('zabbix_proxy_create.sql').with_command("cd #{path_for2} && if [ -f schema.sql.gz ]; then gunzip -f schema.sql.gz ; fi && psql -h 'node01.example.com' -U 'zabbix-proxy' -d 'zabbix-proxy' -f schema.sql && touch /etc/zabbix/.schema.done") }
-          end
+          it { is_expected.to contain_exec('zabbix_proxy_create.sql').with_command("cd #{path_for3_and_up} && if [ -f schema.sql.gz ]; then gunzip -f schema.sql.gz ; fi && psql -h 'node01.example.com' -U 'zabbix-proxy' -d 'zabbix-proxy' -f schema.sql && touch /etc/zabbix/.schema.done") }
           it { is_expected.to contain_class('zabbix::params') }
         end
       end

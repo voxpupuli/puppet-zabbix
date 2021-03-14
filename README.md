@@ -504,49 +504,11 @@ There are some zabbix specific parameters, please check them by opening the mani
 * `templ_source`: The location of the XML file wich needs to be imported.
 
 ## Limitations
-The module is only supported on the following operating systems:
 
-Zabbix 3.0:
+This module supports Zabbix 4.0, 5.0 and 5.2. The upstream supported versions are documented [here](https://www.zabbix.com/de/life_cycle_and_release_policy)
+Please have a look into the metadata.json for all supported operating systems.
 
-  * CentOS 7.x
-  * Amazon 7.x
-  * RedHat 7.x
-  * OracleLinux 7.x
-  * Scientific Linux 7.x
-  * Ubuntu 14.04
-  * Debian 8
-
-Zabbix 2.4:
-
-  * CentOS 6.x, 7.x
-  * Amazon 6.x, 7.x
-  * RedHat 6.x, 7.x
-  * OracleLinux 6.x, 7.x
-  * Scientific Linux 6.x, 7.x
-  * Ubuntu 12.04 14.04
-  * Debian 7
-
-Zabbix 2.2:
-
-  * CentOS 5.x, 6.x
-  * RedHat 5.x, 6.x
-  * OracleLinux 5.x, 6.x
-  * Scientific Linux 5.x, 6.x
-  * Ubuntu 12.04
-  * Debian 7
-  * xenserver 6
-
-Zabbix 2.0:
-
-  * CentOS 5.x, 6.x
-  * RedHat 5.x, 6.x
-  * OracleLinux 5.x, 6.x
-  * Scientific Linux 5.x, 6.x
-  * Ubuntu 12.04
-  * Debian 6, 7
-  * xenserver 6
-
-This module is supported on both the community as the Enterprise version of Puppet.
+This module is supported on both the community and the Enterprise version of Puppet.
 
 Please be aware, that when manage_resources is enabled, it can increase an puppet run on the zabbix-server a lot when you have a lot of hosts.
 

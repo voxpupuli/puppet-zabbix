@@ -1,13 +1,7 @@
 require 'spec_helper_acceptance'
 
-def agent_supported(version)
-  return version != '2.4' if default[:platform] =~ %r{(ubuntu-16.04|debian-9)-amd64}
-  return version >= '4.0' if default[:platform] =~ %r{debian-10-amd64}
-  true
-end
-
-['2.4', '3.2', '3.4', '4.0', '4.2', '4.4', '5.0', '5.2'].each do |version|
-  describe "zabbix::agent class with zabbix_version #{version}", if: agent_supported(version) do
+['4.0', '5.0', '5.2'].each do |version|
+  describe "zabbix::agent class with zabbix_version #{version}" do
     it 'works idempotently with no errors' do
       pp = <<-EOS
       class { 'zabbix::agent':
