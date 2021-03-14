@@ -7,8 +7,15 @@ def prepare_host
       shell('sed -i "/nodocs/d" /etc/yum.conf')
     end
   end
+
+  if fact('os.family') == 'Debian'
+    shell('rm -f /etc/dpkg/dpkg.cfg.d/excludes')
+  end
+
   cleanup_script = <<-SHELL
   /opt/puppetlabs/bin/puppet resource service zabbix-server ensure=stopped
+  /opt/puppetlabs/bin/puppet resource service apache2 ensure=stopped
+  /opt/puppetlabs/bin/puppet resource service httpd ensure=stopped
   /opt/puppetlabs/bin/puppet resource package zabbix-server-pgsql ensure=purged
   /opt/puppetlabs/bin/puppet resource package zabbix-server-pgsql-scl ensure=purged
   /opt/puppetlabs/bin/puppet resource package zabbix-server-mysql ensure=purged

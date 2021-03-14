@@ -10,8 +10,10 @@ describe 'zabbix_template_host type', unless: default[:platform] =~ %r{(ubuntu-1
       template = case zabbix_version
                  when '4.0'
                    'Template OS Linux'
-                 else
+                 when '5.0'
                    'Template OS Linux by Zabbix agent'
+                 else
+                   'Linux by Zabbix agent'
                  end
 
 
