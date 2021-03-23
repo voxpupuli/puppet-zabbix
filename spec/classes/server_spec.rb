@@ -213,7 +213,6 @@ describe 'zabbix::server' do
             fping6location: '/usr/sbin/fping6',
             fpinglocation: '/usr/sbin/fping',
             historycachesize: '4M',
-            historytextcachesize: '4M',
             housekeepingfrequency: '1',
             include_dir: '/etc/zabbix/zabbix_server.conf.d',
             javagateway: '192.168.2.2',
@@ -226,13 +225,9 @@ describe 'zabbix::server' do
             logfile: '/var/log/zabbix/zabbix_server.log',
             logslowqueries: '0',
             maxhousekeeperdelete: '500',
-            nodeid: '0',
-            nodenoevents: '0',
-            nodenohistory: '0',
             pidfile: '/var/run/zabbix/zabbix_server.pid',
             proxyconfigfrequency: '3600',
             proxydatafrequency: '1',
-            senderfrequency: '30',
             snmptrapperfile: '/tmp/zabbix_traps.tmp',
             sourceip: '192.168.1.1',
             sshkeylocation: '/home/zabbix',
@@ -258,7 +253,7 @@ describe 'zabbix::server' do
             valuecachesize: '4M',
             vmwarecachesize: '8M',
             vmwarefrequency: '60',
-            zabbix_version: '2.2'
+            zabbix_version: '5.0'
           }
         end
 
@@ -278,7 +273,6 @@ describe 'zabbix::server' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^Fping6Location=/usr/sbin/fping6} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^FpingLocation=/usr/sbin/fping} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^HistoryCacheSize=4M} }
-        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^HistoryTextCacheSize=4M} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^HousekeepingFrequency=1} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^Include=/etc/zabbix/zabbix_server.conf.d} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^JavaGateway=192.168.2.2} }
@@ -291,13 +285,9 @@ describe 'zabbix::server' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^LogFile=/var/log/zabbix/zabbix_server.log} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^LogSlowQueries=0} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^MaxHousekeeperDelete=500} }
-        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeID=0$} }
-        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeNoEvents=0} }
-        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeNoHistory=0} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^PidFile=/var/run/zabbix/zabbix_server.pid} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^ProxyConfigFrequency=3600} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^ProxyDataFrequency=1} }
-        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SenderFrequency=30} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SNMPTrapperFile=/tmp/zabbix_traps.tmp} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SourceIP=192.168.1.1} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SSHKeyLocation=/home/zabbix} }
@@ -323,62 +313,6 @@ describe 'zabbix::server' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^ValueCacheSize=4M} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^VMwareCacheSize=8M} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^VMwareFrequency=60} }
-      end
-
-      context 'with zabbix_server.conf and version 2.4' do
-        let :params do
-          {
-            nodeid: '0',
-            nodenohistory: '0',
-            nodenoevents: '0',
-            zabbix_version: '2.4'
-          }
-        end
-
-        it { is_expected.not_to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeID=0$} }
-        it { is_expected.not_to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeNoEvents=0} }
-        it { is_expected.not_to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^NodeNoHistory=0} }
-        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SSLCertLocation=/usr/lib/zabbix/ssl/certs} }
-        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SSLKeyLocation=/usr/lib/zabbix/ssl/keys} }
-      end
-
-      context 'with zabbix_server.conf and version 3.0' do
-        let :params do
-          {
-            tlscafile: '/etc/zabbix/keys/zabbix-server.ca',
-            tlscrlfile: '/etc/zabbix/keys/zabbix-server.crl',
-            tlscertfile: '/etc/zabbix/keys/zabbix-server.crt',
-            tlskeyfile: '/etc/zabbix/keys/zabbix-server.key',
-            historyindexcachesize: '4M',
-            zabbix_version: '3.0'
-          }
-        end
-
-        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCAFile=/etc/zabbix/keys/zabbix-server.ca$} }
-        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCRLFile=/etc/zabbix/keys/zabbix-server.crl$} }
-        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCertFile=/etc/zabbix/keys/zabbix-server.crt$} }
-        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSKeyFile=/etc/zabbix/keys/zabbix-server.key$} }
-        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SSLCertLocation=/usr/lib/zabbix/ssl/certs} }
-        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SSLKeyLocation=/usr/lib/zabbix/ssl/keys} }
-        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^HistoryIndexCacheSize=4M} }
-      end
-      context 'with zabbix_server.conf and version 3.2' do
-        let :params do
-          {
-            tlscafile: '/etc/zabbix/keys/zabbix-server.ca',
-            tlscrlfile: '/etc/zabbix/keys/zabbix-server.crl',
-            tlscertfile: '/etc/zabbix/keys/zabbix-server.crt',
-            tlskeyfile: '/etc/zabbix/keys/zabbix-server.key',
-            historyindexcachesize: '4M',
-            zabbix_version: '3.2'
-          }
-        end
-
-        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCAFile=/etc/zabbix/keys/zabbix-server.ca$} }
-        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCRLFile=/etc/zabbix/keys/zabbix-server.crl$} }
-        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCertFile=/etc/zabbix/keys/zabbix-server.crt$} }
-        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSKeyFile=/etc/zabbix/keys/zabbix-server.key$} }
-        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^HistoryIndexCacheSize=4M} }
       end
 
       context 'with zabbix_server.conf and version 5.0' do

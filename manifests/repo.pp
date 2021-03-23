@@ -56,15 +56,8 @@ class zabbix::repo (
     }
     case $facts['os']['family'] {
       'RedHat': {
-        # Zabbix-3.2 and newer RPMs are signed with the GPG key
-        if versioncmp($zabbix_version, '3.2') < 0 {
-          $gpgkey_zabbix = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX'
-          $gpgkey_nonsupported = $gpgkey_zabbix
-        }
-        else {
-          $gpgkey_zabbix = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591'
-          $gpgkey_nonsupported = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-79EA5ED4'
-        }
+        $gpgkey_zabbix = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591'
+        $gpgkey_nonsupported = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-79EA5ED4'
 
         $_repo_location = $repo_location ? {
           undef   => "https://repo.zabbix.com/zabbix/${zabbix_version}/rhel/${majorrelease}/\$basearch/",

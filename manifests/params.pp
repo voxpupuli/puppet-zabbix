@@ -219,7 +219,6 @@ class zabbix::params {
   $server_externalscripts                   = '/usr/lib/zabbix/externalscripts'
   $server_historycachesize                  = '8M'
   $server_historyindexcachesize             = undef
-  $server_historytextcachesize              = '16M'
   $server_housekeepingfrequency             = '1'
   $server_include                           = '/etc/zabbix/zabbix_server.conf.d'
   $server_javagateway                       = undef
@@ -240,13 +239,9 @@ class zabbix::params {
   }
   $server_logslowqueries                    = '0'
   $server_maxhousekeeperdelete              = '500'
-  $server_nodeid                            = '0'
-  $server_nodenoevents                      = '0'
-  $server_nodenohistory                     = '0'
   $server_pidfile                           = '/var/run/zabbix/zabbix_server.pid'
   $server_proxyconfigfrequency              = '3600'
   $server_proxydatafrequency                = '1'
-  $server_senderfrequency                   = '30'
   $server_service_name                      = 'zabbix-server'
   $server_pacemaker                         = false
   $server_pacemaker_resource                = undef
@@ -446,16 +441,8 @@ class zabbix::params {
     default => false,
   }
 
-  # services should run foreground and as simple type
-  # but this only works in 3.0 and newer
-  # https://www.freedesktop.org/software/systemd/man/systemd.service.html#Type=
-  if versioncmp($zabbix_version, '3.0') < 0 {
-    $additional_service_params = ''
-    $service_type              = 'forking'
-  } else {
-    $additional_service_params = '--foreground'
-    $service_type              = 'simple'
-  }
+  $additional_service_params = '--foreground'
+  $service_type              = 'simple'
 
   $default_web_config_owner = $facts['os']['name'] ? {
     /(Ubuntu|Debian)/ => 'www-data',

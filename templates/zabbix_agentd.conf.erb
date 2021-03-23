@@ -11,7 +11,6 @@
 #
 PidFile=<%= @pidfile %><% end %>
 
-<% if @zabbix_version.to_f >= 3.0 -%>
 <% if @logtype %>
 ### Option: LogType
 #	Specifies where log messages are written to:
@@ -27,15 +26,6 @@ LogType=<%= @logtype %><% end %>
 #
 LogFile=<%= @logfile %><% end %>
 
-<% else %>
-<% if @logfile %>
-### Option: LogFile
-#	Name of log file.
-#	If not set, syslog is used.
-#
-LogFile=<%= @logfile %><% end %>
-<% end %>
-
 <% if @logfilesize %>
 ### Option: LogFileSize
 #	Maximum size of log file in MB.
@@ -50,9 +40,7 @@ LogFileSize=<%= @logfilesize %><% end %>
 #	2 - error information
 #	3 - warnings
 #	4 - for debugging (produces lots of information)
-<% if @zabbix_version.to_f >= 3.0 %>
 #	5 - extended debugging (produces even more information)
-<% end %>
 DebugLevel=<%= @debuglevel %>
 
 
@@ -218,7 +206,7 @@ Timeout=<%= @timeout %>
 AllowRoot=<%= @allowroot %>
 <% end %>
 
-<% if @zabbix_version.to_f >= 2.4 and @kernel != 'windows' %>
+<% if @kernel != 'windows' %>
 ### Option: User
 #	Drop privileges to a specific, existing user on the system.
 #	Only has effect if run as 'root' and AllowRoot is disabled.
@@ -253,7 +241,7 @@ UnsafeUserParameters=<%= @unsafeuserparameters %>
 # 	Disabled. A configuration file should be placed on directory: <%= @include %>
 
 ####### LOADABLE MODULES #######
-<% if @zabbix_version.to_f >= 2.4  and @kernel != 'windows' %>
+<% if @kernel != 'windows' %>
 ### Option: LoadModulePath
 #	Full path to location of agent modules.
 #	Default depends on compilation options.
@@ -269,7 +257,6 @@ LoadModulePath=<%= @loadmodulepath %>
 #
 <% if @loadmodule %>LoadModule=<%= @loadmodule %><% end %>
 
-<% if @zabbix_version.to_f >= 3.0 %>
 ####### TLS-RELATED PARAMETERS #######
 
 ### Option: TLSConnect
@@ -360,4 +347,3 @@ LoadModulePath=<%= @loadmodulepath %>
 # Default:
 # TLSPSKFile=
 <% if @tlspskfile %>TLSPSKFile=<%= @tlspskfile %><% end %>
-<% end %>
