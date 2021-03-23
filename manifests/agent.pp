@@ -275,7 +275,7 @@ class zabbix::agent (
   Stdlib::Ensure::Service $service_ensure         = $zabbix::params::agent_service_ensure,
   Boolean $service_enable                         = $zabbix::params::agent_service_enable,
   $hostname                                       = $zabbix::params::agent_hostname,
-  $hostnameitem                                   = $zabbix::params::agent_hostnameitem,
+  Optional[String[1]] $hostnameitem               = $zabbix::params::agent_hostnameitem,
   $hostmetadata                                   = $zabbix::params::agent_hostmetadata,
   $hostmetadataitem                               = $zabbix::params::agent_hostmetadataitem,
   Optional[Stdlib::Fqdn] $hostinterface           = $zabbix::params::agent_hostinterface,
