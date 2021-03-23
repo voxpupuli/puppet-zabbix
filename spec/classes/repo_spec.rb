@@ -28,16 +28,16 @@ describe 'zabbix::repo' do
         end
 
         case facts[:os]['release']['major']
-        when '6'
-          context 'on Debian 6 and Zabbix 2.0' do
+        when '10'
+          context 'on Debian 10 and Zabbix 4.0' do
             let :params do
               {
-                zabbix_version: '2.0',
+                zabbix_version: '4.0',
                 manage_repo: true
               }
             end
 
-            it { is_expected.to contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/2.0/debian/') }
+            it { is_expected.to contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/4.0/debian/') }
           end
 
         when '7'

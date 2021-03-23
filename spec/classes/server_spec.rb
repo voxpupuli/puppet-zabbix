@@ -20,11 +20,7 @@ describe 'zabbix::server' do
         facts.merge(systemd_fact)
       end
 
-      zabbix_version = if facts[:os]['name'] == 'Debian' && facts[:os]['release']['major'].to_i == 10
-                         '4.0'
-                       else
-                         '3.4'
-                       end
+      zabbix_version = '5.0'
 
       describe 'with default settings' do
         it { is_expected.to contain_class('zabbix::repo') }
