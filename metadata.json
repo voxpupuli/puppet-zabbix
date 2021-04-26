@@ -6,27 +6,27 @@
   "dependencies": [
     {
       "name": "puppetlabs/postgresql",
-      "version_requirement": ">= 6.4.0 < 7.0.0"
+      "version_requirement": ">= 6.4.0 < 8.0.0"
     },
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.25.0 < 7.0.0"
+      "version_requirement": ">= 4.25.0 < 8.0.0"
     },
     {
       "name": "puppetlabs/mysql",
-      "version_requirement": ">= 3.5.0 < 11.0.0"
+      "version_requirement": ">= 3.5.0 < 12.0.0"
     },
     {
       "name": "puppetlabs/apache",
-      "version_requirement": ">= 1.6.0 < 6.0.0"
+      "version_requirement": ">= 1.6.0 < 7.0.0"
     },
     {
       "name": "puppetlabs/firewall",
-      "version_requirement": ">= 1.7.0 < 3.0.0"
+      "version_requirement": ">= 1.7.0 < 4.0.0"
     },
     {
       "name": "puppetlabs/apt",
-      "version_requirement": ">= 2.1.0 < 8.0.0"
+      "version_requirement": ">= 2.1.0 < 9.0.0"
     },
     {
       "name": "camptocamp/systemd",
