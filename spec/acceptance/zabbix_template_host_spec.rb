@@ -52,6 +52,7 @@ describe 'zabbix_template_host type', unless: default[:platform] =~ %r{(ubuntu-1
 
         zabbix_template { 'TestTemplate1':
           template_source => '/root/TestTemplate1.xml',
+          zabbix_version  => "#{zabbix_version}",
         }
 
         zabbix_template_host{ "TestTemplate1@test1.example.com": }

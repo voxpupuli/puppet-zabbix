@@ -35,6 +35,7 @@ describe 'zabbix_template type', unless: default[:platform] =~ %r{(ubuntu-16.04|
       pp2 = <<-EOS
           zabbix_template { 'TestTemplate1':
             template_source => '/root/TestTemplate1.xml',
+            zabbix_version  => "#{zabbix_version}",
           }
       EOS
 
