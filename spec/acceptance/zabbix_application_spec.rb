@@ -10,8 +10,10 @@ describe 'zabbix_application type', unless: default[:platform] =~ %r{(ubuntu-16.
     template = case zabbix_version
                when '4.0'
                  'Template OS Linux'
-               else
+               when '5.0'
                  'Template OS Linux by Zabbix agent'
+               else
+                 'Linux by Zabbix agent'
                end
 
     context "create zabbix_application resources with zabbix version #{zabbix_version}" do

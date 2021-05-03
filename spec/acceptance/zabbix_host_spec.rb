@@ -12,9 +12,11 @@ describe 'zabbix_host type', unless: default[:platform] =~ %r{(ubuntu-16.04|debi
 
       template = case zabbix_version
                  when '4.0'
-                   'Template OS Linux'
+                   ['Template OS Linux', 'Template Module ICMP Ping']
+                 when '5.0'
+                   ['Template OS Linux by Zabbix agent', 'Template Module ICMP Ping']
                  else
-                   'Template OS Linux by Zabbix agent'
+                   ['Linux by Zabbix agent', 'ICMP Ping']
                  end
 
       pp1 = <<-EOS
@@ -65,7 +67,7 @@ describe 'zabbix_host type', unless: default[:platform] =~ %r{(ubuntu-16.04|debi
           port         => 10050,
           groups       => ['TestgroupOne'],
           group_create => true,
-          templates    => [ "#{template}", ],
+          templates    => #{template},
           macros       => [],
         }
 
@@ -74,7 +76,7 @@ describe 'zabbix_host type', unless: default[:platform] =~ %r{(ubuntu-16.04|debi
           use_ip    => false,
           port      => 1050,
           groups    => ['Virtual machines'],
-          templates => [ "#{template}", 'Template Module ICMP Ping', ],
+          templates => #{template},
           macros    => [],
         }
         EOS
@@ -120,7 +122,7 @@ describe 'zabbix_host type', unless: default[:platform] =~ %r{(ubuntu-16.04|debi
           expect(test1['interfaces'][0]['useip']).to eq('1')
         end
         it 'has templates attached' do
-          expect(test1['parentTemplates'].map { |t| t['host'] }.sort).to eq([template])
+          expect(test1['parentTemplates'].map { |t| t['host'] }.sort).to eq(template.sort)
         end
       end
 
@@ -152,7 +154,7 @@ describe 'zabbix_host type', unless: default[:platform] =~ %r{(ubuntu-16.04|debi
           expect(test2['interfaces'][0]['useip']).to eq('0')
         end
         it 'has templates attached' do
-          expect(test2['parentTemplates'].map { |t| t['host'] }.sort).to eq(['Template Module ICMP Ping', template])
+          expect(test2['parentTemplates'].map { |t| t['host'] }.sort).to eq(template.sort)
         end
       end
     end
