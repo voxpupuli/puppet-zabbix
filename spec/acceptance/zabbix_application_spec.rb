@@ -20,12 +20,6 @@ describe 'zabbix_application type', unless: default[:platform] =~ %r{(ubuntu-16.
       # This will deploy a running Zabbix setup (server, web, db) which we can
       # use for custom type tests
       pp1 = <<-EOS
-        $compile_packages = $facts['os']['family'] ? {
-          'RedHat' => [ 'make', 'gcc-c++', ],
-          'Debian' => [ 'make', 'g++', ],
-          default  => [],
-        }
-        ensure_packages($compile_packages, { before => Package['zabbixapi'], })
         class { 'apache':
             mpm_module => 'prefork',
         }

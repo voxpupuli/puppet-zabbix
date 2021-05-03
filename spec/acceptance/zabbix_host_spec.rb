@@ -20,12 +20,6 @@ describe 'zabbix_host type', unless: default[:platform] =~ %r{(ubuntu-16.04|debi
                  end
 
       pp1 = <<-EOS
-        $compile_packages = $facts['os']['family'] ? {
-          'RedHat' => [ 'make', 'gcc-c++', 'rubygems', 'ruby'],
-          'Debian' => [ 'make', 'g++', 'ruby-dev', 'ruby', 'pkg-config',],
-          default  => [],
-        }
-        ensure_packages($compile_packages, { before => Package['zabbixapi'], })
         class { 'apache':
             mpm_module => 'prefork',
         }
