@@ -204,7 +204,7 @@ describe 'zabbix::server' do
             database_host: 'localhost',
             database_name: 'zabbix-server',
             database_password: 'zabbix-server',
-            database_port: '3306',
+            database_port: 3306,
             database_schema: 'zabbix-server',
             database_socket: '/tmp/socket.db',
             database_user: 'zabbix-server',
