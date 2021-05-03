@@ -41,7 +41,7 @@ class zabbix::resources::agent (
     ipaddress     => $ipaddress,
     use_ip        => $use_ip,
     port          => $port,
-    groups        => $groups,
+    groups        => $_groups,
     group_create  => $group_create,
     templates     => $templates,
     macros        => $macros,

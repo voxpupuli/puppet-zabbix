@@ -469,7 +469,8 @@ There are some more zabbix specific parameters, please check them by opening the
 The following parameters is only needed when `manage_resources` is set to true:
 * `monitored_by_proxy`: When an agent is monitored via an proxy, enter the name of the proxy. The name is found in the webinterface via: Administration -> DM. If it isn't monitored by an proxy or `manage_resources` is false, this parameter can be empty.
 * `agent_use_ip`: Default is set to true. Zabbix server (or proxy) will connect to this host via ip instead of fqdn. When set to false, it will connect via fqdn.
-* `zbx_group`: Name of the hostgroup on which the agent will be installed. There can only be one hostgroup defined and should exists in the webinterface. Default: Linux servers
+* `zbx_groups`: An array of hostgroups where this host needs to be added. Default (Array): 'Linux servers'
+* `zbx_group_create`: Default is set to true. Creates the Host Groups in Zabbix when they do not exist yet. When set to false you have to make sure the Host Group exists in Zabbix
 * `zbx_templates`: Name of the templates which will be assigned when agent is installed. Default (Array): 'Template OS Linux', 'Template App SSH Service'
 
 There are some more zabbix specific parameters, please check them by opening the manifest file.
