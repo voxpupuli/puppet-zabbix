@@ -8,8 +8,16 @@ def prepare_host
     end
   end
 
-  if fact('os.family') == 'Debian'
+  # The Ubuntu 18.04+ docker image has a dpkg config that won't install docs, to keep used space low
+  # zabbix packages their SQL file as doc, we need that for bootstrapping the database
+  if fact('os.distro.id') == 'Ubuntu'
     shell('rm -f /etc/dpkg/dpkg.cfg.d/excludes')
+  end
+
+  # On Debian it seems that make is searching for mkdir in /usr/bin/ but mkdir
+  # does not exist. Symlink it from /bin/mkdir to make it work.
+  if fact('os.distro.id') == 'Debian'
+    shell('ln -sf /bin/mkdir /usr/bin/mkdir')
   end
 
   cleanup_script = <<-SHELL
