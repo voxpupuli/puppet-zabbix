@@ -9,33 +9,39 @@
 
 #### Table of Contents
 
-1. [Overview](#overview)
-2. [Upgrade](#upgrade)
-    * [to 1.0.0](#100)
-    * [to 2.0.0](#200)
-3. [Module Description - What the module does and why it is useful](#module-description)
-4. [Setup - The basics of getting started with the zabbix module](#setup)
-    * [zabbix-server](#setup-zabbix-server)
-5. [Usage - Configuration options and additional functionality](#usage)
-    * [zabbix-server](#usage-zabbix-server)
-    * [zabbix-agent](#usage-zabbix-agent)
-    * [zabbix-proxy](#usage-zabbix-proxy)
-    * [zabbix-javagateway](#usage-zabbix-javagateway)
-    * [zabbix-sender](#usage-zabbix-sender)
-    * [zabbix-userparameters](#usage-zabbix-userparameters)
-    * [zabbix-template](#usage-zabbix-template)
-6. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
-    * [zabbix-server](#reference-zabbix-server)
-    * [zabbix-agent](#reference-zabbix-agent)
-    * [zabbix-proxy](#reference-zabbix-proxy)
-    * [zabbix-javagateway](#reference-zabbix-javagateway)
-    * [zabbix-userparameters](#reference-zabbix-userparameters)
-    * [zabbix-template](#reference-zabbix-template)
-7. [Limitations - OS compatibility, etc.](#limitations)
-8. [Development - Contributors](#contributors)
-9. [Notes](#note)
-    * [Some overall notes](#standard-usage)
-    * [When using exported resources | manage_resources is true](#when-using-exported-resources)
+- [puppet-zabbix](#puppet-zabbix)
+      - [Table of Contents](#table-of-contents)
+  - [Overview](#overview)
+  - [Module Description](#module-description)
+  - [Upgrade](#upgrade)
+    - [1.0.0](#100)
+    - [2.0.0](#200)
+  - [Setup](#setup)
+    - [Setup zabbix-server](#setup-zabbix-server)
+  - [Usage](#usage)
+    - [Usage zabbix-server](#usage-zabbix-server)
+    - [Usage zabbix-agent](#usage-zabbix-agent)
+    - [Usage zabbix-proxy](#usage-zabbix-proxy)
+    - [Usage zabbix-javagateway](#usage-zabbix-javagateway)
+    - [Usage zabbix-sender](#usage-zabbix-sender)
+    - [Usage zabbix-userparameters](#usage-zabbix-userparameters)
+    - [Usage zabbix-template](#usage-zabbix-template)
+  - [Zabbix Upgrades](#zabbix-upgrades)
+  - [Reference](#reference)
+    - [Reference zabbix (init.pp)](#reference-zabbix-initpp)
+    - [Reference zabbix-web](#reference-zabbix-web)
+    - [Reference zabbix-server](#reference-zabbix-server)
+    - [Reference zabbix-agent](#reference-zabbix-agent)
+    - [Reference zabbix-proxy](#reference-zabbix-proxy)
+    - [Reference zabbix-javagateway](#reference-zabbix-javagateway)
+    - [Reference zabbix-userparameters](#reference-zabbix-userparameters)
+    - [Reference zabbix-template](#reference-zabbix-template)
+  - [Limitations](#limitations)
+  - [Contributors](#contributors)
+  - [Note](#note)
+    - [Standard usage](#standard-usage)
+    - [SE Linux](#se-linux)
+    - [When using exported resources](#when-using-exported-resources)
 
 ## Overview
 
@@ -469,7 +475,8 @@ There are some more zabbix specific parameters, please check them by opening the
 The following parameters is only needed when `manage_resources` is set to true:
 * `monitored_by_proxy`: When an agent is monitored via an proxy, enter the name of the proxy. The name is found in the webinterface via: Administration -> DM. If it isn't monitored by an proxy or `manage_resources` is false, this parameter can be empty.
 * `agent_use_ip`: Default is set to true. Zabbix server (or proxy) will connect to this host via ip instead of fqdn. When set to false, it will connect via fqdn.
-* `zbx_group`: Name of the hostgroup on which the agent will be installed. There can only be one hostgroup defined and should exists in the webinterface. Default: Linux servers
+* `zbx_groups`: An array of hostgroups where this host needs to be added. Default (Array): 'Linux servers'
+* `zbx_group_create`: Default is set to true. Creates the Host Groups in Zabbix when they do not exist yet. When set to false you have to make sure the Host Group exists in Zabbix
 * `zbx_templates`: Name of the templates which will be assigned when agent is installed. Default (Array): 'Template OS Linux', 'Template App SSH Service'
 
 There are some more zabbix specific parameters, please check them by opening the manifest file.
