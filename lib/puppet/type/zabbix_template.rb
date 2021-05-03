@@ -35,5 +35,9 @@ Puppet::Type.newtype(:zabbix_template) do
     desc 'Template source file.'
   end
 
+  newparam(:zabbix_version) do
+    desc 'Zabbix version that the template will be installed on.'
+  end
+
   autorequire(:file) { '/etc/zabbix/api.conf' }
 end

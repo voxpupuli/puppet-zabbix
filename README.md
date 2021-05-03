@@ -338,6 +338,15 @@ zabbix::template { 'Template App MySQL':
 }
 ```
 
+`zabbix::template` class accepts `zabbix_version` parameter, by default is set to module's default Zabbix version.
+Please override if you are using a different version.
+```ruby
+zabbix::template { 'Template App MySQL':
+  templ_source   => 'puppet:///modules/zabbix/MySQL.xml',
+  zabbix_version => '5.2'
+}
+```
+
 ## Zabbix Upgrades
 
 It is possible to do upgrades via this module. An example for the zabbix agent:
@@ -502,6 +511,7 @@ There are some zabbix specific parameters, please check them by opening the mani
 
 * `templ_name`: The name of the template. This name will be found in the Web interface.
 * `templ_source`: The location of the XML file wich needs to be imported.
+* `zabbix_version`: The Zabbix version on which the template will be installed on.
 
 ## Limitations
 

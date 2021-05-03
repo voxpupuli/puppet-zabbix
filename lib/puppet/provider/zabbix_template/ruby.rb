@@ -43,7 +43,7 @@ Puppet::Type.type(:zabbix_template).provide(:ruby, parent: Puppet::Provider::Zab
           createMissing: true,
           updateExisting: true
         },
-        templateScreens: {
+        (@resource[:zabbix_version] =~ %r{5\.[^0]} ? :templateDashboards : :templateScreens) => {
           createMissing: true,
           updateExisting: true
         },
