@@ -493,6 +493,7 @@ class zabbix::proxy (
           database_user        => $database_user,
           database_password    => $database_password,
           database_host        => $database_host,
+          database_port        => $database_port,
           database_path        => $database_path,
           require              => Package["zabbix-proxy-${db}"],
         }
@@ -507,6 +508,7 @@ class zabbix::proxy (
           database_user        => $database_user,
           database_password    => $database_password,
           database_host        => $database_host,
+          database_port        => $database_port,
           database_path        => $database_path,
           require              => Package["zabbix-proxy-${db}"],
         }
