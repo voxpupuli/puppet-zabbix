@@ -2,7 +2,7 @@ require 'spec_helper_acceptance'
 require 'serverspec_type_zabbixapi'
 
 # rubocop:disable RSpec/LetBeforeExamples
-describe 'zabbix_application type', unless: default[:platform] =~ %r{(ubuntu-16.04|debian-9|debian-10)-amd64} do
+describe 'zabbix_application type', unless: default[:platform] =~ %r{(ubuntu-16.04|debian-9)-amd64} do
   %w[4.0 5.0 5.2].each do |zabbix_version|
     # 5.2 server packages are not available for RHEL 7
     next if zabbix_version == '5.2' and default[:platform] == 'el-7-x86_64'
@@ -20,12 +20,6 @@ describe 'zabbix_application type', unless: default[:platform] =~ %r{(ubuntu-16.
       # This will deploy a running Zabbix setup (server, web, db) which we can
       # use for custom type tests
       pp1 = <<-EOS
-        $compile_packages = $facts['os']['family'] ? {
-          'RedHat' => [ 'make', 'gcc-c++', ],
-          'Debian' => [ 'make', 'g++', ],
-          default  => [],
-        }
-        ensure_packages($compile_packages, { before => Package['zabbixapi'], })
         class { 'apache':
             mpm_module => 'prefork',
         }
