@@ -54,6 +54,8 @@ jobs:
     needs: setup_matrix
     runs-on: ubuntu-latest
     env:
+      LANG: en_US
+      LC_ALL: en_US.UTF-8
       BUNDLE_WITHOUT: development:test:release
     strategy:
       fail-fast: false
