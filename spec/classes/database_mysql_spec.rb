@@ -67,7 +67,7 @@ describe 'zabbix::database::mysql' do
         end
 
         context "when zabbix_type is server and zabbix version is #{zabbix_version}" do
-          describe "and database_port is defined" do
+          describe 'and database_port is defined' do
             let :params do
               {
                 database_name: 'zabbix-proxy',
@@ -85,7 +85,7 @@ describe 'zabbix::database::mysql' do
             it { is_expected.to contain_exec('zabbix_proxy_create.sql').with_command("cd #{path} && if [ -f schema.sql.gz ]; then gunzip -f schema.sql.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-proxy' -p'zabbix-proxy' -P 3306 -D 'zabbix-proxy' < schema.sql && touch /etc/zabbix/.schema.done") }
           end
 
-          describe "and no database_port is defined" do
+          describe 'and no database_port is defined' do
             let :params do
               {
                 database_name: 'zabbix-proxy',

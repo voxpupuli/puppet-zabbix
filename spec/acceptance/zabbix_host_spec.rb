@@ -5,7 +5,7 @@ require 'serverspec_type_zabbixapi'
 describe 'zabbix_host type', unless: default[:platform] =~ %r{(ubuntu-16.04|debian-9)-amd64} do
   %w[4.0 5.0 5.2].each do |zabbix_version|
     # 5.2 server packages are not available for RHEL 7
-    next if zabbix_version == '5.2' and default[:platform] == 'el-7-x86_64'
+    next if zabbix_version == '5.2' && default[:platform] == 'el-7-x86_64'
     context "create zabbix_host resources with zabbix version #{zabbix_version}" do
       # This will deploy a running Zabbix setup (server, web, db) which we can
       # use for custom type tests
@@ -83,9 +83,7 @@ describe 'zabbix_host type', unless: default[:platform] =~ %r{(ubuntu-16.04|debi
       end
 
       let(:result_hosts) do
-        zabbixapi('localhost', 'Admin', 'zabbix', 'host.get', selectParentTemplates: ['host'],
-                  selectInterfaces: %w[dns ip main port type useip],
-                  selectGroups: ['name'], output: ['host', '']).result
+        zabbixapi('localhost', 'Admin', 'zabbix', 'host.get', selectParentTemplates: ['host'], selectInterfaces: %w[dns ip main port type useip], selectGroups: ['name'], output: ['host', '']).result
       end
 
       context 'test1.example.com' do

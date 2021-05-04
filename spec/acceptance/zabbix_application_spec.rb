@@ -1,11 +1,9 @@
 require 'spec_helper_acceptance'
 require 'serverspec_type_zabbixapi'
-
-# rubocop:disable RSpec/LetBeforeExamples
 describe 'zabbix_application type', unless: default[:platform] =~ %r{(ubuntu-16.04|debian-9)-amd64} do
   %w[4.0 5.0 5.2].each do |zabbix_version|
     # 5.2 server packages are not available for RHEL 7
-    next if zabbix_version == '5.2' and default[:platform] == 'el-7-x86_64'
+    next if zabbix_version == '5.2' && default[:platform] == 'el-7-x86_64'
 
     template = case zabbix_version
                when '4.0'
@@ -69,8 +67,7 @@ describe 'zabbix_application type', unless: default[:platform] =~ %r{(ubuntu-16.
     end
 
     let(:result_templates) do
-      zabbixapi('localhost', 'Admin', 'zabbix', 'template.get', selectApplications: ['name'],
-                output: ['host']).result
+      zabbixapi('localhost', 'Admin', 'zabbix', 'template.get', selectApplications: ['name'], output: ['host']).result
     end
 
     context 'TestApplication1' do
