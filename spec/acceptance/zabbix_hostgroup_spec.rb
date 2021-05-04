@@ -1,11 +1,9 @@
 require 'spec_helper_acceptance'
 require 'serverspec_type_zabbixapi'
-
-# rubocop:disable RSpec/LetBeforeExamples
 describe 'zabbix_hostgroup type', unless: default[:platform] =~ %r{(ubuntu-16.04|debian-9)-amd64} do
   %w[4.0 5.0 5.2].each do |zabbix_version|
     # 5.2 server packages are not available for RHEL 7
-    next if zabbix_version == '5.2' and default[:platform] == 'el-7-x86_64'
+    next if zabbix_version == '5.2' && default[:platform] == 'el-7-x86_64'
     context "create zabbix_hostgroup resources with zabbix version #{zabbix_version}" do
       # This will deploy a running Zabbix setup (server, web, db) which we can
       # use for custom type tests

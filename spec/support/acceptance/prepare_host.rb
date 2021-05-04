@@ -16,9 +16,7 @@ def prepare_host
 
   # On Debian it seems that make is searching for mkdir in /usr/bin/ but mkdir
   # does not exist. Symlink it from /bin/mkdir to make it work.
-  if fact('os.distro.id') == 'Debian'
-    shell('ln -sf /bin/mkdir /usr/bin/mkdir')
-  end
+  shell('ln -sf /bin/mkdir /usr/bin/mkdir') if fact('os.distro.id') == 'Debian'
 
   cleanup_script = <<-SHELL
   /opt/puppetlabs/bin/puppet resource service zabbix-server ensure=stopped

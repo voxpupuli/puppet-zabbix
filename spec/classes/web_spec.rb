@@ -17,8 +17,8 @@ describe 'zabbix::web' do
       next if facts[:os]['name'] == 'windows'
       next if facts[:os]['name'] == 'Archlinux'
       next if facts[:os]['name'] == 'Gentoo'
-      next if facts[:os]['name'] == 'Debian' and facts[:os]['release']['major'] == '9'
-      next if facts[:os]['name'] == 'Ubuntu' and facts[:os]['release']['major'] == '16.04'
+      next if facts[:os]['name'] == 'Debian' && facts[:os]['release']['major'] == '9'
+      next if facts[:os]['name'] == 'Ubuntu' && facts[:os]['release']['major'] == '16.04'
 
       context "on #{os} " do
         let :facts do
