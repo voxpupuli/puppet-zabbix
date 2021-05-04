@@ -16,15 +16,6 @@ describe 'zabbix::database::postgresql' do
         facts
       end
 
-      case facts[:os]['name']
-      when 'CentOS', 'RedHat', 'OracleLinux', 'VirtuozzoLinux'
-        # Path for version 2.4 on RedHat
-        path_for2 = '/usr/share/doc/zabbix-*-pgsql-2.4*/create'
-      else
-        # Path for version 2.4 on Debian
-        path_for2 = '/usr/share/zabbix-*-pgsql'
-      end
-
       %w[4.0 5.0 5.2].each do |zabbix_version|
         case facts[:os]['name']
         when 'CentOS', 'RedHat', 'OracleLinux', 'VirtuozzoLinux'
