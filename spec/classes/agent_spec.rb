@@ -268,6 +268,7 @@ describe 'zabbix::agent' do
               loadmodulepath: '${libdir}/modules',
               logfilesize: '4',
               logfile: '/var/log/zabbix/zabbix_agentd.log',
+              logtype: 'file',
               logremotecommands: '0',
               pidfile: '/var/run/zabbix/zabbix_agentd.pid',
               refreshactivechecks: '120',
@@ -301,6 +302,7 @@ describe 'zabbix::agent' do
           it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LoadModulePath=\$\{libdir\}/modules$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LogFileSize=4$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LogFile=/var/log/zabbix/zabbix_agentd.log$} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LogType=file$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LogRemoteCommands=0$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^PidFile=/var/run/zabbix/zabbix_agentd.pid$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^RefreshActiveChecks=120$} }
@@ -345,6 +347,32 @@ describe 'zabbix::agent' do
             with_ensure('stopped').
             with_enable(false).
             that_requires("Package[#{package_name}]")
+        end
+      end
+
+      context 'with zabbix_agentd.conf and logtype is declared' do
+        context 'declare logtype as system' do
+          let :params do
+            {
+              logtype: 'system'
+            }
+          end
+
+          it { is_expected.to contain_file(config_path).with_content %r{^LogType=system$} }
+          it { is_expected.to contain_file(config_path).without_content %r{^LogFile=} }
+          it { is_expected.to contain_file(config_path).without_content %r{^LogFileSize=} }
+        end
+
+        context 'declare logtype as console' do
+          let :params do
+            {
+              logtype: 'console'
+            }
+          end
+
+          it { is_expected.to contain_file(config_path).with_content %r{^LogType=console$} }
+          it { is_expected.to contain_file(config_path).without_content %r{^LogFile=} }
+          it { is_expected.to contain_file(config_path).without_content %r{^LogFileSize=} }
         end
       end
     end

@@ -223,6 +223,7 @@ describe 'zabbix::server' do
             loadmodule: 'pizza',
             logfilesize: '10',
             logfile: '/var/log/zabbix/zabbix_server.log',
+            logtype: 'file',
             logslowqueries: '0',
             maxhousekeeperdelete: '500',
             pidfile: '/var/run/zabbix/zabbix_server.pid',
@@ -283,6 +284,7 @@ describe 'zabbix::server' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^LoadModule = pizza} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^LogFileSize=10} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^LogFile=/var/log/zabbix/zabbix_server.log} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^LogType=file} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^LogSlowQueries=0} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^MaxHousekeeperDelete=500} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^PidFile=/var/run/zabbix/zabbix_server.pid} }
@@ -326,14 +328,30 @@ describe 'zabbix::server' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SocketDir=/var/run/zabbix} }
       end
 
-      context 'with zabbix_server.conf and system as logtype' do
-        let :params do
-          {
-            logtype: 'system'
-          }
+      context 'with zabbix_server.conf and logtype' do
+        context 'declared as system' do
+          let :params do
+            {
+              logtype: 'system'
+            }
+          end
+
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^LogType=system$} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').without_content %r{^LogFile=} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').without_content %r{^LogFileSize=} }
         end
 
-        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^LogType=system$} }
+        context 'declared as console' do
+          let :params do
+            {
+              logtype: 'console'
+            }
+          end
+
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^LogType=console$} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').without_content %r{^LogFile=} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').without_content %r{^LogFileSize=} }
+        end
       end
     end
   end
