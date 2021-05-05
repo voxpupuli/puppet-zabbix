@@ -386,6 +386,8 @@ class zabbix::params {
   $proxy_snmptrapperfile                    = '/tmp/zabbix_traps.tmp'
   $proxy_sourceip                           = undef
   $proxy_sshkeylocation                     = undef
+  $proxy_sslcertlocation                    = undef
+  $proxy_sslkeylocation                     = undef
   $proxy_startdbsyncers                     = '4'
   $proxy_startdiscoverers                   = '1'
   $proxy_starthttppollers                   = '1'

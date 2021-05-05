@@ -246,6 +246,8 @@ describe 'zabbix::proxy' do
               snmptrapper: '0',
               snmptrapperfile: '/tmp/zabbix_traps.tmp',
               sshkeylocation: '/home/zabbix/.ssh/',
+              sslcertlocation_dir: '/usr/lib/zabbix/ssl/certs',
+              sslkeylocation_dir: '/usr/lib/zabbix/ssl/keys',
               startdbsyncers: '4',
               startdiscoverers: '15',
               starthttppollers: '15',
@@ -321,6 +323,8 @@ describe 'zabbix::proxy' do
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TmpDir=/tmp$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^AllowRoot=0$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^Include=/etc/zabbix/zabbix_proxy.conf.d$} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^SSLCertLocation=/usr/lib/zabbix/ssl/certs} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^SSLKeyLocation=/usr/lib/zabbix/ssl/keys} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LoadModulePath=\$\{libdir\}/modules$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LoadModule=pizza$} }
         end
