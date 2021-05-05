@@ -48,12 +48,14 @@ DebugLevel=<%= @debuglevel %>
 #
 <% if @sourceip %>SourceIP=<%= @sourceip %><% end %>
 
+<% if @zabbix_version.to_f < 5.0 %>
 ### Option: EnableRemoteCommands
 #	Whether remote commands from Zabbix server are allowed.
 #	0 - not allowed
 #	1 - allowed
 #
 EnableRemoteCommands=<%= @enableremotecommands %>
+<% end %>
 
 ### Option: LogRemoteCommands
 #	Enable logging of executed shell commands as warnings.
