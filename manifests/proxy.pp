@@ -368,6 +368,8 @@ class zabbix::proxy (
   $sourceip                                           = $zabbix::params::proxy_sourceip,
   Integer[0] $enableremotecommands                    = $zabbix::params::proxy_enableremotecommands,
   Integer[0] $logremotecommands                       = $zabbix::params::proxy_logremotecommands,
+  Enum['console', 'file', 'system'] $logtype          = $zabbix::params::proxy_logtype,
+  Optional[Stdlib::Absolutepath] $logfile             = $zabbix::params::proxy_logfile,
   $logfile                                            = $zabbix::params::proxy_logfile,
   $logfilesize                                        = $zabbix::params::proxy_logfilesize,
   $debuglevel                                         = $zabbix::params::proxy_debuglevel,
