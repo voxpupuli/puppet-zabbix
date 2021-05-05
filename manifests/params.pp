@@ -227,7 +227,7 @@ class zabbix::params {
   $server_listenport                        = '10051'
   $server_loadmodule                        = undef
   $server_loadmodulepath                    = '/usr/lib/modules'
-  # provided by camp2camp/systemd
+  # provided by camptocamp/systemd
   if $facts['systemd'] {
     $server_logtype                          = 'system'
     $server_logfile                          = undef
@@ -326,7 +326,7 @@ class zabbix::params {
   $agent_zbx_templates                      = ['Template OS Linux', 'Template App SSH Service']
   $apache_status                            = false
   $monitored_by_proxy                       = undef
-  # provided by camp2camp/systemd
+  # provided by camptocamp/systemd
   if $facts['systemd'] {
     $agent_logtype                          = 'system'
     $agent_logfile                          = undef
