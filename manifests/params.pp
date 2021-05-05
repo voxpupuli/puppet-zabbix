@@ -269,6 +269,12 @@ class zabbix::params {
   $server_starttrappers                     = '5'
   $server_startvmwarecollectors             = '0'
   $server_timeout                           = '3'
+  $server_database_tlsconnect               = undef
+  $server_database_tlscafile                = undef
+  $server_database_tlscertfile              = undef
+  $server_database_tlskeyfile               = undef
+  $server_database_tlscipher                = undef
+  $server_database_tlscipher13              = undef
   $server_tlscafile                         = undef
   $server_tlscertfile                       = undef
   $server_tlscrlfile                        = undef
@@ -421,6 +427,12 @@ class zabbix::params {
   $proxy_starttrappers                      = '5'
   $proxy_startvmwarecollectors              = '0'
   $proxy_timeout                            = '3'
+  $proxy_database_tlsconnect                = undef
+  $proxy_database_tlscafile                 = undef
+  $proxy_database_tlscertfile               = undef
+  $proxy_database_tlskeyfile                = undef
+  $proxy_database_tlscipher                 = undef
+  $proxy_database_tlscipher13               = undef
   $proxy_tlsaccept                          = undef
   $proxy_tlscafile                          = undef
   $proxy_tlscertfile                        = undef
