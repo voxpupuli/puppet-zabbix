@@ -316,6 +316,12 @@ class zabbix::params {
   $agent_tlsaccept                          = undef
   $agent_tlscafile                          = undef
   $agent_tlscertfile                        = undef
+  $agent_tlscipherall                       = undef
+  $agent_tlscipherall13                     = undef
+  $agent_tlsciphercert                      = undef
+  $agent_tlsciphercert13                    = undef
+  $agent_tlscipherpsk                       = undef
+  $agent_tlscipherpsk13                     = undef
   $agent_tlsconnect                         = undef
   $agent_tlscrlfile                         = undef
   $agent_tlskeyfile                         = undef
