@@ -376,7 +376,6 @@ class zabbix::proxy (
   Integer[0] $logremotecommands                       = $zabbix::params::proxy_logremotecommands,
   Enum['console', 'file', 'system'] $logtype          = $zabbix::params::proxy_logtype,
   Optional[Stdlib::Absolutepath] $logfile             = $zabbix::params::proxy_logfile,
-  $logfile                                            = $zabbix::params::proxy_logfile,
   $logfilesize                                        = $zabbix::params::proxy_logfilesize,
   $debuglevel                                         = $zabbix::params::proxy_debuglevel,
   $pidfile                                            = $zabbix::params::proxy_pidfile,
