@@ -52,6 +52,12 @@
 # [*logfilesize*]
 #   Maximum size of log file in MB.
 #
+# [*logtype*]
+#   Specifies where log messages are written to. Can be one of:
+#   - console
+#   - file
+#   - system
+#
 # [*debuglevel*]
 #   Specifies debug level.
 #
