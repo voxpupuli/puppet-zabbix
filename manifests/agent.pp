@@ -88,6 +88,12 @@
 # [*sourceip*]
 #   Source ip address for outgoing connections.
 #
+# [*allowkey*]
+#   Allow execution of item keys matching pattern.
+#
+# [*denykey*]
+#   Deny execution of items keys matching pattern.
+#
 # [*enableremotecommands*]
 #   Whether remote commands from zabbix server are allowed.
 #
@@ -271,6 +277,8 @@ class zabbix::agent (
   $logfilesize                                    = $zabbix::params::agent_logfilesize,
   $debuglevel                                     = $zabbix::params::agent_debuglevel,
   $sourceip                                       = $zabbix::params::agent_sourceip,
+  Optional[String[1]] $allowkey                   = $zabbix::params::agent_allowkey,
+  Optional[String[1]] $denykey                    = $zabbix::params::agent_denykey,
   $enableremotecommands                           = $zabbix::params::agent_enableremotecommands,
   $logremotecommands                              = $zabbix::params::agent_logremotecommands,
   $server                                         = $zabbix::params::agent_server,

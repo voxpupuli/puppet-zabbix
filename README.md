@@ -459,6 +459,8 @@ There are some more zabbix specific parameters, please check them by opening the
 
 ### Reference zabbix-agent
 * `server`: This is the ipaddress of the zabbix-server or zabbix-proxy.
+* `allowkey`: Allows execution of item keys matching pattern.
+* `denykey`: Deny execution of items keys matching pattern.
 * `tlsaccept`: What incoming connections to accept from Zabbix server. Used for a passive proxy, ignored on an active proxy.
 * `tlscafile`: Full pathname of a file containing the top-level CA(s) certificates for peer certificate verification.
 * `tlscertfile`: Full pathname of a file containing the proxy certificate or certificate chain.

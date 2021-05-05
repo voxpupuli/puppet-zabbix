@@ -260,6 +260,8 @@ describe 'zabbix::agent' do
               buffersend: '5',
               buffersize: '100',
               debuglevel: '4',
+              allowkey: 'system.run[*]',
+              denykey: 'system.run[*]',
               enableremotecommands: '1',
               hostname: '10050',
               include_dir: '/etc/zabbix/zabbix_agentd.d',
@@ -294,6 +296,8 @@ describe 'zabbix::agent' do
           it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^BufferSend=5$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^BufferSize=100$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^DebugLevel=4$} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^AllowKey=system.run\[\*\]$} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^DenyKey=system.run\[\*\]$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^Hostname=10050$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^Include=/etc/zabbix/zabbix_agentd.d$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^ListenPort=10050$} }
