@@ -373,8 +373,16 @@ class zabbix::params {
   $proxy_loadmodule                         = undef
   $proxy_loadmodulepath                     = '/usr/lib/modules'
   $proxy_localbuffer                        = '0'
-  $proxy_logfile                            = '/var/log/zabbix/zabbix_proxy.log'
-  $proxy_logfilesize                        = '10'
+  # provided by camptocamp/systemd
+  if $facts['systemd'] {
+    $proxy_logtype                          = 'system'
+    $proxy_logfile                          = undef
+    $proxy_logfilesize                      = undef
+  } else {
+    $proxy_logtype                          = 'file'
+    $proxy_logfile                          = '/var/log/zabbix/zabbix_proxy.log'
+    $proxy_logfilesize                      = '10'
+  }
   $proxy_logremotecommands                  = 0
   $proxy_logslowqueries                     = '0'
   $proxy_mode                               = '0'
