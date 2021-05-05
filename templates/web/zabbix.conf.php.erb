@@ -35,8 +35,8 @@ $IMAGE_FORMAT_DEFAULT = IMAGE_FORMAT_PNG;
 <% if @ldap_cacert %>
 putenv("LDAPTLS_CACERT=<%= @ldap_cacert %>");
 <% end %>
-<% if @ldap_clientcrt %>
-putenv("LDAPTLS_CERT=<%= @ldap_clientcrt %>");
+<% if @ldap_clientcert %>
+putenv("LDAPTLS_CERT=<%= @ldap_clientcert %>");
 <% end %>
 <% if @ldap_clientkey %>
 putenv("LDAPTLS_KEY=<%= @ldap_clientkey %>");
