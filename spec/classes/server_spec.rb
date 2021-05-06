@@ -241,6 +241,7 @@ describe 'zabbix::server' do
             startdbsyncers: '4',
             startalerters: 10,
             startdiscoverers: '1',
+            startescalators: 10,
             starthttppollers: '1',
             startipmipollers: '12',
             startpingers: '1',
@@ -315,6 +316,7 @@ describe 'zabbix::server' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartDBSyncers=4} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartAlerters=10} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartDiscoverers=1} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartEscalators=10} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartHTTPPollers=1} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartIPMIPollers=12} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartPingers=1} }

@@ -127,6 +127,9 @@
 # [*startdiscoverers*]
 #   Number of pre-forked instances of discoverers.
 #
+# [*startescalators*]
+#   Number of pre-forked instances of escalators.
+#
 # [*starthttppollers*]
 #   Number of pre-forked instances of http pollers.
 #
@@ -375,6 +378,7 @@ class zabbix::server (
   $startpingers                                                               = $zabbix::params::server_startpingers,
   Integer[1, 100] $startalerters                                              = $zabbix::params::server_startalerters,
   $startdiscoverers                                                           = $zabbix::params::server_startdiscoverers,
+  Integer[1, 100] $startescalators                                            = $zabbix::params::server_startescalators,
   $starthttppollers                                                           = $zabbix::params::server_starthttppollers,
   $starttimers                                                                = $zabbix::params::server_starttimers,
   $javagateway                                                                = $zabbix::params::server_javagateway,

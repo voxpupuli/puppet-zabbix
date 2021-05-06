@@ -258,6 +258,7 @@ class zabbix::params {
   $server_startdbsyncers                    = '4'
   $server_startalerters                     = 3
   $server_startdiscoverers                  = '1'
+  $server_startescalators                   = 1
   $server_starthttppollers                  = '1'
   $server_startipmipollers                  = '0'
   $server_startjavapollers                  = '5'
