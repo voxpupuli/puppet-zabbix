@@ -158,6 +158,16 @@ StartTimers=<%= @starttimers %>
 #
 <% if @startescalators %>StartEscalators=<%= @startescalators %><% end %>
 
+### Option: StartAlerters
+#       Number of pre-forked instances of alerters.
+#       Alerters send the notifications created by action operations.
+#
+# Mandatory: no
+# Range: 0-100
+# Default:
+# StartAlerters=3
+<% if @startalerters %>StartAlerters=<%= @startalerters %><% end %>
+
 <% if @javagateway %>
 ### Option: JavaGateway
 #	IP address (or hostname) of Zabbix Java gateway.

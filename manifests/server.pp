@@ -121,6 +121,9 @@
 # [*startpingers*]
 #   Number of pre-forked instances of icmp pingers.
 #
+# [*startalerters*]
+#   Number of pre-forked instances of alerters.
+#
 # [*startdiscoverers*]
 #   Number of pre-forked instances of discoverers.
 #
@@ -370,6 +373,7 @@ class zabbix::server (
   $startpollersunreachable                                                    = $zabbix::params::server_startpollersunreachable,
   $starttrappers                                                              = $zabbix::params::server_starttrappers,
   $startpingers                                                               = $zabbix::params::server_startpingers,
+  Integer[1, 100] $startalerters                                              = $zabbix::params::server_startalerters,
   $startdiscoverers                                                           = $zabbix::params::server_startdiscoverers,
   $starthttppollers                                                           = $zabbix::params::server_starthttppollers,
   $starttimers                                                                = $zabbix::params::server_starttimers,
