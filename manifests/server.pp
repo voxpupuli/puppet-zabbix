@@ -207,6 +207,30 @@
 # [*tlskeyfile*]
 #   Full pathname of a file containing the server private key.
 #
+# [*tlscipherall*]
+#   GnuTLS priority string or OpenSSL (TLS 1.2) cipher string. Override the default ciphersuite selection criteria
+#   for certificate- and PSK-based encryption.
+#
+# [*tlscipherall13*]
+#   Cipher string for OpenSSL 1.1.1 or newer in TLS 1.3. Override the default ciphersuite selection criteria
+#   for certificate- and PSK-based encryption.
+#
+# [*tlsciphercert*]
+#   GnuTLS priority string or OpenSSL (TLS 1.2) cipher string. Override the default ciphersuite selection criteria
+#   for certificate-based encryption.
+#
+# [*tlsciphercert13*]
+#   Cipher string for OpenSSL 1.1.1 or newer in TLS 1.3. Override the default ciphersuite selection criteria
+#   for certificate-based encryption.
+#
+# [*tlscipherpsk*]
+#  GnuTLS priority string or OpenSSL (TLS 1.2) cipher string. Override the default ciphersuite selection criteria
+#  for PSK-based encryption.
+#
+# [*tlscipherpsk13*]
+#  Cipher string for OpenSSL 1.1.1 or newer in TLS 1.3. Override the default ciphersuite selection criteria
+#  for PSK-based encryption.
+#
 # [*trappertimeout*]
 #   Specifies how many seconds trapper may spend processing new data.
 #
@@ -373,6 +397,12 @@ class zabbix::server (
   $tlscertfile                                                                = $zabbix::params::server_tlscertfile,
   $tlscrlfile                                                                 = $zabbix::params::server_tlscrlfile,
   $tlskeyfile                                                                 = $zabbix::params::server_tlskeyfile,
+  Optional[String[1]] $tlscipherall                                           = $zabbix::params::server_tlscipherall,
+  Optional[String[1]] $tlscipherall13                                         = $zabbix::params::server_tlscipherall13,
+  Optional[String[1]] $tlsciphercert                                          = $zabbix::params::server_tlsciphercert,
+  Optional[String[1]] $tlsciphercert13                                        = $zabbix::params::server_tlsciphercert13,
+  Optional[String[1]] $tlscipherpsk                                           = $zabbix::params::server_tlscipherpsk,
+  Optional[String[1]] $tlscipherpsk13                                         = $zabbix::params::server_tlscipherpsk13,
   $trappertimeout                                                             = $zabbix::params::server_trappertimeout,
   $unreachableperiod                                                          = $zabbix::params::server_unreachableperiod,
   $unavailabledelay                                                           = $zabbix::params::server_unavailabledelay,
