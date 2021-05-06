@@ -195,6 +195,7 @@ class zabbix::params {
   $ldap_reqcert                             = undef
   $server_api_pass                          = 'zabbix'
   $server_api_user                          = 'Admin'
+  $server_database_double_ieee754           = false
 
   # Zabbix-server
   $server_alertscriptspath                  = '/etc/zabbix/alertscripts'

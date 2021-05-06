@@ -187,6 +187,14 @@ describe 'zabbix::web' do
           it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['SCHEMA'\] = 'zabbix'}) }
         end
 
+        describe 'with parameter: database_double_ieee754' do
+          let :params do
+            super().merge(database_double_ieee754: true)
+          end
+
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['DOUBLE_IEEE754'\] = 'true'}) }
+        end
+
         it { is_expected.to contain_apache__vhost('zabbix.example.com').with_name('zabbix.example.com') }
 
         context 'with database_* settings' do
