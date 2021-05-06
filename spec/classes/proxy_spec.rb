@@ -239,6 +239,7 @@ describe 'zabbix::proxy' do
               localbuffer: '0',
               logfilesize: '15',
               logfile: '/var/log/zabbix/proxy_server.log',
+              logtype: 'file',
               logslowqueries: '0',
               mode: '0',
               offlinebuffer: '1',
@@ -279,6 +280,7 @@ describe 'zabbix::proxy' do
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^ListenPort=10051$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LogFile=/var/log/zabbix/proxy_server.log$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LogFileSize=15$} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LogType=file$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^DebugLevel=4$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^PidFile=/var/run/zabbix/proxy_server.pid$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^DBHost=localhost$} }
@@ -367,6 +369,32 @@ describe 'zabbix::proxy' do
           end
 
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^SocketDir=/var/run/zabbix} }
+        end
+
+        context 'with zabbix_proxy.conf and logtype' do
+          context 'declared as system' do
+            let :params do
+              {
+                logtype: 'system'
+              }
+            end
+
+            it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LogType=system$} }
+            it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').without_content %r{^LogFile=} }
+            it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').without_content %r{^LogFileSize=} }
+          end
+
+          context 'declared as console' do
+            let :params do
+              {
+                logtype: 'console'
+              }
+            end
+
+            it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LogType=console$} }
+            it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').without_content %r{^LogFile=} }
+            it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').without_content %r{^LogFileSize=} }
+          end
         end
       end
     end

@@ -227,7 +227,7 @@ class zabbix::params {
   $server_listenport                        = '10051'
   $server_loadmodule                        = undef
   $server_loadmodulepath                    = '/usr/lib/modules'
-  # provided by camp2camp/systemd
+  # provided by camptocamp/systemd
   if $facts['systemd'] {
     $server_logtype                          = 'system'
     $server_logfile                          = undef
@@ -326,7 +326,7 @@ class zabbix::params {
   $agent_zbx_templates                      = ['Template OS Linux', 'Template App SSH Service']
   $apache_status                            = false
   $monitored_by_proxy                       = undef
-  # provided by camp2camp/systemd
+  # provided by camptocamp/systemd
   if $facts['systemd'] {
     $agent_logtype                          = 'system'
     $agent_logfile                          = undef
@@ -373,8 +373,16 @@ class zabbix::params {
   $proxy_loadmodule                         = undef
   $proxy_loadmodulepath                     = '/usr/lib/modules'
   $proxy_localbuffer                        = '0'
-  $proxy_logfile                            = '/var/log/zabbix/zabbix_proxy.log'
-  $proxy_logfilesize                        = '10'
+  # provided by camptocamp/systemd
+  if $facts['systemd'] {
+    $proxy_logtype                          = 'system'
+    $proxy_logfile                          = undef
+    $proxy_logfilesize                      = undef
+  } else {
+    $proxy_logtype                          = 'file'
+    $proxy_logfile                          = '/var/log/zabbix/zabbix_proxy.log'
+    $proxy_logfilesize                      = '10'
+  }
   $proxy_logremotecommands                  = 0
   $proxy_logslowqueries                     = '0'
   $proxy_mode                               = '0'

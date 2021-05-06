@@ -20,18 +20,17 @@ PidFile=<%= @pidfile %><% end %>
 #
 LogType=<%= @logtype %><% end %>
 
-<% if @logfile %>
+<% if @logtype == 'file' -%>
 ### Option: LogFile
 #	Log file name for LogType 'file' parameter.
 #
-LogFile=<%= @logfile %><% end %>
+LogFile=<%= @logfile %>
 
-<% if @logfilesize %>
 ### Option: LogFileSize
 #	Maximum size of log file in MB.
 #	0 - disable automatic log rotation.
 #
-LogFileSize=<%= @logfilesize %><% end %>
+LogFileSize=<%= @logfilesize %><% end -%>
 
 ### Option: DebugLevel
 #	Specifies debug level

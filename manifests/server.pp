@@ -52,6 +52,12 @@
 # [*logfilesize*]
 #   Maximum size of log file in MB.
 #
+# [*logtype*]
+#   Specifies where log messages are written to. Can be one of:
+#   - console
+#   - file
+#   - system
+#
 # [*debuglevel*]
 #   Specifies debug level.
 #
@@ -296,7 +302,7 @@ class zabbix::server (
   $listenport                                         = $zabbix::params::server_listenport,
   $sourceip                                           = $zabbix::params::server_sourceip,
   Enum['console', 'file', 'system'] $logtype          = $zabbix::params::server_logtype,
-  $logfile                                            = $zabbix::params::server_logfile,
+  Optional[Stdlib::Absolutepath] $logfile             = $zabbix::params::server_logfile,
   $logfilesize                                        = $zabbix::params::server_logfilesize,
   $debuglevel                                         = $zabbix::params::server_debuglevel,
   $pidfile                                            = $zabbix::params::server_pidfile,

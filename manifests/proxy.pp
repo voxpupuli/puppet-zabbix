@@ -81,6 +81,12 @@
 # [*logfilesize*]
 #   Maximum size of log file in MB.
 #
+# [*logtype*]
+#   Specifies where log messages are written to. Can be one of:
+#   - console
+#   - file
+#   - system
+#
 # [*debuglevel*]
 #   Specifies debug level.
 #
@@ -368,7 +374,8 @@ class zabbix::proxy (
   $sourceip                                           = $zabbix::params::proxy_sourceip,
   Integer[0] $enableremotecommands                    = $zabbix::params::proxy_enableremotecommands,
   Integer[0] $logremotecommands                       = $zabbix::params::proxy_logremotecommands,
-  $logfile                                            = $zabbix::params::proxy_logfile,
+  Enum['console', 'file', 'system'] $logtype          = $zabbix::params::proxy_logtype,
+  Optional[Stdlib::Absolutepath] $logfile             = $zabbix::params::proxy_logfile,
   $logfilesize                                        = $zabbix::params::proxy_logfilesize,
   $debuglevel                                         = $zabbix::params::proxy_debuglevel,
   $pidfile                                            = $zabbix::params::proxy_pidfile,
