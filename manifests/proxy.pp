@@ -246,6 +246,9 @@
 # [*sshkeylocation*]
 #   Location of public and private keys for ssh checks and actions.
 #
+# [*sslcalocation_dir*]
+#   Location of certificate authority (CA) files for SSL server certificate verification.
+#
 # [*sslcertlocation_dir*]
 #   Location of SSL client certificate files for client authentication.
 #
@@ -430,6 +433,7 @@ class zabbix::proxy (
   $tmpdir                                             = $zabbix::params::proxy_tmpdir,
   $allowroot                                          = $zabbix::params::proxy_allowroot,
   $include_dir                                        = $zabbix::params::proxy_include,
+  Optional[Stdlib::Absolutepath] $sslcalocation_dir   = $zabbix::params::proxy_sslcalocation,
   Optional[Stdlib::Absolutepath] $sslcertlocation_dir = $zabbix::params::proxy_sslcertlocation,
   Optional[Stdlib::Absolutepath] $sslkeylocation_dir  = $zabbix::params::proxy_sslkeylocation,
   $loadmodulepath                                     = $zabbix::params::proxy_loadmodulepath,
