@@ -216,7 +216,7 @@ class zabbix::web (
   $database_host                                                      = $zabbix::params::server_database_host,
   $database_name                                                      = $zabbix::params::server_database_name,
   $database_schema                                                    = $zabbix::params::server_database_schema,
-  $database_double_ieee754                                            = $zabbix::params::server_database_double_ieee754,
+  Boolean $database_double_ieee754                                    = $zabbix::params::server_database_double_ieee754,
   $database_user                                                      = $zabbix::params::server_database_user,
   $database_password                                                  = $zabbix::params::server_database_password,
   $database_socket                                                    = $zabbix::params::server_database_socket,
