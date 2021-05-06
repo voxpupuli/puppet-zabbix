@@ -406,20 +406,20 @@ Include=<%= @include_dir %>
 #	Location of SSL client certificates.
 #	This parameter is used only in web monitoring.
 #
-<% if @sslcertlocation %>SSLCertLocation=<%= @sslcertlocation %><% end %>
+<% if @sslcertlocation_dir %>SSLCertLocation=<%= @sslcertlocation_dir %><% end %>
 
 ### Option: SSLKeyLocation
 #	Location of private keys for SSL client certificates.
 #	This parameter is used only in web monitoring.
 #
-<% if @sslkeylocation %>SSLKeyLocation=<%= @sslkeylocation %><% end %>
+<% if @sslkeylocation_dir %>SSLKeyLocation=<%= @sslkeylocation_dir %><% end %>
 
 ### Option: SSLCALocation
 #	Location of certificate authority (CA) files for SSL server certificate verification.
 #	If not set, system-wide directory will be used.
 #	This parameter is used only in web monitoring.
 #
-<% if @sslcalocation %>SSLCALocation=<%= @sslcalocation %><% end %>
+<% if @sslcalocation_dir %>SSLCALocation=<%= @sslcalocation_dir %><% end %>
 
 ####### LOADABLE MODULES #######
 
