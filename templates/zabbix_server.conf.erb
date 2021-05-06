@@ -374,6 +374,17 @@ ProxyConfigFrequency=<%= @proxyconfigfrequency %>
 #
 ProxyDataFrequency=<%= @proxydatafrequency %>
 
+<% if @zabbix_version.to_f >= 5.0 %>
+### Option: StartLLDProcessors
+#       Number of pre-forked instances of low level discovery processors.
+#
+# Mandatory: no
+# Range: 1-100
+# Default:
+# StartLLDProcessors=2
+<% if @startlldprocessors %>StartLLDProcessors=<%= @startlldprocessors -%><% end %>
+<% end %>
+
 ### Option: AllowRoot
 #   Allow the server to run as 'root'. If disabled and the server is started by 'root', the server
 #   will try to switch to the user specified by the User configuration option instead.

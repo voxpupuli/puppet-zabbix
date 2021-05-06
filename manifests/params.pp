@@ -262,6 +262,7 @@ class zabbix::params {
   $server_starthttppollers                  = '1'
   $server_startipmipollers                  = '0'
   $server_startjavapollers                  = '5'
+  $server_startlldprocessors                = 2
   $server_startpingers                      = '1'
   $server_startpollers                      = '5'
   $server_startpollersunreachable           = '1'

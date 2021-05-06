@@ -145,6 +145,9 @@
 # [*startjavapollers*]
 #   Number of pre-forked instances of java pollers.
 #
+# [*startlldprocessors*]
+#   Number of pre-forked instances of low-level discovery (LLD) workers.
+#
 # [*startvmwarecollectors*]
 #   Number of pre-forked vmware collector instances.
 #
@@ -384,6 +387,7 @@ class zabbix::server (
   $javagateway                                                                = $zabbix::params::server_javagateway,
   $javagatewayport                                                            = $zabbix::params::server_javagatewayport,
   $startjavapollers                                                           = $zabbix::params::server_startjavapollers,
+  Integer[1, 100] $startlldprocessors                                         = $zabbix::params::server_startlldprocessors,
   $startvmwarecollectors                                                      = $zabbix::params::server_startvmwarecollectors,
   $vmwarefrequency                                                            = $zabbix::params::server_vmwarefrequency,
   $vmwarecachesize                                                            = $zabbix::params::server_vmwarecachesize,

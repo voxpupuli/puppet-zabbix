@@ -251,6 +251,7 @@ describe 'zabbix::server' do
             startsnmptrapper: '1',
             starttimers: '1',
             starttrappers: '5',
+            startlldprocessors: 5,
             startvmwarecollectors: '5',
             timeout: '3',
             tmpdir: '/tmp',
@@ -310,6 +311,7 @@ describe 'zabbix::server' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^PidFile=/var/run/zabbix/zabbix_server.pid} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^ProxyConfigFrequency=3600} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^ProxyDataFrequency=1} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartLLDProcessors=5} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SNMPTrapperFile=/tmp/zabbix_traps.tmp} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SourceIP=192.168.1.1} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SSHKeyLocation=/home/zabbix} }
