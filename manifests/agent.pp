@@ -88,6 +88,12 @@
 # [*sourceip*]
 #   Source ip address for outgoing connections.
 #
+# [*allowkey*]
+#   Allow execution of item keys matching pattern.
+#
+# [*denykey*]
+#   Deny execution of items keys matching pattern.
+#
 # [*enableremotecommands*]
 #   Whether remote commands from zabbix server are allowed.
 #
@@ -196,6 +202,30 @@
 # [*tlspskidentity*]
 #   Unique, case sensitive string used to identify the pre-shared key.
 #
+# [*tlscipherall*]
+#   GnuTLS priority string or OpenSSL (TLS 1.2) cipher string. Override the default ciphersuite selection criteria
+#   for certificate- and PSK-based encryption.
+#
+# [*tlscipherall13*]
+#   Cipher string for OpenSSL 1.1.1 or newer in TLS 1.3. Override the default ciphersuite selection criteria
+#   for certificate- and PSK-based encryption.
+#
+# [*tlsciphercert*]
+#   GnuTLS priority string or OpenSSL (TLS 1.2) cipher string. Override the default ciphersuite selection criteria
+#   for certificate-based encryption.
+#
+# [*tlsciphercert13*]
+#   Cipher string for OpenSSL 1.1.1 or newer in TLS 1.3. Override the default ciphersuite selection criteria
+#   for certificate-based encryption.
+#
+# [*tlscipherpsk*]
+#  GnuTLS priority string or OpenSSL (TLS 1.2) cipher string. Override the default ciphersuite selection criteria
+#  for PSK-based encryption.
+#
+# [*tlscipherpsk13*]
+#  Cipher string for OpenSSL 1.1.1 or newer in TLS 1.3. Override the default ciphersuite selection criteria
+#  for PSK-based encryption.
+#
 # [*tlsservercertissuer*]
 #   Allowed server certificate issuer.
 #
@@ -271,6 +301,8 @@ class zabbix::agent (
   $logfilesize                                    = $zabbix::params::agent_logfilesize,
   $debuglevel                                     = $zabbix::params::agent_debuglevel,
   $sourceip                                       = $zabbix::params::agent_sourceip,
+  Optional[String[1]] $allowkey                   = $zabbix::params::agent_allowkey,
+  Optional[String[1]] $denykey                    = $zabbix::params::agent_denykey,
   $enableremotecommands                           = $zabbix::params::agent_enableremotecommands,
   $logremotecommands                              = $zabbix::params::agent_logremotecommands,
   $server                                         = $zabbix::params::agent_server,
@@ -303,6 +335,12 @@ class zabbix::agent (
   $tlsaccept                                      = $zabbix::params::agent_tlsaccept,
   $tlscafile                                      = $zabbix::params::agent_tlscafile,
   $tlscertfile                                    = $zabbix::params::agent_tlscertfile,
+  Optional[String[1]] $tlscipherall               = $zabbix::params::agent_tlscipherall,
+  Optional[String[1]] $tlscipherall13             = $zabbix::params::agent_tlscipherall13,
+  Optional[String[1]] $tlsciphercert              = $zabbix::params::agent_tlsciphercert,
+  Optional[String[1]] $tlsciphercert13            = $zabbix::params::agent_tlsciphercert13,
+  Optional[String[1]] $tlscipherpsk               = $zabbix::params::agent_tlscipherpsk,
+  Optional[String[1]] $tlscipherpsk13             = $zabbix::params::agent_tlscipherpsk13,
   $tlsconnect                                     = $zabbix::params::agent_tlsconnect,
   $tlscrlfile                                     = $zabbix::params::agent_tlscrlfile,
   $tlskeyfile                                     = $zabbix::params::agent_tlskeyfile,

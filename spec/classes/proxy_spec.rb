@@ -218,6 +218,12 @@ describe 'zabbix::proxy' do
               database_password: 'zabbix-proxy',
               database_schema: 'zabbix-proxy',
               database_user: 'zabbix-proxy',
+              database_tlsconnect: 'verify_ca',
+              database_tlscafile: '/etc/zabbix/ssl/ca.cert',
+              database_tlscertfile: '/etc/zabbix/ssl/cert.cert',
+              database_tlskeyfile: '/etc/zabbix/ssl/key.key',
+              database_tlscipher: 'TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256',
+              database_tlscipher13: 'TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256',
               datasenderfrequency: '1',
               debuglevel: '4',
               externalscripts: '/usr/lib/zabbix/externalscripts',
@@ -269,7 +275,13 @@ describe 'zabbix::proxy' do
               vmwarefrequency: '60',
               zabbix_server_host: '192.168.1.1',
               zabbix_server_port: '10051',
-              zabbix_version: '5.0'
+              zabbix_version: '5.0',
+              tlsciphercert: 'EECDH+aRSA+AES128:RSA+aRSA+AES128',
+              tlsciphercert13: 'EECDH+aRSA+AES128:RSA+aRSA+AES128',
+              tlscipherpsk: 'kECDHEPSK+AES128:kPSK+AES128',
+              tlscipherpsk13: 'TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256',
+              tlscipherall: 'TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256',
+              tlscipherall13: 'EECDH+aRSA+AES128:RSA+aRSA+AES128:kECDHEPSK+AES128:kPSK+AES128'
             }
           end
 
@@ -288,6 +300,12 @@ describe 'zabbix::proxy' do
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^DBSchema=zabbix-proxy$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^DBUser=zabbix-proxy$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^DBPassword=zabbix-proxy$} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^DBTLSConnect=verify_ca} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^DBTLSCAFile=/etc/zabbix/ssl/ca.cert} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^DBTLSCertFile=/etc/zabbix/ssl/cert.cert} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^DBTLSKeyFile=/etc/zabbix/ssl/key.key} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^DBTLSCipher=TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^DBTLSCipher13=TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^ProxyLocalBuffer=0$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^ProxyOfflineBuffer=1$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^HeartbeatFrequency=60$} }
@@ -331,6 +349,12 @@ describe 'zabbix::proxy' do
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^SSLCALocation=/usr/lib/zabbix/ssl/certs} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LoadModulePath=\$\{libdir\}/modules$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LoadModule=pizza$} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSCipherCert=EECDH\+aRSA\+AES128:RSA\+aRSA\+AES128$} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSCipherCert13=EECDH\+aRSA\+AES128:RSA\+aRSA\+AES128$} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSCipherPSK=kECDHEPSK\+AES128:kPSK\+AES128$} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSCipherPSK13=TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256$} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSCipherAll=TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256$} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSCipherAll13=EECDH\+aRSA\+AES128:RSA\+aRSA\+AES128:kECDHEPSK\+AES128:kPSK\+AES128$} }
         end
 
         context 'with zabbix_proxy.conf and version 4.0' do

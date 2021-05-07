@@ -208,6 +208,12 @@ describe 'zabbix::server' do
             database_schema: 'zabbix-server',
             database_socket: '/tmp/socket.db',
             database_user: 'zabbix-server',
+            database_tlsconnect: 'verify_ca',
+            database_tlscafile: '/etc/zabbix/ssl/ca.cert',
+            database_tlscertfile: '/etc/zabbix/ssl/cert.cert',
+            database_tlskeyfile: '/etc/zabbix/ssl/key.key',
+            database_tlscipher: 'TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256',
+            database_tlscipher13: 'TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256',
             debuglevel: '3',
             externalscripts: '/usr/lib/zabbix/externalscripts0',
             fping6location: '/usr/sbin/fping6',
@@ -233,7 +239,9 @@ describe 'zabbix::server' do
             sourceip: '192.168.1.1',
             sshkeylocation: '/home/zabbix',
             startdbsyncers: '4',
+            startalerters: 10,
             startdiscoverers: '1',
+            startescalators: 10,
             starthttppollers: '1',
             startipmipollers: '12',
             startpingers: '1',
@@ -243,6 +251,7 @@ describe 'zabbix::server' do
             startsnmptrapper: '1',
             starttimers: '1',
             starttrappers: '5',
+            startlldprocessors: 5,
             startvmwarecollectors: '5',
             timeout: '3',
             tmpdir: '/tmp',
@@ -254,7 +263,13 @@ describe 'zabbix::server' do
             valuecachesize: '4M',
             vmwarecachesize: '8M',
             vmwarefrequency: '60',
-            zabbix_version: '5.0'
+            zabbix_version: '5.0',
+            tlsciphercert: 'EECDH+aRSA+AES128:RSA+aRSA+AES128',
+            tlsciphercert13: 'EECDH+aRSA+AES128:RSA+aRSA+AES128',
+            tlscipherpsk: 'kECDHEPSK+AES128:kPSK+AES128',
+            tlscipherpsk13: 'TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256',
+            tlscipherall: 'TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256',
+            tlscipherall13: 'EECDH+aRSA+AES128:RSA+aRSA+AES128:kECDHEPSK+AES128:kPSK+AES128'
           }
         end
 
@@ -268,6 +283,12 @@ describe 'zabbix::server' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^DBPort=3306} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^DBSchema=zabbix-server} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^DBSocket=/tmp/socket.db} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^DBTLSConnect=verify_ca} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^DBTLSCAFile=/etc/zabbix/ssl/ca.cert} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^DBTLSCertFile=/etc/zabbix/ssl/cert.cert} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^DBTLSKeyFile=/etc/zabbix/ssl/key.key} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^DBTLSCipher=TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^DBTLSCipher13=TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^DBUser=zabbix-server} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^DebugLevel=3} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^ExternalScripts=/usr/lib/zabbix/externalscripts} }
@@ -290,11 +311,14 @@ describe 'zabbix::server' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^PidFile=/var/run/zabbix/zabbix_server.pid} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^ProxyConfigFrequency=3600} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^ProxyDataFrequency=1} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartLLDProcessors=5} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SNMPTrapperFile=/tmp/zabbix_traps.tmp} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SourceIP=192.168.1.1} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SSHKeyLocation=/home/zabbix} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartDBSyncers=4} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartAlerters=10} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartDiscoverers=1} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartEscalators=10} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartHTTPPollers=1} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartIPMIPollers=12} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartPingers=1} }
@@ -315,6 +339,12 @@ describe 'zabbix::server' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^ValueCacheSize=4M} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^VMwareCacheSize=8M} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^VMwareFrequency=60} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCipherCert=EECDH\+aRSA\+AES128:RSA\+aRSA\+AES128$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCipherCert13=EECDH\+aRSA\+AES128:RSA\+aRSA\+AES128$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCipherPSK=kECDHEPSK\+AES128:kPSK\+AES128$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCipherPSK13=TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCipherAll=TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCipherAll13=EECDH\+aRSA\+AES128:RSA\+aRSA\+AES128:kECDHEPSK\+AES128:kPSK\+AES128$} }
       end
 
       context 'with zabbix_server.conf and version 5.0' do
