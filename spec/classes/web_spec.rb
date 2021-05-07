@@ -219,6 +219,22 @@ describe 'zabbix::web' do
           it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$ZBX_SERVER_PORT = '3306'}) }
           it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$ZBX_SERVER_NAME = 'localhost'}) }
         end
+
+        describe 'with LDAP settings defined' do
+          let :params do
+            super().merge(
+              ldap_cacert: '/etc/zabbix/ssl/ca.crt',
+              ldap_clientcert: '/etc/zabbix/ssl/client.crt',
+              ldap_clientkey: '/etc/zabbix/ssl/client.key',
+              ldap_reqcert: 'allow'
+            )
+          end
+
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^putenv\("LDAPTLS_CACERT=/etc/zabbix/ssl/ca.crt"\);}) }
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^putenv\("LDAPTLS_CERT=/etc/zabbix/ssl/client.crt"\);}) }
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^putenv\("LDAPTLS_KEY=/etc/zabbix/ssl/client.key"\);}) }
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^putenv\("TLS_REQCERT=allow"\);}) }
+        end
       end
     end
   end
