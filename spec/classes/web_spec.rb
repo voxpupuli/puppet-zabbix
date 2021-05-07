@@ -235,6 +235,32 @@ describe 'zabbix::web' do
           it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^putenv\("LDAPTLS_KEY=/etc/zabbix/ssl/client.key"\);}) }
           it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^putenv\("TLS_REQCERT=allow"\);}) }
         end
+
+        describe 'with SAML settings defined' do
+          let :params do
+            super().merge(
+              saml_sp_key: '/etc/zabbix/web/sp.key',
+              saml_sp_cert: '/etc/zabbix/web/sp.cert',
+              saml_idp_cert: '/etc/zabbix/web/idp.cert',
+              saml_settings: {
+                'strict' => true,
+                'baseurl' => 'http://example.com/sp/',
+                'security' => {
+                  'signatureAlgorithm' => 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha384',
+                  'digestAlgorithm' => 'http://www.w3.org/2001/04/xmldsig-more#sha384',
+                  'singleLogoutService' => {
+                    'responseUrl' => '',
+                  }
+                }
+              }
+            )
+          end
+
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$SSO\['SP_KEY'\] = '/etc/zabbix/web/sp.key'}) }
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$SSO\['SP_CERT'\] = '/etc/zabbix/web/sp.cert'}) }
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$SSO\['IDP_CERT'\] = '/etc/zabbix/web/idp.cert'}) }
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$SSO\['SETTINGS'\] = \[ \n  "strict" => true,\n  "baseurl" => "http://example.com/sp/",\n  "security" => \[\n    "signatureAlgorithm" => "http://www.w3.org/2001/04/xmldsig-more#rsa-sha384",\n    "digestAlgorithm" => "http://www.w3.org/2001/04/xmldsig-more#sha384",\n    "singleLogoutService" => \[\n      "responseUrl" => ""\n    \]\n  \]\n\];}) }
+        end
       end
     end
   end
