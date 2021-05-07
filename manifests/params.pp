@@ -266,6 +266,7 @@ class zabbix::params {
   $server_startpingers                      = '1'
   $server_startpollers                      = '5'
   $server_startpollersunreachable           = '1'
+  $server_startpreprocessors                = 3
   $server_startproxypollers                 = '1'
   $server_startsnmptrapper                  = '0'
   $server_starttimers                       = '1'
@@ -433,6 +434,7 @@ class zabbix::params {
   $proxy_startpingers                       = '1'
   $proxy_startpollers                       = '5'
   $proxy_startpollersunreachable            = '1'
+  $proxy_startpreprocessors                 = 3
   $proxy_starttrappers                      = '5'
   $proxy_startvmwarecollectors              = '0'
   $proxy_timeout                            = '3'

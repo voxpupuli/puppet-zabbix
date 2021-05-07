@@ -247,6 +247,7 @@ describe 'zabbix::server' do
             startpingers: '1',
             startpollers: '12',
             startpollersunreachable: '1',
+            startpreprocessors: 10,
             startproxypollers: '1',
             startsnmptrapper: '1',
             starttimers: '1',
@@ -324,6 +325,7 @@ describe 'zabbix::server' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartPingers=1} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartPollers=12} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartPollersUnreachable=1} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartPreprocessors=10} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartProxyPollers=1} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartSNMPTrapper=1} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartTimers=1} }

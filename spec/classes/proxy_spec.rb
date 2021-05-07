@@ -263,6 +263,7 @@ describe 'zabbix::proxy' do
               startpingers: '15',
               startpollers: '15',
               startpollersunreachable: '15',
+              startpreprocessors: 10,
               starttrappers: '15',
               startvmwarecollectors: '0',
               timeout: '20',
@@ -313,6 +314,7 @@ describe 'zabbix::proxy' do
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^DataSenderFrequency=1$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartPollers=15$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartIPMIPollers=15$} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartPreprocessors=10$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartPollersUnreachable=15$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartTrappers=15$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartPingers=15$} }
