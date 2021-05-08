@@ -469,6 +469,9 @@ class zabbix::params {
   $proxy_unreachabedelay                    = '15'
   $proxy_unreachableperiod                  = '45'
   $proxy_use_ip                             = true
+  $proxy_vaultdbpath                        = undef
+  $proxy_vaulttoken                         = undef
+  $proxy_vaulturl                           = 'https://127.0.0.1:8200'
   $proxy_vmwarecachesize                    = '8M'
   $proxy_vmwarefrequency                    = '60'
   $proxy_vmwareperffrequency                = undef
