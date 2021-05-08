@@ -18,19 +18,11 @@ def prepare_host
   # does not exist. Symlink it from /bin/mkdir to make it work.
   shell('ln -sf /bin/mkdir /usr/bin/mkdir') if fact('os.distro.id') == 'Debian'
 
-  cleanup_script = <<-SHELL
+  cleanup_script_debian = <<-SHELL
   /opt/puppetlabs/bin/puppet resource service zabbix-server ensure=stopped
   /opt/puppetlabs/bin/puppet resource service apache2 ensure=stopped
-  /opt/puppetlabs/bin/puppet resource service httpd ensure=stopped
   /opt/puppetlabs/bin/puppet resource package zabbix-server-pgsql ensure=purged
-  /opt/puppetlabs/bin/puppet resource package zabbix-server-pgsql-scl ensure=purged
-  /opt/puppetlabs/bin/puppet resource package zabbix-server-mysql ensure=purged
-  /opt/puppetlabs/bin/puppet resource package zabbix-server-mysql-scl ensure=purged
-  /opt/puppetlabs/bin/puppet resource package zabbix-web ensure=purged
   /opt/puppetlabs/bin/puppet resource package zabbix-web-pgsql ensure=purged
-  /opt/puppetlabs/bin/puppet resource package zabbix-web-mysql ensure=purged
-  /opt/puppetlabs/bin/puppet resource package zabbix-web-pgsql-scl ensure=purged
-  /opt/puppetlabs/bin/puppet resource package zabbix-web-mysql-scl ensure=purged
   /opt/puppetlabs/bin/puppet resource package zabbix-frontend-php ensure=purged
   /opt/puppetlabs/puppet/bin/gem uninstall zabbixapi -a
   rm -f /etc/zabbix/.*done
@@ -38,7 +30,26 @@ def prepare_host
     su - postgres -c "psql -c 'drop database if exists zabbix_server;'"
   fi
   SHELL
-  shell(cleanup_script)
+
+  cleanup_script_redhat = <<-SHELL
+  /opt/puppetlabs/bin/puppet resource service zabbix-server ensure=stopped
+  /opt/puppetlabs/bin/puppet resource service httpd ensure=stopped
+  /opt/puppetlabs/bin/puppet resource package zabbix-server-pgsql ensure=purged
+  /opt/puppetlabs/bin/puppet resource package zabbix-server-pgsql-scl ensure=purged
+  /opt/puppetlabs/bin/puppet resource package zabbix-web ensure=purged
+  /opt/puppetlabs/bin/puppet resource package zabbix-web-pgsql ensure=purged
+  /opt/puppetlabs/bin/puppet resource package zabbix-web-pgsql-scl ensure=purged
+  /opt/puppetlabs/bin/puppet resource package zabbix-frontend-php ensure=purged
+  /opt/puppetlabs/puppet/bin/gem uninstall zabbixapi -a
+  rm -f /etc/zabbix/.*done
+  if id postgres > /dev/null 2>&1; then
+    su - postgres -c "psql -c 'drop database if exists zabbix_server;'"
+  fi
+  SHELL
+
+  shell(cleanup_script_debian) if fact('os.family') == 'Debian'
+  shell(cleanup_script_redhat) if fact('os.family') == 'RedHat'
+
   install_deps = <<-SHELL
       $compile_packages = $facts['os']['family'] ? {
         'RedHat' => [ 'make', 'gcc-c++', 'rubygems', 'ruby'],
