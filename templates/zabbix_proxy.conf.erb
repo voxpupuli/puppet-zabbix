@@ -203,6 +203,16 @@ StartIPMIPollers=<%= @startipmipollers %>
 #
 StartPollersUnreachable=<%= @startpollersunreachable %>
 
+### Option: StartPreprocessors
+#       Number of pre-forked instances of preprocessing workers.
+#               The preprocessing manager process is automatically started when preprocessor worker is started.
+#
+# Mandatory: no
+# Range: 1-1000
+# Default:
+# StartPreprocessors=3
+<% if @startpreprocessors %>StartPreprocessors=<%= @startpreprocessors -%><% end %>
+
 ### Option: StartTrappers
 #	Number of pre-forked instances of trappers.
 #	Trappers accept incoming connections from Zabbix sender and active agents.
