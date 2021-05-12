@@ -397,8 +397,8 @@ describe 'zabbix::proxy' do
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^SocketDir=/var/run/zabbix} }
         end
 
-        context 'with zabbix_proxy.conf and logtype' do
-          context 'declared as system' do
+        context 'with zabbix_proxy.conf and logtype declared' do
+          describe 'as system' do
             let :params do
               {
                 logtype: 'system'
@@ -410,7 +410,7 @@ describe 'zabbix::proxy' do
             it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').without_content %r{^LogFileSize=} }
           end
 
-          context 'declared as console' do
+          describe 'as console' do
             let :params do
               {
                 logtype: 'console'
@@ -420,6 +420,18 @@ describe 'zabbix::proxy' do
             it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LogType=console$} }
             it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').without_content %r{^LogFile=} }
             it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').without_content %r{^LogFileSize=} }
+          end
+
+          describe 'as file' do
+            let :params do
+              {
+                logtype: 'file'
+              }
+            end
+
+            it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LogType=file$} }
+            it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LogFile=/var/log/zabbix/zabbix_proxy.log$} }
+            it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LogFileSize=10$} }
           end
         end
       end
