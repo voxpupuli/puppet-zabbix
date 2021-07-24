@@ -16,14 +16,22 @@ describe 'zabbix::database::postgresql' do
         facts
       end
 
-      %w[4.0 5.0 5.2].each do |zabbix_version|
+      supported_versions.each do |zabbix_version|
         case facts[:os]['name']
         when 'CentOS', 'RedHat', 'OracleLinux', 'VirtuozzoLinux'
-          # Path for versions >= 3.x on RedHat
-          path_for3_and_up = "/usr/share/doc/zabbix-*-pgsql-#{zabbix_version}*/"
+          # Path on RedHat
+          path = if zabbix_version == '5.4'
+                   '/usr/share/doc/zabbix-sql-scripts/postgresql/'
+                 else
+                   "/usr/share/doc/zabbix-*-pgsql-#{zabbix_version}*/"
+                 end
         else
-          # Path for versions >= 3.x on Debian
-          path_for3_and_up = '/usr/share/doc/zabbix-*-pgsql'
+          # Path on Debian
+          path = if zabbix_version == '5.4'
+                   '/usr/share/doc/zabbix-sql-scripts/postgresql/'
+                 else
+                   '/usr/share/doc/zabbix-*-pgsql'
+                 end
         end
 
         describe "when zabbix_type is server and version is #{zabbix_version}" do
@@ -41,7 +49,7 @@ describe 'zabbix::database::postgresql' do
 
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to contain_exec('update_pgpass').with_command('echo node01.example.com:5432:zabbix-server:zabbix-server:zabbix-server >> /root/.pgpass') }
-          it { is_expected.to contain_exec('zabbix_server_create.sql').with_command("cd #{path_for3_and_up} && if [ -f create.sql.gz ]; then gunzip -f create.sql.gz ; fi && psql -h 'node01.example.com' -U 'zabbix-server' -p 5432 -d 'zabbix-server' -f create.sql && touch /etc/zabbix/.schema.done") }
+          it { is_expected.to contain_exec('zabbix_server_create.sql').with_command("cd #{path} && if [ -f create.sql.gz ]; then gunzip -f create.sql.gz ; fi && psql -h 'node01.example.com' -U 'zabbix-server' -p 5432 -d 'zabbix-server' -f create.sql && touch /etc/zabbix/.schema.done") }
           it { is_expected.to contain_exec('zabbix_server_images.sql').with_command('touch /etc/zabbix/.images.done') }
           it { is_expected.to contain_exec('zabbix_server_data.sql').with_command('touch /etc/zabbix/.data.done') }
           it { is_expected.to contain_file('/root/.pgpass') }
@@ -62,7 +70,7 @@ describe 'zabbix::database::postgresql' do
 
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to contain_exec('update_pgpass').with_command('echo node01.example.com:5432:zabbix-server:zabbix-server:zabbix-server >> /root/.pgpass') }
-          it { is_expected.to contain_exec('zabbix_server_create.sql').with_command("cd #{path_for3_and_up} && if [ -f create.sql.gz ]; then gunzip -f create.sql.gz ; fi && psql -h 'node01.example.com' -U 'zabbix-server' -d 'zabbix-server' -f create.sql && touch /etc/zabbix/.schema.done") }
+          it { is_expected.to contain_exec('zabbix_server_create.sql').with_command("cd #{path} && if [ -f create.sql.gz ]; then gunzip -f create.sql.gz ; fi && psql -h 'node01.example.com' -U 'zabbix-server' -d 'zabbix-server' -f create.sql && touch /etc/zabbix/.schema.done") }
           it { is_expected.to contain_exec('zabbix_server_images.sql').with_command('touch /etc/zabbix/.images.done') }
           it { is_expected.to contain_exec('zabbix_server_data.sql').with_command('touch /etc/zabbix/.data.done') }
           it { is_expected.to contain_file('/root/.pgpass') }
@@ -84,7 +92,7 @@ describe 'zabbix::database::postgresql' do
 
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to contain_exec('update_pgpass').with_command('echo node01.example.com:5432:zabbix-proxy:zabbix-proxy:zabbix-proxy >> /root/.pgpass') }
-          it { is_expected.to contain_exec('zabbix_proxy_create.sql').with_command("cd #{path_for3_and_up} && if [ -f schema.sql.gz ]; then gunzip -f schema.sql.gz ; fi && psql -h 'node01.example.com' -U 'zabbix-proxy' -p 5432 -d 'zabbix-proxy' -f schema.sql && touch /etc/zabbix/.schema.done") }
+          it { is_expected.to contain_exec('zabbix_proxy_create.sql').with_command("cd #{path} && if [ -f schema.sql.gz ]; then gunzip -f schema.sql.gz ; fi && psql -h 'node01.example.com' -U 'zabbix-proxy' -p 5432 -d 'zabbix-proxy' -f schema.sql && touch /etc/zabbix/.schema.done") }
           it { is_expected.to contain_class('zabbix::params') }
         end
 
@@ -102,7 +110,7 @@ describe 'zabbix::database::postgresql' do
 
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to contain_exec('update_pgpass').with_command('echo node01.example.com:5432:zabbix-proxy:zabbix-proxy:zabbix-proxy >> /root/.pgpass') }
-          it { is_expected.to contain_exec('zabbix_proxy_create.sql').with_command("cd #{path_for3_and_up} && if [ -f schema.sql.gz ]; then gunzip -f schema.sql.gz ; fi && psql -h 'node01.example.com' -U 'zabbix-proxy' -d 'zabbix-proxy' -f schema.sql && touch /etc/zabbix/.schema.done") }
+          it { is_expected.to contain_exec('zabbix_proxy_create.sql').with_command("cd #{path} && if [ -f schema.sql.gz ]; then gunzip -f schema.sql.gz ; fi && psql -h 'node01.example.com' -U 'zabbix-proxy' -d 'zabbix-proxy' -f schema.sql && touch /etc/zabbix/.schema.done") }
           it { is_expected.to contain_class('zabbix::params') }
         end
       end
