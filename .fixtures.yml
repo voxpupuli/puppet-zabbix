@@ -8,7 +8,7 @@ fixtures:
     postgresql: https://github.com/puppetlabs/puppet-postgresql.git
     mysql: https://github.com/puppetlabs/puppetlabs-mysql.git
     ruby: https://github.com/puppetlabs/puppetlabs-ruby.git
-    systemd: https://github.com/camptocamp/puppet-systemd.git
+    systemd: https://github.com/voxpupuli/puppet-systemd.git
     selinux: https://github.com/voxpupuli/puppet-selinux.git
     chocolatey: https://github.com/puppetlabs/puppetlabs-chocolatey.git
     yumrepo_core:
