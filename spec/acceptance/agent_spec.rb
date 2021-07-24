@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-['4.0', '5.0', '5.2'].each do |version|
+supported_versions.each do |version|
   describe "zabbix::agent class with zabbix_version #{version}" do
     it 'works idempotently with no errors' do
       pp = <<-EOS

@@ -13,7 +13,7 @@ describe 'zabbix::web' do
   end
 
   on_supported_os.each do |os, facts|
-    %w[4.0 5.0].each do |zabbix_version|
+    supported_versions.each do |zabbix_version|
       next if facts[:os]['name'] == 'windows'
       next if facts[:os]['name'] == 'Archlinux'
       next if facts[:os]['name'] == 'Gentoo'

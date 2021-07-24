@@ -24,7 +24,7 @@ describe 'zabbix::database::mysql' do
       # path to sql files on zabbix 3.X on Debian and RedHat
       path = '/usr/share/doc/zabbix-*-mysql*'
 
-      %w[4.0 5.0 5.2].each do |zabbix_version|
+      supported_versions.each do |zabbix_version|
         context "when zabbix_type is server and zabbix version is #{zabbix_version}" do
           describe 'and database_port is defined' do
             let :params do

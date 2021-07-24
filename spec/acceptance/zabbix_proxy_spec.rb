@@ -3,7 +3,7 @@ require 'serverspec_type_zabbixapi'
 
 # rubocop:disable RSpec/LetBeforeExamples
 describe 'zabbix_proxy type', unless: default[:platform] =~ %r{(ubuntu-16.04|debian-9)-amd64} do
-  %w[4.0 5.0 5.2].each do |zabbix_version|
+  supported_versions.each do |zabbix_version|
     # 5.2 server packages are not available for RHEL 7
     next if zabbix_version == '5.2' && default[:platform] == 'el-7-x86_64'
     context "create zabbix_proxy resources with zabbix version #{zabbix_version}" do
