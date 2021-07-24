@@ -366,7 +366,7 @@ class zabbix::web (
     }
     'CentOS', 'RedHat': {
       $zabbix_web_package = 'zabbix-web'
-      if ($facts['os']['release']['major'] == '7' and versioncmp($zabbix_version, '5') >= 0) {
+      if ($facts['os']['release']['major'] == '7' and versioncmp($zabbix_version, '5.0') >= 0) {
         package { 'zabbix-required-scl-repo':
           ensure => 'latest',
           name   => 'centos-release-scl',
