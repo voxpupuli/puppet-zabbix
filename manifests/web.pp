@@ -300,7 +300,7 @@ class zabbix::web (
       '4.0': {
         $zabbixapi_version = '4.2.0'
       }
-      /^5\.[02]/: {
+      /^5\.[024]/: {
         $zabbixapi_version = '5.0.0-alpha1'
       }
       default: {
