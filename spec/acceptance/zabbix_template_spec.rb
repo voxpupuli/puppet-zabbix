@@ -57,7 +57,12 @@ describe 'zabbix_template type', unless: default[:platform] =~ %r{(ubuntu-16.04|
     end
 
     let(:result_templates) do
-      zabbixapi('localhost', 'Admin', 'zabbix', 'template.get', selectApplications: ['name'], output: ['host']).result
+      # selectApplications parameter was removed in Zabbix 5.4
+      if zabbix_version =~ %r{5\.[^4]}
+        zabbixapi('localhost', 'Admin', 'zabbix', 'template.get', selectApplications: ['name'], output: ['host']).result
+      else
+        zabbixapi('localhost', 'Admin', 'zabbix', 'template.get', output: ['host']).result
+      end
     end
 
     context 'TestTemplate1' do

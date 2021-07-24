@@ -4,6 +4,8 @@ describe 'zabbix_application type', unless: default[:platform] =~ %r{(ubuntu-16.
   %w[4.0 5.0 5.2].each do |zabbix_version|
     # 5.2 server packages are not available for RHEL 7
     next if zabbix_version == '5.2' && default[:platform] == 'el-7-x86_64'
+    # Application API was removed in Zabbix 5.4
+    next if zabbix_version == '5.4'
 
     template = case zabbix_version
                when '4.0'
