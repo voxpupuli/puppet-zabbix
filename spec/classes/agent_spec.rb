@@ -28,6 +28,13 @@ describe 'zabbix::agent' do
                     else
                       '/etc/zabbix/zabbix_agentd.conf'
                     end
+
+      log_path = case facts[:operatingsystem]
+                 when 'windows'
+                   'C:/ProgramData/zabbix/zabbix_agentd.log'
+                 else
+                   '/var/log/zabbix/zabbix_agentd.log'
+                 end
       include_dir = case facts[:operatingsystem]
                     when 'windows'
                       'C:/ProgramData/zabbix/zabbix_agentd.d'
@@ -365,8 +372,8 @@ describe 'zabbix::agent' do
         end
       end
 
-      context 'with zabbix_agentd.conf and logtype is declared' do
-        context 'declare logtype as system' do
+      context 'with zabbix_agentd.conf and logtype declared' do
+        describe 'as system' do
           let :params do
             {
               logtype: 'system'
@@ -378,7 +385,7 @@ describe 'zabbix::agent' do
           it { is_expected.to contain_file(config_path).without_content %r{^LogFileSize=} }
         end
 
-        context 'declare logtype as console' do
+        describe 'as console' do
           let :params do
             {
               logtype: 'console'
@@ -388,6 +395,18 @@ describe 'zabbix::agent' do
           it { is_expected.to contain_file(config_path).with_content %r{^LogType=console$} }
           it { is_expected.to contain_file(config_path).without_content %r{^LogFile=} }
           it { is_expected.to contain_file(config_path).without_content %r{^LogFileSize=} }
+        end
+
+        describe 'as file' do
+          let :params do
+            {
+              logtype: 'file'
+            }
+          end
+
+          it { is_expected.to contain_file(config_path).with_content %r{^LogType=file$} }
+          it { is_expected.to contain_file(config_path).with_content %r{^LogFile=#{log_path}$} }
+          it { is_expected.to contain_file(config_path).with_content %r{^LogFileSize=100$} }
         end
       end
     end
