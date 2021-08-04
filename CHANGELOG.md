@@ -4,6 +4,31 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v9.1.0](https://github.com/voxpupuli/puppet-zabbix/tree/v9.1.0) (2021-08-04)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v9.0.0...v9.1.0)
+
+**Implemented enhancements:**
+
+- Add Zabbix 5.4 support [\#776](https://github.com/voxpupuli/puppet-zabbix/pull/776) ([root-expert](https://github.com/root-expert))
+- Add Vault parameters [\#770](https://github.com/voxpupuli/puppet-zabbix/pull/770) ([root-expert](https://github.com/root-expert))
+- Add StartPreprocessors option [\#768](https://github.com/voxpupuli/puppet-zabbix/pull/768) ([root-expert](https://github.com/root-expert))
+- Add Missing parameters [\#767](https://github.com/voxpupuli/puppet-zabbix/pull/767) ([root-expert](https://github.com/root-expert))
+
+**Fixed bugs:**
+
+- Missing code to support server parameter 'StartEscalators' [\#340](https://github.com/voxpupuli/puppet-zabbix/issues/340)
+- Ensure correct logfile/logfilesize values when defaulting logtype to system [\#772](https://github.com/voxpupuli/puppet-zabbix/pull/772) ([root-expert](https://github.com/root-expert))
+
+**Closed issues:**
+
+- Zabbix SQL file location has changed [\#773](https://github.com/voxpupuli/puppet-zabbix/issues/773)
+
+**Merged pull requests:**
+
+- switch from camptocamp/systemd to voxpupuli/systemd [\#775](https://github.com/voxpupuli/puppet-zabbix/pull/775) ([bastelfreak](https://github.com/bastelfreak))
+- Optimize acceptance tests [\#771](https://github.com/voxpupuli/puppet-zabbix/pull/771) ([root-expert](https://github.com/root-expert))
+
 ## [v9.0.0](https://github.com/voxpupuli/puppet-zabbix/tree/v9.0.0) (2021-05-07)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v8.0.0...v9.0.0)
@@ -23,6 +48,7 @@ These should not affect the functionality of the module.
 - Zabbix 4.2 Support [\#621](https://github.com/voxpupuli/puppet-zabbix/issues/621)
 - Support sslcertlocation & sslkeylocation for zabbix proxy [\#766](https://github.com/voxpupuli/puppet-zabbix/pull/766) ([shaunbugler](https://github.com/shaunbugler))
 - Allow to pass LDAP settings to zabbix class [\#764](https://github.com/voxpupuli/puppet-zabbix/pull/764) ([root-expert](https://github.com/root-expert))
+- Implement additional SAML settings [\#763](https://github.com/voxpupuli/puppet-zabbix/pull/763) ([root-expert](https://github.com/root-expert))
 - Enable Debian 10 acceptance tests [\#759](https://github.com/voxpupuli/puppet-zabbix/pull/759) ([root-expert](https://github.com/root-expert))
 - Allow non-default port database importing [\#758](https://github.com/voxpupuli/puppet-zabbix/pull/758) ([root-expert](https://github.com/root-expert))
 - Add Ubuntu 18.04 and 20.04 support [\#757](https://github.com/voxpupuli/puppet-zabbix/pull/757) ([root-expert](https://github.com/root-expert))
@@ -59,6 +85,7 @@ These should not affect the functionality of the module.
 - Need to set $DB\[DOUBLE\_IEEE754\] to true in Zabbix \>=5.0's zabbix.conf.php. [\#734](https://github.com/voxpupuli/puppet-zabbix/issues/734)
 - the install action for zabbix 5.0 on centos/redhat 7 is wrong [\#731](https://github.com/voxpupuli/puppet-zabbix/issues/731)
 - zbx\_group vs zbx\_groups in Readme [\#717](https://github.com/voxpupuli/puppet-zabbix/issues/717)
+- Allow for configuration of 5.0's zabbix.conf.php SAML settings [\#693](https://github.com/voxpupuli/puppet-zabbix/issues/693)
 - Add Support for Zabbix 5.0 [\#689](https://github.com/voxpupuli/puppet-zabbix/issues/689)
 - zabbix::repo should be in setup stage [\#661](https://github.com/voxpupuli/puppet-zabbix/issues/661)
 - Remove dependency on concat [\#658](https://github.com/voxpupuli/puppet-zabbix/issues/658)
@@ -815,7 +842,7 @@ These should not affect the functionality of the module.
 **Merged pull requests:**
 
 - Generalise the zabbix\_url [\#129](https://github.com/voxpupuli/puppet-zabbix/pull/129) ([eliranbz](https://github.com/eliranbz))
-- Added supporting new Zabbix params [\#128](https://github.com/voxpupuli/puppet-zabbix/pull/128) ([akostetskiy](https://github.com/akostetskiy))
+- Added supporting new Zabbix params [\#128](https://github.com/voxpupuli/puppet-zabbix/pull/128) ([akostetsky](https://github.com/akostetsky))
 - refactoring of repo.pp [\#126](https://github.com/voxpupuli/puppet-zabbix/pull/126) ([bastelfreak](https://github.com/bastelfreak))
 - Fping wrong path in debian [\#124](https://github.com/voxpupuli/puppet-zabbix/pull/124) ([Oyabi](https://github.com/Oyabi))
 - add support for CloudLinux [\#122](https://github.com/voxpupuli/puppet-zabbix/pull/122) ([bastelfreak](https://github.com/bastelfreak))
