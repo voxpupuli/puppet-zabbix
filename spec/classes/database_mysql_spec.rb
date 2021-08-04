@@ -21,10 +21,15 @@ describe 'zabbix::database::mysql' do
           is_expected.not_to compile.with_all_deps
         end
       end
-      # path to sql files on zabbix 3.X on Debian and RedHat
-      path = '/usr/share/doc/zabbix-*-mysql*'
 
-      %w[4.0 5.0 5.2].each do |zabbix_version|
+      supported_versions.each do |zabbix_version|
+        # path to sql files on Debian and RedHat
+        path = if zabbix_version == '5.4'
+                 '/usr/share/doc/zabbix-sql-scripts/mysql/'
+               else
+                 '/usr/share/doc/zabbix-*-mysql*'
+               end
+
         context "when zabbix_type is server and zabbix version is #{zabbix_version}" do
           describe 'and database_port is defined' do
             let :params do

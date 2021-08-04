@@ -6,6 +6,7 @@ Gemfile:
       - gem: 'zabbixapi'
 spec/spec_helper.rb:
   mock_with: ':mocha'
+  spec_overrides: "require 'support/acceptance/supported_versions'"
 spec/spec_helper_acceptance.rb:
   unmanaged: false
 .github/workflows/ci.yml:

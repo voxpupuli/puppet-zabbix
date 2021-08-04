@@ -530,6 +530,21 @@ class zabbix::proxy (
   }
 
   if $manage_database {
+    if versioncmp($zabbix_version, '5.4') == 0 {
+      package { 'zabbix-sql-scripts':
+        ensure  => present,
+        require => Class['zabbix::repo'],
+        tag     => 'zabbix',
+      }
+    }
+
+    # Zabbix version 5.4 uses zabbix-sql-scripts for initializing the database.
+    if versioncmp($zabbix_version, '5.4') == 0 {
+      $zabbix_database_require = [Package["zabbix-proxy-${db}"], Package['zabbix-sql-scripts']]
+    } else {
+      $zabbix_database_require = Package["zabbix-proxy-${db}"]
+    }
+
     case $database_type {
       'postgresql' : {
         # Execute the postgresql scripts
@@ -543,7 +558,7 @@ class zabbix::proxy (
           database_host        => $database_host,
           database_port        => $database_port,
           database_path        => $database_path,
-          require              => Package["zabbix-proxy-${db}"],
+          require              => $zabbix_database_require,
         }
       }
       'mysql'      : {
@@ -558,7 +573,7 @@ class zabbix::proxy (
           database_host        => $database_host,
           database_port        => $database_port,
           database_path        => $database_path,
-          require              => Package["zabbix-proxy-${db}"],
+          require              => $zabbix_database_require,
         }
       }
 

@@ -1,5 +1,4 @@
 require 'spec_helper_acceptance'
-
 describe 'zabbix::server class' do
   context 'default parameters' do
     # Using puppet_apply as a helper

@@ -34,7 +34,11 @@ class zabbix::database::mysql (
   assert_private()
 
   if ($database_schema_path == false) or ($database_schema_path == '') {
-    $schema_path   = '/usr/share/doc/zabbix-*-mysql*'
+    if versioncmp($zabbix_version, '5.4') == 0 {
+      $schema_path = '/usr/share/doc/zabbix-sql-scripts/mysql/'
+    } else {
+      $schema_path = '/usr/share/doc/zabbix-*-mysql*'
+    }
   }
   else {
     $schema_path = $database_schema_path

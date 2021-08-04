@@ -13,7 +13,7 @@ describe 'zabbix::web' do
   end
 
   on_supported_os.each do |os, facts|
-    %w[4.0 5.0].each do |zabbix_version|
+    supported_versions.each do |zabbix_version|
       next if facts[:os]['name'] == 'windows'
       next if facts[:os]['name'] == 'Archlinux'
       next if facts[:os]['name'] == 'Gentoo'
@@ -80,7 +80,7 @@ describe 'zabbix::web' do
           packages = if facts[:osfamily] == 'RedHat'
                        if facts[:operatingsystemmajrelease].to_i == 7 &&
                           !%w[VirtuozzoLinux OracleLinux Scientific].include?(facts[:os]['name']) &&
-                          zabbix_version == '5.0'
+                          zabbix_version =~ %r{5\.[024]}
                          ['zabbix-web-pgsql-scl', 'zabbix-web']
                        else
                          ['zabbix-web-pgsql', 'zabbix-web']
