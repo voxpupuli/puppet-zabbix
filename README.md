@@ -1,11 +1,14 @@
 # puppet-zabbix
 
-[![Build Status](https://travis-ci.org/voxpupuli/puppet-zabbix.svg?branch=master)](https://travis-ci.org/voxpupuli/puppet-zabbix)
-[![Code Coverage](https://coveralls.io/repos/github/voxpupuli/puppet-zabbix/badge.svg?branch=master)](https://coveralls.io/github/voxpupuli/puppet-zabbix)
+[![Build Status](https://github.com/voxpupuli/puppet-zabbix/workflows/CI/badge.svg)](https://github.com/voxpupuli/puppet-zabbix/actions?query=workflow%3ACI)
+[![Release](https://github.com/voxpupuli/puppet-zabbix/actions/workflows/release.yml/badge.svg)](https://github.com/voxpupuli/puppet-zabbix/actions/workflows/release.yml)
 [![Puppet Forge](https://img.shields.io/puppetforge/v/puppet/zabbix.svg)](https://forge.puppetlabs.com/puppet/zabbix)
 [![Puppet Forge - downloads](https://img.shields.io/puppetforge/dt/puppet/zabbix.svg)](https://forge.puppetlabs.com/puppet/zabbix)
 [![Puppet Forge - endorsement](https://img.shields.io/puppetforge/e/puppet/zabbix.svg)](https://forge.puppetlabs.com/puppet/zabbix)
 [![Puppet Forge - scores](https://img.shields.io/puppetforge/f/puppet/zabbix.svg)](https://forge.puppetlabs.com/puppet/zabbix)
+[![puppetmodule.info docs](http://www.puppetmodule.info/images/badge.png)](http://www.puppetmodule.info/m/puppet-zabbix)
+[![Apache-2 License](https://img.shields.io/github/license/voxpupuli/puppet-zabbix.svg)](LICENSE)
+[![Donated by Werner Dijkerman](https://img.shields.io/badge/donated%20by-Werner%20Dijkerman-fb7047.svg)](#transfer-notice)
 
 #### Table of Contents
 
@@ -641,3 +644,11 @@ Could not evaluate: Connection refused - connect(2)
 ```
 
 When running puppet again (for 3rd time) everything goes fine.
+
+## Transfer Notice
+
+This plugin was originally authored by [Werner Dijkerman](https://werner-dijkerman.nl/).
+The maintainer preferred that Vox Pupuli take ownership of the module for future improvement and maintenance.
+Existing pull requests and issues were transferred over, please fork and continue to contribute at https://github.com/voxpupuli/puppet-zabbix
+
+Previously: https://github.com/dj-wasabi/puppet-zabbix
