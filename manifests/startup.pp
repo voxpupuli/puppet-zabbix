@@ -1,15 +1,21 @@
-# == Define: zabbix::startup
+# @summary This manage the zabbix related service startup script.
+# @param pidfile Location of the PID file
+# @param agent_configfile_path Location of Zabbix's agent configuration file
+# @param server_configfile_path Location of Zabbix's server configuration file
+# @param database_type
+#   Type of database. Can use the following 2 databases:
+#   - postgresql
+#   - mysql
+# @param zabbix_user User the zabbix service will run as
+# @param additional_service_params Additional parameters to pass to the service
+# @param service_type Systemd service type
+# @param manage_database When true, it will configure the database and execute the sql scripts.
+# @param service_name Name of the service. Defaults to the resource name
+# @example
+#   zabbix::startup { 'agent': }
 #
-#  This manage the zabbix related service startup script.
-#
-# === Requirements
-#
-# === Parameters
-#
-# === Example
-#
-#  zabbix::startup { 'agent':
-#  }
+# @example
+#   zabbix::startup { 'server': }
 #
 define zabbix::startup (
   Optional[Stdlib::Absolutepath] $pidfile                = undef,

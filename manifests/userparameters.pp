@@ -1,64 +1,32 @@
-# == Define: zabbix::userparameters
-#
-#  This will install an userparameters file with keys for items that can be checked
-#  with zabbix.
-#
-# === Requirements
-#
-# === Parameters
-#
-# [*ensure*]
-#   If the userparameter should be `present` or `absent`
-#
-# [*source*]
-#   File which holds several userparameter entries.
-#
-# [*content*]
-#   When you have 1 userparameter entry which you want to install.
-#
-# [*script*]
-#   Low level discovery (LLD) script.
-#
-# [*script_ext*]
-#   The script extention. Should be started with the dot. Like: .sh .bat .py
-#
-# [*template*]
+# @summary This will install an userparameters file with keys for items that can be checked with zabbix.
+# @param ensure If the userparameter should be `present` or `absent`
+# @param source File which holds several userparameter entries.
+# @param content When you have 1 userparameter entry which you want to install.
+# @param script Low level discovery (LLD) script.
+# @param script_ext The script extention. Should be started with the dot. Like: .sh .bat .py
+# @param template
 #   When you use exported resources (when manage_resources is set to true on other components)
 #   you'll can add the name of the template which correspondents with the 'content' or
 #   'source' which you add. The template will be added to the host.
-#
-# [*script_dir*]
-#   When 'script' is used, this parameter can provide the directly where this script needs to
-#   be placed. Default: '/usr/bin'
-#
-# [*config_mode*]
+# @param script_dir
+#   When 'script' is used, this parameter can provide the directly where this script needs to be placed. Default: '/usr/bin'
+# @param config_mode
 #   When 'config_mode' is used, this parameter can provide the mode of the config file who will be created
 #   to keep some credidentials private. Default: '0644'
-#
-# === Example
-#
+# @example
 #  zabbix::userparameters { 'mysql':
 #    source => 'puppet:///modules/zabbix/mysqld.conf',
 #  }
-#
+# @example
 #  zabbix::userparameters { 'mysql':
 #    content => 'UserParameter=mysql.ping,mysqladmin -uroot ping | grep -c alive',
 #  }
-#
-#  Or when using exported resources (manage_resources is set to true)
+# @example Or when using exported resources (manage_resources is set to true)
 #  zabbix::userparameters { 'mysql':
 #    source   => 'puppet:///modules/zabbix/mysqld.conf',
 #    template => 'Template App MySQL',
 #  }
-#
-# === Authors
-#
-# Author Name: ikben@werner-dijkerman.nl
-#
-# === Copyright
-#
-# Copyright 2014 Werner Dijkerman
-#
+# @author Werner Dijkerman <ikben@werner-dijkerman.nl>
 define zabbix::userparameters (
   Enum['present', 'absent']    $ensure      = 'present',
   Optional[Stdlib::Filesource] $source      = undef,

@@ -1,327 +1,145 @@
-# == Class: zabbix::server
-#
-#  This will install and configure the zabbix-server deamon
-#
-# === Requirements
-#
-#
-# === Parameters
-#
-# [*database_type*]
+# @summary This will install and configure the zabbix-server deamon
+# @param database_type
 #   Type of database. Can use the following 2 databases:
 #   - postgresql
 #   - mysql
-#
-# [*database_path*]
+# @param database_path
 #   When database binaries are not found on the default path:
 #   /bin:/usr/bin:/usr/local/sbin:/usr/local/bin
 #   you can use this parameter to add the database_path to the above mentioned
 #   path.
-#
-# [*zabbix_version*]
-#   This is the zabbix version.
-#   Example: 2.4
-#
-# [*manage_repo*]
-#   When true (default) this module will manage the Zabbix repository
-#
-# [*zabbix_package_state*]
-#   The state of the package that needs to be installed: present or latest.
-#   Default: present
-#
-# [*manage_firewall*]
-#   When true, it will create iptables rules.
-#
-# [*manage_service*]
+# @param zabbix_version This is the zabbix version. Example: 5.0
+# @param manage_repo When true (default) this module will manage the Zabbix repository.
+# @param manage_database When true, it will configure the database and execute the sql scripts.
+# @param zabbix_package_state The state of the package that needs to be installed: present or latest.
+# @param manage_firewall When true, it will create iptables rules.
+# @param manage_service
 #   When true, it will ensure service running and enabled.
 #   When false, it does not care about service
-#   Default: true
-#
-# [*server_configfile_path*]
-#   Server config file path defaults to /etc/zabbix/zabbix_server.conf
-#
-# [*listenport*]
-#   Listen port for the zabbix-server. Default: 10051
-#
-# [*sourceip*]
-#   Source ip address for outgoing connections.
-#
-# [*logfile*]
-#   Name of log file.
-#
-# [*logfilesize*]
-#   Maximum size of log file in MB.
-#
-# [*logtype*]
-#   Specifies where log messages are written to. Can be one of:
-#   - console
-#   - file
-#   - system
-#
-# [*debuglevel*]
-#   Specifies debug level.
-#
-# [*pidfile*]
-#   Name of pid file.
-#
-# [*database_host*]
-#   Database host name.
-#
-# [*database_name*]
-#   Database name.
-#
-# [*database_schema*]
-#   Schema name. used for ibm db2.
-#
-# [*database_user*]
-#   Database user. ignored for sqlite.
-#
-# [*database_password*]
-#   Database password. ignored for sqlite.
-#
-# [*database_socket*]
-#   Path to mysql socket.
-#
-# [*database_port*]
-#   Database port when not using local socket. Ignored for sqlite.
-#
-# [*database_tlsconnect*]
+# @param server_configfile_path Server config file path defaults to /etc/zabbix/zabbix_server.conf
+# @param server_config_owner The owner of Zabbix's server config file.
+# @param server_config_group The group of Zabbix's server config file.
+# @param server_service_name The service name of Zabbix server.
+# @param pacemaker Whether to control zabbix server through Pacemaker.
+# @param pacemaker_resource Zabbix server pacemaker resource.
+# @param listenport Listen port for the zabbix-server. Default: 10051
+# @param sourceip Source ip address for outgoing connections.
+# @param logfile Name of log file.
+# @param logfilesize Maximum size of log file in MB.
+# @param logtype Specifies where log messages are written to. (options: console, file, system)
+# @param debuglevel Specifies debug level.
+# @param pidfile Name of pid file.
+# @param database_schema_path The path to the directory containing the .sql schema files
+# @param database_host Database host name.
+# @param database_name Database name.
+# @param database_schema Schema name. used for ibm db2.
+# @param database_user Database user. ignored for sqlite.
+# @param database_password Database password. ignored for sqlite.
+# @param database_socket Path to mysql socket.
+# @param database_port Database port when not using local socket. Ignored for sqlite.
+# @param database_tlsconnect
 #   Available options:
 #   * required - connect using TLS
 #   * verify_ca - connect using TLS and verify certificate
 #   * verify_full - connect using TLS, verify certificate and verify that database identity specified by DBHost matches its certificate
-#
-# [*database_tlscafile*]
-#   Full pathname of a file containing the top-level CA(s) certificates for database certificate verification.
-#
-# [*database_tlscertfile*]
-#   Full pathname of file containing Zabbix server certificate for authenticating to database.
-#
-# [*database_tlskeyfile*]
-#   Full pathname of file containing the private key for authenticating to database.
-#
-# [*database_tlscipher*]
-#   The list of encryption ciphers that Zabbix server permits for TLS protocols up through TLSv1.2.
-#
-# [*database_tlscipher13*]
-#   The list of encryption ciphersuites that Zabbix server permits for TLSv1.3 protocol.
-#
-# [*startpollers*]
-#   Number of pre-forked instances of pollers.
-#
-# [*startpreprocessors*]
-#   Number of pre-forked instances of preprocessing workers
-#
-# [*startipmipollers*]
-#   Number of pre-forked instances of ipmi pollers.
-#
-# [*startpollersunreachable*]
-#   Number of pre-forked instances of pollers for unreachable hosts (including ipmi).
-#
-# [*starttrappers*]
-#   Number of pre-forked instances of trappers.
-#
-# [*startpingers*]
-#   Number of pre-forked instances of icmp pingers.
-#
-# [*startalerters*]
-#   Number of pre-forked instances of alerters.
-#
-# [*startdiscoverers*]
-#   Number of pre-forked instances of discoverers.
-#
-# [*startescalators*]
-#   Number of pre-forked instances of escalators.
-#
-# [*starthttppollers*]
-#   Number of pre-forked instances of http pollers.
-#
-# [*starttimers*]
-#   Number of pre-forked instances of timers.
-#
-# [*javagateway*]
-#   IP address (or hostname) of zabbix java gateway.
-#
-# [*javagatewayport*]
-#   Port that zabbix java gateway listens on.
-#
-# [*startjavapollers*]
-#   Number of pre-forked instances of java pollers.
-#
-# [*startlldprocessors*]
-#   Number of pre-forked instances of low-level discovery (LLD) workers.
-#
-# [*startvmwarecollectors*]
-#   Number of pre-forked vmware collector instances.
-#
-# [*vmwarefrequency*]
-#   How often zabbix will connect to vmware service to obtain a new datan.
-#
-# [*vaultdbpath*]
-#   Vault path from where credentials for database will be retrieved by keys 'password' and 'username'.
-#
-# [*vaulttoken*]
+# @param database_tlscafile Full pathname of a file containing the top-level CA(s) certificates for database certificate verification.
+# @param database_tlscertfile Full pathname of file containing Zabbix server certificate for authenticating to database.
+# @param database_tlskeyfile Full pathname of file containing the private key for authenticating to database.
+# @param database_tlscipher The list of encryption ciphers that Zabbix server permits for TLS protocols up through TLSv1.2.
+# @param database_tlscipher13 The list of encryption ciphersuites that Zabbix server permits for TLSv1.3 protocol.
+# @param startpollers Number of pre-forked instances of pollers.
+# @param startpreprocessors Number of pre-forked instances of preprocessing workers
+# @param startipmipollers Number of pre-forked instances of ipmi pollers.
+# @param startpollersunreachable Number of pre-forked instances of pollers for unreachable hosts (including ipmi).
+# @param starttrappers Number of pre-forked instances of trappers.
+# @param startpingers Number of pre-forked instances of icmp pingers.
+# @param startalerters Number of pre-forked instances of alerters.
+# @param startdiscoverers Number of pre-forked instances of discoverers.
+# @param startescalators Number of pre-forked instances of escalators.
+# @param starthttppollers Number of pre-forked instances of http pollers.
+# @param starttimers Number of pre-forked instances of timers.
+# @param javagateway IP address (or hostname) of zabbix java gateway.
+# @param javagatewayport Port that zabbix java gateway listens on.
+# @param startjavapollers Number of pre-forked instances of java pollers.
+# @param startlldprocessors Number of pre-forked instances of low-level discovery (LLD) workers.
+# @param startvmwarecollectors Number of pre-forked vmware collector instances.
+# @param vmwarefrequency How often zabbix will connect to vmware service to obtain a new datan.
+# @param vaultdbpath Vault path from where credentials for database will be retrieved by keys 'password' and 'username'.
+# @param vaulttoken
 #   Vault authentication token that should have been generated exclusively for Zabbix proxy with read-only
 #   permission to the path specified in the optional VaultDBPath configuration parameter.
-#
-# [*vaulturl*]
-#   Vault server HTTP[S] URL. System-wide CA certificates directory will be used if SSLCALocation is not specified.
-#
-# [*vmwarecachesize*]
-#   Size of vmware cache, in bytes.
-#
-# [*vmwaretimeout*]
-#   The maximum number of seconds vmware collector will wait for a response from VMware service.
-#
-# [*snmptrapperfile*]
-#   Temporary file used for passing data from snmp trap daemon to the server.
-#
-# [*startsnmptrapper*]
-#   If 1, snmp trapper process is started.
-#
-# [*listenip*]
-#   List of comma delimited ip addresses that the zabbix-server should listen on.
-#
-# [*housekeepingfrequency*]
-#   How often zabbix will perform housekeeping procedure (in hours).
-#
-# [*maxhousekeeperdelete*]
+# @param vaulturl Vault server HTTP[S] URL. System-wide CA certificates directory will be used if SSLCALocation is not specified.
+# @param vmwarecachesize Size of vmware cache, in bytes.
+# @param vmwaretimeout The maximum number of seconds vmware collector will wait for a response from VMware service.
+# @param snmptrapperfile Temporary file used for passing data from snmp trap daemon to the server.
+# @param startsnmptrapper If 1, snmp trapper process is started.
+# @param listenip List of comma delimited ip addresses that the zabbix-server should listen on.
+# @param housekeepingfrequency How often zabbix will perform housekeeping procedure (in hours).
+# @param maxhousekeeperdelete
 #   the table "housekeeper" contains "tasks" for housekeeping procedure in the format:
 #   [housekeeperid], [tablename], [field], [value].
 #   no more than 'maxhousekeeperdelete' rows (corresponding to [tablename], [field], [value])
 #   will be deleted per one task in one housekeeping cycle.
 #   sqlite3 does not use this parameter, deletes all corresponding rows without a limit.
 #   if set to 0 then no limit is used at all. in this case you must know what you are doing!
-#
-# [*cachesize*]
-#   Size of configuration cache, in bytes.
-#
-# [*cacheupdatefrequency*]
-#   How often zabbix will perform update of configuration cache, in seconds.
-#
-# [*startdbsyncers*]
-#   Number of pre-forked instances of db syncers.
-#
-# [*historycachesize*]
-#   Size of history cache, in bytes.
-#
-# [*historyindexcachesize*]
-#   Size of history index cache, in bytes.
-#
-# [*trendcachesize*]
-#   Size of trend cache, in bytes.
-#
-# [*valuecachesize*]
-#   Size of history value cache, in bytes.
-#
-# [*timeout*]
-#   Specifies how long we wait for agent, snmp device or external check (in seconds).
-#
-# [*tlscafile*]
-#   Full pathname of a file containing the top-level CA(s) certificates for peer certificate verification.
-#
-# [*tlscertfile*]
-#   Full pathname of a file containing the server certificate or certificate chain.
-#
-# [*tlscrlfile*]
-#   Full pathname of a file containing revoked certificates.
-#
-# [*tlskeyfile*]
-#   Full pathname of a file containing the server private key.
-#
-# [*tlscipherall*]
+# @param cachesize Size of configuration cache, in bytes.
+# @param cacheupdatefrequency How often zabbix will perform update of configuration cache, in seconds.
+# @param startdbsyncers Number of pre-forked instances of db syncers.
+# @param historycachesize Size of history cache, in bytes.
+# @param historyindexcachesize Size of history index cache, in bytes.
+# @param trendcachesize Size of trend cache, in bytes.
+# @param valuecachesize Size of history value cache, in bytes.
+# @param timeout Specifies how long we wait for agent, snmp device or external check (in seconds).
+# @param tlscafile Full pathname of a file containing the top-level CA(s) certificates for peer certificate verification.
+# @param tlscertfile Full pathname of a file containing the server certificate or certificate chain.
+# @param tlscrlfile Full pathname of a file containing revoked certificates.
+# @param tlskeyfile Full pathname of a file containing the server private key.
+# @param tlscipherall
 #   GnuTLS priority string or OpenSSL (TLS 1.2) cipher string. Override the default ciphersuite selection criteria
 #   for certificate- and PSK-based encryption.
-#
-# [*tlscipherall13*]
+# @param tlscipherall13
 #   Cipher string for OpenSSL 1.1.1 or newer in TLS 1.3. Override the default ciphersuite selection criteria
 #   for certificate- and PSK-based encryption.
-#
-# [*tlsciphercert*]
+# @param tlsciphercert
 #   GnuTLS priority string or OpenSSL (TLS 1.2) cipher string. Override the default ciphersuite selection criteria
 #   for certificate-based encryption.
-#
-# [*tlsciphercert13*]
+# @param tlsciphercert13
 #   Cipher string for OpenSSL 1.1.1 or newer in TLS 1.3. Override the default ciphersuite selection criteria
 #   for certificate-based encryption.
-#
-# [*tlscipherpsk*]
+# @param tlscipherpsk
 #  GnuTLS priority string or OpenSSL (TLS 1.2) cipher string. Override the default ciphersuite selection criteria
 #  for PSK-based encryption.
-#
-# [*tlscipherpsk13*]
+# @param tlscipherpsk13
 #  Cipher string for OpenSSL 1.1.1 or newer in TLS 1.3. Override the default ciphersuite selection criteria
 #  for PSK-based encryption.
-#
-# [*trappertimeout*]
-#   Specifies how many seconds trapper may spend processing new data.
-#
-# [*unreachableperiod*]
-#   After how many seconds of unreachability treat a host as unavailable.
-#
-# [*unavailabledelay*]
-#   How often host is checked for availability during the unavailability period, in seconds.
-#
-# [*unreachabledelay*]
-#   How often host is checked for availability during the unreachability period, in seconds.
-#
-# [*alertscriptspath*]
-#   Full path to location of custom alert scripts.
-#
-# [*externalscripts*]
-#   Full path to location of external scripts.
-#
-# [*fpinglocation*]
-#   Location of fping.
-#
-# [*fping6location*]
-#   Location of fping6.
-#
-# [*sshkeylocation*]
-#   Location of public and private keys for ssh checks and actions.
-#
-# [*logslowqueries*]
-#   How long a database query may take before being logged (in milliseconds).
-#
-# [*tmpdir*]
-#   Temporary directory.
-#
-# [*startproxypollers*]
-#   Number of pre-forked instances of pollers for passive proxies.
-#
-# [*proxyconfigfrequency*]
-#   How often zabbix server sends configuration data to a zabbix proxy in seconds.
-#
-# [*proxydatafrequency*]
-#   How often zabbix server requests history data from a zabbix proxy in seconds.
-#
-# [*allowroot*]
-#   Allow the server to run as 'root'.
-#
-# [*include_dir*]
-#   You may include individual files or all files in a directory in the configuration file.
-#
-# [*loadmodulepath*]
-#   Full path to location of server modules.
-#
-# [*loadmodule*]
-#   Module to load at server startup.
-#
-# [*sslcertlocation_dir*]
-#   Location of SSL client certificate files for client authentication.
-#
-# [*sslkeylocation_dir*]
-#   Location of SSL private key files for client authentication.
-#
-# [*manage_startup_script*]
-#  If the init script should be managed by this module. Attention: This might cause problems with some config options of this module (e.g server_configfile_path)
-#
-# [*socketdir*]
+# @param trappertimeout Specifies how many seconds trapper may spend processing new data.
+# @param unreachableperiod After how many seconds of unreachability treat a host as unavailable.
+# @param unavailabledelay How often host is checked for availability during the unavailability period, in seconds.
+# @param unreachabledelay How often host is checked for availability during the unreachability period, in seconds.
+# @param alertscriptspath Full path to location of custom alert scripts.
+# @param externalscripts Full path to location of external scripts.
+# @param fpinglocation Location of fping.
+# @param fping6location Location of fping6.
+# @param sshkeylocation Location of public and private keys for ssh checks and actions.
+# @param logslowqueries How long a database query may take before being logged (in milliseconds).
+# @param tmpdir Temporary directory.
+# @param startproxypollers Number of pre-forked instances of pollers for passive proxies.
+# @param proxyconfigfrequency How often zabbix server sends configuration data to a zabbix proxy in seconds.
+# @param proxydatafrequency How often zabbix server requests history data from a zabbix proxy in seconds.
+# @param allowroot Allow the server to run as 'root'.
+# @param include_dir You may include individual files or all files in a directory in the configuration file.
+# @param loadmodulepath Full path to location of server modules.
+# @param loadmodule Module to load at server startup.
+# @param sslcertlocation_dir Location of SSL client certificate files for client authentication.
+# @param sslkeylocation_dir Location of SSL private key files for client authentication.
+# @param manage_selinux Whether we should manage SELinux rules.
+# @param additional_service_params Additional parameters to pass to the service.
+# @param zabbix_user User the zabbix service will run as.
+# @param manage_startup_script If the init script should be managed by this module. Attention: This might cause problems with some config options of this module (e.g server_configfile_path)
+# @param socketdir
 #   IPC socket directory.
-#     Directory to store IPC sockets used by internal Zabbix services.
-#
-# === Example
-#
+#   Directory to store IPC sockets used by internal Zabbix services.
+# @example
 #   When running everything on a single node, please check
 #   documentation in init.pp
 #   The following is an example of an multiple host setup:
@@ -343,14 +161,7 @@
 #   When database_type = postgres, uncomment the postgresql::client class and change or
 #   remove the database_type parameter and comment the mysql::client class.
 #
-# === Authors
-#
-# Author Name: ikben@werner-dijkerman.nl
-#
-# === Copyright
-#
-# Copyright 2014 Werner Dijkerman
-#
+# @author Werner Dijkerman ikben@werner-dijkerman.nl#
 class zabbix::server (
   Zabbix::Databases $database_type                                            = $zabbix::params::database_type,
   $database_path                                                              = $zabbix::params::database_path,
