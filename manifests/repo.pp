@@ -1,36 +1,14 @@
-# == Class: zabbix::repo
-#
-#  If enabled, this will install the repository used for installing zabbix
-#
-#  Please note:
-#  This class will be called from zabbix::server, zabbix::proxy and
-#  zabbix::agent. No need for calling this class manually.
-#
-# === Parameters
-#
-# [*manage_repo*]
-#   When true, it will create repository for installing the server.
-#
-# [*zabbix_version*]
-#   This is the zabbix version.
-#
-# [*repo_location*]
-#   A custom repo location (e.g. your own mirror)
-#
-# [*unsupported_repo_location*]
+# @summary If enabled, this will install the repository used for installing zabbix
+# @param manage_repo When true, it will create repository for installing the server.
+# @param manage_apt Whether the module should manage apt repositories for Debian based systems.
+# @param zabbix_version This is the zabbix version.
+# @param repo_location A custom repo location (e.g. your own mirror)
+# @param frontend_repo_location A custom repo location for frontend package.
+# @param unsupported_repo_location
 #   A custom repo location for unsupported content (e.g. your own mirror)
 #   Currently only supported under RedHat based systems.
-#
-# === Authors
-#
-# Author Name:
-#   ikben@werner-dijkerman.nl
-#   Tim Meusel <tim@bastelfreak.de>
-#
-# === Copyright
-#
-# Copyright 2014 Werner Dijkerman
-#
+# @author Werner Dijkerman <ikben@werner-dijkerman.nl>
+# @author Tim Meusel <tim@bastelfreak.de>
 class zabbix::repo (
   Boolean                   $manage_repo               = $zabbix::params::manage_repo,
   Boolean                   $manage_apt                = $zabbix::params::manage_apt,

@@ -10,6 +10,7 @@ group :test do
   gem 'puppet_metadata', '~> 0.3.0',  :require => false
   gem 'fakefs',                       :require => false
   gem 'zabbixapi',                    :require => false
+  gem 'puppet-lint-param-docs',       :require => false
 end
 
 group :development do

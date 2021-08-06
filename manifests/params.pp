@@ -1,15 +1,4 @@
-# class: zabbix::params
-#
-# this class manages zabbix server parameters
-#
-# parameters:
-#
-# actions:
-#
-# requires:
-#
-# sample usage:
-#
+# @summary This class manages zabbix server parameters
 class zabbix::params {
   # It seems that ubuntu has an different fping path...
   case $facts['os']['name'] {
@@ -417,7 +406,6 @@ class zabbix::params {
   $proxy_offlinebuffer                      = '1'
   $proxy_pidfile                            = '/var/run/zabbix/zabbix_proxy.pid'
   $proxy_service_name                       = 'zabbix-proxy'
-  $proxy_enablesnmpbulkrequests             = undef
   $proxy_snmptrapper                        = '0'
   $proxy_snmptrapperfile                    = '/tmp/zabbix_traps.tmp'
   $proxy_sourceip                           = undef
