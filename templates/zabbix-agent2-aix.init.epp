@@ -1,0 +1,46 @@
+<%- | String $pidfile,
+      String $agent_configfile_path,
+      String $zabbix_user
+| -%>
+#!/bin/ksh
+# THIS FILE IS MANAGED BY PUPPET
+
+
+##################################################
+# name: start zabbix agent
+# purpose: zabbix agent start script
+# author: V.Danhelka IBM 11.2.2016; B. Schafer 2020-02-26
+##################################################
+
+PID=<%= $pidfile %>
+BIN=/usr/sbin/zabbix_agent2
+CONF=<%= $agent_configfile_path %>
+LOGFILE=/var/log/zabbix/zabbix_agent2.log
+ARGS="-c $CONF"
+USER=<%= $zabbix_user %>
+
+test -d $(dirname $LOGFILE) || mkdir -p $(dirname $LOGFILE)
+chown -R $USER $LOGDIR
+
+test -d $(dirname $PID) || mkdir -p $(dirname $PID)
+chown -R $USER $(dirname $PID)
+
+case "$1" in
+start )
+        sudo -u $USER $BIN $ARGS
+        ;;
+stop )
+        [ -f $PID ] && kill $(cat $PID)
+        ;;
+restart )
+        [ -f $PID ] && kill $(cat $PID)
+        sleep 5
+        sudo -u $USER $BIN $ARGS
+        ;;
+status)
+        [ -f $PID ] && echo "running as $(cat $PID)" || echo "stopped"
+        ;;
+* )
+        echo "Usage: $0 (start | stop | restart | status)"
+        exit 1
+esac
