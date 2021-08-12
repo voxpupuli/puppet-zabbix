@@ -297,13 +297,19 @@ class zabbix::agent (
       zabbix_user               => $zabbix_user,
       additional_service_params => $additional_service_params,
       service_type              => $service_type,
-      service_name              => 'zabbix-agent',
+      service_name              => $servicename,
       require                   => Package[$zabbix_package_agent],
     }
   }
 
   if $agent_configfile_path != '/etc/zabbix/zabbix_agentd.conf' and $facts['kernel'] != 'windows' {
     file { '/etc/zabbix/zabbix_agentd.conf':
+      ensure  => absent,
+      require => Package[$zabbix_package_agent],
+    }
+  }
+  elsif $agent_configfile_path != '/etc/zabbix/zabbix_agent2.conf' and $facts['kernel'] != 'windows' {
+    file { '/etc/zabbix/zabbix_agent2.conf':
       ensure  => absent,
       require => Package[$zabbix_package_agent],
     }
@@ -326,15 +332,28 @@ class zabbix::agent (
   }
 
   # Configuring the zabbix-agent configuration file
-  file { $agent_configfile_path:
-    ensure  => file,
-    owner   => $agent_config_owner,
-    group   => $agent_config_group,
-    mode    => '0644',
-    notify  => Service[$servicename],
-    require => Package[$zabbix_package_agent],
-    replace => true,
-    content => template('zabbix/zabbix_agentd.conf.erb'),
+  if $agent_configfile_path =~ /agent2/ {
+    file { $agent_configfile_path:
+      ensure  => file,
+      owner   => $agent_config_owner,
+      group   => $agent_config_group,
+      mode    => '0644',
+      notify  => Service[$servicename],
+      require => Package[$zabbix_package_agent],
+      replace => true,
+      content => template("zabbix/zabbix_agent2.conf.erb"),
+    }
+  } else {
+    file { $agent_configfile_path:
+      ensure  => file,
+      owner   => $agent_config_owner,
+      group   => $agent_config_group,
+      mode    => '0644',
+      notify  => Service[$servicename],
+      require => Package[$zabbix_package_agent],
+      replace => true,
+      content => template("zabbix/zabbix_agentd.conf.erb"),
+    }
   }
 
   # Include dir for specific zabbix-agent checks.
