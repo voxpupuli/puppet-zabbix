@@ -41,7 +41,7 @@ define zabbix::startup (
       fail('we currently only support a title that contains agent or server')
     }
   }
-  # provided by puppet/systemd or camptocamp/systemd
+  # provided by puppet/systemd
   if $facts['systemd'] {
     contain systemd
     systemd::unit_file { "${name}.service":
