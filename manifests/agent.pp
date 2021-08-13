@@ -296,7 +296,7 @@ class zabbix::agent (
       default  => 'zabbix-agent',
     }
     zabbix::startup { $servicename:
-     pidfile                   => $pidfile,
+      pidfile                   => $pidfile,
       agent_configfile_path     => $agent_configfile_path,
       zabbix_user               => $zabbix_user,
       additional_service_params => $additional_service_params,
@@ -355,7 +355,7 @@ class zabbix::agent (
       notify  => Service[$servicename],
       require => Package[$zabbix_package_agent],
       replace => true,
-      content => template("zabbix/zabbix_agentd.conf.erb"),
+      content => template('zabbix/zabbix_agentd.conf.erb'),
     }
   }
 
