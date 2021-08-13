@@ -298,7 +298,7 @@ class zabbix::agent (
         zabbix_user               => $zabbix_user,
         additional_service_params => $additional_service_params,
         service_type              => $service_type,
-        service_name              => 'zabbix-agent2'
+        service_name              => 'zabbix-agent2',
         require                   => Package[$zabbix_package_agent],
       }
     } else {
