@@ -61,7 +61,7 @@
 #	Name of PID file.
 #
 PidFile=<%= $pidfile %>
-<% } %->
+<% } -%>
 
 <% if $logtype { %>
 ### Option: LogType

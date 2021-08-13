@@ -171,7 +171,7 @@ DebugLevel=<%= $debuglevel %>
 # Default:
 # ServerActive=
 
-<% if $serveractive %>ServerActive=<%= $serveractive %><% } %>
+<% if $serveractive { %>ServerActive=<%= $serveractive %><% } %>
 
 ### Option: Hostname
 #	List of comma delimited unique, case sensitive hostnames.
