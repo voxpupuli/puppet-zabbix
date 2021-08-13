@@ -124,6 +124,7 @@ class zabbix::params {
       $server_zabbix_user        = 'zabbix'
       $zabbix_package_provider   = undef
       $agent_loadmodulepath      = '/usr/lib/modules'
+      $manage_startup_script     = false
     }
   }
 
@@ -131,11 +132,6 @@ class zabbix::params {
     $zabbix_version = '4.4.5'
   } else {
     $zabbix_version = '5.0'
-  }
-
-  $manage_startup_script = downcase($facts['kernel']) ? {
-    'windows' => false,
-    default   => true,
   }
 
   $zabbix_package_state                     = 'present'
