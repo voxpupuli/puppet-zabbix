@@ -341,7 +341,7 @@ class zabbix::agent (
       notify  => Service[$servicename],
       require => Package[$zabbix_package_agent],
       replace => true,
-      content => template("zabbix/zabbix_agent2.conf.erb"),
+      content => epp("zabbix/zabbix_agent2.conf.epp"),
     }
   } else {
     file { $agent_configfile_path:
@@ -352,7 +352,7 @@ class zabbix::agent (
       notify  => Service[$servicename],
       require => Package[$zabbix_package_agent],
       replace => true,
-      content => template("zabbix/zabbix_agentd.conf.erb"),
+      content => epp("zabbix/zabbix_agentd.conf.epp"),
     }
   }
 
