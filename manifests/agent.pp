@@ -310,6 +310,8 @@ class zabbix::agent (
       require                   => Package[$zabbix_package_agent],
     }
   }
+
+  # Remove unused config files
   if $agent_configfile_path != '/etc/zabbix/zabbix_agentd.conf' and $facts['kernel'] != 'windows' {
     file { '/etc/zabbix/zabbix_agentd.conf':
       ensure  => absent,
