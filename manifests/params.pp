@@ -131,8 +131,6 @@ class zabbix::params {
     $zabbix_version = '5.0'
   }
 
-  $agent_configfile_epp                     = undef
-  $agent_configfile_template                = undef
   $manage_startup_script                    = false
   $zabbix_package_state                     = 'present'
   $zabbix_proxy                             = 'localhost'
