@@ -227,7 +227,7 @@ StartAgents=<%= $startagents %>
 #       the value returned by specified item is over limit of 255 characters.
 #       This option is only used when HostInterface is not defined.
 #
-<% if $hostinterfaceitem %>HostInterfaceItem=<%= $hostinterfaceitem %><% } %>
+<% if $hostinterfaceitem { %>HostInterfaceItem=<%= $hostinterfaceitem %><% } %>
 
 ### Option: RefreshActiveChecks
 #	How often list of active checks is refreshed, in seconds.
