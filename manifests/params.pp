@@ -113,8 +113,6 @@ class zabbix::params {
       $manage_choco              = false
       $zabbix_package_agent      = 'zabbix-agent'
       $agent_configfile_path     = '/etc/zabbix/zabbix_agentd.conf'
-      $agent_configfile_epp      = undef
-      $agent_configfile_template = undef
       $agent_config_owner        = 'zabbix'
       $agent_zabbix_user         = 'zabbix'
       $agent_config_group        = 'zabbix'
@@ -124,7 +122,6 @@ class zabbix::params {
       $server_zabbix_user        = 'zabbix'
       $zabbix_package_provider   = undef
       $agent_loadmodulepath      = '/usr/lib/modules'
-      $manage_startup_script     = false
     }
   }
 
@@ -134,6 +131,9 @@ class zabbix::params {
     $zabbix_version = '5.0'
   }
 
+  $agent_configfile_epp                     = undef
+  $agent_configfile_template                = undef
+  $manage_startup_script                    = false
   $zabbix_package_state                     = 'present'
   $zabbix_proxy                             = 'localhost'
   $zabbix_proxy_ip                          = '127.0.0.1'
