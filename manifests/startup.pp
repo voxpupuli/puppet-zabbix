@@ -47,6 +47,13 @@ define zabbix::startup (
     systemd::unit_file { "${name}.service":
       content => template("zabbix/${service_name}-systemd.init.erb"),
     }
+  } elsif ($facts['os']['family'] == 'windows') {
+    exec { "install_agent_${name}":
+      command  => "& 'C:\\Program Files\\Zabbix Agent\\zabbix_agentd.exe' --config ${agent_configfile_path} --install",
+      onlyif   => "if (Get-WmiObject -Class Win32_Service -Filter \"Name='${name}'\"){exit 1}",
+      provider => powershell,
+      notify   => Service[$name],
+    }
   } else {
     fail('systemd not found')
   }
