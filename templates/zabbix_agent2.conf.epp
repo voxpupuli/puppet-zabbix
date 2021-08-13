@@ -20,6 +20,7 @@
       $zabbix_alias = $zabbix::agent::zabbix_alias,
       $timeout = $zabbix::agent::timeout,
       $include_dir = $zabbix::agent::include_dir,
+      $unsafeuserparameters = $zabbix::agent::unsafeuserparameters,
       $include = $zabbix::agent::include,
       $tlsconnect = $zabbix::agent::tlsconnect,
       $tlsaccept = $zabbix::agent::tlsaccept,
