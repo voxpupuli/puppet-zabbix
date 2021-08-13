@@ -185,6 +185,25 @@ class { 'zabbix::agent':
 }
 ```
 
+If you want to use Zabbix Agent 2, use the following parameters:
+```ruby
+class { 'zabbix::agent':
+  agent_configfile_path => '/etc/zabbix/zabbix_agent2.conf',
+  include_dir           => '/etc/zabbix/zabbix_agent2.d',
+  pidfile               => '/var/run/zabbix/zabbix_agentd2.pid',
+  servicename           => 'zabbix-agent2',
+  zabbix_package_agent  => 'zabbix-agent2',
+}
+```
+Or the same parameters in Hiera:
+```yaml
+zabbix::agent::agent_configfile_path: '/etc/zabbix/zabbix_agent2.conf'
+zabbix::agent::include_dir: '/etc/zabbix/zabbix_agent2.d'
+zabbix::agent::pidfile: '/var/run/zabbix/zabbix_agentd2.pid'
+zabbix::agent::servicename: 'zabbix-agent2'
+zabbix::agent::zabbix_package_agent: 'zabbix-agent2'
+```
+
 ### Usage zabbix-proxy
 
 Like the zabbix-server, the zabbix-proxy can also be used in 2 ways:
