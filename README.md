@@ -189,6 +189,7 @@ If you want to use Zabbix Agent 2, use the following parameters:
 ```ruby
 class { 'zabbix::agent':
   agent_configfile_path => '/etc/zabbix/zabbix_agent2.conf',
+  agent_configfile_epp  => 'zabbix/zabbix_agent2.conf.epp',
   include_dir           => '/etc/zabbix/zabbix_agent2.d',
   pidfile               => '/var/run/zabbix/zabbix_agentd2.pid',
   servicename           => 'zabbix-agent2',
@@ -198,6 +199,7 @@ class { 'zabbix::agent':
 Or the same parameters in Hiera:
 ```yaml
 zabbix::agent::agent_configfile_path: '/etc/zabbix/zabbix_agent2.conf'
+zabbix::agent::agent_configfile_epp: 'zabbix/zabbix_agent2.conf.epp'
 zabbix::agent::include_dir: '/etc/zabbix/zabbix_agent2.d'
 zabbix::agent::pidfile: '/var/run/zabbix/zabbix_agentd2.pid'
 zabbix::agent::servicename: 'zabbix-agent2'

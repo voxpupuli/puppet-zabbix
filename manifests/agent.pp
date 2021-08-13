@@ -28,6 +28,9 @@
 # @param zbx_macros List of macros which will be added when host is configured.
 # @param zbx_interface_type Integer specifying type of interface to be created
 # @param agent_configfile_path Agent config file path defaults to /etc/zabbix/zabbix_agentd.conf
+# @param agent_configfile_epp Specifies a file path to an EPP template for the config file.
+# @param agent_configfile_template Specifies a file path to an ERB template for the config file.
+#   A validation error is thrown if both this **and** the `agent_configfile_epp` parameter are specified.
 # @param pidfile Name of pid file.
 # @param servicename Zabbix's agent service name.
 # @param logfile Name of log file.
@@ -149,6 +152,8 @@ class zabbix::agent (
   Array[Hash] $zbx_macros                         = [],
   Integer[1,4] $zbx_interface_type                = 1,
   $agent_configfile_path                          = $zabbix::params::agent_configfile_path,
+  Optional[String] $agent_configfile_epp          = $zabbix::params::agent_configfile_epp,
+  Optional[String] $agent_configfile_template     = $zabbix::params::agent_configfile_template,
   $pidfile                                        = $zabbix::params::agent_pidfile,
   $servicename                                    = $zabbix::params::agent_servicename,
   Enum['console', 'file', 'system'] $logtype      = $zabbix::params::agent_logtype,
@@ -334,29 +339,28 @@ class zabbix::agent (
     }
   }
 
-  # Configuring the zabbix-agent configuration file
-  if $agent_configfile_path =~ /agent2/ {
-    file { $agent_configfile_path:
-      ensure  => file,
-      owner   => $agent_config_owner,
-      group   => $agent_config_group,
-      mode    => '0644',
-      notify  => Service[$servicename],
-      require => Package[$zabbix_package_agent],
-      replace => true,
-      content => epp('zabbix/zabbix_agent2.conf.epp'),
-    }
+  # If both epp and erb are defined, throw validation error.
+  # Otherwise use the defined erb/epp template, or use default
+  if $agent_configfile_epp and $agent_configfile_template {
+    fail('Cannot supply both agent_configfile_epp and agent_configfile_template templates for config file.')
+  } elsif $agent_configfile_template {
+    $config_content = template($agent_configfile_template)
+  } elsif $agent_configfile_epp {
+    $config_content = epp($agent_configfile_epp)
   } else {
-    file { $agent_configfile_path:
-      ensure  => file,
-      owner   => $agent_config_owner,
-      group   => $agent_config_group,
-      mode    => '0644',
-      notify  => Service[$servicename],
-      require => Package[$zabbix_package_agent],
-      replace => true,
-      content => template('zabbix/zabbix_agentd.conf.erb'),
-    }
+    $config_content = template('zabbix/zabbix_agentd.conf.erb')
+  }
+
+  # Configuring the zabbix-agent configuration file
+  file { $agent_configfile_path:
+    ensure  => file,
+    owner   => $agent_config_owner,
+    group   => $agent_config_group,
+    mode    => '0644',
+    notify  => Service[$servicename],
+    require => Package[$zabbix_package_agent],
+    replace => true,
+    content => $config_content,
   }
 
   # Include dir for specific zabbix-agent checks.
