@@ -291,15 +291,26 @@ class zabbix::agent (
 
   # Ensure that the correct config file is used.
   if $manage_startup_script {
-    zabbix::startup { $servicename:
-      pidfile                   => $pidfile,
-      agent_configfile_path     => $agent_configfile_path,
-      zabbix_user               => $zabbix_user,
-      additional_service_params => $additional_service_params,
-      service_type              => $service_type,
-      service_name              => $servicename,
-      require                   => Package[$zabbix_package_agent],
-    }
+    if $agent_configfile_path =~ /agent2/ {
+      zabbix::startup { $servicename:
+        pidfile                   => $pidfile,
+        agent_configfile_path     => $agent_configfile_path,
+        zabbix_user               => $zabbix_user,
+        additional_service_params => $additional_service_params,
+        service_type              => $service_type,
+        service_name              => 'zabbix-agent2'
+        require                   => Package[$zabbix_package_agent],
+      }
+    } else {
+      zabbix::startup { $servicename:
+        pidfile                   => $pidfile,
+        agent_configfile_path     => $agent_configfile_path,
+        zabbix_user               => $zabbix_user,
+        additional_service_params => $additional_service_params,
+        service_type              => $service_type,
+        service_name              => 'zabbix-agent',
+        require                   => Package[$zabbix_package_agent],
+     }
   }
 
   if $agent_configfile_path != '/etc/zabbix/zabbix_agentd.conf' and $facts['kernel'] != 'windows' {
