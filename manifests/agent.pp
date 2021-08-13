@@ -310,9 +310,9 @@ class zabbix::agent (
         service_type              => $service_type,
         service_name              => 'zabbix-agent',
         require                   => Package[$zabbix_package_agent],
-     }
+      }
+    }
   }
-
   if $agent_configfile_path != '/etc/zabbix/zabbix_agentd.conf' and $facts['kernel'] != 'windows' {
     file { '/etc/zabbix/zabbix_agentd.conf':
       ensure  => absent,
