@@ -219,9 +219,9 @@ class zabbix::agent (
   if $use_agent_2 {
     $agent_configfile_path = '/etc/zabbix/zabbix_agent2.conf'
     $include_dir = '/etc/zabbix/zabbix_agent2.d'
-    $pidfile: '/var/run/zabbix/zabbix_agentd2.pid'
-    $servicename: 'zabbix-agent2'
-    $zabbix_package_agent: 'zabbix-agent2'
+    $pidfile = '/var/run/zabbix/zabbix_agentd2.pid'
+    $servicename = 'zabbix-agent2'
+    $zabbix_package_agent = 'zabbix-agent2'
   }
 
   # Find if listenip is set. If not, we can set to specific ip or
