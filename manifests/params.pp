@@ -131,6 +131,7 @@ class zabbix::params {
     $zabbix_version = '5.0'
   }
 
+  $use_agent_2                              = false
   $manage_startup_script                    = false
   $zabbix_package_state                     = 'present'
   $zabbix_proxy                             = 'localhost'

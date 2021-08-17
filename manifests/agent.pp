@@ -2,6 +2,7 @@
 # @param zabbix_version This is the zabbix version.
 # @param zabbix_package_state The state of the package that needs to be installed: present or latest.
 # @param zabbix_package_agent The name of the agent package that we manage
+# @param use_agent_2 Overrides zabbix_package_agent, servicename, pidfile, include_dir and agent_configfile_path so that Zabbix agent 2 is installed and configured.
 # @param manage_firewall When true, it will create iptables rules.
 # @param manage_repo When true, it will create repository for installing the agent.
 # @param manage_choco
@@ -136,6 +137,7 @@ class zabbix::agent (
   $zabbix_package_state                           = $zabbix::params::zabbix_package_state,
   $zabbix_package_agent                           = $zabbix::params::zabbix_package_agent,
   Optional[String[1]] $zabbix_package_provider    = $zabbix::params::zabbix_package_provider,
+  Boolean $use_agent_2                            = $zabbix::params::use_agent_2,
   Boolean $manage_choco                           = $zabbix::params::manage_choco,
   Boolean $manage_firewall                        = $zabbix::params::manage_firewall,
   Boolean $manage_repo                            = $zabbix::params::manage_repo,
@@ -212,6 +214,16 @@ class zabbix::agent (
   String $service_type                            = $zabbix::params::service_type,
   Boolean $manage_startup_script                  = $zabbix::params::manage_startup_script,
 ) inherits zabbix::params {
+
+  # Install and configure new generation Zabbix agent 2
+  if $use_agent_2 {
+    $agent_configfile_path = '/etc/zabbix/zabbix_agent2.conf'
+    $include_dir = '/etc/zabbix/zabbix_agent2.d'
+    $pidfile: '/var/run/zabbix/zabbix_agentd2.pid'
+    $servicename: 'zabbix-agent2'
+    $zabbix_package_agent: 'zabbix-agent2'
+  }
+
   # Find if listenip is set. If not, we can set to specific ip or
   # to network name. If more than 1 interfaces are available, we
   # can find the ipaddress of this specific interface if listenip
