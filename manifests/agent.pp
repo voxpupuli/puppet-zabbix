@@ -214,7 +214,6 @@ class zabbix::agent (
   String $service_type                            = $zabbix::params::service_type,
   Boolean $manage_startup_script                  = $zabbix::params::manage_startup_script,
 ) inherits zabbix::params {
-
   # Install and configure new generation Zabbix agent 2
   if $use_agent_2 {
     $agent_configfile_path = '/etc/zabbix/zabbix_agent2.conf'
