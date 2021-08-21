@@ -398,8 +398,8 @@ describe 'zabbix::server' do
         end
       end
 
-      # Zabbix Server 5.2 is not supported on RedHat family
-      if facts[:osfamily] != 'RedHat'
+      # Zabbix Server 5.2 is not supported on RedHat family and Debian 11
+      if facts[:osfamily] != 'RedHat' && facts[:os]['release']['major'] != '11'
         describe 'with zabbix_version 5.2 and Vault parameters defined' do
           let :params do
             {

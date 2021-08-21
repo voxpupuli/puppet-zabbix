@@ -6,6 +6,8 @@ describe 'zabbix_hostgroup type', unless: default[:platform] =~ %r{(ubuntu-16.04
     # 5.2 and 5.4 server packages are not available for RHEL 7
     next if zabbix_version == '5.2' && default[:platform] == 'el-7-x86_64'
     next if zabbix_version == '5.4' && default[:platform] == 'el-7-x86_64'
+    # No Zabbix 5.2 packages on Debian 11
+    next if zabbix_version == '5.2' && default[:platform] == 'debian-11-amd64'
     context "create zabbix_hostgroup resources with zabbix version #{zabbix_version}" do
       # This will deploy a running Zabbix setup (server, web, db) which we can
       # use for custom type tests
