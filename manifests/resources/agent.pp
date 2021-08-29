@@ -9,19 +9,21 @@
 # @param templates List of templates which should be attached to this host.
 # @param macros Array of hashes (macros) which should be attached to this host.
 # @param proxy Whether it is monitored by an proxy or not.
-# @param interfacetype Internally used identifier for the host interface
+# @param interfacetype Internally used identifier for the host interface.
+# @param interfacedetails Hash with interface details for SNMP when interface type is 2.
 class zabbix::resources::agent (
-  $hostname                = undef,
-  $ipaddress               = undef,
-  $use_ip                  = undef,
-  $port                    = undef,
-  $group                   = undef,
-  Array[String[1]] $groups = undef,
-  $group_create            = undef,
-  $templates               = undef,
-  $macros                  = undef,
-  $proxy                   = undef,
-  $interfacetype           = 1,
+  $hostname                           = undef,
+  $ipaddress                          = undef,
+  $use_ip                             = undef,
+  $port                               = undef,
+  $group                              = undef,
+  Array[String[1]] $groups            = undef,
+  $group_create                       = undef,
+  $templates                          = undef,
+  $macros                             = undef,
+  $proxy                              = undef,
+  $interfacetype                      = 1,
+  Hash[String, Any] $interfacedetails = {},
 ) {
   if $group and $groups {
     fail("Got group and groups. This isn't support! Please use groups only.")
@@ -35,14 +37,15 @@ class zabbix::resources::agent (
   }
 
   @@zabbix_host { $hostname:
-    ipaddress     => $ipaddress,
-    use_ip        => $use_ip,
-    port          => $port,
-    groups        => $_groups,
-    group_create  => $group_create,
-    templates     => $templates,
-    macros        => $macros,
-    proxy         => $proxy,
-    interfacetype => $interfacetype,
+    ipaddress        => $ipaddress,
+    use_ip           => $use_ip,
+    port             => $port,
+    groups           => $_groups,
+    group_create     => $group_create,
+    templates        => $templates,
+    macros           => $macros,
+    proxy            => $proxy,
+    interfacetype    => $interfacetype,
+    interfacedetails => $interfacedetails,
   }
 }

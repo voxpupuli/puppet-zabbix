@@ -52,6 +52,13 @@ Puppet::Type.newtype(:zabbix_host) do
     desc 'Interface type. 1 for zabbix agent.'
   end
 
+  newproperty(:interfacedetails) do
+    desc 'Additional interface details.'
+    def insync?(is)
+      is.to_s == should.to_s
+    end
+  end
+
   newproperty(:use_ip, boolean: true) do
     desc 'Using ipadress instead of dns to connect.'
 
