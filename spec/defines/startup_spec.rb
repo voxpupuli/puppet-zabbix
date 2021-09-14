@@ -2,18 +2,16 @@ require 'spec_helper'
 
 describe 'zabbix::startup', type: :define do # rubocop:disable RSpec/MultipleDescribes
   let(:title) { 'zabbix-agent' }
+  let :pre_condition do
+    'service{"zabbix-agent":}'
+  end
 
-  %w[RedHat Debian Gentoo Archlinux].each do |osfamily|
-    context "on #{osfamily}" do
+  on_supported_os.each do |os, os_facts|
+    context "on #{os}" do
       context 'on legacy init systems' do
         ['false', false].each do |systemd_fact_state|
           let :facts do
-            {
-              path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
-              osfamily: osfamily,
-              systemd: systemd_fact_state,
-              os: { family: osfamily }
-            }
+            os_facts.merge({ systemd: systemd_fact_state })
           end
 
           context 'it works' do
@@ -23,22 +21,24 @@ describe 'zabbix::startup', type: :define do # rubocop:disable RSpec/MultipleDes
               }
             end
 
-            if osfamily == 'Debian'
+            case os_facts[:os]['family']
+            when 'Debian'
               it do
                 is_expected.to contain_file('/etc/init.d/zabbix-agent').with(
                   ensure: 'file',
                   content: %r{DAEMON_OPTS="-c /something"}
                 )
               end
-            elsif osfamily == 'RedHat'
+            when 'RedHat'
               it do
                 is_expected.to contain_file('/etc/init.d/zabbix-agent').with(
                   ensure: 'file',
                   content: %r{OPTS="/something"}
                 )
               end
-            elsif osfamily == 'windows'
+            when 'windows'
               it { is_expected.to have_exec_resource_count(1) }
+              it { is_expected.to contain_exec('install_agent_zabbix-agent') }
             else
               it { is_expected.not_to compile.with_all_deps }
               next
@@ -48,39 +48,34 @@ describe 'zabbix::startup', type: :define do # rubocop:disable RSpec/MultipleDes
           end
         end
       end
-    end
-    context 'on systemd' do
-      ['true', true].each do |systemd_fact_state|
-        let :facts do
-          {
-            path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
-            osfamily: osfamily,
-            operatingsystem: osfamily,
-            systemd: systemd_fact_state,
-            os: { family: osfamily }
-          }
-        end
-
-        context 'it works' do
-          let :params do
-            {
-              agent_configfile_path: '/something',
-              pidfile: '/somethingelse',
-              additional_service_params: '--foreground'
-            }
+      next if os_facts[:os]['family'] == 'windows'
+      context "#{os} on systemd" do
+        ['true', true].each do |systemd_fact_state|
+          let :facts do
+            os_facts.merge({ systemd: systemd_fact_state })
           end
 
-          it { is_expected.to contain_class('systemd') }
-          it { is_expected.to contain_systemd__unit_file('zabbix-agent.service') }
-          it { is_expected.to contain_file('/etc/init.d/zabbix-agent').with_ensure('absent') }
-          it do
-            is_expected.to contain_file('/etc/systemd/system/zabbix-agent.service').with(
-              ensure: 'file',
-              mode:   '0444'
-            )
+          context 'it works' do
+            let :params do
+              {
+                agent_configfile_path: '/something',
+                pidfile: '/somethingelse',
+                additional_service_params: '--foreground'
+              }
+            end
+
+            it { is_expected.to contain_class('systemd') }
+            it { is_expected.to contain_systemd__unit_file('zabbix-agent.service') }
+            it { is_expected.to contain_file('/etc/init.d/zabbix-agent').with_ensure('absent') }
+            it do
+              is_expected.to contain_file('/etc/systemd/system/zabbix-agent.service').with(
+                ensure: 'file',
+                mode:   '0444'
+              )
+            end
+            it { is_expected.to contain_file('/etc/systemd/system/zabbix-agent.service').with_content(%r{ExecStart=/usr/sbin/zabbix_agentd --foreground -c /something}) }
+            it { is_expected.to contain_file('/etc/systemd/system/zabbix-agent.service').with_content(%r{PIDFile=/somethingelse}) }
           end
-          it { is_expected.to contain_file('/etc/systemd/system/zabbix-agent.service').with_content(%r{ExecStart=/usr/sbin/zabbix_agentd --foreground -c /something}) }
-          it { is_expected.to contain_file('/etc/systemd/system/zabbix-agent.service').with_content(%r{PIDFile=/somethingelse}) }
         end
       end
     end
@@ -89,17 +84,12 @@ end
 describe 'zabbix::startup', type: :define do
   let(:title) { 'zabbix-server' }
 
-  %w[RedHat Debian Gentoo].each do |osfamily|
-    context "on #{osfamily}" do
+  on_supported_os.each do |os, os_facts|
+    context "on #{os}" do
       context 'on legacy init systems' do
         ['false', false].each do |systemd_fact_state|
           let :facts do
-            {
-              path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
-              osfamily: osfamily,
-              systemd: systemd_fact_state,
-              os: { family: osfamily }
-            }
+            os_facts.merge({ systemd: systemd_fact_state })
           end
 
           context 'it works' do
@@ -111,14 +101,15 @@ describe 'zabbix::startup', type: :define do
               }
             end
 
-            if osfamily == 'Debian'
+            case os_facts[:os]['family']
+            when 'Debian'
               it do
                 is_expected.to contain_file('/etc/init.d/zabbix-server').with(
                   ensure: 'file',
                   content: %r{DAEMON_OPTS="-c /something"}
                 )
               end
-            elsif osfamily == 'RedHat'
+            when 'RedHat'
               it do
                 is_expected.to contain_file('/etc/init.d/zabbix-server').with(
                   ensure: 'file',
@@ -135,15 +126,11 @@ describe 'zabbix::startup', type: :define do
         end
       end
     end
+    next if os_facts[:os]['family'] == 'windows'
     context 'on systemd' do
       ['true', true].each do |systemd_fact_state|
         let :facts do
-          {
-            path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/sbin',
-            osfamily: osfamily,
-            systemd: systemd_fact_state,
-            os: { family: osfamily }
-          }
+          os_facts.merge({ systemd: systemd_fact_state })
         end
 
         context 'it works on mysql' do
