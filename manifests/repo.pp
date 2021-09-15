@@ -134,10 +134,17 @@ class zabbix::repo (
             id     => 'A1848F5352D022B9471D83D0082AB56BA14FE591',
             source => 'https://repo.zabbix.com/zabbix-official-repo.key',
           }
+
+          # Debian 11 provides Zabbix 5.0 by default. This can cause problems for 4.0 versions
+          $pinpriority = $facts['os']['release']['major'] ? {
+            '11'    => 1000,
+            default => undef,
+          }
           apt::source { 'zabbix':
             location => $_repo_location,
             repos    => 'main',
             release  => $releasename,
+            pin      => $pinpriority,
             require  => [
               Apt_key['zabbix-FBABD5F'],
               Apt_key['zabbix-A1848F5'],
