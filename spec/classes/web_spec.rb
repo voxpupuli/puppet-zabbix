@@ -19,6 +19,8 @@ describe 'zabbix::web' do
       next if facts[:os]['name'] == 'Gentoo'
       next if facts[:os]['name'] == 'Debian' && facts[:os]['release']['major'] == '9'
       next if facts[:os]['name'] == 'Ubuntu' && facts[:os]['release']['major'] == '16.04'
+      # There are no zabbix 5.2 packages for Debian 11
+      next if facts[:os]['name'] == 'Debian' && facts[:os]['release']['major'] == '11' && zabbix_version == '5.2'
 
       context "on #{os} " do
         let :facts do

@@ -1,6 +1,9 @@
 require 'spec_helper_acceptance'
 
 supported_versions.each do |version|
+  # No Zabbix 5.2 packages on Debian 11
+  next if version == '5.2' && default[:platform] == 'debian-11-amd64'
+
   describe "zabbix::agent class with zabbix_version #{version}" do
     it 'works idempotently with no errors' do
       pp = <<-EOS
