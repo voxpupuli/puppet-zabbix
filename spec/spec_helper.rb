@@ -21,3 +21,4 @@ if File.exist?(File.join(__dir__, 'default_module_facts.yml'))
 end
 
 require 'support/acceptance/supported_versions'
+require 'spec_helper_methods'
