@@ -12,7 +12,7 @@ describe 'zabbix::web' do
     }
   end
 
-  on_supported_os.each do |os, facts|
+  on_supported_os(baseline_os_hash).each do |os, facts|
     supported_versions.each do |zabbix_version|
       next if facts[:os]['name'] == 'windows'
       next if facts[:os]['name'] == 'Archlinux'

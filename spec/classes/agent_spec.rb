@@ -12,7 +12,7 @@ describe 'zabbix::agent' do
     }
   end
 
-  on_supported_os.each do |os, facts|
+  on_supported_os(baseline_os_hash).each do |os, facts|
     context "on #{os} " do
       systemd_fact = case facts[:osfamily]
                      when 'Archlinux', 'Fedora', 'Gentoo'
