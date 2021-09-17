@@ -82,7 +82,7 @@ describe 'zabbix::agent' do
               with_ensure('running').
               with_enable(true).
               with_service_provider(facts[:osfamily] == 'AIX' ? 'init' : nil).
-              that_requires("Package[#{package_name}]")
+              that_requires(["Package[#{package_name}]", "Zabbix::Startup[#{service_name}]"])
           end
 
           it { is_expected.to contain_file(include_dir).with_ensure('directory') }
