@@ -1,272 +1,145 @@
-# == Class: zabbix::server
-#
-#  This will install and configure the zabbix-server deamon
-#
-# === Requirements
-#
-#
-# === Parameters
-#
-# [*database_type*]
+# @summary This will install and configure the zabbix-server deamon
+# @param database_type
 #   Type of database. Can use the following 2 databases:
 #   - postgresql
 #   - mysql
-#
-# [*database_path*]
+# @param database_path
 #   When database binaries are not found on the default path:
 #   /bin:/usr/bin:/usr/local/sbin:/usr/local/bin
 #   you can use this parameter to add the database_path to the above mentioned
 #   path.
-#
-# [*zabbix_version*]
-#   This is the zabbix version.
-#   Example: 2.4
-#
-# [*manage_repo*]
-#   When true (default) this module will manage the Zabbix repository
-#
-# [*zabbix_package_state*]
-#   The state of the package that needs to be installed: present or latest.
-#   Default: present
-#
-# [*manage_firewall*]
-#   When true, it will create iptables rules.
-#
-# [*manage_service*]
+# @param zabbix_version This is the zabbix version. Example: 5.0
+# @param manage_repo When true (default) this module will manage the Zabbix repository.
+# @param manage_database When true, it will configure the database and execute the sql scripts.
+# @param zabbix_package_state The state of the package that needs to be installed: present or latest.
+# @param manage_firewall When true, it will create iptables rules.
+# @param manage_service
 #   When true, it will ensure service running and enabled.
 #   When false, it does not care about service
-#   Default: true
-#
-# [*server_configfile_path*]
-#   Server config file path defaults to /etc/zabbix/zabbix_server.conf
-#
-# [*nodeid*]
-#   Unique nodeid in distributed setup.
-#   (Deprecated since 2.4)
-#
-# [*listenport*]
-#   Listen port for the zabbix-server. Default: 10051
-#
-# [*sourceip*]
-#   Source ip address for outgoing connections.
-#
-# [*logfile*]
-#   Name of log file.
-#
-# [*logfilesize*]
-#   Maximum size of log file in MB.
-#
-# [*debuglevel*]
-#   Specifies debug level.
-#
-# [*pidfile*]
-#   Name of pid file.
-#
-# [*database_host*]
-#   Database host name.
-#
-# [*database_name*]
-#   Database name.
-#
-# [*database_schema*]
-#   Schema name. used for ibm db2.
-#
-# [*database_user*]
-#   Database user. ignored for sqlite.
-#
-# [*database_password*]
-#   Database password. ignored for sqlite.
-#
-# [*database_socket*]
-#   Path to mysql socket.
-#
-# [*database_port*]
-#   Database port when not using local socket. Ignored for sqlite.
-#
-# [*startpollers*]
-#   Number of pre-forked instances of pollers.
-#
-# [*startipmipollers*]
-#   Number of pre-forked instances of ipmi pollers.
-#
-# [*startpollersunreachable*]
-#   Number of pre-forked instances of pollers for unreachable hosts (including ipmi).
-#
-# [*starttrappers*]
-#   Number of pre-forked instances of trappers.
-#
-# [*startpingers*]
-#   Number of pre-forked instances of icmp pingers.
-#
-# [*startdiscoverers*]
-#   Number of pre-forked instances of discoverers.
-#
-# [*starthttppollers*]
-#   Number of pre-forked instances of http pollers.
-#
-# [*starttimers*]
-#   Number of pre-forked instances of timers.
-#
-# [*javagateway*]
-#   IP address (or hostname) of zabbix java gateway.
-#
-# [*javagatewayport*]
-#   Port that zabbix java gateway listens on.
-#
-# [*startjavapollers*]
-#   Number of pre-forked instances of java pollers.
-#
-# [*startvmwarecollectors*]
-#   Number of pre-forked vmware collector instances.
-#
-# [*vmwarefrequency*]
-#   How often zabbix will connect to vmware service to obtain a new datan.
-#
-# [*vmwarecachesize*]
-#   Size of vmware cache, in bytes.
-#
-# [*vmwaretimeout*]
-#   The maximum number of seconds vmware collector will wait for a response from VMware service.
-#
-# [*snmptrapperfile*]
-#   Temporary file used for passing data from snmp trap daemon to the server.
-#
-# [*startsnmptrapper*]
-#   If 1, snmp trapper process is started.
-#
-# [*listenip*]
-#   List of comma delimited ip addresses that the zabbix-server should listen on.
-#
-# [*housekeepingfrequency*]
-#   How often zabbix will perform housekeeping procedure (in hours).
-#
-# [*maxhousekeeperdelete*]
+# @param server_configfile_path Server config file path defaults to /etc/zabbix/zabbix_server.conf
+# @param server_config_owner The owner of Zabbix's server config file.
+# @param server_config_group The group of Zabbix's server config file.
+# @param server_service_name The service name of Zabbix server.
+# @param pacemaker Whether to control zabbix server through Pacemaker.
+# @param pacemaker_resource Zabbix server pacemaker resource.
+# @param listenport Listen port for the zabbix-server. Default: 10051
+# @param sourceip Source ip address for outgoing connections.
+# @param logfile Name of log file.
+# @param logfilesize Maximum size of log file in MB.
+# @param logtype Specifies where log messages are written to. (options: console, file, system)
+# @param debuglevel Specifies debug level.
+# @param pidfile Name of pid file.
+# @param database_schema_path The path to the directory containing the .sql schema files
+# @param database_host Database host name.
+# @param database_name Database name.
+# @param database_schema Schema name. used for ibm db2.
+# @param database_user Database user. ignored for sqlite.
+# @param database_password Database password. ignored for sqlite.
+# @param database_socket Path to mysql socket.
+# @param database_port Database port when not using local socket. Ignored for sqlite.
+# @param database_tlsconnect
+#   Available options:
+#   * required - connect using TLS
+#   * verify_ca - connect using TLS and verify certificate
+#   * verify_full - connect using TLS, verify certificate and verify that database identity specified by DBHost matches its certificate
+# @param database_tlscafile Full pathname of a file containing the top-level CA(s) certificates for database certificate verification.
+# @param database_tlscertfile Full pathname of file containing Zabbix server certificate for authenticating to database.
+# @param database_tlskeyfile Full pathname of file containing the private key for authenticating to database.
+# @param database_tlscipher The list of encryption ciphers that Zabbix server permits for TLS protocols up through TLSv1.2.
+# @param database_tlscipher13 The list of encryption ciphersuites that Zabbix server permits for TLSv1.3 protocol.
+# @param startpollers Number of pre-forked instances of pollers.
+# @param startpreprocessors Number of pre-forked instances of preprocessing workers
+# @param startipmipollers Number of pre-forked instances of ipmi pollers.
+# @param startpollersunreachable Number of pre-forked instances of pollers for unreachable hosts (including ipmi).
+# @param starttrappers Number of pre-forked instances of trappers.
+# @param startpingers Number of pre-forked instances of icmp pingers.
+# @param startalerters Number of pre-forked instances of alerters.
+# @param startdiscoverers Number of pre-forked instances of discoverers.
+# @param startescalators Number of pre-forked instances of escalators.
+# @param starthttppollers Number of pre-forked instances of http pollers.
+# @param starttimers Number of pre-forked instances of timers.
+# @param javagateway IP address (or hostname) of zabbix java gateway.
+# @param javagatewayport Port that zabbix java gateway listens on.
+# @param startjavapollers Number of pre-forked instances of java pollers.
+# @param startlldprocessors Number of pre-forked instances of low-level discovery (LLD) workers.
+# @param startvmwarecollectors Number of pre-forked vmware collector instances.
+# @param vmwarefrequency How often zabbix will connect to vmware service to obtain a new datan.
+# @param vaultdbpath Vault path from where credentials for database will be retrieved by keys 'password' and 'username'.
+# @param vaulttoken
+#   Vault authentication token that should have been generated exclusively for Zabbix proxy with read-only
+#   permission to the path specified in the optional VaultDBPath configuration parameter.
+# @param vaulturl Vault server HTTP[S] URL. System-wide CA certificates directory will be used if SSLCALocation is not specified.
+# @param vmwarecachesize Size of vmware cache, in bytes.
+# @param vmwaretimeout The maximum number of seconds vmware collector will wait for a response from VMware service.
+# @param snmptrapperfile Temporary file used for passing data from snmp trap daemon to the server.
+# @param startsnmptrapper If 1, snmp trapper process is started.
+# @param listenip List of comma delimited ip addresses that the zabbix-server should listen on.
+# @param housekeepingfrequency How often zabbix will perform housekeeping procedure (in hours).
+# @param maxhousekeeperdelete
 #   the table "housekeeper" contains "tasks" for housekeeping procedure in the format:
 #   [housekeeperid], [tablename], [field], [value].
 #   no more than 'maxhousekeeperdelete' rows (corresponding to [tablename], [field], [value])
 #   will be deleted per one task in one housekeeping cycle.
 #   sqlite3 does not use this parameter, deletes all corresponding rows without a limit.
 #   if set to 0 then no limit is used at all. in this case you must know what you are doing!
-#
-# [*senderfrequency*]
-#   How often zabbix will try to send unsent alerts (in seconds).
-#
-# [*cachesize*]
-#   Size of configuration cache, in bytes.
-#
-# [*cacheupdatefrequency*]
-#   How often zabbix will perform update of configuration cache, in seconds.
-#
-# [*startdbsyncers*]
-#   Number of pre-forked instances of db syncers.
-#
-# [*historycachesize*]
-#   Size of history cache, in bytes.
-#
-# [*historyindexcachesize*]
-#   Size of history index cache, in bytes.
-#
-# [*trendcachesize*]
-#   Size of trend cache, in bytes.
-#
-# [*historytextcachesize*]
-#   Size of text history cache, in bytes.
-#
-# [*valuecachesize*]
-#   Size of history value cache, in bytes.
-#
-# [*nodenoevents*]
-#   If set to '1' local events won't be sent to master node.
-#   (Deprecated since 2.4)
-#
-# [*nodenohistory*]
-#   If set to '1' local history won't be sent to master node.
-#   (Deprecated since 2.4)
-#
-# [*timeout*]
-#   Specifies how long we wait for agent, snmp device or external check (in seconds).
-#
-# [*tlscafile*]
-#   Full pathname of a file containing the top-level CA(s) certificates for peer certificate verification.
-#
-# [*tlscertfile*]
-#   Full pathname of a file containing the server certificate or certificate chain.
-#
-# [*tlscrlfile*]
-#   Full pathname of a file containing revoked certificates.
-#
-# [*tlskeyfile*]
-#   Full pathname of a file containing the server private key.
-#
-# [*trappertimeout*]
-#   Specifies how many seconds trapper may spend processing new data.
-#
-# [*unreachableperiod*]
-#   After how many seconds of unreachability treat a host as unavailable.
-#
-# [*unavailabledelay*]
-#   How often host is checked for availability during the unavailability period, in seconds.
-#
-# [*unreachabledelay*]
-#   How often host is checked for availability during the unreachability period, in seconds.
-#
-# [*alertscriptspath*]
-#   Full path to location of custom alert scripts.
-#
-# [*externalscripts*]
-#   Full path to location of external scripts.
-#
-# [*fpinglocation*]
-#   Location of fping.
-#
-# [*fping6location*]
-#   Location of fping6.
-#
-# [*sshkeylocation*]
-#   Location of public and private keys for ssh checks and actions.
-#
-# [*logslowqueries*]
-#   How long a database query may take before being logged (in milliseconds).
-#
-# [*tmpdir*]
-#   Temporary directory.
-#
-# [*startproxypollers*]
-#   Number of pre-forked instances of pollers for passive proxies.
-#
-# [*proxyconfigfrequency*]
-#   How often zabbix server sends configuration data to a zabbix proxy in seconds.
-#
-# [*proxydatafrequency*]
-#   How often zabbix server requests history data from a zabbix proxy in seconds.
-#
-# [*allowroot*]
-#   Allow the server to run as 'root'.
-#
-# [*include_dir*]
-#   You may include individual files or all files in a directory in the configuration file.
-#
-# [*loadmodulepath*]
-#   Full path to location of server modules.
-#
-# [*loadmodule*]
-#   Module to load at server startup.
-#
-# [*sslcertlocation_dir*]
-#   Location of SSL client certificate files for client authentication.
-#
-# [*sslkeylocation_dir*]
-#   Location of SSL private key files for client authentication.
-#
-# [*manage_startup_script*]
-#  If the init script should be managed by this module. Attention: This might cause problems with some config options of this module (e.g server_configfile_path)
-#
-# [*socketdir*]
+# @param cachesize Size of configuration cache, in bytes.
+# @param cacheupdatefrequency How often zabbix will perform update of configuration cache, in seconds.
+# @param startdbsyncers Number of pre-forked instances of db syncers.
+# @param historycachesize Size of history cache, in bytes.
+# @param historyindexcachesize Size of history index cache, in bytes.
+# @param trendcachesize Size of trend cache, in bytes.
+# @param valuecachesize Size of history value cache, in bytes.
+# @param timeout Specifies how long we wait for agent, snmp device or external check (in seconds).
+# @param tlscafile Full pathname of a file containing the top-level CA(s) certificates for peer certificate verification.
+# @param tlscertfile Full pathname of a file containing the server certificate or certificate chain.
+# @param tlscrlfile Full pathname of a file containing revoked certificates.
+# @param tlskeyfile Full pathname of a file containing the server private key.
+# @param tlscipherall
+#   GnuTLS priority string or OpenSSL (TLS 1.2) cipher string. Override the default ciphersuite selection criteria
+#   for certificate- and PSK-based encryption.
+# @param tlscipherall13
+#   Cipher string for OpenSSL 1.1.1 or newer in TLS 1.3. Override the default ciphersuite selection criteria
+#   for certificate- and PSK-based encryption.
+# @param tlsciphercert
+#   GnuTLS priority string or OpenSSL (TLS 1.2) cipher string. Override the default ciphersuite selection criteria
+#   for certificate-based encryption.
+# @param tlsciphercert13
+#   Cipher string for OpenSSL 1.1.1 or newer in TLS 1.3. Override the default ciphersuite selection criteria
+#   for certificate-based encryption.
+# @param tlscipherpsk
+#  GnuTLS priority string or OpenSSL (TLS 1.2) cipher string. Override the default ciphersuite selection criteria
+#  for PSK-based encryption.
+# @param tlscipherpsk13
+#  Cipher string for OpenSSL 1.1.1 or newer in TLS 1.3. Override the default ciphersuite selection criteria
+#  for PSK-based encryption.
+# @param trappertimeout Specifies how many seconds trapper may spend processing new data.
+# @param unreachableperiod After how many seconds of unreachability treat a host as unavailable.
+# @param unavailabledelay How often host is checked for availability during the unavailability period, in seconds.
+# @param unreachabledelay How often host is checked for availability during the unreachability period, in seconds.
+# @param alertscriptspath Full path to location of custom alert scripts.
+# @param externalscripts Full path to location of external scripts.
+# @param fpinglocation Location of fping.
+# @param fping6location Location of fping6.
+# @param sshkeylocation Location of public and private keys for ssh checks and actions.
+# @param logslowqueries How long a database query may take before being logged (in milliseconds).
+# @param tmpdir Temporary directory.
+# @param startproxypollers Number of pre-forked instances of pollers for passive proxies.
+# @param proxyconfigfrequency How often zabbix server sends configuration data to a zabbix proxy in seconds.
+# @param proxydatafrequency How often zabbix server requests history data from a zabbix proxy in seconds.
+# @param allowroot Allow the server to run as 'root'.
+# @param include_dir You may include individual files or all files in a directory in the configuration file.
+# @param loadmodulepath Full path to location of server modules.
+# @param loadmodule Module to load at server startup.
+# @param sslcertlocation_dir Location of SSL client certificate files for client authentication.
+# @param sslkeylocation_dir Location of SSL private key files for client authentication.
+# @param manage_selinux Whether we should manage SELinux rules.
+# @param additional_service_params Additional parameters to pass to the service.
+# @param zabbix_user User the zabbix service will run as.
+# @param manage_startup_script If the init script should be managed by this module. Attention: This might cause problems with some config options of this module (e.g server_configfile_path)
+# @param socketdir
 #   IPC socket directory.
-#     Directory to store IPC sockets used by internal Zabbix services.
-#
-# === Example
-#
+#   Directory to store IPC sockets used by internal Zabbix services.
+# @example
 #   When running everything on a single node, please check
 #   documentation in init.pp
 #   The following is an example of an multiple host setup:
@@ -288,122 +161,126 @@
 #   When database_type = postgres, uncomment the postgresql::client class and change or
 #   remove the database_type parameter and comment the mysql::client class.
 #
-# === Authors
-#
-# Author Name: ikben@werner-dijkerman.nl
-#
-# === Copyright
-#
-# Copyright 2014 Werner Dijkerman
-#
+# @author Werner Dijkerman ikben@werner-dijkerman.nl#
 class zabbix::server (
-  Zabbix::Databases $database_type           = $zabbix::params::database_type,
-  $database_path                             = $zabbix::params::database_path,
-  $zabbix_version                            = $zabbix::params::zabbix_version,
-  $zabbix_package_state                      = $zabbix::params::zabbix_package_state,
-  Boolean $manage_firewall                   = $zabbix::params::manage_firewall,
-  Boolean $manage_repo                       = $zabbix::params::manage_repo,
-  Boolean $manage_database                   = $zabbix::params::manage_database,
-  Boolean $manage_service                    = $zabbix::params::manage_service,
-  $server_configfile_path                    = $zabbix::params::server_configfile_path,
-  $server_config_owner                       = $zabbix::params::server_config_owner,
-  $server_config_group                       = $zabbix::params::server_config_group,
-  $server_service_name                       = $zabbix::params::server_service_name,
-  $pacemaker                                 = $zabbix::params::server_pacemaker,
-  $pacemaker_resource                        = $zabbix::params::server_pacemaker_resource,
-  $nodeid                                    = $zabbix::params::server_nodeid,
-  $listenport                                = $zabbix::params::server_listenport,
-  $sourceip                                  = $zabbix::params::server_sourceip,
-  Enum['console', 'file', 'system'] $logtype = $zabbix::params::server_logtype,
-  $logfile                                   = $zabbix::params::server_logfile,
-  $logfilesize                               = $zabbix::params::server_logfilesize,
-  $debuglevel                                = $zabbix::params::server_debuglevel,
-  $pidfile                                   = $zabbix::params::server_pidfile,
-  $database_schema_path                      = $zabbix::params::database_schema_path,
-  $database_host                             = $zabbix::params::server_database_host,
-  $database_name                             = $zabbix::params::server_database_name,
-  $database_schema                           = $zabbix::params::server_database_schema,
-  $database_user                             = $zabbix::params::server_database_user,
-  $database_password                         = $zabbix::params::server_database_password,
-  $database_socket                           = $zabbix::params::server_database_socket,
-  $database_port                             = $zabbix::params::server_database_port,
-  $startpollers                              = $zabbix::params::server_startpollers,
-  $startipmipollers                          = $zabbix::params::server_startipmipollers,
-  $startpollersunreachable                   = $zabbix::params::server_startpollersunreachable,
-  $starttrappers                             = $zabbix::params::server_starttrappers,
-  $startpingers                              = $zabbix::params::server_startpingers,
-  $startdiscoverers                          = $zabbix::params::server_startdiscoverers,
-  $starthttppollers                          = $zabbix::params::server_starthttppollers,
-  $starttimers                               = $zabbix::params::server_starttimers,
-  $javagateway                               = $zabbix::params::server_javagateway,
-  $javagatewayport                           = $zabbix::params::server_javagatewayport,
-  $startjavapollers                          = $zabbix::params::server_startjavapollers,
-  $startvmwarecollectors                     = $zabbix::params::server_startvmwarecollectors,
-  $vmwarefrequency                           = $zabbix::params::server_vmwarefrequency,
-  $vmwarecachesize                           = $zabbix::params::server_vmwarecachesize,
-  $vmwaretimeout                             = $zabbix::params::server_vmwaretimeout,
-  $snmptrapperfile                           = $zabbix::params::server_snmptrapperfile,
-  $startsnmptrapper                          = $zabbix::params::server_startsnmptrapper,
-  $listenip                                  = $zabbix::params::server_listenip,
-  $housekeepingfrequency                     = $zabbix::params::server_housekeepingfrequency,
-  $maxhousekeeperdelete                      = $zabbix::params::server_maxhousekeeperdelete,
-  $senderfrequency                           = $zabbix::params::server_senderfrequency,
-  $cachesize                                 = $zabbix::params::server_cachesize,
-  $cacheupdatefrequency                      = $zabbix::params::server_cacheupdatefrequency,
-  $startdbsyncers                            = $zabbix::params::server_startdbsyncers,
-  $historycachesize                          = $zabbix::params::server_historycachesize,
-  $historyindexcachesize                     = $zabbix::params::server_historyindexcachesize,
-  $trendcachesize                            = $zabbix::params::server_trendcachesize,
-  $historytextcachesize                      = $zabbix::params::server_historytextcachesize,
-  $valuecachesize                            = $zabbix::params::server_valuecachesize,
-  $nodenoevents                              = $zabbix::params::server_nodenoevents,
-  $nodenohistory                             = $zabbix::params::server_nodenohistory,
-  $timeout                                   = $zabbix::params::server_timeout,
-  $tlscafile                                 = $zabbix::params::server_tlscafile,
-  $tlscertfile                               = $zabbix::params::server_tlscertfile,
-  $tlscrlfile                                = $zabbix::params::server_tlscrlfile,
-  $tlskeyfile                                = $zabbix::params::server_tlskeyfile,
-  $trappertimeout                            = $zabbix::params::server_trappertimeout,
-  $unreachableperiod                         = $zabbix::params::server_unreachableperiod,
-  $unavailabledelay                          = $zabbix::params::server_unavailabledelay,
-  $unreachabledelay                          = $zabbix::params::server_unreachabledelay,
-  $alertscriptspath                          = $zabbix::params::server_alertscriptspath,
-  $externalscripts                           = $zabbix::params::server_externalscripts,
-  $fpinglocation                             = $zabbix::params::server_fpinglocation,
-  $fping6location                            = $zabbix::params::server_fping6location,
-  $sshkeylocation                            = $zabbix::params::server_sshkeylocation,
-  $logslowqueries                            = $zabbix::params::server_logslowqueries,
-  $tmpdir                                    = $zabbix::params::server_tmpdir,
-  $startproxypollers                         = $zabbix::params::server_startproxypollers,
-  $proxyconfigfrequency                      = $zabbix::params::server_proxyconfigfrequency,
-  $proxydatafrequency                        = $zabbix::params::server_proxydatafrequency,
-  $allowroot                                 = $zabbix::params::server_allowroot,
-  $include_dir                               = $zabbix::params::server_include,
-  $loadmodulepath                            = $zabbix::params::server_loadmodulepath,
-  $loadmodule                                = $zabbix::params::server_loadmodule,
-  $sslcertlocation_dir                       = $zabbix::params::server_sslcertlocation,
-  $sslkeylocation_dir                        = $zabbix::params::server_sslkeylocation,
-  Boolean $manage_selinux                    = $zabbix::params::manage_selinux,
-  String $additional_service_params          = $zabbix::params::additional_service_params,
-  Optional[String[1]] $zabbix_user           = $zabbix::params::server_zabbix_user,
-  Boolean $manage_startup_script             = $zabbix::params::manage_startup_script,
-  Optional[Stdlib::Absolutepath] $socketdir  = $zabbix::params::server_socketdir,
+  Zabbix::Databases $database_type                                            = $zabbix::params::database_type,
+  $database_path                                                              = $zabbix::params::database_path,
+  $zabbix_version                                                             = $zabbix::params::zabbix_version,
+  $zabbix_package_state                                                       = $zabbix::params::zabbix_package_state,
+  Boolean $manage_firewall                                                    = $zabbix::params::manage_firewall,
+  Boolean $manage_repo                                                        = $zabbix::params::manage_repo,
+  Boolean $manage_database                                                    = $zabbix::params::manage_database,
+  Boolean $manage_service                                                     = $zabbix::params::manage_service,
+  $server_configfile_path                                                     = $zabbix::params::server_configfile_path,
+  $server_config_owner                                                        = $zabbix::params::server_config_owner,
+  $server_config_group                                                        = $zabbix::params::server_config_group,
+  $server_service_name                                                        = $zabbix::params::server_service_name,
+  $pacemaker                                                                  = $zabbix::params::server_pacemaker,
+  $pacemaker_resource                                                         = $zabbix::params::server_pacemaker_resource,
+  $listenport                                                                 = $zabbix::params::server_listenport,
+  $sourceip                                                                   = $zabbix::params::server_sourceip,
+  Enum['console', 'file', 'system'] $logtype                                  = $zabbix::params::server_logtype,
+  Optional[Stdlib::Absolutepath] $logfile                                     = $zabbix::params::server_logfile,
+  $logfilesize                                                                = $zabbix::params::server_logfilesize,
+  $debuglevel                                                                 = $zabbix::params::server_debuglevel,
+  $pidfile                                                                    = $zabbix::params::server_pidfile,
+  $database_schema_path                                                       = $zabbix::params::database_schema_path,
+  $database_host                                                              = $zabbix::params::server_database_host,
+  $database_name                                                              = $zabbix::params::server_database_name,
+  $database_schema                                                            = $zabbix::params::server_database_schema,
+  $database_user                                                              = $zabbix::params::server_database_user,
+  $database_password                                                          = $zabbix::params::server_database_password,
+  $database_socket                                                            = $zabbix::params::server_database_socket,
+  Optional[Stdlib::Port::Unprivileged] $database_port                         = $zabbix::params::server_database_port,
+  Optional[Enum['required', 'verify_ca', 'verify_full']] $database_tlsconnect = $zabbix::params::server_database_tlsconnect,
+  Optional[Stdlib::Absolutepath] $database_tlscafile                          = $zabbix::params::server_database_tlscafile,
+  Optional[Stdlib::Absolutepath] $database_tlscertfile                        = $zabbix::params::server_database_tlscertfile,
+  Optional[Stdlib::Absolutepath] $database_tlskeyfile                         = $zabbix::params::server_database_tlskeyfile,
+  Optional[String[1]] $database_tlscipher                                     = $zabbix::params::server_database_tlscipher,
+  Optional[String[1]] $database_tlscipher13                                   = $zabbix::params::server_database_tlscipher13,
+  $startpollers                                                               = $zabbix::params::server_startpollers,
+  $startipmipollers                                                           = $zabbix::params::server_startipmipollers,
+  $startpollersunreachable                                                    = $zabbix::params::server_startpollersunreachable,
+  Integer[1, 1000] $startpreprocessors                                        = $zabbix::params::server_startpreprocessors,
+  $starttrappers                                                              = $zabbix::params::server_starttrappers,
+  $startpingers                                                               = $zabbix::params::server_startpingers,
+  Integer[1, 100] $startalerters                                              = $zabbix::params::server_startalerters,
+  $startdiscoverers                                                           = $zabbix::params::server_startdiscoverers,
+  Integer[1, 100] $startescalators                                            = $zabbix::params::server_startescalators,
+  $starthttppollers                                                           = $zabbix::params::server_starthttppollers,
+  $starttimers                                                                = $zabbix::params::server_starttimers,
+  $javagateway                                                                = $zabbix::params::server_javagateway,
+  $javagatewayport                                                            = $zabbix::params::server_javagatewayport,
+  $startjavapollers                                                           = $zabbix::params::server_startjavapollers,
+  Integer[1, 100] $startlldprocessors                                         = $zabbix::params::server_startlldprocessors,
+  $startvmwarecollectors                                                      = $zabbix::params::server_startvmwarecollectors,
+  Optional[String[1]] $vaultdbpath                                            = $zabbix::params::server_vaultdbpath,
+  Optional[String[1]] $vaulttoken                                             = $zabbix::params::server_vaulttoken,
+  Stdlib::HTTPSUrl $vaulturl                                                  = $zabbix::params::server_vaulturl,
+  $vmwarefrequency                                                            = $zabbix::params::server_vmwarefrequency,
+  $vmwarecachesize                                                            = $zabbix::params::server_vmwarecachesize,
+  $vmwaretimeout                                                              = $zabbix::params::server_vmwaretimeout,
+  $snmptrapperfile                                                            = $zabbix::params::server_snmptrapperfile,
+  $startsnmptrapper                                                           = $zabbix::params::server_startsnmptrapper,
+  $listenip                                                                   = $zabbix::params::server_listenip,
+  $housekeepingfrequency                                                      = $zabbix::params::server_housekeepingfrequency,
+  $maxhousekeeperdelete                                                       = $zabbix::params::server_maxhousekeeperdelete,
+  $cachesize                                                                  = $zabbix::params::server_cachesize,
+  $cacheupdatefrequency                                                       = $zabbix::params::server_cacheupdatefrequency,
+  $startdbsyncers                                                             = $zabbix::params::server_startdbsyncers,
+  $historycachesize                                                           = $zabbix::params::server_historycachesize,
+  $historyindexcachesize                                                      = $zabbix::params::server_historyindexcachesize,
+  $trendcachesize                                                             = $zabbix::params::server_trendcachesize,
+  $valuecachesize                                                             = $zabbix::params::server_valuecachesize,
+  $timeout                                                                    = $zabbix::params::server_timeout,
+  $tlscafile                                                                  = $zabbix::params::server_tlscafile,
+  $tlscertfile                                                                = $zabbix::params::server_tlscertfile,
+  $tlscrlfile                                                                 = $zabbix::params::server_tlscrlfile,
+  $tlskeyfile                                                                 = $zabbix::params::server_tlskeyfile,
+  Optional[String[1]] $tlscipherall                                           = $zabbix::params::server_tlscipherall,
+  Optional[String[1]] $tlscipherall13                                         = $zabbix::params::server_tlscipherall13,
+  Optional[String[1]] $tlsciphercert                                          = $zabbix::params::server_tlsciphercert,
+  Optional[String[1]] $tlsciphercert13                                        = $zabbix::params::server_tlsciphercert13,
+  Optional[String[1]] $tlscipherpsk                                           = $zabbix::params::server_tlscipherpsk,
+  Optional[String[1]] $tlscipherpsk13                                         = $zabbix::params::server_tlscipherpsk13,
+  $trappertimeout                                                             = $zabbix::params::server_trappertimeout,
+  $unreachableperiod                                                          = $zabbix::params::server_unreachableperiod,
+  $unavailabledelay                                                           = $zabbix::params::server_unavailabledelay,
+  $unreachabledelay                                                           = $zabbix::params::server_unreachabledelay,
+  $alertscriptspath                                                           = $zabbix::params::server_alertscriptspath,
+  $externalscripts                                                            = $zabbix::params::server_externalscripts,
+  $fpinglocation                                                              = $zabbix::params::server_fpinglocation,
+  $fping6location                                                             = $zabbix::params::server_fping6location,
+  $sshkeylocation                                                             = $zabbix::params::server_sshkeylocation,
+  $logslowqueries                                                             = $zabbix::params::server_logslowqueries,
+  $tmpdir                                                                     = $zabbix::params::server_tmpdir,
+  $startproxypollers                                                          = $zabbix::params::server_startproxypollers,
+  $proxyconfigfrequency                                                       = $zabbix::params::server_proxyconfigfrequency,
+  $proxydatafrequency                                                         = $zabbix::params::server_proxydatafrequency,
+  $allowroot                                                                  = $zabbix::params::server_allowroot,
+  $include_dir                                                                = $zabbix::params::server_include,
+  $loadmodulepath                                                             = $zabbix::params::server_loadmodulepath,
+  $loadmodule                                                                 = $zabbix::params::server_loadmodule,
+  $sslcertlocation_dir                                                        = $zabbix::params::server_sslcertlocation,
+  $sslkeylocation_dir                                                         = $zabbix::params::server_sslkeylocation,
+  Boolean $manage_selinux                                                     = $zabbix::params::manage_selinux,
+  String $additional_service_params                                           = $zabbix::params::additional_service_params,
+  Optional[String[1]] $zabbix_user                                            = $zabbix::params::server_zabbix_user,
+  Boolean $manage_startup_script                                              = $zabbix::params::manage_startup_script,
+  Optional[Stdlib::Absolutepath] $socketdir                                   = $zabbix::params::server_socketdir,
 ) inherits zabbix::params {
-  # the following codeblock is a bit blargh. The correct default value for
-  # $real_additional_service_params changes based on the value of $zabbix_version
-  # We handle this in the params.pp, but that doesn't work if somebody provides a specific
-  # value for $zabbix_version and overwrites our default :(
-  # the codeblock sets a default value for $real_additional_service_params if $zabbix_version got provided,
-  # but only if the variable isn't provided.
-
-  if $zabbix_version != $zabbix::params::zabbix_version and $additional_service_params == $zabbix::params::additional_service_params {
-    $real_additional_service_params = versioncmp($zabbix_version, '3.0') ? {
-      1  => '--foreground',
-      0  => '--foreground',
-      -1 => '',
+  # zabbix server 5.2 and 5.4 is not supported on RHEL 7.
+  # https://www.zabbix.com/documentation/current/manual/installation/install_from_packages/rhel_centos
+  if $facts['os']['family'] == 'RedHat' and versioncmp($zabbix_version, '5.2') >= 0 {
+    if versioncmp($facts['os']['release']['major'], '7') == 0 {
+      fail("${facts['os']['family']} ${$facts['os']['release']['major']} is not supported for zabbix::server (version ${$zabbix_version}) (yet)")
     }
-  } else {
-    $real_additional_service_params = $additional_service_params
+  }
+
+  if $facts['os']['family'] == 'Debian' and versioncmp($facts['os']['release']['major'], '11') == 0 {
+    if versioncmp($zabbix_version, '5.2') == 0 {
+      fail('Zabbix 5.2 is not supported on Debian 11!')
+    }
   }
 
   # Only include the repo class if it has not yet been included
@@ -414,12 +291,26 @@ class zabbix::server (
     }
   }
 
+  if versioncmp($zabbix_version, '5.4') == 0 {
+    package { 'zabbix-sql-scripts':
+      ensure  => present,
+      require => Class['zabbix::repo'],
+      tag     => 'zabbix',
+    }
+  }
+
   # Get the correct database_type. We need this for installing the
   # correct package and loading the sql files.
-
   case $database_type {
     'postgresql' : {
       $db = 'pgsql'
+
+      # Zabbix version 5.4 uses zabbix-sql-scripts for initializing the database.
+      if versioncmp($zabbix_version, '5.4') == 0 {
+        $zabbix_database_require = [Package["zabbix-server-${db}"], Package['zabbix-sql-scripts']]
+      } else {
+        $zabbix_database_require = Package["zabbix-server-${db}"]
+      }
 
       if $manage_database {
         # Execute the postgresql scripts
@@ -431,13 +322,21 @@ class zabbix::server (
           database_user        => $database_user,
           database_password    => $database_password,
           database_host        => $database_host,
+          database_port        => $database_port,
           database_path        => $database_path,
-          require              => Package["zabbix-server-${db}"],
+          require              => $zabbix_database_require,
         }
       }
     }
-    'mysql'      : {
+    'mysql' : {
       $db = 'mysql'
+
+      # Zabbix version 5.4 uses zabbix-sql-scripts for initializing the database.
+      if versioncmp($zabbix_version, '5.4') == 0 {
+        $zabbix_database_require = [Package["zabbix-server-${db}"], Package['zabbix-sql-scripts']]
+      } else {
+        $zabbix_database_require = Package["zabbix-server-${db}"]
+      }
 
       if $manage_database {
         # Execute the mysql scripts
@@ -449,8 +348,9 @@ class zabbix::server (
           database_user        => $database_user,
           database_password    => $database_password,
           database_host        => $database_host,
+          database_port        => $database_port,
           database_path        => $database_path,
-          require              => Package["zabbix-server-${db}"],
+          require              => $zabbix_database_require,
         }
       }
     }
@@ -473,7 +373,7 @@ class zabbix::server (
       database_type             => $database_type,
       server_configfile_path    => $server_configfile_path,
       zabbix_user               => $zabbix_user,
-      additional_service_params => $real_additional_service_params,
+      additional_service_params => $additional_service_params,
       manage_database           => $manage_database,
       service_name              => 'zabbix-server',
       require                   => Package["zabbix-server-${db}"],
@@ -586,14 +486,10 @@ class zabbix::server (
       before    => $dependency,
       require   => Selboolean['zabbix_can_network'],
     }
-    # zabbix-server 3.4 introduced IPC via a socket in /tmp
-    # https://support.zabbix.com/browse/ZBX-12567
-    if versioncmp($zabbix_version, '3.3') > 0 {
-      selinux::module { 'zabbix-server-ipc':
-        ensure    => 'present',
-        source_te => 'puppet:///modules/zabbix/zabbix-server-ipc.te',
-        before    => $dependency,
-      }
+    selinux::module { 'zabbix-server-ipc':
+      ensure    => 'present',
+      source_te => 'puppet:///modules/zabbix/zabbix-server-ipc.te',
+      before    => $dependency,
     }
   }
 }

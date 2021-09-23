@@ -12,18 +12,21 @@ describe 'zabbix::web' do
     }
   end
 
-  on_supported_os.each do |os, facts|
-    next if facts[:os]['name'] == 'windows'
-    context "on #{os} " do
-      let :facts do
-        facts
-      end
+  on_supported_os(baseline_os_hash).each do |os, facts|
+    supported_versions.each do |zabbix_version|
+      next if facts[:os]['name'] == 'windows'
+      next if facts[:os]['name'] == 'Archlinux'
+      next if facts[:os]['name'] == 'Gentoo'
+      next if facts[:os]['name'] == 'Debian' && facts[:os]['release']['major'] == '9'
+      next if facts[:os]['name'] == 'Ubuntu' && facts[:os]['release']['major'] == '16.04'
+      # There are no zabbix 5.2 packages for Debian 11
+      next if facts[:os]['name'] == 'Debian' && facts[:os]['release']['major'] == '11' && zabbix_version == '5.2'
 
-      if facts[:osfamily] == 'Archlinux' || facts[:osfamily] == 'Gentoo'
-        context 'with all defaults' do
-          it { is_expected.not_to compile }
+      context "on #{os} " do
+        let :facts do
+          facts
         end
-      else
+
         context 'with all defaults' do
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to contain_file('/etc/zabbix/web').with_ensure('directory') }
@@ -53,9 +56,10 @@ describe 'zabbix::web' do
           it { is_expected.not_to contain_selboolean('httpd_can_connect_zabbix') }
         end
 
-        describe 'with database_type as postgresql' do
+        describe "with database_type as postgresql and zabbix_version #{zabbix_version}" do
           let :params do
             super().merge(database_type: 'postgresql')
+            super().merge(zabbix_version: zabbix_version)
           end
 
           pgsqlpackage = case facts[:operatingsystem]
@@ -75,14 +79,25 @@ describe 'zabbix::web' do
                            'php5-pgsql'
                          end
 
-          packages = facts[:osfamily] == 'RedHat' ? ['zabbix-web-pgsql', 'zabbix-web'] : ['zabbix-frontend-php', pgsqlpackage]
+          packages = if facts[:osfamily] == 'RedHat'
+                       if facts[:operatingsystemmajrelease].to_i == 7 &&
+                          !%w[VirtuozzoLinux OracleLinux Scientific].include?(facts[:os]['name']) &&
+                          zabbix_version =~ %r{5\.[024]}
+                         ['zabbix-web-pgsql-scl', 'zabbix-web']
+                       else
+                         ['zabbix-web-pgsql', 'zabbix-web']
+                       end
+                     else
+                       ['zabbix-frontend-php', pgsqlpackage]
+                     end
+
           packages.each do |package|
             it { is_expected.to contain_package(package) }
           end
           it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['TYPE'\]     = 'POSTGRESQL'}) }
         end
 
-        describe 'with database_type as mysql' do
+        describe 'with database_type as mysql', if: facts[:os]['release']['major'] != '7' && facts[:os]['family'] != 'RedHat' do
           let :params do
             super().merge(database_type: 'mysql')
           end
@@ -174,6 +189,14 @@ describe 'zabbix::web' do
           it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['SCHEMA'\] = 'zabbix'}) }
         end
 
+        describe 'with parameter: database_double_ieee754' do
+          let :params do
+            super().merge(database_double_ieee754: true)
+          end
+
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['DOUBLE_IEEE754'\] = 'true'}) }
+        end
+
         it { is_expected.to contain_apache__vhost('zabbix.example.com').with_name('zabbix.example.com') }
 
         context 'with database_* settings' do
@@ -185,7 +208,8 @@ describe 'zabbix::web' do
               database_password: 'zabbix-server',
               zabbix_server: 'localhost',
               zabbix_listenport: '3306',
-              zabbix_server_name: 'localhost'
+              zabbix_server_name: 'localhost',
+              zabbix_version: '4.0'
             )
           end
 
@@ -196,6 +220,48 @@ describe 'zabbix::web' do
           it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$ZBX_SERVER      = 'localhost'}) }
           it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$ZBX_SERVER_PORT = '3306'}) }
           it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$ZBX_SERVER_NAME = 'localhost'}) }
+        end
+
+        describe 'with LDAP settings defined' do
+          let :params do
+            super().merge(
+              ldap_cacert: '/etc/zabbix/ssl/ca.crt',
+              ldap_clientcert: '/etc/zabbix/ssl/client.crt',
+              ldap_clientkey: '/etc/zabbix/ssl/client.key',
+              ldap_reqcert: 'allow'
+            )
+          end
+
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^putenv\("LDAPTLS_CACERT=/etc/zabbix/ssl/ca.crt"\);}) }
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^putenv\("LDAPTLS_CERT=/etc/zabbix/ssl/client.crt"\);}) }
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^putenv\("LDAPTLS_KEY=/etc/zabbix/ssl/client.key"\);}) }
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^putenv\("TLS_REQCERT=allow"\);}) }
+        end
+
+        describe 'with SAML settings defined' do
+          let :params do
+            super().merge(
+              saml_sp_key: '/etc/zabbix/web/sp.key',
+              saml_sp_cert: '/etc/zabbix/web/sp.cert',
+              saml_idp_cert: '/etc/zabbix/web/idp.cert',
+              saml_settings: {
+                'strict' => true,
+                'baseurl' => 'http://example.com/sp/',
+                'security' => {
+                  'signatureAlgorithm' => 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha384',
+                  'digestAlgorithm' => 'http://www.w3.org/2001/04/xmldsig-more#sha384',
+                  'singleLogoutService' => {
+                    'responseUrl' => '',
+                  }
+                }
+              }
+            )
+          end
+
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$SSO\['SP_KEY'\] = '/etc/zabbix/web/sp.key'}) }
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$SSO\['SP_CERT'\] = '/etc/zabbix/web/sp.cert'}) }
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$SSO\['IDP_CERT'\] = '/etc/zabbix/web/idp.cert'}) }
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$SSO\['SETTINGS'\] = \[ \n  "strict" => true,\n  "baseurl" => "http://example.com/sp/",\n  "security" => \[\n    "signatureAlgorithm" => "http://www.w3.org/2001/04/xmldsig-more#rsa-sha384",\n    "digestAlgorithm" => "http://www.w3.org/2001/04/xmldsig-more#sha384",\n    "singleLogoutService" => \[\n      "responseUrl" => ""\n    \]\n  \]\n\];}) }
         end
       end
     end

@@ -1,6 +1,5 @@
-# This file is managed via modulesync
-# https://github.com/voxpupuli/modulesync
-# https://github.com/voxpupuli/modulesync_config
+# Managed by modulesync - DO NOT EDIT
+# https://voxpupuli.org/docs/updating-files-managed-with-modulesync/
 
 RSpec.configure do |c|
   c.mock_with :mocha
@@ -20,3 +19,6 @@ if File.exist?(File.join(__dir__, 'default_module_facts.yml'))
     end
   end
 end
+
+require 'support/acceptance/supported_versions'
+require 'spec_helper_methods'

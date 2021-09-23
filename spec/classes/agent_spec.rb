@@ -12,7 +12,7 @@ describe 'zabbix::agent' do
     }
   end
 
-  on_supported_os.each do |os, facts|
+  on_supported_os(baseline_os_hash).each do |os, facts|
     context "on #{os} " do
       systemd_fact = case facts[:osfamily]
                      when 'Archlinux', 'Fedora', 'Gentoo'
@@ -28,17 +28,21 @@ describe 'zabbix::agent' do
                     else
                       '/etc/zabbix/zabbix_agentd.conf'
                     end
+
+      log_path = case facts[:operatingsystem]
+                 when 'windows'
+                   'C:/ProgramData/zabbix/zabbix_agentd.log'
+                 else
+                   '/var/log/zabbix/zabbix_agentd.log'
+                 end
       include_dir = case facts[:operatingsystem]
                     when 'windows'
                       'C:/ProgramData/zabbix/zabbix_agentd.d'
                     else
                       '/etc/zabbix/zabbix_agentd.d'
                     end
-      zabbix_version = if facts[:os]['name'] == 'Debian' && facts[:os]['release']['major'].to_i == 10
-                         '4.0'
-                       else
-                         '3.4'
-                       end
+      zabbix_version = '5.0'
+
       let :facts do
         facts.merge(systemd_fact)
       end
@@ -78,7 +82,7 @@ describe 'zabbix::agent' do
               with_ensure('running').
               with_enable(true).
               with_service_provider(facts[:osfamily] == 'AIX' ? 'init' : nil).
-              that_requires("Package[#{package_name}]")
+              that_requires(["Package[#{package_name}]", "Zabbix::Startup[#{service_name}]"])
           end
 
           it { is_expected.to contain_file(include_dir).with_ensure('directory') }
@@ -263,6 +267,8 @@ describe 'zabbix::agent' do
               buffersend: '5',
               buffersize: '100',
               debuglevel: '4',
+              allowkey: 'system.run[*]',
+              denykey: 'system.run[*]',
               enableremotecommands: '1',
               hostname: '10050',
               include_dir: '/etc/zabbix/zabbix_agentd.d',
@@ -271,6 +277,7 @@ describe 'zabbix::agent' do
               loadmodulepath: '${libdir}/modules',
               logfilesize: '4',
               logfile: '/var/log/zabbix/zabbix_agentd.log',
+              logtype: 'file',
               logremotecommands: '0',
               pidfile: '/var/run/zabbix/zabbix_agentd.pid',
               refreshactivechecks: '120',
@@ -288,7 +295,13 @@ describe 'zabbix::agent' do
               tlscertfile: '/etc/zabbix/keys/tls.crt',
               tlskeyfile: '/etc/zabbix/keys/tls.key',
               tlspskidentity: '/etc/zabbix/keys/tlspskidentity.id',
-              tlspskfile: '/etc/zabbix/keys/tlspskfile.key'
+              tlspskfile: '/etc/zabbix/keys/tlspskfile.key',
+              tlsciphercert: 'EECDH+aRSA+AES128:RSA+aRSA+AES128',
+              tlsciphercert13: 'EECDH+aRSA+AES128:RSA+aRSA+AES128',
+              tlscipherpsk: 'kECDHEPSK+AES128:kPSK+AES128',
+              tlscipherpsk13: 'TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256',
+              tlscipherall: 'TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256',
+              tlscipherall13: 'EECDH+aRSA+AES128:RSA+aRSA+AES128:kECDHEPSK+AES128:kPSK+AES128'
             }
           end
 
@@ -296,7 +309,8 @@ describe 'zabbix::agent' do
           it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^BufferSend=5$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^BufferSize=100$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^DebugLevel=4$} }
-          it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^EnableRemoteCommands=1$} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^AllowKey=system.run\[\*\]$} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^DenyKey=system.run\[\*\]$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^Hostname=10050$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^Include=/etc/zabbix/zabbix_agentd.d$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^ListenPort=10050$} }
@@ -304,6 +318,7 @@ describe 'zabbix::agent' do
           it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LoadModulePath=\$\{libdir\}/modules$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LogFileSize=4$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LogFile=/var/log/zabbix/zabbix_agentd.log$} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LogType=file$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^LogRemoteCommands=0$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^PidFile=/var/run/zabbix/zabbix_agentd.pid$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^RefreshActiveChecks=120$} }
@@ -322,6 +337,12 @@ describe 'zabbix::agent' do
           it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSKeyFile=/etc/zabbix/keys/tls.key$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSPSKIdentity=/etc/zabbix/keys/tlspskidentity.id$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSPSKFile=/etc/zabbix/keys/tlspskfile.key$} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSCipherCert=EECDH\+aRSA\+AES128:RSA\+aRSA\+AES128$} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSCipherCert13=EECDH\+aRSA\+AES128:RSA\+aRSA\+AES128$} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSCipherPSK=kECDHEPSK\+AES128:kPSK\+AES128$} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSCipherPSK13=TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256$} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSCipherAll=TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256$} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^TLSCipherAll13=EECDH\+aRSA\+AES128:RSA\+aRSA\+AES128:kECDHEPSK\+AES128:kPSK\+AES128$} }
         end
       end
 
@@ -348,6 +369,44 @@ describe 'zabbix::agent' do
             with_ensure('stopped').
             with_enable(false).
             that_requires("Package[#{package_name}]")
+        end
+      end
+
+      context 'with zabbix_agentd.conf and logtype declared' do
+        describe 'as system' do
+          let :params do
+            {
+              logtype: 'system'
+            }
+          end
+
+          it { is_expected.to contain_file(config_path).with_content %r{^LogType=system$} }
+          it { is_expected.to contain_file(config_path).without_content %r{^LogFile=} }
+          it { is_expected.to contain_file(config_path).without_content %r{^LogFileSize=} }
+        end
+
+        describe 'as console' do
+          let :params do
+            {
+              logtype: 'console'
+            }
+          end
+
+          it { is_expected.to contain_file(config_path).with_content %r{^LogType=console$} }
+          it { is_expected.to contain_file(config_path).without_content %r{^LogFile=} }
+          it { is_expected.to contain_file(config_path).without_content %r{^LogFileSize=} }
+        end
+
+        describe 'as file' do
+          let :params do
+            {
+              logtype: 'file'
+            }
+          end
+
+          it { is_expected.to contain_file(config_path).with_content %r{^LogType=file$} }
+          it { is_expected.to contain_file(config_path).with_content %r{^LogFile=#{log_path}$} }
+          it { is_expected.to contain_file(config_path).with_content %r{^LogFileSize=100$} }
         end
       end
     end

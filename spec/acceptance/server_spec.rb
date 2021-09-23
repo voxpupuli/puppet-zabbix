@@ -1,5 +1,4 @@
 require 'spec_helper_acceptance'
-
 describe 'zabbix::server class' do
   context 'default parameters' do
     # Using puppet_apply as a helper
@@ -15,9 +14,15 @@ describe 'zabbix::server class' do
 
       # this will actually deploy apache + postgres + zabbix-server + zabbix-web
       pp = <<-EOS
-        class { 'postgresql::server': } ->
-        class { 'zabbix::database': } ->
-        class { 'zabbix::server': }
+        class { 'postgresql::globals':
+          encoding => 'UTF-8',
+          locale   => 'en_US.UTF-8',
+          manage_package_repo => true,
+          version => '12',
+        }
+        -> class { 'postgresql::server': }
+        -> class { 'zabbix::database': }
+        -> class { 'zabbix::server': }
       EOS
 
       prepare_host

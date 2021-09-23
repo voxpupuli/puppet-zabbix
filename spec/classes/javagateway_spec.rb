@@ -5,7 +5,7 @@ describe 'zabbix::javagateway' do
     'rspec.puppet.com'
   end
 
-  on_supported_os.each do |os, facts|
+  on_supported_os(baseline_os_hash).each do |os, facts|
     next if facts[:os]['name'] == 'windows'
     context "on #{os} " do
       let :facts do
