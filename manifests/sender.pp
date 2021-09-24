@@ -1,23 +1,7 @@
-# == Class zabbix::sender
-#
-#  This will install and configure the zabbix-agent deamon
-#
-# === Requirements
-#
-#   No special requirements
-#
-# === Parameters
-#
-# [*zabbix_version*]
-#   This is the zabbix version.
-#
-# [*zabbix_package_state*]
-#   The state of the package that needs to be installed: present or latest.
-#   Default: present
-#
-# [*manage_repo*]
-#   When true, it will create repository for installing the agent.
-#
+# @summary This will install and configure the zabbix-agent deamon
+# @param zabbix_version This is the zabbix version.
+# @param zabbix_package_state The state of the package that needs to be installed: present or latest.
+# @param manage_repo When true, it will create repository for installing the agent.
 class zabbix::sender (
   $zabbix_version        = $zabbix::params::zabbix_version,
   $zabbix_package_state  = $zabbix::params::zabbix_package_state,

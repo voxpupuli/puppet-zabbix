@@ -11,7 +11,6 @@
 #
 PidFile=<%= @pidfile %><% end %>
 
-<% if @zabbix_version.to_f >= 3.0 -%>
 <% if @logtype %>
 ### Option: LogType
 #	Specifies where log messages are written to:
@@ -21,27 +20,17 @@ PidFile=<%= @pidfile %><% end %>
 #
 LogType=<%= @logtype %><% end %>
 
-<% if @logfile %>
+<% if @logtype == 'file' -%>
 ### Option: LogFile
 #	Log file name for LogType 'file' parameter.
 #
-LogFile=<%= @logfile %><% end %>
+LogFile=<%= @logfile %>
 
-<% else %>
-<% if @logfile %>
-### Option: LogFile
-#	Name of log file.
-#	If not set, syslog is used.
-#
-LogFile=<%= @logfile %><% end %>
-<% end %>
-
-<% if @logfilesize %>
 ### Option: LogFileSize
 #	Maximum size of log file in MB.
 #	0 - disable automatic log rotation.
 #
-LogFileSize=<%= @logfilesize %><% end %>
+LogFileSize=<%= @logfilesize %><% end -%>
 
 ### Option: DebugLevel
 #	Specifies debug level
@@ -50,9 +39,7 @@ LogFileSize=<%= @logfilesize %><% end %>
 #	2 - error information
 #	3 - warnings
 #	4 - for debugging (produces lots of information)
-<% if @zabbix_version.to_f >= 3.0 %>
 #	5 - extended debugging (produces even more information)
-<% end %>
 DebugLevel=<%= @debuglevel %>
 
 
@@ -61,12 +48,40 @@ DebugLevel=<%= @debuglevel %>
 #
 <% if @sourceip %>SourceIP=<%= @sourceip %><% end %>
 
+<% if @zabbix_version.to_f >= 5.0 %>
+### Option: AllowKey
+#       Allow execution of item keys matching pattern.
+#       Multiple keys matching rules may be defined in combination with DenyKey.
+#       Key pattern is wildcard expression, which support "*" character to match any number of any characters in certain position.
+#       It might be used in both key name and key arguments.
+#       Parameters are processed one by one according their appearance order.
+#       If no AllowKey or DenyKey rules defined, all keys are allowed.
+#
+# Mandatory: no
+<% if @allowkey %>AllowKey=<%= @allowkey -%><% end %>
+
+### Option: DenyKey
+#       Deny execution of items keys matching pattern.
+#       Multiple keys matching rules may be defined in combination with AllowKey.
+#       Key pattern is wildcard expression, which support "*" character to match any number of any characters in certain position.
+#       It might be used in both key name and key arguments.
+#       Parameters are processed one by one according their appearance order.
+#       If no AllowKey or DenyKey rules defined, all keys are allowed.
+#       Unless another system.run[*] rule is specified DenyKey=system.run[*] is added by default.
+#
+# Mandatory: no
+# Default:
+<% if @denykey %>DenyKey=<%= @denykey -%><% end %>
+<% end %>
+
+<% if @zabbix_version.to_f < 5.0 %>
 ### Option: EnableRemoteCommands
 #	Whether remote commands from Zabbix server are allowed.
 #	0 - not allowed
 #	1 - allowed
 #
 EnableRemoteCommands=<%= @enableremotecommands %>
+<% end %>
 
 ### Option: LogRemoteCommands
 #	Enable logging of executed shell commands as warnings.
@@ -218,7 +233,7 @@ Timeout=<%= @timeout %>
 AllowRoot=<%= @allowroot %>
 <% end %>
 
-<% if @zabbix_version.to_f >= 2.4 and @kernel != 'windows' %>
+<% if @kernel != 'windows' %>
 ### Option: User
 #	Drop privileges to a specific, existing user on the system.
 #	Only has effect if run as 'root' and AllowRoot is disabled.
@@ -253,7 +268,7 @@ UnsafeUserParameters=<%= @unsafeuserparameters %>
 # 	Disabled. A configuration file should be placed on directory: <%= @include %>
 
 ####### LOADABLE MODULES #######
-<% if @zabbix_version.to_f >= 2.4  and @kernel != 'windows' %>
+<% if @kernel != 'windows' %>
 ### Option: LoadModulePath
 #	Full path to location of agent modules.
 #	Default depends on compilation options.
@@ -269,7 +284,6 @@ LoadModulePath=<%= @loadmodulepath %>
 #
 <% if @loadmodule %>LoadModule=<%= @loadmodule %><% end %>
 
-<% if @zabbix_version.to_f >= 3.0 %>
 ####### TLS-RELATED PARAMETERS #######
 
 ### Option: TLSConnect
@@ -360,4 +374,70 @@ LoadModulePath=<%= @loadmodulepath %>
 # Default:
 # TLSPSKFile=
 <% if @tlspskfile %>TLSPSKFile=<%= @tlspskfile %><% end %>
+
+<% if @zabbix_version.to_f >= 5.0 %>
+### Option: TLSCipherCert13
+#       Cipher string for OpenSSL 1.1.1 or newer in TLS 1.3.
+#       Override the default ciphersuite selection criteria for certificate-based encryption.
+#
+# Mandatory: no
+# Default:
+<% if @tlsciphercert13 %>TLSCipherCert13=<%= @tlsciphercert13 %><% end %>
+
+### Option: TLSCipherCert
+#       GnuTLS priority string or OpenSSL (TLS 1.2) cipher string.
+#       Override the default ciphersuite selection criteria for certificate-based encryption.
+#       Example for GnuTLS:
+#               NONE:+VERS-TLS1.2:+ECDHE-RSA:+RSA:+AES-128-GCM:+AES-128-CBC:+AEAD:+SHA256:+SHA1:+CURVE-ALL:+COMP-NULL:+SIGN-ALL:+CTYPE-X.509
+#       Example for OpenSSL:
+#               EECDH+aRSA+AES128:RSA+aRSA+AES128
+#
+# Mandatory: no
+# Default:
+<% if @tlsciphercert %>TLSCipherCert=<%= @tlsciphercert %><% end %>
+
+### Option: TLSCipherPSK13
+#       Cipher string for OpenSSL 1.1.1 or newer in TLS 1.3.
+#       Override the default ciphersuite selection criteria for PSK-based encryption.
+#       Example:
+#               TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256
+#
+# Mandatory: no
+# Default:
+<% if @tlscipherpsk13 %>TLSCipherPSK13=<%= @tlscipherpsk13 %><% end %>
+
+### Option: TLSCipherPSK
+#       GnuTLS priority string or OpenSSL (TLS 1.2) cipher string.
+#       Override the default ciphersuite selection criteria for PSK-based encryption.
+#       Example for GnuTLS:
+#               NONE:+VERS-TLS1.2:+ECDHE-PSK:+PSK:+AES-128-GCM:+AES-128-CBC:+AEAD:+SHA256:+SHA1:+CURVE-ALL:+COMP-NULL:+SIGN-ALL
+#       Example for OpenSSL:
+#               kECDHEPSK+AES128:kPSK+AES128
+#
+# Mandatory: no
+# Default:
+<% if @tlscipherpsk %>TLSCipherPSK=<%= @tlscipherpsk %><% end %>
+
+### Option: TLSCipherAll13
+#       Cipher string for OpenSSL 1.1.1 or newer in TLS 1.3.
+#       Override the default ciphersuite selection criteria for certificate- and PSK-based encryption.
+#       Example:
+#               TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256
+#
+# Mandatory: no
+# Default:
+<% if @tlscipherall13 %>TLSCipherAll13=<%= @tlscipherall13 %><% end %>
+
+### Option: TLSCipherAll
+#       GnuTLS priority string or OpenSSL (TLS 1.2) cipher string.
+#       Override the default ciphersuite selection criteria for certificate- and PSK-based encryption.
+#       Example for GnuTLS:
+#               NONE:+VERS-TLS1.2:+ECDHE-RSA:+RSA:+ECDHE-PSK:+PSK:+AES-128-GCM:+AES-128-CBC:+AEAD:+SHA256:+SHA1:+CURVE-ALL:+COMP-NULL:+SIGN-ALL:+CTYPE-X.509
+#       Example for OpenSSL:
+#               EECDH+aRSA+AES128:RSA+aRSA+AES128:kECDHEPSK+AES128:kPSK+AES128
+#
+# Mandatory: no
+# Default:
+<% if @tlscipherall %>TLSCipherAll=<%= @tlscipherall %><% end %>
+
 <% end %>

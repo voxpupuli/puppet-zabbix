@@ -1,47 +1,12 @@
-# == Class: zabbix::zapache
-#
-#  This will install and configure the zapache monitoring script
-#  Upstream: https://github.com/lorf/zapache
-#
-# === Requirements
-#
-# Must import zapache-template.xml and zapache-template-active.xml
-# Using the Zabbix web portal
-# Note: I believe this can be automated via the API but have not done s.
-#
-# Must bind "Template App Apache Web Server zapache" OR "Template App Apache Web Server zapache Agent Active"
-# to the node.
-#
-# manage_resources must be true.
-#
-# Otherwise, no requirements
-#
-# === Parameters
-#
-# [*apache_status*]
-#   Boolean. False by default. Installs zapache monitoring script when true.
-#
-# === Example
-#
-#  Basic installation:
+# @summary This will install and configure the zapache monitoring script Upstream: https://github.com/lorf/zapache
+# @param apache_status Boolean. False by default. Installs zapache monitoring script when true.
+# @example Basic installation:
 #  class { 'zabbix::agent':
 #    manage_resources => true,
 #    apache_status    => true,
 #    zbx_templates    => [ 'Template App Apache Web Server zapache'],
 #  }
-#
-#
-# === Authors
-#
-# Author Name: rob@roberttisdale.com
-#
-# === Copyright
-#
-# The MIT License (MIT)
-# Copyright (c) [2015] [Robert Tisdale]
-#
-
-# Check if apache_status is true, installs Zapache scripts. Defaults to false.
+# @author Robert Tisdale <rob@roberttisdale.com>
 class zabbix::zapache (
   Boolean $apache_status = $zabbix::params::apache_status,
 ) inherits zabbix::params {

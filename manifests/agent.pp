@@ -1,245 +1,137 @@
-# == Class: zabbix::agent
-#
-#  This will install and configure the zabbix-agent deamon
-#
-# === Requirements
-#
-#  If 'manage_resources' is set to true, you'll need to configure
-#  storeconfigs/exported resources.
-#
-#  Otherwise no requirements.
-#
-# === Parameters
-#
-# [*zabbix_version*]
-#   This is the zabbix version.
-#
-# [*zabbix_package_state*]
-#   The state of the package that needs to be installed: present or latest.
-#   Default: present
-#
-# [*zabbix_package_agent*]
-#   The name of the agent package that we manage
-#
-# [*manage_firewall*]
-#   When true, it will create iptables rules.
-#
-# [*manage_repo*]
-#   When true, it will create repository for installing the agent.
-#
-# [*manage_choco*]
+# @summary This will install and configure the zabbix-agent deamon
+# @param zabbix_version This is the zabbix version.
+# @param zabbix_package_state The state of the package that needs to be installed: present or latest.
+# @param zabbix_package_agent The name of the agent package that we manage
+# @param manage_firewall When true, it will create iptables rules.
+# @param manage_repo When true, it will create repository for installing the agent.
+# @param manage_choco
 #   When true on windows, it will use chocolatey to install the agent.
 #   The module chocolatey is required https://forge.puppet.com/puppetlabs/chocolatey.
-#
-# [*zabbix_package_provider*]
+# @param zabbix_package_provider
 #   Which package's provider to use to install the agent.
 #   It is undef for all linux os and set to 'chocolatey' on windows.
-#
-# [*manage_resources*]
+# @param manage_resources
 #   When true, it will export resources to something like puppetdb.
 #   When set to true, you'll need to configure 'storeconfigs' to make
 #   this happen. Default is set to false, as not everyone has this
 #   enabled.
-#
-# [*monitored_by_proxy*]
+# @param monitored_by_proxy
 #   When this is monitored by an proxy, please fill in the name of this proxy.
 #   If the proxy is also installed via this module, please fill in the FQDN
-#
-# [*agent_use_ip*]
+# @param agent_use_ip
 #   When true, when creating hosts via the zabbix-api, it will configure that
 #   connection should me made via ip, not fqdn.
-#
-# [*zbx_group*]
-#   Deprecated! Name of the hostgroup where this host needs to be added.
-#
-# [*zbx_groups*]
-#   An array of hostgroups where this host needs to be added.
-#
-# [*zbx_templates*]
-#   List of templates which will be added when host is configured.
-#
-# [*zbx_macros*]
-#   List of macros which will be added when host is configured.
-#
-# [*zbx_interface_type*]
-#   Integer specifying type of interface to be created
-#
-# [*agent_configfile_path*]
-#   Agent config file path defaults to /etc/zabbix/zabbix_agentd.conf
-#
-# [*pidfile*]
-#   Name of pid file.
-#
-# [*logfile*]
-#   Name of log file.
-#
-# [*logfilesize*]
-#   Maximum size of log file in MB.
-#
-# [*debuglevel*]
-#   Specifies debug level.
-#
-# [*sourceip*]
-#   Source ip address for outgoing connections.
-#
-# [*enableremotecommands*]
-#   Whether remote commands from zabbix server are allowed.
-#
-# [*logremotecommands*]
-#   Enable logging of executed shell commands as warnings.
-#
-# [*server*]
-#   List of comma delimited ip addresses (or hostnames) of zabbix servers.
-#
-# [*listenport*]
-#   Agent will listen on this port for connections from the server.
-#
-# [*listenip*]
+# @param zbx_group *Deprecated* (see zbx_groups) Name of the hostgroup where this host needs to be added.
+# @param zbx_groups An array of hostgroups where this host needs to be added.
+# @param zbx_group_create Whether to create hostgroup if missing.
+# @param zbx_templates List of templates which will be added when host is configured.
+# @param zbx_macros List of macros which will be added when host is configured.
+# @param zbx_interface_type Integer specifying type of interface to be created.
+# @param zbx_interface_details Hash with interface details for SNMP when interface type is 2.
+# @param agent_configfile_path Agent config file path defaults to /etc/zabbix/zabbix_agentd.conf.
+# @param pidfile Name of pid file.
+# @param servicename Zabbix's agent service name.
+# @param logfile Name of log file.
+# @param logfilesize Maximum size of log file in MB.
+# @param logtype Specifies where log messages are written to. Can be one of: console, file, system.
+# @param debuglevel Specifies debug level.
+# @param sourceip Source ip address for outgoing connections.
+# @param allowkey Allow execution of item keys matching pattern.
+# @param denykey Deny execution of items keys matching pattern.
+# @param enableremotecommands Whether remote commands from zabbix server are allowed.
+# @param logremotecommands Enable logging of executed shell commands as warnings.
+# @param server List of comma delimited ip addresses (or hostnames) of zabbix servers.
+# @param listenport Agent will listen on this port for connections from the server.
+# @param listenip
 #   List of comma delimited ip addresses that the agent should listen on.
 #   You can also specify which network interface it should listen on.
 #
-#   Example:
 #   listenip => 'eth0',  or
 #   listenip => 'bond0.73',
 #
 #   It will find out which ip is configured for this ipaddress. Can be handy
 #   if more than 1 interface is on the server.
 #
-# [*startagents*]
-#   Number of pre-forked instances of zabbix_agentd that process passive checks.
-#
-# [*serveractive*]
-#   List of comma delimited ip:port (or hostname:port) pairs of zabbix servers for active checks.
-#
-# [*service_ensure*]
-#   Start / stop the agent service. E.g. to preconfigure a hosts agent and turn on the service
-#   at a later time (when the server reaches production SLA)
-#   Default: 'running'
-#
-# [*service_enable*]
-#   Automatically start the agent on system boot
-#   Default: true
-#
-# [*hostname*]
-#   Unique, case sensitive hostname.
-#
-# [*hostnameitem*]
-#   Item used for generating hostname if it is undefined.
-#
-# [*hostmetadata*]
-#   Optional parameter that defines host metadata.
-#
-# [*hostmetadataitem*]
-#   Optional parameter that defines an item used for getting host metadata.
-#
-# [*hostinterface*]
+# @param startagents Number of pre-forked instances of zabbix_agentd that process passive checks.
+# @param serveractive List of comma delimited ip:port (or hostname:port) pairs of zabbix servers for active checks.
+# @param service_ensure Start / stop the agent service. E.g. to preconfigure a hosts agent and turn on the service at a later time (when the server reaches production SLA)
+# @param service_enable Automatically start the agent on system boot
+# @param hostname Unique, case sensitive hostname.
+# @param hostnameitem Zabbix item used for generating hostname if it is undefined.
+# @param hostmetadata Optional parameter that defines host metadata.
+# @param hostmetadataitem Optional parameter that defines a zabbix item used for getting host metadata.
+# @param hostinterface
 #   Optional parameter that defines host metadata. Host metadata is used only at host
 #   auto-registration process (active agent).
-#
-# [*hostinterfaceitem*]
+# @param hostinterfaceitem
 #   Optional parameter that defines an item used for getting host interface.
 #   Host interface is used at host auto-registration process.
-#
-# [*refreshactivechecks*]
-#   How often list of active checks is refreshed, in seconds.
-#
-# [*buffersend*]
-#   Do not keep data longer than n seconds in buffer.
-#
-# [*buffersize*]
-#   Maximum number of values in a memory buffer.
-#
-# [*maxlinespersecond*]
-#   Maximum number of new lines the agent will send per second to zabbix server
-#   or proxy processing.
-#
-# [*allowroot*]
-#   Allow the agent to run as 'root'.
-#
-# [*zabbix_user*]
-#   Drop privileges to a specific, existing user on the system.
-#   Only has effect if run as 'root' and AllowRoot is disabled.
-#
-# [*zabbix_alias*]
-#   Sets an alias for parameter.
-#
-# [*timeout*]
-#   Spend no more than timeout seconds on processing.
-#
-# [*tlsaccept*]
-#   What incoming connections to accept from Zabbix server. Used for a passive proxy, ignored on an active proxy.
-#
-# [*tlscafile*]
-#   Full pathname of a file containing the top-level CA(s) certificates for peer certificate verification.
-#
-# [*tlscertfile*]
-#   Full pathname of a file containing the proxy certificate or certificate chain.
-#
-# [*tlsconnect*]
-#   How the proxy should connect to Zabbix server. Used for an active proxy, ignored on a passive proxy.
-#
-# [*tlscrlfile*]
-#   Full pathname of a file containing revoked certificates.
-#
-# [*tlskeyfile*]
-#   Full pathname of a file containing the proxy private key.
-#
-# [*tlspskfile*]
-#   Full pathname of a file containing the pre-shared key.
-#
-# [*tlspskidentity*]
-#   Unique, case sensitive string used to identify the pre-shared key.
-#
-# [*tlsservercertissuer*]
-#   Allowed server certificate issuer.
-#
-# [*tlsservercertsubject*]
-#   Allowed server certificate subject.
-#
-# [*include_dir*]
-#   You may include individual files or all files in a directory in the configuration file.
-#
-# [*unsafeuserparameters*]
-#   Allow all characters to be passed in arguments to user-defined parameters.
-#
-# [*userparameter*]
-#   User-defined parameter to monitor.
-#
-# [*loadmodulepath*]
-#   Full path to location of agent modules.
-#
-# [*loadmodule*]
-#   Module to load at agent startup.
-#
-# [*manage_startup_script*]
+# @param refreshactivechecks How often list of active checks is refreshed, in seconds.
+# @param buffersend Do not keep data longer than n seconds in buffer.
+# @param buffersize Maximum number of values in a memory buffer.
+# @param maxlinespersecond Maximum number of new lines the agent will send per second to zabbix server or proxy processing.
+# @param allowroot Allow the agent to run as 'root'.
+# @param zabbix_user Drop privileges to a specific, existing user on the system. Only has effect if run as 'root' and AllowRoot is disabled.
+# @param zabbix_alias Sets an alias for parameter.
+# @param timeout Spend no more than timeout seconds on processing.
+# @param tlsaccept What incoming connections to accept from Zabbix server. Used for a passive proxy, ignored on an active proxy.
+# @param tlscafile Full pathname of a file containing the top-level CA(s) certificates for peer certificate verification.
+# @param tlscertfile Full pathname of a file containing the proxy certificate or certificate chain.
+# @param tlsconnect How the proxy should connect to Zabbix server. Used for an active proxy, ignored on a passive proxy.
+# @param tlscrlfile Full pathname of a file containing revoked certificates.
+# @param tlskeyfile Full pathname of a file containing the proxy private key.
+# @param tlspskfile Full pathname of a file containing the pre-shared key.
+# @param tlspskidentity Unique, case sensitive string used to identify the pre-shared key.
+# @param tlscipherall
+#   GnuTLS priority string or OpenSSL (TLS 1.2) cipher string. Override the default ciphersuite selection criteria
+#   for certificate- and PSK-based encryption.
+# @param tlscipherall13
+#   Cipher string for OpenSSL 1.1.1 or newer in TLS 1.3. Override the default ciphersuite selection criteria
+#   for certificate- and PSK-based encryption.
+# @param tlsciphercert
+#   GnuTLS priority string or OpenSSL (TLS 1.2) cipher string. Override the default ciphersuite selection criteria
+#   for certificate-based encryption.
+# @param tlsciphercert13
+#   Cipher string for OpenSSL 1.1.1 or newer in TLS 1.3. Override the default ciphersuite selection criteria
+#   for certificate-based encryption.
+# @param tlscipherpsk
+#  GnuTLS priority string or OpenSSL (TLS 1.2) cipher string. Override the default ciphersuite selection criteria
+#  for PSK-based encryption.
+# @param tlscipherpsk13
+#  Cipher string for OpenSSL 1.1.1 or newer in TLS 1.3. Override the default ciphersuite selection criteria
+#  for PSK-based encryption.
+# @param tlsservercertissuer Allowed server certificate issuer.
+# @param tlsservercertsubject Allowed server certificate subject.
+# @param agent_config_owner The owner of Zabbix's agent config file.
+# @param agent_config_group The group of Zabbix's agent config file.
+# @param manage_selinux Whether the module should manage SELinux rules or not.
+# @param selinux_require An array of SELinux require {} rules.
+# @param selinux_rules A Hash of SELinux rules.
+# @param additional_service_params Additional parameters to pass to the service.
+# @param service_type Systemd service type
+# @param include_dir You may include individual files or all files in a directory in the configuration file.
+# @param include_dir_purge Include dir to purge.
+# @param unsafeuserparameters Allow all characters to be passed in arguments to user-defined parameters.
+# @param userparameter User-defined parameter to monitor.
+# @param loadmodulepath Full path to location of agent modules.
+# @param loadmodule Module to load at agent startup.
+# @param manage_startup_script
 #  If the init script should be managed by this module. Attention: This might
 #  cause problems with some config options of this module (e.g
 #  agent_configfile_path)
-#
-# === Example
-#
-#  Basic installation:
+# @example Basic installation:
 #  class { 'zabbix::agent':
-#    zabbix_version => '2.2',
+#    zabbix_version => '5.2',
 #    server         => '192.168.1.1',
 #  }
 #
-#  Exported resources:
+# @example With exported resources:
 #  class { 'zabbix::agent':
 #    manage_resources   => true,
 #    monitored_by_proxy => 'my_proxy_host',
 #    server             => '192.168.1.1',
 #  }
-#
-# === Authors
-#
-# Author Name: ikben@werner-dijkerman.nl
-#
-# === Copyright
-#
-# Copyright 2014 Werner Dijkerman
-#
-
+# @author Werner Dijkerman ikben@werner-dijkerman.nl
 class zabbix::agent (
   $zabbix_version                                 = $zabbix::params::zabbix_version,
   $zabbix_package_state                           = $zabbix::params::zabbix_package_state,
@@ -257,14 +149,17 @@ class zabbix::agent (
   $zbx_templates                                  = $zabbix::params::agent_zbx_templates,
   Array[Hash] $zbx_macros                         = [],
   Integer[1,4] $zbx_interface_type                = 1,
+  Hash[String, Any] $zbx_interface_details        = {},
   $agent_configfile_path                          = $zabbix::params::agent_configfile_path,
   $pidfile                                        = $zabbix::params::agent_pidfile,
   $servicename                                    = $zabbix::params::agent_servicename,
-  String $logtype                                 = $zabbix::params::agent_logtype,
+  Enum['console', 'file', 'system'] $logtype      = $zabbix::params::agent_logtype,
   Optional[Stdlib::Absolutepath] $logfile         = $zabbix::params::agent_logfile,
   $logfilesize                                    = $zabbix::params::agent_logfilesize,
   $debuglevel                                     = $zabbix::params::agent_debuglevel,
   $sourceip                                       = $zabbix::params::agent_sourceip,
+  Optional[String[1]] $allowkey                   = $zabbix::params::agent_allowkey,
+  Optional[String[1]] $denykey                    = $zabbix::params::agent_denykey,
   $enableremotecommands                           = $zabbix::params::agent_enableremotecommands,
   $logremotecommands                              = $zabbix::params::agent_logremotecommands,
   $server                                         = $zabbix::params::agent_server,
@@ -297,6 +192,12 @@ class zabbix::agent (
   $tlsaccept                                      = $zabbix::params::agent_tlsaccept,
   $tlscafile                                      = $zabbix::params::agent_tlscafile,
   $tlscertfile                                    = $zabbix::params::agent_tlscertfile,
+  Optional[String[1]] $tlscipherall               = $zabbix::params::agent_tlscipherall,
+  Optional[String[1]] $tlscipherall13             = $zabbix::params::agent_tlscipherall13,
+  Optional[String[1]] $tlsciphercert              = $zabbix::params::agent_tlsciphercert,
+  Optional[String[1]] $tlsciphercert13            = $zabbix::params::agent_tlsciphercert13,
+  Optional[String[1]] $tlscipherpsk               = $zabbix::params::agent_tlscipherpsk,
+  Optional[String[1]] $tlscipherpsk13             = $zabbix::params::agent_tlscipherpsk13,
   $tlsconnect                                     = $zabbix::params::agent_tlsconnect,
   $tlscrlfile                                     = $zabbix::params::agent_tlscrlfile,
   $tlskeyfile                                     = $zabbix::params::agent_tlskeyfile,
@@ -313,30 +214,10 @@ class zabbix::agent (
   String $service_type                            = $zabbix::params::service_type,
   Boolean $manage_startup_script                  = $zabbix::params::manage_startup_script,
 ) inherits zabbix::params {
-  # the following two codeblocks are a bit blargh. The correct default value for
-  # $real_additional_service_params and $type changes based on the value of $zabbix_version
-  # We handle this in the params.pp, but that doesn't work if somebody provides a specific
-  # value for $zabbix_version and overwrites our default :(
-  # the codeblocks set defaults for both variables if $zabbix_version got provided,
-  # but only if the variables aren't provided.
-
-  if $zabbix_version != $zabbix::params::zabbix_version and $additional_service_params == $zabbix::params::additional_service_params {
-    $real_additional_service_params = versioncmp($zabbix_version, '3.0') ? {
-      1  => '--foreground',
-      0  => '--foreground',
-      -1 => '',
+  if $facts['os']['family'] == 'Debian' and versioncmp($facts['os']['release']['major'], '11') == 0 {
+    if versioncmp($zabbix_version, '5.2') == 0 {
+      fail('Zabbix 5.2 is not supported on Debian 11!')
     }
-  } else {
-    $real_additional_service_params = $additional_service_params
-  }
-  if $zabbix_version != $zabbix::params::zabbix_version and $service_type == $zabbix::params::service_type {
-    $real_service_type = versioncmp($zabbix_version, '3.0') ? {
-      1  => 'simple',
-      0  => 'simple',
-      -1 => 'forking',
-    }
-  } else {
-    $real_service_type = $service_type
   }
 
   # Find if listenip is set. If not, we can set to specific ip or
@@ -378,16 +259,17 @@ class zabbix::agent (
     $_hostname = pick($hostname, $facts['networking']['fqdn'])
 
     class { 'zabbix::resources::agent':
-      hostname      => $_hostname,
-      ipaddress     => $listen_ip,
-      use_ip        => $agent_use_ip,
-      port          => $listenport,
-      groups        => [$groups].flatten(),
-      group_create  => $zbx_group_create,
-      templates     => $zbx_templates,
-      macros        => $zbx_macros,
-      interfacetype => $zbx_interface_type,
-      proxy         => $use_proxy,
+      hostname         => $_hostname,
+      ipaddress        => $listen_ip,
+      use_ip           => $agent_use_ip,
+      port             => $listenport,
+      groups           => [$groups].flatten(),
+      group_create     => $zbx_group_create,
+      templates        => $zbx_templates,
+      macros           => $zbx_macros,
+      interfacetype    => $zbx_interface_type,
+      interfacedetails => $zbx_interface_details,
+      proxy            => $use_proxy,
     }
   }
 
@@ -422,8 +304,8 @@ class zabbix::agent (
       pidfile                   => $pidfile,
       agent_configfile_path     => $agent_configfile_path,
       zabbix_user               => $zabbix_user,
-      additional_service_params => $real_additional_service_params,
-      service_type              => $real_service_type,
+      additional_service_params => $additional_service_params,
+      service_type              => $service_type,
       service_name              => 'zabbix-agent',
       require                   => Package[$zabbix_package_agent],
     }
@@ -436,11 +318,16 @@ class zabbix::agent (
     }
   }
 
+  $service_require = $manage_startup_script ? {
+    true  => [Package[$zabbix_package_agent], Zabbix::Startup[$servicename]],
+    false => Package[$zabbix_package_agent]
+  }
+
   # Controlling the 'zabbix-agent' service
   service { $servicename:
     ensure  => $service_ensure,
     enable  => $service_enable,
-    require => Package[$zabbix_package_agent],
+    require => $service_require,
   }
 
   # Override the service provider on AIX

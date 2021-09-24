@@ -5,7 +5,7 @@ describe 'zabbix::sender' do
     'agent.example.com'
   end
 
-  on_supported_os.each do |os, facts|
+  on_supported_os(baseline_os_hash).each do |os, facts|
     next if facts[:os]['name'] == 'windows'
     context "on #{os} " do
       let :facts do
@@ -30,12 +30,7 @@ describe 'zabbix::sender' do
         if %w[Archlinux Gentoo].include?(facts[:osfamily])
           it { is_expected.not_to compile.with_all_deps }
         else
-          zabbix_version = if facts[:os]['name'] == 'Debian' && facts[:os]['release']['major'].to_i == 10
-                             '4.0'
-                           else
-                             '3.4'
-                           end
-          it { is_expected.to contain_class('zabbix::repo').with_zabbix_version(zabbix_version) }
+          it { is_expected.to contain_class('zabbix::repo').with_zabbix_version('5.0') }
           it { is_expected.to contain_package('zabbix-sender').with_require('Class[Zabbix::Repo]') }
         end
 

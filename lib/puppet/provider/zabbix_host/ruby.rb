@@ -8,7 +8,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
       method: 'host.get',
       params: {
         selectParentTemplates: ['host'],
-        selectInterfaces: %w[interfaceid type main ip port useip],
+        selectInterfaces: %w[interfaceid type main ip port useip details],
         selectGroups: ['name'],
         selectMacros: %w[macro value],
         output: %w[host proxy_hostid]
@@ -35,7 +35,8 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
         templates: h['parentTemplates'].map { |x| x['host'] },
         macros: h['macros'].map { |macro| { macro['macro'] => macro['value'] } },
         proxy: proxy_select,
-        interfacetype: interface['type'].to_i
+        interfacetype: interface['type'].to_i,
+        interfacedetails: interface['details']
       )
     end
   end
@@ -68,7 +69,8 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
           ip: @resource[:ipaddress],
           dns: @resource[:hostname],
           port: @resource[:port],
-          useip: @resource[:use_ip] ? 1 : 0
+          useip: @resource[:use_ip] ? 1 : 0,
+          details: @resource[:interfacedetails].nil? ? {} : @resource[:interfacedetails]
         }
       ],
       templates: templates,
@@ -153,6 +155,16 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
       params: {
         interfaceid: @property_hash[:interfaceid],
         type: int
+      }
+    )
+  end
+
+  def interfacedetails=(hash)
+    zbx.query(
+      method: 'hostinterface.update',
+      params: {
+        interfaceid: @property_hash[:interfaceid],
+        details: hash
       }
     )
   end

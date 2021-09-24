@@ -1,17 +1,7 @@
-# == Define zabbix::resources::userparameters
-#
-# This will create an resources into puppetdb
-# for automatically configuring agent into
-# zabbix front-end.
-#
-# === Requirements
-#
-# Nothing.
-#
-# When manage_resource is set to true, this class
-# will be loaded from 'zabbix::userparameters'. So
-# no need for loading this class manually.
-#
+# @summary This will create resources into puppetdb for automatically configuring agent into zabbix front-end.
+# @param ensure Ensure resource.
+# @param hostname Hostname of the machine.
+# @param template Template which should be attached to this host.
 define zabbix::resources::userparameters (
   $ensure,
   $hostname,

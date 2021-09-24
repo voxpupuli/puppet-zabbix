@@ -51,7 +51,8 @@ class Puppet::Provider::Zabbix < Puppet::Provider
       user: api_config['default']['zabbix_user'],
       password: api_config['default']['zabbix_pass'],
       http_user: api_config['default']['zabbix_user'],
-      http_password: api_config['default']['zabbix_pass']
+      http_password: api_config['default']['zabbix_pass'],
+      ignore_version: true
     )
     zbx
   end

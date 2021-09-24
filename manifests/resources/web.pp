@@ -1,17 +1,8 @@
-# == Class zabbix::resources::server
-#
-# This will load all zabbix related items from
-# the puppet database and uses the zabbixapi
-# gem to add/configure hosts via the zabbix-api
-#
-# === Requirements
-#
-# Nothing.
-#
-# When manage_resource is set to true, this class
-# will be loaded from 'zabbix::server'. So no need
-# for loading this class manually.
-#
+# @summary This will load all zabbix related items from the puppet database and uses the zabbixapi gem to add/configure hosts via the zabbix-api
+# @param zabbix_url Url on which zabbix is available.
+# @param zabbix_user API username.
+# @param zabbix_pass API password.
+# @param apache_use_ssl Whether to use ssl or not.
 class zabbix::resources::web (
   String[1] $zabbix_url,
   String[1] $zabbix_user,

@@ -50,7 +50,6 @@ ListenPort=<%= @listenport %>
 # SourceIP=
 <% if @sourceip %>SourceIP=<%= @sourceip %><% end %>
 
-<% if @zabbix_version.to_f >= 3.0 -%>
 ### Option: LogType
 #	Specifies where log messages are written to:
 #		system  - syslog
@@ -59,24 +58,17 @@ ListenPort=<%= @listenport %>
 #
 <% if @logtype %>LogType=<%= @logtype %><% end %>
 
+<% if @logtype == 'file' -%>
 ### Option: LogFile
 #	Log file name for LogType 'file' parameter.
 #
 LogFile=<%= @logfile %>
 
-<% else %>
-### Option: LogFile
-#	Name of log file.
-#	If not set, syslog is used.
-#
-LogFile=<%= @logfile %>
-<% end %>
-
 ### Option: LogFileSize
 #	Maximum size of log file in MB.
 #	0 - disable automatic log rotation.
 #
-LogFileSize=<%= @logfilesize %>
+LogFileSize=<%= @logfilesize %><% end -%>
 
 ### Option: DebugLevel
 #	Specifies debug level
@@ -85,9 +77,7 @@ LogFileSize=<%= @logfilesize %>
 #	2 - error information
 #	3 - warnings
 #	4 - for debugging (produces lots of information)
-<% if @zabbix_version.to_f >= 3.0 %>
 #	5 - extended debugging (produces even more information)
-<% end %>
 DebugLevel=<%= @debuglevel %>
 
 ### Option: PidFile
@@ -146,7 +136,6 @@ DBPassword=<%= @database_password %>
 #
 <% if @database_port %>DBPort=<%= @database_port %><% end %>
 
-<% if @zabbix_version.to_f >= 3.4 %>
 ### Option: EnableRemoteCommands
 #	Whether remote commands from Zabbix server are allowed.
 #	0 - not allowed
@@ -160,7 +149,6 @@ EnableRemoteCommands=<%= @enableremotecommands %>
 #	1 - enabled
 #
 LogRemoteCommands=<%= @logremotecommands %>
-<% end %>
 
 ######### PROXY SPECIFIC PARAMETERS #############
 
@@ -214,6 +202,16 @@ StartIPMIPollers=<%= @startipmipollers %>
 #	are started.
 #
 StartPollersUnreachable=<%= @startpollersunreachable %>
+
+### Option: StartPreprocessors
+#       Number of pre-forked instances of preprocessing workers.
+#               The preprocessing manager process is automatically started when preprocessor worker is started.
+#
+# Mandatory: no
+# Range: 1-1000
+# Default:
+# StartPreprocessors=3
+<% if @startpreprocessors %>StartPreprocessors=<%= @startpreprocessors -%><% end %>
 
 ### Option: StartTrappers
 #	Number of pre-forked instances of trappers.
@@ -281,15 +279,6 @@ VMwareCacheSize=<%= @vmwarecachesize %>
 #
 <% if @vmwaretimeout %>VMwareTimeout=<%= @vmwaretimeout %><% end %>
 
-<% if @zabbix_version.to_f < 2.4 %>
-### Option: EnableSNMPBulkRequests
-#	Enable or disable SNMP bulk requests.
-#	0 - disable
-#	1 - enable
-#
-<% if @enablesnmpbulkrequests %>EnableSNMPBulkRequests=<%= @enablesnmpbulkrequests %><% end %>
-<% end %>
-
 ### Option: SNMPTrapperFile
 #	Temporary file used for passing data from SNMP trap daemon to the proxy.
 #	Must be the same as in zabbix_trap_receiver.pl or SNMPTT configuration file.
@@ -313,11 +302,9 @@ StartSNMPTrapper=<%= @snmptrapper %>
 #	To prevent Housekeeper from being overloaded, no more than 4 times HousekeepingFrequency
 #	hours of outdated information are deleted in one housekeeping cycle.
 #	To lower load on proxy startup housekeeping is postponed for 30 minutes after proxy start.
-<% if @zabbix_version.to_f >= 3.0 %>
 #	With HousekeepingFrequency=0 the housekeeper can be only executed using the runtime control option.
 #	In this case the period of outdated information deleted in one housekeeping cycle is 4 times the
 #	period since the last housekeeping cycle, but not less than 4 hours and not greater than 4 days.
-<% end %>
 #
 HousekeepingFrequency=<%= @housekeepingfrequency %>
 
@@ -338,21 +325,11 @@ StartDBSyncers=<%= @startdbsyncers %>
 #
 HistoryCacheSize=<%= @historycachesize %>
 
-<% if @zabbix_version.to_f <= 2.4 %>
-### Option: HistoryTextCacheSize
-#   Size of text history cache, in bytes.
-#   Shared memory size for storing character, text or log history data.
-#
-HistoryTextCacheSize=<%= @historytextcachesize %>
-<% end %>
-
-<% if @zabbix_version.to_f >= 3.0 %>
 ### Option: HistoryIndexCacheSize
 #   Size of history index cache, in bytes.
 #   Shared memory size for indexing history cache.
 #
 <% if @historyindexcachesize %>HistoryIndexCacheSize=<%= @historyindexcachesize %><% end %>
-<% end %>
 
 ### Option: Timeout
 #	Specifies how long we wait for agent, SNMP device or external check (in seconds).
@@ -424,13 +401,11 @@ TmpDir=<%= @tmpdir %>
 #
 AllowRoot=<%= @allowroot %>
 
-<% if @zabbix_version.to_f >= 2.4 %>
 ### Option: User
 #	Drop privileges to a specific, existing user on the system.
 #	Only has effect if run as 'root' and AllowRoot is disabled.
 #
 <% if @zabbix_user %>User=<%= @zabbix_user %><% end %>
-<% end %>
 
 ### Option: Include
 #	You may include individual files or all files in a directory in the configuration file.
@@ -438,26 +413,24 @@ AllowRoot=<%= @allowroot %>
 #
 Include=<%= @include_dir %>
 
-<% if @zabbix_version.to_f >= 2.4 %>
 ### Option: SSLCertLocation
 #	Location of SSL client certificates.
 #	This parameter is used only in web monitoring.
 #
-<% if @sslcertlocation %>SSLCertLocation=<%= @sslcertlocation %><% end %>
+<% if @sslcertlocation_dir %>SSLCertLocation=<%= @sslcertlocation_dir %><% end %>
 
 ### Option: SSLKeyLocation
 #	Location of private keys for SSL client certificates.
 #	This parameter is used only in web monitoring.
 #
-<% if @sslkeylocation %>SSLKeyLocation=<%= @sslkeylocation %><% end %>
+<% if @sslkeylocation_dir %>SSLKeyLocation=<%= @sslkeylocation_dir %><% end %>
 
 ### Option: SSLCALocation
 #	Location of certificate authority (CA) files for SSL server certificate verification.
 #	If not set, system-wide directory will be used.
 #	This parameter is used only in web monitoring.
 #
-<% if @sslcalocation %>SSLCALocation=<%= @sslcalocation %><% end %>
-<% end %>
+<% if @sslcalocation_dir %>SSLCALocation=<%= @sslcalocation_dir %><% end %>
 
 ####### LOADABLE MODULES #######
 
@@ -475,8 +448,6 @@ LoadModulePath=<%= @loadmodulepath %>
 #
 <% if @loadmodule %>LoadModule=<%= @loadmodule %><% end %>
 
-
-<% if @zabbix_version.to_f >= 3.0 %>
 ####### TLS-RELATED PARAMETERS #######
 
 ### Option: TLSConnect
@@ -544,4 +515,164 @@ LoadModulePath=<%= @loadmodulepath %>
 #
 <% if @tlspskfile %>TLSPSKFile=<%= @tlspskfile %><% end %>
 
+####### For advanced users - TLS ciphersuite selection criteria #######
+<% if @zabbix_version.to_f >= 5.0 %>
+### Option: DBTLSConnect
+#       Setting this option enforces to use TLS connection to database.
+#       required    - connect using TLS
+#       verify_ca   - connect using TLS and verify certificate
+#       verify_full - connect using TLS, verify certificate and verify that database identity specified by DBHost
+#                     matches its certificate
+#       On MySQL starting from 5.7.11 and PostgreSQL following values are supported: "required", "verify_ca" and
+#       "verify_full".
+#       On MariaDB starting from version 10.2.6 "required" and "verify_full" values are supported.
+#       Default is not to set any option and behavior depends on database configuration
+#
+# Mandatory: no
+# Default:
+<% if @database_tlsconnect %>DBTLSConnect=<%= @database_tlsconnect %><% end %>
+
+### Option: DBTLSCAFile
+#       Full pathname of a file containing the top-level CA(s) certificates for database certificate verification.
+#       Supported only for MySQL and PostgreSQL
+#
+# Mandatory: no
+#       (yes, if DBTLSConnect set to one of: verify_ca, verify_full)
+# Default:
+<% if @database_tlscafile %>DBTLSCAFile=<%= @database_tlscafile %><% end %>
+
+### Option: DBTLSCertFile
+#       Full pathname of file containing Zabbix server certificate for authenticating to database.
+#       Supported only for MySQL and PostgreSQL
+#
+# Mandatory: no
+# Default:
+<% if @database_tlscertfile %>DBTLSCertFile=<%= @database_tlscertfile %><% end %>
+
+### Option: DBTLSKeyFile
+#       Full pathname of file containing the private key for authenticating to database.
+#       Supported only for MySQL and PostgreSQL
+#
+# Mandatory: no
+# Default:
+<% if @database_tlskeyfile %>DBTLSKeyFile=<%= @database_tlskeyfile %><% end %>
+
+### Option: DBTLSCipher
+#       The list of encryption ciphers that Zabbix server permits for TLS protocols up through TLSv1.2
+#       Supported only for MySQL
+#
+# Mandatory no
+# Default:
+<% if @database_tlscipher %>DBTLSCipher=<%= @database_tlscipher %><% end %>
+
+### Option: DBTLSCipher13
+#       The list of encryption ciphersuites that Zabbix server permits for TLSv1.3 protocol
+#       Supported only for MySQL, starting from version 8.0.16
+#
+# Mandatory no
+# Default:
+<% if @database_tlscipher13 %>DBTLSCipher13=<%= @database_tlscipher13 %><% end %>
+<% end %>
+
+<% if @zabbix_version.to_f >= 5.0 %>
+### Option: TLSCipherCert13
+#       Cipher string for OpenSSL 1.1.1 or newer in TLS 1.3.
+#       Override the default ciphersuite selection criteria for certificate-based encryption.
+#
+# Mandatory: no
+# Default:
+# TLSCipherCert13=
+<% if @tlsciphercert13 %>TLSCipherCert13=<%= @tlsciphercert13 %><% end %>
+
+### Option: TLSCipherCert
+#       GnuTLS priority string or OpenSSL (TLS 1.2) cipher string.
+#       Override the default ciphersuite selection criteria for certificate-based encryption.
+#       Example for GnuTLS:
+#               NONE:+VERS-TLS1.2:+ECDHE-RSA:+RSA:+AES-128-GCM:+AES-128-CBC:+AEAD:+SHA256:+SHA1:+CURVE-ALL:+COMP-NULL:+SIGN-ALL:+CTYPE-X.509
+#       Example for OpenSSL:
+#               EECDH+aRSA+AES128:RSA+aRSA+AES128
+#
+# Mandatory: no
+# Default:
+# TLSCipherCert=
+<% if @tlsciphercert %>TLSCipherCert=<%= @tlsciphercert %><% end %>
+
+### Option: TLSCipherPSK13
+#       Cipher string for OpenSSL 1.1.1 or newer in TLS 1.3.
+#       Override the default ciphersuite selection criteria for PSK-based encryption.
+#       Example:
+#               TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256
+#
+# Mandatory: no
+# Default:
+# TLSCipherPSK13=
+<% if @tlscipherpsk13 %>TLSCipherPSK13=<%= @tlscipherpsk13 %><% end %>
+
+### Option: TLSCipherPSK
+#       GnuTLS priority string or OpenSSL (TLS 1.2) cipher string.
+#       Override the default ciphersuite selection criteria for PSK-based encryption.
+#       Example for GnuTLS:
+#               NONE:+VERS-TLS1.2:+ECDHE-PSK:+PSK:+AES-128-GCM:+AES-128-CBC:+AEAD:+SHA256:+SHA1:+CURVE-ALL:+COMP-NULL:+SIGN-ALL
+#       Example for OpenSSL:
+#               kECDHEPSK+AES128:kPSK+AES128
+#
+# Mandatory: no
+# Default:
+# TLSCipherPSK=
+<% if @tlscipherpsk %>TLSCipherPSK=<%= @tlscipherpsk %><% end %>
+
+### Option: TLSCipherAll13
+#       Cipher string for OpenSSL 1.1.1 or newer in TLS 1.3.
+#       Override the default ciphersuite selection criteria for certificate- and PSK-based encryption.
+#       Example:
+#               TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256
+#
+# Mandatory: no
+# Default:
+# TLSCipherAll13=
+<% if @tlscipherall13 %>TLSCipherAll13=<%= @tlscipherall13 %><% end %>
+
+### Option: TLSCipherAll
+#       GnuTLS priority string or OpenSSL (TLS 1.2) cipher string.
+#       Override the default ciphersuite selection criteria for certificate- and PSK-based encryption.
+#       Example for GnuTLS:
+#               NONE:+VERS-TLS1.2:+ECDHE-RSA:+RSA:+ECDHE-PSK:+PSK:+AES-128-GCM:+AES-128-CBC:+AEAD:+SHA256:+SHA1:+CURVE-ALL:+COMP-NULL:+SIGN-ALL:+CTYPE-X.509
+#       Example for OpenSSL:
+#               EECDH+aRSA+AES128:RSA+aRSA+AES128:kECDHEPSK+AES128:kPSK+AES128
+#
+# Mandatory: no
+# Default:
+# TLSCipherAll13=
+<% if @tlscipherall %>TLSCipherAll=<%= @tlscipherall %><% end %>
+<% end %>
+
+<% if @zabbix_version.to_f >= 5.2 %>
+### Option: VaultToken
+#	Vault authentication token that should have been generated exclusively for Zabbix server with read only permission
+#	to paths specified in Vault macros and read only permission to path specified in optional VaultDBPath
+#	configuration parameter.
+#	It is an error if VaultToken and VAULT_TOKEN environment variable are defined at the same time.
+#
+# Mandatory: no
+# Default:
+# VaultToken=
+<% if @vaulttoken %>VaultToken=<%= @vaulttoken -%><% end %>
+
+### Option: VaultURL
+#	Vault server HTTP[S] URL. System-wide CA certificates directory will be used if SSLCALocation is not specified.
+#
+# Mandatory: no
+# Default:
+# VaultURL=https://127.0.0.1:8200
+<% if @vaulturl %>VaultURL=<%= @vaulturl -%><% end %>
+
+### Option: VaultDBPath
+#	Vault path from where credentials for database will be retrieved by keys 'password' and 'username'.
+#	Example: secret/zabbix/database
+#	This option can only be used if DBUser and DBPassword are not specified.
+#
+# Mandatory: no
+# Default:
+# VaultDBPath=
+<% if @vaultdbpath %>VaultDBPath=<%= @vaultdbpath -%><% end %>
 <% end %>
