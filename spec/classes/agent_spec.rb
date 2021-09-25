@@ -409,6 +409,26 @@ describe 'zabbix::agent' do
           it { is_expected.to contain_file(config_path).with_content %r{^LogFileSize=100$} }
         end
       end
+
+      context 'when declaring manage_choco is false with zabbix_package_source specified' do
+        if facts[:kernel] == 'windows'
+          let :params do
+            {
+              manage_choco: false,
+              zabbix_package_source: 'C:\\path\\to\\zabbix_installer.msi',
+              zabbix_package_provider: 'windows'
+            }
+          end
+
+          it do
+            is_expected.to contain_package(package_name).
+              with_ensure('present').
+              with_tag('zabbix').
+              with_provider('windows').
+              with_source('C:\\path\\to\\zabbix_installer.msi')
+          end
+        end
+      end
     end
   end
 end
