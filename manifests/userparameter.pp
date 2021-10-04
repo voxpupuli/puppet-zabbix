@@ -1,5 +1,5 @@
-# @summary This class can be used when you use hiera or The Foreman. With this tools you can't use and define. This make use of "create_resources".
-# @param data This is the data in YAML format
+# @summary Realise zabbix::userparameters with data from Hiera or The Foreman.
+# @param data
 # @example
 #   zabbix::userparameter::data:
 #     MySQL:
@@ -8,8 +8,7 @@
 class zabbix::userparameter (
   Hash $data = {},
 ) {
-  $_data = hiera_hash('zabbix::userparameter::data', $data)
-  $_data.each |$key,$value| {
+  $data.each |$key,$value| {
     zabbix::userparameters { $key:
       * => $value,
     }
