@@ -54,6 +54,7 @@ Puppet::Type.newtype(:zabbix_host) do
 
   newproperty(:interfacedetails) do
     desc 'Additional interface details.'
+
     def insync?(is)
       is.to_s == should.to_s
     end

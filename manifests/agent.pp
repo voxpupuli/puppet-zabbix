@@ -152,7 +152,7 @@ class zabbix::agent (
   $zbx_templates                                       = $zabbix::params::agent_zbx_templates,
   Array[Hash] $zbx_macros                              = [],
   Integer[1,4] $zbx_interface_type                     = 1,
-  Hash[String, Any] $zbx_interface_details             = {},
+  Variant[Array, Hash] $zbx_interface_details          = [],
   $agent_configfile_path                               = $zabbix::params::agent_configfile_path,
   $pidfile                                             = $zabbix::params::agent_pidfile,
   $servicename                                         = $zabbix::params::agent_servicename,
