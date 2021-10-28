@@ -39,5 +39,33 @@ Puppet::Type.newtype(:zabbix_template) do
     desc 'Zabbix version that the template will be installed on.'
   end
 
+  newparam(:delete_missing_applications, boolean: true) do
+    desc 'Delete applications from zabbix which are not in the template.'
+  end
+
+  newparam(:delete_missing_drules, boolean: true) do
+    desc 'Delete discovery rules from zabbix which are not in the template.'
+  end
+
+  newparam(:delete_missing_graphs, boolean: true) do
+    desc 'Delete graphs from zabbix which are not in the template.'
+  end
+
+  newparam(:delete_missing_httptests, boolean: true) do
+    desc 'Delete web scenarios from zabbix which are not in the template.'
+  end
+
+  newparam(:delete_missing_items, boolean: true) do
+    desc 'Delete items from zabbix which are not in the template.'
+  end
+
+  newparam(:delete_missing_templatescreens, boolean: true) do
+    desc 'Delete templateScreens from zabbix which are not in the template.'
+  end
+
+  newparam(:delete_missing_triggers, boolean: true) do
+    desc 'Delete triggers from zabbix which are not in the template.'
+  end
+
   autorequire(:file) { '/etc/zabbix/api.conf' }
 end
