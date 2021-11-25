@@ -328,20 +328,27 @@ class zabbix::web (
   # Is set to true, it will create the apache vhost.
   if $manage_vhost {
     include apache
-    if $facts['os']['family'] == 'RedHat' and versioncmp($facts['os']['release']['major'], '7') == 0 and versioncmp($zabbix_version, '5') >= 0 {
+    if $facts['os']['family'] == 'RedHat' and versioncmp($facts['os']['release']['major'], '7') >= 0 and versioncmp($zabbix_version, '5') >= 0 {
+      if versioncmp($facts['os']['release']['major'], '7') == 0 {
+        $fpm_service = 'rh-php72-php-fpm'
+        # PHP parameters are moved to /etc/opt/rh/rh-php72/php-fpm.d/zabbix.conf per package zabbix-web-deps-scl
+        $fpm_scl_prefix = '/opt/rh/rh-php72'
+      } else {
+        $fpm_service = 'php-fpm'
+        $fpm_scl_prefix = ''
+      }
       include apache::mod::proxy
       include apache::mod::proxy_fcgi
       $apache_vhost_custom_fragment = ''
 
-      service { 'rh-php72-php-fpm':
+      service { $fpm_service:
         ensure => 'running',
         enable => true,
       }
 
-      # PHP parameters are moved to /etc/opt/rh/rh-php72/php-fpm.d/zabbix.conf per package zabbix-web-deps-scl
-      file { '/etc/opt/rh/rh-php72/php-fpm.d/zabbix.conf':
+      file { "/etc${fpm_scl_prefix}/php-fpm.d/zabbix.conf":
         ensure  => file,
-        notify  => Service['rh-php72-php-fpm'],
+        notify  => Service[$fpm_service],
         content => epp('zabbix/web/php-fpm.d.zabbix.conf.epp'),
       }
 
@@ -354,7 +361,7 @@ class zabbix::web (
               'php',
               'phar',
             ],
-            handler => 'proxy:unix:/var/opt/rh/rh-php72/run/php-fpm/zabbix.sock|fcgi://localhost',
+            handler => "proxy:unix:/var${fpm_scl_prefix}/run/php-fpm/zabbix.sock|fcgi://localhost",
           },
         ],
       }
