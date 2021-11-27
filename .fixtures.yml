@@ -11,12 +11,6 @@ fixtures:
     systemd: https://github.com/voxpupuli/puppet-systemd.git
     selinux: https://github.com/voxpupuli/puppet-selinux.git
     chocolatey: https://github.com/puppetlabs/puppetlabs-chocolatey.git
-    yumrepo_core:
-      repo: https://github.com/puppetlabs/puppetlabs-yumrepo_core.git
-      puppet_version: ">= 6.0.0"
-    selinux_core:
-      repo: https://github.com/puppetlabs/puppetlabs-selinux_core.git
-      puppet_version: ">= 6.0.0"
-    augeas_core:
-      repo: https://github.com/puppetlabs/puppetlabs-augeas_core.git
-      puppet_version: ">= 6.0.0"
+    yumrepo_core: https://github.com/puppetlabs/puppetlabs-yumrepo_core.git
+    selinux_core: https://github.com/puppetlabs/puppetlabs-selinux_core.git
+    augeas_core: https://github.com/puppetlabs/puppetlabs-augeas_core.git
