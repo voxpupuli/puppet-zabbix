@@ -23,6 +23,7 @@ class zabbix::params {
     }
     'AIX': {
       $manage_repo              = false
+      $manage_choco             = false
       $zabbix_package_provider  = 'yum'
       $zabbix_package_agent     = 'zabbix-agent'
       $agent_configfile_path    = '/etc/zabbix/zabbix_agentd.conf'
@@ -32,7 +33,6 @@ class zabbix::params {
       $agent_pidfile            = '/var/run/zabbix/zabbix_agentd.pid'
       $agent_servicename        = 'zabbix-agent'
     }
-
     'Archlinux': {
       $server_fpinglocation     = '/usr/bin/fping'
       $server_fping6location    = '/usr/bin/fping6'

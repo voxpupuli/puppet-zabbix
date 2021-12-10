@@ -348,8 +348,8 @@ class zabbix::agent (
   # Doing it this way allows overriding it on other platforms
   if $facts['os']['name'] == 'AIX' {
     Service[$servicename] {
-      service_provider => 'init',
-      service_path     => '/etc/rc.d/init.d',
+      provider => 'init',
+      path     => '/etc/rc.d/init.d',
     }
   }
 
