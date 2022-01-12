@@ -660,7 +660,7 @@ LoadModulePath=<%= @loadmodulepath %>
 # Range: 0-100
 # Default:
 # StartReportWriters=0
-<% if @startreportwriters %>VaultDBPath=<%= @startreportwriters -%><% end %>
+<% if @startreportwriters %>StartReportWriters=<%= @startreportwriters -%><% end %>
 
 ### Option: WebServiceURL
 #	URL to Zabbix web service, used to perform web related tasks.
@@ -669,5 +669,5 @@ LoadModulePath=<%= @loadmodulepath %>
 # Mandatory: no
 # Default:
 # WebServiceURL=
-<% if @webserviceurl %>VaultDBPath=<%= @webserviceurl -%><% end %>
+<% if @webserviceurl %>WebServiceURL=<%= @webserviceurl -%><% end %>
 <% end %>
