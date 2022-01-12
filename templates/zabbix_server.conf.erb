@@ -650,3 +650,24 @@ LoadModulePath=<%= @loadmodulepath %>
 # VaultDBPath=
 <% if @vaultdbpath %>VaultDBPath=<%= @vaultdbpath -%><% end %>
 <% end %>
+
+
+<% if @zabbix_version.to_f >= 5.2 %>
+### Option: StartReportWriters
+#	Number of pre-forked report writer instances.
+#
+# Mandatory: no
+# Range: 0-100
+# Default:
+# StartReportWriters=0
+<% if @startreportwriters %>VaultDBPath=<%= @startreportwriters -%><% end %>
+
+### Option: WebServiceURL
+#	URL to Zabbix web service, used to perform web related tasks.
+#	Example: http://localhost:10053/report
+#
+# Mandatory: no
+# Default:
+# WebServiceURL=
+<% if @webserviceurl %>VaultDBPath=<%= @webserviceurl -%><% end %>
+<% end %>

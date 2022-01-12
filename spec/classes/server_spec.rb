@@ -253,6 +253,7 @@ describe 'zabbix::server' do
             starttimers: '1',
             starttrappers: '5',
             startlldprocessors: 5,
+            startreportwriters: 1,
             startvmwarecollectors: '5',
             timeout: '3',
             tmpdir: '/tmp',
@@ -264,6 +265,7 @@ describe 'zabbix::server' do
             valuecachesize: '4M',
             vmwarecachesize: '8M',
             vmwarefrequency: '60',
+            webserviceurl: 'http://localhost:10053/report',
             zabbix_version: '5.0',
             tlsciphercert: 'EECDH+aRSA+AES128:RSA+aRSA+AES128',
             tlsciphercert13: 'EECDH+aRSA+AES128:RSA+aRSA+AES128',
@@ -327,6 +329,7 @@ describe 'zabbix::server' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartPollersUnreachable=1} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartPreprocessors=10} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartProxyPollers=1} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartReportWriters=1} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartSNMPTrapper=1} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartTimers=1} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartTrappers=5} }
@@ -341,6 +344,7 @@ describe 'zabbix::server' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^ValueCacheSize=4M} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^VMwareCacheSize=8M} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^VMwareFrequency=60} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^WebServiceURL=http://localhost:10053/report} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCipherCert=EECDH\+aRSA\+AES128:RSA\+aRSA\+AES128$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCipherCert13=EECDH\+aRSA\+AES128:RSA\+aRSA\+AES128$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCipherPSK=kECDHEPSK\+AES128:kPSK\+AES128$} }

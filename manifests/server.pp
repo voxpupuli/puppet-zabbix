@@ -63,6 +63,8 @@
 # @param startjavapollers Number of pre-forked instances of java pollers.
 # @param startlldprocessors Number of pre-forked instances of low-level discovery (LLD) workers.
 # @param startvmwarecollectors Number of pre-forked vmware collector instances.
+# @param startreportwriters Number of pre-forked report writer instances.
+# @param webserviceurl URL to Zabbix web service, used to perform web related tasks.
 # @param vmwarefrequency How often zabbix will connect to vmware service to obtain a new datan.
 # @param vaultdbpath Vault path from where credentials for database will be retrieved by keys 'password' and 'username'.
 # @param vaulttoken
@@ -213,6 +215,7 @@ class zabbix::server (
   $javagatewayport                                                            = $zabbix::params::server_javagatewayport,
   $startjavapollers                                                           = $zabbix::params::server_startjavapollers,
   Integer[1, 100] $startlldprocessors                                         = $zabbix::params::server_startlldprocessors,
+  Optional[Integer[1, 100]] $startreportwriters                               = $zabbix::params::server_startreportwriters,
   $startvmwarecollectors                                                      = $zabbix::params::server_startvmwarecollectors,
   Optional[String[1]] $vaultdbpath                                            = $zabbix::params::server_vaultdbpath,
   Optional[String[1]] $vaulttoken                                             = $zabbix::params::server_vaulttoken,
