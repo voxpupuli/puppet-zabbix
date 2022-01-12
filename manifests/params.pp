@@ -255,7 +255,6 @@ class zabbix::params {
   $server_startpollersunreachable           = '1'
   $server_startpreprocessors                = 3
   $server_startproxypollers                 = '1'
-  $server_startreportwriters                = undef
   $server_startsnmptrapper                  = '0'
   $server_starttimers                       = '1'
   $server_starttrappers                     = '5'
@@ -291,7 +290,6 @@ class zabbix::params {
   $server_vmwarefrequency                   = '60'
   $server_vmwaretimeout                     = undef
   $server_socketdir                         = undef
-  $server_webserviceurl                     = undef
 
   # Agent specific params
   $agent_allowroot                          = '0'
