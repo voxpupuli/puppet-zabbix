@@ -271,7 +271,7 @@ class zabbix::server (
   Optional[String[1]] $zabbix_user                                            = $zabbix::params::server_zabbix_user,
   Boolean $manage_startup_script                                              = $zabbix::params::manage_startup_script,
   Optional[Stdlib::Absolutepath] $socketdir                                   = $zabbix::params::server_socketdir,
-  Optional[Stdlib::HTTPSUrl] $webserviceurl                                   = undef,
+  Optional[Stdlib::HTTPUrl] $webserviceurl                                    = undef,
 ) inherits zabbix::params {
   # zabbix server 5.2 and 5.4 is not supported on RHEL 7.
   # https://www.zabbix.com/documentation/current/manual/installation/install_from_packages/rhel_centos
