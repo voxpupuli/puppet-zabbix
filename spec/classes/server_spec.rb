@@ -414,6 +414,19 @@ describe 'zabbix::server' do
           it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^VaultToken=FKTYPEGL156DK$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^VaultURL=https://127.0.0.1:8200$} }
         end
+
+        describe 'with zabbix_version 5.4 and report parameters defined' do
+          let :params do
+            {
+              zabbix_version: '5.4',
+              startreportwriters: 1,
+              webserviceurl: 'http://localhost:10053/report',
+            }
+          end
+
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartReportWriters=1} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^WebServiceURL=http://localhost:10053/report} }
+        end
       end
     end
   end
