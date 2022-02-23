@@ -118,7 +118,7 @@ class zabbix::repo (
             ,
           }
         } else {
-          if ($facts['os']['distro'][id] == 'Raspbian') {
+          if ($facts['os']['distro']['id'] == 'Raspbian') {
             $operatingsystem = 'raspbian'
           } else {
             $operatingsystem = downcase($facts['os']['name'])
