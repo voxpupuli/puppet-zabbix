@@ -286,7 +286,7 @@ class zabbix::proxy (
   $sshkeylocation                                                             = $zabbix::params::proxy_sshkeylocation,
   $logslowqueries                                                             = $zabbix::params::proxy_logslowqueries,
   $tmpdir                                                                     = $zabbix::params::proxy_tmpdir,
-  $allowroot                                                                  = $zabbix::params::proxy_allowroot,
+  Integer[0, 1] $allowroot                                                    = $zabbix::params::proxy_allowroot,
   $include_dir                                                                = $zabbix::params::proxy_include,
   Optional[Stdlib::Absolutepath] $sslcalocation_dir                           = $zabbix::params::proxy_sslcalocation,
   Optional[Stdlib::Absolutepath] $sslcertlocation_dir                         = $zabbix::params::proxy_sslcertlocation,

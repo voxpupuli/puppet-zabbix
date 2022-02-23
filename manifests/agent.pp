@@ -40,8 +40,8 @@
 # @param sourceip Source ip address for outgoing connections.
 # @param allowkey Allow execution of item keys matching pattern.
 # @param denykey Deny execution of items keys matching pattern.
-# @param enableremotecommands Whether remote commands from zabbix server are allowed.
-# @param logremotecommands Enable logging of executed shell commands as warnings.
+# @param enableremotecommands Optional whether remote commands from zabbix server are allowed.
+# @param logremotecommands Optional enable logging of executed shell commands as warnings.
 # @param server List of comma delimited ip addresses (or hostnames) of zabbix servers.
 # @param listenport Agent will listen on this port for connections from the server.
 # @param listenip
@@ -54,7 +54,7 @@
 #   It will find out which ip is configured for this ipaddress. Can be handy
 #   if more than 1 interface is on the server.
 #
-# @param startagents Number of pre-forked instances of zabbix_agentd that process passive checks.
+# @param startagents Optional number of pre-forked instances of zabbix_agentd that process passive checks.
 # @param serveractive List of comma delimited ip:port (or hostname:port) pairs of zabbix servers for active checks.
 # @param service_ensure Start / stop the agent service. E.g. to preconfigure a hosts agent and turn on the service at a later time (when the server reaches production SLA)
 # @param service_enable Automatically start the agent on system boot
@@ -71,9 +71,9 @@
 # @param refreshactivechecks How often list of active checks is refreshed, in seconds.
 # @param buffersend Do not keep data longer than n seconds in buffer.
 # @param buffersize Maximum number of values in a memory buffer.
-# @param maxlinespersecond Maximum number of new lines the agent will send per second to zabbix server or proxy processing.
-# @param allowroot Allow the agent to run as 'root'.
-# @param zabbix_user Drop privileges to a specific, existing user on the system. Only has effect if run as 'root' and AllowRoot is disabled.
+# @param maxlinespersecond Optional maximum number of new lines the agent will send per second to zabbix server or proxy processing.
+# @param allowroot Optional allow the agent to run as 'root'.
+# @param zabbix_user Optional drop privileges to a specific, existing user on the system. Only has effect if run as 'root' and AllowRoot is disabled.
 # @param zabbix_alias Sets an alias for parameter.
 # @param timeout Spend no more than timeout seconds on processing.
 # @param tlsaccept What incoming connections to accept from Zabbix server. Used for a passive proxy, ignored on an active proxy.
@@ -115,7 +115,7 @@
 # @param include_dir_purge Include dir to purge.
 # @param unsafeuserparameters Allow all characters to be passed in arguments to user-defined parameters.
 # @param userparameter User-defined parameter to monitor.
-# @param loadmodulepath Full path to location of agent modules.
+# @param loadmodulepath Optional full path to location of agent modules.
 # @param loadmodule Module to load at agent startup.
 # @param manage_startup_script
 #  If the init script should be managed by this module. Attention: This might
@@ -153,22 +153,22 @@ class zabbix::agent (
   Array[Hash] $zbx_macros                              = [],
   Integer[1,4] $zbx_interface_type                     = 1,
   Variant[Array, Hash] $zbx_interface_details          = [],
-  $agent_configfile_path                               = $zabbix::params::agent_configfile_path,
-  $pidfile                                             = $zabbix::params::agent_pidfile,
-  $servicename                                         = $zabbix::params::agent_servicename,
+  Stdlib::Absolutepath $agent_configfile_path          = $zabbix::params::agent_configfile_path,
+  Stdlib::Absolutepath $pidfile                        = $zabbix::params::agent_pidfile,
+  String[1] $servicename                               = $zabbix::params::agent_servicename,
   Enum['console', 'file', 'system'] $logtype           = $zabbix::params::agent_logtype,
   Optional[Stdlib::Absolutepath] $logfile              = $zabbix::params::agent_logfile,
-  $logfilesize                                         = $zabbix::params::agent_logfilesize,
-  $debuglevel                                          = $zabbix::params::agent_debuglevel,
+  Integer[0,1024] $logfilesize                         = $zabbix::params::agent_logfilesize,
+  Integer[0,5] $debuglevel                             = $zabbix::params::agent_debuglevel,
   $sourceip                                            = $zabbix::params::agent_sourceip,
   Optional[String[1]] $allowkey                        = $zabbix::params::agent_allowkey,
   Optional[String[1]] $denykey                         = $zabbix::params::agent_denykey,
-  $enableremotecommands                                = $zabbix::params::agent_enableremotecommands,
-  $logremotecommands                                   = $zabbix::params::agent_logremotecommands,
+  Optional[Integer[0,1]] $enableremotecommands         = $zabbix::params::agent_enableremotecommands,
+  Optional[Integer[0,1]] $logremotecommands            = $zabbix::params::agent_logremotecommands,
   $server                                              = $zabbix::params::agent_server,
-  $listenport                                          = $zabbix::params::agent_listenport,
+  Integer[1024, 32767] $listenport                     = $zabbix::params::agent_listenport,
   $listenip                                            = $zabbix::params::agent_listenip,
-  $startagents                                         = $zabbix::params::agent_startagents,
+  Optional[Integer[0,100]] $startagents                = $zabbix::params::agent_startagents,
   $serveractive                                        = $zabbix::params::agent_serveractive,
   Stdlib::Ensure::Service $service_ensure              = $zabbix::params::agent_service_ensure,
   Boolean $service_enable                              = $zabbix::params::agent_service_enable,
@@ -178,17 +178,17 @@ class zabbix::agent (
   $hostmetadataitem                                    = $zabbix::params::agent_hostmetadataitem,
   Optional[Stdlib::Fqdn] $hostinterface                = $zabbix::params::agent_hostinterface,
   Optional[Stdlib::Fqdn] $hostinterfaceitem            = $zabbix::params::agent_hostinterfaceitem,
-  $refreshactivechecks                                 = $zabbix::params::agent_refreshactivechecks,
-  $buffersend                                          = $zabbix::params::agent_buffersend,
-  $buffersize                                          = $zabbix::params::agent_buffersize,
-  $maxlinespersecond                                   = $zabbix::params::agent_maxlinespersecond,
+  Integer[60,3600] $refreshactivechecks                = $zabbix::params::agent_refreshactivechecks,
+  Integer[1,3600] $buffersend                          = $zabbix::params::agent_buffersend,
+  Integer[2,65535] $buffersize                         = $zabbix::params::agent_buffersize,
+  Optional[Integer[1,1000]] $maxlinespersecond         = $zabbix::params::agent_maxlinespersecond,
   Optional[Array] $zabbix_alias                        = $zabbix::params::agent_zabbix_alias,
-  $timeout                                             = $zabbix::params::agent_timeout,
-  $allowroot                                           = $zabbix::params::agent_allowroot,
+  Integer[1,30] $timeout                               = $zabbix::params::agent_timeout,
+  Optional[Integer[0,1]] $allowroot                    = $zabbix::params::agent_allowroot,
   Optional[String[1]] $zabbix_user                     = $zabbix::params::agent_zabbix_user,
-  $include_dir                                         = $zabbix::params::agent_include,
-  $include_dir_purge                                   = $zabbix::params::agent_include_purge,
-  $unsafeuserparameters                                = $zabbix::params::agent_unsafeuserparameters,
+  Stdlib::Absolutepath $include_dir                    = $zabbix::params::agent_include,
+  Boolean $include_dir_purge                           = $zabbix::params::agent_include_purge,
+  Integer[0,1] $unsafeuserparameters                   = $zabbix::params::agent_unsafeuserparameters,
   $userparameter                                       = $zabbix::params::agent_userparameter,
   Optional[String[1]] $loadmodulepath                  = $zabbix::params::agent_loadmodulepath,
   $loadmodule                                          = $zabbix::params::agent_loadmodule,
