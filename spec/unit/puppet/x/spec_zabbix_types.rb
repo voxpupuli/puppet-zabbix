@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 shared_examples 'generic namevar' do |name|
@@ -27,7 +29,7 @@ shared_examples 'generic ensurable' do |*allowed|
   end
 
   allowed.each do |value|
-    it "should support #{value.inspect} as a value to :ensure" do
+    it "supports #{value.inspect} as a value to :ensure" do
       expect { described_class.new(name: 'nobody', ensure: value) }.not_to raise_error
     end
   end
@@ -52,7 +54,7 @@ shared_examples 'validated property' do |param, default, allowed, disallowed|
 
   context 'allowed' do
     allowed.each do |value|
-      it "should support #{value} as a value" do
+      it "supports #{value} as a value" do
         expect { described_class.new(:name => 'nobody', param => value) }.
           not_to raise_error
       end
@@ -60,12 +62,10 @@ shared_examples 'validated property' do |param, default, allowed, disallowed|
   end
 
   context 'disallowed' do
-    unless disallowed.nil?
-      disallowed.each do |value|
-        it "rejects #{value} as a value" do
-          expect { described_class.new(:name => 'nobody', param => :value) }.
-            to raise_error(Puppet::Error)
-        end
+    disallowed&.each do |value|
+      it "rejects #{value} as a value" do
+        expect { described_class.new(:name => 'nobody', param => :value) }.
+          to raise_error(Puppet::Error)
       end
     end
   end
@@ -77,7 +77,7 @@ shared_examples 'validated property' do |param, default, allowed, disallowed|
         expect(resource.should(param)).to be_nil
       end
     else
-      it "should default to #{default}" do
+      it "defaults to #{default}" do
         resource = described_class.new(name: 'nobody')
         expect(resource.should(param)).to eq default
       end
@@ -107,7 +107,7 @@ shared_examples 'array_matching property' do |param, default|
         expect(resource.should(param)).to be_nil
       end
     else
-      it "should default to #{default}" do
+      it "defaults to #{default}" do
         resource = described_class.new(name: 'nobody')
         expect(resource.should(param)).to eq default
       end

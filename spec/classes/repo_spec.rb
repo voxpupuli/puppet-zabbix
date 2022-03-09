@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'zabbix::repo' do
   on_supported_os(baseline_os_hash).each do |os, facts|
-    context "on #{os} " do
+    context "on #{os}" do # rubocop:disable RSpec/EmptyExampleGroup
       let :facts do
         facts
       end
@@ -39,6 +41,7 @@ describe 'zabbix::repo' do
 
             it { is_expected.to contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/4.0/debian/') }
           end
+
           context 'on Debian 10 and Zabbix 5.0' do
             let :params do
               {

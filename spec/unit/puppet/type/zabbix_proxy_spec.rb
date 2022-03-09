@@ -1,25 +1,27 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Puppet::Type.type(:zabbix_proxy) do
   describe 'when validating params' do
-    [
-      :hostname,
-      :provider
+    %i[
+      hostname
+      provider
     ].each do |param|
-      it "should have a #{param} parameter" do
+      it "has a #{param} parameter" do
         expect(described_class.attrtype(param)).to eq(:param)
       end
     end
   end
 
   describe 'when validating properties' do
-    [
-      :ipaddress,
-      :use_ip,
-      :mode,
-      :port
+    %i[
+      ipaddress
+      use_ip
+      mode
+      port
     ].each do |param|
-      it "should have a #{param} property" do
+      it "has a #{param} property" do
         expect(described_class.attrtype(param)).to eq(:property)
       end
     end
@@ -96,9 +98,11 @@ describe Puppet::Type.type(:zabbix_proxy) do
     it 'resource has one relationship' do
       expect(relationships.size).to eq(1)
     end
+
     it 'relationship target is the zabbix_proxy resource' do
       expect(relationships[0].target).to eq(resource)
     end
+
     it 'relationship source is the config file' do
       expect(relationships[0].source).to eq(config_file)
     end

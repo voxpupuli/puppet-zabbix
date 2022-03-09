@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'zabbix::database::postgresql' do
@@ -11,28 +13,29 @@ describe 'zabbix::database::postgresql' do
 
   on_supported_os(baseline_os_hash).each do |os, facts|
     next if facts[:os]['name'] == 'windows'
-    context "on #{os} " do
+
+    context "on #{os}" do
       let :facts do
         facts
       end
 
       supported_versions.each do |zabbix_version|
-        case facts[:os]['name']
-        when 'CentOS', 'RedHat', 'OracleLinux', 'VirtuozzoLinux'
-          # Path on RedHat
-          path = if zabbix_version == '5.4'
+        path = case facts[:os]['name']
+               when 'CentOS', 'RedHat', 'OracleLinux', 'VirtuozzoLinux'
+                 # Path on RedHat
+                 if zabbix_version == '5.4'
                    '/usr/share/doc/zabbix-sql-scripts/postgresql/'
                  else
                    "/usr/share/doc/zabbix-*-pgsql-#{zabbix_version}*/"
                  end
-        else
-          # Path on Debian
-          path = if zabbix_version == '5.4'
+               else
+                 # Path on Debian
+                 if zabbix_version == '5.4'
                    '/usr/share/doc/zabbix-sql-scripts/postgresql/'
                  else
                    '/usr/share/doc/zabbix-*-pgsql'
                  end
-        end
+               end
 
         describe "when zabbix_type is server and version is #{zabbix_version}" do
           let :params do

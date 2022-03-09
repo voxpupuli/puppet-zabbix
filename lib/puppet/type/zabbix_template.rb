@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Puppet::Type.newtype(:zabbix_template) do
   ensurable do
     defaultvalues
@@ -5,6 +7,7 @@ Puppet::Type.newtype(:zabbix_template) do
 
     def insync?(is)
       return false if is == :present && !template_xmls_match?
+
       super
     end
 
@@ -18,11 +21,12 @@ Puppet::Type.newtype(:zabbix_template) do
     end
 
     def clean_xml(dirty)
-      dirty.gsub(%r{>\s*}, '>').gsub(%r{\s*<}, '<').gsub(%r{<date>.*<\/date>}, 'DATEWASHERE')
+      dirty.gsub(%r{>\s*}, '>').gsub(%r{\s*<}, '<').gsub(%r{<date>.*</date>}, 'DATEWASHERE')
     end
 
     def change_to_s(currentvalue, newvalue)
       return 'Template updated' if currentvalue == :present && newvalue == :present
+
       super
     end
   end

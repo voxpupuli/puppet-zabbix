@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'zabbix::agent' do
@@ -13,7 +15,7 @@ describe 'zabbix::agent' do
   end
 
   on_supported_os(baseline_os_hash).each do |os, facts|
-    context "on #{os} " do
+    context "on #{os}" do
       systemd_fact = case facts[:osfamily]
                      when 'Archlinux', 'Fedora', 'Gentoo'
                        { systemd: true }
@@ -47,10 +49,11 @@ describe 'zabbix::agent' do
         facts.merge(systemd_fact)
       end
 
-      if facts[:osfamily] == 'Gentoo'
+      case facts[:osfamily]
+      when 'Gentoo'
         package_name = 'zabbix'
         service_name = 'zabbix-agentd'
-      elsif facts[:osfamily] == 'windows'
+      when 'windows'
         package_name = 'zabbix-agent'
         service_name = 'Zabbix Agent'
       else
@@ -65,9 +68,9 @@ describe 'zabbix::agent' do
         if facts[:kernel] == 'windows'
           it do
             is_expected.to contain_package(package_name).with(
-              ensure:   '4.4.5',
+              ensure: '4.4.5',
               provider: 'chocolatey',
-              tag:      'zabbix'
+              tag: 'zabbix'
             )
           end
         else
@@ -77,6 +80,7 @@ describe 'zabbix::agent' do
               with_tag('zabbix').
               that_requires('Class[zabbix::repo]')
           end
+
           it do
             is_expected.to contain_service(service_name).
               with_ensure('running').

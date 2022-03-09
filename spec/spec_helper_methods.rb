@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def baseline_os_hash
   {
     supported_os: [

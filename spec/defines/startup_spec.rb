@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'zabbix::startup', type: :define do # rubocop:disable RSpec/MultipleDescribes
@@ -41,6 +43,7 @@ describe 'zabbix::startup', type: :define do # rubocop:disable RSpec/MultipleDes
               it { is_expected.to contain_exec('install_agent_zabbix-agent') }
             else
               it { is_expected.not_to compile.with_all_deps }
+
               next
             end
             it { is_expected.not_to contain_class('systemd') }
@@ -48,7 +51,9 @@ describe 'zabbix::startup', type: :define do # rubocop:disable RSpec/MultipleDes
           end
         end
       end
+
       next if os_facts[:os]['family'] == 'windows'
+
       context "#{os} on systemd" do
         ['true', true].each do |systemd_fact_state|
           let :facts do
@@ -67,12 +72,14 @@ describe 'zabbix::startup', type: :define do # rubocop:disable RSpec/MultipleDes
             it { is_expected.to contain_class('systemd') }
             it { is_expected.to contain_systemd__unit_file('zabbix-agent.service') }
             it { is_expected.to contain_file('/etc/init.d/zabbix-agent').with_ensure('absent') }
+
             it do
               is_expected.to contain_file('/etc/systemd/system/zabbix-agent.service').with(
                 ensure: 'file',
-                mode:   '0444'
+                mode: '0444'
               )
             end
+
             it { is_expected.to contain_file('/etc/systemd/system/zabbix-agent.service').with_content(%r{ExecStart=/usr/sbin/zabbix_agentd --foreground -c /something}) }
             it { is_expected.to contain_file('/etc/systemd/system/zabbix-agent.service').with_content(%r{PIDFile=/somethingelse}) }
           end
@@ -81,6 +88,7 @@ describe 'zabbix::startup', type: :define do # rubocop:disable RSpec/MultipleDes
     end
   end
 end
+
 describe 'zabbix::startup', type: :define do
   let(:title) { 'zabbix-server' }
 
@@ -118,6 +126,7 @@ describe 'zabbix::startup', type: :define do
               end
             else
               it { is_expected.not_to compile.with_all_deps }
+
               next
             end
             it { is_expected.not_to contain_class('systemd') }
@@ -126,7 +135,9 @@ describe 'zabbix::startup', type: :define do
         end
       end
     end
+
     next if os_facts[:os]['family'] == 'windows'
+
     context 'on systemd' do
       ['true', true].each do |systemd_fact_state|
         let :facts do
@@ -147,12 +158,14 @@ describe 'zabbix::startup', type: :define do
           it { is_expected.to contain_class('systemd') }
           it { is_expected.to contain_systemd__unit_file('zabbix-server.service') }
           it { is_expected.to contain_file('/etc/init.d/zabbix-server').with_ensure('absent') }
+
           it do
             is_expected.to contain_file('/etc/systemd/system/zabbix-server.service').with(
               ensure: 'file',
-              mode:   '0444'
+              mode: '0444'
             )
           end
+
           it { is_expected.to contain_file('/etc/systemd/system/zabbix-server.service').with_content(%r{ExecStart=/usr/sbin/zabbix_server --foreground -c /something}) }
           it { is_expected.to contain_file('/etc/systemd/system/zabbix-server.service').with_content(%r{PIDFile=/somethingelse}) }
           it { is_expected.to contain_file('/etc/systemd/system/zabbix-server.service').with_content(%r{After=mysqld.service}) }

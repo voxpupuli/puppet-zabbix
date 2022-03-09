@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require 'deep_merge'
 
@@ -9,7 +11,8 @@ describe 'zabbix::server' do
   on_supported_os(baseline_os_hash).each do |os, facts|
     next if facts[:osfamily] == 'Archlinux' # zabbix server is currently not supported on archlinux
     next if facts[:os]['name'] == 'windows'
-    context "on #{os} " do
+
+    context "on #{os}" do
       systemd_fact = case facts[:osfamily]
                      when 'Archlinux', 'Fedora', 'Gentoo'
                        { systemd: true }
