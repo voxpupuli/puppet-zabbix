@@ -28,7 +28,7 @@ define zabbix::startup (
   Optional[Boolean] $manage_database                     = undef,
   Optional[String] $service_name                         = $name,
 ) {
-  case $title {
+  case $title.downcase {
     /agent/: {
       assert_type(Stdlib::Absolutepath, $agent_configfile_path)
     }
