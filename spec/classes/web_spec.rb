@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require 'deep_merge'
 
@@ -22,7 +24,7 @@ describe 'zabbix::web' do
       # There are no zabbix 5.2 packages for Debian 11
       next if facts[:os]['name'] == 'Debian' && facts[:os]['release']['major'] == '11' && zabbix_version == '5.2'
 
-      context "on #{os} " do
+      context "on #{os}" do
         let :facts do
           facts
         end
@@ -83,9 +85,9 @@ describe 'zabbix::web' do
                        if facts[:operatingsystemmajrelease].to_i == 7 &&
                           !%w[VirtuozzoLinux OracleLinux Scientific].include?(facts[:os]['name']) &&
                           zabbix_version =~ %r{5\.[024]}
-                         ['zabbix-web-pgsql-scl', 'zabbix-web']
+                         %w[zabbix-web-pgsql-scl zabbix-web]
                        else
-                         ['zabbix-web-pgsql', 'zabbix-web']
+                         %w[zabbix-web-pgsql zabbix-web]
                        end
                      else
                        ['zabbix-frontend-php', pgsqlpackage]
@@ -119,7 +121,7 @@ describe 'zabbix::web' do
                            'php5-mysql'
                          end
 
-          packages = facts[:osfamily] == 'RedHat' ? ['zabbix-web-mysql', 'zabbix-web'] : ['zabbix-frontend-php', mysqlpackage]
+          packages = facts[:osfamily] == 'RedHat' ? %w[zabbix-web-mysql zabbix-web] : ['zabbix-frontend-php', mysqlpackage]
           packages.each do |package|
             it { is_expected.to contain_package(package) }
           end
@@ -158,6 +160,7 @@ describe 'zabbix::web' do
               with_zabbix_pass('zabbix').
               with_apache_use_ssl(false)
           end
+
           it do
             is_expected.to contain_file('/etc/zabbix/api.conf').
               with_ensure('file').
@@ -169,6 +172,7 @@ describe 'zabbix::web' do
               with_content(%r{zabbix_pass    = zabbix}).
               with_content(%r{apache_use_ssl = false})
           end
+
           it { is_expected.to contain_package('zabbixapi').with_provider('puppet_gem') }
           it { is_expected.to contain_file('/etc/zabbix/imported_templates').with_ensure('directory') }
         end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Puppet::Type.type(:zabbix_proxy).provider(:ruby) do
@@ -12,14 +14,14 @@ describe Puppet::Type.type(:zabbix_proxy).provider(:ruby) do
     expect(provider).to be_an_instance_of Puppet::Type::Zabbix_proxy::ProviderRuby
   end
 
-  [:instances, :prefetch].each do |method|
-    it "should respond to the class method #{method}" do
+  %i[instances prefetch].each do |method|
+    it "responds to the class method #{method}" do
       expect(described_class).to respond_to(method)
     end
   end
 
-  [:create, :exists?, :destroy].each do |method|
-    it "should respond to the instance method #{method}" do
+  %i[create exists? destroy].each do |method|
+    it "responds to the instance method #{method}" do
       expect(described_class.new).to respond_to(method)
     end
   end

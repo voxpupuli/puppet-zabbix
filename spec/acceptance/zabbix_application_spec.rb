@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 require 'serverspec_type_zabbixapi'
 
@@ -44,13 +46,13 @@ describe 'zabbix_application type', unless: default[:platform] =~ %r{(ubuntu-16.
           require          => [ Class['postgresql::server'], Class['apache'], ],
         }
 
-        EOS
+      EOS
 
       pp2 = <<-EOS
         zabbix_application { 'TestApplication1':
           template => "#{template}",
         }
-        EOS
+      EOS
       # setup zabbix. Apache module isn't idempotent and requires a second run
       it 'works with no error on the first apply' do
         # Cleanup old database
@@ -58,6 +60,7 @@ describe 'zabbix_application type', unless: default[:platform] =~ %r{(ubuntu-16.
 
         apply_manifest(pp1, catch_failures: true)
       end
+
       it 'works with no error on the second apply' do
         apply_manifest(pp1, catch_failures: true)
       end
@@ -66,6 +69,7 @@ describe 'zabbix_application type', unless: default[:platform] =~ %r{(ubuntu-16.
       it 'works with no error on the third apply' do
         apply_manifest(pp2, catch_failures: true)
       end
+
       it 'works without changes on the fourth apply' do
         apply_manifest(pp2, catch_changes: true)
       end

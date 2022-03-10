@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 require 'serverspec_type_zabbixapi'
 
@@ -9,6 +11,7 @@ describe 'zabbix_proxy type', unless: default[:platform] =~ %r{(ubuntu-16.04|deb
     next if zabbix_version == '5.4' && default[:platform] == 'el-7-x86_64'
     # No Zabbix 5.2 packages on Debian 11
     next if zabbix_version == '5.2' && default[:platform] == 'debian-11-amd64'
+
     context "create zabbix_proxy resources with zabbix version #{zabbix_version}" do
       # This will deploy a running Zabbix setup (server, web, db) which we can
       # use for custom type tests
@@ -42,6 +45,7 @@ describe 'zabbix_proxy type', unless: default[:platform] =~ %r{(ubuntu-16.04|deb
 
         apply_manifest(pp1, catch_failures: true)
       end
+
       it 'works with no error on second apply' do
         apply_manifest(pp1, catch_failures: true)
       end
@@ -92,12 +96,15 @@ describe 'zabbix_proxy type', unless: default[:platform] =~ %r{(ubuntu-16.04|deb
         it 'has a interfaces dns configured' do
           expect(proxy2['interface']['dns']).to eq('ZabbixProxy2')
         end
+
         it 'has a interfaces ip configured' do
           expect(proxy2['interface']['ip']).to eq('127.0.0.3')
         end
+
         it 'has a interfaces port configured' do
           expect(proxy2['interface']['port']).to eq('10055')
         end
+
         it 'has a interfaces useip configured' do
           expect(proxy2['interface']['useip']).to eq('0')
         end
@@ -138,12 +145,15 @@ describe 'zabbix_proxy type', unless: default[:platform] =~ %r{(ubuntu-16.04|deb
         it 'has a interfaces dns configured' do
           expect(proxy1['interface']['dns']).to eq('ZabbixProxy1')
         end
+
         it 'has a interfaces ip configured' do
           expect(proxy1['interface']['ip']).to eq('127.0.0.3')
         end
+
         it 'has a interfaces port configured' do
           expect(proxy1['interface']['port']).to eq('10055')
         end
+
         it 'has a interfaces useip configured' do
           expect(proxy1['interface']['useip']).to eq('0')
         end

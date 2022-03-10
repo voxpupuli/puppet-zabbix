@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'json'
 
 module Serverspec::Type
@@ -56,6 +58,7 @@ module Serverspec::Type
       JSON.parse(result.stdout.chomp)
     end
   end
+
   def zabbixapi(host, user, pass, method, params)
     Zabbixapi.new(host, user, pass, method, params)
   end

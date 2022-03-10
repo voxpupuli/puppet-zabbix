@@ -23,7 +23,7 @@ define zabbix::startup (
   Optional[Stdlib::Absolutepath] $server_configfile_path = undef,
   Optional[Zabbix::Databases] $database_type             = undef,
   Optional[String] $zabbix_user                          = undef,
-  String $additional_service_params                      = '',
+  Optional[String[1]] $additional_service_params         = undef,
   String $service_type                                   = 'simple',
   Optional[Boolean] $manage_database                     = undef,
   Optional[String] $service_name                         = $name,

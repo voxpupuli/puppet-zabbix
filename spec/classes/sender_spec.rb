@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'zabbix::sender' do
@@ -7,7 +9,8 @@ describe 'zabbix::sender' do
 
   on_supported_os(baseline_os_hash).each do |os, facts|
     next if facts[:os]['name'] == 'windows'
-    context "on #{os} " do
+
+    context "on #{os}" do
       let :facts do
         facts
       end
@@ -20,6 +23,7 @@ describe 'zabbix::sender' do
         it { is_expected.to contain_package('zabbix-sender').with_ensure('present') }
         it { is_expected.to contain_package('zabbix-sender').with_name('zabbix-sender') }
       end
+
       context 'when declaring manage_repo is true' do
         let :params do
           {
