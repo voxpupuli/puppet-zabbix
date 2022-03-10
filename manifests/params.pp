@@ -297,7 +297,7 @@ class zabbix::params {
   $agent_buffersize                         = '100'
   $agent_debuglevel                         = '3'
   $agent_allowkey                           = undef
-  $agent_denykey                            = 'system.run[*]'
+  $agent_denykey                            = undef
   $agent_enableremotecommands               = '0'
   $agent_hostmetadata                       = undef
   $agent_hostmetadataitem                   = undef
