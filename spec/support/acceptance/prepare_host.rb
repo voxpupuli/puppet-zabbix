@@ -22,6 +22,7 @@ def prepare_host
   /opt/puppetlabs/bin/puppet resource package zabbix-server-pgsql ensure=purged
   /opt/puppetlabs/bin/puppet resource package zabbix-web-pgsql ensure=purged
   /opt/puppetlabs/bin/puppet resource package zabbix-frontend-php ensure=purged
+  /opt/puppetlabs/bin/puppet resource package zabbix-sql-scripts ensure=purged
   /opt/puppetlabs/puppet/bin/gem uninstall zabbixapi -a
   rm -f /etc/zabbix/.*done
   if id postgres > /dev/null 2>&1; then
@@ -38,6 +39,7 @@ def prepare_host
   /opt/puppetlabs/bin/puppet resource package zabbix-web-pgsql ensure=purged
   /opt/puppetlabs/bin/puppet resource package zabbix-web-pgsql-scl ensure=purged
   /opt/puppetlabs/bin/puppet resource package zabbix-frontend-php ensure=purged
+  /opt/puppetlabs/bin/puppet resource package zabbix-sql-scripts ensure=purged
   /opt/puppetlabs/puppet/bin/gem uninstall zabbixapi -a
   rm -f /etc/zabbix/.*done
   if id postgres > /dev/null 2>&1; then

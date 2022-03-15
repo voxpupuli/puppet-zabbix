@@ -84,7 +84,7 @@ describe 'zabbix::web' do
           packages = if facts[:osfamily] == 'RedHat'
                        if facts[:operatingsystemmajrelease].to_i == 7 &&
                           !%w[VirtuozzoLinux OracleLinux Scientific].include?(facts[:os]['name']) &&
-                          zabbix_version =~ %r{5\.[024]}
+                          Puppet::Util::Package.versioncmp(zabbix_version, '5.0') >= 0
                          %w[zabbix-web-pgsql-scl zabbix-web]
                        else
                          %w[zabbix-web-pgsql zabbix-web]

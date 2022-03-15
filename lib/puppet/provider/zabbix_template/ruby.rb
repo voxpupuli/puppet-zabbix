@@ -57,7 +57,7 @@ Puppet::Type.type(:zabbix_template).provide(:ruby, parent: Puppet::Provider::Zab
           updateExisting: true
         },
         # templateDashboards was renamed to templateScreen on Zabbix >= 5.2
-        (@resource[:zabbix_version] =~ %r{5\.[24]} ? :templateDashboards : :templateScreens) => {
+        (@resource[:zabbix_version] =~ %r{5\.[24]|6\.0} ? :templateDashboards : :templateScreens) => {
           createMissing: true,
           deleteMissing: (@resource[:delete_missing_templatescreens].nil? ? false : @resource[:delete_missing_templatescreens]),
           updateExisting: true

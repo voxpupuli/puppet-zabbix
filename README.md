@@ -427,7 +427,7 @@ Take a look at the [REFERENCE.md](https://github.com/voxpupuli/puppet-zabbix/blo
 
 ## Limitations
 
-This module supports Zabbix 4.0, 5.0, 5.2 and 5.4. The upstream supported versions are documented [here](https://www.zabbix.com/de/life_cycle_and_release_policy)
+This module supports Zabbix 4.0, 5.0, 5.2, 5.4 and 6.0. The upstream supported versions are documented [here](https://www.zabbix.com/de/life_cycle_and_release_policy)
 Please have a look into the metadata.json for all supported operating systems.
 
 This module is supported on both the community and the Enterprise version of Puppet.

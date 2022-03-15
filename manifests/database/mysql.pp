@@ -24,7 +24,7 @@ class zabbix::database::mysql (
   assert_private()
 
   if ($database_schema_path == false) or ($database_schema_path == '') {
-    if versioncmp($zabbix_version, '5.4') == 0 {
+    if versioncmp($zabbix_version, '5.4') >= 0 {
       $schema_path = '/usr/share/doc/zabbix-sql-scripts/mysql/'
     } else {
       $schema_path = '/usr/share/doc/zabbix-*-mysql*'
@@ -42,10 +42,16 @@ class zabbix::database::mysql (
 
   case $zabbix_type {
     'proxy': {
-      $zabbix_proxy_create_sql = "cd ${schema_path} && if [ -f schema.sql.gz ]; then gunzip -f schema.sql.gz ; fi && mysql -h '${database_host}' -u '${database_user}' -p'${database_password}' ${port}-D '${database_name}' < schema.sql && touch /etc/zabbix/.schema.done"
+      $zabbix_proxy_create_sql = versioncmp($zabbix_version, '6.0') >= 0 ? {
+        true  => "cd ${schema_path} && mysql -h '${database_host}' -u '${database_user}' -p'${database_password}' ${port}-D '${database_name}' < proxy.sql && touch /etc/zabbix/.schema.done",
+        false => "cd ${schema_path} && if [ -f schema.sql.gz ]; then gunzip -f schema.sql.gz ; fi && mysql -h '${database_host}' -u '${database_user}' -p'${database_password}' ${port}-D '${database_name}' < schema.sql && touch /etc/zabbix/.schema.done"
+      }
     }
     default: {
-      $zabbix_server_create_sql = "cd ${schema_path} && if [ -f create.sql.gz ]; then gunzip -f create.sql.gz ; fi && mysql -h '${database_host}' -u '${database_user}' -p'${database_password}' ${port}-D '${database_name}' < create.sql && touch /etc/zabbix/.schema.done"
+      $zabbix_server_create_sql = versioncmp($zabbix_version, '6.0') >= 0 ? {
+        true  => "cd ${schema_path} && if [ -f server.sql.gz ]; then gunzip -f server.sql.gz ; fi && mysql -h '${database_host}' -u '${database_user}' -p'${database_password}' ${port}-D '${database_name}' < server.sql && touch /etc/zabbix/.schema.done",
+        false => "cd ${schema_path} && if [ -f create.sql.gz ]; then gunzip -f create.sql.gz ; fi && mysql -h '${database_host}' -u '${database_user}' -p'${database_password}' ${port}-D '${database_name}' < create.sql && touch /etc/zabbix/.schema.done"
+      }
       $zabbix_server_images_sql = 'touch /etc/zabbix/.images.done'
       $zabbix_server_data_sql   = 'touch /etc/zabbix/.data.done'
     }
