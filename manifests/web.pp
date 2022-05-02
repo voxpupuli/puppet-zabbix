@@ -139,6 +139,8 @@ class zabbix::web (
   Optional[Stdlib::Absolutepath] $saml_sp_key                         = $zabbix::params::saml_sp_key,
   Optional[Stdlib::Absolutepath] $saml_sp_cert                        = $zabbix::params::saml_sp_cert,
   Optional[Stdlib::Absolutepath] $saml_idp_cert                       = $zabbix::params::saml_idp_cert,
+  Optional[Integer[1, 1000]] $fpm_max_requests                        = $zabbix::params::fpm_max_requests,
+  Optional[Integer[1, 100]] $fpm_max_spare_servers                    = $zabbix::params::fpm_max_spare_servers,
   Hash[String[1], Variant[ScalarData, Hash]] $saml_settings           = $zabbix::params::saml_settings,
   $puppetgem                                                          = $zabbix::params::puppetgem,
   Boolean $manage_selinux                                             = $zabbix::params::manage_selinux,

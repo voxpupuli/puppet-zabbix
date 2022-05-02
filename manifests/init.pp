@@ -341,6 +341,7 @@ class zabbix (
   Optional[Stdlib::Absolutepath] $saml_sp_key                                 = $zabbix::params::saml_sp_key,
   Optional[Stdlib::Absolutepath] $saml_sp_cert                                = $zabbix::params::saml_sp_cert,
   Optional[Stdlib::Absolutepath] $saml_idp_cert                               = $zabbix::params::saml_idp_cert,
+  Optional[Integer[1, 1000]] $fpm_max_requests                                = $zabbix::params::fpm_max_requests,
   Hash[String[1], Variant[ScalarData, Hash]] $saml_settings                   = $zabbix::params::saml_settings,
 ) inherits zabbix::params {
   class { 'zabbix::web':
@@ -388,6 +389,8 @@ class zabbix (
     saml_sp_cert                             => $saml_sp_cert,
     saml_idp_cert                            => $saml_idp_cert,
     saml_settings                            => $saml_settings,
+    fpm_max_requests                         => $fpm_max_requests,
+    fpm_max_spare_servers                    => $fpm_max_spare_servers,
     manage_selinux                           => $manage_selinux,
     require                                  => Class['zabbix::server'],
   }
