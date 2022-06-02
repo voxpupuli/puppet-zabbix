@@ -45,7 +45,7 @@
 * [`zabbix_hostgroup`](#zabbix_hostgroup): Manage zabbix hostgroups
 * [`zabbix_proxy`](#zabbix_proxy): FQDN of the proxy.
 * [`zabbix_template`](#zabbix_template): The name of template.
-* [`zabbix_template_host`](#zabbix_template_host): Link or Unlink template to host. Example. Name should be in the format of "template_name@hostname"  zabbix_template_host{ 'mysql_template@db1
+* [`zabbix_template_host`](#zabbix_template_host): Link or Unlink template to host. Only for Zabbix < 6.0! Example. Name should be in the format of "template_name@hostname"  zabbix_template_ho
 * [`zabbix_userparameters`](#zabbix_userparameters): An unique name for this define.
 
 ### Data types
@@ -1334,6 +1334,7 @@ The following parameters are available in the `zabbix::agent` class:
 * [`manage_repo`](#manage_repo)
 * [`manage_choco`](#manage_choco)
 * [`zabbix_package_provider`](#zabbix_package_provider)
+* [`zabbix_package_source`](#zabbix_package_source)
 * [`manage_resources`](#manage_resources)
 * [`monitored_by_proxy`](#monitored_by_proxy)
 * [`agent_use_ip`](#agent_use_ip)
@@ -1343,6 +1344,7 @@ The following parameters are available in the `zabbix::agent` class:
 * [`zbx_templates`](#zbx_templates)
 * [`zbx_macros`](#zbx_macros)
 * [`zbx_interface_type`](#zbx_interface_type)
+* [`zbx_interface_details`](#zbx_interface_details)
 * [`agent_configfile_path`](#agent_configfile_path)
 * [`pidfile`](#pidfile)
 * [`servicename`](#servicename)
@@ -1465,6 +1467,14 @@ It is undef for all linux os and set to 'chocolatey' on windows.
 
 Default value: `$zabbix::params::zabbix_package_provider`
 
+##### <a name="zabbix_package_source"></a>`zabbix_package_source`
+
+Data type: `Optional[Stdlib::Windowspath]`
+
+Path to a Windows MSI file used to install the agent.
+
+Default value: ``undef``
+
 ##### <a name="manage_resources"></a>`manage_resources`
 
 Data type: `Boolean`
@@ -1538,15 +1548,23 @@ Default value: `[]`
 
 Data type: `Integer[1,4]`
 
-Integer specifying type of interface to be created
+Integer specifying type of interface to be created.
 
 Default value: `1`
+
+##### <a name="zbx_interface_details"></a>`zbx_interface_details`
+
+Data type: `Variant[Array, Hash]`
+
+Hash with interface details for SNMP when interface type is 2.
+
+Default value: `[]`
 
 ##### <a name="agent_configfile_path"></a>`agent_configfile_path`
 
 Data type: `Any`
 
-Agent config file path defaults to /etc/zabbix/zabbix_agentd.conf
+Agent config file path defaults to /etc/zabbix/zabbix_agentd.conf.
 
 Default value: `$zabbix::params::agent_configfile_path`
 
@@ -1586,7 +1604,7 @@ Default value: `$zabbix::params::agent_logfilesize`
 
 Data type: `Enum['console', 'file', 'system']`
 
-Specifies where log messages are written to. Can be one of: console, file, system
+Specifies where log messages are written to. Can be one of: console, file, system.
 
 Default value: `$zabbix::params::agent_logtype`
 
@@ -3550,6 +3568,7 @@ The following parameters are available in the `zabbix::resources::agent` class:
 * [`macros`](#macros)
 * [`proxy`](#proxy)
 * [`interfacetype`](#interfacetype)
+* [`interfacedetails`](#interfacedetails)
 
 ##### <a name="hostname"></a>`hostname`
 
@@ -3635,9 +3654,17 @@ Default value: ``undef``
 
 Data type: `Any`
 
-Internally used identifier for the host interface
+Internally used identifier for the host interface.
 
 Default value: `1`
+
+##### <a name="interfacedetails"></a>`interfacedetails`
+
+Data type: `Variant[Array, Hash]`
+
+Hash with interface details for SNMP when interface type is 2.
+
+Default value: `[]`
 
 ### <a name="zabbixresourcesproxy"></a>`zabbix::resources::proxy`
 
@@ -3852,6 +3879,8 @@ The following parameters are available in the `zabbix::server` class:
 * [`startjavapollers`](#startjavapollers)
 * [`startlldprocessors`](#startlldprocessors)
 * [`startvmwarecollectors`](#startvmwarecollectors)
+* [`startreportwriters`](#startreportwriters)
+* [`webserviceurl`](#webserviceurl)
 * [`vmwarefrequency`](#vmwarefrequency)
 * [`vaultdbpath`](#vaultdbpath)
 * [`vaulttoken`](#vaulttoken)
@@ -4323,6 +4352,22 @@ Data type: `Any`
 Number of pre-forked vmware collector instances.
 
 Default value: `$zabbix::params::server_startvmwarecollectors`
+
+##### <a name="startreportwriters"></a>`startreportwriters`
+
+Data type: `Optional[Integer[1, 100]]`
+
+Number of pre-forked report writer instances.
+
+Default value: ``undef``
+
+##### <a name="webserviceurl"></a>`webserviceurl`
+
+Data type: `Optional[Stdlib::HTTPUrl]`
+
+URL to Zabbix web service, used to perform web related tasks.
+
+Default value: ``undef``
 
 ##### <a name="vmwarefrequency"></a>`vmwarefrequency`
 
@@ -5336,6 +5381,13 @@ The following parameters are available in the `zabbix::resources::template` defi
 * [`template_name`](#template_name)
 * [`template_source`](#template_source)
 * [`zabbix_version`](#zabbix_version)
+* [`delete_missing_applications`](#delete_missing_applications)
+* [`delete_missing_drules`](#delete_missing_drules)
+* [`delete_missing_graphs`](#delete_missing_graphs)
+* [`delete_missing_httptests`](#delete_missing_httptests)
+* [`delete_missing_items`](#delete_missing_items)
+* [`delete_missing_templatescreens`](#delete_missing_templatescreens)
+* [`delete_missing_triggers`](#delete_missing_triggers)
 
 ##### <a name="template_dir"></a>`template_dir`
 
@@ -5368,6 +5420,62 @@ Data type: `Any`
 Zabbix version that the template will be installed on.
 
 Default value: `$zabbix::params::zabbix_version`
+
+##### <a name="delete_missing_applications"></a>`delete_missing_applications`
+
+Data type: `Boolean`
+
+Deletes applications from zabbix that are not in the template when set to true
+
+Default value: ``false``
+
+##### <a name="delete_missing_drules"></a>`delete_missing_drules`
+
+Data type: `Boolean`
+
+Deletes discovery rules from zabbix that are not in the template when set to true
+
+Default value: ``false``
+
+##### <a name="delete_missing_graphs"></a>`delete_missing_graphs`
+
+Data type: `Boolean`
+
+Deletes graphs from zabbix that are not in the template when set to true
+
+Default value: ``false``
+
+##### <a name="delete_missing_httptests"></a>`delete_missing_httptests`
+
+Data type: `Boolean`
+
+Deletes web-scenarios from zabbix that are not in the template when set to true
+
+Default value: ``false``
+
+##### <a name="delete_missing_items"></a>`delete_missing_items`
+
+Data type: `Boolean`
+
+Deletes items from zabbix that are not in the template when set to true
+
+Default value: ``false``
+
+##### <a name="delete_missing_templatescreens"></a>`delete_missing_templatescreens`
+
+Data type: `Boolean`
+
+Deletes template-screens from zabbix that are not in the template when set to true
+
+Default value: ``false``
+
+##### <a name="delete_missing_triggers"></a>`delete_missing_triggers`
+
+Data type: `Boolean`
+
+Deletes triggers from zabbix that are not in the template when set to true
+
+Default value: ``false``
 
 ### <a name="zabbixresourcesuserparameters"></a>`zabbix::resources::userparameters`
 
@@ -5475,11 +5583,11 @@ Default value: ``undef``
 
 ##### <a name="additional_service_params"></a>`additional_service_params`
 
-Data type: `String`
+Data type: `Optional[String[1]]`
 
 Additional parameters to pass to the service
 
-Default value: `''`
+Default value: ``undef``
 
 ##### <a name="service_type"></a>`service_type`
 
@@ -5526,6 +5634,13 @@ The following parameters are available in the `zabbix::template` defined type:
 * [`templ_name`](#templ_name)
 * [`templ_source`](#templ_source)
 * [`zabbix_version`](#zabbix_version)
+* [`delete_missing_applications`](#delete_missing_applications)
+* [`delete_missing_drules`](#delete_missing_drules)
+* [`delete_missing_graphs`](#delete_missing_graphs)
+* [`delete_missing_httptests`](#delete_missing_httptests)
+* [`delete_missing_items`](#delete_missing_items)
+* [`delete_missing_templatescreens`](#delete_missing_templatescreens)
+* [`delete_missing_triggers`](#delete_missing_triggers)
 
 ##### <a name="templ_name"></a>`templ_name`
 
@@ -5550,6 +5665,62 @@ Data type: `String[1]`
 The Zabbix version on which the template will be installed on.
 
 Default value: `$zabbix::params::zabbix_version`
+
+##### <a name="delete_missing_applications"></a>`delete_missing_applications`
+
+Data type: `Boolean`
+
+Deletes applications from zabbix that are not in the template when set to true
+
+Default value: ``false``
+
+##### <a name="delete_missing_drules"></a>`delete_missing_drules`
+
+Data type: `Boolean`
+
+Deletes discovery rules from zabbix that are not in the template when set to true
+
+Default value: ``false``
+
+##### <a name="delete_missing_graphs"></a>`delete_missing_graphs`
+
+Data type: `Boolean`
+
+Deletes graphs from zabbix that are not in the template when set to true
+
+Default value: ``false``
+
+##### <a name="delete_missing_httptests"></a>`delete_missing_httptests`
+
+Data type: `Boolean`
+
+Deletes web-scenarios from zabbix that are not in the template when set to true
+
+Default value: ``false``
+
+##### <a name="delete_missing_items"></a>`delete_missing_items`
+
+Data type: `Boolean`
+
+Deletes items from zabbix that are not in the template when set to true
+
+Default value: ``false``
+
+##### <a name="delete_missing_templatescreens"></a>`delete_missing_templatescreens`
+
+Data type: `Boolean`
+
+Deletes template-screens from zabbix that are not in the template when set to true
+
+Default value: ``false``
+
+##### <a name="delete_missing_triggers"></a>`delete_missing_triggers`
+
+Data type: `Boolean`
+
+Deletes triggers from zabbix that are not in the template when set to true
+
+Default value: ``false``
 
 ### <a name="zabbixuserparameters"></a>`zabbix::userparameters`
 
@@ -5740,6 +5911,10 @@ An array of groups the host belongs to.
 
 Internally used hostid
 
+##### `interfacedetails`
+
+Additional interface details.
+
 ##### `interfaceid`
 
 Internally used identifier for the host interface
@@ -5909,10 +6084,45 @@ Default value: `present`
 
 The following parameters are available in the `zabbix_template` type.
 
+* [`delete_missing_applications`](#delete_missing_applications)
+* [`delete_missing_drules`](#delete_missing_drules)
+* [`delete_missing_graphs`](#delete_missing_graphs)
+* [`delete_missing_httptests`](#delete_missing_httptests)
+* [`delete_missing_items`](#delete_missing_items)
+* [`delete_missing_templatescreens`](#delete_missing_templatescreens)
+* [`delete_missing_triggers`](#delete_missing_triggers)
 * [`provider`](#provider)
 * [`template_name`](#template_name)
 * [`template_source`](#template_source)
 * [`zabbix_version`](#zabbix_version)
+
+##### <a name="delete_missing_applications"></a>`delete_missing_applications`
+
+Delete applications from zabbix which are not in the template.
+
+##### <a name="delete_missing_drules"></a>`delete_missing_drules`
+
+Delete discovery rules from zabbix which are not in the template.
+
+##### <a name="delete_missing_graphs"></a>`delete_missing_graphs`
+
+Delete graphs from zabbix which are not in the template.
+
+##### <a name="delete_missing_httptests"></a>`delete_missing_httptests`
+
+Delete web scenarios from zabbix which are not in the template.
+
+##### <a name="delete_missing_items"></a>`delete_missing_items`
+
+Delete items from zabbix which are not in the template.
+
+##### <a name="delete_missing_templatescreens"></a>`delete_missing_templatescreens`
+
+Delete templateScreens from zabbix which are not in the template.
+
+##### <a name="delete_missing_triggers"></a>`delete_missing_triggers`
+
+Delete triggers from zabbix which are not in the template.
 
 ##### <a name="provider"></a>`provider`
 
@@ -5933,7 +6143,7 @@ Zabbix version that the template will be installed on.
 
 ### <a name="zabbix_template_host"></a>`zabbix_template_host`
 
-Link or Unlink template to host.
+Link or Unlink template to host. Only for Zabbix < 6.0!
 Example.
 Name should be in the format of "template_name@hostname"
 
@@ -5962,7 +6172,7 @@ The following parameters are available in the `zabbix_template_host` type.
 
 ##### <a name="name"></a>`name`
 
-Valid values: `%r{.+\@.+}`
+Valid values: `%r{.+@.+}`
 
 namevar
 

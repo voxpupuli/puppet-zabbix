@@ -4,7 +4,55 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
-## [v9.1.0](https://github.com/voxpupuli/puppet-zabbix/tree/v9.1.0) (2021-08-04)
+## [v9.2.0](https://github.com/voxpupuli/puppet-zabbix/tree/v9.2.0) (2022-06-03)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v9.1.0...v9.2.0)
+
+**Implemented enhancements:**
+
+- Add Zabbix 6.0 support [\#820](https://github.com/voxpupuli/puppet-zabbix/pull/820) ([root-expert](https://github.com/root-expert))
+- add zabbix-server options StartReportWriters and WebServiceURL. [\#811](https://github.com/voxpupuli/puppet-zabbix/pull/811) ([Heidistein](https://github.com/Heidistein))
+- Add AIX 7 support [\#807](https://github.com/voxpupuli/puppet-zabbix/pull/807) ([cchallenorskytap](https://github.com/cchallenorskytap))
+- Add RedHat 8 support [\#805](https://github.com/voxpupuli/puppet-zabbix/pull/805) ([tjikkun](https://github.com/tjikkun))
+- Added ability to keep templates in sync \(no manual changes\) [\#803](https://github.com/voxpupuli/puppet-zabbix/pull/803) ([Fabian1976](https://github.com/Fabian1976))
+- Bump lower bound of systemd to 3.1.0 [\#791](https://github.com/voxpupuli/puppet-zabbix/pull/791) ([root-expert](https://github.com/root-expert))
+- Allow MSI package install on Windows [\#790](https://github.com/voxpupuli/puppet-zabbix/pull/790) ([spicyprogramming](https://github.com/spicyprogramming))
+- Add Debian 11 support [\#784](https://github.com/voxpupuli/puppet-zabbix/pull/784) ([root-expert](https://github.com/root-expert))
+
+**Fixed bugs:**
+
+- Agent service needs to require the startup script [\#788](https://github.com/voxpupuli/puppet-zabbix/issues/788)
+-  Fix \#817 - startup\_script fails for windows [\#818](https://github.com/voxpupuli/puppet-zabbix/pull/818) ([logicminds](https://github.com/logicminds))
+- Fix typo in repo.pp [\#816](https://github.com/voxpupuli/puppet-zabbix/pull/816) ([root-expert](https://github.com/root-expert))
+- Default denykey to undef [\#813](https://github.com/voxpupuli/puppet-zabbix/pull/813) ([root-expert](https://github.com/root-expert))
+- set ipaddress to empty string if agent\_use\_ip is false [\#810](https://github.com/voxpupuli/puppet-zabbix/pull/810) ([mergwyn](https://github.com/mergwyn))
+- Respect manage\_repo for RedHat family [\#801](https://github.com/voxpupuli/puppet-zabbix/pull/801) ([fraenki](https://github.com/fraenki))
+- Require startup script for the zabbix agent service [\#794](https://github.com/voxpupuli/puppet-zabbix/pull/794) ([root-expert](https://github.com/root-expert))
+- Add code to ensure interfacedetails is always a hash [\#793](https://github.com/voxpupuli/puppet-zabbix/pull/793) ([oraziobattaglia](https://github.com/oraziobattaglia))
+- Added details to host network interface to configure SNMP hosts [\#785](https://github.com/voxpupuli/puppet-zabbix/pull/785) ([oraziobattaglia](https://github.com/oraziobattaglia))
+
+**Closed issues:**
+
+- startup\_script fails for windows [\#817](https://github.com/voxpupuli/puppet-zabbix/issues/817)
+- Zabbix 6.0 [\#814](https://github.com/voxpupuli/puppet-zabbix/issues/814)
+- DenyKey active by default even if denykey =\> undef, [\#812](https://github.com/voxpupuli/puppet-zabbix/issues/812)
+- ipaddress should be set to empty string if agent\_use\_ip is false [\#809](https://github.com/voxpupuli/puppet-zabbix/issues/809)
+- no parameter named 'interfacedetails'  [\#804](https://github.com/voxpupuli/puppet-zabbix/issues/804)
+- Keychain for Zabbix repo certificate verify failed [\#800](https://github.com/voxpupuli/puppet-zabbix/issues/800)
+- Add support for CentOS/RHEL 8 [\#643](https://github.com/voxpupuli/puppet-zabbix/issues/643)
+- Add status property to zabbix\_host resource [\#606](https://github.com/voxpupuli/puppet-zabbix/issues/606)
+
+**Merged pull requests:**
+
+- Ubuntu: Install lsb-release during CI [\#819](https://github.com/voxpupuli/puppet-zabbix/pull/819) ([bastelfreak](https://github.com/bastelfreak))
+- cleanup .fixtures.yml [\#806](https://github.com/voxpupuli/puppet-zabbix/pull/806) ([bastelfreak](https://github.com/bastelfreak))
+- Run unit tests on only on major OS versions [\#795](https://github.com/voxpupuli/puppet-zabbix/pull/795) ([bastelfreak](https://github.com/bastelfreak))
+- zabbix::startup: use rspec-puppet-facts [\#792](https://github.com/voxpupuli/puppet-zabbix/pull/792) ([bastelfreak](https://github.com/bastelfreak))
+- Allow up-to-date dependencies [\#786](https://github.com/voxpupuli/puppet-zabbix/pull/786) ([smortex](https://github.com/smortex))
+- Use puppet-strings annotations/Generate REFERENCE.md [\#781](https://github.com/voxpupuli/puppet-zabbix/pull/781) ([root-expert](https://github.com/root-expert))
+- Update README.md with new badges/transfer notice [\#780](https://github.com/voxpupuli/puppet-zabbix/pull/780) ([bastelfreak](https://github.com/bastelfreak))
+
+## [v9.1.0](https://github.com/voxpupuli/puppet-zabbix/tree/v9.1.0) (2021-08-05)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v9.0.0...v9.1.0)
 
