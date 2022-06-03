@@ -149,7 +149,10 @@
       ]
     },
     {
-      "operatingsystem": "AIX"
+      "operatingsystem": "AIX",
+      "operatingsystemrelease": [
+        "7"
+      ]
     }
   ]
 }

@@ -10,7 +10,7 @@ describe 'zabbix::proxy' do
   on_supported_os(baseline_os_hash).each do |os, facts|
     next if facts[:os]['name'] == 'windows'
 
-    context "on #{os}" do # rubocop:disable RSpec/EmptyExampleGroup
+    context "on #{os}" do
       let :facts do
         facts
       end
