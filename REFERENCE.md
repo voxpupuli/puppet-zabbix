@@ -80,6 +80,19 @@ class { 'zabbix':
 }
 ```
 
+##### Using Zabbix Agent 2
+
+```puppet
+class { 'zabbix::agent':
+  package_name          => 'zabbix-agent2',
+  agent_configfile_path => '/etc/zabbix/zabbix_agent2.d',
+  pidfile               => '/var/run/zabbix/zabbix_agentd2.pid',
+  servicename           => 'zabbix-agent2',
+  zabbix_package_agent  => 'zabbix-agent2',
+  binary_location       => '/usr/sbin/zabbix_agent2'
+}
+```
+
 #### Parameters
 
 The following parameters are available in the `zabbix` class:
@@ -1418,6 +1431,7 @@ The following parameters are available in the `zabbix::agent` class:
 * [`userparameter`](#-zabbix--agent--userparameter)
 * [`loadmodulepath`](#-zabbix--agent--loadmodulepath)
 * [`loadmodule`](#-zabbix--agent--loadmodule)
+* [`binary_location`](#-zabbix--agent--binary_location)
 * [`manage_startup_script`](#-zabbix--agent--manage_startup_script)
 
 ##### <a name="-zabbix--agent--zabbix_version"></a>`zabbix_version`
@@ -2097,6 +2111,14 @@ Data type: `Any`
 Module to load at agent startup.
 
 Default value: `$zabbix::params::agent_loadmodule`
+
+##### <a name="-zabbix--agent--binary_location"></a>`binary_location`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+Location of th binary file, this feature is available only for systemd startup script
+
+Default value: `$zabbix::params::agent_binary_location`
 
 ##### <a name="-zabbix--agent--manage_startup_script"></a>`manage_startup_script`
 
@@ -5628,6 +5650,7 @@ The following parameters are available in the `zabbix::startup` defined type:
 * [`service_type`](#-zabbix--startup--service_type)
 * [`manage_database`](#-zabbix--startup--manage_database)
 * [`service_name`](#-zabbix--startup--service_name)
+* [`binary_location`](#-zabbix--startup--binary_location)
 
 ##### <a name="-zabbix--startup--pidfile"></a>`pidfile`
 
@@ -5702,6 +5725,14 @@ Data type: `Optional[String]`
 Name of the service. Defaults to the resource name
 
 Default value: `$name`
+
+##### <a name="-zabbix--startup--binary_location"></a>`binary_location`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+This params is use for define a specific binary location. This is actually only available for zabbix agent and systemd
+
+Default value: `undef`
 
 ### <a name="zabbix--template"></a>`zabbix::template`
 

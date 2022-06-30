@@ -22,6 +22,7 @@
 5. [Usage - Configuration options and additional functionality](#usage)
     * [zabbix-server](#usage-zabbix-server)
     * [zabbix-agent](#usage-zabbix-agent)
+    * [zabbix-agent2](#usage-zabbix-agent2)
     * [zabbix-proxy](#usage-zabbix-proxy)
     * [zabbix-javagateway](#usage-zabbix-javagateway)
     * [zabbix-sender](#usage-zabbix-sender)
@@ -204,6 +205,21 @@ class { 'zabbix::agent':
   zabbix_package_provider => 'windows',
   zabbix_package_source   => "${tmpdir}/zabbix_agent-windows-amd64-openssl.msi",
 }
+```
+
+### Usage zabbix-agent2
+
+To use Zabbix agent2 you need to define some parameters
+
+```ruby
+  class { 'zabbix::agent':
+    package_name          => 'zabbix-agent2',
+    agent_configfile_path => '/etc/zabbix/zabbix_agent2.d',
+    pidfile               => '/var/run/zabbix/zabbix_agentd2.pid',
+    servicename           => 'zabbix-agent2',
+    zabbix_package_agent  => 'zabbix-agent2',
+    binary_location       => '/usr/sbin/zabbix_agent2'
+  }
 ```
 
 ### Usage zabbix-proxy
