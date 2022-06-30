@@ -445,6 +445,36 @@ describe 'zabbix::agent' do
           it { is_expected.to contain_systemd__unit_file('zabbix-agent.service') }
         end
       end
+
+      context 'when binary_location is define', if: facts[:kernel] == 'Linux' do
+        it do
+          is_expected.to contain_zabbix__startup(service_name).with(
+            binary_location: '/usr/sbin/zabbix_agentd'
+          )
+        end
+      end
+
+      context 'when zabbix_package_agent is zabbix-agent2' do
+        let :params do
+          {
+            zabbix_package_agent: 'zabbix-agent2', startagents: 1,
+            maxlinespersecond: 1, allowroot: 1, zabbix_user: 'root',
+            loadmodulepath: '/tmp', allowkey: 'system.run[*]',
+            denykey: 'system.run[*]', enableremotecommands: 1,
+            logremotecommands: 1
+          }
+        end
+
+        it { is_expected.to contain_package('zabbix-agent2') }
+
+        it do
+          is_expected.not_to contain_file(config_path).with_content(
+            %r{^(LogRemoteCommands|StartAgents|MaxLinesPerSecond
+                 |AllowRoot|User|LoadModulePath|AllowKey|DenyKey|
+                 EnableRemoteCommands|LogRemoteCommands)}
+          )
+        end
+      end
     end
   end
 end
