@@ -134,6 +134,17 @@
 #    monitored_by_proxy => 'my_proxy_host',
 #    server             => '192.168.1.1',
 #  }
+#
+# @example Using Zabbix Agent 2
+#   class { 'zabbix::agent':
+#     agent_configfile_path => '/etc/zabbix/zabbix_agent2.conf',
+#     include_dir           => '/etc/zabbix/zabbix_agent2.d',
+#     include_dir_purge     => false,
+#     zabbix_package_agent  => 'zabbix-agent2',
+#     servicename           => 'zabbix-agent2',
+#     manage_startup_script => false,
+#   }
+#
 # @author Werner Dijkerman ikben@werner-dijkerman.nl
 class zabbix::agent (
   $zabbix_version                                      = $zabbix::params::zabbix_version,
@@ -219,6 +230,8 @@ class zabbix::agent (
   String $service_type                                 = $zabbix::params::service_type,
   Boolean $manage_startup_script                       = $zabbix::params::manage_startup_script,
 ) inherits zabbix::params {
+  $agent2 = $zabbix_package_agent == 'zabbix-agent2'
+
   # Find if listenip is set. If not, we can set to specific ip or
   # to network name. If more than 1 interfaces are available, we
   # can find the ipaddress of this specific interface if listenip

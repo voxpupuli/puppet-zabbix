@@ -5,21 +5,27 @@ def prepare_host
 
   apply_manifest <<~PUPPET
     $services = $facts['os']['family'] ? {
-      'RedHat' => ['zabbix-server', 'httpd'],
-      'Debian' => ['zabbix-server', 'apache2'],
-      default  => [],
+      'RedHat' => ['zabbix-server', 'httpd', 'zabbix-agentd', 'zabbix-agent', 'zabbix-agent2'],
+      'Debian' => ['zabbix-server', 'apache2', 'zabbix-agentd', 'zabbix-agent', 'zabbix-agent2'],
+      default  => ['zabbix-agentd', 'zabbix-agent', 'zabbix-agent2'],
     }
     service { $services:
       ensure => stopped
     }
 
     $packages = $facts['os']['family'] ? {
-      'RedHat' => ['zabbix-server-pgsql', 'zabbix-server-pgsql-scl', 'zabbix-web', 'zabbix-web-pgsql', 'zabbix-web-pgsql-scl', 'zabbix-frontend-php', 'zabbix-sql-scripts'],
-      'Debian' => ['zabbix-server-pgsql', 'zabbix-web-pgsql', 'zabbix-frontend-php', 'zabbix-sql-scripts'],
-      default  => [],
+      'RedHat' => ['zabbix-server-pgsql', 'zabbix-server-pgsql-scl', 'zabbix-web', 'zabbix-web-pgsql', 'zabbix-web-pgsql-scl', 'zabbix-frontend-php', 'zabbix-sql-scripts', 'zabbix-agent', 'zabbix-agent2'],
+      'Debian' => ['zabbix-server-pgsql', 'zabbix-web-pgsql', 'zabbix-frontend-php', 'zabbix-sql-scripts', 'zabbix-agent', 'zabbix-agent2'],
+      default  => ['zabbix-agent', 'zabbix-agent2'],
     }
+
+    $pkg_ensure = $facts['os']['family'] ? {
+      'Archlinux' => absent,
+      default     => purged,
+    }
+
     package { $packages:
-      ensure => purged
+      ensure => $pkg_ensure
     }
   PUPPET
 

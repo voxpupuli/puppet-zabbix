@@ -1342,6 +1342,19 @@ class { 'zabbix::agent':
 }
 ```
 
+##### Using Zabbix Agent 2
+
+```puppet
+class { 'zabbix::agent':
+  agent_configfile_path => '/etc/zabbix/zabbix_agent2.conf',
+  include_dir           => '/etc/zabbix/zabbix_agent2.d',
+  include_dir_purge     => false,
+  zabbix_package_agent  => 'zabbix-agent2',
+  servicename           => 'zabbix-agent2',
+  manage_startup_script => false,
+}
+```
+
 #### Parameters
 
 The following parameters are available in the `zabbix::agent` class:
