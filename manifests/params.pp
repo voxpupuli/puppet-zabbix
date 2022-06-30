@@ -292,6 +292,10 @@ class zabbix::params {
   $server_socketdir                         = undef
 
   # Agent specific params
+  $agent_binary_location                    = $facts['kernel'] ? {
+    'Linux' => '/usr/sbin/zabbix_agentd',
+    default => undef,
+  }
   $agent_allowroot                          = '0'
   $agent_buffersend                         = '5'
   $agent_buffersize                         = '100'

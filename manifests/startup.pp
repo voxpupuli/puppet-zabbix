@@ -11,6 +11,7 @@
 # @param service_type Systemd service type
 # @param manage_database When true, it will configure the database and execute the sql scripts.
 # @param service_name Name of the service. Defaults to the resource name
+# @param binary_location This params is use for define a specific binary location. This is actually only available for zabbix agent and systemd
 # @example
 #   zabbix::startup { 'agent': }
 #
@@ -27,6 +28,7 @@ define zabbix::startup (
   String $service_type                                   = 'simple',
   Optional[Boolean] $manage_database                     = undef,
   Optional[String] $service_name                         = $name,
+  Optional[Stdlib::Absolutepath] $binary_location        = undef,
 ) {
   case $title.downcase {
     /agent/: {
@@ -41,8 +43,10 @@ define zabbix::startup (
       fail('we currently only support a title that contains agent or server')
     }
   }
-  # provided by camp2camp/systemd
   if $facts['systemd'] {
+    if $name =~ /^zabbix-agent2?$/ {
+      assert_type(Stdlib::Absolutepath, $binary_location)
+    }
     contain systemd
     systemd::unit_file { "${name}.service":
       content => template("zabbix/${service_name}-systemd.init.erb"),

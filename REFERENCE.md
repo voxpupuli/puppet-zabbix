@@ -80,6 +80,19 @@ class { 'zabbix':
 }
 ```
 
+##### Using Zabbix Agent 2
+
+```puppet
+class { 'zabbix::agent':
+  package_name          => 'zabbix-agent2',
+  agent_configfile_path => '/etc/zabbix/zabbix_agent2.d',
+  pidfile               => '/var/run/zabbix/zabbix_agentd2.pid',
+  servicename           => 'zabbix-agent2',
+  zabbix_package_agent  => 'zabbix-agent2',
+  binary_location       => '/usr/sbin/zabbix_agent2'
+}
+```
+
 #### Parameters
 
 The following parameters are available in the `zabbix` class:
@@ -432,7 +445,7 @@ Default value: `$zabbix::params::apache_listen_ip`
 
 ##### <a name="apache_listenport"></a>`apache_listenport`
 
-Data type: `Any`
+Data type: `Variant[Array[Stdlib::Port], Stdlib::Port]`
 
 The port for the apache vhost.
 
@@ -440,7 +453,7 @@ Default value: `$zabbix::params::apache_listenport`
 
 ##### <a name="apache_listenport_ssl"></a>`apache_listenport_ssl`
 
-Data type: `Any`
+Data type: `Variant[Array[Stdlib::Port], Stdlib::Port]`
 
 The port for the apache SSL vhost.
 
@@ -1407,6 +1420,7 @@ The following parameters are available in the `zabbix::agent` class:
 * [`userparameter`](#userparameter)
 * [`loadmodulepath`](#loadmodulepath)
 * [`loadmodule`](#loadmodule)
+* [`binary_location`](#binary_location)
 * [`manage_startup_script`](#manage_startup_script)
 
 ##### <a name="zabbix_version"></a>`zabbix_version`
@@ -2071,6 +2085,14 @@ Module to load at agent startup.
 
 Default value: `$zabbix::params::agent_loadmodule`
 
+##### <a name="binary_location"></a>`binary_location`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+Location of th binary file, this feature is available only for systemd startup script
+
+Default value: `$zabbix::params::agent_binary_location`
+
 ##### <a name="manage_startup_script"></a>`manage_startup_script`
 
 Data type: `Boolean`
@@ -2505,7 +2527,7 @@ The following parameters are available in the `zabbix::proxy` class:
 * [`database_password`](#database_password)
 * [`database_socket`](#database_socket)
 * [`database_port`](#database_port)
-* [`database_charset`](#database_collate)
+* [`database_charset`](#database_charset)
 * [`database_collate`](#database_collate)
 * [`database_tlsconnect`](#database_tlsconnect)
 * [`database_tlscafile`](#database_tlscafile)
@@ -5097,7 +5119,7 @@ Default value: `$zabbix::params::apache_listen_ip`
 
 ##### <a name="apache_listenport"></a>`apache_listenport`
 
-Data type: `Any`
+Data type: `Variant[Array[Stdlib::Port], Stdlib::Port]`
 
 The port for the apache vhost.
 
@@ -5105,7 +5127,7 @@ Default value: `$zabbix::params::apache_listenport`
 
 ##### <a name="apache_listenport_ssl"></a>`apache_listenport_ssl`
 
-Data type: `Any`
+Data type: `Variant[Array[Stdlib::Port], Stdlib::Port]`
 
 The port for the apache SSL vhost.
 
@@ -5556,6 +5578,7 @@ The following parameters are available in the `zabbix::startup` defined type:
 * [`service_type`](#service_type)
 * [`manage_database`](#manage_database)
 * [`service_name`](#service_name)
+* [`binary_location`](#binary_location)
 
 ##### <a name="pidfile"></a>`pidfile`
 
@@ -5630,6 +5653,14 @@ Data type: `Optional[String]`
 Name of the service. Defaults to the resource name
 
 Default value: `$name`
+
+##### <a name="binary_location"></a>`binary_location`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+This params is use for define a specific binary location. This is actually only available for zabbix agent and systemd
+
+Default value: ``undef``
 
 ### <a name="zabbixtemplate"></a>`zabbix::template`
 

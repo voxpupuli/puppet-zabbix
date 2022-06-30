@@ -198,10 +198,12 @@
 # @param saml_sp_cert The location of the SAML Service Provider Certificate.
 # @param saml_idp_cert The location of the SAML Identity Provider Certificate.
 # @param saml_settings A hash of additional SAML SSO settings.
+#
 # @example Single host setup:
 #   class { 'zabbix':
 #     zabbix_url => 'zabbix.dj-wasabi.nl',
 #   }
+#
 #
 # @example This assumes that you want to use the postgresql database. If not and  you want to supply your own database crendentials:
 #   class { 'zabbix':
@@ -210,6 +212,17 @@
 #     database_user     => 'zabbix',
 #     database_password => 'ThisIsVeryDifficult.nl',
 #   }
+#
+# @example Using Zabbix Agent 2
+#   class { 'zabbix::agent':
+#     package_name          => 'zabbix-agent2',
+#     agent_configfile_path => '/etc/zabbix/zabbix_agent2.d',
+#     pidfile               => '/var/run/zabbix/zabbix_agentd2.pid',
+#     servicename           => 'zabbix-agent2',
+#     zabbix_package_agent  => 'zabbix-agent2',
+#     binary_location       => '/usr/sbin/zabbix_agent2'
+#   }
+#
 # @author Werner Dijkerman ikben@werner-dijkerman.nl
 class zabbix (
   $zabbix_url                                                                 = '',
