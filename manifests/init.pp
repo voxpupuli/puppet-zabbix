@@ -351,6 +351,7 @@ class zabbix (
     zabbix_package_state                     => $zabbix_package_state,
     zabbix_timezone                          => $zabbix_timezone,
     zabbix_template_dir                      => $zabbix_template_dir,
+    default_vhost                            => $default_vhost,
     manage_vhost                             => $manage_vhost,
     manage_resources                         => $manage_resources,
     apache_use_ssl                           => $apache_use_ssl,
