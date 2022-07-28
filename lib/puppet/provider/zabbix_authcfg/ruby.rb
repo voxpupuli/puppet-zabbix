@@ -2,6 +2,7 @@
 
 require_relative '../zabbix'
 Puppet::Type.type(:zabbix_authcfg).provide(:ruby, parent: Puppet::Provider::Zabbix) do
+  desc 'Puppet provider for managing Zabbix Auth. It uses the Zabbix API to configure authentication.'
   confine feature: :zabbixapi
 
   def initialize(value = {})

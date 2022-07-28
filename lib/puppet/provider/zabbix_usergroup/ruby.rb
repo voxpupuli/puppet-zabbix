@@ -2,6 +2,7 @@
 
 require_relative '../zabbix'
 Puppet::Type.type(:zabbix_usergroup).provide(:ruby, parent: Puppet::Provider::Zabbix) do
+  desc 'Puppet provider for managing Zabbix usergroup. It uses the Zabbix API to create, read, update and delete usergroup.'
   confine feature: :zabbixapi
 
   def initialize(value = {})

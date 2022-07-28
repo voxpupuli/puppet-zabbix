@@ -14,6 +14,7 @@ Puppet::Type.newtype(:zabbix_user) do
       }")
 
   ensurable do
+    desc 'The basic property that the resource should be in.'
     defaultvalues
     defaultto :present
   end

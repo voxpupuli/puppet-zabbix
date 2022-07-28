@@ -27,6 +27,10 @@
     * [zabbix-sender](#usage-zabbix-sender)
     * [zabbix-userparameters](#usage-zabbix-userparameters)
     * [zabbix-template](#usage-zabbix-template)
+    * [zabbix-authcfg](#usage-zabbix-authcfg)
+    * [zabbix-user](#usage-zabbix-user)
+    * [zabbix-usergroup](#usage-zabbix-usergroup)
+    * [zabbix-role](#usage-zabbix-role)
 6. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
 7. [Limitations - OS compatibility, etc.](#limitations)
 8. [Development - Contributors](#contributors)
@@ -353,6 +357,235 @@ zabbix::template { 'Template App MySQL':
   templ_source   => 'puppet:///modules/zabbix/MySQL.xml',
   zabbix_version => '5.2'
 }
+```
+
+### Usage zabbix-authcfg
+
+With the `zabbix_authcfg` resource you can configure authentication via the API.
+
+Please be aware of the following limitations:
+- You can only make use of this feature when you have configured the module to make use of exported resources.
+- Only '1' is supported as the namevar, this is a Zabbix limitation.
+- Only tested on Zabbix 6.0.
+- Only LDAP and internal authentication are implemented.
+
+You can configure zabbix to use LDAP with the following example:
+``` ruby
+zabbix_authcfg { '1':
+  ensure                => present,
+  authentication_type   => 'LDAP',
+  ldap_host             => 'ldaps://ldap.example.com'
+  ldap_port             => 636,
+  ldap_base_dn          => 'dc=example,dc=com',
+  ldap_bind_dn          => 'CN=Manager',
+  ldap_bind_password    => Sensitive('my-bind-password'),
+  ldap_search_attribute => 'sAMAccountName',
+  ldap_case_sensitive   => true,
+}
+```
+
+### Usage zabbix-user
+
+With the `zabbix_user` resource you can manage users via the API.
+
+Please be aware of the following limitations:
+- You can only make use of this feature when you have configured the module to make use of exported resources.
+- Only tested on Zabbix 6.0.
+- Usergroups (if defined) must exist (you can use `zabbix_usergroup`)
+
+Example:
+
+``` ruby
+# Update admin password
+zabbix_user { 'NewUser':
+  ensure    => present,
+  firstname => 'New,
+  surname   => 'User',
+  role      => 'Admin role',
+  usrgrps   => ['Zabbix administrators'],
+  passwd    => Sensitive('a_password'),
+}
+```
+
+Other supported params:
+- `autologin` (boolean)
+
+When you want to use this resource to change the default admin password you can use the helper fact `zbx_admin_passwd_default`:
+
+``` ruby
+# Use default password unless the password was changed already
+$_server_api_pass = $facts['zbx_admin_passwd_default'] ? {
+  true    => Sensitive('zabbix'),
+  false   => Sensitive('mynewpassword'),
+  default => Sensitive('zabbix'),
+}
+
+class { 'zabbix':
+  ...
+  zabbix_api_pass    => $_server_api_pass,
+  ...
+}
+
+# Update admin password
+zabbix_user { 'Admin':
+  ensure    => present,
+  firstname => 'Zabbix',
+  role      => 'Super admin role',
+  surname   => 'Administrator',
+  usrgrps   => ['Zabbix administrators'],
+  passwd    => Sensitive('mynewpassword'),
+}
+
+unless $facts['zbx_admin_passwd_default'] {
+  # Do other stuff with the API
+}
+
+```
+
+### Usage zabbix-usergroup
+
+With the `zabbix_usergroup` resource you can manage usergroups via the API.
+
+Please be aware of the following limitations:
+- You can only make use of this feature when you have configured the module to make use of exported resources.
+- Only tested on Zabbix 6.0.
+
+Example:
+
+``` ruby
+# Make sure 'Zabbix administrators' uses internal authentication and add an LDAP administrators group
+zabbix_usergroup {
+  default:
+    ensure     => present,
+    ;
+  'Zabbix administrators':
+    gui_access => 'internal',
+    ;
+  'LDAP administrators':
+    gui_access => 'LDAP,
+    ;
+}
+
+zabbix_user { 'LDAPAdmin':
+  ensure    => present,
+  firstname => 'LDAP,
+  role      => 'Super admin role',
+  surname   => 'Administrator',
+  usrgrps   => ['LDAP administrators'],
+  passwd    => Sensitive('mynewpassword'),
+  require   => Zabbix_usergroup['LDAP administrators']
+}
+```
+
+`gui_access` can be one of:
+- default (use the default)
+- internal
+- LDAP
+
+Other supported parameters:
+- debug_mode (boolean - default false)
+- users_status (boolean - default true)
+
+### Usage zabbix-role
+
+With the `zabbix_role` resource you can manage Zabbix roles and role rules.
+
+Please be aware of the following limitations:
+- You can only make use of this feature when you have configured the module to make use of exported resources.
+- Only tested on Zabbix 6.0.
+- To avoid having to define enormous hashes when just overriding one default rule the provider will ignore any default rules when comparing rules. This means that if you want a role with just one rule enabled you will have to define a hash that overrides all defaults.
+
+For the role rules syntax (and information on defaults) please refer to the official zabbix documentation: https://www.zabbix.com/documentation/current/en/manual/api/reference/role/object
+
+Example:
+``` ruby
+# Create custom production role (and its rules)
+$_production_role_rules = {
+  'ui'                       => [
+    {
+      'name'                 => 'configuration.actions',
+      'status'               => '0'
+    },
+    {
+      'name'                 => 'configuration.discovery',
+      'status'               => '0'
+    },
+    {
+      'name'                 => 'configuration.host_groups',
+      'status'               => '0'
+    },
+    {
+      'name'                 => 'configuration.hosts',
+      'status'               => '0'
+    },
+    {
+      'name'                 => 'configuration.templates',
+      'status'               => '0'
+    },
+  ],
+  'ui.default_access'        => '1',
+  'services.read.mode'       => '1',
+  'services.write.mode'      => '0',
+  'modules.default_access'   => '0',
+  'api.access'               => '0',
+  'actions'                  => [
+    {
+      'name'                 => 'edit_dashboards',
+      'status'               => '1',
+    },
+    {
+      'name'                 => 'edit_maps',
+      'status'               => '1',
+    },
+    {
+      'name'                 => 'acknowledge_problems',
+      'status'               => '1',
+    },
+    {
+      'name'                 => 'close_problems',
+      'status'               => '1',
+    },
+    {
+      'name'                 => 'change_severity',
+      'status'               => '1',
+    },
+    {
+      'name'                 => 'add_problem_comments',
+      'status'               => '1',
+    },
+    {
+      'name'                 => 'execute_scripts',
+      'status'               => '0',
+    },
+    {
+      'name'                 => 'edit_maintenance',
+      'status'               => '1',
+    },
+    {
+      'name'                 => 'manage_scheduled_reports',
+      'status'               => '1',
+    },
+    {
+      'name'                 => 'manage_sla',
+      'status'               => '1',
+    },
+  ],
+  'actions.default_access'   => '1',
+}
+
+zabbix_role { 'Production role':
+  ensure => present,
+  type   => 'Admin',
+  rules  => $_production_role_rules,
+}
+
+Type can be one of:
+- User
+- Admin
+- Super admin
+
+Other supported params:
+- readonly (boolean - default false)
 ```
 
 ## Zabbix Upgrades

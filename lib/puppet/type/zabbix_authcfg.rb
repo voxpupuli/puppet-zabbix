@@ -19,6 +19,7 @@ Puppet::Type.newtype(:zabbix_authcfg) do
 
   ensurable do
     # We should not be able to delete the authentication settings
+    desc 'The basic property that the resource should be in.'
     newvalues(:present)
     defaultto :present
   end
