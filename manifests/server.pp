@@ -11,6 +11,7 @@
 # @param zabbix_version This is the zabbix version. Example: 5.0
 # @param manage_repo When true (default) this module will manage the Zabbix repository.
 # @param manage_database When true, it will configure the database and execute the sql scripts.
+# @param manage_database_timescale When true, it will execute the sql scripts needed for timescaledb.
 # @param zabbix_package_state The state of the package that needs to be installed: present or latest.
 # @param manage_firewall When true, it will create iptables rules.
 # @param manage_service
@@ -172,6 +173,7 @@ class zabbix::server (
   Boolean $manage_firewall                                                    = $zabbix::params::manage_firewall,
   Boolean $manage_repo                                                        = $zabbix::params::manage_repo,
   Boolean $manage_database                                                    = $zabbix::params::manage_database,
+  Boolean $manage_database_timescale                                          = $zabbix::params::manage_database_timescale,
   Boolean $manage_service                                                     = $zabbix::params::manage_service,
   $server_configfile_path                                                     = $zabbix::params::server_configfile_path,
   $server_config_owner                                                        = $zabbix::params::server_config_owner,
