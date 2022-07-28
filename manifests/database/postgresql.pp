@@ -9,6 +9,7 @@
 # @param database_host Hostname to use to connect to the database
 # @param database_port Database port to be used for the import process.
 # @param database_path Path to the database executable
+# @param manage_timescale Import the timescaledb sql file?
 # @author Werner Dijkerman <ikben@werner-dijkerman.nl>
 class zabbix::database::postgresql (
   $zabbix_type                                        = '',
@@ -20,6 +21,7 @@ class zabbix::database::postgresql (
   $database_host                                      = '',
   Stdlib::Port::Unprivileged $database_port           = 5432,
   $database_path                                      = $zabbix::params::database_path,
+  Boolean $manage_timescale                           = false,
 ) inherits zabbix::params {
   assert_private()
 
@@ -107,6 +109,27 @@ class zabbix::database::postgresql (
         unless   => 'test -f /etc/zabbix/.data.done',
         provider => 'shell',
         require  => Exec['update_pgpass'],
+      }
+      if $manage_timescale {
+        # Enable timescaledb
+        $_timescaledb_sql = [
+          "cd ${schema_path}",
+          "&& psql -h '${database_host}'",
+          "-U '${database_user}'",
+          "-d '${database_name}'",
+          '-f timescaledb.sql',
+          '&& touch /etc/zabbix/.timescaledb.done',
+        ]
+        exec { 'zabbix_timescaledb.sql':
+          command  => $_timescaledb_sql.join(' '),
+          path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
+          unless   => 'test -f /etc/zabbix/.timescaledb.done',
+          provider => 'shell',
+          require  => [
+            Exec['update_pgpass'],
+            Exec['zabbix_server_data.sql'],
+          ],
+        }
       }
     }
     default: {
