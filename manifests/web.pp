@@ -151,7 +151,7 @@ class zabbix::web (
   # zabbix frontend 5.x is not supported, among others, on stretch and xenial.
   # https://www.zabbix.com/documentation/current/manual/installation/frontend/frontend_on_debian
   if $facts['os']['name'] in ['ubuntu', 'debian'] and versioncmp($zabbix_version, '5') >= 0 {
-    if versioncmp($facts['os']['release']['major'], '16.04') == 0 or versioncmp($facts['os']['release']['major'], '9') == 0 {
+    if versioncmp($facts['os']['release']['major'], '9') == 0 {
       fail("${facts['os']['family']} ${$facts['os']['release']['major']} is not supported for zabbix::web")
     }
   }
@@ -227,29 +227,7 @@ class zabbix::web (
   case $facts['os']['name'] {
     'ubuntu', 'debian': {
       $zabbix_web_package = 'zabbix-frontend-php'
-
-      # Check OS release for proper prefix
-      case $facts['os']['name'] {
-        'Ubuntu': {
-          if versioncmp($facts['os']['release']['major'], '16.04') >= 0 {
-            $php_db_package = "php-${db}"
-          }
-          else {
-            $php_db_package = "php5-${db}"
-          }
-        }
-        'Debian': {
-          if versioncmp($facts['os']['release']['major'], '9') >= 0 {
-            $php_db_package = "php-${db}"
-          }
-          else {
-            $php_db_package = "php5-${db}"
-          }
-        }
-        default: {
-          $php_db_package = "php5-${db}"
-        }
-      }
+      $php_db_package = "php-${db}"
 
       package { $php_db_package:
         ensure => $zabbix_package_state,
