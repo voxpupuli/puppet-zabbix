@@ -69,9 +69,9 @@ class zabbix::database::postgresql (
   }
 
   exec { 'update_pgpass':
-    command => "echo ${database_host}:${database_port}:${database_name}:${database_user}:${database_password_unsensitive} >> /root/.pgpass",
+    command => Sensitive("echo ${database_host}:${database_port}:${database_name}:${database_user}:${database_password_unsensitive} >> /root/.pgpass"),
     path    => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
-    unless  => "grep \"${database_host}:${database_port}:${database_name}:${database_user}:${database_password_unsensitive}\" /root/.pgpass",
+    unless  => Sensitive("grep \"${database_host}:${database_port}:${database_name}:${database_user}:${database_password_unsensitive}\" /root/.pgpass"),
     require => File['/root/.pgpass'],
   }
 
