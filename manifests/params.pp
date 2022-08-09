@@ -169,8 +169,8 @@ class zabbix::params {
 
   # Zabbix-web
   $apache_listen_ip                         = undef
-  $apache_listenport                        = '80'
-  $apache_listenport_ssl                    = '443'
+  $apache_listenport                        = 80
+  $apache_listenport_ssl                    = 443
   $apache_ssl_cert                          = undef
   $apache_ssl_chain                         = undef
   # Cipher is used from: https://wiki.mozilla.org/Security/Server_Side_TLS#Modern_compatibility
