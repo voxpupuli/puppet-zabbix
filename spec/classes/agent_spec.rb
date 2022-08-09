@@ -16,12 +16,6 @@ describe 'zabbix::agent' do
 
   on_supported_os(baseline_os_hash).each do |os, facts|
     context "on #{os}" do
-      systemd_fact = case facts[:osfamily]
-                     when 'Archlinux', 'Fedora', 'Gentoo'
-                       { systemd: true }
-                     else
-                       { systemd: false }
-                     end
       config_path = case facts[:operatingsystem]
                     when 'Fedora'
                       '/etc/zabbix_agentd.conf'
@@ -45,9 +39,7 @@ describe 'zabbix::agent' do
                     end
       zabbix_version = '5.0'
 
-      let :facts do
-        facts.merge(systemd_fact)
-      end
+      let(:facts) { facts }
 
       case facts[:osfamily]
       when 'Gentoo'

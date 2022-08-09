@@ -13,15 +13,7 @@ describe 'zabbix::server' do
     next if facts[:os]['name'] == 'windows'
 
     context "on #{os}" do
-      systemd_fact = case facts[:osfamily]
-                     when 'Archlinux', 'Fedora', 'Gentoo'
-                       { systemd: true }
-                     else
-                       { systemd: false }
-                     end
-      let :facts do
-        facts.merge(systemd_fact)
-      end
+      let(:facts) { facts }
 
       zabbix_version = '5.0'
 
