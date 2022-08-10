@@ -3,7 +3,7 @@
 require 'spec_helper_acceptance'
 require 'serverspec_type_zabbixapi'
 
-describe 'zabbix_hostgroup type', unless: default[:platform] =~ %r{(debian-9|archlinux)} do
+describe 'zabbix_hostgroup type', unless: default[:platform] =~ %r{archlinux} do
   supported_versions.each do |zabbix_version|
     # >= 5.2 server packages are not available for RHEL 7
     next if zabbix_version >= '5.2' && default[:platform] == 'el-7-x86_64'

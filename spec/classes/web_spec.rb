@@ -19,7 +19,6 @@ describe 'zabbix::web' do
       next if facts[:os]['name'] == 'windows'
       next if facts[:os]['name'] == 'Archlinux'
       next if facts[:os]['name'] == 'Gentoo'
-      next if facts[:os]['name'] == 'Debian' && facts[:os]['release']['major'] == '9'
       # There are no zabbix 5.2 packages for Debian 11
       next if facts[:os]['name'] == 'Debian' && facts[:os]['release']['major'] == '11' && zabbix_version == '5.2'
 
