@@ -3,7 +3,7 @@
 require 'spec_helper_acceptance'
 require 'serverspec_type_zabbixapi'
 
-describe 'zabbix_template_host type', unless: default[:platform] =~ %r{(ubuntu-16.04|debian-9|archlinux)} do
+describe 'zabbix_template_host type', unless: default[:platform] =~ %r{(debian-9|archlinux)} do
   supported_versions.each do |zabbix_version|
     # Zabbix 6.0 removed the ability to attach templates directly to hosts.
     next if zabbix_version == '6.0'

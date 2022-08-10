@@ -20,7 +20,6 @@ describe 'zabbix::web' do
       next if facts[:os]['name'] == 'Archlinux'
       next if facts[:os]['name'] == 'Gentoo'
       next if facts[:os]['name'] == 'Debian' && facts[:os]['release']['major'] == '9'
-      next if facts[:os]['name'] == 'Ubuntu' && facts[:os]['release']['major'] == '16.04'
       # There are no zabbix 5.2 packages for Debian 11
       next if facts[:os]['name'] == 'Debian' && facts[:os]['release']['major'] == '11' && zabbix_version == '5.2'
 
@@ -64,22 +63,7 @@ describe 'zabbix::web' do
             super().merge(zabbix_version: zabbix_version)
           end
 
-          pgsqlpackage = case facts[:operatingsystem]
-                         when 'Ubuntu'
-                           if facts[:operatingsystemmajrelease] >= '16.04'
-                             'php-pgsql'
-                           else
-                             'php5-pgsql'
-                           end
-                         when 'Debian'
-                           if facts[:operatingsystemmajrelease].to_i >= 9
-                             'php-pgsql'
-                           else
-                             'php5-pgsql'
-                           end
-                         else
-                           'php5-pgsql'
-                         end
+          pgsqlpackage = 'php-pgsql'
 
           packages = if facts[:osfamily] == 'RedHat'
                        if facts[:operatingsystemmajrelease].to_i == 7 &&
@@ -104,22 +88,7 @@ describe 'zabbix::web' do
             super().merge(database_type: 'mysql')
           end
 
-          mysqlpackage = case facts[:operatingsystem]
-                         when 'Ubuntu'
-                           if facts[:operatingsystemmajrelease] >= '16.04'
-                             'php-mysql'
-                           else
-                             'php5-mysql'
-                           end
-                         when 'Debian'
-                           if facts[:operatingsystemmajrelease].to_i >= 9
-                             'php-mysql'
-                           else
-                             'php5-mysql'
-                           end
-                         else
-                           'php5-mysql'
-                         end
+          mysqlpackage = 'php-mysql'
 
           packages = facts[:osfamily] == 'RedHat' ? %w[zabbix-web-mysql zabbix-web] : ['zabbix-frontend-php', mysqlpackage]
           packages.each do |package|
