@@ -65,9 +65,9 @@ class zabbix::database::postgresql (
   }
 
   exec { 'update_pgpass':
-    command => "echo ${database_host}:5432:${database_name}:${database_user}:${database_password} >> /root/.pgpass",
+    command => "echo ${database_host}:5432:${database_name}:${database_user}:${shell_escape($database_password)} >> /root/.pgpass",
     path    => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
-    unless  => "grep \"${database_host}:5432:${database_name}:${database_user}:${database_password}\" /root/.pgpass",
+    unless  => "grep ${database_host}:5432:${database_name}:${database_user}:${shell_escape($database_password)} /root/.pgpass",
     require => File['/root/.pgpass'],
   }
 
