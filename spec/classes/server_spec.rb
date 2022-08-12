@@ -147,7 +147,7 @@ describe 'zabbix::server' do
 
       context 'it creates a startup script' do
         case facts[:osfamily]
-        when 'Archlinux', 'Fedora', 'Gentoo'
+        when 'Archlinux', 'Debian', 'Gentoo', 'RedHat'
           it { is_expected.to contain_file('/etc/init.d/zabbix-server').with_ensure('absent') }
           it { is_expected.to contain_file('/etc/systemd/system/zabbix-server.service').with_ensure('file') }
         else

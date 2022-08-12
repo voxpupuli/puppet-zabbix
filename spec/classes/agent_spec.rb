@@ -213,7 +213,7 @@ describe 'zabbix::agent' do
       context 'it creates a startup script' do
         if facts[:kernel] == 'Linux'
           case facts[:osfamily]
-          when 'Archlinux', 'Fedora', 'Gentoo'
+          when 'Archlinux', 'Debian', 'Gentoo', 'RedHat'
             it { is_expected.to contain_file("/etc/init.d/#{service_name}").with_ensure('absent') }
             it { is_expected.to contain_file("/etc/systemd/system/#{service_name}.service").with_ensure('file') }
           when 'windows'
