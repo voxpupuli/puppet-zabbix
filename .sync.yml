@@ -9,8 +9,6 @@ spec/spec_helper.rb:
   spec_overrides:
     - "require 'support/acceptance/supported_versions'"
     - "require 'spec_helper_methods'"
-spec/spec_helper_acceptance.rb:
-  unmanaged: false
 .github/workflows/ci.yml:
   pidfile_workaround: CentOS,Ubuntu
 .puppet-lint.rc:
