@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require 'deep_merge'
 
@@ -17,12 +19,10 @@ describe 'zabbix::web' do
       next if facts[:os]['name'] == 'windows'
       next if facts[:os]['name'] == 'Archlinux'
       next if facts[:os]['name'] == 'Gentoo'
-      next if facts[:os]['name'] == 'Debian' && facts[:os]['release']['major'] == '9'
-      next if facts[:os]['name'] == 'Ubuntu' && facts[:os]['release']['major'] == '16.04'
       # There are no zabbix 5.2 packages for Debian 11
       next if facts[:os]['name'] == 'Debian' && facts[:os]['release']['major'] == '11' && zabbix_version == '5.2'
 
-      context "on #{os} " do
+      context "on #{os}" do
         let :facts do
           facts
         end
@@ -62,30 +62,15 @@ describe 'zabbix::web' do
             super().merge(zabbix_version: zabbix_version)
           end
 
-          pgsqlpackage = case facts[:operatingsystem]
-                         when 'Ubuntu'
-                           if facts[:operatingsystemmajrelease] >= '16.04'
-                             'php-pgsql'
-                           else
-                             'php5-pgsql'
-                           end
-                         when 'Debian'
-                           if facts[:operatingsystemmajrelease].to_i >= 9
-                             'php-pgsql'
-                           else
-                             'php5-pgsql'
-                           end
-                         else
-                           'php5-pgsql'
-                         end
+          pgsqlpackage = 'php-pgsql'
 
           packages = if facts[:osfamily] == 'RedHat'
                        if facts[:operatingsystemmajrelease].to_i == 7 &&
                           !%w[VirtuozzoLinux OracleLinux Scientific].include?(facts[:os]['name']) &&
-                          zabbix_version =~ %r{5\.[024]}
-                         ['zabbix-web-pgsql-scl', 'zabbix-web']
+                          Puppet::Util::Package.versioncmp(zabbix_version, '5.0') >= 0
+                         %w[zabbix-web-pgsql-scl zabbix-web]
                        else
-                         ['zabbix-web-pgsql', 'zabbix-web']
+                         %w[zabbix-web-pgsql zabbix-web]
                        end
                      else
                        ['zabbix-frontend-php', pgsqlpackage]
@@ -102,24 +87,9 @@ describe 'zabbix::web' do
             super().merge(database_type: 'mysql')
           end
 
-          mysqlpackage = case facts[:operatingsystem]
-                         when 'Ubuntu'
-                           if facts[:operatingsystemmajrelease] >= '16.04'
-                             'php-mysql'
-                           else
-                             'php5-mysql'
-                           end
-                         when 'Debian'
-                           if facts[:operatingsystemmajrelease].to_i >= 9
-                             'php-mysql'
-                           else
-                             'php5-mysql'
-                           end
-                         else
-                           'php5-mysql'
-                         end
+          mysqlpackage = 'php-mysql'
 
-          packages = facts[:osfamily] == 'RedHat' ? ['zabbix-web-mysql', 'zabbix-web'] : ['zabbix-frontend-php', mysqlpackage]
+          packages = facts[:osfamily] == 'RedHat' ? %w[zabbix-web-mysql zabbix-web] : ['zabbix-frontend-php', mysqlpackage]
           packages.each do |package|
             it { is_expected.to contain_package(package) }
           end
@@ -158,6 +128,7 @@ describe 'zabbix::web' do
               with_zabbix_pass('zabbix').
               with_apache_use_ssl(false)
           end
+
           it do
             is_expected.to contain_file('/etc/zabbix/api.conf').
               with_ensure('file').
@@ -169,6 +140,7 @@ describe 'zabbix::web' do
               with_content(%r{zabbix_pass    = zabbix}).
               with_content(%r{apache_use_ssl = false})
           end
+
           it { is_expected.to contain_package('zabbixapi').with_provider('puppet_gem') }
           it { is_expected.to contain_file('/etc/zabbix/imported_templates').with_ensure('directory') }
         end

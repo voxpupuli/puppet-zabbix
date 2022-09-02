@@ -17,7 +17,7 @@ class zabbix::repo (
   Optional[Stdlib::HTTPUrl] $unsupported_repo_location = $zabbix::params::unsupported_repo_location,
   String[1]                 $zabbix_version            = $zabbix::params::zabbix_version,
 ) inherits zabbix::params {
-  if ($manage_repo) {
+  if $manage_repo {
     case $facts['os']['name'] {
       'PSBM': {
         $majorrelease = '6'
@@ -81,6 +81,13 @@ class zabbix::repo (
             priority => '1',
           }
         }
+
+        if ($facts['os']['release']['major'] == '7' and versioncmp($zabbix_version, '5.0') >= 0) {
+          package { 'zabbix-required-scl-repo':
+            ensure => 'latest',
+            name   => 'centos-release-scl',
+          }
+        }
       }
       'Debian': {
         if ($manage_apt) {
@@ -111,7 +118,7 @@ class zabbix::repo (
             ,
           }
         } else {
-          if ($facts['os']['distro'][id] == 'Raspbian') {
+          if ($facts['os']['distro']['id'] == 'Raspbian') {
             $operatingsystem = 'raspbian'
           } elsif ($facts['os']['architecture'] == 'aarch64' and $facts['os']['distro']['codename'] == 'focal') {
             $operatingsystem = 'ubuntu-arm64'

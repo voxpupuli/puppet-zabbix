@@ -185,6 +185,27 @@ class { 'zabbix::agent':
 }
 ```
 
+To install on Windows without requiring the use of `chocolatey`:
+```ruby
+$tmpdir = $facts['windows_env']['TMP'];
+
+download_file { 'get zabbix-installer.msi':
+  url                   => "https://<hostname>/zabbix_agent-${zabbix_version}-windows-amd64-openssl.msi",
+  destination_directory => $tmpdir,
+  destination_file      => "zabbix_agent-windows-amd64-openssl.msi",
+}
+
+class { 'zabbix::agent':
+  zabbix_version          => $zabbix_version,
+  manage_resources        => true,
+  manage_choco            => false,
+  zabbix_package_agent    => "Zabbix Agent (64-bit)",
+  zabbix_package_state    => present,
+  zabbix_package_provider => 'windows',
+  zabbix_package_source   => "${tmpdir}/zabbix_agent-windows-amd64-openssl.msi",
+}
+```
+
 ### Usage zabbix-proxy
 
 Like the zabbix-server, the zabbix-proxy can also be used in 2 ways:
@@ -406,7 +427,7 @@ Take a look at the [REFERENCE.md](https://github.com/voxpupuli/puppet-zabbix/blo
 
 ## Limitations
 
-This module supports Zabbix 4.0, 5.0, 5.2 and 5.4. The upstream supported versions are documented [here](https://www.zabbix.com/de/life_cycle_and_release_policy)
+This module supports Zabbix 4.0, 5.0, 5.2, 5.4 and 6.0. The upstream supported versions are documented [here](https://www.zabbix.com/de/life_cycle_and_release_policy)
 Please have a look into the metadata.json for all supported operating systems.
 
 This module is supported on both the community and the Enterprise version of Puppet.

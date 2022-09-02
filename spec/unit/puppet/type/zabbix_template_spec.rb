@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require 'fakefs/spec_helpers'
 
@@ -12,12 +14,12 @@ describe Puppet::Type.type(:zabbix_template) do
   let(:provider) { stub('provider', class: provider_class, clear: nil) }
 
   describe 'when validating attributes' do
-    [
-      :template_name,
-      :template_source,
-      :provider
+    %i[
+      template_name
+      template_source
+      provider
     ].each do |param|
-      it "should have a #{param} parameter" do
+      it "has a #{param} parameter" do
         expect(described_class.attrtype(param)).to eq(:param)
       end
     end
@@ -32,7 +34,7 @@ describe Puppet::Type.type(:zabbix_template) do
   describe 'ensure' do
     let(:property) { resource.property(:ensure) }
 
-    [:present, :absent].each do |value|
+    %i[present absent].each do |value|
       it "suppports #{value} as a value to :ensure" do
         expect { described_class.new(template_name: 'My template', ensure: value) }.not_to raise_error
       end
@@ -52,6 +54,7 @@ describe Puppet::Type.type(:zabbix_template) do
         property.expects(:template_xmls_match?).returns true
         expect(property).to be_safe_insync(:present)
       end
+
       it 'is not insync if ensure is set to :present but the source and server templates don\'t match' do
         property.should = :present
         property.expects(:template_xmls_match?).returns false
@@ -124,18 +127,23 @@ describe Puppet::Type.type(:zabbix_template) do
       it 'removes spaces after \'>\'s' do
         expect(property.clean_xml('> ')).to eq '>'
       end
+
       it 'removes tabs after \'>\'s' do
         expect(property.clean_xml(">\t")).to eq '>'
       end
+
       it 'removes newlines after \'>\'s' do
         expect(property.clean_xml(">\n")).to eq '>'
       end
+
       it 'removes spaces before \'<\'s' do
         expect(property.clean_xml(' <')).to eq '<'
       end
+
       it 'removes tabs before \'<\'s' do
         expect(property.clean_xml("\t<")).to eq '<'
       end
+
       it 'replaces dates with DATEWASHERE' do
         expect(property.clean_xml('<date>2016-11-30T12:06:25Z</date>')).to eq 'DATEWASHERE'
       end
@@ -145,6 +153,7 @@ describe Puppet::Type.type(:zabbix_template) do
       it 'returns \'Template updated\' when resource is being updated' do
         expect(property.change_to_s(:present, :present)).to eq 'Template updated'
       end
+
       it 'calls super otherwise' do
         expect(property.change_to_s(:absent, :present)).to eq 'created'
       end

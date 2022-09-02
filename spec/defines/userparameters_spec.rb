@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'zabbix::userparameters', type: :define do
   on_supported_os(baseline_os_hash).each do |os, facts|
     next if facts[:os]['name'] == 'windows'
-    context "on #{os} " do
+
+    context "on #{os}" do
       let :facts do
         systemd_fact = case facts[:os]['family']
                        when 'Archlinux', 'Fedora', 'Gentoo'

@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 Puppet::Type.newtype(:zabbix_template_host) do
   @doc = <<-DOC
-    Link or Unlink template to host.
+    Link or Unlink template to host. Only for Zabbix < 6.0!
 	  Example.
 	  Name should be in the format of "template_name@hostname"
 
@@ -15,7 +17,7 @@ Puppet::Type.newtype(:zabbix_template_host) do
   end
 
   newparam(:name, namevar: true) do
-    newvalues(%r{.+\@.+})
+    newvalues(%r{.+@.+})
     desc 'template_name@host_name'
   end
 

@@ -23,7 +23,7 @@ class zabbix::resources::agent (
   $macros                             = undef,
   $proxy                              = undef,
   $interfacetype                      = 1,
-  Hash[String, Any] $interfacedetails = {},
+  Variant[Array, Hash] $interfacedetails = [],
 ) {
   if $group and $groups {
     fail("Got group and groups. This isn't support! Please use groups only.")

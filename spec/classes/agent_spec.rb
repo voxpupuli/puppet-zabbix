@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'zabbix::agent' do
@@ -13,7 +15,7 @@ describe 'zabbix::agent' do
   end
 
   on_supported_os(baseline_os_hash).each do |os, facts|
-    context "on #{os} " do
+    context "on #{os}" do
       systemd_fact = case facts[:osfamily]
                      when 'Archlinux', 'Fedora', 'Gentoo'
                        { systemd: true }
@@ -47,10 +49,11 @@ describe 'zabbix::agent' do
         facts.merge(systemd_fact)
       end
 
-      if facts[:osfamily] == 'Gentoo'
+      case facts[:osfamily]
+      when 'Gentoo'
         package_name = 'zabbix'
         service_name = 'zabbix-agentd'
-      elsif facts[:osfamily] == 'windows'
+      when 'windows'
         package_name = 'zabbix-agent'
         service_name = 'Zabbix Agent'
       else
@@ -65,9 +68,9 @@ describe 'zabbix::agent' do
         if facts[:kernel] == 'windows'
           it do
             is_expected.to contain_package(package_name).with(
-              ensure:   '4.4.5',
+              ensure: '4.4.5',
               provider: 'chocolatey',
-              tag:      'zabbix'
+              tag: 'zabbix'
             )
           end
         else
@@ -77,6 +80,7 @@ describe 'zabbix::agent' do
               with_tag('zabbix').
               that_requires('Class[zabbix::repo]')
           end
+
           it do
             is_expected.to contain_service(service_name).
               with_ensure('running').
@@ -220,6 +224,8 @@ describe 'zabbix::agent' do
           when 'Archlinux', 'Fedora', 'Gentoo'
             it { is_expected.to contain_file("/etc/init.d/#{service_name}").with_ensure('absent') }
             it { is_expected.to contain_file("/etc/systemd/system/#{service_name}.service").with_ensure('file') }
+          when 'windows'
+            it { is_expected.to contain_exec("install_agent_#{service_name}") }
           else
             it { is_expected.to contain_file("/etc/init.d/#{service_name}").with_ensure('file') }
             it { is_expected.not_to contain_file("/etc/systemd/system/#{service_name}.service") }
@@ -407,6 +413,26 @@ describe 'zabbix::agent' do
           it { is_expected.to contain_file(config_path).with_content %r{^LogType=file$} }
           it { is_expected.to contain_file(config_path).with_content %r{^LogFile=#{log_path}$} }
           it { is_expected.to contain_file(config_path).with_content %r{^LogFileSize=100$} }
+        end
+      end
+
+      context 'when declaring manage_choco is false with zabbix_package_source specified' do
+        if facts[:kernel] == 'windows'
+          let :params do
+            {
+              manage_choco: false,
+              zabbix_package_source: 'C:\\path\\to\\zabbix_installer.msi',
+              zabbix_package_provider: 'windows'
+            }
+          end
+
+          it do
+            is_expected.to contain_package(package_name).
+              with_ensure('present').
+              with_tag('zabbix').
+              with_provider('windows').
+              with_source('C:\\path\\to\\zabbix_installer.msi')
+          end
         end
       end
     end

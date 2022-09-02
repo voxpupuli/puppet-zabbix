@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 
 supported_versions.each do |version|
@@ -44,14 +46,16 @@ supported_versions.each do |version|
             listenip             => '127.0.0.1',
             zabbix_version       => '#{version}',
           }
-          EOS
+        EOS
         apply_manifest(pp, catch_failures: true)
         apply_manifest(pp, catch_changes: true)
       end
+
       describe file('/etc/zabbix/zabbix_agentd.conf') do
         its(:content) { is_expected.to match %r{ListenIP=127.0.0.1} }
       end
     end
+
     context 'With ListenIP set to lo' do
       it 'works idempotently with no errors' do
         pp = <<-EOS
@@ -61,10 +65,11 @@ supported_versions.each do |version|
             listenip             => 'lo',
             zabbix_version       => '#{version}',
           }
-          EOS
+        EOS
         apply_manifest(pp, catch_failures: true)
         apply_manifest(pp, catch_changes: true)
       end
+
       context 'With ListenIP set to an IP-Address' do
         it 'works idempotently with no errors' do
           pp = <<-EOS
@@ -74,10 +79,11 @@ supported_versions.each do |version|
               listenip             => '127.0.0.1',
               zabbix_version       => '#{version}',
             }
-            EOS
+          EOS
           apply_manifest(pp, catch_failures: true)
           apply_manifest(pp, catch_changes: true)
         end
+
         describe file('/etc/zabbix/zabbix_agentd.conf') do
           its(:content) { is_expected.to match %r{ListenIP=127.0.0.1} }
         end

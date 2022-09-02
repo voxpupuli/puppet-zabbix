@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Puppet::Type.newtype(:zabbix_proxy) do
   ensurable do
     defaultvalues
@@ -55,7 +57,7 @@ Puppet::Type.newtype(:zabbix_proxy) do
 
       begin
         IPAddr.new(value)
-      rescue => e
+      rescue StandardError => e
         raise Puppet::Error, e.to_s
       end
     end
@@ -74,10 +76,12 @@ Puppet::Type.newtype(:zabbix_proxy) do
       if value.is_a?(String)
         raise Puppet::Error, 'invalid port' unless value =~ %r{^\d+$}
         raise Puppet::Error, 'invalid port' unless value.to_i.between?(1, 65_535)
+
         return
       end
       if value.is_a?(Integer)
         raise Puppet::Error, 'invalid port' unless value.between?(1, 65_535)
+
         return
       end
       raise Puppet::Error, 'invalid port'

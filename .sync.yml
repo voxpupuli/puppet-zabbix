@@ -4,7 +4,6 @@ Gemfile:
     ':test':
       - gem: 'fakefs'
       - gem: 'zabbixapi'
-      - gem: puppet-lint-param-docs
 spec/spec_helper.rb:
   mock_with: ':mocha'
   spec_overrides:
@@ -14,3 +13,6 @@ spec/spec_helper_acceptance.rb:
   unmanaged: false
 .github/workflows/ci.yml:
   pidfile_workaround: CentOS,Ubuntu
+.puppet-lint.rc:
+  enabled_lint_checks:
+    - parameter_documentation

@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 def baseline_os_hash
   {
     supported_os: [
       {
         'operatingsystem' => 'CentOS',
-        'operatingsystemrelease' => %w[7]
+        'operatingsystemrelease' => %w[7 8]
       },
       {
         'operatingsystem' => 'Debian',
@@ -11,7 +13,7 @@ def baseline_os_hash
       },
       {
         'operatingsystem' => 'Ubuntu',
-        'operatingsystemrelease' => %w[16.04 18.04 20.04]
+        'operatingsystemrelease' => %w[18.04 20.04]
       },
       {
         'operatingsystem' => 'Archlinux',

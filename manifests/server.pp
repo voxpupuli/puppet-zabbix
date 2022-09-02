@@ -63,6 +63,8 @@
 # @param startjavapollers Number of pre-forked instances of java pollers.
 # @param startlldprocessors Number of pre-forked instances of low-level discovery (LLD) workers.
 # @param startvmwarecollectors Number of pre-forked vmware collector instances.
+# @param startreportwriters Number of pre-forked report writer instances.
+# @param webserviceurl URL to Zabbix web service, used to perform web related tasks.
 # @param vmwarefrequency How often zabbix will connect to vmware service to obtain a new datan.
 # @param vaultdbpath Vault path from where credentials for database will be retrieved by keys 'password' and 'username'.
 # @param vaulttoken
@@ -213,6 +215,7 @@ class zabbix::server (
   $javagatewayport                                                            = $zabbix::params::server_javagatewayport,
   $startjavapollers                                                           = $zabbix::params::server_startjavapollers,
   Integer[1, 100] $startlldprocessors                                         = $zabbix::params::server_startlldprocessors,
+  Optional[Integer[1, 100]] $startreportwriters                               = undef,
   $startvmwarecollectors                                                      = $zabbix::params::server_startvmwarecollectors,
   Optional[String[1]] $vaultdbpath                                            = $zabbix::params::server_vaultdbpath,
   Optional[String[1]] $vaulttoken                                             = $zabbix::params::server_vaulttoken,
@@ -268,8 +271,9 @@ class zabbix::server (
   Optional[String[1]] $zabbix_user                                            = $zabbix::params::server_zabbix_user,
   Boolean $manage_startup_script                                              = $zabbix::params::manage_startup_script,
   Optional[Stdlib::Absolutepath] $socketdir                                   = $zabbix::params::server_socketdir,
+  Optional[Stdlib::HTTPUrl] $webserviceurl                                    = undef,
 ) inherits zabbix::params {
-  # zabbix server 5.2 and 5.4 is not supported on RHEL 7.
+  # zabbix server 5.2, 5.4 and 6.0 is not supported on RHEL 7.
   # https://www.zabbix.com/documentation/current/manual/installation/install_from_packages/rhel_centos
   if $facts['os']['family'] == 'RedHat' and versioncmp($zabbix_version, '5.2') >= 0 {
     if versioncmp($facts['os']['release']['major'], '7') == 0 {
@@ -291,7 +295,7 @@ class zabbix::server (
     }
   }
 
-  if versioncmp($zabbix_version, '5.4') == 0 {
+  if versioncmp($zabbix_version, '5.4') >= 0 {
     package { 'zabbix-sql-scripts':
       ensure  => present,
       require => Class['zabbix::repo'],
@@ -305,8 +309,8 @@ class zabbix::server (
     'postgresql' : {
       $db = 'pgsql'
 
-      # Zabbix version 5.4 uses zabbix-sql-scripts for initializing the database.
-      if versioncmp($zabbix_version, '5.4') == 0 {
+      # Zabbix version >= 5.4 uses zabbix-sql-scripts for initializing the database.
+      if versioncmp($zabbix_version, '5.4') >= 0 {
         $zabbix_database_require = [Package["zabbix-server-${db}"], Package['zabbix-sql-scripts']]
       } else {
         $zabbix_database_require = Package["zabbix-server-${db}"]
@@ -331,8 +335,8 @@ class zabbix::server (
     'mysql' : {
       $db = 'mysql'
 
-      # Zabbix version 5.4 uses zabbix-sql-scripts for initializing the database.
-      if versioncmp($zabbix_version, '5.4') == 0 {
+      # Zabbix version >= 5.4 uses zabbix-sql-scripts for initializing the database.
+      if versioncmp($zabbix_version, '5.4') >= 0 {
         $zabbix_database_require = [Package["zabbix-server-${db}"], Package['zabbix-sql-scripts']]
       } else {
         $zabbix_database_require = Package["zabbix-server-${db}"]

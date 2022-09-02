@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Puppet::Type.newtype(:zabbix_host) do
   ensurable do
     defaultvalues
@@ -9,6 +11,7 @@ Puppet::Type.newtype(:zabbix_host) do
 
     # Migrate group to groups
     return if self[:group].nil?
+
     self[:groups] = self[:group]
     delete(:group)
   end
@@ -54,6 +57,7 @@ Puppet::Type.newtype(:zabbix_host) do
 
   newproperty(:interfacedetails) do
     desc 'Additional interface details.'
+
     def insync?(is)
       is.to_s == should.to_s
     end

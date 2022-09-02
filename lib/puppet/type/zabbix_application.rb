@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Puppet::Type.newtype(:zabbix_application) do
   @doc = %q(Manage zabbix applications
 

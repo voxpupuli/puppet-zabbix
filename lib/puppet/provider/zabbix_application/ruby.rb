@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../zabbix'
 Puppet::Type.type(:zabbix_application).provide(:ruby, parent: Puppet::Provider::Zabbix) do
   confine feature: :zabbixapi
@@ -23,7 +25,7 @@ Puppet::Type.type(:zabbix_application).provide(:ruby, parent: Puppet::Provider::
 
   def destroy
     zbx.applications.delete(application_id)
-  rescue => error
-    raise(Puppet::Error, "Zabbix Application Delete Failed\n#{error.message}")
+  rescue StandardError => e
+    raise(Puppet::Error, "Zabbix Application Delete Failed\n#{e.message}")
   end
 end

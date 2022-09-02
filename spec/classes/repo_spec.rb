@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'zabbix::repo' do
   on_supported_os(baseline_os_hash).each do |os, facts|
-    context "on #{os} " do
+    context "on #{os}" do
       let :facts do
         facts
       end
@@ -39,6 +41,7 @@ describe 'zabbix::repo' do
 
             it { is_expected.to contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/4.0/debian/') }
           end
+
           context 'on Debian 10 and Zabbix 5.0' do
             let :params do
               {
@@ -48,28 +51,6 @@ describe 'zabbix::repo' do
             end
 
             it { is_expected.to contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/5.0/debian/') }
-          end
-        when '16.04'
-          context 'on Ubuntu 14.04 and Zabbix 5.0' do
-            let :params do
-              {
-                zabbix_version: '5.0',
-                manage_repo: true
-              }
-            end
-
-            it { is_expected.to contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/5.0/ubuntu/') }
-          end
-
-          context 'on Ubuntu 16.04 and Zabbix 4.0' do
-            let :params do
-              {
-                zabbix_version: '4.0',
-                manage_repo: true
-              }
-            end
-
-            it { is_expected.to contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/4.0/ubuntu/') }
           end
         end
       when 'RedHat'
@@ -128,6 +109,8 @@ describe 'zabbix::repo' do
             it { is_expected.to contain_yumrepo('zabbix').with_gpgkey('https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591') }
             it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_baseurl('https://repo.zabbix.com/non-supported/rhel/7/$basearch/') }
             it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_gpgkey('https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-79EA5ED4') }
+
+            it { is_expected.to contain_package('zabbix-required-scl-repo').with_ensure('latest').with_name('centos-release-scl') }
           end
         end
       end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Puppet::Type.newtype(:zabbix_hostgroup) do
   @doc = 'Manage zabbix hostgroups'
 

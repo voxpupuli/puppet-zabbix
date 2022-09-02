@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../zabbix'
 Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix) do
   confine feature: :zabbixapi
@@ -66,7 +68,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
         {
           type: @resource[:interfacetype].nil? ? 1 : @resource[:interfacetype],
           main: 1,
-          ip: @resource[:ipaddress],
+          ip: @resource[:ipaddress].nil? ? '' : @resource[:ipaddress],
           dns: @resource[:hostname],
           port: @resource[:port],
           useip: @resource[:use_ip] ? 1 : 0,
@@ -94,7 +96,8 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
     group_array.each do |g|
       id = zbx.hostgroups.get_id(name: g)
       if id.nil?
-        raise Puppet::Error, 'The hostgroup (' + g + ') does not exist in zabbix. Please use the correct one or set group_create => true.' unless create
+        raise Puppet::Error, "The hostgroup (#{g}) does not exist in zabbix. Please use the correct one or set group_create => true." unless create
+
         groupids << zbx.hostgroups.create(name: g)
       else
         groupids << id
@@ -108,6 +111,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
     template_array.each do |t|
       template_id = zbx.templates.get_id(host: t)
       raise Puppet::Error, "The template #{t} does not exist in Zabbix. Please use a correct one." if template_id.nil?
+
       templateids << template_id
     end
     templateids

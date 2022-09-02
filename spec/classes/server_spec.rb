@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require 'deep_merge'
 
@@ -9,7 +11,8 @@ describe 'zabbix::server' do
   on_supported_os(baseline_os_hash).each do |os, facts|
     next if facts[:osfamily] == 'Archlinux' # zabbix server is currently not supported on archlinux
     next if facts[:os]['name'] == 'windows'
-    context "on #{os} " do
+
+    context "on #{os}" do
       systemd_fact = case facts[:osfamily]
                      when 'Archlinux', 'Fedora', 'Gentoo'
                        { systemd: true }
@@ -413,6 +416,19 @@ describe 'zabbix::server' do
           it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^VaultDBPath=secret/zabbix/database$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^VaultToken=FKTYPEGL156DK$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^VaultURL=https://127.0.0.1:8200$} }
+        end
+
+        describe 'with zabbix_version 5.4 and report parameters defined' do
+          let :params do
+            {
+              zabbix_version: '5.4',
+              startreportwriters: 1,
+              webserviceurl: 'http://localhost:10053/report',
+            }
+          end
+
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartReportWriters=1} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^WebServiceURL=http://localhost:10053/report} }
         end
       end
     end

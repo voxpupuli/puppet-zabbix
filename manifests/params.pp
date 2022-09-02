@@ -23,6 +23,7 @@ class zabbix::params {
     }
     'AIX': {
       $manage_repo              = false
+      $manage_choco             = false
       $zabbix_package_provider  = 'yum'
       $zabbix_package_agent     = 'zabbix-agent'
       $agent_configfile_path    = '/etc/zabbix/zabbix_agentd.conf'
@@ -32,7 +33,6 @@ class zabbix::params {
       $agent_pidfile            = '/var/run/zabbix/zabbix_agentd.pid'
       $agent_servicename        = 'zabbix-agent'
     }
-
     'Archlinux': {
       $server_fpinglocation     = '/usr/bin/fping'
       $server_fping6location    = '/usr/bin/fping6'
@@ -169,8 +169,8 @@ class zabbix::params {
 
   # Zabbix-web
   $apache_listen_ip                         = undef
-  $apache_listenport                        = '80'
-  $apache_listenport_ssl                    = '443'
+  $apache_listenport                        = 80
+  $apache_listenport_ssl                    = 443
   $apache_ssl_cert                          = undef
   $apache_ssl_chain                         = undef
   # Cipher is used from: https://wiki.mozilla.org/Security/Server_Side_TLS#Modern_compatibility
@@ -297,7 +297,7 @@ class zabbix::params {
   $agent_buffersize                         = '100'
   $agent_debuglevel                         = '3'
   $agent_allowkey                           = undef
-  $agent_denykey                            = 'system.run[*]'
+  $agent_denykey                            = undef
   $agent_enableremotecommands               = '0'
   $agent_hostmetadata                       = undef
   $agent_hostmetadataitem                   = undef
