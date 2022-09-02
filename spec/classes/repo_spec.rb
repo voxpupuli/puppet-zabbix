@@ -53,6 +53,33 @@ describe 'zabbix::repo' do
             it { is_expected.to contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/5.0/debian/') }
           end
         end
+
+        if facts[:os]['distro']['id'] == 'Ubuntu'
+          case facts[:os]['architecture']
+          when 'amd64'
+            context 'on Ubuntu with architecture amd64' do
+              let :params do
+                {
+                  zabbix_version: '6.2',
+                  manage_repo: true
+                }
+              end
+
+              it { is_expected.to contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/6.2/ubuntu/') }
+            end
+          when 'aarch64'
+            context 'on Ubuntu with architecture aarch64' do
+              let :params do
+                {
+                  zabbix_version: '6.2',
+                  manage_repo: true
+                }
+              end
+
+              it { is_expected.to contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/6.2/ubuntu-arm64/') }
+            end
+          end
+        end
       when 'RedHat'
 
         it { is_expected.to compile.with_all_deps }
