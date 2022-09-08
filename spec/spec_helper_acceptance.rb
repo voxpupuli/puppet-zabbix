@@ -2,7 +2,7 @@
 
 require 'voxpupuli/acceptance/spec_helper_acceptance'
 
-configure_beaker do
+configure_beaker do |host|
   # In Puppet 7 the locale ends up being C.UTF-8 if it isn't passed.
   # This locale doesn't exist in EL7 and won't be supported either.
   # At least PostgreSQL runs into this.
