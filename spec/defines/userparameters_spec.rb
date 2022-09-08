@@ -7,15 +7,7 @@ describe 'zabbix::userparameters', type: :define do
     next if facts[:os]['name'] == 'windows'
 
     context "on #{os}" do
-      let :facts do
-        systemd_fact = case facts[:os]['family']
-                       when 'Archlinux', 'Fedora', 'Gentoo'
-                         { systemd: true }
-                       else
-                         { systemd: false }
-                       end
-        facts.merge(systemd_fact)
-      end
+      let(:facts) { facts }
       let(:title) { 'mysqld' }
       let(:pre_condition) { 'class { "zabbix::agent": include_dir => "/etc/zabbix/zabbix_agentd.d" }' }
 
