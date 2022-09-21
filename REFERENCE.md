@@ -2505,6 +2505,8 @@ The following parameters are available in the `zabbix::proxy` class:
 * [`database_password`](#database_password)
 * [`database_socket`](#database_socket)
 * [`database_port`](#database_port)
+* [`database_charset`](#database_collate)
+* [`database_collate`](#database_collate)
 * [`database_tlsconnect`](#database_tlsconnect)
 * [`database_tlscafile`](#database_tlscafile)
 * [`database_tlscertfile`](#database_tlscertfile)
@@ -2873,6 +2875,22 @@ Data type: `Any`
 Database port when not using local socket. Ignored for sqlite.
 
 Default value: `$zabbix::params::proxy_database_port`
+
+##### <a name="database_charset"></a>`database_charset`
+
+Data type: `Any`
+
+The default charset of the database.
+
+Default value: `$zabbix::params::server_database_charset`
+
+##### <a name="database_collate"></a>`database_collate`
+
+Data type: `Any`
+
+The default collation of the database.
+
+Default value: `$zabbix::params::server_database_collate`
 
 ##### <a name="database_tlsconnect"></a>`database_tlsconnect`
 
