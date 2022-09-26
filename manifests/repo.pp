@@ -82,7 +82,7 @@ class zabbix::repo (
           }
         }
         
-        if ($facts['os']['name'] != 'RedHat' $facts['os']['release']['major'] == '7' and versioncmp($zabbix_version, '5.0') >= 0) {
+        if ($facts['os']['name'] != 'RedHat' and $facts['os']['release']['major'] == '7' and versioncmp($zabbix_version, '5.0') >= 0) {
           package { 'zabbix-required-scl-repo':
             ensure => 'latest',
             name   => 'centos-release-scl',
