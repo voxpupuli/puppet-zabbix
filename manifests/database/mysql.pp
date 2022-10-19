@@ -66,37 +66,37 @@ class zabbix::database::mysql (
   }
 
   # Loading the sql files.
-  $_mysql_env = [ "database_password=${database_password_unsensitive}" ]
+  $_mysql_env = ["database_password=${database_password_unsensitive}"]
   case $zabbix_type {
     'proxy'  : {
       exec { 'zabbix_proxy_create.sql':
-        command  => $zabbix_proxy_create_sql,
-        path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
-        unless   => 'test -f /etc/zabbix/.schema.done',
-        provider => 'shell',
+        command     => $zabbix_proxy_create_sql,
+        path        => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
+        unless      => 'test -f /etc/zabbix/.schema.done',
+        provider    => 'shell',
         environment => $_mysql_env,
       }
     }
     'server' : {
       exec { 'zabbix_server_create.sql':
-        command  => $zabbix_server_create_sql,
-        path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
-        unless   => 'test -f /etc/zabbix/.schema.done',
-        provider => 'shell',
+        command     => $zabbix_server_create_sql,
+        path        => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
+        unless      => 'test -f /etc/zabbix/.schema.done',
+        provider    => 'shell',
         environment => $_mysql_env,
       }
       -> exec { 'zabbix_server_images.sql':
-        command  => $zabbix_server_images_sql,
-        path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
-        unless   => 'test -f /etc/zabbix/.images.done',
-        provider => 'shell',
+        command     => $zabbix_server_images_sql,
+        path        => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
+        unless      => 'test -f /etc/zabbix/.images.done',
+        provider    => 'shell',
         environment => $_mysql_env,
       }
       -> exec { 'zabbix_server_data.sql':
-        command  => $zabbix_server_data_sql,
-        path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
-        unless   => 'test -f /etc/zabbix/.data.done',
-        provider => 'shell',
+        command     => $zabbix_server_data_sql,
+        path        => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
+        unless      => 'test -f /etc/zabbix/.data.done',
+        provider    => 'shell',
         environment => $_mysql_env,
       }
     }
