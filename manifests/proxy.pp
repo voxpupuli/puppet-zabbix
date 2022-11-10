@@ -43,6 +43,8 @@
 # @param database_password Database password. ignored for sqlite.
 # @param database_socket Path to mysql socket.
 # @param database_port Database port when not using local socket. Ignored for sqlite.
+# @param database_charset The default charset of the database.
+# @param database_collate The default collation of the database.
 # @param database_tlsconnect
 #   Available options:
 #   * required - connect using TLS
@@ -220,6 +222,8 @@ class zabbix::proxy (
   $database_password                                                          = $zabbix::params::proxy_database_password,
   $database_socket                                                            = $zabbix::params::proxy_database_socket,
   $database_port                                                              = $zabbix::params::proxy_database_port,
+  $database_charset                                                           = $zabbix::params::server_database_charset,
+  $database_collate                                                           = $zabbix::params::server_database_collate,
   Optional[Enum['required', 'verify_ca', 'verify_full']] $database_tlsconnect = $zabbix::params::proxy_database_tlsconnect,
   Optional[Stdlib::Absolutepath] $database_tlscafile                          = $zabbix::params::proxy_database_tlscafile,
   Optional[Stdlib::Absolutepath] $database_tlscertfile                        = $zabbix::params::proxy_database_tlscertfile,
@@ -487,6 +491,8 @@ class zabbix::proxy (
       database_user     => $database_user,
       database_password => $database_password,
       database_host     => $database_host,
+      database_charset  => $database_charset,
+      database_collate  => $database_collate,
       zabbix_proxy      => $zabbix_proxy,
       zabbix_proxy_ip   => $zabbix_proxy_ip,
       before            => $before_database,

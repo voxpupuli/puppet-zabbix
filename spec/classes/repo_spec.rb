@@ -52,28 +52,6 @@ describe 'zabbix::repo' do
 
             it { is_expected.to contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/5.0/debian/') }
           end
-        when '16.04'
-          context 'on Ubuntu 14.04 and Zabbix 5.0' do
-            let :params do
-              {
-                zabbix_version: '5.0',
-                manage_repo: true
-              }
-            end
-
-            it { is_expected.to contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/5.0/ubuntu/') }
-          end
-
-          context 'on Ubuntu 16.04 and Zabbix 4.0' do
-            let :params do
-              {
-                zabbix_version: '4.0',
-                manage_repo: true
-              }
-            end
-
-            it { is_expected.to contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/4.0/ubuntu/') }
-          end
         end
       when 'RedHat'
 
