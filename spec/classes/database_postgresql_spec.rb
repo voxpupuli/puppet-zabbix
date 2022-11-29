@@ -23,14 +23,18 @@ describe 'zabbix::database::postgresql' do
         path = case facts[:os]['name']
                when 'CentOS', 'RedHat', 'OracleLinux', 'VirtuozzoLinux'
                  # Path on RedHat
-                 if Puppet::Util::Package.versioncmp(zabbix_version, '5.4') >= 0
+                 if Puppet::Util::Package.versioncmp(zabbix_version, '6.0') >= 0
+                   '/usr/share/zabbix-sql-scripts/postgresql/'
+                 elsif Puppet::Util::Package.versioncmp(zabbix_version, '5.4') >= 0
                    '/usr/share/doc/zabbix-sql-scripts/postgresql/'
                  else
                    "/usr/share/doc/zabbix-*-pgsql-#{zabbix_version}*/"
                  end
                else
                  # Path on Debian
-                 if Puppet::Util::Package.versioncmp(zabbix_version, '5.4') >= 0
+                 if Puppet::Util::Package.versioncmp(zabbix_version, '6.0') >= 0
+                   '/usr/share/zabbix-sql-scripts/postgresql/'
+                 elsif Puppet::Util::Package.versioncmp(zabbix_version, '5.4') >= 0
                    '/usr/share/doc/zabbix-sql-scripts/postgresql/'
                  else
                    '/usr/share/doc/zabbix-*-pgsql'
