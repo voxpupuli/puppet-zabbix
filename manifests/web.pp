@@ -306,6 +306,7 @@ class zabbix::web (
   # Is set to true, it will create the apache vhost.
   if $manage_vhost {
     include apache
+    include apache::mod::dir
     if $facts['os']['family'] == 'RedHat' and versioncmp($facts['os']['release']['major'], '7') >= 0 and versioncmp($zabbix_version, '5') >= 0 {
       if versioncmp($facts['os']['release']['major'], '7') == 0 {
         $fpm_service = 'rh-php72-php-fpm'
