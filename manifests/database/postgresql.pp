@@ -18,7 +18,7 @@ class zabbix::database::postgresql (
   $database_user                                      = '',
   $database_password                                  = '',
   $database_host                                      = '',
-  Optional[Stdlib::Port::Unprivileged] $database_port = undef,
+  Stdlib::Port::Unprivileged $database_port           = 5432,
   $database_path                                      = $zabbix::params::database_path,
 ) inherits zabbix::params {
   assert_private()
@@ -45,23 +45,17 @@ class zabbix::database::postgresql (
     $schema_path = $database_schema_path
   }
 
-  if $database_port != undef {
-    $port = "-p ${database_port} "
-  } else {
-    $port = ''
-  }
-
   case $zabbix_type {
     'proxy': {
       $zabbix_proxy_create_sql = versioncmp($zabbix_version, '6.0') >= 0 ? {
-        true  => "cd ${schema_path} && psql -h '${database_host}' -U '${database_user}' ${port}-d '${database_name}' -f proxy.sql && touch /etc/zabbix/.schema.done",
-        false => "cd ${schema_path} && if [ -f schema.sql.gz ]; then gunzip -f schema.sql.gz ; fi && psql -h '${database_host}' -U '${database_user}' ${port}-d '${database_name}' -f schema.sql && touch /etc/zabbix/.schema.done"
+        true  => "cd ${schema_path} && psql -h '${database_host}' -U '${database_user}' -p ${database_port} -d '${database_name}' -f proxy.sql && touch /etc/zabbix/.schema.done",
+        false => "cd ${schema_path} && if [ -f schema.sql.gz ]; then gunzip -f schema.sql.gz ; fi && psql -h '${database_host}' -U '${database_user}' -p ${database_port} -d '${database_name}' -f schema.sql && touch /etc/zabbix/.schema.done"
       }
     }
     default: {
       $zabbix_server_create_sql = versioncmp($zabbix_version, '6.0') >= 0 ? {
-        true  => "cd ${schema_path} && if [ -f server.sql.gz ]; then gunzip -f server.sql.gz ; fi && psql -h '${database_host}' -U '${database_user}' ${port}-d '${database_name}' -f server.sql && touch /etc/zabbix/.schema.done",
-        false => "cd ${schema_path} && if [ -f create.sql.gz ]; then gunzip -f create.sql.gz ; fi && psql -h '${database_host}' -U '${database_user}' ${port}-d '${database_name}' -f create.sql && touch /etc/zabbix/.schema.done"
+        true  => "cd ${schema_path} && if [ -f server.sql.gz ]; then gunzip -f server.sql.gz ; fi && psql -h '${database_host}' -U '${database_user}' -p ${database_port} -d '${database_name}' -f server.sql && touch /etc/zabbix/.schema.done",
+        false => "cd ${schema_path} && if [ -f create.sql.gz ]; then gunzip -f create.sql.gz ; fi && psql -h '${database_host}' -U '${database_user}' -p ${database_port} -d '${database_name}' -f create.sql && touch /etc/zabbix/.schema.done"
       }
       $zabbix_server_images_sql = 'touch /etc/zabbix/.images.done'
       $zabbix_server_data_sql   = 'touch /etc/zabbix/.data.done'
@@ -69,9 +63,9 @@ class zabbix::database::postgresql (
   }
 
   exec { 'update_pgpass':
-    command => "echo ${database_host}:5432:${database_name}:${database_user}:${database_password} >> /root/.pgpass",
+    command => "echo ${database_host}:${database_port}:${database_name}:${database_user}:${database_password} >> /root/.pgpass",
     path    => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
-    unless  => "grep \"${database_host}:5432:${database_name}:${database_user}:${database_password}\" /root/.pgpass",
+    unless  => "grep \"${database_host}:${database_port}:${database_name}:${database_user}:${database_password}\" /root/.pgpass",
     require => File['/root/.pgpass'],
   }
 
