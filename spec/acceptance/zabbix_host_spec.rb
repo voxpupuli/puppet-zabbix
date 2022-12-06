@@ -29,8 +29,10 @@ describe 'zabbix_host type', unless: default[:platform] =~ %r{archlinux} do
                         ['Template OS Linux SNMPv2']
                       when '5.0'
                         ['Template OS Linux SNMP']
-                      else
+                      when '5.2', '5.4'
                         ['Linux SNMP']
+                      else
+                        ['Linux by SNMP']
                       end
 
       pp1 = <<-EOS
