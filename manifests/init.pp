@@ -74,6 +74,7 @@
 # @param ldap_reqcert Specifies what checks to perform on a server certificate
 # @param zabbix_api_user Name of the user which the api should connect to. Default: Admin
 # @param zabbix_api_pass Password of the user which connects to the api. Default: zabbix
+# @param zabbix_api_access Which host has access to the api. Default: no restriction
 # @param listenport Listen port for the zabbix-server. Default: 10051
 # @param sourceip Source ip address for outgoing connections.
 # @param logfile Name of log file.
@@ -250,6 +251,7 @@ class zabbix (
   Optional[Enum['never', 'allow', 'try', 'demand', 'hard']] $ldap_reqcert     = $zabbix::params::ldap_reqcert,
   $zabbix_api_user                                                            = $zabbix::params::server_api_user,
   $zabbix_api_pass                                                            = $zabbix::params::server_api_pass,
+  Optional[Array[Stdlib::Fqdn]] $zabbix_api_access                            = $zabbix::params::server_api_acces,
   $listenport                                                                 = $zabbix::params::server_listenport,
   $sourceip                                                                   = $zabbix::params::server_sourceip,
   Enum['console', 'file', 'system'] $logtype                                  = $zabbix::params::server_logtype,
@@ -364,6 +366,7 @@ class zabbix (
     apache_listenport_ssl                    => $apache_listenport_ssl,
     zabbix_api_user                          => $zabbix_api_user,
     zabbix_api_pass                          => $zabbix_api_pass,
+    zabbix_api_access                        => $zabbix_api_access,
     database_host                            => $database_host,
     database_name                            => $database_name,
     database_schema                          => $database_schema,

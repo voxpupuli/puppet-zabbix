@@ -42,6 +42,7 @@
 # @param apache_listenport_ssl The port for the apache SSL vhost.
 # @param zabbix_api_user Name of the user which the api should connect to. Default: Admin
 # @param zabbix_api_pass Password of the user which connects to the api. Default: zabbix
+# @param zabbix_api_access Which host has access to the api. Default: no restriction
 # @param database_host Database host name.
 # @param database_name Database name.
 # @param database_schema Schema name. used for ibm db2.
@@ -114,6 +115,7 @@ class zabbix::web (
   Variant[Array[Stdlib::Port], Stdlib::Port] $apache_listenport_ssl   = $zabbix::params::apache_listenport_ssl,
   $zabbix_api_user                                                    = $zabbix::params::server_api_user,
   $zabbix_api_pass                                                    = $zabbix::params::server_api_pass,
+  Optional[Array[Stdlib::Fqdn]] $zabbix_api_access                    = $zabbix::params::server_api_access,
   $database_host                                                      = $zabbix::params::server_database_host,
   $database_name                                                      = $zabbix::params::server_database_name,
   $database_schema                                                    = $zabbix::params::server_database_schema,
@@ -395,6 +397,15 @@ class zabbix::web (
     $directory_allow = { 'require' => 'all granted', }
     $directory_deny = { 'require' => 'all denied', }
 
+    $location_api_access = $zabbix_api_access ? {
+      undef   => $directory_allow,
+      default => if versioncmp($apache::apache_version, '2.4') >= 0 {
+        { 'require' => $zabbix_api_access.map |$host| { "host ${host}" }, }
+      } else {
+        { 'allow' => $zabbix_api_access, 'order' => 'Allow,Deny' }
+      }
+    }
+
     apache::vhost { $zabbix_url:
       docroot         => '/usr/share/zabbix',
       ip              => $apache_listen_ip,
@@ -425,6 +436,10 @@ class zabbix::web (
             path     => '/usr/share/zabbix/include/classes',
             provider => 'directory',
         }, $directory_deny),
+        merge({
+            path     => '/api_jsonrpc.php',
+            provider => 'location',
+        }, $location_api_access),
       ],
       custom_fragment => $apache_vhost_custom_fragment,
       rewrites        => [
