@@ -365,6 +365,17 @@ describe 'zabbix::proxy' do
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSCipherAll13=EECDH\+aRSA\+AES128:RSA\+aRSA\+AES128:kECDHEPSK\+AES128:kPSK\+AES128$} }
         end
 
+        context 'with zabbix_proxy.conf and sensitive database_password' do
+          let :params do
+            {
+              database_password: sensitive('secret')
+            }
+          end
+
+          it { is_expected.to compile }
+        end
+
+
         context 'with zabbix_proxy.conf and version 4.0' do
           let :params do
             {

@@ -344,6 +344,16 @@ describe 'zabbix::server' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCipherAll13=EECDH\+aRSA\+AES128:RSA\+aRSA\+AES128:kECDHEPSK\+AES128:kPSK\+AES128$} }
       end
 
+      context 'with zabbix_server.conf and sensitive database_password' do
+        let :params do
+          {
+            database_password: sensitive('secret')
+          }
+        end
+
+        it { is_expected.to compile }
+      end
+
       context 'with zabbix_server.conf and version 5.0' do
         let :params do
           {

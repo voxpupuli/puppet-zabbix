@@ -197,6 +197,16 @@ describe 'zabbix::web' do
           it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$ZBX_SERVER_NAME = 'localhost'}) }
         end
 
+        context 'with sensitive database_password' do
+          let :params do
+            {
+              database_password: sensitive('secret')
+            }
+          end
+
+          it { is_expected.to compile }
+        end
+
         describe 'with LDAP settings defined' do
           let :params do
             super().merge(
