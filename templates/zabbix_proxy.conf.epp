@@ -37,7 +37,7 @@
     Optional[Stdlib::Absolutepath]                         $logfile,
     String[1]                                              $logfilesize,
     Integer[0]                                             $logremotecommands,
-    Integer                                                $logslowqueries,
+    Variant[Integer,String[1]]                             $logslowqueries,
     Enum['console', 'file', 'system']                      $logtype,
     String[1]                                              $mode,
     String[1]                                              $offlinebuffer,
@@ -50,12 +50,12 @@
     Optional[Stdlib::Absolutepath]                         $sslcalocation_dir,
     Optional[Stdlib::Absolutepath]                         $sslcertlocation_dir,
     Optional[Stdlib::Absolutepath]                         $sslkeylocation_dir,
-    Integer                                                $startdbsyncers,
-    Integer                                                $startdiscoverers,
-    Integer                                                $starthttppollers,
-    Integer                                                $startipmipollers,
-    Integer                                                $startjavapollers,
-    Integer                                                $startpingers,
+    String[1]                                              $startdbsyncers,
+    String[1]                                              $startdiscoverers,
+    String[1]                                              $starthttppollers,
+    String[1]                                              $startipmipollers,
+    String[1]                                              $startjavapollers,
+    String[1]                                              $startpingers,
     Variant[Integer, String[1]]                            $startpollers,
     Variant[Integer, String[1]]                            $startpollersunreachable,
     Integer[1, 1000]                                       $startpreprocessors,
@@ -90,7 +90,7 @@
     String[1]                                              $vmwarefrequency,
     Optional[String[1]]                                    $vmwareperffrequency,
     Optional[String[1]]                                    $vmwaretimeout,
-    String[1]                                              $zabbix_server_host,
+    Optional[String[1]]                                    $zabbix_server_host,
     String[1]                                              $zabbix_server_port,
     String[1]                                              $zabbix_user,
     String[1]                                              $zabbix_version,
@@ -743,7 +743,7 @@ LoadModulePath=<%= $loadmodulepath %>
 <% if $tlscipherall { %>TLSCipherAll=<%= $tlscipherall %><% } -%>
 <% } -%>
 
-<% if versioncmp($zabbix_version,'6.2') >= 0 { -%>
+<% if versioncmp($zabbix_version,'5.2') >= 0 { -%>
 ### Option: VaultToken
 #	Vault authentication token that should have been generated exclusively for Zabbix server with read only permission
 #	to paths specified in Vault macros and read only permission to path specified in optional VaultDBPath
