@@ -116,9 +116,10 @@ describe 'zabbix::web' do
 
         describe 'when manage_resources is true' do
           let :params do
-            super().merge(
-              manage_resources: true
-            )
+            super().merge( {
+              manage_resources: true,
+              zabbix_api_pass: 'zabbix' # cleartext password must be explicitly declared in this test, otherwise the parser will secure content of the file
+            })
           end
 
           it do
