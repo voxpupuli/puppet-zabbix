@@ -375,7 +375,6 @@ describe 'zabbix::proxy' do
           it { is_expected.to compile }
         end
 
-
         context 'with zabbix_proxy.conf and version 4.0' do
           let :params do
             {
