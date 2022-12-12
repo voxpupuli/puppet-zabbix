@@ -16,7 +16,7 @@ class zabbix::database::mysql (
   $database_schema_path                                                 = '',
   $database_name                                                        = '',
   $database_user                                                        = '',
-  Optional[Variant[String[1], Sensitive[String[1]]]] $database_password = '',
+  Optional[Variant[String[1], Sensitive[String[1]]]] $database_password = undef,
   $database_host                                                        = '',
   Optional[Stdlib::Port::Unprivileged] $database_port                   = undef,
   $database_path                                                        = $zabbix::params::database_path,
