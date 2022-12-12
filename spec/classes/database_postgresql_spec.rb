@@ -150,7 +150,6 @@ describe 'zabbix::database::postgresql' do
           end
 
           it { is_expected.to compile.with_all_deps }
-          #it { is_expected.to contain_exec('update_pgpass').with_command('echo node01.example.com:5432:zabbix-proxy:zabbix-proxy:zabbix-proxy >> /root/.pgpass') }
           it { is_expected.to contain_exec('update_pgpass').with_command(sensitive('echo node01.example.com:5432:zabbix-proxy:zabbix-proxy:zabbix-proxy >> /root/.pgpass')) }
 
           if Puppet::Util::Package.versioncmp(zabbix_version, '6.0') < 0
