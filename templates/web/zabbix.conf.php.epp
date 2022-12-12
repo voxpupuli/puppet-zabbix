@@ -78,6 +78,10 @@ $SSO['SP_CERT'] = '<%= $saml_sp_cert -%>';
 $SSO['IDP_CERT'] = '<%= $saml_idp_cert -%>';
 <% } -%>
 <% unless empty($saml_settings) { -%>
-$SSO['SETTINGS'] = [ <%= String($saml_settings,'%[h') %>;
+$SSO['SETTINGS'] = [ <%= to_json_pretty($saml_settings, undef, {space_before => " "})
+                             .regsubst("{", "")
+                             .regsubst(" : ", " => ",'G')
+                             .regsubst("{", "[",'G')
+                             .regsubst("}", "]",'G') -%>;
 <% } -%>
 ?>
