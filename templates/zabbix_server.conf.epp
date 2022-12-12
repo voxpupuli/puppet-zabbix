@@ -6,7 +6,7 @@
     String[1]                                              $database_host,
     String[1]                                              $database_name,
     Variant[String[1], Sensitive[String[8]]]               $database_password,
-    Optional[String[1]]                                    $database_port,
+    Optional[Stdlib::Port::Unprivileged]                   $database_port,
     Optional[String[1]]                                    $database_schema,
     Optional[String[1]]                                    $database_socket,
     Optional[Stdlib::Absolutepath]                         $database_tlscafile,
@@ -32,7 +32,7 @@
     String[1]                                              $loadmodulepath,
     Optional[Stdlib::Absolutepath]                         $logfile,
     String[1]                                              $logfilesize,
-    Integer                                                $logslowqueries,
+    Variant[Integer,String[1]]                             $logslowqueries,
     Enum['console', 'file', 'system']                      $logtype,
     String[1]                                              $maxhousekeeperdelete,
     String[1]                                              $pidfile,
@@ -53,12 +53,12 @@
     String[1]                                              $startipmipollers,
     String[1]                                              $startjavapollers,
     Integer[1,100]                                         $startlldprocessors,
-    Integer                                                $startpingers,
+    Variant[Integer, String[1]]                            $startpingers,
     Variant[Integer, String[1]]                            $startpollers,
     Variant[Integer, String[1]]                            $startpollersunreachable,
     Integer[1, 1000]                                       $startpreprocessors,
     Variant[Integer, String[1]]                            $startproxypollers,
-    Optional[String[1]]                                    $startreportwriters,
+    Optional[Integer]                                      $startreportwriters,
     Variant[Integer, String[1]]                            $startsnmptrapper,
     Variant[Integer, String[1]]                            $starttimers,
     Variant[Integer, String[1]]                            $starttrappers,
@@ -714,7 +714,7 @@ LoadModulePath=<%= $loadmodulepath %>
 <% if $tlscipherall { %>TLSCipherAll=<%= $tlscipherall %><% } -%>
 <% } -%>
 
-<% if versioncmp($zabbix_version,'6.2') >= 0 { -%>
+<% if versioncmp($zabbix_version,'5.2') >= 0 { -%>
 ### Option: VaultToken
 #	Vault authentication token that should have been generated exclusively for Zabbix server with read only permission
 #	to paths specified in Vault macros and read only permission to path specified in optional VaultDBPath
