@@ -20,7 +20,7 @@ describe 'zabbix::proxy' do
         context 'with all defaults' do
           it { is_expected.not_to compile }
         end
-      when 'RedHat'
+      when 'CentOS'
         let :pre_condition do
           "include 'postgresql::server'
            include 'mysql::server'"
