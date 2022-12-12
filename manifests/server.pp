@@ -452,7 +452,7 @@ class zabbix::server (
     mode    => '0640',
     require => Package["zabbix-server-${db}"],
     replace => true,
-    content => Sensitive(epp('zabbix/zabbix_server.conf.epp', {
+    content => epp('zabbix/zabbix_server.conf.epp', {
           'alertscriptspath'        => $alertscriptspath,
           'allowroot'               => $allowroot,
           'cachesize'               => $cachesize,
@@ -545,7 +545,7 @@ class zabbix::server (
           'webserviceurl'           => $webserviceurl,
           'zabbix_user'             => $zabbix::params::server_zabbix_user,
           'zabbix_version'          => $zabbix_version,
-    })),
+    }),
   }
 
   # Include dir for specific zabbix-server checks.

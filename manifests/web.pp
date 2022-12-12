@@ -289,7 +289,7 @@ class zabbix::web (
     group   => $web_config_group,
     mode    => '0640',
     replace => true,
-    content => Sensitive(epp('zabbix/web/zabbix.conf.php.epp', {
+    content => epp('zabbix/web/zabbix.conf.php.epp', {
           'database_type'           => $database_type,
           'database_host'           => $database_host,
           'database_port'           => $database_port,
@@ -310,7 +310,7 @@ class zabbix::web (
           'saml_sp_cert'            => $saml_sp_cert,
           'saml_idp_cert'           => $saml_idp_cert,
           'saml_settings'           => $saml_settings,
-    })),
+    }),
   }
 
   # For API to work on Zabbix 5.x zabbix.conf.php needs to be in the root folder.

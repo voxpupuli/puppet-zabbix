@@ -507,7 +507,7 @@ class zabbix::proxy (
     mode    => '0644',
     require => Package["zabbix-proxy-${db}"],
     replace => true,
-    content => Sensitive(epp('zabbix/zabbix_proxy.conf.epp', {
+    content => epp('zabbix/zabbix_proxy.conf.epp', {
           'allowroot'               => $allowroot,
           'cachesize'               => $cachesize,
           'configfrequency'         => $configfrequency,
@@ -603,7 +603,7 @@ class zabbix::proxy (
           'zabbix_server_port'      => $zabbix_server_port,
           'zabbix_user'             => $zabbix::params::server_zabbix_user,
           'zabbix_version'          => $zabbix_version,
-    })),
+    }),
   }
 
   # Include dir for specific zabbix-proxy checks.
