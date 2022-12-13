@@ -113,7 +113,7 @@ class zabbix::web (
   Variant[Array[Stdlib::Port], Stdlib::Port] $apache_listenport         = $zabbix::params::apache_listenport,
   Variant[Array[Stdlib::Port], Stdlib::Port] $apache_listenport_ssl     = $zabbix::params::apache_listenport_ssl,
   $zabbix_api_user                                                      = $zabbix::params::server_api_user,
-  $zabbix_api_pass                                                      = $zabbix::params::server_api_pass,
+  Optional[Variant[String[1], Sensitive[String[1]]]] $zabbix_api_pass   = $zabbix::params::server_api_pass,
   $database_host                                                        = $zabbix::params::server_database_host,
   $database_name                                                        = $zabbix::params::server_database_name,
   $database_schema                                                      = $zabbix::params::server_database_schema,
