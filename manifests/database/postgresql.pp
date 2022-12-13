@@ -116,6 +116,7 @@ class zabbix::database::postgresql (
           "cd ${schema_path}",
           "&& psql -h '${database_host}'",
           "-U '${database_user}'",
+          "-p ${database_port}",
           "-d '${database_name}'",
           '-f timescaledb.sql',
           '&& touch /etc/zabbix/.timescaledb.done',
