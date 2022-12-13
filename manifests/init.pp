@@ -403,6 +403,7 @@ class zabbix (
     manage_firewall           => $manage_firewall,
     manage_repo               => $manage_repo,
     manage_database           => $manage_database,
+    manage_database_timescale => $manage_database_timescale,
     manage_service            => $manage_service,
     listenport                => $listenport,
     sourceip                  => $sourceip,

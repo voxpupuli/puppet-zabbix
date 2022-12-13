@@ -321,16 +321,17 @@ class zabbix::server (
       if $manage_database {
         # Execute the postgresql scripts
         class { 'zabbix::database::postgresql':
-          zabbix_type          => 'server',
-          zabbix_version       => $zabbix_version,
-          database_schema_path => $database_schema_path,
-          database_name        => $database_name,
-          database_user        => $database_user,
-          database_password    => $database_password,
-          database_host        => $database_host,
-          database_port        => $database_port,
-          database_path        => $database_path,
-          require              => $zabbix_database_require,
+          zabbix_type               => 'server',
+          zabbix_version            => $zabbix_version,
+          database_schema_path      => $database_schema_path,
+          database_name             => $database_name,
+          database_user             => $database_user,
+          database_password         => $database_password,
+          database_host             => $database_host,
+          database_port             => $database_port,
+          database_path             => $database_path,
+          manage_database_timescale => $manage_database_timescale,
+          require                   => $zabbix_database_require,
         }
       }
     }
