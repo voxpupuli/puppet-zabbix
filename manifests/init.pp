@@ -251,7 +251,7 @@ class zabbix (
   Optional[Enum['never', 'allow', 'try', 'demand', 'hard']] $ldap_reqcert     = $zabbix::params::ldap_reqcert,
   $zabbix_api_user                                                            = $zabbix::params::server_api_user,
   $zabbix_api_pass                                                            = $zabbix::params::server_api_pass,
-  Optional[Array[Stdlib::Fqdn]] $zabbix_api_access                            = $zabbix::params::server_api_acces,
+  Optional[Array[Stdlib::Host,1]] $zabbix_api_access                          = $zabbix::params::server_api_access,
   $listenport                                                                 = $zabbix::params::server_listenport,
   $sourceip                                                                   = $zabbix::params::server_sourceip,
   Enum['console', 'file', 'system'] $logtype                                  = $zabbix::params::server_logtype,
