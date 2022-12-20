@@ -79,6 +79,8 @@
 # @param tlsaccept What incoming connections to accept from Zabbix server. Used for a passive proxy, ignored on an active proxy.
 # @param tlscafile Full pathname of a file containing the top-level CA(s) certificates for peer certificate verification.
 # @param tlscertfile Full pathname of a file containing the proxy certificate or certificate chain.
+# @param tlscertissuer Issuer of the certificate that is allowed to talk with the serve
+# @param tlscertsubject Subject of the certificate that is allowed to talk with the server
 # @param tlsconnect How the proxy should connect to Zabbix server. Used for an active proxy, ignored on a passive proxy.
 # @param tlscrlfile Full pathname of a file containing revoked certificates.
 # @param tlskeyfile Full pathname of a file containing the proxy private key.
@@ -192,16 +194,18 @@ class zabbix::agent (
   $userparameter                                       = $zabbix::params::agent_userparameter,
   Optional[String[1]] $loadmodulepath                  = $zabbix::params::agent_loadmodulepath,
   $loadmodule                                          = $zabbix::params::agent_loadmodule,
-  $tlsaccept                                           = $zabbix::params::agent_tlsaccept,
+  Optional[Enum['unencrypted','psk','cert']] $tlsaccept = $zabbix::params::agent_tlsaccept,
   $tlscafile                                           = $zabbix::params::agent_tlscafile,
   $tlscertfile                                         = $zabbix::params::agent_tlscertfile,
+  Optional[String[1]] $tlscertissuer                   = undef,
+  Optional[String[1]] $tlscertsubject                  = undef,
   Optional[String[1]] $tlscipherall                    = $zabbix::params::agent_tlscipherall,
   Optional[String[1]] $tlscipherall13                  = $zabbix::params::agent_tlscipherall13,
   Optional[String[1]] $tlsciphercert                   = $zabbix::params::agent_tlsciphercert,
   Optional[String[1]] $tlsciphercert13                 = $zabbix::params::agent_tlsciphercert13,
   Optional[String[1]] $tlscipherpsk                    = $zabbix::params::agent_tlscipherpsk,
   Optional[String[1]] $tlscipherpsk13                  = $zabbix::params::agent_tlscipherpsk13,
-  $tlsconnect                                          = $zabbix::params::agent_tlsconnect,
+  Optional[Enum['unencrypted','psk','cert']] $tlsconnect = $zabbix::params::agent_tlsconnect,
   $tlscrlfile                                          = $zabbix::params::agent_tlscrlfile,
   $tlskeyfile                                          = $zabbix::params::agent_tlskeyfile,
   $tlspskfile                                          = $zabbix::params::agent_tlspskfile,
@@ -273,6 +277,10 @@ class zabbix::agent (
       interfacetype    => $zbx_interface_type,
       interfacedetails => $zbx_interface_details,
       proxy            => $use_proxy,
+      tls_accept       => $tlsaccept,
+      tls_connect      => $tlsconnect,
+      tls_issuer       => $tlscertissuer,
+      tls_subject      => $tlscertsubject,
     }
   }
 
