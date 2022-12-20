@@ -393,10 +393,6 @@ class zabbix::web (
       $apache_listen_port = $apache_listenport
     }
 
-    if versioncmp($apache::apache_version, '2.4') < 0 {
-      fail('Only apache >= 2.4 is supported')
-    }
-
     $location_api_access = $zabbix_api_access ? {
       undef   => 'all granted',
       default => $zabbix_api_access.map |$host| { "host ${host}" },
