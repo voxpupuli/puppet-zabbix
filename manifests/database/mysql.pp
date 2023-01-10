@@ -11,17 +11,23 @@
 # @param database_path Path to the database executable
 # @author Werner Dijkerman <ikben@werner-dijkerman.nl>
 class zabbix::database::mysql (
-  $zabbix_type                                        = '',
-  $zabbix_version                                     = $zabbix::params::zabbix_version,
-  $database_schema_path                               = '',
-  $database_name                                      = '',
-  $database_user                                      = '',
-  $database_password                                  = '',
-  $database_host                                      = '',
-  Optional[Stdlib::Port::Unprivileged] $database_port = undef,
-  $database_path                                      = $zabbix::params::database_path,
+  $zabbix_type                                                          = '',
+  $zabbix_version                                                       = $zabbix::params::zabbix_version,
+  $database_schema_path                                                 = '',
+  $database_name                                                        = '',
+  $database_user                                                        = '',
+  Optional[Variant[String[1], Sensitive[String[1]]]] $database_password = undef,
+  $database_host                                                        = '',
+  Optional[Stdlib::Port::Unprivileged] $database_port                   = undef,
+  $database_path                                                        = $zabbix::params::database_path,
 ) inherits zabbix::params {
   assert_private()
+
+  $database_password_unsensitive = if $database_password =~ Sensitive[String] {
+    $database_password.unwrap
+  } else {
+    $database_password
+  }
 
   if ($database_schema_path == false) or ($database_schema_path == '') {
     if versioncmp($zabbix_version, '6.0') >= 0 {
@@ -45,14 +51,14 @@ class zabbix::database::mysql (
   case $zabbix_type {
     'proxy': {
       $zabbix_proxy_create_sql = versioncmp($zabbix_version, '6.0') >= 0 ? {
-        true  => "cd ${schema_path} && mysql -h '${database_host}' -u '${database_user}' -p'${database_password}' ${port}-D '${database_name}' < proxy.sql && touch /etc/zabbix/.schema.done",
-        false => "cd ${schema_path} && if [ -f schema.sql.gz ]; then gunzip -f schema.sql.gz ; fi && mysql -h '${database_host}' -u '${database_user}' -p'${database_password}' ${port}-D '${database_name}' < schema.sql && touch /etc/zabbix/.schema.done"
+        true  => "cd ${schema_path} && mysql -h '${database_host}' -u '${database_user}' -p\"\${database_password}\" ${port}-D '${database_name}' < proxy.sql && touch /etc/zabbix/.schema.done",
+        false => "cd ${schema_path} && if [ -f schema.sql.gz ]; then gunzip -f schema.sql.gz ; fi && mysql -h '${database_host}' -u '${database_user}' -p\"\${database_password}\" ${port}-D '${database_name}' < schema.sql && touch /etc/zabbix/.schema.done"
       }
     }
     default: {
       $zabbix_server_create_sql = versioncmp($zabbix_version, '6.0') >= 0 ? {
-        true  => "cd ${schema_path} && if [ -f server.sql.gz ]; then gunzip -f server.sql.gz ; fi && mysql -h '${database_host}' -u '${database_user}' -p'${database_password}' ${port}-D '${database_name}' < server.sql && touch /etc/zabbix/.schema.done",
-        false => "cd ${schema_path} && if [ -f create.sql.gz ]; then gunzip -f create.sql.gz ; fi && mysql -h '${database_host}' -u '${database_user}' -p'${database_password}' ${port}-D '${database_name}' < create.sql && touch /etc/zabbix/.schema.done"
+        true  => "cd ${schema_path} && if [ -f server.sql.gz ]; then gunzip -f server.sql.gz ; fi && mysql -h '${database_host}' -u '${database_user}' -p\"\${database_password}\" ${port}-D '${database_name}' < server.sql && touch /etc/zabbix/.schema.done",
+        false => "cd ${schema_path} && if [ -f create.sql.gz ]; then gunzip -f create.sql.gz ; fi && mysql -h '${database_host}' -u '${database_user}' -p\"\${database_password}\" ${port}-D '${database_name}' < create.sql && touch /etc/zabbix/.schema.done"
       }
       $zabbix_server_images_sql = 'touch /etc/zabbix/.images.done'
       $zabbix_server_data_sql   = 'touch /etc/zabbix/.data.done'
@@ -60,33 +66,38 @@ class zabbix::database::mysql (
   }
 
   # Loading the sql files.
+  $_mysql_env = ["database_password=${database_password_unsensitive}"]
   case $zabbix_type {
     'proxy'  : {
       exec { 'zabbix_proxy_create.sql':
-        command  => $zabbix_proxy_create_sql,
-        path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
-        unless   => 'test -f /etc/zabbix/.schema.done',
-        provider => 'shell',
+        command     => $zabbix_proxy_create_sql,
+        path        => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
+        unless      => 'test -f /etc/zabbix/.schema.done',
+        provider    => 'shell',
+        environment => $_mysql_env,
       }
     }
     'server' : {
       exec { 'zabbix_server_create.sql':
-        command  => $zabbix_server_create_sql,
-        path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
-        unless   => 'test -f /etc/zabbix/.schema.done',
-        provider => 'shell',
+        command     => $zabbix_server_create_sql,
+        path        => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
+        unless      => 'test -f /etc/zabbix/.schema.done',
+        provider    => 'shell',
+        environment => $_mysql_env,
       }
       -> exec { 'zabbix_server_images.sql':
-        command  => $zabbix_server_images_sql,
-        path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
-        unless   => 'test -f /etc/zabbix/.images.done',
-        provider => 'shell',
+        command     => $zabbix_server_images_sql,
+        path        => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
+        unless      => 'test -f /etc/zabbix/.images.done',
+        provider    => 'shell',
+        environment => $_mysql_env,
       }
       -> exec { 'zabbix_server_data.sql':
-        command  => $zabbix_server_data_sql,
-        path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
-        unless   => 'test -f /etc/zabbix/.data.done',
-        provider => 'shell',
+        command     => $zabbix_server_data_sql,
+        path        => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
+        unless      => 'test -f /etc/zabbix/.data.done',
+        provider    => 'shell',
+        environment => $_mysql_env,
       }
     }
     default  : {
