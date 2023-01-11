@@ -391,14 +391,9 @@ class zabbix::web (
       $apache_listen_port = $apache_listenport
     }
 
-    # Check which version of Apache we're using
-    if versioncmp($apache::apache_version, '2.4') >= 0 {
-      $directory_allow = { 'require' => 'all granted', }
-      $directory_deny = { 'require' => 'all denied', }
-    } else {
-      $directory_allow = { 'allow' => 'from all', 'order' => 'Allow,Deny', }
-      $directory_deny = { 'deny' => 'from all', 'order' => 'Deny,Allow', }
-    }
+    # Apache >= 2.4
+    $directory_allow = { 'require' => 'all granted', }
+    $directory_deny = { 'require' => 'all denied', }
 
     apache::vhost { $zabbix_url:
       docroot         => '/usr/share/zabbix',
