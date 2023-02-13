@@ -235,6 +235,20 @@ describe 'zabbix::web' do
           it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$SSO\['IDP_CERT'\] = '/etc/zabbix/web/idp.cert'}) }
           it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$SSO\['SETTINGS'\] = \[ \n  "strict" => true,\n  "baseurl" => "http://example.com/sp/",\n  "security" => \[\n    "signatureAlgorithm" => "http://www.w3.org/2001/04/xmldsig-more#rsa-sha384",\n    "digestAlgorithm" => "http://www.w3.org/2001/04/xmldsig-more#sha384",\n    "singleLogoutService" => \[\n      "responseUrl" => ""\n    \]\n  \]\n\];}) }
         end
+
+        describe 'with restriction to api access' do
+          let :params do
+            super().merge(
+              zabbix_api_access: ['127.0.0.1']
+            )
+          end
+
+          it {
+            is_expected.to contain_concat__fragment('zabbix.example.com-directories').with(
+              content: %r{^\s+Require host 127\.0\.0\.1$}
+            )
+          }
+        end
       end
     end
   end

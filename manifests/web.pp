@@ -42,6 +42,7 @@
 # @param apache_listenport_ssl The port for the apache SSL vhost.
 # @param zabbix_api_user Name of the user which the api should connect to. Default: Admin
 # @param zabbix_api_pass Password of the user which connects to the api. Default: zabbix
+# @param zabbix_api_access Which host has access to the api. Default: no restriction
 # @param database_host Database host name.
 # @param database_name Database name.
 # @param database_schema Schema name. used for ibm db2.
@@ -114,6 +115,7 @@ class zabbix::web (
   Variant[Array[Stdlib::Port], Stdlib::Port] $apache_listenport_ssl   = $zabbix::params::apache_listenport_ssl,
   $zabbix_api_user                                                    = $zabbix::params::server_api_user,
   $zabbix_api_pass                                                    = $zabbix::params::server_api_pass,
+  Optional[Array[Stdlib::Host,1]] $zabbix_api_access                  = $zabbix::params::server_api_access,
   $database_host                                                      = $zabbix::params::server_database_host,
   $database_name                                                      = $zabbix::params::server_database_name,
   $database_schema                                                    = $zabbix::params::server_database_schema,
@@ -391,9 +393,10 @@ class zabbix::web (
       $apache_listen_port = $apache_listenport
     }
 
-    # Apache >= 2.4
-    $directory_allow = { 'require' => 'all granted', }
-    $directory_deny = { 'require' => 'all denied', }
+    $location_api_access = $zabbix_api_access ? {
+      undef   => 'all granted',
+      default => $zabbix_api_access.map |$host| { "host ${host}" },
+    }
 
     apache::vhost { $zabbix_url:
       docroot         => '/usr/share/zabbix',
@@ -402,29 +405,37 @@ class zabbix::web (
       default_vhost   => $default_vhost,
       add_listen      => true,
       directories     => [
-        merge(
-          merge({
-              path     => '/usr/share/zabbix',
-              provider => 'directory',
-          }, $directory_allow),
-          $fcgi_filematch
+        merge({
+            path     => '/usr/share/zabbix',
+            provider => 'directory',
+            require  => 'all granted',
+          }, $fcgi_filematch
         ),
-        merge({
-            path     => '/usr/share/zabbix/conf',
-            provider => 'directory',
-        }, $directory_deny),
-        merge({
-            path     => '/usr/share/zabbix/api',
-            provider => 'directory',
-        }, $directory_deny),
-        merge({
-            path     => '/usr/share/zabbix/include',
-            provider => 'directory',
-        }, $directory_deny),
-        merge({
-            path     => '/usr/share/zabbix/include/classes',
-            provider => 'directory',
-        }, $directory_deny),
+        {
+          path     => '/usr/share/zabbix/conf',
+          provider => 'directory',
+          require  => 'all denied',
+        },
+        {
+          path     => '/usr/share/zabbix/api',
+          provider => 'directory',
+          require  => 'all denied',
+        },
+        {
+          path     => '/usr/share/zabbix/include',
+          provider => 'directory',
+          require  => 'all denied',
+        },
+        {
+          path     => '/usr/share/zabbix/include/classes',
+          provider => 'directory',
+          require  => 'all denied',
+        },
+        {
+          path     => '/api_jsonrpc.php',
+          provider => 'location',
+          require  => $location_api_access,
+        },
       ],
       custom_fragment => $apache_vhost_custom_fragment,
       rewrites        => [
