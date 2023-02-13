@@ -128,7 +128,6 @@
 # @param fpinglocation Location of fping.
 # @param fping6location Location of fping6.
 # @param sshkeylocation Location of public and private keys for ssh checks and actions.
-# @param sslcalocation_dir Location of certificate authority (CA) files for SSL server certificate verification.
 # @param sslcertlocation_dir Location of SSL client certificate files for client authentication.
 # @param sslkeylocation_dir Location of SSL private key files for client authentication.
 # @param logslowqueries How long a database query may take before being logged (in milliseconds).
@@ -290,7 +289,6 @@ class zabbix::proxy (
   $tmpdir                                                                     = $zabbix::params::proxy_tmpdir,
   $allowroot                                                                  = $zabbix::params::proxy_allowroot,
   $include_dir                                                                = $zabbix::params::proxy_include,
-  Optional[Stdlib::Absolutepath] $sslcalocation_dir                           = $zabbix::params::proxy_sslcalocation,
   Optional[Stdlib::Absolutepath] $sslcertlocation_dir                         = $zabbix::params::proxy_sslcertlocation,
   Optional[Stdlib::Absolutepath] $sslkeylocation_dir                          = $zabbix::params::proxy_sslkeylocation,
   $loadmodulepath                                                             = $zabbix::params::proxy_loadmodulepath,
@@ -554,7 +552,6 @@ class zabbix::proxy (
         'socketdir'               => $socketdir,
         'sourceip'                => $sourceip,
         'sshkeylocation'          => $sshkeylocation,
-        'sslcalocation_dir'       => $sslcalocation_dir,
         'sslcertlocation_dir'     => $sslcertlocation_dir,
         'sslkeylocation_dir'      => $sslkeylocation_dir,
         'startdbsyncers'          => $startdbsyncers,

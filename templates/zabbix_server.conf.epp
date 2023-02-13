@@ -42,7 +42,6 @@
     Optional[Stdlib::Absolutepath]                         $socketdir,
     Optional[Stdlib::IP::Address]                          $sourceip,
     Optional[String[1]]                                    $sshkeylocation,
-    Optional[Stdlib::Absolutepath]                         $sslcalocation_dir,
     Optional[Stdlib::Absolutepath]                         $sslcertlocation_dir,
     Optional[Stdlib::Absolutepath]                         $sslkeylocation_dir,
     Integer[1,100]                                         $startalerters,
@@ -518,13 +517,6 @@ SSLCertLocation=<%= $sslcertlocation_dir %>
 #   This parameter is used only in web monitoring.
 #
 SSLKeyLocation=<%= $sslkeylocation_dir %>
-
-### Option: SSLCALocation
-#   Override the location of certificate authority (CA) files for SSL server certificate verification.
-#   If not set, system-wide directory will be used.
-#   This parameter is used only in web monitoring.
-#
-<% if $sslcalocation_dir { %>SSLCALocation=<%= $sslcalocation_dir %><% } -%>
 
 ####### LOADABLE MODULES #######
 

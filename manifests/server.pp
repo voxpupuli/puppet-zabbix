@@ -132,7 +132,6 @@
 # @param include_dir You may include individual files or all files in a directory in the configuration file.
 # @param loadmodulepath Full path to location of server modules.
 # @param loadmodule Module to load at server startup.
-# @param sslcalocation_dir Location of certificate authority (CA) files for SSL server certificate verification.
 # @param sslcertlocation_dir Location of SSL client certificate files for client authentication.
 # @param sslkeylocation_dir Location of SSL private key files for client authentication.
 # @param manage_selinux Whether we should manage SELinux rules.
@@ -265,7 +264,6 @@ class zabbix::server (
   $include_dir                                                                = $zabbix::params::server_include,
   $loadmodulepath                                                             = $zabbix::params::server_loadmodulepath,
   $loadmodule                                                                 = $zabbix::params::server_loadmodule,
-  Optional[Stdlib::Absolutepath] $sslcalocation_dir                           = $zabbix::params::server_sslcalocation,
   Optional[Stdlib::Absolutepath] $sslcertlocation_dir                         = $zabbix::params::server_sslcertlocation,
   Optional[Stdlib::Absolutepath] $sslkeylocation_dir                          = $zabbix::params::server_sslkeylocation,
   Boolean $manage_selinux                                                     = $zabbix::params::manage_selinux,
@@ -492,7 +490,6 @@ class zabbix::server (
         'socketdir'               => $socketdir,
         'sourceip'                => $sourceip,
         'sshkeylocation'          => $sshkeylocation,
-        'sslcalocation_dir'       => $sslcalocation_dir,
         'sslcertlocation_dir'     => $sslcertlocation_dir,
         'sslkeylocation_dir'      => $sslkeylocation_dir,
         'startalerters'           => $startalerters,
