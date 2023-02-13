@@ -184,6 +184,7 @@ class zabbix::params {
   $ldap_reqcert                             = undef
   $server_api_pass                          = Sensitive('zabbix')
   $server_api_user                          = 'Admin'
+  $server_api_access                        = undef
   $server_database_double_ieee754           = false
   $saml_sp_key                              = undef
   $saml_sp_cert                             = undef

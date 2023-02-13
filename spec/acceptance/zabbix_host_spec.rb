@@ -132,8 +132,36 @@ describe 'zabbix_host type', unless: default[:platform] =~ %r{archlinux} do
         end
       end
 
+      it_behaves_like 'an idempotent resource' do
+        let(:manifest) do
+          <<-EOS
+          zabbix_host { 'test5.example.com':
+            ipaddress   => '127.0.0.5',
+            use_ip      => false,
+            port        => 1051,
+            groups      => ['Virtual machines'],
+            templates   => #{template},
+            macros      => [],
+            tls_accept  => 'cert',
+            tls_connect => 'cert',
+            tls_issuer  => 'Zabbix.com',
+            tls_subject => 'MyClientCertificate',
+          }
+          EOS
+        end
+      end
+
       let(:result_hosts) do
-        zabbixapi('localhost', 'Admin', 'zabbix', 'host.get', selectParentTemplates: ['host'], selectInterfaces: %w[dns ip main port type useip details], selectGroups: ['name'], output: ['host', '']).result
+        zabbixapi(
+          'localhost',
+          'Admin',
+          'zabbix',
+          'host.get',
+          selectParentTemplates: ['host'],
+          selectInterfaces: %w[dns ip main port type useip details],
+          selectGroups: ['name'],
+          output: ['host', 'tls_accept', 'tls_connect', 'tls_issuer', 'tls_subject', '']
+        ).result
       end
 
       context 'test1.example.com' do
@@ -307,6 +335,30 @@ describe 'zabbix_host type', unless: default[:platform] =~ %r{archlinux} do
           end
         end
 
+      end
+
+      context 'test5.example.com' do
+        let(:test5) { result_hosts.select { |h| h['host'] == 'test5.example.com' }.first }
+
+        it 'is created' do
+          expect(test5['host']).to eq('test5.example.com')
+        end
+
+        it 'has a correct tls_accept configured' do
+          expect(test5['tls_accept']).to eq('4')
+        end
+
+        it 'has a correct tls_connect configured' do
+          expect(test5['tls_connect']).to eq('4')
+        end
+
+        it 'has a correct tls_issuer configured' do
+          expect(test5['tls_issuer']).to eq('Zabbix.com')
+        end
+
+        it 'has a correct tls_subject configured' do
+          expect(test5['tls_subject']).to eq('MyClientCertificate')
+        end
       end
     end
   end

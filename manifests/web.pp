@@ -42,6 +42,7 @@
 # @param apache_listenport_ssl The port for the apache SSL vhost.
 # @param zabbix_api_user Name of the user which the api should connect to. Default: Admin
 # @param zabbix_api_pass Password of the user which connects to the api. Default: zabbix
+# @param zabbix_api_access Which host has access to the api. Default: no restriction
 # @param database_host Database host name.
 # @param database_name Database name.
 # @param database_schema Schema name. used for ibm db2.
@@ -92,56 +93,57 @@
 #   }
 # @author Werner Dijkerman <ikben@werner-dijkerman.nl>
 class zabbix::web (
-  $zabbix_url                                                           = $zabbix::params::zabbix_url,
-  $database_type                                                        = $zabbix::params::database_type,
-  $manage_repo                                                          = $zabbix::params::manage_repo,
-  $zabbix_version                                                       = $zabbix::params::zabbix_version,
-  $zabbix_timezone                                                      = $zabbix::params::zabbix_timezone,
-  $zabbix_package_state                                                 = $zabbix::params::zabbix_package_state,
-  $zabbix_template_dir                                                  = $zabbix::params::zabbix_template_dir,
-  $web_config_owner                                                     = $zabbix::params::web_config_owner,
-  $web_config_group                                                     = $zabbix::params::web_config_group,
-  $manage_vhost                                                         = $zabbix::params::manage_vhost,
-  $default_vhost                                                        = $zabbix::params::default_vhost,
-  $manage_resources                                                     = $zabbix::params::manage_resources,
-  $apache_use_ssl                                                       = $zabbix::params::apache_use_ssl,
-  $apache_ssl_cert                                                      = $zabbix::params::apache_ssl_cert,
-  $apache_ssl_key                                                       = $zabbix::params::apache_ssl_key,
-  $apache_ssl_cipher                                                    = $zabbix::params::apache_ssl_cipher,
-  $apache_ssl_chain                                                     = $zabbix::params::apache_ssl_chain,
-  $apache_listen_ip                                                     = $zabbix::params::apache_listen_ip,
-  Variant[Array[Stdlib::Port], Stdlib::Port] $apache_listenport         = $zabbix::params::apache_listenport,
-  Variant[Array[Stdlib::Port], Stdlib::Port] $apache_listenport_ssl     = $zabbix::params::apache_listenport_ssl,
-  $zabbix_api_user                                                      = $zabbix::params::server_api_user,
-  Optional[Variant[String[1], Sensitive[String[1]]]] $zabbix_api_pass   = $zabbix::params::server_api_pass,
-  $database_host                                                        = $zabbix::params::server_database_host,
-  $database_name                                                        = $zabbix::params::server_database_name,
-  $database_schema                                                      = $zabbix::params::server_database_schema,
-  Boolean $database_double_ieee754                                      = $zabbix::params::server_database_double_ieee754,
-  $database_user                                                        = $zabbix::params::server_database_user,
+  $zabbix_url                                                         = $zabbix::params::zabbix_url,
+  $database_type                                                      = $zabbix::params::database_type,
+  $manage_repo                                                        = $zabbix::params::manage_repo,
+  $zabbix_version                                                     = $zabbix::params::zabbix_version,
+  $zabbix_timezone                                                    = $zabbix::params::zabbix_timezone,
+  $zabbix_package_state                                               = $zabbix::params::zabbix_package_state,
+  $zabbix_template_dir                                                = $zabbix::params::zabbix_template_dir,
+  $web_config_owner                                                   = $zabbix::params::web_config_owner,
+  $web_config_group                                                   = $zabbix::params::web_config_group,
+  $manage_vhost                                                       = $zabbix::params::manage_vhost,
+  $default_vhost                                                      = $zabbix::params::default_vhost,
+  $manage_resources                                                   = $zabbix::params::manage_resources,
+  $apache_use_ssl                                                     = $zabbix::params::apache_use_ssl,
+  $apache_ssl_cert                                                    = $zabbix::params::apache_ssl_cert,
+  $apache_ssl_key                                                     = $zabbix::params::apache_ssl_key,
+  $apache_ssl_cipher                                                  = $zabbix::params::apache_ssl_cipher,
+  $apache_ssl_chain                                                   = $zabbix::params::apache_ssl_chain,
+  $apache_listen_ip                                                   = $zabbix::params::apache_listen_ip,
+  Variant[Array[Stdlib::Port], Stdlib::Port] $apache_listenport       = $zabbix::params::apache_listenport,
+  Variant[Array[Stdlib::Port], Stdlib::Port] $apache_listenport_ssl   = $zabbix::params::apache_listenport_ssl,
+  $zabbix_api_user                                                    = $zabbix::params::server_api_user,
+  $zabbix_api_pass                                                    = $zabbix::params::server_api_pass,
+  Optional[Array[Stdlib::Host,1]] $zabbix_api_access                  = $zabbix::params::server_api_access,
+  $database_host                                                      = $zabbix::params::server_database_host,
+  $database_name                                                      = $zabbix::params::server_database_name,
+  $database_schema                                                    = $zabbix::params::server_database_schema,
+  Boolean $database_double_ieee754                                    = $zabbix::params::server_database_double_ieee754,
+  $database_user                                                      = $zabbix::params::server_database_user,
   Optional[Variant[String[1], Sensitive[String[1]]]] $database_password = $zabbix::params::server_database_password,
-  $database_socket                                                      = $zabbix::params::server_database_socket,
-  $database_port                                                        = $zabbix::params::server_database_port,
-  $zabbix_server                                                        = $zabbix::params::zabbix_server,
-  Optional[String] $zabbix_server_name                                  = $zabbix::params::zabbix_server,
-  $zabbix_listenport                                                    = $zabbix::params::server_listenport,
-  $apache_php_max_execution_time                                        = $zabbix::params::apache_php_max_execution_time,
-  $apache_php_memory_limit                                              = $zabbix::params::apache_php_memory_limit,
-  $apache_php_post_max_size                                             = $zabbix::params::apache_php_post_max_size,
-  $apache_php_upload_max_filesize                                       = $zabbix::params::apache_php_upload_max_filesize,
-  $apache_php_max_input_time                                            = $zabbix::params::apache_php_max_input_time,
-  $apache_php_always_populate_raw_post_data                             = $zabbix::params::apache_php_always_populate_raw_post_data,
-  $apache_php_max_input_vars                                            = $zabbix::params::apache_php_max_input_vars,
-  Optional[Stdlib::Absolutepath] $ldap_cacert                           = $zabbix::params::ldap_cacert,
-  Optional[Stdlib::Absolutepath] $ldap_clientcert                       = $zabbix::params::ldap_clientcert,
-  Optional[Stdlib::Absolutepath] $ldap_clientkey                        = $zabbix::params::ldap_clientkey,
-  Optional[Enum['never','allow','try','demand','hard']] $ldap_reqcert   = $zabbix::params::ldap_reqcert,
-  Optional[Stdlib::Absolutepath] $saml_sp_key                           = $zabbix::params::saml_sp_key,
-  Optional[Stdlib::Absolutepath] $saml_sp_cert                          = $zabbix::params::saml_sp_cert,
-  Optional[Stdlib::Absolutepath] $saml_idp_cert                         = $zabbix::params::saml_idp_cert,
-  Hash[String[1], Variant[ScalarData, Hash]] $saml_settings             = $zabbix::params::saml_settings,
-  $puppetgem                                                            = $zabbix::params::puppetgem,
-  Boolean $manage_selinux                                               = $zabbix::params::manage_selinux,
+  $database_socket                                                    = $zabbix::params::server_database_socket,
+  $database_port                                                      = $zabbix::params::server_database_port,
+  $zabbix_server                                                      = $zabbix::params::zabbix_server,
+  Optional[String] $zabbix_server_name                                = $zabbix::params::zabbix_server,
+  $zabbix_listenport                                                  = $zabbix::params::server_listenport,
+  $apache_php_max_execution_time                                      = $zabbix::params::apache_php_max_execution_time,
+  $apache_php_memory_limit                                            = $zabbix::params::apache_php_memory_limit,
+  $apache_php_post_max_size                                           = $zabbix::params::apache_php_post_max_size,
+  $apache_php_upload_max_filesize                                     = $zabbix::params::apache_php_upload_max_filesize,
+  $apache_php_max_input_time                                          = $zabbix::params::apache_php_max_input_time,
+  $apache_php_always_populate_raw_post_data                           = $zabbix::params::apache_php_always_populate_raw_post_data,
+  $apache_php_max_input_vars                                          = $zabbix::params::apache_php_max_input_vars,
+  Optional[Stdlib::Absolutepath] $ldap_cacert                         = $zabbix::params::ldap_cacert,
+  Optional[Stdlib::Absolutepath] $ldap_clientcert                     = $zabbix::params::ldap_clientcert,
+  Optional[Stdlib::Absolutepath] $ldap_clientkey                      = $zabbix::params::ldap_clientkey,
+  Optional[Enum['never','allow','try','demand','hard']] $ldap_reqcert = $zabbix::params::ldap_reqcert,
+  Optional[Stdlib::Absolutepath] $saml_sp_key                         = $zabbix::params::saml_sp_key,
+  Optional[Stdlib::Absolutepath] $saml_sp_cert                        = $zabbix::params::saml_sp_cert,
+  Optional[Stdlib::Absolutepath] $saml_idp_cert                       = $zabbix::params::saml_idp_cert,
+  Hash[String[1], Variant[ScalarData, Hash]] $saml_settings           = $zabbix::params::saml_settings,
+  $puppetgem                                                          = $zabbix::params::puppetgem,
+  Boolean $manage_selinux                                             = $zabbix::params::manage_selinux,
 ) inherits zabbix::params {
   # check osfamily, Arch is currently not supported for web
   if $facts['os']['family'] in ['Archlinux', 'Gentoo',] {
@@ -412,13 +414,9 @@ class zabbix::web (
       $apache_listen_port = $apache_listenport
     }
 
-    # Check which version of Apache we're using
-    if versioncmp($apache::apache_version, '2.4') >= 0 {
-      $directory_allow = { 'require' => 'all granted', }
-      $directory_deny = { 'require' => 'all denied', }
-    } else {
-      $directory_allow = { 'allow' => 'from all', 'order' => 'Allow,Deny', }
-      $directory_deny = { 'deny' => 'from all', 'order' => 'Deny,Allow', }
+    $location_api_access = $zabbix_api_access ? {
+      undef   => 'all granted',
+      default => $zabbix_api_access.map |$host| { "host ${host}" },
     }
 
     apache::vhost { $zabbix_url:
@@ -428,29 +426,37 @@ class zabbix::web (
       default_vhost   => $default_vhost,
       add_listen      => true,
       directories     => [
-        merge(
-          merge({
-              path     => '/usr/share/zabbix',
-              provider => 'directory',
-          }, $directory_allow),
-          $fcgi_filematch
+        merge({
+            path     => '/usr/share/zabbix',
+            provider => 'directory',
+            require  => 'all granted',
+          }, $fcgi_filematch
         ),
-        merge({
-            path     => '/usr/share/zabbix/conf',
-            provider => 'directory',
-        }, $directory_deny),
-        merge({
-            path     => '/usr/share/zabbix/api',
-            provider => 'directory',
-        }, $directory_deny),
-        merge({
-            path     => '/usr/share/zabbix/include',
-            provider => 'directory',
-        }, $directory_deny),
-        merge({
-            path     => '/usr/share/zabbix/include/classes',
-            provider => 'directory',
-        }, $directory_deny),
+        {
+          path     => '/usr/share/zabbix/conf',
+          provider => 'directory',
+          require  => 'all denied',
+        },
+        {
+          path     => '/usr/share/zabbix/api',
+          provider => 'directory',
+          require  => 'all denied',
+        },
+        {
+          path     => '/usr/share/zabbix/include',
+          provider => 'directory',
+          require  => 'all denied',
+        },
+        {
+          path     => '/usr/share/zabbix/include/classes',
+          provider => 'directory',
+          require  => 'all denied',
+        },
+        {
+          path     => '/api_jsonrpc.php',
+          provider => 'location',
+          require  => $location_api_access,
+        },
       ],
       custom_fragment => $apache_vhost_custom_fragment,
       rewrites        => [
