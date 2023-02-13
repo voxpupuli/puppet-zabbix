@@ -393,17 +393,13 @@ class zabbix::web (
       $apache_listen_port = $apache_listenport
     }
 
-    # Apache >= 2.4
-    $directory_allow = { 'require' => 'all granted', }
-    $directory_deny = { 'require' => 'all denied', }
+    if versioncmp($apache::apache_version, '2.4') < 0 {
+      fail('Only apache >= 2.4 is supported')
+    }
 
     $location_api_access = $zabbix_api_access ? {
-      undef   => $directory_allow,
-      default => if versioncmp($apache::apache_version, '2.4') >= 0 {
-        { 'require' => $zabbix_api_access.map |$host| { "host ${host}" }, }
-      } else {
-        { 'allow' => $zabbix_api_access, 'order' => 'Allow,Deny' }
-      }
+      undef   => 'all granted',
+      default => $zabbix_api_access.map |$host| { "host ${host}" },
     }
 
     apache::vhost { $zabbix_url:
@@ -413,33 +409,37 @@ class zabbix::web (
       default_vhost   => $default_vhost,
       add_listen      => true,
       directories     => [
-        merge(
-          merge({
-              path     => '/usr/share/zabbix',
-              provider => 'directory',
-          }, $directory_allow),
-          $fcgi_filematch
+        merge({
+            path     => '/usr/share/zabbix',
+            provider => 'directory',
+            require  => 'all granted',
+          }, $fcgi_filematch
         ),
-        merge({
-            path     => '/usr/share/zabbix/conf',
-            provider => 'directory',
-        }, $directory_deny),
-        merge({
-            path     => '/usr/share/zabbix/api',
-            provider => 'directory',
-        }, $directory_deny),
-        merge({
-            path     => '/usr/share/zabbix/include',
-            provider => 'directory',
-        }, $directory_deny),
-        merge({
-            path     => '/usr/share/zabbix/include/classes',
-            provider => 'directory',
-        }, $directory_deny),
-        merge({
-            path     => '/api_jsonrpc.php',
-            provider => 'location',
-        }, $location_api_access),
+        {
+          path     => '/usr/share/zabbix/conf',
+          provider => 'directory',
+          require  => 'all denied',
+        },
+        {
+          path     => '/usr/share/zabbix/api',
+          provider => 'directory',
+          require  => 'all denied',
+        },
+        {
+          path     => '/usr/share/zabbix/include',
+          provider => 'directory',
+          require  => 'all denied',
+        },
+        {
+          path     => '/usr/share/zabbix/include/classes',
+          provider => 'directory',
+          require  => 'all denied',
+        },
+        {
+          path     => '/api_jsonrpc.php',
+          provider => 'location',
+          require  => $location_api_access,
+        },
       ],
       custom_fragment => $apache_vhost_custom_fragment,
       rewrites        => [
