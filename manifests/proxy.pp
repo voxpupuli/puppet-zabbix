@@ -73,7 +73,6 @@
 # @param startjavapollers Number of pre-forked instances of java pollers.
 # @param startvmwarecollectors Number of pre-forked vmware collector instances.
 # @param vmwarefrequency How often zabbix will connect to vmware service to obtain a new datan.
-# @param vmwareperffrequency
 #   Delay in seconds between performance counter statistics retrieval from a single VMware service.
 #   This delay should be set to the least update interval of any VMware monitoring item that uses VMware performance counters.
 # @param vmwaretimeout The maximum number of seconds vmware collector will wait for a response from VMware service (vCenter or ESX hypervisor).
@@ -251,7 +250,6 @@ class zabbix::proxy (
   Optional[String[1]] $vaulttoken                                             = $zabbix::params::proxy_vaulttoken,
   Stdlib::HTTPSUrl $vaulturl                                                  = $zabbix::params::proxy_vaulturl,
   $vmwarefrequency                                                            = $zabbix::params::proxy_vmwarefrequency,
-  $vmwareperffrequency                                                        = $zabbix::params::proxy_vmwareperffrequency,
   $vmwarecachesize                                                            = $zabbix::params::proxy_vmwarecachesize,
   $vmwaretimeout                                                              = $zabbix::params::proxy_vmwaretimeout,
   $snmptrapperfile                                                            = $zabbix::params::proxy_snmptrapperfile,
@@ -597,7 +595,6 @@ class zabbix::proxy (
         'vaulturl'                => $vaulturl,
         'vmwarecachesize'         => $vmwarecachesize,
         'vmwarefrequency'         => $vmwarefrequency,
-        'vmwareperffrequency'     => $vmwareperffrequency,
         'vmwaretimeout'           => $vmwaretimeout,
         'zabbix_server_host'      => $zabbix_server_host,
         'zabbix_server_port'      => $zabbix_server_port,

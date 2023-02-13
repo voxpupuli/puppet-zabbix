@@ -66,9 +66,6 @@
 # @param startreportwriters Number of pre-forked report writer instances.
 # @param webserviceurl URL to Zabbix web service, used to perform web related tasks.
 # @param vmwarefrequency How often zabbix will connect to vmware service to obtain a new datan.
-# @param vmwareperffrequency
-#   Delay in seconds between performance counter statistics retrieval from a single VMware service.
-#   This delay should be set to the least update interval of any VMware monitoring item that uses VMware performance counters.
 # @param vaultdbpath Vault path from where credentials for database will be retrieved by keys 'password' and 'username'.
 # @param vaulttoken
 #   Vault authentication token that should have been generated exclusively for Zabbix proxy with read-only
@@ -225,7 +222,6 @@ class zabbix::server (
   Optional[String[1]] $vaulttoken                                             = $zabbix::params::server_vaulttoken,
   Stdlib::HTTPSUrl $vaulturl                                                  = $zabbix::params::server_vaulturl,
   $vmwarefrequency                                                            = $zabbix::params::server_vmwarefrequency,
-  $vmwareperffrequency                                                        = $zabbix::params::server_vmwareperffrequency,
   $vmwarecachesize                                                            = $zabbix::params::server_vmwarecachesize,
   $vmwaretimeout                                                              = $zabbix::params::server_vmwaretimeout,
   $snmptrapperfile                                                            = $zabbix::params::server_snmptrapperfile,
@@ -540,7 +536,6 @@ class zabbix::server (
         'vaulturl'                => $vaulturl,
         'vmwarecachesize'         => $vmwarecachesize,
         'vmwarefrequency'         => $vmwarefrequency,
-        'vmwareperffrequency'     => $vmwareperffrequency,
         'vmwaretimeout'           => $vmwaretimeout,
         'webserviceurl'           => $webserviceurl,
         'zabbix_user'             => $zabbix::params::server_zabbix_user,

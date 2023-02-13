@@ -289,7 +289,6 @@ class zabbix::params {
   $server_vaulturl                          = 'https://127.0.0.1:8200'
   $server_vmwarecachesize                   = '8M'
   $server_vmwarefrequency                   = '60'
-  $server_vmwareperffrequency               = undef
   $server_vmwaretimeout                     = undef
   $server_socketdir                         = undef
 
@@ -460,7 +459,6 @@ class zabbix::params {
   $proxy_vaulturl                           = 'https://127.0.0.1:8200'
   $proxy_vmwarecachesize                    = '8M'
   $proxy_vmwarefrequency                    = '60'
-  $proxy_vmwareperffrequency                = undef
   $proxy_vmwaretimeout                      = undef
   $proxy_zabbix_server_host                 = undef
   $proxy_zabbix_server_port                 = '10051'

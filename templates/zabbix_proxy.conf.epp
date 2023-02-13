@@ -88,7 +88,6 @@
     Optional[Stdlib::HTTPSUrl]                             $vaulturl,
     String[1]                                              $vmwarecachesize,
     String[1]                                              $vmwarefrequency,
-    Optional[String[1]]                                    $vmwareperffrequency,
     Optional[String[1]]                                    $vmwaretimeout,
     Optional[String[1]]                                    $zabbix_server_host,
     String[1]                                              $zabbix_server_port,
@@ -358,11 +357,6 @@ StartVMwareCollectors=<%= $startvmwarecollectors %>
 #	How often Zabbix will connect to VMware service to obtain a new data.
 #
 VMwareFrequency=<%= $vmwarefrequency %>
-
-### Option: VMwarePerfFrequency
-#	How often Zabbix will connect to VMware service to obtain performance data.
-#
-<% if $vmwareperffrequency { %>VMwarePerfFrequency=<%= $vmwareperffrequency %><% } -%>
 
 ### Option: VMwareCacheSize
 #	Size of VMware cache, in bytes.
