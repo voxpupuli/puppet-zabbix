@@ -251,7 +251,6 @@ class zabbix (
   Optional[Enum['never', 'allow', 'try', 'demand', 'hard']] $ldap_reqcert     = $zabbix::params::ldap_reqcert,
   $zabbix_api_user                                                            = $zabbix::params::server_api_user,
   Optional[Variant[String[1], Sensitive[String[1]]]] $zabbix_api_pass         = $zabbix::params::server_api_pass,
-  $zabbix_api_pass                                                            = $zabbix::params::server_api_pass,
   Optional[Array[Stdlib::Host,1]] $zabbix_api_access                          = $zabbix::params::server_api_access,
   $listenport                                                                 = $zabbix::params::server_listenport,
   $sourceip                                                                   = $zabbix::params::server_sourceip,
