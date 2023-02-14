@@ -65,7 +65,8 @@ describe 'zabbix::startup', type: :define do # rubocop:disable RSpec/MultipleDes
               {
                 agent_configfile_path: '/something',
                 pidfile: '/somethingelse',
-                additional_service_params: '--foreground'
+                additional_service_params: '--foreground',
+                binary_location: '/usr/sbin/zabbix_agentd'
               }
             end
 

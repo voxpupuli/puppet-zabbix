@@ -11,9 +11,7 @@ describe 'zabbix::database' do
     next if facts[:os]['name'] == 'windows'
 
     context "on #{os}" do
-      let :facts do
-        facts
-      end
+      let(:facts) { facts }
 
       let :pre_condition do
         <<-EOS

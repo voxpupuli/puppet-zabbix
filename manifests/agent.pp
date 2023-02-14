@@ -119,6 +119,7 @@
 # @param userparameter User-defined parameter to monitor.
 # @param loadmodulepath Full path to location of agent modules.
 # @param loadmodule Module to load at agent startup.
+# @param binary_location Location of th binary file, this feature is available only for systemd startup script
 # @param manage_startup_script
 #  If the init script should be managed by this module. Attention: This might
 #  cause problems with some config options of this module (e.g
@@ -220,12 +221,15 @@ class zabbix::agent (
   String $additional_service_params                    = $zabbix::params::additional_service_params,
   String $service_type                                 = $zabbix::params::service_type,
   Boolean $manage_startup_script                       = $zabbix::params::manage_startup_script,
+  Optional[Stdlib::Absolutepath] $binary_location      = $zabbix::params::agent_binary_location,
 ) inherits zabbix::params {
   if $facts['os']['family'] == 'Debian' and versioncmp($facts['os']['release']['major'], '11') == 0 {
     if versioncmp($zabbix_version, '5.2') == 0 {
       fail('Zabbix 5.2 is not supported on Debian 11!')
     }
   }
+
+  $agent2 = $zabbix_package_agent == 'zabbix-agent2'
 
   # Find if listenip is set. If not, we can set to specific ip or
   # to network name. If more than 1 interfaces are available, we
@@ -329,6 +333,7 @@ class zabbix::agent (
       additional_service_params => $additional_service_params,
       service_type              => $service_type,
       service_name              => 'zabbix-agent',
+      binary_location           => $binary_location,
       require                   => Package[$zabbix_package_agent],
     }
   }
