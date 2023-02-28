@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Puppet::Type.newtype(:zabbix_proxy) do
+  desc 'Zabbix proxy type'
   ensurable do
     defaultvalues
     defaultto :present

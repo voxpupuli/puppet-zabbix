@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Puppet::Type.newtype(:zabbix_host) do
+  desc 'Zabbix host type'
   ensurable do
     defaultvalues
     defaultto :present

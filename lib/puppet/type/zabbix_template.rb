@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Puppet::Type.newtype(:zabbix_template) do
+  desc 'Zabbix template type'
   ensurable do
     defaultvalues
     defaultto :present
