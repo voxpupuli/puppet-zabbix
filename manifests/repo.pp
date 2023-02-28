@@ -34,12 +34,12 @@ class zabbix::repo (
     }
     case $facts['os']['family'] {
       'RedHat': {
-        $gpgkey_zabbix = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591'
-        $gpgkey_nonsupported = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-79EA5ED4'
-
-        $_repo_location = $repo_location ? {
-          undef   => "https://repo.zabbix.com/zabbix/${zabbix_version}/rhel/${majorrelease}/\$basearch/",
-          default => $repo_location,
+        if versioncmp(fact('os.release.full'), '8.0') >= 0 {
+          $gpgkey_zabbix = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-08EFA7DD'
+          $gpgkey_nonsupported = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-08EFA7DD'
+        } else {
+          $gpgkey_zabbix = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591'
+          $gpgkey_nonsupported = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-79EA5ED4'
         }
 
         yumrepo { 'zabbix':
