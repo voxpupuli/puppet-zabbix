@@ -13,6 +13,7 @@ Puppet::Type.newtype(:zabbix_application) do
   DOC
 
   ensurable do
+    desc 'The basic property that the resource should be in.'
     defaultvalues
     defaultto :present
   end

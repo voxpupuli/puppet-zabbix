@@ -41,12 +41,12 @@
 ### Resource types
 
 * [`zabbix_application`](#zabbix_application): Manage zabbix applications  Example:   zabbix_application{"app1":     ensure   => present,     template => 'template1',   } It Raise exceptio
-* [`zabbix_host`](#zabbix_host): FQDN of the machine.
+* [`zabbix_host`](#zabbix_host): Manage zabbix hosts
 * [`zabbix_hostgroup`](#zabbix_hostgroup): Manage zabbix hostgroups
-* [`zabbix_proxy`](#zabbix_proxy): FQDN of the proxy.
-* [`zabbix_template`](#zabbix_template): The name of template.
+* [`zabbix_proxy`](#zabbix_proxy): Manage zabbix proxies
+* [`zabbix_template`](#zabbix_template): Manage zabbix templates
 * [`zabbix_template_host`](#zabbix_template_host): Link or Unlink template to host. Only for Zabbix < 6.0!  Example:   zabbix_template_host{ 'mysql_template@db1':     ensure => present,   } Na
-* [`zabbix_userparameters`](#zabbix_userparameters): An unique name for this define.
+* [`zabbix_userparameters`](#zabbix_userparameters): Manage zabbix user templates
 
 ### Data types
 
@@ -5973,7 +5973,7 @@ template to which the application is linked
 
 ### <a name="zabbix_host"></a>`zabbix_host`
 
-FQDN of the machine.
+Manage zabbix hosts
 
 #### Properties
 
@@ -6112,7 +6112,7 @@ usually discover the appropriate provider for your platform.
 
 ### <a name="zabbix_proxy"></a>`zabbix_proxy`
 
-FQDN of the proxy.
+Manage zabbix proxies
 
 #### Properties
 
@@ -6170,7 +6170,7 @@ usually discover the appropriate provider for your platform.
 
 ### <a name="zabbix_template"></a>`zabbix_template`
 
-The name of template.
+Manage zabbix templates
 
 #### Properties
 
@@ -6289,7 +6289,7 @@ will usually discover the appropriate provider for your platform.
 
 ### <a name="zabbix_userparameters"></a>`zabbix_userparameters`
 
-An unique name for this define.
+Manage zabbix user templates
 
 #### Properties
 

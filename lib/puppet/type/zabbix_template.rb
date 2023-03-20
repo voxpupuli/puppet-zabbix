@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 Puppet::Type.newtype(:zabbix_template) do
+  @doc = 'Manage zabbix templates'
+
   ensurable do
+    desc 'The basic property that the resource should be in.'
     defaultvalues
     defaultto :present
 
