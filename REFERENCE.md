@@ -40,12 +40,12 @@
 
 ### Resource types
 
-* [`zabbix_application`](#zabbix_application): %q(Manage zabbix applications      zabbix_application{"app1":       ensure   => present,       template => 'template1',     }  It Raise excep
+* [`zabbix_application`](#zabbix_application): Manage zabbix applications  Example:   zabbix_application{"app1":     ensure   => present,     template => 'template1',   } It Raise exceptio
 * [`zabbix_host`](#zabbix_host): FQDN of the machine.
 * [`zabbix_hostgroup`](#zabbix_hostgroup): Manage zabbix hostgroups
 * [`zabbix_proxy`](#zabbix_proxy): FQDN of the proxy.
 * [`zabbix_template`](#zabbix_template): The name of template.
-* [`zabbix_template_host`](#zabbix_template_host): Link or Unlink template to host. Only for Zabbix < 6.0! Example. Name should be in the format of "template_name@hostname"  zabbix_template_ho
+* [`zabbix_template_host`](#zabbix_template_host): Link or Unlink template to host. Only for Zabbix < 6.0!  Example:   zabbix_template_host{ 'mysql_template@db1':     ensure => present,   } Na
 * [`zabbix_userparameters`](#zabbix_userparameters): An unique name for this define.
 
 ### Data types
@@ -5927,16 +5927,14 @@ Default value: `'0644'`
 
 ### <a name="zabbix_application"></a>`zabbix_application`
 
-%q(Manage zabbix applications
+Manage zabbix applications
 
-    zabbix_application{"app1":
-      ensure   => present,
-      template => 'template1',
-    }
-
+Example:
+  zabbix_application{"app1":
+    ensure   => present,
+    template => 'template1',
+  }
 It Raise exception on deleting an application which is a part of used template.
-
-)
 
 #### Properties
 
@@ -6250,12 +6248,12 @@ Zabbix version that the template will be installed on.
 ### <a name="zabbix_template_host"></a>`zabbix_template_host`
 
 Link or Unlink template to host. Only for Zabbix < 6.0!
-Example.
-Name should be in the format of "template_name@hostname"
 
-zabbix_template_host{ 'mysql_template@db1':
-      ensure => present,
-    }
+Example:
+  zabbix_template_host{ 'mysql_template@db1':
+    ensure => present,
+  }
+Name should be in the format of "template_name@hostname"
 
 #### Properties
 
