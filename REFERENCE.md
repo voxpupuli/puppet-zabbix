@@ -51,7 +51,7 @@
 ### Data types
 
 * [`Zabbix::Databases`](#Zabbix--Databases): Type for supported databases by the zabbix module
-* [`Zabbix::Historyics`](#Zabbix--Historyics)
+* [`Zabbix::Historyics`](#Zabbix--Historyics): Type for size values in bytes (also allows k/K and m/M as appendix)
 
 ## Classes
 
@@ -6343,7 +6343,7 @@ Alias of `Enum['postgresql', 'mysql', 'sqlite']`
 
 ### <a name="Zabbix--Historyics"></a>`Zabbix::Historyics`
 
-The Zabbix::Historyics data type.
+Type for size values in bytes (also allows k/K and m/M as appendix)
 
 Alias of `Optional[Pattern[/^\d+[k|K|m|M]?$/]]`
 

@@ -2,6 +2,7 @@
 
 require_relative '../zabbix'
 Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix) do
+  desc 'Puppet provider for managing Zabbix hosts. It uses the Zabbix API to create, read, update and delete hosts.'
   confine feature: :zabbixapi
 
   def self.instances
