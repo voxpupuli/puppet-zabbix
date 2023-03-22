@@ -76,6 +76,6 @@ define zabbix::startup (
       notify   => Service[$name],
     }
   } else {
-    fail('We currently only support Debian, Redhat, AIX and Windows osfamily as non-systemd')
+    fail('We currently only support Debian, FreeBSD, Redhat, AIX and Windows osfamily as non-systemd')
   }
 }
