@@ -24,7 +24,7 @@ describe 'zabbix::web' do
 
       context "on #{os}" do
         let :facts do
-          facts
+          facts.deep_merge({ apache_version: '2.4' })
         end
 
         context 'with all defaults' do
