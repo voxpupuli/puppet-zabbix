@@ -266,6 +266,8 @@ class zabbix::server (
   $loadmodule                                                                 = $zabbix::params::server_loadmodule,
   $sslcertlocation_dir                                                        = $zabbix::params::server_sslcertlocation,
   $sslkeylocation_dir                                                         = $zabbix::params::server_sslkeylocation,
+  $statsallowedip                                                             = $zabbix::params::server_statsallowedip,
+
   Boolean $manage_selinux                                                     = $zabbix::params::manage_selinux,
   String $additional_service_params                                           = $zabbix::params::additional_service_params,
   Optional[String[1]] $zabbix_user                                            = $zabbix::params::server_zabbix_user,
