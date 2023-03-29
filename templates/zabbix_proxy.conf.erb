@@ -17,11 +17,13 @@ ProxyMode=<%= @mode %>
 #
 Server=<%= @zabbix_server_host %>
 
+<% if @zabbix_version.to_f < 6.0 %>
 ### Option: ServerPort
 #	Port of Zabbix trapper on Zabbix server.
 #	For a proxy in the passive mode this parameter will be ignored.
 #
 ServerPort=<%= @zabbix_server_port %>
+<% end %>
 
 ### Option: Hostname
 #	Unique, case sensitive Proxy name. Make sure the Proxy name is known to the server!
