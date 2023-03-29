@@ -130,6 +130,7 @@
 # @param proxydatafrequency How often zabbix server requests history data from a zabbix proxy in seconds.
 # @param allowroot Allow the server to run as 'root'.
 # @param include_dir You may include individual files or all files in a directory in the configuration file.
+# @param statsallowedip list of allowed ipadresses that can access the internal stats of zabbix server over network
 # @param loadmodulepath Full path to location of server modules.
 # @param loadmodule Module to load at server startup.
 # @param sslcertlocation_dir Location of SSL client certificate files for client authentication.
@@ -266,7 +267,7 @@ class zabbix::server (
   $loadmodule                                                                 = $zabbix::params::server_loadmodule,
   $sslcertlocation_dir                                                        = $zabbix::params::server_sslcertlocation,
   $sslkeylocation_dir                                                         = $zabbix::params::server_sslkeylocation,
-  $statsallowedip                                                             = $zabbix::params::server_statsallowedip,
+  Optional[String[1]] $statsallowedip                                         = $zabbix::params::server_statsallowedip,
 
   Boolean $manage_selinux                                                     = $zabbix::params::manage_selinux,
   String $additional_service_params                                           = $zabbix::params::additional_service_params,
