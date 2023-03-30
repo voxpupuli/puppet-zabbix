@@ -26,6 +26,10 @@ describe 'zabbix::server' do
         it { is_expected.to contain_class('zabbix::params') }
         it { is_expected.to contain_service('zabbix-server').with_ensure('running') }
         it { is_expected.to contain_zabbix__startup('zabbix-server') }
+
+        it { is_expected.to contain_apt__source('zabbix') }      if facts[:os]['family'] == 'Debian'
+        it { is_expected.to contain_apt__key('zabbix-A1848F5') } if facts[:os]['family'] == 'Debian'
+        it { is_expected.to contain_apt__key('zabbix-FBABD5F') } if facts[:os]['family'] == 'Debian'
       end
 
       if facts[:osfamily] == 'RedHat'
@@ -41,11 +45,16 @@ describe 'zabbix::server' do
           end
 
           it { is_expected.to contain_selboolean('zabbix_can_network').with('value' => 'on', 'persistent' => true) }
+          it { is_expected.to contain_selinux__module('zabbix-server').with_ensure('present') }
+          it { is_expected.to contain_selinux__module('zabbix-server-ipc').with_ensure('present') }
         end
 
         describe 'with defaults' do
           it { is_expected.to contain_yumrepo('zabbix-nonsupported') }
           it { is_expected.to contain_yumrepo('zabbix') }
+
+          it { is_expected.to contain_yumrepo('zabbix-frontend') }          if facts[:os]['release']['major'] == '7'
+          it { is_expected.to contain_package('zabbix-required-scl-repo') } if facts[:os]['release']['major'] == '7'
         end
       end
 
@@ -71,6 +80,8 @@ describe 'zabbix::server' do
         it { is_expected.to contain_package('zabbix-server-pgsql').with_ensure('present') }
         it { is_expected.to contain_package('zabbix-server-pgsql').with_name('zabbix-server-pgsql') }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_require('Package[zabbix-server-pgsql]') }
+        it { is_expected.to contain_exec('update_pgpass') }
+        it { is_expected.to contain_file('/root/.pgpass') }
       end
 
       describe 'with database_type as mysql' do
@@ -83,6 +94,9 @@ describe 'zabbix::server' do
         it { is_expected.to contain_package('zabbix-server-mysql').with_ensure('present') }
         it { is_expected.to contain_package('zabbix-server-mysql').with_name('zabbix-server-mysql') }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_require('Package[zabbix-server-mysql]') }
+        it { is_expected.to contain_exec('zabbix_server_create.sql') }
+        it { is_expected.to contain_exec('zabbix_server_data.sql') }
+        it { is_expected.to contain_exec('zabbix_server_images.sql') }
       end
 
       # Include directory should be available.
@@ -154,6 +168,7 @@ describe 'zabbix::server' do
         when 'Archlinux', 'Debian', 'Gentoo', 'RedHat'
           it { is_expected.to contain_file('/etc/init.d/zabbix-server').with_ensure('absent') }
           it { is_expected.to contain_file('/etc/systemd/system/zabbix-server.service').with_ensure('file') }
+          it { is_expected.to contain_systemd__unit_file('zabbix-server.service') }
         else
           it { is_expected.to contain_file('/etc/init.d/zabbix-server').with_ensure('file') }
           it { is_expected.not_to contain_file('/etc/systemd/system/zabbix-server.service') }

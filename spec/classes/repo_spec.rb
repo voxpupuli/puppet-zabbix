@@ -19,6 +19,9 @@ describe 'zabbix::repo' do
         it { is_expected.to contain_class('zabbix::params') }
         it { is_expected.to contain_class('zabbix::repo') }
 
+        it { is_expected.to contain_apt__key('zabbix-A1848F5') } if facts[:os]['family'] == 'Debian'
+        it { is_expected.to contain_apt__key('zabbix-FBABD5F') } if facts[:os]['family'] == 'Debian'
+
         context 'when repo_location is "https://example.com/foo"' do
           let :params do
             {
@@ -83,6 +86,7 @@ describe 'zabbix::repo' do
             it { is_expected.to contain_yumrepo('zabbix').with_gpgkey('https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591') }
             it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_baseurl('https://repo.zabbix.com/non-supported/rhel/7/$basearch/') }
             it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_gpgkey('https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-79EA5ED4') }
+            it { is_expected.to contain_yumrepo('zabbix-frontend') }
 
             it { is_expected.to contain_package('zabbix-required-scl-repo').with_ensure('latest').with_name('centos-release-scl') } if facts[:os]['name'] == 'CentOS'
             it { is_expected.to contain_package('zabbix-required-scl-repo').with_ensure('latest').with_name('oracle-softwarecollection-release-el7') } if facts[:os]['name'] == 'OracleLinux'
