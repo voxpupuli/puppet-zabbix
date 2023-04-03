@@ -16,7 +16,7 @@ describe 'zabbix::agent' do
 
   on_supported_os(baseline_os_hash).each do |os, facts|
     context "on #{os}" do
-      config_path = case facts[:operatingsystem]
+      config_path = case facts[:os]['name']
                     when 'Fedora'
                       '/etc/zabbix_agentd.conf'
                     when 'windows'
@@ -25,13 +25,13 @@ describe 'zabbix::agent' do
                       '/etc/zabbix/zabbix_agentd.conf'
                     end
 
-      log_path = case facts[:operatingsystem]
+      log_path = case facts[:os]['name']
                  when 'windows'
                    'C:/ProgramData/zabbix/zabbix_agentd.log'
                  else
                    '/var/log/zabbix/zabbix_agentd.log'
                  end
-      include_dir = case facts[:operatingsystem]
+      include_dir = case facts[:os]['name']
                     when 'windows'
                       'C:/ProgramData/zabbix/zabbix_agentd.d'
                     else
@@ -45,7 +45,7 @@ describe 'zabbix::agent' do
                          '6.0'
                        end
 
-      case facts[:osfamily]
+      case facts[:os]['family']
       when 'Gentoo'
         package_name = 'zabbix'
         service_name = 'zabbix-agentd'
@@ -56,12 +56,12 @@ describe 'zabbix::agent' do
         package_name = 'zabbix-agent'
         service_name = 'zabbix-agent'
       end
-      # package = facts[:osfamily] == 'Gentoo' ? 'zabbix' : 'zabbix-agent'
-      # service = facts[:osfamily] == 'Gentoo' ? 'zabbix-agentd' : 'zabbix-agent'
+      # package = facts[:os]['family'] == 'Gentoo' ? 'zabbix' : 'zabbix-agent'
+      # service = facts[:os]['family'] == 'Gentoo' ? 'zabbix-agentd' : 'zabbix-agent'
 
       context 'with all defaults' do
         # Make sure package will be installed, service running and ensure of directory.
-        if facts[:kernel] == 'windows'
+        if facts[:os]['name'] == 'windows'
           it do
             is_expected.to contain_package(package_name).with(
               ensure: '4.4.5',
@@ -81,7 +81,7 @@ describe 'zabbix::agent' do
             is_expected.to contain_service(service_name).
               with_ensure('running').
               with_enable(true).
-              with_service_provider(facts[:osfamily] == 'AIX' ? 'init' : nil).
+              with_service_provider(facts[:os]['family'] == 'AIX' ? 'init' : nil).
               that_requires(["Package[#{package_name}]", "Zabbix::Startup[#{service_name}]"])
           end
 
@@ -99,7 +99,7 @@ describe 'zabbix::agent' do
           }
         end
 
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Archlinux'
           it { is_expected.not_to compile.with_all_deps }
         when 'Debian'
@@ -216,7 +216,7 @@ describe 'zabbix::agent' do
 
       context 'it creates a startup script' do
         if facts[:kernel] == 'Linux'
-          case facts[:osfamily]
+          case facts[:os]['family']
           when 'Archlinux', 'Debian', 'Gentoo', 'RedHat'
             it { is_expected.to contain_file("/etc/init.d/#{service_name}").with_ensure('absent') }
             it { is_expected.to contain_file("/etc/systemd/system/#{service_name}.service").with_ensure('file') }
@@ -413,7 +413,7 @@ describe 'zabbix::agent' do
       end
 
       context 'when declaring manage_choco is false with zabbix_package_source specified' do
-        if facts[:kernel] == 'windows'
+        if facts[:os]['name'] == 'windows'
           let :params do
             {
               manage_choco: false,

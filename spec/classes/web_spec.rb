@@ -62,8 +62,8 @@ describe 'zabbix::web' do
 
           pgsqlpackage = 'php-pgsql'
 
-          packages = if facts[:osfamily] == 'RedHat'
-                       if facts[:operatingsystemmajrelease].to_i == 7 &&
+          packages = if facts[:os]['family'] == 'RedHat'
+                       if facts[:os]['release']['major'].to_i == 7 &&
                           !%w[VirtuozzoLinux OracleLinux Scientific].include?(facts[:os]['name']) &&
                           Puppet::Util::Package.versioncmp(zabbix_version, '5.0') >= 0
                          %w[zabbix-web-pgsql-scl zabbix-web]
@@ -87,7 +87,7 @@ describe 'zabbix::web' do
 
           mysqlpackage = 'php-mysql'
 
-          packages = facts[:osfamily] == 'RedHat' ? %w[zabbix-web-mysql zabbix-web] : ['zabbix-frontend-php', mysqlpackage]
+          packages = facts[:os]['family'] == 'RedHat' ? %w[zabbix-web-mysql zabbix-web] : ['zabbix-frontend-php', mysqlpackage]
           packages.each do |package|
             it { is_expected.to contain_package(package) }
           end

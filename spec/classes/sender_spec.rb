@@ -37,7 +37,7 @@ describe 'zabbix::sender' do
           }
         end
 
-        if %w[Archlinux Gentoo].include?(facts[:osfamily])
+        if %w[Archlinux Gentoo].include?(facts[:os]['family'])
           it { is_expected.not_to compile.with_all_deps }
         else
           it { is_expected.to contain_class('zabbix::repo').with_zabbix_version(zabbix_version) }
