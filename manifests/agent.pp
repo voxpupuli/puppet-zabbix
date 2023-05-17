@@ -347,9 +347,11 @@ class zabbix::agent (
 
   # Controlling the 'zabbix-agent' service
   service { $servicename:
-    ensure  => $service_ensure,
-    enable  => $service_enable,
-    require => $service_require,
+    ensure    => $service_ensure,
+    enable    => $service_enable,
+    require   => $service_require,
+    subscribe => Package[$zabbix_package_agent],
+
   }
 
   # Override the service provider on AIX
