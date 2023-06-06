@@ -60,7 +60,7 @@ describe 'zabbix::agent' do
         if facts[:kernel] == 'windows'
           it do
             is_expected.to contain_package(package_name).with(
-              ensure: '4.4.5',
+              ensure: 'latest',
               provider: 'chocolatey',
               tag: 'zabbix'
             )
