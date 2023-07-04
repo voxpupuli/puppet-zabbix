@@ -180,7 +180,7 @@ class zabbix::database (
         if $zabbix_web != $zabbix_server {
           mysql_user { "${database_user}@${zabbix_web}":
             ensure        => 'present',
-            password_hash => mysql_password($database_password),
+            password_hash => mysql::password($database_password),
           }
 
           # And this is the grant part. It will grant the users which is created earlier
