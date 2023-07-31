@@ -146,6 +146,7 @@ The following parameters are available in the `zabbix` class:
 * [`startpollers`](#-zabbix--startpollers)
 * [`startpreprocessors`](#-zabbix--startpreprocessors)
 * [`startipmipollers`](#-zabbix--startipmipollers)
+* [`startodbcpollers`](#-zabbix--startodbcpollers)
 * [`startpollersunreachable`](#-zabbix--startpollersunreachable)
 * [`starttrappers`](#-zabbix--starttrappers)
 * [`startpingers`](#-zabbix--startpingers)
@@ -739,6 +740,14 @@ Data type: `Any`
 Number of pre-forked instances of ipmi pollers.
 
 Default value: `$zabbix::params::server_startipmipollers`
+
+##### <a name="-zabbix--startodbcpollers"></a>`startodbcpollers`
+
+Data type: `Integer[0, 1000]`
+
+Number of pre-forked instances of ODBC pollers.
+
+Default value: `$zabbix::params::server_startodbcpollers`
 
 ##### <a name="-zabbix--startpollersunreachable"></a>`startpollersunreachable`
 
@@ -2548,6 +2557,7 @@ The following parameters are available in the `zabbix::proxy` class:
 * [`startpollers`](#-zabbix--proxy--startpollers)
 * [`startpreprocessors`](#-zabbix--proxy--startpreprocessors)
 * [`startipmipollers`](#-zabbix--proxy--startipmipollers)
+* [`startodbcpollers`](#-zabbix--proxy--startodbcpollers)
 * [`startpollersunreachable`](#-zabbix--proxy--startpollersunreachable)
 * [`starttrappers`](#-zabbix--proxy--starttrappers)
 * [`startpingers`](#-zabbix--proxy--startpingers)
@@ -3033,6 +3043,14 @@ Data type: `Any`
 Number of pre-forked instances of ipmi pollers.
 
 Default value: `$zabbix::params::proxy_startipmipollers`
+
+##### <a name="-zabbix--proxy--startodbcpollers"></a>`startodbcpollers`
+
+Data type: `Integer[0, 1000]`
+
+Number of pre-forked instances of ODBC pollers.
+
+Default value: `$zabbix::params::proxy_startodbcpollers`
 
 ##### <a name="-zabbix--proxy--startpollersunreachable"></a>`startpollersunreachable`
 
@@ -3947,6 +3965,7 @@ The following parameters are available in the `zabbix::server` class:
 * [`startpollers`](#-zabbix--server--startpollers)
 * [`startpreprocessors`](#-zabbix--server--startpreprocessors)
 * [`startipmipollers`](#-zabbix--server--startipmipollers)
+* [`startodbcpollers`](#-zabbix--server--startodbcpollers)
 * [`startpollersunreachable`](#-zabbix--server--startpollersunreachable)
 * [`starttrappers`](#-zabbix--server--starttrappers)
 * [`startpingers`](#-zabbix--server--startpingers)
@@ -4329,6 +4348,14 @@ Data type: `Any`
 Number of pre-forked instances of ipmi pollers.
 
 Default value: `$zabbix::params::server_startipmipollers`
+
+##### <a name="-zabbix--server--startodbcpollers"></a>`startodbcpollers`
+
+Data type: `Integer[0, 1000]`
+
+Number of pre-forked instances of ODBC pollers.
+
+Default value: `$zabbix::params::server_startodbcpollers`
 
 ##### <a name="-zabbix--server--startpollersunreachable"></a>`startpollersunreachable`
 

@@ -253,6 +253,7 @@ class zabbix::params {
   $server_startipmipollers                  = '0'
   $server_startjavapollers                  = '5'
   $server_startlldprocessors                = 2
+  $server_startodbcpollers                  = 1
   $server_startpingers                      = '1'
   $server_startpollers                      = '5'
   $server_startpollersunreachable           = '1'
@@ -422,6 +423,7 @@ class zabbix::params {
   $proxy_startipmipollers                   = '0'
   $proxy_startjavapollers                   = '5'
   $proxy_startpingers                       = '1'
+  $proxy_startodbcpollers                   = 1
   $proxy_startpollers                       = '5'
   $proxy_startpollersunreachable            = '1'
   $proxy_startpreprocessors                 = 3

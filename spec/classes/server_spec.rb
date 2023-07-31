@@ -367,11 +367,13 @@ describe 'zabbix::server' do
         let :params do
           {
             socketdir: '/var/run/zabbix',
+            startodbcpollers: 1,
             zabbix_version: '5.0'
           }
         end
 
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SocketDir=/var/run/zabbix} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').without_content %r{^StartODBCPollers=1} }
       end
 
       context 'with zabbix_server.conf and logtype declared' do
