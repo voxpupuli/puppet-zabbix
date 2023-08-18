@@ -116,9 +116,7 @@ describe Puppet::Type.type(:zabbix_template) do
           content
         EOS
         FileUtils.mkdir_p '/path/to'
-        File.open(mock_template_source_file, 'w') do |f|
-          f.write mock_file_content
-        end
+        File.write(mock_template_source_file, mock_file_content)
         expect(property.source_xml).to eq mock_file_content
       end
     end
