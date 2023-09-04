@@ -182,7 +182,7 @@ class zabbix::params {
   $ldap_clientcert                          = undef
   $ldap_clientkey                           = undef
   $ldap_reqcert                             = undef
-  $server_api_pass                          = 'zabbix'
+  $server_api_pass                          = Sensitive('zabbix')
   $server_api_user                          = 'Admin'
   $server_api_access                        = undef
   $server_database_double_ieee754           = false
@@ -204,7 +204,7 @@ class zabbix::params {
   $server_database_host                     = 'localhost'
   $server_database_host_ip                  = '127.0.0.1'
   $server_database_name                     = 'zabbix_server'
-  $server_database_password                 = 'zabbix_server'
+  $server_database_password                 = Sensitive('zabbix_server')
   $server_database_port                     = undef
   $server_database_schema                   = undef
   $server_database_socket                   = undef
@@ -241,6 +241,7 @@ class zabbix::params {
   $server_snmptrapperfile                   = '/tmp/zabbix_traps.tmp'
   $server_sourceip                          = undef
   $server_sshkeylocation                    = undef
+  $server_sslcalocation                     = undef
   $server_sslcertlocation                   = '/usr/lib/zabbix/ssl/certs'
   $server_sslkeylocation                    = '/usr/lib/zabbix/ssl/keys'
   $server_startdbsyncers                    = '4'
@@ -370,7 +371,7 @@ class zabbix::params {
   $proxy_configfrequency                    = '3600'
   $proxy_database_host                      = 'localhost'
   $proxy_database_name                      = 'zabbix_proxy'
-  $proxy_database_password                  = 'zabbix-proxy'
+  $proxy_database_password                  = Sensitive('zabbix-proxy')
   $proxy_database_port                      = undef
   $proxy_database_schema                    = undef
   $proxy_database_socket                    = undef
@@ -459,7 +460,6 @@ class zabbix::params {
   $proxy_vaulturl                           = 'https://127.0.0.1:8200'
   $proxy_vmwarecachesize                    = '8M'
   $proxy_vmwarefrequency                    = '60'
-  $proxy_vmwareperffrequency                = undef
   $proxy_vmwaretimeout                      = undef
   $proxy_zabbix_server_host                 = undef
   $proxy_zabbix_server_port                 = '10051'

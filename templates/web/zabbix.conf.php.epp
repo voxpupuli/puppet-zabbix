@@ -1,0 +1,87 @@
+<%- |
+    String[1]                                 $database_type,
+    String[1]                                 $database_host,
+    Optional[String[1]]                       $database_port,
+    String[1]                                 $db_port,
+    String[1]                                 $database_name,
+    String[1]                                 $database_user,
+    Variant[String[1], Sensitive[String[1]]]  $database_password,
+    Optional[String[1]]                       $database_schema,
+    Boolean                                   $database_double_ieee754,
+    Stdlib::Fqdn                              $zabbix_server,
+    String[1]                                 $zabbix_listenport,
+    Stdlib::Fqdn                              $zabbix_server_name,
+    Optional[String[1]]                       $ldap_cacert,
+    Optional[String[1]]                       $ldap_clientcert,
+    Optional[String[1]]                       $ldap_clientkey,
+    Optional[String[1]]                       $ldap_reqcert,
+    Optional[String[1]]                       $saml_sp_key,
+    Optional[String[1]]                       $saml_sp_cert,
+    Optional[String[1]]                       $saml_idp_cert,
+    Hash[String[1],Variant[ScalarData, Hash]] $saml_settings,
+    | -%>
+
+<?php
+// Zabbix GUI configuration file
+global $DB;
+
+$DB['TYPE']     = '<%= $database_type.upcase %>';
+$DB['SERVER']   = '<%= $database_host %>';
+<% if $database_port { -%>
+$DB['PORT']     = '<%= $database_port %>';
+<% } elsif $db_port { -%>
+$DB['PORT']     = '<%= $db_port %>';
+<% } else { -%>
+$DB['PORT']     = '0';
+<% } -%>
+$DB['DATABASE'] = '<%= $database_name %>';
+$DB['USER']     = '<%= $database_user %>';
+$DB['PASSWORD'] = '<%= $database_password.unwrap %>';
+
+// SCHEMA is relevant only for IBM_DB2 and PostgreSQL database
+<% if $database_schema { -%>
+$DB['SCHEMA'] = '<%= $database_schema %>';
+<% } else { -%>
+$DB['SCHEMA'] = '';
+<% } -%>
+
+<% if $database_double_ieee754 { -%>
+$DB['DOUBLE_IEEE754'] = 'true';
+<% } -%>
+
+$ZBX_SERVER      = '<%= $zabbix_server %>';
+$ZBX_SERVER_PORT = '<%= $zabbix_listenport %>';
+$ZBX_SERVER_NAME = '<%= $zabbix_server_name %>';
+
+$IMAGE_FORMAT_DEFAULT = IMAGE_FORMAT_PNG;
+
+<% if $ldap_cacert { -%>
+putenv("LDAPTLS_CACERT=<%= $ldap_cacert %>");
+<% } -%>
+<% if $ldap_clientcert { -%>
+putenv("LDAPTLS_CERT=<%= $ldap_clientcert %>");
+<% } -%>
+<% if $ldap_clientkey { -%>
+putenv("LDAPTLS_KEY=<%= $ldap_clientkey %>");
+<% } -%>
+<% if $ldap_reqcert { -%>
+putenv("TLS_REQCERT=<%= $ldap_reqcert %>");
+<% } -%>
+
+<% if $saml_sp_key { -%>
+$SSO['SP_KEY'] = '<%= $saml_sp_key -%>';
+<% } -%>
+<% if $saml_sp_cert { -%>
+$SSO['SP_CERT'] = '<%= $saml_sp_cert -%>';
+<% } -%>
+<% if $saml_idp_cert { -%>
+$SSO['IDP_CERT'] = '<%= $saml_idp_cert -%>';
+<% } -%>
+<% unless empty($saml_settings) { -%>
+$SSO['SETTINGS'] = [ <%= to_json_pretty($saml_settings, undef, {space_before => " "})
+                             .regsubst("{", "")
+                             .regsubst(" : ", " => ",'G')
+                             .regsubst("{", "[",'G')
+                             .regsubst("}", "]",'G') -%>;
+<% } -%>
+?>
