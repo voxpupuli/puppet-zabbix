@@ -474,7 +474,7 @@ class zabbix::params {
   # Java Gateway specific params
   $javagateway_listenip                     = '0.0.0.0'
   $javagateway_listenport                   = '10052'
-  $javagateway_pidfile                      = '/var/run/zabbix/zabbix_java.pid'
+  $javagateway_pidfile                      = '/var/run/zabbix/zabbix_java_gateway.pid'
   $javagateway_startpollers                 = '5'
   $javagateway_timeout                      = '3'
 
