@@ -7,6 +7,7 @@
 # @param delete_missing_graphs Deletes graphs from zabbix that are not in the template when set to true
 # @param delete_missing_httptests Deletes web-scenarios from zabbix that are not in the template when set to true
 # @param delete_missing_items Deletes items from zabbix that are not in the template when set to true
+# @param delete_missing_linkage Delete linked templates when they are no longer present
 # @param delete_missing_templatescreens Deletes template-screens from zabbix that are not in the template when set to true
 # @param delete_missing_triggers Deletes triggers from zabbix that are not in the template when set to true
 # @example
@@ -23,6 +24,7 @@ define zabbix::template (
   Boolean $delete_missing_graphs          = false,
   Boolean $delete_missing_httptests       = false,
   Boolean $delete_missing_items           = false,
+  Boolean $delete_missing_linkage         = false,
   Boolean $delete_missing_templatescreens = false,
   Boolean $delete_missing_triggers        = false,
 ) {
@@ -35,6 +37,7 @@ define zabbix::template (
     delete_missing_graphs          => $delete_missing_graphs,
     delete_missing_httptests       => $delete_missing_httptests,
     delete_missing_items           => $delete_missing_items,
+    delete_missing_linkage         => $delete_missing_linkage,
     delete_missing_templatescreens => $delete_missing_templatescreens,
     delete_missing_triggers        => $delete_missing_triggers,
   }

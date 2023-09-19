@@ -66,6 +66,10 @@ Puppet::Type.newtype(:zabbix_template) do
     desc 'Delete items from zabbix which are not in the template.'
   end
 
+  newparam(:delete_missing_linkage, boolean: true) do
+    desc 'Delete linked templates when they are no longer present.'
+  end
+
   newparam(:delete_missing_templatescreens, boolean: true) do
     desc 'Delete templateScreens from zabbix which are not in the template.'
   end
