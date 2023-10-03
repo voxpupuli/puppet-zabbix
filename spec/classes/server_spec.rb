@@ -392,37 +392,6 @@ describe 'zabbix::server' do
           it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^LogFileSize=10$} }
         end
       end
-
-      # Zabbix Server 5.2 is not supported on RedHat family and Debian 11
-      if facts[:osfamily] != 'RedHat' && facts[:os]['release']['major'] != '11'
-        describe 'with zabbix_version 5.2 and Vault parameters defined' do
-          let :params do
-            {
-              zabbix_version: '5.2',
-              vaultdbpath: 'secret/zabbix/database',
-              vaulttoken: 'FKTYPEGL156DK',
-              vaulturl: 'https://127.0.0.1:8200',
-            }
-          end
-
-          it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^VaultDBPath=secret/zabbix/database$} }
-          it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^VaultToken=FKTYPEGL156DK$} }
-          it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^VaultURL=https://127.0.0.1:8200$} }
-        end
-
-        describe 'with zabbix_version 5.4 and report parameters defined' do
-          let :params do
-            {
-              zabbix_version: '5.4',
-              startreportwriters: 1,
-              webserviceurl: 'http://localhost:10053/report',
-            }
-          end
-
-          it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartReportWriters=1} }
-          it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^WebServiceURL=http://localhost:10053/report} }
-        end
-      end
     end
   end
 end

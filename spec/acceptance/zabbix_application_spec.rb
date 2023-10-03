@@ -5,12 +5,8 @@ require 'serverspec_type_zabbixapi'
 
 describe 'zabbix_application type', unless: default[:platform] =~ %r{archlinux} do
   supported_versions.each do |zabbix_version|
-    # 5.2 and 5.4 server packages are not available for RHEL 7
-    next if zabbix_version == '5.2' && default[:platform] == 'el-7-x86_64'
     # Application API was removed in Zabbix 5.4
     next if zabbix_version >= '5.4'
-    # No Zabbix 5.2 packages on Debian 11
-    next if zabbix_version == '5.2' && default[:platform] == 'debian-11-amd64'
 
     template = case zabbix_version
                when '4.0'

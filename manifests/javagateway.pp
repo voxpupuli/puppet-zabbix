@@ -10,7 +10,7 @@
 # @param timeout Number of worker threads to start.
 # @example
 #  class { 'zabbix::javagateway':
-#    zabbix_version => '5.2',
+#    zabbix_version => '6.0',
 #  }
 # @author Werner Dijkerman ikben@werner-dijkerman.nl
 class zabbix::javagateway (

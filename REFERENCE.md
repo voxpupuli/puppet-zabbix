@@ -1317,7 +1317,7 @@ This will install and configure the zabbix-agent deamon
 
 ```puppet
 class { 'zabbix::agent':
-  zabbix_version => '5.2',
+  zabbix_version => '6.0',
   server         => '192.168.1.1',
 }
 ```
@@ -2336,7 +2336,7 @@ This will install and configure the zabbix-agent deamon
 
 ```puppet
 class { 'zabbix::javagateway':
-  zabbix_version => '5.2',
+  zabbix_version => '6.0',
 }
 ```
 

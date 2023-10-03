@@ -8,8 +8,6 @@ describe 'zabbix_host type', unless: default[:platform] =~ %r{archlinux} do
   supported_versions.each do |zabbix_version|
     # >= 5.2 server packages are not available for RHEL 7
     next if zabbix_version >= '5.2' && default[:platform] == 'el-7-x86_64'
-    # No Zabbix 5.2 packages on Debian 11
-    next if zabbix_version == '5.2' && default[:platform] == 'debian-11-amd64'
 
     context "create zabbix_host resources with zabbix version #{zabbix_version}" do
       # This will deploy a running Zabbix setup (server, web, db) which we can
@@ -29,8 +27,6 @@ describe 'zabbix_host type', unless: default[:platform] =~ %r{archlinux} do
                         ['Template OS Linux SNMPv2']
                       when '5.0'
                         ['Template OS Linux SNMP']
-                      when '5.2', '5.4'
-                        ['Linux SNMP']
                       else
                         ['Linux by SNMP']
                       end
