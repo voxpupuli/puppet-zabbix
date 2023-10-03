@@ -9,11 +9,11 @@ def baseline_os_hash
       },
       {
         'operatingsystem' => 'Debian',
-        'operatingsystemrelease' => %w[10 11]
+        'operatingsystemrelease' => %w[11]
       },
       {
         'operatingsystem' => 'Ubuntu',
-        'operatingsystemrelease' => %w[18.04 20.04]
+        'operatingsystemrelease' => %w[20.04]
       },
       {
         'operatingsystem' => 'Archlinux',
