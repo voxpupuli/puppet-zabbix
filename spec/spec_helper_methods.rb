@@ -24,7 +24,7 @@ def baseline_os_hash
       # },
       {
         'operatingsystem' => 'windows',
-        'operatingsystemrelease' => ['2012', '2012 R2', '2016']
+        'operatingsystemrelease' => %w[2016 2019]
       },
     ]
   }
