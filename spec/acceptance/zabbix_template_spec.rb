@@ -18,7 +18,8 @@ describe 'zabbix_template type', unless: default[:platform] =~ %r{archlinux} do
           include apache::mod::php
           class { 'postgresql::globals':
             locale   => 'en_US.UTF-8',
-            manage_package_repo => true,
+            manage_package_repo => $facts['os']['release']['major'] != '8',
+            manage_dnf_module => $facts['os']['release']['major'] == '8',
             version => '12',
           }
           -> class { 'postgresql::server': }

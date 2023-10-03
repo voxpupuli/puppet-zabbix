@@ -19,7 +19,8 @@ describe 'zabbix::server class', unless: default[:platform] =~ %r{archlinux} do
         class { 'postgresql::globals':
           encoding => 'UTF-8',
           locale   => 'en_US.UTF-8',
-          manage_package_repo => true,
+          manage_package_repo => $facts['os']['release']['major'] != '8',
+          manage_dnf_module => $facts['os']['release']['major'] == '8',
           version => '12',
         }
         -> class { 'postgresql::server': }
