@@ -16,7 +16,9 @@ describe 'zabbix_proxy type', unless: default[:platform] =~ %r{archlinux} do
       class { 'apache':
         mpm_module => 'prefork',
       }
-      include apache::mod::php
+      if $facts['os']['family'] != 'RedHat' {
+        include apache::mod::php
+      }
       class { 'postgresql::globals':
         locale   => 'en_US.UTF-8',
         manage_package_repo => $facts['os']['release']['major'] != '8',
