@@ -420,32 +420,11 @@ class zabbix::proxy (
     }
   }
 
-  # Now we are going to install the correct packages.
-  case $facts['os']['name'] {
-    'redhat', 'centos', 'oraclelinux', 'VirtuozzoLinux': {
-      #There is no zabbix-proxy package in 3.0
-      if versioncmp('3.0',$zabbix_version) > 0 {
-        package { 'zabbix-proxy':
-          ensure  => $zabbix_package_state,
-          require => Package["zabbix-proxy-${db}"],
-          tag     => 'zabbix',
-        }
-      }
-
-      # Installing the packages
-      package { "zabbix-proxy-${db}":
-        ensure => $zabbix_package_state,
-        tag    => 'zabbix',
-      }
-    } # END 'redhat','centos','oraclelinux'
-    default : {
-      # Installing the packages
-      package { "zabbix-proxy-${db}":
-        ensure => $zabbix_package_state,
-        tag    => 'zabbix',
-      }
-    } # END default
-  } # END case $facts['os']['name']
+  # Installing the packages
+  package { "zabbix-proxy-${db}":
+    ensure => $zabbix_package_state,
+    tag    => 'zabbix',
+  }
 
   # Controlling the 'zabbix-proxy' service
   if $manage_service {
