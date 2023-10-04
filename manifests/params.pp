@@ -127,8 +127,10 @@ class zabbix::params {
 
   if downcase($facts['kernel']) == 'windows' {
     $zabbix_version = '4.4.5'
-  } else {
+  } elsif $facts['os']['family'] == 'RedHat' and $facts['os']['release']['major'] == '7' {
     $zabbix_version = '5.0'
+  } else {
+    $zabbix_version = '6.0'
   }
 
   $manage_startup_script = downcase($facts['kernel']) ? {

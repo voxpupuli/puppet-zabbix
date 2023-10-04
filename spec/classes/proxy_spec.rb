@@ -47,7 +47,7 @@ describe 'zabbix::proxy' do
             }
           end
 
-          it { is_expected.to contain_class('zabbix::repo').with_zabbix_version('5.0') }
+          it { is_expected.to contain_class('zabbix::repo').with_zabbix_version('6.0') }
           it { is_expected.to contain_package('zabbix-proxy-pgsql').with_require('Class[Zabbix::Repo]') }
           it { is_expected.to contain_yumrepo('zabbix-nonsupported') }
           it { is_expected.to contain_yumrepo('zabbix') }
@@ -106,7 +106,7 @@ describe 'zabbix::proxy' do
           end
 
           it { is_expected.to contain_class('zabbix::database::postgresql').with_zabbix_type('proxy') }
-          it { is_expected.to contain_class('zabbix::database::postgresql').with_zabbix_version('5.0') }
+          it { is_expected.to contain_class('zabbix::database::postgresql').with_zabbix_version('6.0') }
           it { is_expected.to contain_class('zabbix::database::postgresql').with_database_name('zabbix_proxy') }
           it { is_expected.to contain_class('zabbix::database::postgresql').with_database_user('zabbix-proxy') }
           it { is_expected.to contain_class('zabbix::database::postgresql').with_database_password('zabbix-proxy') }
@@ -126,7 +126,7 @@ describe 'zabbix::proxy' do
           end
 
           it { is_expected.to contain_class('zabbix::database::mysql').with_zabbix_type('proxy') }
-          it { is_expected.to contain_class('zabbix::database::mysql').with_zabbix_version('5.0') }
+          it { is_expected.to contain_class('zabbix::database::mysql').with_zabbix_version('6.0') }
           it { is_expected.to contain_class('zabbix::database::mysql').with_database_name('zabbix_proxy') }
           it { is_expected.to contain_class('zabbix::database::mysql').with_database_user('zabbix-proxy') }
           it { is_expected.to contain_class('zabbix::database::mysql').with_database_password('zabbix-proxy') }
