@@ -27,16 +27,12 @@ class zabbix::database::postgresql (
     if member(['CentOS', 'RedHat', 'OracleLinux', 'VirtuozzoLinux'], $facts['os']['name']) {
       if versioncmp($zabbix_version, '6.0') >= 0 {
         $schema_path = '/usr/share/zabbix-sql-scripts/postgresql/'
-      } elsif versioncmp($zabbix_version, '5.4') >= 0 {
-        $schema_path = '/usr/share/doc/zabbix-sql-scripts/postgresql/'
       } else {
         $schema_path = "/usr/share/doc/zabbix-*-pgsql-${zabbix_version}*/"
       }
     } else {
       if versioncmp($zabbix_version, '6.0') >= 0 {
         $schema_path = '/usr/share/zabbix-sql-scripts/postgresql/'
-      } elsif versioncmp($zabbix_version, '5.4') >= 0 {
-        $schema_path = '/usr/share/doc/zabbix-sql-scripts/postgresql/'
       } else {
         $schema_path = '/usr/share/doc/zabbix-*-pgsql'
       }
