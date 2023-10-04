@@ -26,8 +26,6 @@ class zabbix::database::mysql (
   if ($database_schema_path == false) or ($database_schema_path == '') {
     if versioncmp($zabbix_version, '6.0') >= 0 {
       $schema_path = '/usr/share/zabbix-sql-scripts/mysql/'
-    } elsif versioncmp($zabbix_version, '5.4') >= 0 {
-      $schema_path = '/usr/share/doc/zabbix-sql-scripts/mysql/'
     } else {
       $schema_path = '/usr/share/doc/zabbix-*-mysql*'
     }
