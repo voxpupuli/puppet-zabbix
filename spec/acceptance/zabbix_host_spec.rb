@@ -14,8 +14,6 @@ describe 'zabbix_host type', unless: default[:platform] =~ %r{archlinux} do
       # use for custom type tests
 
       template = case zabbix_version
-                 when '4.0'
-                   ['Template OS Linux', 'Template Module ICMP Ping']
                  when '5.0'
                    ['Template OS Linux by Zabbix agent', 'Template Module ICMP Ping']
                  else
@@ -23,8 +21,6 @@ describe 'zabbix_host type', unless: default[:platform] =~ %r{archlinux} do
                  end
 
       template_snmp = case zabbix_version
-                      when '4.0'
-                        ['Template OS Linux SNMPv2']
                       when '5.0'
                         ['Template OS Linux SNMP']
                       else
@@ -96,36 +92,33 @@ describe 'zabbix_host type', unless: default[:platform] =~ %r{archlinux} do
         apply_manifest(pp2, catch_changes: true)
       end
 
-      # Zabbix version 4.0 doesn't support interface details hash
-      if zabbix_version != '4.0'
-        pp3 = <<-EOS
-          zabbix_host { 'test3.example.com':
-            ipaddress        => '127.0.0.3',
-            use_ip           => false,
-            port             => 161,
-            groups           => ['Virtual machines'],
-            templates        => #{template_snmp},
-            macros           => [],
-            interfacetype    => 2,
-            interfacedetails => {"version" => "2", "bulk" => "0", "community" => "public"},
-          }
-          zabbix_host { 'test4.example.com':
-            ipaddress        => '127.0.0.4',
-            use_ip           => false,
-            port             => 161,
-            groups           => ['Virtual machines'],
-            templates        => #{template},
-            macros           => [],
-          }
-        EOS
+      pp3 = <<-EOS
+        zabbix_host { 'test3.example.com':
+          ipaddress        => '127.0.0.3',
+          use_ip           => false,
+          port             => 161,
+          groups           => ['Virtual machines'],
+          templates        => #{template_snmp},
+          macros           => [],
+          interfacetype    => 2,
+          interfacedetails => {"version" => "2", "bulk" => "0", "community" => "public"},
+        }
+        zabbix_host { 'test4.example.com':
+          ipaddress        => '127.0.0.4',
+          use_ip           => false,
+          port             => 161,
+          groups           => ['Virtual machines'],
+          templates        => #{template},
+          macros           => [],
+        }
+      EOS
 
-        it 'creates hosts with SNMP interface and details without errors' do
-          apply_manifest(pp3, catch_failures: true)
-        end
+      it 'creates hosts with SNMP interface and details without errors' do
+        apply_manifest(pp3, catch_failures: true)
+      end
 
-        it 'creates hosts with SNMP interface and details without changes' do
-          apply_manifest(pp3, catch_changes: true)
-        end
+      it 'creates hosts with SNMP interface and details without changes' do
+        apply_manifest(pp3, catch_changes: true)
       end
 
       it_behaves_like 'an idempotent resource' do
@@ -240,97 +233,92 @@ describe 'zabbix_host type', unless: default[:platform] =~ %r{archlinux} do
         end
       end
 
-      # Zabbix version 4.0 doesn't support interface details hash
-      if zabbix_version != '4.0'
+      context 'test3.example.com' do
+        let(:test3) { result_hosts.select { |h| h['host'] == 'test3.example.com' }.first }
 
-        context 'test3.example.com' do
-          let(:test3) { result_hosts.select { |h| h['host'] == 'test3.example.com' }.first }
-
-          it 'is created' do
-            expect(test3['host']).to eq('test3.example.com')
-          end
-
-          it 'is in group Virtual machines' do
-            expect(test3['groups'].map { |g| g['name'] }).to eq(['Virtual machines'])
-          end
-
-          it 'has a correct interface dns configured' do
-            expect(test3['interfaces'][0]['dns']).to eq('test3.example.com')
-          end
-
-          it 'has a correct interface ip configured' do
-            expect(test3['interfaces'][0]['ip']).to eq('127.0.0.3')
-          end
-
-          it 'has a correct interface main configured' do
-            expect(test3['interfaces'][0]['main']).to eq('1')
-          end
-
-          it 'has a correct interface port configured' do
-            expect(test3['interfaces'][0]['port']).to eq('161')
-          end
-
-          it 'has a correct interface type configured' do
-            expect(test3['interfaces'][0]['type']).to eq('2')
-          end
-
-          it 'has a correct interface details configured' do
-            expect(test3['interfaces'][0]['details']).to eq('version' => '2', 'bulk' => '0', 'community' => 'public')
-          end
-
-          it 'has a correct interface useip configured' do
-            expect(test3['interfaces'][0]['useip']).to eq('0')
-          end
-
-          it 'has templates attached' do
-            expect(test3['parentTemplates'].map { |t| t['host'] }.sort).to eq(template_snmp.sort)
-          end
+        it 'is created' do
+          expect(test3['host']).to eq('test3.example.com')
         end
 
-        context 'test4.example.com' do
-          let(:test4) { result_hosts.select { |h| h['host'] == 'test4.example.com' }.first }
-
-          it 'is created' do
-            expect(test4['host']).to eq('test4.example.com')
-          end
-
-          it 'is in group Virtual machines' do
-            expect(test4['groups'].map { |g| g['name'] }).to eq(['Virtual machines'])
-          end
-
-          it 'has a correct interface dns configured' do
-            expect(test4['interfaces'][0]['dns']).to eq('test4.example.com')
-          end
-
-          it 'has a correct interface ip configured' do
-            expect(test4['interfaces'][0]['ip']).to eq('127.0.0.4')
-          end
-
-          it 'has a correct interface main configured' do
-            expect(test4['interfaces'][0]['main']).to eq('1')
-          end
-
-          it 'has a correct interface port configured' do
-            expect(test4['interfaces'][0]['port']).to eq('161')
-          end
-
-          it 'has a correct interface type configured' do
-            expect(test4['interfaces'][0]['type']).to eq('1')
-          end
-
-          it 'has a correct interface details configured' do
-            expect(test4['interfaces'][0]['details']).to eq([])
-          end
-
-          it 'has a correct interface useip configured' do
-            expect(test4['interfaces'][0]['useip']).to eq('0')
-          end
-
-          it 'has templates attached' do
-            expect(test4['parentTemplates'].map { |t| t['host'] }.sort).to eq(template.sort)
-          end
+        it 'is in group Virtual machines' do
+          expect(test3['groups'].map { |g| g['name'] }).to eq(['Virtual machines'])
         end
 
+        it 'has a correct interface dns configured' do
+          expect(test3['interfaces'][0]['dns']).to eq('test3.example.com')
+        end
+
+        it 'has a correct interface ip configured' do
+          expect(test3['interfaces'][0]['ip']).to eq('127.0.0.3')
+        end
+
+        it 'has a correct interface main configured' do
+          expect(test3['interfaces'][0]['main']).to eq('1')
+        end
+
+        it 'has a correct interface port configured' do
+          expect(test3['interfaces'][0]['port']).to eq('161')
+        end
+
+        it 'has a correct interface type configured' do
+          expect(test3['interfaces'][0]['type']).to eq('2')
+        end
+
+        it 'has a correct interface details configured' do
+          expect(test3['interfaces'][0]['details']).to eq('version' => '2', 'bulk' => '0', 'community' => 'public')
+        end
+
+        it 'has a correct interface useip configured' do
+          expect(test3['interfaces'][0]['useip']).to eq('0')
+        end
+
+        it 'has templates attached' do
+          expect(test3['parentTemplates'].map { |t| t['host'] }.sort).to eq(template_snmp.sort)
+        end
+      end
+
+      context 'test4.example.com' do
+        let(:test4) { result_hosts.select { |h| h['host'] == 'test4.example.com' }.first }
+
+        it 'is created' do
+          expect(test4['host']).to eq('test4.example.com')
+        end
+
+        it 'is in group Virtual machines' do
+          expect(test4['groups'].map { |g| g['name'] }).to eq(['Virtual machines'])
+        end
+
+        it 'has a correct interface dns configured' do
+          expect(test4['interfaces'][0]['dns']).to eq('test4.example.com')
+        end
+
+        it 'has a correct interface ip configured' do
+          expect(test4['interfaces'][0]['ip']).to eq('127.0.0.4')
+        end
+
+        it 'has a correct interface main configured' do
+          expect(test4['interfaces'][0]['main']).to eq('1')
+        end
+
+        it 'has a correct interface port configured' do
+          expect(test4['interfaces'][0]['port']).to eq('161')
+        end
+
+        it 'has a correct interface type configured' do
+          expect(test4['interfaces'][0]['type']).to eq('1')
+        end
+
+        it 'has a correct interface details configured' do
+          expect(test4['interfaces'][0]['details']).to eq([])
+        end
+
+        it 'has a correct interface useip configured' do
+          expect(test4['interfaces'][0]['useip']).to eq('0')
+        end
+
+        it 'has templates attached' do
+          expect(test4['parentTemplates'].map { |t| t['host'] }.sort).to eq(template.sort)
+        end
       end
 
       context 'test5.example.com' do

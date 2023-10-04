@@ -31,17 +31,6 @@ describe 'zabbix::repo' do
 
         case facts[:os]['release']['major']
         when '10'
-          context 'on Debian 10 and Zabbix 4.0' do
-            let :params do
-              {
-                zabbix_version: '4.0',
-                manage_repo: true
-              }
-            end
-
-            it { is_expected.to contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/4.0/debian/') }
-          end
-
           context 'on Debian 10 and Zabbix 5.0' do
             let :params do
               {
@@ -82,21 +71,6 @@ describe 'zabbix::repo' do
 
         case facts[:os]['release']['major']
         when '7'
-
-          context 'on RedHat 7 and Zabbix 4.0' do
-            let :params do
-              {
-                zabbix_version: '4.0',
-                manage_repo: true
-              }
-            end
-
-            it { is_expected.to contain_yumrepo('zabbix').with_baseurl('https://repo.zabbix.com/zabbix/4.0/rhel/7/$basearch/') }
-            it { is_expected.to contain_yumrepo('zabbix').with_gpgkey('https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591') }
-            it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_baseurl('https://repo.zabbix.com/non-supported/rhel/7/$basearch/') }
-            it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_gpgkey('https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-79EA5ED4') }
-          end
-
           context 'on RedHat 7 and Zabbix 5.0' do
             let :params do
               {

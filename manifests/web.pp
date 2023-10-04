@@ -188,9 +188,6 @@ class zabbix::web (
   if $manage_resources {
     # Determine correct zabbixapi version.
     case $zabbix_version {
-      '4.0': {
-        $zabbixapi_version = '4.2.0'
-      }
       /^[56]\.[024]/: {
         $zabbixapi_version = '5.0.0-alpha1'
       }

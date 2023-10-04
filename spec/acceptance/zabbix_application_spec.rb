@@ -9,8 +9,6 @@ describe 'zabbix_application type', unless: default[:platform] =~ %r{archlinux} 
     next if zabbix_version >= '5.4'
 
     template = case zabbix_version
-               when '4.0'
-                 'Template OS Linux'
                when '5.0'
                  'Template OS Linux by Zabbix agent'
                else
