@@ -21,7 +21,7 @@ describe 'zabbix::server class', unless: default[:platform] =~ %r{archlinux} do
           locale   => 'en_US.UTF-8',
           manage_package_repo => $facts['os']['release']['major'] != '8',
           manage_dnf_module => $facts['os']['release']['major'] == '8',
-          version => '12',
+          version => '13',
         }
         -> class { 'postgresql::server': }
         -> class { 'zabbix::database': }
@@ -69,7 +69,7 @@ describe 'zabbix::server class', unless: default[:platform] =~ %r{archlinux} do
             locale   => 'en_US.UTF-8',
             manage_package_repo => $facts['os']['release']['major'] != '8',
             manage_dnf_module => $facts['os']['release']['major'] == '8',
-            version => '12',
+            version => '13',
           }
           -> class { 'postgresql::server': }
           -> class { 'zabbix::database': }
