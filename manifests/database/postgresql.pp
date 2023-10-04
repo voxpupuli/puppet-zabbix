@@ -24,7 +24,7 @@ class zabbix::database::postgresql (
   assert_private()
 
   if ($database_schema_path == false) or ($database_schema_path == '') {
-    if member(['CentOS', 'RedHat', 'OracleLinux', 'VirtuozzoLinux'], $facts['os']['name']) {
+    if $facts['os']['family'] == 'RedHat' and $facts['os']['release']['major'] == '7' {
       if versioncmp($zabbix_version, '6.0') >= 0 {
         $schema_path = '/usr/share/zabbix-sql-scripts/postgresql/'
       } else {
