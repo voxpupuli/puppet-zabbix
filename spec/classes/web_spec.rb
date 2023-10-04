@@ -179,7 +179,7 @@ describe 'zabbix::web' do
               zabbix_server: 'localhost',
               zabbix_listenport: '3306',
               zabbix_server_name: 'localhost',
-              zabbix_version: '4.0'
+              zabbix_version: '6.0'
             )
           end
 

@@ -12,8 +12,6 @@ describe 'zabbix_template_host type', unless: default[:platform] =~ %r{archlinux
 
     context "create zabbix_template_host resources with zabbix version #{zabbix_version}" do
       template = case zabbix_version
-                 when '4.0'
-                   'Template OS Linux'
                  when '5.0'
                    'Template OS Linux by Zabbix agent'
                  else

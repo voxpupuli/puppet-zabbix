@@ -53,18 +53,6 @@ describe 'zabbix::proxy' do
           it { is_expected.to contain_yumrepo('zabbix') }
         end
 
-        describe 'when manage_repo is true and zabbix version is 4.0' do
-          let :params do
-            {
-              manage_repo: true,
-              zabbix_version: '4.0'
-            }
-          end
-
-          it { is_expected.to contain_class('zabbix::repo').with_zabbix_version('4.0') }
-          it { is_expected.to contain_package('zabbix-proxy-pgsql').with_require('Class[Zabbix::Repo]') }
-        end
-
         describe 'with enabled selinux' do
           let :facts do
             super().merge(selinux: true)
@@ -360,33 +348,6 @@ describe 'zabbix::proxy' do
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSCipherPSK13=TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSCipherAll=TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSCipherAll13=EECDH\+aRSA\+AES128:RSA\+aRSA\+AES128:kECDHEPSK\+AES128:kPSK\+AES128$} }
-        end
-
-        context 'with zabbix_proxy.conf and version 4.0' do
-          let :params do
-            {
-              tlsaccept: 'cert',
-              tlscafile: '/etc/zabbix/keys/zabbix-server.ca',
-              tlscrlfile: '/etc/zabbix/keys/zabbix-server.crl',
-              tlscertfile: '/etc/zabbix/keys/zabbix-server.crt',
-              tlskeyfile: '/etc/zabbix/keys/zabbix-server.key',
-              tlsservercertissuer: 'Zabbix.Com',
-              tlsservercertsubject: 'MyZabbix',
-              tlspskidentity: '/etc/zabbix/keys/identity.file',
-              tlspskfile: '/etc/zabbix/keys/file.key',
-              zabbix_version: '4.0'
-            }
-          end
-
-          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSAccept=cert$} }
-          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSCAFile=/etc/zabbix/keys/zabbix-server.ca$} }
-          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSCRLFile=/etc/zabbix/keys/zabbix-server.crl$} }
-          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSCertFile=/etc/zabbix/keys/zabbix-server.crt$} }
-          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSKeyFile=/etc/zabbix/keys/zabbix-server.key$} }
-          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSServerCertIssuer=Zabbix.Com$} }
-          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSServerCertSubject=MyZabbix$} }
-          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSPSKIdentity=/etc/zabbix/keys/identity.file$} }
-          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSPSKFile=/etc/zabbix/keys/file.key$} }
         end
 
         context 'with zabbix_proxy.conf and version 5.0' do
