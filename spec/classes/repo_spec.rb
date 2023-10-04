@@ -85,6 +85,7 @@ describe 'zabbix::repo' do
             it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_gpgkey('https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-79EA5ED4') }
 
             it { is_expected.to contain_package('zabbix-required-scl-repo').with_ensure('latest').with_name('centos-release-scl') } if facts[:os]['name'] == 'CentOS'
+            it { is_expected.to contain_package('zabbix-required-scl-repo').with_ensure('latest').with_name('oracle-softwarecollection-release-el7') } if facts[:os]['name'] == 'OracleLinux'
           end
         when '9'
 

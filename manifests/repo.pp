@@ -70,8 +70,8 @@ class zabbix::repo (
           priority => '1',
         }
 
-        # Zabbix 5.0 frontend on CentOS 7 has different location.
-        if ($facts['os']['name'] == 'CentOS' and $majorrelease == '7' and $zabbix_version == '5.0') {
+        # Zabbix 5.0 frontend on EL7 has different location.
+        if ($majorrelease == '7' and $zabbix_version == '5.0') {
           $_frontend_repo_location = $frontend_repo_location ? {
             undef   => "https://repo.zabbix.com/zabbix/${zabbix_version}/rhel/${majorrelease}/\$basearch/frontend",
             default => $frontend_repo_location,
@@ -87,10 +87,23 @@ class zabbix::repo (
           }
         }
 
-        if ($facts['os']['name'] == 'CentOS' and $facts['os']['release']['major'] == '7' and versioncmp($zabbix_version, '5.0') >= 0) {
-          package { 'zabbix-required-scl-repo':
-            ensure => 'latest',
-            name   => 'centos-release-scl',
+        if ($facts['os']['release']['major'] == '7' and versioncmp($zabbix_version, '5.0') >= 0) {
+          case $facts['os']['name'] {
+            'CentOS': {
+              $scl_package_name = 'centos-release-scl'
+            }
+            'OracleLinux': {
+              $scl_package_name = 'oracle-softwarecollection-release-el7'
+            }
+            default: {
+              $scl_package_name = undef
+            }
+          }
+          if $scl_package_name {
+            package { 'zabbix-required-scl-repo':
+              ensure => 'latest',
+              name   => $scl_package_name,
+            }
           }
         }
       }

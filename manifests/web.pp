@@ -217,8 +217,8 @@ class zabbix::web (
     }
   }
 
-  case $facts['os']['name'] {
-    'ubuntu', 'debian': {
+  case $facts['os']['family'] {
+    'Debian': {
       $zabbix_web_package = 'zabbix-frontend-php'
       $php_db_package = "php-${db}"
 
@@ -230,7 +230,7 @@ class zabbix::web (
         ],
       }
     }
-    'CentOS', 'RedHat': {
+    'RedHat': {
       $zabbix_web_package = 'zabbix-web'
       if ($facts['os']['release']['major'] == '7' and versioncmp($zabbix_version, '5.0') >= 0) {
         package { "zabbix-web-${db}-scl":
@@ -258,7 +258,7 @@ class zabbix::web (
         tag     => 'zabbix',
       }
     }
-  } # END case $facts['os']['name']
+  } # END case $facts['os']['family']
 
   file { '/etc/zabbix/web':
     ensure  => directory,
