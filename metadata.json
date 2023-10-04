@@ -34,7 +34,7 @@
     },
     {
       "name": "puppet/selinux",
-      "version_requirement": ">= 1.1.0 < 4.0.0"
+      "version_requirement": ">= 1.1.0 < 5.0.0"
     }
   ],
   "source": "https://github.com/voxpupuli/puppet-zabbix.git",
