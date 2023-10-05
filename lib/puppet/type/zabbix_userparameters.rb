@@ -2,7 +2,10 @@
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', '..'))
 Puppet::Type.newtype(:zabbix_userparameters) do
+  @doc = 'Manage zabbix user templates'
+
   ensurable do
+    desc 'The basic property that the resource should be in.'
     defaultvalues
     defaultto :present
   end

@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 Puppet::Type.newtype(:zabbix_host) do
+  @doc = 'Manage zabbix hosts'
+
   ensurable do
+    desc 'The basic property that the resource should be in.'
     defaultvalues
     defaultto :present
   end

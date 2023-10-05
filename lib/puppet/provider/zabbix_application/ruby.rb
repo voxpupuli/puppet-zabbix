@@ -2,6 +2,7 @@
 
 require_relative '../zabbix'
 Puppet::Type.type(:zabbix_application).provide(:ruby, parent: Puppet::Provider::Zabbix) do
+  desc 'Puppet provider for Zabbix application using the Zabbix API.2'
   confine feature: :zabbixapi
 
   def template_id

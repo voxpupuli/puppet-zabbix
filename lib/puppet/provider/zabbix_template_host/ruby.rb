@@ -2,6 +2,7 @@
 
 require_relative '../zabbix'
 Puppet::Type.type(:zabbix_template_host).provide(:ruby, parent: Puppet::Provider::Zabbix) do
+  desc 'Puppet provider that manages the association between Zabbix templates and hosts. It allows creating, checking the existence of, and deleting the association between a Zabbix template and a host, using the Zabbix API.'
   confine feature: :zabbixapi
   def template_name
     @template_name ||= @resource[:name].split('@')[0]

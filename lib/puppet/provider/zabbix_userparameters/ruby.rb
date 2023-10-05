@@ -2,6 +2,7 @@
 
 require_relative '../zabbix'
 Puppet::Type.type(:zabbix_userparameters).provide(:ruby, parent: Puppet::Provider::Zabbix) do
+  desc 'Puppet provider that manages Zabbix user parameters. It allows users to define custom monitoring parameters in Zabbix, and provides methods for creating and checking the existence of a user parameter. It also has a placeholder method for destroying the user parameter.'
   confine feature: :zabbixapi
 
   def create
