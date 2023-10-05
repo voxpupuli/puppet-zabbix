@@ -2,9 +2,7 @@ fixtures:
   repositories:
     apache: https://github.com/puppetlabs/puppetlabs-apache.git
     apt: https://github.com/puppetlabs/puppetlabs-apt.git
-    firewall:
-      repo: https://github.com/puppetlabs/puppetlabs-firewall
-      ref: v6.0.0
+    firewall: https://github.com/puppetlabs/puppetlabs-firewall
     stdlib: https://github.com/puppetlabs/puppetlabs-stdlib.git
     concat: https://github.com/puppetlabs/puppetlabs-concat.git
     postgresql: https://github.com/puppetlabs/puppet-postgresql.git

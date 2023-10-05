@@ -454,10 +454,10 @@ class zabbix::server (
   # Manage firewall
   if $manage_firewall {
     firewall { '151 zabbix-server':
-      dport  => $listenport,
-      proto  => 'tcp',
-      action => 'accept',
-      state  => [
+      dport => $listenport,
+      proto => 'tcp',
+      jump  => 'accept',
+      state => [
         'NEW',
         'RELATED',
         'ESTABLISHED',

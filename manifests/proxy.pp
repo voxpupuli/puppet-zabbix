@@ -492,10 +492,10 @@ class zabbix::proxy (
   # Manage firewall
   if $manage_firewall {
     firewall { '151 zabbix-proxy':
-      dport  => $listenport,
-      proto  => 'tcp',
-      action => 'accept',
-      state  => [
+      dport => $listenport,
+      proto => 'tcp',
+      jump  => 'accept',
+      state => [
         'NEW',
         'RELATED',
         'ESTABLISHED',
