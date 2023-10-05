@@ -7,6 +7,8 @@ describe 'zabbix_application type', unless: default[:platform] =~ %r{archlinux} 
   supported_versions.each do |zabbix_version|
     # Application API was removed in Zabbix 5.4
     next if zabbix_version >= '5.4'
+    # < 6.0 server packages are not available for RHEL 9
+    next if zabbix_version < '6.0' && default[:platform] == 'el-9-x86_64'
 
     template = case zabbix_version
                when '5.0'
@@ -22,7 +24,9 @@ describe 'zabbix_application type', unless: default[:platform] =~ %r{archlinux} 
         class { 'apache':
             mpm_module => 'prefork',
         }
-        include apache::mod::php
+        if $facts['os']['family'] != 'RedHat' {
+          include apache::mod::php
+        }
         class { 'postgresql::globals':
           locale   => 'en_US.UTF-8',
           manage_package_repo => $facts['os']['release']['major'] != '8',

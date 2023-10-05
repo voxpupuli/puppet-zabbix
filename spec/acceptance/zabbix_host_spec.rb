@@ -8,6 +8,8 @@ describe 'zabbix_host type', unless: default[:platform] =~ %r{archlinux} do
   supported_versions.each do |zabbix_version|
     # >= 5.2 server packages are not available for RHEL 7
     next if zabbix_version >= '5.2' && default[:platform] == 'el-7-x86_64'
+    # < 6.0 server packages are not available for RHEL 9
+    next if zabbix_version < '6.0' && default[:platform] == 'el-9-x86_64'
 
     context "create zabbix_host resources with zabbix version #{zabbix_version}" do
       # This will deploy a running Zabbix setup (server, web, db) which we can
@@ -31,7 +33,9 @@ describe 'zabbix_host type', unless: default[:platform] =~ %r{archlinux} do
         class { 'apache':
             mpm_module => 'prefork',
         }
-        include apache::mod::php
+        if $facts['os']['family'] != 'RedHat' {
+          include apache::mod::php
+        }
         class { 'postgresql::globals':
           locale   => 'en_US.UTF-8',
           manage_package_repo => $facts['os']['release']['major'] != '8',
