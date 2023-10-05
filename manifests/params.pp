@@ -194,7 +194,7 @@ class zabbix::params {
   # Zabbix-server
   $server_alertscriptspath                  = '/etc/zabbix/alertscripts'
   $server_allowroot                         = '0'
-  $server_cachesize                         = '8M'
+  $server_cachesize                         = '32M'
   $server_cacheupdatefrequency              = '60'
   $server_config_group                      = 'zabbix'
   $server_config_owner                      = 'zabbix'
@@ -365,7 +365,7 @@ class zabbix::params {
 
   # Proxy specific params
   $proxy_allowroot                          = '0'
-  $proxy_cachesize                          = '8M'
+  $proxy_cachesize                          = '32M'
   $proxy_configfile_path                    = '/etc/zabbix/zabbix_proxy.conf'
   $proxy_configfrequency                    = '3600'
   $proxy_database_host                      = 'localhost'

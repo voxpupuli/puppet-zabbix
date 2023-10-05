@@ -194,7 +194,7 @@ describe 'zabbix::server' do
           {
             alertscriptspath: '${datadir}/zabbix/alertscripts',
             allowroot: '1',
-            cachesize: '8M',
+            cachesize: '32M',
             cacheupdatefrequency: '30',
             database_host: 'localhost',
             database_name: 'zabbix-server',
@@ -271,7 +271,7 @@ describe 'zabbix::server' do
 
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^AlertScriptsPath=\$\{datadir\}/zabbix/alertscripts} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^AllowRoot=1} }
-        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^CacheSize=8M} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^CacheSize=32M} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^CacheUpdateFrequency=30} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^DBHost=localhost} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^DBName=zabbix-server} }

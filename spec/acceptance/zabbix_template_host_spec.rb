@@ -29,7 +29,7 @@ describe 'zabbix_template_host type', unless: default[:platform] =~ %r{archlinux
           locale   => 'en_US.UTF-8',
           manage_package_repo => $facts['os']['release']['major'] != '8',
           manage_dnf_module => $facts['os']['release']['major'] == '8',
-          version => '12',
+          version => '13',
         }
         -> class { 'postgresql::server': }
 
