@@ -66,10 +66,10 @@ class zabbix::javagateway (
   # Manage firewall
   if $manage_firewall {
     firewall { '152 zabbix-javagateway':
-      dport  => $listenport,
-      proto  => 'tcp',
-      action => 'accept',
-      state  => ['NEW','RELATED', 'ESTABLISHED'],
+      dport => $listenport,
+      proto => 'tcp',
+      jump  => 'accept',
+      state => ['NEW','RELATED', 'ESTABLISHED'],
     }
   }
 }
