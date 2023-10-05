@@ -27,7 +27,22 @@ describe 'zabbix::web' do
 
         context 'with all defaults' do
           it { is_expected.to compile.with_all_deps }
+          it { is_expected.to contain_class('Zabbix::Params') }
+          it { is_expected.to contain_class('Zabbix::Repo') }
           it { is_expected.to contain_file('/etc/zabbix/web').with_ensure('directory') }
+
+          it { is_expected.to contain_apt__key('zabbix-A1848F5') }                         if facts[:os]['family'] == 'Debian'
+          it { is_expected.to contain_apt__key('zabbix-FBABD5F') }                         if facts[:os]['family'] == 'Debian'
+          it { is_expected.to contain_apt__source('zabbix') }                              if facts[:os]['family'] == 'Debian'
+          it { is_expected.to contain_yumrepo('zabbix') }                                  if facts[:os]['family'] == 'RedHat'
+          it { is_expected.to contain_yumrepo('zabbix-nonsupported') }                     if facts[:os]['family'] == 'RedHat'
+          it { is_expected.to contain_yumrepo('zabbix-frontend') }                         if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
+          it { is_expected.to contain_package('zabbix-required-scl-repo') }                if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
+          it { is_expected.to contain_service('rh-php72-php-fpm') }                        if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
+          it { is_expected.to contain_file('/etc/opt/rh/rh-php72/php-fpm.d/zabbix.conf') } if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
+          it { is_expected.to contain_file('/etc/zabbix/zabbix.conf.php') }                if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7' && Puppet::Util::Package.versioncmp(zabbix_version, '5.0') >= 0
+          it { is_expected.to contain_service('php-fpm') }                                 if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] >= '8'
+          it { is_expected.to contain_file('/etc/php-fpm.d/zabbix.conf') }                 if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] >= '8'
         end
 
         describe 'with enforcing selinux' do
@@ -42,6 +57,8 @@ describe 'zabbix::web' do
           end
 
           it { is_expected.to contain_selboolean('httpd_can_connect_zabbix').with('value' => 'on', 'persistent' => true) }
+          it { is_expected.to contain_selboolean('httpd_can_network_connect_db').with('value' => 'on', 'persistent' => true) }
+          it { is_expected.to contain_apache__vhost('localhost') }
         end
 
         describe 'with false selinux' do

@@ -60,6 +60,13 @@ describe 'zabbix::agent' do
       # service = facts[:os]['family'] == 'Gentoo' ? 'zabbix-agentd' : 'zabbix-agent'
 
       context 'with all defaults' do
+        it { is_expected.to contain_selinux__module('zabbix-agent') }            if facts[:os]['family'] == 'RedHat'
+        it { is_expected.to contain_yumrepo('zabbix-frontend') }                 if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
+        it { is_expected.to contain_package('zabbix-required-scl-repo') }        if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
+        it { is_expected.to contain_apt__key('zabbix-A1848F5') }                 if facts[:os]['family'] == 'Debian'
+        it { is_expected.to contain_apt__key('zabbix-FBABD5F') }                 if facts[:os]['family'] == 'Debian'
+        it { is_expected.to contain_file(include_dir).with_ensure('directory') }
+
         # Make sure package will be installed, service running and ensure of directory.
         if facts[:os]['name'] == 'windows'
           it do
@@ -85,7 +92,6 @@ describe 'zabbix::agent' do
               that_requires(["Package[#{package_name}]", "Zabbix::Startup[#{service_name}]"])
           end
 
-          it { is_expected.to contain_file(include_dir).with_ensure('directory') }
           it { is_expected.to contain_zabbix__startup(service_name).that_requires("Package[#{package_name}]") }
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to contain_class('zabbix::params') }
@@ -429,6 +435,16 @@ describe 'zabbix::agent' do
               with_provider('windows').
               with_source('C:\\path\\to\\zabbix_installer.msi')
           end
+        end
+      end
+
+      describe 'with systemd active' do
+        if facts[:kernel] == 'Linux'
+          let :facts do
+            super().merge(systemd: true)
+          end
+
+          it { is_expected.to contain_systemd__unit_file('zabbix-agent.service') }
         end
       end
     end

@@ -54,6 +54,7 @@ describe 'zabbix::database::mysql' do
               }
             end
 
+            it { is_expected.to contain_class('zabbix::params') }
             it { is_expected.to contain_class('zabbix::database::mysql') }
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to contain_exec('zabbix_server_create.sql').with_command("cd #{path} && if [ -f #{sql_server}.gz ]; then gunzip -f #{sql_server}.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-server' -p'zabbix-server' -P 3306 -D 'zabbix-server' < #{sql_server} && touch /etc/zabbix/.schema.done") }
@@ -73,6 +74,7 @@ describe 'zabbix::database::mysql' do
               }
             end
 
+            it { is_expected.to contain_class('zabbix::params') }
             it { is_expected.to contain_class('zabbix::database::mysql') }
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to contain_exec('zabbix_server_create.sql').with_command("cd #{path} && if [ -f #{sql_server}.gz ]; then gunzip -f #{sql_server}.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-server' -p'zabbix-server' -D 'zabbix-server' < #{sql_server} && touch /etc/zabbix/.schema.done") }
@@ -95,6 +97,7 @@ describe 'zabbix::database::mysql' do
               }
             end
 
+            it { is_expected.to contain_class('zabbix::params') }
             it { is_expected.to contain_class('zabbix::database::mysql') }
             it { is_expected.to compile.with_all_deps }
 
@@ -117,6 +120,7 @@ describe 'zabbix::database::mysql' do
               }
             end
 
+            it { is_expected.to contain_class('zabbix::params') }
             it { is_expected.to contain_class('zabbix::database::mysql') }
             it { is_expected.to compile.with_all_deps }
 
