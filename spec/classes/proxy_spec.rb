@@ -15,12 +15,18 @@ describe 'zabbix::proxy' do
         facts
       end
 
-      case facts[:os]['name']
+      zabbix_version = if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
+                         '5.0'
+                       else
+                         '6.0'
+                       end
+
+      case facts[:os]['family']
       when 'Archlinux'
         context 'with all defaults' do
           it { is_expected.not_to compile }
         end
-      when 'RedHat'
+      else
         let :pre_condition do
           "include 'postgresql::server'
            include 'mysql::server'"
@@ -47,13 +53,19 @@ describe 'zabbix::proxy' do
             }
           end
 
-          it { is_expected.to contain_class('zabbix::repo').with_zabbix_version('6.0') }
+          it { is_expected.to contain_class('zabbix::repo').with_zabbix_version(zabbix_version) }
           it { is_expected.to contain_package('zabbix-proxy-pgsql').with_require('Class[Zabbix::Repo]') }
-          it { is_expected.to contain_yumrepo('zabbix-nonsupported') }
-          it { is_expected.to contain_yumrepo('zabbix') }
+
+          case facts[:os]['family']
+          when 'RedHat'
+            it { is_expected.to contain_yumrepo('zabbix-nonsupported') }
+            it { is_expected.to contain_yumrepo('zabbix') }
+          when 'Debian'
+            it { is_expected.to contain_apt__source('zabbix') }
+          end
         end
 
-        describe 'with enabled selinux' do
+        describe 'with enabled selinux', if: facts[:os]['family'] == 'RedHat' do
           let :facts do
             super().merge(selinux: true)
           end
@@ -106,7 +118,7 @@ describe 'zabbix::proxy' do
           end
 
           it { is_expected.to contain_class('zabbix::database::postgresql').with_zabbix_type('proxy') }
-          it { is_expected.to contain_class('zabbix::database::postgresql').with_zabbix_version('6.0') }
+          it { is_expected.to contain_class('zabbix::database::postgresql').with_zabbix_version(zabbix_version) }
           it { is_expected.to contain_class('zabbix::database::postgresql').with_database_name('zabbix_proxy') }
           it { is_expected.to contain_class('zabbix::database::postgresql').with_database_user('zabbix-proxy') }
           it { is_expected.to contain_class('zabbix::database::postgresql').with_database_password('zabbix-proxy') }
@@ -126,7 +138,7 @@ describe 'zabbix::proxy' do
           end
 
           it { is_expected.to contain_class('zabbix::database::mysql').with_zabbix_type('proxy') }
-          it { is_expected.to contain_class('zabbix::database::mysql').with_zabbix_version('6.0') }
+          it { is_expected.to contain_class('zabbix::database::mysql').with_zabbix_version(zabbix_version) }
           it { is_expected.to contain_class('zabbix::database::mysql').with_database_name('zabbix_proxy') }
           it { is_expected.to contain_class('zabbix::database::mysql').with_database_user('zabbix-proxy') }
           it { is_expected.to contain_class('zabbix::database::mysql').with_database_password('zabbix-proxy') }
