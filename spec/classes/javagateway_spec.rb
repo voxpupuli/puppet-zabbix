@@ -35,7 +35,7 @@ describe 'zabbix::javagateway' do
           }
         end
 
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Archlinux'
           it { is_expected.not_to compile }
         when 'RedHat'

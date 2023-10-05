@@ -11,8 +11,8 @@ describe 'zabbix::userparameters', type: :define do
       let(:title) { 'mysqld' }
       let(:pre_condition) { 'class { "zabbix::agent": include_dir => "/etc/zabbix/zabbix_agentd.d" }' }
 
-      package = facts[:osfamily] == 'Gentoo' ? 'zabbix' : 'zabbix-agent'
-      service = facts[:osfamily] == 'Gentoo' ? 'zabbix-agentd' : 'zabbix-agent'
+      package = facts[:os]['family'] == 'Gentoo' ? 'zabbix' : 'zabbix-agent'
+      service = facts[:os]['family'] == 'Gentoo' ? 'zabbix-agentd' : 'zabbix-agent'
 
       context 'with an content' do
         let(:params) { { content: 'UserParameter=mysql.ping,mysqladmin -uroot ping | grep -c alive' } }

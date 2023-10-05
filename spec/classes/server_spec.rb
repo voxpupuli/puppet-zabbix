@@ -9,7 +9,7 @@ describe 'zabbix::server' do
   end
 
   on_supported_os(baseline_os_hash).each do |os, facts|
-    next if facts[:osfamily] == 'Archlinux' # zabbix server is currently not supported on archlinux
+    next if facts[:os]['family'] == 'Archlinux' # zabbix server is currently not supported on archlinux
     next if facts[:os]['name'] == 'windows'
 
     context "on #{os}" do
@@ -28,7 +28,7 @@ describe 'zabbix::server' do
         it { is_expected.to contain_zabbix__startup('zabbix-server') }
       end
 
-      if facts[:osfamily] == 'RedHat'
+      if facts[:os]['family'] == 'RedHat'
         describe 'with enabled selinux' do
           let :params do
             {
@@ -150,7 +150,7 @@ describe 'zabbix::server' do
       end
 
       context 'it creates a startup script' do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Archlinux', 'Debian', 'Gentoo', 'RedHat'
           it { is_expected.to contain_file('/etc/init.d/zabbix-server').with_ensure('absent') }
           it { is_expected.to contain_file('/etc/systemd/system/zabbix-server.service').with_ensure('file') }
