@@ -202,7 +202,7 @@ describe 'zabbix::proxy' do
           let(:params) do
             {
               allowroot: '0',
-              cachesize: '8M',
+              cachesize: '32M',
               configfrequency: '3600',
               database_host: 'localhost',
               database_name: 'zabbix-proxy',
@@ -321,7 +321,7 @@ describe 'zabbix::proxy' do
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartSNMPTrapper=0$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^ListenIP=192.168.1.1$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^HousekeepingFrequency=1$} }
-          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^CacheSize=8M$} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^CacheSize=32M$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartDBSyncers=4$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^HistoryCacheSize=16M$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^Timeout=20$} }
