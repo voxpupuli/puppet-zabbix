@@ -37,9 +37,13 @@ describe 'zabbix::agent' do
                     else
                       '/etc/zabbix/zabbix_agentd.d'
                     end
-      zabbix_version = '5.0'
-
       let(:facts) { facts }
+
+      zabbix_version = if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
+                         '5.0'
+                       else
+                         '6.0'
+                       end
 
       case facts[:osfamily]
       when 'Gentoo'

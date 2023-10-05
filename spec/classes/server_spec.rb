@@ -15,7 +15,11 @@ describe 'zabbix::server' do
     context "on #{os}" do
       let(:facts) { facts }
 
-      zabbix_version = '5.0'
+      zabbix_version = if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
+                         '5.0'
+                       else
+                         '6.0'
+                       end
 
       describe 'with default settings' do
         it { is_expected.to contain_class('zabbix::repo') }

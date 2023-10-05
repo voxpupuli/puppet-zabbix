@@ -15,6 +15,12 @@ describe 'zabbix::sender' do
         facts
       end
 
+      zabbix_version = if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
+                         '5.0'
+                       else
+                         '6.0'
+                       end
+
       context 'with all defaults' do
         it { is_expected.to contain_class('zabbix::sender') }
         it { is_expected.to contain_class('zabbix::params') }
@@ -34,7 +40,7 @@ describe 'zabbix::sender' do
         if %w[Archlinux Gentoo].include?(facts[:osfamily])
           it { is_expected.not_to compile.with_all_deps }
         else
-          it { is_expected.to contain_class('zabbix::repo').with_zabbix_version('5.0') }
+          it { is_expected.to contain_class('zabbix::repo').with_zabbix_version(zabbix_version) }
           it { is_expected.to contain_package('zabbix-sender').with_require('Class[Zabbix::Repo]') }
         end
 
