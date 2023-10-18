@@ -32,6 +32,7 @@
 #   you can use this parameter to add the database_path to the above mentioned
 #   path.
 # @param manage_database When true, it will configure the database and execute the sql scripts.
+# @param manage_database_timescale When true, it will execute the sql scripts needef for timescaledb.
 # @param manage_repo When true (default) this module will manage the Zabbix repository.
 # @param manage_firewall When true, it will create iptables rules.
 # @param manage_service
@@ -225,6 +226,7 @@ class zabbix (
   Zabbix::Databases $database_type                                            = $zabbix::params::database_type,
   $database_path                                                              = $zabbix::params::database_path,
   $manage_database                                                            = $zabbix::params::manage_database,
+  $manage_database_timescale                                                  = $zabbix::params::manage_database_timescale,
   $default_vhost                                                              = $zabbix::params::default_vhost,
   $manage_vhost                                                               = $zabbix::params::manage_vhost,
   $manage_firewall                                                            = $zabbix::params::manage_firewall,
@@ -404,6 +406,7 @@ class zabbix (
     manage_firewall           => $manage_firewall,
     manage_repo               => $manage_repo,
     manage_database           => $manage_database,
+    manage_database_timescale => $manage_database_timescale,
     manage_service            => $manage_service,
     listenport                => $listenport,
     sourceip                  => $sourceip,

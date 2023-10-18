@@ -149,6 +149,7 @@ class zabbix::params {
   $zabbix_web                               = 'localhost'
   $zabbix_web_ip                            = '127.0.0.1'
   $manage_database                          = true
+  $manage_database_timescale                = false
   $manage_service                           = true
   $default_vhost                            = false
   $manage_firewall                          = false
