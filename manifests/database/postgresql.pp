@@ -53,8 +53,6 @@ class zabbix::database::postgresql (
         true  => "cd ${schema_path} && if [ -f server.sql.gz ]; then gunzip -f server.sql.gz ; fi && psql -h '${database_host}' -U '${database_user}' -p ${database_port} -d '${database_name}' -f server.sql && touch /etc/zabbix/.schema.done",
         false => "cd ${schema_path} && if [ -f create.sql.gz ]; then gunzip -f create.sql.gz ; fi && psql -h '${database_host}' -U '${database_user}' -p ${database_port} -d '${database_name}' -f create.sql && touch /etc/zabbix/.schema.done"
       }
-      $zabbix_server_images_sql = 'touch /etc/zabbix/.images.done'
-      $zabbix_server_data_sql   = 'touch /etc/zabbix/.data.done'
     }
   }
 
@@ -87,20 +85,6 @@ class zabbix::database::postgresql (
         command  => $zabbix_server_create_sql,
         path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
         unless   => 'test -f /etc/zabbix/.schema.done',
-        provider => 'shell',
-        require  => Exec['update_pgpass'],
-      }
-      -> exec { 'zabbix_server_images.sql':
-        command  => $zabbix_server_images_sql,
-        path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
-        unless   => 'test -f /etc/zabbix/.images.done',
-        provider => 'shell',
-        require  => Exec['update_pgpass'],
-      }
-      -> exec { 'zabbix_server_data.sql':
-        command  => $zabbix_server_data_sql,
-        path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
-        unless   => 'test -f /etc/zabbix/.data.done',
         provider => 'shell',
         require  => Exec['update_pgpass'],
       }

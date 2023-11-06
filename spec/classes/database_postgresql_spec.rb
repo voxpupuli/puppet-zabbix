@@ -63,8 +63,6 @@ describe 'zabbix::database::postgresql' do
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to contain_exec('update_pgpass').with_command('echo node01.example.com:5432:zabbix-server:zabbix-server:zabbix-server >> /root/.pgpass') }
             it { is_expected.to contain_exec('zabbix_server_create.sql').with_command("cd #{path} && if [ -f #{sql_server}.gz ]; then gunzip -f #{sql_server}.gz ; fi && psql -h 'node01.example.com' -U 'zabbix-server' -p 5432 -d 'zabbix-server' -f #{sql_server} && touch /etc/zabbix/.schema.done") }
-            it { is_expected.to contain_exec('zabbix_server_images.sql').with_command('touch /etc/zabbix/.images.done') }
-            it { is_expected.to contain_exec('zabbix_server_data.sql').with_command('touch /etc/zabbix/.data.done') }
             it { is_expected.to contain_file('/root/.pgpass') }
             it { is_expected.to contain_class('zabbix::params') }
 
@@ -74,8 +72,6 @@ describe 'zabbix::database::postgresql' do
               it { is_expected.to compile.with_all_deps }
               it { is_expected.to contain_exec('update_pgpass').with_command('echo node01.example.com:6432:zabbix-server:zabbix-server:zabbix-server >> /root/.pgpass') }
               it { is_expected.to contain_exec('zabbix_server_create.sql').with_command("cd #{path} && if [ -f #{sql_server}.gz ]; then gunzip -f #{sql_server}.gz ; fi && psql -h 'node01.example.com' -U 'zabbix-server' -p 6432 -d 'zabbix-server' -f #{sql_server} && touch /etc/zabbix/.schema.done") }
-              it { is_expected.to contain_exec('zabbix_server_images.sql').with_command('touch /etc/zabbix/.images.done') }
-              it { is_expected.to contain_exec('zabbix_server_data.sql').with_command('touch /etc/zabbix/.data.done') }
               it { is_expected.to contain_file('/root/.pgpass') }
               it { is_expected.to contain_class('zabbix::params') }
             end
