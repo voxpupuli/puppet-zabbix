@@ -17,7 +17,6 @@ describe 'zabbix::database' do
 
       let :pre_condition do
         <<-EOS
-          include 'postgresql::server'
           if $facts['os']['family'] == 'Gentoo' {
             # We don't need the package to be installed as its the same for the server.
             class { 'mysql::client':

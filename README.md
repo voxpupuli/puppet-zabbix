@@ -138,8 +138,6 @@ node 'zabbix.example.com' {
   }
   include apache::mod::php
 
-  class { 'postgresql::server': }
-
   class { 'zabbix':
     zabbix_url    => 'zabbix.example.com',
   }
@@ -215,8 +213,6 @@ Like the zabbix-server, the zabbix-proxy can also be used in 2 ways:
 The following is an example for using the PostgreSQL as database:
 ```ruby
 node 'proxy.example.com' {
-  class { 'postgresql::server': }
-
   class { 'zabbix::database':
     database_type => 'postgresql',
   }

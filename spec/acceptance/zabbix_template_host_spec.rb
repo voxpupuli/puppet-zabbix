@@ -35,7 +35,6 @@ describe 'zabbix_template_host type', unless: default[:platform] =~ %r{archlinux
           manage_dnf_module => $facts['os']['release']['major'] == '8',
           version => '13',
         }
-        -> class { 'postgresql::server': }
 
         class { 'zabbix':
           zabbix_version   => "#{zabbix_version}",
@@ -44,7 +43,7 @@ describe 'zabbix_template_host type', unless: default[:platform] =~ %r{archlinux
           zabbix_api_pass  => 'zabbix',
           apache_use_ssl   => false,
           manage_resources => true,
-          require          => [ Class['postgresql::server'], Class['apache'], ],
+          require          => Class['apache'],
         }
       EOS
 

@@ -28,8 +28,7 @@ describe 'zabbix::proxy' do
         end
       else
         let :pre_condition do
-          "include 'postgresql::server'
-           include 'mysql::server'"
+          "include 'mysql::server'"
         end
         let :params do
           {

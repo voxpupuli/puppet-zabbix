@@ -23,7 +23,6 @@ describe 'zabbix::server class', unless: default[:platform] =~ %r{archlinux} do
           manage_dnf_module => $facts['os']['release']['major'] == '8',
           version => '13',
         }
-        -> class { 'postgresql::server': }
         -> class { 'zabbix::database': }
         -> class { 'zabbix::server': }
       EOS
@@ -73,7 +72,6 @@ describe 'zabbix::server class', unless: default[:platform] =~ %r{archlinux} do
             manage_dnf_module => $facts['os']['release']['major'] == '8',
             version => '13',
           }
-          -> class { 'postgresql::server': }
           -> class { 'zabbix::database': }
           -> class { 'zabbix::server':
             zabbix_version => "#{zabbix_version}"

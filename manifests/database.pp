@@ -94,12 +94,13 @@ class zabbix::database (
     case $database_type {
       'postgresql': {
         # This is the PostgreSQL part.
+
+        include postgresql::server
         # Create the postgres database.
         postgresql::server::db { $database_name:
           user       => $database_user,
           owner      => $database_user,
           password   => postgresql::postgresql_password($database_user, $database_password),
-          require    => Class['postgresql::server'],
           tablespace => $database_tablespace,
         }
 
