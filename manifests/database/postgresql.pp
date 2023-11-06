@@ -47,13 +47,13 @@ class zabbix::database::postgresql (
     'proxy': {
       $zabbix_create_sql = versioncmp($zabbix_version, '6.0') >= 0 ? {
         true  => "cd ${schema_path} && psql -f proxy.sql && touch /etc/zabbix/.schema.done",
-        false => "cd ${schema_path} && if [ -f schema.sql.gz ]; then gunzip -f schema.sql.gz ; fi && psql -f schema.sql && touch ${done_file}"
+        false => "cd ${schema_path} && if [ -f schema.sql.gz ]; then zcat schema.sql.gz | psql ; else psql -f schema.sql; fi && touch ${done_file}",
       }
     }
     default: {
       $zabbix_create_sql = versioncmp($zabbix_version, '6.0') >= 0 ? {
-        true  => "cd ${schema_path} && if [ -f server.sql.gz ]; then gunzip -f server.sql.gz ; fi && psql -f server.sql && touch ${done_file}",
-        false => "cd ${schema_path} && if [ -f create.sql.gz ]; then gunzip -f create.sql.gz ; fi && psql -f create.sql && touch ${done_file}"
+        true  => "cd ${schema_path} && if [ -f server.sql.gz ]; then zcat server.sql.gz | psql ; else psql -f server.sql; fi && touch ${done_file}",
+        false => "cd ${schema_path} && if [ -f create.sql.gz ]; then zcat create.sql.gz | psql ; else psql -f create.sql; fi && touch ${done_file}"
       }
     }
   }

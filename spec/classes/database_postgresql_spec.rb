@@ -75,7 +75,7 @@ describe 'zabbix::database::postgresql' do
             end
 
             it { is_expected.to compile.with_all_deps }
-            it { is_expected.to contain_exec('zabbix_create.sql').with_command("cd #{path} && if [ -f #{sql_server}.gz ]; then gunzip -f #{sql_server}.gz ; fi && psql -f #{sql_server} && touch /etc/zabbix/.schema.done").with_environment(expected_environment) }
+            it { is_expected.to contain_exec('zabbix_create.sql').with_command("cd #{path} && if [ -f #{sql_server}.gz ]; then zcat #{sql_server}.gz | psql ; else psql -f #{sql_server}; fi && touch /etc/zabbix/.schema.done").with_environment(expected_environment) }
             it { is_expected.to contain_class('zabbix::params') }
 
             describe 'with custom port is defined' do
@@ -108,7 +108,7 @@ describe 'zabbix::database::postgresql' do
             it { is_expected.to compile.with_all_deps }
 
             if Puppet::Util::Package.versioncmp(zabbix_version, '6.0') < 0
-              it { is_expected.to contain_exec('zabbix_create.sql').with_command("cd #{path} && if [ -f schema.sql.gz ]; then gunzip -f schema.sql.gz ; fi && psql -f schema.sql && touch /etc/zabbix/.schema.done").with_environment(expected_environment) }
+              it { is_expected.to contain_exec('zabbix_create.sql').with_command("cd #{path} && if [ -f schema.sql.gz ]; then zcat schema.sql.gz | psql ; else psql -f schema.sql; fi && touch /etc/zabbix/.schema.done").with_environment(expected_environment) }
             else
               it { is_expected.to contain_exec('zabbix_create.sql').with_command("cd #{path} && psql -f proxy.sql && touch /etc/zabbix/.schema.done").with_environment(expected_environment) }
             end
