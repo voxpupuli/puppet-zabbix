@@ -41,17 +41,19 @@ class zabbix::database::postgresql (
     $schema_path = $database_schema_path
   }
 
+  $done_file = '/etc/zabbix/.schema.done'
+
   case $zabbix_type {
     'proxy': {
       $zabbix_create_sql = versioncmp($zabbix_version, '6.0') >= 0 ? {
         true  => "cd ${schema_path} && psql -f proxy.sql && touch /etc/zabbix/.schema.done",
-        false => "cd ${schema_path} && if [ -f schema.sql.gz ]; then gunzip -f schema.sql.gz ; fi && psql -f schema.sql && touch /etc/zabbix/.schema.done"
+        false => "cd ${schema_path} && if [ -f schema.sql.gz ]; then gunzip -f schema.sql.gz ; fi && psql -f schema.sql && touch ${done_file}"
       }
     }
     default: {
       $zabbix_create_sql = versioncmp($zabbix_version, '6.0') >= 0 ? {
-        true  => "cd ${schema_path} && if [ -f server.sql.gz ]; then gunzip -f server.sql.gz ; fi && psql -f server.sql && touch /etc/zabbix/.schema.done",
-        false => "cd ${schema_path} && if [ -f create.sql.gz ]; then gunzip -f create.sql.gz ; fi && psql -f create.sql && touch /etc/zabbix/.schema.done"
+        true  => "cd ${schema_path} && if [ -f server.sql.gz ]; then gunzip -f server.sql.gz ; fi && psql -f server.sql && touch ${done_file}",
+        false => "cd ${schema_path} && if [ -f create.sql.gz ]; then gunzip -f create.sql.gz ; fi && psql -f create.sql && touch ${done_file}"
       }
     }
   }
@@ -67,7 +69,7 @@ class zabbix::database::postgresql (
   exec { 'zabbix_create.sql':
     command     => $zabbix_create_sql,
     path        => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
-    unless      => 'test -f /etc/zabbix/.schema.done',
+    creates     => $done_file,
     provider    => 'shell',
     environment => $exec_env,
   }
