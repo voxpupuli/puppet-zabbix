@@ -42,22 +42,24 @@ class zabbix::database::postgresql (
   }
 
   $done_file = '/etc/zabbix/.schema.done'
-
-  case $zabbix_type {
+  $schema_file = case $zabbix_type {
     'proxy': {
-      $zabbix_create_sql = versioncmp($zabbix_version, '6.0') >= 0 ? {
-        true  => "cd ${schema_path} && psql -f proxy.sql && touch /etc/zabbix/.schema.done",
-        false => "cd ${schema_path} && if [ -f schema.sql.gz ]; then zcat schema.sql.gz | psql ; else psql -f schema.sql; fi && touch ${done_file}",
+      if versioncmp($zabbix_version, '6.0') >= 0 {
+        'proxy.sql'
+      } else {
+        'schema.sql'
       }
     }
     default: {
-      $zabbix_create_sql = versioncmp($zabbix_version, '6.0') >= 0 ? {
-        true  => "cd ${schema_path} && if [ -f server.sql.gz ]; then zcat server.sql.gz | psql ; else psql -f server.sql; fi && touch ${done_file}",
-        false => "cd ${schema_path} && if [ -f create.sql.gz ]; then zcat create.sql.gz | psql ; else psql -f create.sql; fi && touch ${done_file}"
+      if versioncmp($zabbix_version, '6.0') >= 0 {
+        'server.sql'
+      } else {
+        'create.sql'
       }
     }
   }
 
+  $command = "cd ${schema_path} && if [ -f ${schema_file}.gz ]; then zcat ${schema_file}.gz | psql ; else psql -f ${schema_file}; fi && touch ${done_file}"
   $exec_env = [
     "PGHOST=${database_host}",
     "PGPORT=${database_port}",
@@ -67,7 +69,7 @@ class zabbix::database::postgresql (
   ]
 
   exec { 'zabbix_create.sql':
-    command     => $zabbix_create_sql,
+    command     => $command,
     path        => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
     creates     => $done_file,
     provider    => 'shell',

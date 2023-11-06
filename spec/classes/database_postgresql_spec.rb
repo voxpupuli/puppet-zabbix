@@ -110,7 +110,7 @@ describe 'zabbix::database::postgresql' do
             if Puppet::Util::Package.versioncmp(zabbix_version, '6.0') < 0
               it { is_expected.to contain_exec('zabbix_create.sql').with_command("cd #{path} && if [ -f schema.sql.gz ]; then zcat schema.sql.gz | psql ; else psql -f schema.sql; fi && touch /etc/zabbix/.schema.done").with_environment(expected_environment) }
             else
-              it { is_expected.to contain_exec('zabbix_create.sql').with_command("cd #{path} && psql -f proxy.sql && touch /etc/zabbix/.schema.done").with_environment(expected_environment) }
+              it { is_expected.to contain_exec('zabbix_create.sql').with_command("cd #{path} && if [ -f proxy.sql.gz ]; then zcat proxy.sql.gz | psql ; else psql -f proxy.sql; fi && touch /etc/zabbix/.schema.done").with_environment(expected_environment) }
             end
             it { is_expected.to contain_class('zabbix::params') }
 
