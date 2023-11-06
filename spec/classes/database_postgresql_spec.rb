@@ -7,10 +7,6 @@ describe 'zabbix::database::postgresql' do
     'rspec.puppet.com'
   end
 
-  let :pre_condition do
-    'include postgresql::server'
-  end
-
   on_supported_os(baseline_os_hash).each do |os, facts|
     next if facts[:os]['name'] == 'windows'
 
