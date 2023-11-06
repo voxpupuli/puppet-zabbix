@@ -152,8 +152,6 @@ node 'zabbix.example.com' {
   }
   include apache::mod::php
 
-  class { 'mysql::server': }
-
   class { 'zabbix':
     zabbix_url    => 'zabbix.example.com',
     database_type => 'mysql',
@@ -227,8 +225,6 @@ node 'proxy.example.com' {
 When you want to make use of an MySQL database as backend:
 ```ruby
 node 'proxy.example.com' {
-  class { 'mysql::server': }
-
   class { 'zabbix::database':
     database_type => 'mysql',
   }

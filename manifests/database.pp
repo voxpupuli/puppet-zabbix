@@ -146,6 +146,7 @@ class zabbix::database (
       }
       'mysql': {
         # This is the MySQL part.
+        include mysql::server
 
         # First we check what kind of zabbix component it is. We have to use clear names
         # as it may be confusing when you need to fill in the zabbix-proxy name into the

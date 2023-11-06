@@ -23,7 +23,6 @@ describe 'zabbix::database' do
               package_manage => false,
             }
           }
-          include 'mysql::server'
         EOS
       end
 

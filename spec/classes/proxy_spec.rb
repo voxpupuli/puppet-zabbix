@@ -27,9 +27,6 @@ describe 'zabbix::proxy' do
           it { is_expected.not_to compile }
         end
       else
-        let :pre_condition do
-          "include 'mysql::server'"
-        end
         let :params do
           {
             zabbix_server_host: '192.168.1.1',
@@ -130,10 +127,6 @@ describe 'zabbix::proxy' do
               database_type: 'mysql',
               manage_database: true
             }
-          end
-
-          let(:pre_condition) do
-            "include 'mysql::server'"
           end
 
           it { is_expected.to contain_class('zabbix::database::mysql').with_zabbix_type('proxy') }
