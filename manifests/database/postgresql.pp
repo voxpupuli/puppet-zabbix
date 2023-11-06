@@ -23,22 +23,14 @@ class zabbix::database::postgresql (
 ) inherits zabbix::params {
   assert_private()
 
-  if ($database_schema_path == false) or ($database_schema_path == '') {
-    if $facts['os']['family'] == 'RedHat' and $facts['os']['release']['major'] == '7' {
-      if versioncmp($zabbix_version, '6.0') >= 0 {
-        $schema_path = '/usr/share/zabbix-sql-scripts/postgresql/'
-      } else {
-        $schema_path = "/usr/share/doc/zabbix-*-pgsql-${zabbix_version}*/"
-      }
-    } else {
-      if versioncmp($zabbix_version, '6.0') >= 0 {
-        $schema_path = '/usr/share/zabbix-sql-scripts/postgresql/'
-      } else {
-        $schema_path = '/usr/share/doc/zabbix-*-pgsql'
-      }
-    }
-  } else {
+  if $database_schema_path != false and $database_schema_path != '' {
     $schema_path = $database_schema_path
+  } elsif versioncmp($zabbix_version, '6.0') >= 0 {
+    $schema_path = '/usr/share/zabbix-sql-scripts/postgresql/'
+  } elsif $facts['os']['family'] == 'RedHat' and $facts['os']['release']['major'] == '7' {
+    $schema_path = "/usr/share/doc/zabbix-*-pgsql-${zabbix_version}*/"
+  } else {
+    $schema_path = '/usr/share/doc/zabbix-*-pgsql'
   }
 
   $done_file = '/etc/zabbix/.schema.done'
