@@ -14,6 +14,16 @@ describe 'zabbix::web' do
     }
   end
 
+  let :pre_condition do
+    <<~PUPPET
+      if $facts['os']['family'] != 'RedHat' {
+        class { 'apache':
+          mpm_module => 'prefork',
+        }
+      }
+    PUPPET
+  end
+
   on_supported_os(baseline_os_hash).each do |os, facts|
     supported_versions.each do |zabbix_version|
       next if facts[:os]['name'] == 'windows'

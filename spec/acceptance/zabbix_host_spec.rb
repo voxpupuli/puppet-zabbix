@@ -33,9 +33,6 @@ describe 'zabbix_host type', unless: default[:platform] =~ %r{archlinux} do
         class { 'apache':
             mpm_module => 'prefork',
         }
-        if $facts['os']['family'] != 'RedHat' {
-          include apache::mod::php
-        }
         class { 'postgresql::globals':
           locale   => 'en_US.UTF-8',
           manage_package_repo => $facts['os']['release']['major'] != '8',

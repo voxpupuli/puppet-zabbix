@@ -82,7 +82,6 @@
 #     class { 'apache':
 #         mpm_module => 'prefork',
 #     }
-#     class { 'apache::mod::php': }
 #     class { 'zabbix::web':
 #       zabbix_url    => 'zabbix.dj-wasabi.nl',
 #       zabbix_server => 'wdpuppet03.dj-wasabi.local',
@@ -343,6 +342,8 @@ class zabbix::web (
       }
     }
     else {
+      include apache::mod::php
+
       $apache_vhost_custom_fragment = "
         php_value max_execution_time ${apache_php_max_execution_time}
         php_value memory_limit ${apache_php_memory_limit}
