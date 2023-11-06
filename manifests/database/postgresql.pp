@@ -43,13 +43,13 @@ class zabbix::database::postgresql (
 
   case $zabbix_type {
     'proxy': {
-      $zabbix_proxy_create_sql = versioncmp($zabbix_version, '6.0') >= 0 ? {
+      $zabbix_create_sql = versioncmp($zabbix_version, '6.0') >= 0 ? {
         true  => "cd ${schema_path} && psql -h '${database_host}' -U '${database_user}' -p ${database_port} -d '${database_name}' -f proxy.sql && touch /etc/zabbix/.schema.done",
         false => "cd ${schema_path} && if [ -f schema.sql.gz ]; then gunzip -f schema.sql.gz ; fi && psql -h '${database_host}' -U '${database_user}' -p ${database_port} -d '${database_name}' -f schema.sql && touch /etc/zabbix/.schema.done"
       }
     }
     default: {
-      $zabbix_server_create_sql = versioncmp($zabbix_version, '6.0') >= 0 ? {
+      $zabbix_create_sql = versioncmp($zabbix_version, '6.0') >= 0 ? {
         true  => "cd ${schema_path} && if [ -f server.sql.gz ]; then gunzip -f server.sql.gz ; fi && psql -h '${database_host}' -U '${database_user}' -p ${database_port} -d '${database_name}' -f server.sql && touch /etc/zabbix/.schema.done",
         false => "cd ${schema_path} && if [ -f create.sql.gz ]; then gunzip -f create.sql.gz ; fi && psql -h '${database_host}' -U '${database_user}' -p ${database_port} -d '${database_name}' -f create.sql && touch /etc/zabbix/.schema.done"
       }
@@ -70,27 +70,11 @@ class zabbix::database::postgresql (
     group  => 'root',
   }
 
-  case $zabbix_type {
-    'proxy': {
-      exec { 'zabbix_proxy_create.sql':
-        command  => $zabbix_proxy_create_sql,
-        path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
-        unless   => 'test -f /etc/zabbix/.schema.done',
-        provider => 'shell',
-        require  => Exec['update_pgpass'],
-      }
-    }
-    'server': {
-      exec { 'zabbix_server_create.sql':
-        command  => $zabbix_server_create_sql,
-        path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
-        unless   => 'test -f /etc/zabbix/.schema.done',
-        provider => 'shell',
-        require  => Exec['update_pgpass'],
-      }
-    }
-    default: {
-      fail 'We do not work.'
-    }
+  exec { 'zabbix_create.sql':
+    command  => $zabbix_create_sql,
+    path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
+    unless   => 'test -f /etc/zabbix/.schema.done',
+    provider => 'shell',
+    require  => Exec['update_pgpass'],
   }
 }

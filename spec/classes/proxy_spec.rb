@@ -38,7 +38,7 @@ describe 'zabbix::proxy' do
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to contain_class('zabbix::params') }
         it { is_expected.to contain_exec('update_pgpass') }
-        it { is_expected.to contain_exec('zabbix_proxy_create.sql') }
+        it { is_expected.to contain_exec('zabbix_create.sql') }
         it { is_expected.to contain_file('/root/.pgpass') }
         it { is_expected.to contain_postgresql__server__pg_hba_rule('Allow zabbix-proxy to access database') }
 
