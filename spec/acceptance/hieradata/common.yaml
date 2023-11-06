@@ -1,0 +1,7 @@
+---
+apache::mpm_module: 'prefork'
+
+postgresql::globals::encoding: 'UTF-8'
+postgresql::globals::locale: 'en_US.UTF-8'
+postgresql::globals::manage_package_repo: true
+postgresql::globals::version: '13'

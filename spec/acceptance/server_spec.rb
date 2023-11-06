@@ -16,14 +16,7 @@ describe 'zabbix::server class', unless: default[:platform] =~ %r{archlinux} do
 
       # this will actually deploy apache + postgres + zabbix-server + zabbix-web
       pp = <<-EOS
-        class { 'postgresql::globals':
-          encoding => 'UTF-8',
-          locale   => 'en_US.UTF-8',
-          manage_package_repo => $facts['os']['release']['major'] != '8',
-          manage_dnf_module => $facts['os']['release']['major'] == '8',
-          version => '13',
-        }
-        -> class { 'zabbix::database': }
+        class { 'zabbix::database': }
         -> class { 'zabbix::server': }
       EOS
 
@@ -65,14 +58,7 @@ describe 'zabbix::server class', unless: default[:platform] =~ %r{archlinux} do
 
         # this will actually deploy apache + postgres + zabbix-server + zabbix-web
         pp = <<-EOS
-          class { 'postgresql::globals':
-            encoding => 'UTF-8',
-            locale   => 'en_US.UTF-8',
-            manage_package_repo => $facts['os']['release']['major'] != '8',
-            manage_dnf_module => $facts['os']['release']['major'] == '8',
-            version => '13',
-          }
-          -> class { 'zabbix::database': }
+          class { 'zabbix::database': }
           -> class { 'zabbix::server':
             zabbix_version => "#{zabbix_version}"
           }
