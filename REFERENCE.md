@@ -23,6 +23,7 @@
 * [`zabbix::server`](#zabbix--server): This will install and configure the zabbix-server deamon
 * [`zabbix::userparameter`](#zabbix--userparameter): This class can be used when you use hiera or The Foreman. With this tools you can't use and define. This make use of "create_resources".
 * [`zabbix::web`](#zabbix--web): This will install the zabbix-web package and install an virtual host.
+* [`zabbix::zabbixapi`](#zabbix--zabbixapi): This will install the zabbixapi gem.
 * [`zabbix::zapache`](#zabbix--zapache): This will install and configure the zapache monitoring script Upstream: https://github.com/lorf/zapache
 
 #### Private Classes
@@ -5425,6 +5426,33 @@ Data type: `Boolean`
 Whether we should manage SELinux rules.
 
 Default value: `$zabbix::params::manage_selinux`
+
+### <a name="zabbix--zabbixapi"></a>`zabbix::zabbixapi`
+
+This will install the zabbixapi gem.
+
+#### Parameters
+
+The following parameters are available in the `zabbix::zabbixapi` class:
+
+* [`zabbix_version`](#-zabbix--zabbixapi--zabbix_version)
+* [`puppetgem`](#-zabbix--zabbixapi--puppetgem)
+
+##### <a name="-zabbix--zabbixapi--zabbix_version"></a>`zabbix_version`
+
+Data type: `Any`
+
+This is the zabbix version.
+
+Default value: `$zabbix::params::zabbix_version`
+
+##### <a name="-zabbix--zabbixapi--puppetgem"></a>`puppetgem`
+
+Data type: `Any`
+
+Provider for the zabbixapi gem package.
+
+Default value: `$zabbix::params::puppetgem`
 
 ### <a name="zabbix--zapache"></a>`zabbix::zapache`
 

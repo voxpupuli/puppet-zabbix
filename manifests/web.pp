@@ -177,28 +177,15 @@ class zabbix::web (
   # is set to false, you'll get warnings like this:
   # "Warning: You cannot collect without storeconfigs being set"
   if $manage_resources {
-    # Determine correct zabbixapi version.
-    case $zabbix_version {
-      /^[56]\.[024]/: {
-        $zabbixapi_version = '5.0.0-alpha1'
-      }
-      default: {
-        fail("Zabbix ${zabbix_version} is not supported!")
-      }
-    }
-
-    # Installing the zabbixapi gem package. We need this gem for
-    # communicating with the zabbix-api. This is way better then
-    # doing it ourself.
     file { $zabbix_template_dir:
       ensure => directory,
       owner  => 'zabbix',
       group  => 'zabbix',
       mode   => '0755',
     }
-    -> package { 'zabbixapi':
-      ensure   => $zabbixapi_version,
-      provider => $puppetgem,
+    -> class { 'zabbix::zabbixapi':
+      zabbix_version => $zabbix_version,
+      puppetgem      => $puppetgem,
     }
     -> class { 'zabbix::resources::web':
       zabbix_url     => $zabbix_url,
