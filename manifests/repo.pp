@@ -118,6 +118,9 @@ class zabbix::repo (
 
         if ($facts['os']['distro']['id'] == 'Raspbian') {
           $operatingsystem = 'raspbian'
+        } elsif ($facts['os']['architecture'] in ['arm64', 'aarch64']) {
+          # arm64 is the Debian name, but some facter versions report aarch64 instead
+          $operatingsystem = "${downcase($facts['os']['name'])}-arm64"
         } else {
           $operatingsystem = downcase($facts['os']['name'])
         }

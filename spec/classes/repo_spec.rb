@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'deep_merge'
 require 'spec_helper'
 
 describe 'zabbix::repo' do
@@ -43,6 +44,16 @@ describe 'zabbix::repo' do
             end
 
             it { is_expected.to contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/5.0/debian/') }
+          end
+        end
+
+        %w[arm64 aarch64].each do |arch|
+          context "on #{arch}" do
+            let :facts do
+              facts.deep_merge(os: { architecture: arch })
+            end
+
+            it { is_expected.to contain_apt__source('zabbix').with_location("http://repo.zabbix.com/zabbix/6.0/#{facts[:os]['name'].downcase}-arm64/") }
           end
         end
       when 'RedHat'
