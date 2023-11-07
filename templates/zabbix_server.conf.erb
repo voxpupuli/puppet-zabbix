@@ -384,7 +384,6 @@ ProxyConfigFrequency=<%= @proxyconfigfrequency %>
 #
 ProxyDataFrequency=<%= @proxydatafrequency %>
 
-<% if @zabbix_version.to_f >= 5.0 %>
 ### Option: StartLLDProcessors
 #       Number of pre-forked instances of low level discovery processors.
 #
@@ -393,7 +392,6 @@ ProxyDataFrequency=<%= @proxydatafrequency %>
 # Default:
 # StartLLDProcessors=2
 <% if @startlldprocessors %>StartLLDProcessors=<%= @startlldprocessors -%><% end %>
-<% end %>
 
 ### Option: AllowRoot
 #   Allow the server to run as 'root'. If disabled and the server is started by 'root', the server
@@ -490,7 +488,6 @@ LoadModulePath=<%= @loadmodulepath %>
 <% if @tlskeyfile %>TLSKeyFile=<%= @tlskeyfile %><% end %>
 
 ####### For advanced users - TLS ciphersuite selection criteria #######
-<% if @zabbix_version.to_f >= 5.0 %>
 ### Option: DBTLSConnect
 #       Setting this option enforces to use TLS connection to database.
 #       required    - connect using TLS
@@ -546,9 +543,7 @@ LoadModulePath=<%= @loadmodulepath %>
 # Mandatory no
 # Default:
 <% if @database_tlscipher13 %>DBTLSCipher13=<%= @database_tlscipher13 %><% end %>
-<% end %>
 
-<% if @zabbix_version.to_f >= 5.0 %>
 ### Option: TLSCipherCert13
 #       Cipher string for OpenSSL 1.1.1 or newer in TLS 1.3.
 #       Override the default ciphersuite selection criteria for certificate-based encryption.
@@ -618,7 +613,6 @@ LoadModulePath=<%= @loadmodulepath %>
 # Default:
 # TLSCipherAll13=
 <% if @tlscipherall %>TLSCipherAll=<%= @tlscipherall %><% end %>
-<% end %>
 
 <% if @zabbix_version.to_f >= 5.2 %>
 ### Option: VaultToken

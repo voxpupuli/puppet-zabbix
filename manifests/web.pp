@@ -149,14 +149,6 @@ class zabbix::web (
     fail("${facts['os']['family']} is currently not supported for zabbix::web")
   }
 
-  # zabbix frontend 5.x is not supported, among others, on stretch and xenial.
-  # https://www.zabbix.com/documentation/current/manual/installation/frontend/frontend_on_debian
-  if $facts['os']['name'] in ['ubuntu', 'debian'] and versioncmp($zabbix_version, '5') >= 0 {
-    if versioncmp($facts['os']['release']['major'], '9') == 0 {
-      fail("${facts['os']['family']} ${$facts['os']['release']['major']} is not supported for zabbix::web")
-    }
-  }
-
   # Only include the repo class if it has not yet been included
   unless defined(Class['Zabbix::Repo']) {
     class { 'zabbix::repo':
@@ -231,7 +223,7 @@ class zabbix::web (
     }
     'RedHat': {
       $zabbix_web_package = 'zabbix-web'
-      if ($facts['os']['release']['major'] == '7' and versioncmp($zabbix_version, '5.0') >= 0) {
+      if ($facts['os']['release']['major'] == '7') {
         package { "zabbix-web-${db}-scl":
           ensure  => $zabbix_package_state,
           before  => Package[$zabbix_web_package],
@@ -285,22 +277,20 @@ class zabbix::web (
   }
 
   # For API to work on Zabbix 5.x zabbix.conf.php needs to be in the root folder.
-  if versioncmp($zabbix_version, '5') >= 0 {
-    file { '/etc/zabbix/zabbix.conf.php':
-      ensure => link,
-      target => '/etc/zabbix/web/zabbix.conf.php',
-      owner  => $web_config_owner,
-      group  => $web_config_group,
-      mode   => '0640',
-    }
+  file { '/etc/zabbix/zabbix.conf.php':
+    ensure => link,
+    target => '/etc/zabbix/web/zabbix.conf.php',
+    owner  => $web_config_owner,
+    group  => $web_config_group,
+    mode   => '0640',
   }
 
   # Is set to true, it will create the apache vhost.
   if $manage_vhost {
     include apache
     include apache::mod::dir
-    if $facts['os']['family'] == 'RedHat' and versioncmp($facts['os']['release']['major'], '7') >= 0 and versioncmp($zabbix_version, '5') >= 0 {
-      if versioncmp($facts['os']['release']['major'], '7') == 0 {
+    if $facts['os']['family'] == 'RedHat' {
+      if $facts['os']['release']['major'] == '7' {
         $fpm_service = 'rh-php72-php-fpm'
         # PHP parameters are moved to /etc/opt/rh/rh-php72/php-fpm.d/zabbix.conf per package zabbix-web-deps-scl
         $fpm_scl_prefix = '/opt/rh/rh-php72'

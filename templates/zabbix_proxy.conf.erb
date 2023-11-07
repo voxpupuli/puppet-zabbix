@@ -85,7 +85,6 @@ DebugLevel=<%= @debuglevel %>
 #
 PidFile=<%= @pidfile %>
 
-<% if @zabbix_version.to_f >= 5.0 %>
 ### Option: SocketDir
 #       IPC socket directory.
 #               Directory to store IPC sockets used by internal Zabbix services.
@@ -94,7 +93,6 @@ PidFile=<%= @pidfile %>
 # Default:
 
 <% if @socketdir %>SocketDir=<%= @socketdir %><% end %>
-<% end %>
 
 ### Option: DBHost
 #	Database host name.
@@ -516,7 +514,6 @@ LoadModulePath=<%= @loadmodulepath %>
 <% if @tlspskfile %>TLSPSKFile=<%= @tlspskfile %><% end %>
 
 ####### For advanced users - TLS ciphersuite selection criteria #######
-<% if @zabbix_version.to_f >= 5.0 %>
 ### Option: DBTLSConnect
 #       Setting this option enforces to use TLS connection to database.
 #       required    - connect using TLS
@@ -572,9 +569,7 @@ LoadModulePath=<%= @loadmodulepath %>
 # Mandatory no
 # Default:
 <% if @database_tlscipher13 %>DBTLSCipher13=<%= @database_tlscipher13 %><% end %>
-<% end %>
 
-<% if @zabbix_version.to_f >= 5.0 %>
 ### Option: TLSCipherCert13
 #       Cipher string for OpenSSL 1.1.1 or newer in TLS 1.3.
 #       Override the default ciphersuite selection criteria for certificate-based encryption.
@@ -644,7 +639,6 @@ LoadModulePath=<%= @loadmodulepath %>
 # Default:
 # TLSCipherAll13=
 <% if @tlscipherall %>TLSCipherAll=<%= @tlscipherall %><% end %>
-<% end %>
 
 <% if @zabbix_version.to_f >= 5.2 %>
 ### Option: VaultToken
