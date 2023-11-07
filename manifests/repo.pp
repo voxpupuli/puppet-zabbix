@@ -116,66 +116,46 @@ class zabbix::repo (
           include apt
         }
 
-        if ($facts['os']['architecture'] == 'armv6l') {
-          $_repo_location = $repo_location ? {
-            undef   => 'http://naizvoru.com/raspbian/zabbix',
-            default => $repo_location,
-          }
-
-          apt::source { 'zabbix':
-            location => $_repo_location,
-            repos    => 'main',
-            key      => {
-              'id'     => 'BC274A7EA7FD5DD267C9A18FD54A213C80E871A7',
-              'source' => 'https://naizvoru.com/raspbian/zabbix/conf/boris@steki.net.gpg.key',
-            }
-            ,
-            include  => {
-              'src' => false,
-            }
-            ,
-          }
+        if ($facts['os']['distro']['id'] == 'Raspbian') {
+          $operatingsystem = 'raspbian'
         } else {
-          if ($facts['os']['distro']['id'] == 'Raspbian') {
-            $operatingsystem = 'raspbian'
-          } else {
-            $operatingsystem = downcase($facts['os']['name'])
-          }
-          case $facts['os']['release']['full'] {
-            /\/sid$/: { $releasename = regsubst($facts['os']['release']['full'], '/sid$', '') }
-            default: { $releasename = $facts['os']['distro']['codename'] }
-          }
-
-          $_repo_location = $repo_location ? {
-            undef   => "http://repo.zabbix.com/zabbix/${zabbix_version}/${operatingsystem}/",
-            default => $repo_location,
-          }
-
-          apt::key { 'zabbix-FBABD5F':
-            id     => 'FBABD5FB20255ECAB22EE194D13D58E479EA5ED4',
-            source => 'https://repo.zabbix.com/zabbix-official-repo.key',
-          }
-          apt::key { 'zabbix-A1848F5':
-            id     => 'A1848F5352D022B9471D83D0082AB56BA14FE591',
-            source => 'https://repo.zabbix.com/zabbix-official-repo.key',
-          }
-
-          # Debian 11 provides Zabbix 5.0 by default. This can cause problems for 4.0 versions
-          $pinpriority = $facts['os']['release']['major'] ? {
-            '11'    => 1000,
-            default => undef,
-          }
-          apt::source { 'zabbix':
-            location => $_repo_location,
-            repos    => 'main',
-            release  => $releasename,
-            pin      => $pinpriority,
-            require  => [
-              Apt_key['zabbix-FBABD5F'],
-              Apt_key['zabbix-A1848F5'],
-            ],
-          }
+          $operatingsystem = downcase($facts['os']['name'])
         }
+        case $facts['os']['release']['full'] {
+          /\/sid$/: { $releasename = regsubst($facts['os']['release']['full'], '/sid$', '') }
+          default: { $releasename = $facts['os']['distro']['codename'] }
+        }
+
+        $_repo_location = $repo_location ? {
+          undef   => "http://repo.zabbix.com/zabbix/${zabbix_version}/${operatingsystem}/",
+          default => $repo_location,
+        }
+
+        apt::key { 'zabbix-FBABD5F':
+          id     => 'FBABD5FB20255ECAB22EE194D13D58E479EA5ED4',
+          source => 'https://repo.zabbix.com/zabbix-official-repo.key',
+        }
+        apt::key { 'zabbix-A1848F5':
+          id     => 'A1848F5352D022B9471D83D0082AB56BA14FE591',
+          source => 'https://repo.zabbix.com/zabbix-official-repo.key',
+        }
+
+        # Debian 11 provides Zabbix 5.0 by default. This can cause problems for 4.0 versions
+        $pinpriority = $facts['os']['release']['major'] ? {
+          '11'    => 1000,
+          default => undef,
+        }
+        apt::source { 'zabbix':
+          location => $_repo_location,
+          repos    => 'main',
+          release  => $releasename,
+          pin      => $pinpriority,
+          require  => [
+            Apt_key['zabbix-FBABD5F'],
+            Apt_key['zabbix-A1848F5'],
+          ],
+        }
+
         Apt::Source['zabbix'] -> Package<|tag == 'zabbix'|>
         Class['Apt::Update'] -> Package<|tag == 'zabbix'|>
       }
