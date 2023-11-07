@@ -87,7 +87,7 @@ class zabbix::repo (
           }
         }
 
-        if ($facts['os']['release']['major'] == '7' and versioncmp($zabbix_version, '5.0') >= 0) {
+        if ($facts['os']['release']['major'] == '7') {
           case $facts['os']['name'] {
             'CentOS': {
               $scl_package_name = 'centos-release-scl'

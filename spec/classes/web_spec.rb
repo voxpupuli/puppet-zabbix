@@ -50,7 +50,7 @@ describe 'zabbix::web' do
           it { is_expected.to contain_package('zabbix-required-scl-repo') }                if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
           it { is_expected.to contain_service('rh-php72-php-fpm') }                        if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
           it { is_expected.to contain_file('/etc/opt/rh/rh-php72/php-fpm.d/zabbix.conf') } if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
-          it { is_expected.to contain_file('/etc/zabbix/zabbix.conf.php') }                if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7' && Puppet::Util::Package.versioncmp(zabbix_version, '5.0') >= 0
+          it { is_expected.to contain_file('/etc/zabbix/zabbix.conf.php') }                if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
           it { is_expected.to contain_service('php-fpm') }                                 if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] >= '8'
           it { is_expected.to contain_file('/etc/php-fpm.d/zabbix.conf') }                 if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] >= '8'
         end
@@ -91,8 +91,7 @@ describe 'zabbix::web' do
 
           packages = if facts[:os]['family'] == 'RedHat'
                        if facts[:os]['release']['major'].to_i == 7 &&
-                          !%w[VirtuozzoLinux OracleLinux Scientific].include?(facts[:os]['name']) &&
-                          Puppet::Util::Package.versioncmp(zabbix_version, '5.0') >= 0
+                          !%w[VirtuozzoLinux OracleLinux Scientific].include?(facts[:os]['name'])
                          %w[zabbix-web-pgsql-scl zabbix-web]
                        else
                          %w[zabbix-web-pgsql zabbix-web]
