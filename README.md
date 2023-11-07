@@ -136,9 +136,6 @@ node 'zabbix.example.com' {
   class { 'apache':
     mpm_module => 'prefork',
   }
-  include apache::mod::php
-
-  class { 'postgresql::server': }
 
   class { 'zabbix':
     zabbix_url    => 'zabbix.example.com',
@@ -152,9 +149,6 @@ node 'zabbix.example.com' {
   class { 'apache':
     mpm_module => 'prefork',
   }
-  include apache::mod::php
-
-  class { 'mysql::server': }
 
   class { 'zabbix':
     zabbix_url    => 'zabbix.example.com',
@@ -215,8 +209,6 @@ Like the zabbix-server, the zabbix-proxy can also be used in 2 ways:
 The following is an example for using the PostgreSQL as database:
 ```ruby
 node 'proxy.example.com' {
-  class { 'postgresql::server': }
-
   class { 'zabbix::database':
     database_type => 'postgresql',
   }
@@ -231,8 +223,6 @@ node 'proxy.example.com' {
 When you want to make use of an MySQL database as backend:
 ```ruby
 node 'proxy.example.com' {
-  class { 'mysql::server': }
-
   class { 'zabbix::database':
     database_type => 'mysql',
   }

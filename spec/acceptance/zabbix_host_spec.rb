@@ -30,20 +30,6 @@ describe 'zabbix_host type', unless: default[:platform] =~ %r{archlinux} do
                       end
 
       pp1 = <<-EOS
-        class { 'apache':
-            mpm_module => 'prefork',
-        }
-        if $facts['os']['family'] != 'RedHat' {
-          include apache::mod::php
-        }
-        class { 'postgresql::globals':
-          locale   => 'en_US.UTF-8',
-          manage_package_repo => $facts['os']['release']['major'] != '8',
-          manage_dnf_module => $facts['os']['release']['major'] == '8',
-          version => '13',
-        }
-        -> class { 'postgresql::server': }
-
         class { 'zabbix':
           zabbix_version   => "#{zabbix_version}",
           zabbix_url       => 'localhost',
@@ -51,7 +37,6 @@ describe 'zabbix_host type', unless: default[:platform] =~ %r{archlinux} do
           zabbix_api_pass  => 'zabbix',
           apache_use_ssl   => false,
           manage_resources => true,
-          require          => [ Class['postgresql::server'], Class['apache'], ],
         }
       EOS
 

@@ -7,10 +7,6 @@ describe 'zabbix::database::mysql' do
     'rspec.puppet.com'
   end
 
-  let :pre_condition do
-    "include 'mysql::server'"
-  end
-
   on_supported_os(baseline_os_hash).each do |os, facts|
     next if facts[:os]['name'] == 'windows'
 

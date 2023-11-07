@@ -4936,7 +4936,6 @@ node 'wdpuppet02.dj-wasabi.local' {
   class { 'apache':
       mpm_module => 'prefork',
   }
-  class { 'apache::mod::php': }
   class { 'zabbix::web':
     zabbix_url    => 'zabbix.dj-wasabi.nl',
     zabbix_server => 'wdpuppet03.dj-wasabi.local',
