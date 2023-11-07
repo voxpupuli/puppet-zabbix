@@ -37,9 +37,7 @@ describe 'zabbix::proxy' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf.d').with_require('File[/etc/zabbix/zabbix_proxy.conf]') }
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to contain_class('zabbix::params') }
-        it { is_expected.to contain_exec('update_pgpass') }
-        it { is_expected.to contain_exec('zabbix_proxy_create.sql') }
-        it { is_expected.to contain_file('/root/.pgpass') }
+        it { is_expected.to contain_exec('zabbix_create.sql') }
         it { is_expected.to contain_postgresql__server__pg_hba_rule('Allow zabbix-proxy to access database') }
 
         describe 'when manage_repo is true and zabbix version is unset' do

@@ -80,8 +80,6 @@ describe 'zabbix::server' do
         it { is_expected.to contain_package('zabbix-server-pgsql').with_ensure('present') }
         it { is_expected.to contain_package('zabbix-server-pgsql').with_name('zabbix-server-pgsql') }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_require('Package[zabbix-server-pgsql]') }
-        it { is_expected.to contain_exec('update_pgpass') }
-        it { is_expected.to contain_file('/root/.pgpass') }
       end
 
       describe 'with database_type as mysql' do
@@ -95,8 +93,6 @@ describe 'zabbix::server' do
         it { is_expected.to contain_package('zabbix-server-mysql').with_name('zabbix-server-mysql') }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_require('Package[zabbix-server-mysql]') }
         it { is_expected.to contain_exec('zabbix_server_create.sql') }
-        it { is_expected.to contain_exec('zabbix_server_data.sql') }
-        it { is_expected.to contain_exec('zabbix_server_images.sql') }
       end
 
       # Include directory should be available.

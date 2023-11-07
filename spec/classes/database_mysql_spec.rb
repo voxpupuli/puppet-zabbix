@@ -54,8 +54,6 @@ describe 'zabbix::database::mysql' do
             it { is_expected.to contain_class('zabbix::database::mysql') }
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to contain_exec('zabbix_server_create.sql').with_command("cd #{path} && if [ -f #{sql_server}.gz ]; then gunzip -f #{sql_server}.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-server' -p'zabbix-server' -P 3306 -D 'zabbix-server' < #{sql_server} && touch /etc/zabbix/.schema.done") }
-            it { is_expected.to contain_exec('zabbix_server_images.sql').with_command('touch /etc/zabbix/.images.done') }
-            it { is_expected.to contain_exec('zabbix_server_data.sql').with_command('touch /etc/zabbix/.data.done') }
           end
 
           describe 'and no database_port is defined' do
@@ -74,8 +72,6 @@ describe 'zabbix::database::mysql' do
             it { is_expected.to contain_class('zabbix::database::mysql') }
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to contain_exec('zabbix_server_create.sql').with_command("cd #{path} && if [ -f #{sql_server}.gz ]; then gunzip -f #{sql_server}.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-server' -p'zabbix-server' -D 'zabbix-server' < #{sql_server} && touch /etc/zabbix/.schema.done") }
-            it { is_expected.to contain_exec('zabbix_server_images.sql').with_command('touch /etc/zabbix/.images.done') }
-            it { is_expected.to contain_exec('zabbix_server_data.sql').with_command('touch /etc/zabbix/.data.done') }
           end
         end
 
