@@ -503,9 +503,9 @@ class zabbix::params {
   $additional_service_params = '--foreground'
   $service_type              = 'simple'
 
-  $default_web_config_owner = $facts['os']['name'] ? {
-    /(Ubuntu|Debian)/ => 'www-data',
-    default           => 'apache',
+  $default_web_config_owner = $facts['os']['family'] ? {
+    'Debian' => 'www-data',
+    default  => 'apache',
   }
 
   $_web_config_owner = getvar('::apache::user')
