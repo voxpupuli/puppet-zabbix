@@ -1,8 +1,8 @@
 # @summary This class manages zabbix server parameters
 class zabbix::params {
   # It seems that ubuntu has an different fping path...
-  case $facts['os']['name'] {
-    'Ubuntu', 'Debian' : {
+  case $facts['os']['family'] {
+    'Debian' : {
       $server_fpinglocation     = '/usr/bin/fping'
       $server_fping6location    = '/usr/bin/fping6'
       $proxy_fpinglocation      = '/usr/bin/fping'
