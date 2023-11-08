@@ -1348,7 +1348,6 @@ The following parameters are available in the `zabbix::agent` class:
 * [`manage_resources`](#-zabbix--agent--manage_resources)
 * [`monitored_by_proxy`](#-zabbix--agent--monitored_by_proxy)
 * [`agent_use_ip`](#-zabbix--agent--agent_use_ip)
-* [`zbx_group`](#-zabbix--agent--zbx_group)
 * [`zbx_groups`](#-zabbix--agent--zbx_groups)
 * [`zbx_group_create`](#-zabbix--agent--zbx_group_create)
 * [`zbx_templates`](#-zabbix--agent--zbx_templates)
@@ -1515,14 +1514,6 @@ When true, when creating hosts via the zabbix-api, it will configure that
 connection should me made via ip, not fqdn.
 
 Default value: `$zabbix::params::agent_use_ip`
-
-##### <a name="-zabbix--agent--zbx_group"></a>`zbx_group`
-
-Data type: `Any`
-
-*Deprecated* (see zbx_groups) Name of the hostgroup where this host needs to be added.
-
-Default value: `$zabbix::params::agent_zbx_group`
 
 ##### <a name="-zabbix--agent--zbx_groups"></a>`zbx_groups`
 
@@ -3607,7 +3598,6 @@ The following parameters are available in the `zabbix::resources::agent` class:
 * [`ipaddress`](#-zabbix--resources--agent--ipaddress)
 * [`use_ip`](#-zabbix--resources--agent--use_ip)
 * [`port`](#-zabbix--resources--agent--port)
-* [`group`](#-zabbix--resources--agent--group)
 * [`groups`](#-zabbix--resources--agent--groups)
 * [`group_create`](#-zabbix--resources--agent--group_create)
 * [`templates`](#-zabbix--resources--agent--templates)
@@ -3649,14 +3639,6 @@ Default value: `undef`
 Data type: `Any`
 
 The port that the zabbix agent is listening on.
-
-Default value: `undef`
-
-##### <a name="-zabbix--resources--agent--group"></a>`group`
-
-Data type: `Any`
-
-*Deprecated* (see groups parameter) Name of the hostgroup.
 
 Default value: `undef`
 
@@ -6013,10 +5995,6 @@ Valid values: `present`, `absent`
 The basic property that the resource should be in.
 
 Default value: `present`
-
-##### `group`
-
-Deprecated! Name of the hostgroup.
 
 ##### `groups`
 

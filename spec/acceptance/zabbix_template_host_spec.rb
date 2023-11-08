@@ -38,7 +38,7 @@ describe 'zabbix_template_host type', unless: default[:platform] =~ %r{archlinux
           ipaddress    => '127.0.0.1',
           use_ip       => true,
           port         => 10050,
-          group        => 'TestgroupOne',
+          groups       => ['TestgroupOne'],
           group_create => true,
           templates    => [ "#{template}", ],
         }

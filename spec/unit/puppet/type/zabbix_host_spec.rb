@@ -18,7 +18,6 @@ describe Puppet::Type.type(:zabbix_host) do
 
   describe 'when validating properties' do
     %i[
-      group
       groups
       id
       interfaceid
@@ -74,10 +73,6 @@ describe Puppet::Type.type(:zabbix_host) do
   describe 'properties' do
     describe 'ensure' do
       it_behaves_like 'generic ensurable', :present
-    end
-
-    describe 'group' do
-      it_behaves_like 'validated property', :group, nil, ['group1', 'Group One']
     end
 
     describe 'groups' do
