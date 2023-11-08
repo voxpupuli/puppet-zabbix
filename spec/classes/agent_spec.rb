@@ -17,8 +17,6 @@ describe 'zabbix::agent' do
   on_supported_os(baseline_os_hash).each do |os, facts|
     context "on #{os}" do
       config_path = case facts[:os]['name']
-                    when 'Fedora'
-                      '/etc/zabbix_agentd.conf'
                     when 'windows'
                       'C:/ProgramData/zabbix/zabbix_agentd.conf'
                     else
