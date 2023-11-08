@@ -25,9 +25,6 @@ class zabbix::repo (
       'Amazon': {
         $majorrelease = '6'
       }
-      'oraclelinux': {
-        $majorrelease = $facts['os']['release']['major']
-      }
       default: {
         $majorrelease = $facts['os']['release']['major']
       }
