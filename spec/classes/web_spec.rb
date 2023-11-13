@@ -273,6 +273,16 @@ describe 'zabbix::web' do
             )
           }
         end
+
+        describe 'with custom vhost params' do
+          let :params do
+            super().merge(
+              apache_vhost_custom_params: { mdomain: true }
+            )
+          end
+
+          it { is_expected.to contain_apache__vhost('zabbix.example.com').with_mdomain(true) }
+        end
       end
     end
   end
