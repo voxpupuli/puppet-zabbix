@@ -4984,6 +4984,7 @@ The following parameters are available in the `zabbix::web` class:
 * [`saml_settings`](#-zabbix--web--saml_settings)
 * [`puppetgem`](#-zabbix--web--puppetgem)
 * [`manage_selinux`](#-zabbix--web--manage_selinux)
+* [`apache_vhost_custom_params`](#-zabbix--web--apache_vhost_custom_params)
 
 ##### <a name="-zabbix--web--zabbix_url"></a>`zabbix_url`
 
@@ -5408,6 +5409,14 @@ Data type: `Boolean`
 Whether we should manage SELinux rules.
 
 Default value: `$zabbix::params::manage_selinux`
+
+##### <a name="-zabbix--web--apache_vhost_custom_params"></a>`apache_vhost_custom_params`
+
+Data type: `Hash[String[1], Any]`
+
+Additional parameters to pass to apache::vhost.
+
+Default value: `{}`
 
 ### <a name="zabbix--zabbixapi"></a>`zabbix::zabbixapi`
 

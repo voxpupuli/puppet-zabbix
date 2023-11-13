@@ -77,6 +77,7 @@
 # @param saml_settings A hash of additional SAML SSO settings.
 # @param puppetgem Provider for the zabbixapi gem package.
 # @param manage_selinux Whether we should manage SELinux rules.
+# @param apache_vhost_custom_params Additional parameters to pass to apache::vhost.
 # @example For multiple host setup:
 #   node 'wdpuppet02.dj-wasabi.local' {
 #     class { 'apache':
@@ -143,6 +144,7 @@ class zabbix::web (
   Hash[String[1], Variant[ScalarData, Hash]] $saml_settings           = $zabbix::params::saml_settings,
   $puppetgem                                                          = $zabbix::params::puppetgem,
   Boolean $manage_selinux                                             = $zabbix::params::manage_selinux,
+  Hash[String[1], Any] $apache_vhost_custom_params                    = {},
 ) inherits zabbix::params {
   # check osfamily, Arch is currently not supported for web
   if $facts['os']['family'] in ['Archlinux', 'Gentoo',] {
@@ -417,6 +419,7 @@ class zabbix::web (
       ssl_cipher      => $apache_ssl_cipher,
       ssl_chain       => $apache_ssl_chain,
       require         => Package[$zabbix_web_package],
+      *               => $apache_vhost_custom_params,
     }
   } # END if $manage_vhost
 
