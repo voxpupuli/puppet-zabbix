@@ -63,6 +63,7 @@
 # @param startpollers Number of pre-forked instances of pollers.
 # @param startpreprocessors Number of pre-forked instances of preprocessing workers
 # @param startipmipollers Number of pre-forked instances of ipmi pollers.
+# @param startodbcpollers Number of pre-forked instances of ODBC pollers.
 # @param startpollersunreachable Number of pre-forked instances of pollers for unreachable hosts (including ipmi).
 # @param starttrappers Number of pre-forked instances of trappers.
 # @param startpingers Number of pre-forked instances of icmp pingers.
@@ -237,6 +238,7 @@ class zabbix::proxy (
   $datasenderfrequency                                                        = $zabbix::params::proxy_datasenderfrequency,
   $startpollers                                                               = $zabbix::params::proxy_startpollers,
   $startipmipollers                                                           = $zabbix::params::proxy_startipmipollers,
+  Integer[0, 1000] $startodbcpollers                                          = $zabbix::params::proxy_startodbcpollers,
   $startpollersunreachable                                                    = $zabbix::params::proxy_startpollersunreachable,
   Integer[1, 1000] $startpreprocessors                                        = $zabbix::params::proxy_startpreprocessors,
   $starttrappers                                                              = $zabbix::params::proxy_starttrappers,

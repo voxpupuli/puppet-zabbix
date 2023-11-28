@@ -105,6 +105,7 @@
 # @param startpollers Number of pre-forked instances of pollers.
 # @param startpreprocessors Number of pre-forked instances of preprocessing workers
 # @param startipmipollers Number of pre-forked instances of ipmi pollers.
+# @param startodbcpollers Number of pre-forked instances of ODBC pollers.
 # @param startpollersunreachable Number of pre-forked instances of pollers for unreachable hosts (including ipmi).
 # @param starttrappers Number of pre-forked instances of trappers.
 # @param startpingers Number of pre-forked instances of icmp pingers.
@@ -274,6 +275,7 @@ class zabbix (
   Optional[Stdlib::Absolutepath] $database_tlscafile                          = $zabbix::params::server_database_tlscafile,
   $startpollers                                                               = $zabbix::params::server_startpollers,
   $startipmipollers                                                           = $zabbix::params::server_startipmipollers,
+  Integer[0, 1000] $startodbcpollers                                          = $zabbix::params::server_startodbcpollers,
   $startpollersunreachable                                                    = $zabbix::params::server_startpollersunreachable,
   Integer[1, 1000] $startpreprocessors                                        = $zabbix::params::server_startpreprocessors,
   $starttrappers                                                              = $zabbix::params::server_starttrappers,

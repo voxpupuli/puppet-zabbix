@@ -133,6 +133,17 @@ StartIPMIPollers=<%= @startipmipollers %>
 #
 StartPollersUnreachable=<%= @startpollersunreachable %>
 
+<% if @zabbix_version.to_f >= 6.0 %>
+## Option: StartODBCPollers
+#       Number of pre-forked ODBC poller instances.
+#
+# Mandatory: no
+# Range: 0-1000
+# Default:
+# StartODBCPollers=1
+StartODBCPollers=<%= @startodbcpollers %>
+<% end %>
+
 ### Option: StartTrappers
 #	Number of pre-forked instances of trappers.
 #	Trappers accept incoming connections from Zabbix sender, active agents and active proxies.
