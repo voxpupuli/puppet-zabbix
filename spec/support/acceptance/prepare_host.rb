@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 def prepare_host
-  if fact('os.family') == 'RedHat'
-    shell('yum clean all --verbose; rm -rf /etc/yum.repos.d/Zabbix*.repo')
-  end
+  shell('yum clean all --verbose; rm -rf /etc/yum.repos.d/Zabbix*.repo') if fact('os.family') == 'RedHat'
 
   apply_manifest <<~PUPPET
     $services = $facts['os']['family'] ? {
