@@ -2,7 +2,7 @@
 
 def prepare_host
   if fact('os.family') == 'RedHat'
-    shell('rm -rf /etc/yum.repos.d/Zabbix*.repo; rm -rf /var/cache/yum/x86_64/*/Zabbix*; yum clean all --verbose')
+    shell('yum clean all --verbose; rm -rf /etc/yum.repos.d/Zabbix*.repo')
   end
 
   cleanup_puppet = <<-SHELL
