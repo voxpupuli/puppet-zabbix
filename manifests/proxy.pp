@@ -130,6 +130,7 @@
 # @param fpinglocation Location of fping.
 # @param fping6location Location of fping6.
 # @param sshkeylocation Location of public and private keys for ssh checks and actions.
+# @param statsallowedip list of allowed ipadresses that can access the internal stats of zabbix proxy over network
 # @param sslcalocation_dir Location of certificate authority (CA) files for SSL server certificate verification.
 # @param sslcertlocation_dir Location of SSL client certificate files for client authentication.
 # @param sslkeylocation_dir Location of SSL private key files for client authentication.
@@ -290,6 +291,7 @@ class zabbix::proxy (
   $fpinglocation                                                              = $zabbix::params::proxy_fpinglocation,
   $fping6location                                                             = $zabbix::params::proxy_fping6location,
   $sshkeylocation                                                             = $zabbix::params::proxy_sshkeylocation,
+  Optional[String[1]] $statsallowedip                                         = $zabbix::params::proxy_statsallowedip,
   $logslowqueries                                                             = $zabbix::params::proxy_logslowqueries,
   $tmpdir                                                                     = $zabbix::params::proxy_tmpdir,
   $allowroot                                                                  = $zabbix::params::proxy_allowroot,
