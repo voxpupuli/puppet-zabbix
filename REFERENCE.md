@@ -4027,6 +4027,8 @@ The following parameters are available in the `zabbix::server` class:
 * [`zabbix_user`](#-zabbix--server--zabbix_user)
 * [`manage_startup_script`](#-zabbix--server--manage_startup_script)
 * [`socketdir`](#-zabbix--server--socketdir)
+* [`hanodename`](#-zabbix--server--hanodename)
+* [`nodeaddress`](#-zabbix--server--nodeaddress)
 
 ##### <a name="-zabbix--server--database_type"></a>`database_type`
 
@@ -4913,6 +4915,23 @@ IPC socket directory.
 Directory to store IPC sockets used by internal Zabbix services.
 
 Default value: `$zabbix::params::server_socketdir`
+
+##### <a name="-zabbix--server--hanodename"></a>`hanodename`
+
+Data type: `Optional[String[1]]`
+
+The high availability cluster node name.
+When empty, server is working in standalone mode; a node with empty name is registered with address for the frontend to connect to
+
+Default value: `$zabbix::params::server_hanodename`
+
+##### <a name="-zabbix--server--nodeaddress"></a>`nodeaddress`
+
+Data type: `Optional[String[1]]`
+
+IP or hostname with optional port to specify how frontend should connect to the server.
+
+Default value: `$zabbix::params::server_nodeaddress`
 
 ### <a name="zabbix--userparameter"></a>`zabbix::userparameter`
 
