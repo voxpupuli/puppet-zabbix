@@ -26,8 +26,10 @@ $DB['SCHEMA'] = '';
 $DB['DOUBLE_IEEE754'] = 'true';
 <% end -%>
 
+<% if @zabbix_version.to_f < 6.0 -%>
 $ZBX_SERVER      = '<%= @zabbix_server %>';
 $ZBX_SERVER_PORT = '<%= @zabbix_listenport %>';
+<% end -%>
 $ZBX_SERVER_NAME = '<%= @zabbix_server_name %>';
 
 $IMAGE_FORMAT_DEFAULT = IMAGE_FORMAT_PNG;

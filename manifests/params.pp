@@ -291,6 +291,8 @@ class zabbix::params {
   $server_vmwarefrequency                   = '60'
   $server_vmwaretimeout                     = undef
   $server_socketdir                         = undef
+  $server_hanodename                        = undef
+  $server_nodeaddress                       = undef
 
   # Agent specific params
   $agent_allowroot                          = '0'
@@ -367,6 +369,7 @@ class zabbix::params {
   $proxy_cachesize                          = '32M'
   $proxy_configfile_path                    = '/etc/zabbix/zabbix_proxy.conf'
   $proxy_configfrequency                    = '3600'
+  $proxy_proxyconfigfrequency               = undef
   $proxy_database_host                      = 'localhost'
   $proxy_database_name                      = 'zabbix_proxy'
   $proxy_database_password                  = 'zabbix-proxy'

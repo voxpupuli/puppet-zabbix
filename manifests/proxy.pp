@@ -59,6 +59,7 @@
 # @param offlinebuffer Proxy will keep data for N hours in case if no connectivity with Zabbix Server
 # @param heartbeatfrequency Unique nodeid in distributed setup.
 # @param configfrequency How often proxy retrieves configuration data from Zabbix Server in seconds.
+# @param proxyconfigfrequency How often proxy retrieves configuration data from Zabbix Server in seconds (Zabbix 6.4).
 # @param datasenderfrequency Proxy will send collected data to the Server every N seconds.
 # @param startpollers Number of pre-forked instances of pollers.
 # @param startpreprocessors Number of pre-forked instances of preprocessing workers
@@ -236,6 +237,7 @@ class zabbix::proxy (
   $offlinebuffer                                                              = $zabbix::params::proxy_offlinebuffer,
   $heartbeatfrequency                                                         = $zabbix::params::proxy_heartbeatfrequency,
   $configfrequency                                                            = $zabbix::params::proxy_configfrequency,
+  Optional[Integer[1,604800]] $proxyconfigfrequency                           = $zabbix::params::proxy_proxyconfigfrequency,
   $datasenderfrequency                                                        = $zabbix::params::proxy_datasenderfrequency,
   $startpollers                                                               = $zabbix::params::proxy_startpollers,
   $startipmipollers                                                           = $zabbix::params::proxy_startipmipollers,

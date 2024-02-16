@@ -164,6 +164,7 @@ ProxyLocalBuffer=<%= @localbuffer %>
 #
 ProxyOfflineBuffer=<%= @offlinebuffer %>
 
+<% if @zabbix_version.to_f < 6.4 %>
 ### Option: HeartbeatFrequency
 #	Frequency of heartbeat messages in seconds.
 #	Used for monitoring availability of Proxy on server side.
@@ -177,6 +178,19 @@ HeartbeatFrequency=<%= @heartbeatfrequency %>
 #	For a proxy in the passive mode this parameter will be ignored.
 #
 ConfigFrequency=<%= @configfrequency %>
+<% end %>
+
+<% if @zabbix_version.to_f >= 6.4 %>
+### Option: ProxyConfigFrequency
+#	How often proxy retrieves configuration data from Zabbix Server in seconds.
+#	For a proxy in the passive mode this parameter will be ignored.
+#
+# Mandatory: no
+# Range: 1-3600*24*7
+# Default:
+# ProxyConfigFrequency=10
+<% if @proxyconfigfrequency %>ProxyConfigFrequency=<%= @proxyconfigfrequency %><% end %>
+<% end %>
 
 ### Option: DataSenderFrequency
 #	Proxy will send collected data to the Server every N seconds.

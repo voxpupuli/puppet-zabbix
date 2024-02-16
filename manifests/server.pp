@@ -141,6 +141,8 @@
 # @param zabbix_user User the zabbix service will run as.
 # @param manage_startup_script If the init script should be managed by this module. Attention: This might cause problems with some config options of this module (e.g server_configfile_path)
 # @param socketdir
+# @param hanodename Node name identifier in HA setup
+# @param nodeaddress Connection details to the HA node, used to check if zabbix-web can talk to zabbix server
 #   IPC socket directory.
 #   Directory to store IPC sockets used by internal Zabbix services.
 # @example
@@ -277,6 +279,8 @@ class zabbix::server (
   Boolean $manage_startup_script                                              = $zabbix::params::manage_startup_script,
   Optional[Stdlib::Absolutepath] $socketdir                                   = $zabbix::params::server_socketdir,
   Optional[Stdlib::HTTPUrl] $webserviceurl                                    = undef,
+  Optional[String[1]] $hanodename                                             = $zabbix::params::server_hanodename,
+  Optional[String[1]] $nodeaddress                                            = $zabbix::params::server_nodeaddress,
 ) inherits zabbix::params {
   # zabbix server 5.2, 5.4 and 6.0 is not supported on RHEL 7.
   # https://www.zabbix.com/documentation/current/manual/installation/install_from_packages/rhel_centos
