@@ -3115,7 +3115,7 @@ Data type: `Any`
 
 Zabbix internal stats are exposed to a configurable set of addresses listed in the 'StatsAllowedIP' proxy parameter. Requests will be accepted only from these addresses.
 
-Default value: `$zabbix::params::statsallowedip`
+Default value: `$zabbix::params::proxy_statsallowedip`
 
 ##### <a name="-zabbix--proxy--startvmwarecollectors"></a>`startvmwarecollectors`
 
