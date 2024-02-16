@@ -2559,6 +2559,7 @@ The following parameters are available in the `zabbix::proxy` class:
 * [`javagatewayport`](#-zabbix--proxy--javagatewayport)
 * [`startjavapollers`](#-zabbix--proxy--startjavapollers)
 * [`startvmwarecollectors`](#-zabbix--proxy--startvmwarecollectors)
+* [`statsallowedip`](#-zabbix--proxy--statsallowedip)
 * [`vmwarefrequency`](#-zabbix--proxy--vmwarefrequency)
 * [`vmwareperffrequency`](#-zabbix--proxy--vmwareperffrequency)
 * [`vmwaretimeout`](#-zabbix--proxy--vmwaretimeout)
@@ -3107,6 +3108,14 @@ Data type: `Any`
 Number of pre-forked instances of java pollers.
 
 Default value: `$zabbix::params::proxy_startjavapollers`
+
+##### <a name="-zabbix--proxy--statsallowedip"></a>`statsallowedip`
+
+Data type: `Any`
+
+Zabbix internal stats are exposed to a configurable set of addresses listed in the 'StatsAllowedIP' proxy parameter. Requests will be accepted only from these addresses.
+
+Default value: `$zabbix::params::statsallowedip`
 
 ##### <a name="-zabbix--proxy--startvmwarecollectors"></a>`startvmwarecollectors`
 
