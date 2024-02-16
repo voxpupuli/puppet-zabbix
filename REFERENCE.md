@@ -2545,6 +2545,7 @@ The following parameters are available in the `zabbix::proxy` class:
 * [`offlinebuffer`](#-zabbix--proxy--offlinebuffer)
 * [`heartbeatfrequency`](#-zabbix--proxy--heartbeatfrequency)
 * [`configfrequency`](#-zabbix--proxy--configfrequency)
+* [`proxyconfigfrequency`](#-zabbix--proxy--proxyconfigfrequency)
 * [`datasenderfrequency`](#-zabbix--proxy--datasenderfrequency)
 * [`startpollers`](#-zabbix--proxy--startpollers)
 * [`startpreprocessors`](#-zabbix--proxy--startpreprocessors)
@@ -2559,7 +2560,6 @@ The following parameters are available in the `zabbix::proxy` class:
 * [`javagatewayport`](#-zabbix--proxy--javagatewayport)
 * [`startjavapollers`](#-zabbix--proxy--startjavapollers)
 * [`startvmwarecollectors`](#-zabbix--proxy--startvmwarecollectors)
-* [`statsallowedip`](#-zabbix--proxy--statsallowedip)
 * [`vmwarefrequency`](#-zabbix--proxy--vmwarefrequency)
 * [`vmwareperffrequency`](#-zabbix--proxy--vmwareperffrequency)
 * [`vmwaretimeout`](#-zabbix--proxy--vmwaretimeout)
@@ -2601,6 +2601,7 @@ The following parameters are available in the `zabbix::proxy` class:
 * [`fpinglocation`](#-zabbix--proxy--fpinglocation)
 * [`fping6location`](#-zabbix--proxy--fping6location)
 * [`sshkeylocation`](#-zabbix--proxy--sshkeylocation)
+* [`statsallowedip`](#-zabbix--proxy--statsallowedip)
 * [`sslcalocation_dir`](#-zabbix--proxy--sslcalocation_dir)
 * [`sslcertlocation_dir`](#-zabbix--proxy--sslcertlocation_dir)
 * [`sslkeylocation_dir`](#-zabbix--proxy--sslkeylocation_dir)
@@ -3005,6 +3006,14 @@ How often proxy retrieves configuration data from Zabbix Server in seconds.
 
 Default value: `$zabbix::params::proxy_configfrequency`
 
+##### <a name="-zabbix--proxy--proxyconfigfrequency"></a>`proxyconfigfrequency`
+
+Data type: `Optional[Integer[1,604800]]`
+
+How often proxy retrieves configuration data from Zabbix Server in seconds (Zabbix 6.4).
+
+Default value: `$zabbix::params::proxy_proxyconfigfrequency`
+
 ##### <a name="-zabbix--proxy--datasenderfrequency"></a>`datasenderfrequency`
 
 Data type: `Any`
@@ -3108,14 +3117,6 @@ Data type: `Any`
 Number of pre-forked instances of java pollers.
 
 Default value: `$zabbix::params::proxy_startjavapollers`
-
-##### <a name="-zabbix--proxy--statsallowedip"></a>`statsallowedip`
-
-Data type: `Any`
-
-Zabbix internal stats are exposed to a configurable set of addresses listed in the 'StatsAllowedIP' proxy parameter. Requests will be accepted only from these addresses.
-
-Default value: `$zabbix::params::proxy_statsallowedip`
 
 ##### <a name="-zabbix--proxy--startvmwarecollectors"></a>`startvmwarecollectors`
 
@@ -3460,6 +3461,14 @@ Data type: `Any`
 Location of public and private keys for ssh checks and actions.
 
 Default value: `$zabbix::params::proxy_sshkeylocation`
+
+##### <a name="-zabbix--proxy--statsallowedip"></a>`statsallowedip`
+
+Data type: `Optional[String[1]]`
+
+list of allowed ipadresses that can access the internal stats of zabbix proxy over network
+
+Default value: `$zabbix::params::proxy_statsallowedip`
 
 ##### <a name="-zabbix--proxy--sslcalocation_dir"></a>`sslcalocation_dir`
 
@@ -4018,6 +4027,7 @@ The following parameters are available in the `zabbix::server` class:
 * [`proxydatafrequency`](#-zabbix--server--proxydatafrequency)
 * [`allowroot`](#-zabbix--server--allowroot)
 * [`include_dir`](#-zabbix--server--include_dir)
+* [`statsallowedip`](#-zabbix--server--statsallowedip)
 * [`loadmodulepath`](#-zabbix--server--loadmodulepath)
 * [`loadmodule`](#-zabbix--server--loadmodule)
 * [`sslcertlocation_dir`](#-zabbix--server--sslcertlocation_dir)
@@ -4843,6 +4853,14 @@ You may include individual files or all files in a directory in the configuratio
 
 Default value: `$zabbix::params::server_include`
 
+##### <a name="-zabbix--server--statsallowedip"></a>`statsallowedip`
+
+Data type: `Optional[String[1]]`
+
+list of allowed ipadresses that can access the internal stats of zabbix server over network
+
+Default value: `$zabbix::params::server_statsallowedip`
+
 ##### <a name="-zabbix--server--loadmodulepath"></a>`loadmodulepath`
 
 Data type: `Any`
@@ -4911,8 +4929,7 @@ Default value: `$zabbix::params::manage_startup_script`
 
 Data type: `Optional[Stdlib::Absolutepath]`
 
-IPC socket directory.
-Directory to store IPC sockets used by internal Zabbix services.
+
 
 Default value: `$zabbix::params::server_socketdir`
 
@@ -4920,8 +4937,7 @@ Default value: `$zabbix::params::server_socketdir`
 
 Data type: `Optional[String[1]]`
 
-The high availability cluster node name.
-When empty, server is working in standalone mode; a node with empty name is registered with address for the frontend to connect to
+Node name identifier in HA setup
 
 Default value: `$zabbix::params::server_hanodename`
 
@@ -4929,7 +4945,9 @@ Default value: `$zabbix::params::server_hanodename`
 
 Data type: `Optional[String[1]]`
 
-IP or hostname with optional port to specify how frontend should connect to the server.
+Connection details to the HA node, used to check if zabbix-web can talk to zabbix server
+IPC socket directory.
+Directory to store IPC sockets used by internal Zabbix services.
 
 Default value: `$zabbix::params::server_nodeaddress`
 
