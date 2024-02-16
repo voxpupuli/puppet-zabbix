@@ -195,7 +195,7 @@ describe 'zabbix::web' do
 
         it { is_expected.to contain_apache__vhost('zabbix.example.com').with_name('zabbix.example.com') }
 
-        context 'with database_* settings and version 6.0' do
+        context 'with database_* settings and zabbix_version 6.0' do
           let :params do
             super().merge(
               database_host: 'localhost',
@@ -226,7 +226,7 @@ describe 'zabbix::web' do
               zabbix_server: 'localhost',
               zabbix_listenport: '3306',
               zabbix_server_name: 'localhost',
-              zabbix_version: '6.0'
+              zabbix_version: '5.0'
             )
           end
 
