@@ -216,7 +216,7 @@ describe 'zabbix::web' do
           it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$ZBX_SERVER_NAME = 'localhost'}) }
         end
 
-        context 'with database_* settings and version 5.0' do
+        context 'with database_* settings and zabbix_version 5.0' do
           let :params do
             super().merge(
               database_host: 'localhost',
