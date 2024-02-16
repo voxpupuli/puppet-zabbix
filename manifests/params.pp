@@ -260,6 +260,7 @@ class zabbix::params {
   $server_starttimers                       = '1'
   $server_starttrappers                     = '5'
   $server_startvmwarecollectors             = '0'
+  $server_statsallowedip                    = undef
   $server_timeout                           = '3'
   $server_database_tlsconnect               = undef
   $server_database_tlscafile                = undef
@@ -428,6 +429,7 @@ class zabbix::params {
   $proxy_startpreprocessors                 = 3
   $proxy_starttrappers                      = '5'
   $proxy_startvmwarecollectors              = '0'
+  $proxy_statsallowedip                     = undef
   $proxy_timeout                            = '3'
   $proxy_database_tlsconnect                = undef
   $proxy_database_tlscafile                 = undef
