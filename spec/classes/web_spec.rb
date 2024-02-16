@@ -195,7 +195,28 @@ describe 'zabbix::web' do
 
         it { is_expected.to contain_apache__vhost('zabbix.example.com').with_name('zabbix.example.com') }
 
-        context 'with database_* settings' do
+        context 'with database_* settings and version 6.0' do
+          let :params do
+            super().merge(
+              database_host: 'localhost',
+              database_name: 'zabbix-server',
+              database_user: 'zabbix-server',
+              database_password: 'zabbix-server',
+              zabbix_server: 'localhost',
+              zabbix_listenport: '3306',
+              zabbix_server_name: 'localhost',
+              zabbix_version: '6.0'
+            )
+          end
+
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['SERVER'\]   = 'localhost'}) }
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['DATABASE'\] = 'zabbix-server'}) }
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['USER'\]     = 'zabbix-server'}) }
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['PASSWORD'\] = 'zabbix-server'}) }
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$ZBX_SERVER_NAME = 'localhost'}) }
+        end
+
+        context 'with database_* settings and version 5.0' do
           let :params do
             super().merge(
               database_host: 'localhost',
