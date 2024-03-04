@@ -43,6 +43,8 @@ describe 'zabbix::server class', unless: default[:platform] =~ %r{archlinux} do
     next if zabbix_version >= '5.2' && default[:platform] == 'el-7-x86_64'
     # < 6.0 server packages are not available for RHEL 9
     next if zabbix_version < '6.0' && default[:platform] == 'el-9-x86_64'
+    # <6.0 server packages are not available for ubuntu 22.04
+    next if zabbix_version < '6.0' && default[:platform] =~ %r{ubuntu-22}
 
     context "deploys a zabbix #{zabbix_version} server" do
       # Using puppet_apply as a helper
