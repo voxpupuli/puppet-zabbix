@@ -11,6 +11,8 @@ describe 'zabbix_template_host type', unless: default[:platform] =~ %r{archlinux
     next if zabbix_version >= '5.2' && default[:platform] == 'el-7-x86_64'
     # < 6.0 server packages are not available for RHEL 9
     next if zabbix_version < '6.0' && default[:platform] == 'el-9-x86_64'
+    # <6.0 server packages are not available for ubuntu 22.04
+    next if zabbix_version < '6.0' && default[:platform] =~ %r{ubuntu-22}
 
     context "create zabbix_template_host resources with zabbix version #{zabbix_version}" do
       template = case zabbix_version
