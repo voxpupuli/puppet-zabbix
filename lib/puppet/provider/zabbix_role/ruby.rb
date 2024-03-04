@@ -83,7 +83,7 @@ Puppet::Type.type(:zabbix_role).provide(:ruby, parent: Puppet::Provider::Zabbix)
       end
     end
     # make sure the 'IS' (role[:rules]) is sorted to make comparing easy
-    is_sorted = role[:rules].map { |k, v| v.is_a?(Array) ? [k, v.sort_by { |h| h['name'] }] : [k, v] }.to_h
+    is_sorted = role[:rules].to_h { |k, v| v.is_a?(Array) ? [k, v.sort_by { |h| h['name'] }] : [k, v] }
     # if merged equals is_sorted it means that 'should' is contained in 'in' and no action is needed
     # otherwise the value is either wrong or missing so action is needed
     merged == is_sorted
