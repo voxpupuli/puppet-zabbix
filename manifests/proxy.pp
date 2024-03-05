@@ -59,6 +59,7 @@
 # @param offlinebuffer Proxy will keep data for N hours in case if no connectivity with Zabbix Server
 # @param heartbeatfrequency Unique nodeid in distributed setup.
 # @param configfrequency How often proxy retrieves configuration data from Zabbix Server in seconds.
+# @param proxyconfigfrequency How often proxy retrieves configuration data from Zabbix Server in seconds (Zabbix 6.4).
 # @param datasenderfrequency Proxy will send collected data to the Server every N seconds.
 # @param startpollers Number of pre-forked instances of pollers.
 # @param startpreprocessors Number of pre-forked instances of preprocessing workers
@@ -130,6 +131,7 @@
 # @param fpinglocation Location of fping.
 # @param fping6location Location of fping6.
 # @param sshkeylocation Location of public and private keys for ssh checks and actions.
+# @param statsallowedip list of allowed ipadresses that can access the internal stats of zabbix proxy over network
 # @param sslcalocation_dir Location of certificate authority (CA) files for SSL server certificate verification.
 # @param sslcertlocation_dir Location of SSL client certificate files for client authentication.
 # @param sslkeylocation_dir Location of SSL private key files for client authentication.
@@ -235,6 +237,7 @@ class zabbix::proxy (
   $offlinebuffer                                                              = $zabbix::params::proxy_offlinebuffer,
   $heartbeatfrequency                                                         = $zabbix::params::proxy_heartbeatfrequency,
   $configfrequency                                                            = $zabbix::params::proxy_configfrequency,
+  Optional[Integer[1,604800]] $proxyconfigfrequency                           = $zabbix::params::proxy_proxyconfigfrequency,
   $datasenderfrequency                                                        = $zabbix::params::proxy_datasenderfrequency,
   $startpollers                                                               = $zabbix::params::proxy_startpollers,
   $startipmipollers                                                           = $zabbix::params::proxy_startipmipollers,
@@ -290,6 +293,7 @@ class zabbix::proxy (
   $fpinglocation                                                              = $zabbix::params::proxy_fpinglocation,
   $fping6location                                                             = $zabbix::params::proxy_fping6location,
   $sshkeylocation                                                             = $zabbix::params::proxy_sshkeylocation,
+  Optional[String[1]] $statsallowedip                                         = $zabbix::params::proxy_statsallowedip,
   $logslowqueries                                                             = $zabbix::params::proxy_logslowqueries,
   $tmpdir                                                                     = $zabbix::params::proxy_tmpdir,
   $allowroot                                                                  = $zabbix::params::proxy_allowroot,

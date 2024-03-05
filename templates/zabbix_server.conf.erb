@@ -447,6 +447,20 @@ SSLKeyLocation=<%= @sslkeylocation_dir %>
 #
 <% if @sslcalocation_dir %>SSLCALocation=<%= @sslcalocation_dir %><% end %>
 
+### Option: StatsAllowedIP
+#	List of comma delimited IP addresses, optionally in CIDR notation, or DNS names of external Zabbix instances.
+#	Stats request will be accepted only from the addresses listed here. If this parameter is not set no stats requests
+#	will be accepted.
+#	If IPv6 support is enabled then '127.0.0.1', '::127.0.0.1', '::ffff:127.0.0.1' are treated equally
+#	and '::/0' will allow any IPv4 or IPv6 address.
+#	'0.0.0.0/0' can be used to allow any IPv4 address.
+#	Example: StatsAllowedIP=127.0.0.1,192.168.1.0/24,::1,2001:db8::/32,zabbix.example.com
+#
+# Mandatory: no
+# Default:
+# StatsAllowedIP=
+<% if @statsallowedip %>StatsAllowedIP=<%= @statsallowedip %><% end %>
+
 ####### LOADABLE MODULES #######
 
 ### Option: LoadModulePath
@@ -675,4 +689,30 @@ LoadModulePath=<%= @loadmodulepath %>
 # Default:
 # WebServiceURL=
 <% if @webserviceurl %>WebServiceURL=<%= @webserviceurl -%><% end %>
+<% end %>
+
+<% if @zabbix_version.to_f >= 6.0 %>
+####### High availability cluster parameters #######
+
+## Option: HANodeName
+#	The high availability cluster node name.
+#	When empty, server is working in standalone mode; a node with empty name is registered with address for the frontend to connect to.
+#
+# Mandatory: no
+# Default: 
+# HANodeName=
+<% if @hanodename %>HANodeName=<%= @hanodename -%><% end %>
+
+## Option: NodeAddress
+#	IP or hostname with optional port to specify how frontend should connect to the server.
+#	Format: <address>[:<port>]
+#
+#	If IP or hostname is not set, then ListenIP value will be used. In case ListenIP is not set, localhost will be used.
+#	If port is not set, then ListenPort value will be used. In case ListenPort is not set, 10051 will be used.
+#	This option can be overridden by address specified in frontend configuration.
+#
+# Mandatory: no
+# Default: 
+# NodeAddress=localhost:10051
+<% if @nodeaddress %>NodeAddress=<%= @nodeaddress -%><% end %>
 <% end %>

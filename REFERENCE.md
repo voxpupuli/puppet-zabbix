@@ -2545,6 +2545,7 @@ The following parameters are available in the `zabbix::proxy` class:
 * [`offlinebuffer`](#-zabbix--proxy--offlinebuffer)
 * [`heartbeatfrequency`](#-zabbix--proxy--heartbeatfrequency)
 * [`configfrequency`](#-zabbix--proxy--configfrequency)
+* [`proxyconfigfrequency`](#-zabbix--proxy--proxyconfigfrequency)
 * [`datasenderfrequency`](#-zabbix--proxy--datasenderfrequency)
 * [`startpollers`](#-zabbix--proxy--startpollers)
 * [`startpreprocessors`](#-zabbix--proxy--startpreprocessors)
@@ -2600,6 +2601,7 @@ The following parameters are available in the `zabbix::proxy` class:
 * [`fpinglocation`](#-zabbix--proxy--fpinglocation)
 * [`fping6location`](#-zabbix--proxy--fping6location)
 * [`sshkeylocation`](#-zabbix--proxy--sshkeylocation)
+* [`statsallowedip`](#-zabbix--proxy--statsallowedip)
 * [`sslcalocation_dir`](#-zabbix--proxy--sslcalocation_dir)
 * [`sslcertlocation_dir`](#-zabbix--proxy--sslcertlocation_dir)
 * [`sslkeylocation_dir`](#-zabbix--proxy--sslkeylocation_dir)
@@ -3003,6 +3005,14 @@ Data type: `Any`
 How often proxy retrieves configuration data from Zabbix Server in seconds.
 
 Default value: `$zabbix::params::proxy_configfrequency`
+
+##### <a name="-zabbix--proxy--proxyconfigfrequency"></a>`proxyconfigfrequency`
+
+Data type: `Optional[Integer[1,604800]]`
+
+How often proxy retrieves configuration data from Zabbix Server in seconds (Zabbix 6.4).
+
+Default value: `$zabbix::params::proxy_proxyconfigfrequency`
 
 ##### <a name="-zabbix--proxy--datasenderfrequency"></a>`datasenderfrequency`
 
@@ -3451,6 +3461,14 @@ Data type: `Any`
 Location of public and private keys for ssh checks and actions.
 
 Default value: `$zabbix::params::proxy_sshkeylocation`
+
+##### <a name="-zabbix--proxy--statsallowedip"></a>`statsallowedip`
+
+Data type: `Optional[String[1]]`
+
+list of allowed ipadresses that can access the internal stats of zabbix proxy over network
+
+Default value: `$zabbix::params::proxy_statsallowedip`
 
 ##### <a name="-zabbix--proxy--sslcalocation_dir"></a>`sslcalocation_dir`
 
@@ -4009,6 +4027,7 @@ The following parameters are available in the `zabbix::server` class:
 * [`proxydatafrequency`](#-zabbix--server--proxydatafrequency)
 * [`allowroot`](#-zabbix--server--allowroot)
 * [`include_dir`](#-zabbix--server--include_dir)
+* [`statsallowedip`](#-zabbix--server--statsallowedip)
 * [`loadmodulepath`](#-zabbix--server--loadmodulepath)
 * [`loadmodule`](#-zabbix--server--loadmodule)
 * [`sslcertlocation_dir`](#-zabbix--server--sslcertlocation_dir)
@@ -4018,6 +4037,8 @@ The following parameters are available in the `zabbix::server` class:
 * [`zabbix_user`](#-zabbix--server--zabbix_user)
 * [`manage_startup_script`](#-zabbix--server--manage_startup_script)
 * [`socketdir`](#-zabbix--server--socketdir)
+* [`hanodename`](#-zabbix--server--hanodename)
+* [`nodeaddress`](#-zabbix--server--nodeaddress)
 
 ##### <a name="-zabbix--server--database_type"></a>`database_type`
 
@@ -4832,6 +4853,14 @@ You may include individual files or all files in a directory in the configuratio
 
 Default value: `$zabbix::params::server_include`
 
+##### <a name="-zabbix--server--statsallowedip"></a>`statsallowedip`
+
+Data type: `Optional[String[1]]`
+
+list of allowed ipadresses that can access the internal stats of zabbix server over network
+
+Default value: `$zabbix::params::server_statsallowedip`
+
 ##### <a name="-zabbix--server--loadmodulepath"></a>`loadmodulepath`
 
 Data type: `Any`
@@ -4900,10 +4929,27 @@ Default value: `$zabbix::params::manage_startup_script`
 
 Data type: `Optional[Stdlib::Absolutepath]`
 
+
+
+Default value: `$zabbix::params::server_socketdir`
+
+##### <a name="-zabbix--server--hanodename"></a>`hanodename`
+
+Data type: `Optional[String[1]]`
+
+Node name identifier in HA setup
+
+Default value: `$zabbix::params::server_hanodename`
+
+##### <a name="-zabbix--server--nodeaddress"></a>`nodeaddress`
+
+Data type: `Optional[String[1]]`
+
+Connection details to the HA node, used to check if zabbix-web can talk to zabbix server
 IPC socket directory.
 Directory to store IPC sockets used by internal Zabbix services.
 
-Default value: `$zabbix::params::server_socketdir`
+Default value: `$zabbix::params::server_nodeaddress`
 
 ### <a name="zabbix--userparameter"></a>`zabbix::userparameter`
 

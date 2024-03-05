@@ -260,6 +260,7 @@ class zabbix::params {
   $server_starttimers                       = '1'
   $server_starttrappers                     = '5'
   $server_startvmwarecollectors             = '0'
+  $server_statsallowedip                    = undef
   $server_timeout                           = '3'
   $server_database_tlsconnect               = undef
   $server_database_tlscafile                = undef
@@ -291,6 +292,8 @@ class zabbix::params {
   $server_vmwarefrequency                   = '60'
   $server_vmwaretimeout                     = undef
   $server_socketdir                         = undef
+  $server_hanodename                        = undef
+  $server_nodeaddress                       = undef
 
   # Agent specific params
   $agent_allowroot                          = '0'
@@ -367,6 +370,7 @@ class zabbix::params {
   $proxy_cachesize                          = '32M'
   $proxy_configfile_path                    = '/etc/zabbix/zabbix_proxy.conf'
   $proxy_configfrequency                    = '3600'
+  $proxy_proxyconfigfrequency               = undef
   $proxy_database_host                      = 'localhost'
   $proxy_database_name                      = 'zabbix_proxy'
   $proxy_database_password                  = 'zabbix-proxy'
@@ -425,6 +429,7 @@ class zabbix::params {
   $proxy_startpreprocessors                 = 3
   $proxy_starttrappers                      = '5'
   $proxy_startvmwarecollectors              = '0'
+  $proxy_statsallowedip                     = undef
   $proxy_timeout                            = '3'
   $proxy_database_tlsconnect                = undef
   $proxy_database_tlscafile                 = undef

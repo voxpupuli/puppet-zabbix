@@ -131,6 +131,7 @@
 # @param proxydatafrequency How often zabbix server requests history data from a zabbix proxy in seconds.
 # @param allowroot Allow the server to run as 'root'.
 # @param include_dir You may include individual files or all files in a directory in the configuration file.
+# @param statsallowedip list of allowed ipadresses that can access the internal stats of zabbix server over network
 # @param loadmodulepath Full path to location of server modules.
 # @param loadmodule Module to load at server startup.
 # @param sslcertlocation_dir Location of SSL client certificate files for client authentication.
@@ -140,6 +141,8 @@
 # @param zabbix_user User the zabbix service will run as.
 # @param manage_startup_script If the init script should be managed by this module. Attention: This might cause problems with some config options of this module (e.g server_configfile_path)
 # @param socketdir
+# @param hanodename Node name identifier in HA setup
+# @param nodeaddress Connection details to the HA node, used to check if zabbix-web can talk to zabbix server
 #   IPC socket directory.
 #   Directory to store IPC sockets used by internal Zabbix services.
 # @example
@@ -268,12 +271,15 @@ class zabbix::server (
   $loadmodule                                                                 = $zabbix::params::server_loadmodule,
   $sslcertlocation_dir                                                        = $zabbix::params::server_sslcertlocation,
   $sslkeylocation_dir                                                         = $zabbix::params::server_sslkeylocation,
+  Optional[String[1]] $statsallowedip                                         = $zabbix::params::server_statsallowedip,
   Boolean $manage_selinux                                                     = $zabbix::params::manage_selinux,
   String $additional_service_params                                           = $zabbix::params::additional_service_params,
   Optional[String[1]] $zabbix_user                                            = $zabbix::params::server_zabbix_user,
   Boolean $manage_startup_script                                              = $zabbix::params::manage_startup_script,
   Optional[Stdlib::Absolutepath] $socketdir                                   = $zabbix::params::server_socketdir,
   Optional[Stdlib::HTTPUrl] $webserviceurl                                    = undef,
+  Optional[String[1]] $hanodename                                             = $zabbix::params::server_hanodename,
+  Optional[String[1]] $nodeaddress                                            = $zabbix::params::server_nodeaddress,
 ) inherits zabbix::params {
   # zabbix server 5.2, 5.4 and 6.0 is not supported on RHEL 7.
   # https://www.zabbix.com/documentation/current/manual/installation/install_from_packages/rhel_centos
