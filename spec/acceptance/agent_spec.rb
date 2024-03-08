@@ -7,21 +7,21 @@ supported_versions.each do |version|
   next if version < '6.0' && default[:platform] =~ %r{debian-12}
 
   describe "zabbix::agent class with zabbix_version #{version}" do
+    before(:all) do
+      prepare_host
+    end
+
     context 'With minimal parameter' do
-      it 'works idempotently with no errors' do
-        pp = <<-EOS
-        class { 'zabbix::agent':
-          server               => '192.168.20.11',
-          zabbix_package_state => 'latest',
-          zabbix_version       => '#{version}',
-        }
-        EOS
-
-        prepare_host
-
-        # Run it twice and test for idempotency
-        apply_manifest(pp, catch_failures: true)
-        apply_manifest(pp, catch_changes: true)
+      it_behaves_like 'an idempotent resource' do
+        let(:manifest) do
+          <<-PUPPET
+          class { 'zabbix::agent':
+            server               => '192.168.20.11',
+            zabbix_package_state => 'latest',
+            zabbix_version       => '#{version}',
+          }
+          PUPPET
+        end
       end
 
       # do some basic checks
@@ -40,17 +40,17 @@ supported_versions.each do |version|
     end
 
     context 'With ListenIP set to an IP-Address' do
-      it 'works idempotently with no errors' do
-        pp = <<-EOS
+      it_behaves_like 'an idempotent resource' do
+        let(:manifest) do
+          <<-PUPPET
           class { 'zabbix::agent':
             server               => '192.168.20.11',
             zabbix_package_state => 'latest',
             listenip             => '127.0.0.1',
             zabbix_version       => '#{version}',
           }
-        EOS
-        apply_manifest(pp, catch_failures: true)
-        apply_manifest(pp, catch_changes: true)
+          PUPPET
+        end
       end
 
       describe file('/etc/zabbix/zabbix_agentd.conf') do
@@ -59,36 +59,21 @@ supported_versions.each do |version|
     end
 
     context 'With ListenIP set to lo' do
-      it 'works idempotently with no errors' do
-        pp = <<-EOS
+      it_behaves_like 'an idempotent resource' do
+        let(:manifest) do
+          <<-PUPPET
           class { 'zabbix::agent':
             server               => '192.168.20.11',
             zabbix_package_state => 'latest',
             listenip             => 'lo',
             zabbix_version       => '#{version}',
           }
-        EOS
-        apply_manifest(pp, catch_failures: true)
-        apply_manifest(pp, catch_changes: true)
+          PUPPET
+        end
       end
 
-      context 'With ListenIP set to an IP-Address' do
-        it 'works idempotently with no errors' do
-          pp = <<-EOS
-            class { 'zabbix::agent':
-              server               => '192.168.20.11',
-              zabbix_package_state => 'latest',
-              listenip             => '127.0.0.1',
-              zabbix_version       => '#{version}',
-            }
-          EOS
-          apply_manifest(pp, catch_failures: true)
-          apply_manifest(pp, catch_changes: true)
-        end
-
-        describe file('/etc/zabbix/zabbix_agentd.conf') do
-          its(:content) { is_expected.to match %r{ListenIP=127.0.0.1} }
-        end
+      describe file('/etc/zabbix/zabbix_agentd.conf') do
+        its(:content) { is_expected.to match %r{ListenIP=127.0.0.1} }
       end
     end
   end
