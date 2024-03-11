@@ -11,6 +11,8 @@ describe 'zabbix_hostgroup type', unless: default[:platform] =~ %r{archlinux} do
     next if zabbix_version < '6.0' && default[:platform] == 'el-9-x86_64'
     # <6.0 server packages are not available for ubuntu 22.04
     next if zabbix_version < '6.0' && default[:platform] =~ %r{ubuntu-22}
+    # < 6.0 server packages are not available for Debian 12
+    next if zabbix_version < '6.0' && default[:platform] =~ %r{debian-12}
 
     context "create zabbix_hostgroup resources with zabbix version #{zabbix_version}" do
       # This will deploy a running Zabbix setup (server, web, db) which we can
