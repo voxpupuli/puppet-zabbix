@@ -42,22 +42,20 @@ describe 'zabbix_proxy type', unless: default[:platform] =~ %r{archlinux} do
       end
 
       # setup proxies within zabbix
-      pp2 = <<-EOS
-      zabbix_proxy { 'ZabbixProxy1':
-        mode => 0,
-      }
-      zabbix_proxy { 'ZabbixProxy2':
-        ipaddress => '127.0.0.3',
-        use_ip    => false,
-        mode      => 1,
-        port      => 10055,
-      }
-      EOS
-
-      it 'works idempotently with no errors' do
-        # Run it twice and test for idempotency
-        apply_manifest(pp2, catch_failures: true)
-        apply_manifest(pp2, catch_changes: true)
+      it_behaves_like 'an idempotent resource' do
+        let(:manifest) do
+          <<-PUPPET
+          zabbix_proxy { 'ZabbixProxy1':
+            mode => 0,
+          }
+          zabbix_proxy { 'ZabbixProxy2':
+            ipaddress => '127.0.0.3',
+            use_ip    => false,
+            mode      => 1,
+            port      => 10055,
+          }
+          PUPPET
+        end
       end
 
       let(:result_proxies) do
@@ -104,22 +102,20 @@ describe 'zabbix_proxy type', unless: default[:platform] =~ %r{archlinux} do
 
     context 'update zabbix_proxy resources' do
       # This will update the Zabbix proxies created above by switching their configuration
-      pp_update = <<-EOS
-      zabbix_proxy { 'ZabbixProxy1':
-        ipaddress => '127.0.0.3',
-        use_ip    => false,
-        mode      => 1,
-        port      => 10055,
-      }
-      zabbix_proxy { 'ZabbixProxy2':
-        mode => 0,
-      }
-      EOS
-
-      it 'works idempotently with no errors' do
-        # Run it twice and test for idempotency
-        apply_manifest(pp_update, catch_failures: true)
-        apply_manifest(pp_update, catch_changes: true)
+      it_behaves_like 'an idempotent resource' do
+        let(:manifest) do
+          <<-PUPPET
+          zabbix_proxy { 'ZabbixProxy1':
+            ipaddress => '127.0.0.3',
+            use_ip    => false,
+            mode      => 1,
+            port      => 10055,
+          }
+          zabbix_proxy { 'ZabbixProxy2':
+            mode => 0,
+          }
+          PUPPET
+        end
       end
 
       let(:result_proxies) do
@@ -166,19 +162,17 @@ describe 'zabbix_proxy type', unless: default[:platform] =~ %r{archlinux} do
 
     context 'delete zabbix_proxy resources' do
       # This will delete the Zabbix proxies create above
-      pp_delete = <<-EOS
-      zabbix_proxy { 'ZabbixProxy1':
-        ensure => absent,
-      }
-      zabbix_proxy { 'ZabbixProxy2':
-        ensure => absent,
-      }
-      EOS
-
-      it 'works idempotently with no errors' do
-        # Run it twice and test for idempotency
-        apply_manifest(pp_delete, catch_failures: true)
-        apply_manifest(pp_delete, catch_changes: true)
+      it_behaves_like 'an idempotent resource' do
+        let(:manifest) do
+          <<-PUPPET
+          zabbix_proxy { 'ZabbixProxy1':
+            ensure => absent,
+          }
+          zabbix_proxy { 'ZabbixProxy2':
+            ensure => absent,
+          }
+          PUPPET
+        end
       end
 
       let(:result_proxies) do
