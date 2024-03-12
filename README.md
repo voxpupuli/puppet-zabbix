@@ -22,6 +22,7 @@
 5. [Usage - Configuration options and additional functionality](#usage)
     * [zabbix-server](#usage-zabbix-server)
     * [zabbix-agent](#usage-zabbix-agent)
+    * [zabbix-agent2](#usage-zabbix-agent2)
     * [zabbix-proxy](#usage-zabbix-proxy)
     * [zabbix-javagateway](#usage-zabbix-javagateway)
     * [zabbix-sender](#usage-zabbix-sender)
@@ -197,6 +198,21 @@ class { 'zabbix::agent':
   zabbix_package_state    => present,
   zabbix_package_provider => 'windows',
   zabbix_package_source   => "${tmpdir}/zabbix_agent-windows-amd64-openssl.msi",
+}
+```
+
+### Usage zabbix-agent2
+
+Basic one way of setup, wheter it is monitored by zabbix-server or zabbix-proxy:
+```ruby
+class { 'zabbix::agent':
+  agent_configfile_path => '/etc/zabbix/zabbix_agent2.conf',
+  include_dir           => '/etc/zabbix/zabbix_agent2.d',
+  include_dir_purge     => false,
+  zabbix_package_agent  => 'zabbix-agent2',
+  servicename           => 'zabbix-agent2',
+  manage_startup_script => false,
+  server                => '192.168.20.11',
 }
 ```
 
