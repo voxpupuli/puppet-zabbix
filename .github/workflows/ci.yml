@@ -22,3 +22,4 @@ jobs:
     with:
       pidfile_workaround: 'false'
       beaker_facter: 'zabbix_version:Zabbix:5.0,6.0'
+      beaker_hypervisor: 'vagrant_libvirt'
