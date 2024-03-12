@@ -2,10 +2,7 @@
 
 require 'spec_helper_acceptance'
 
-supported_versions.each do |version|
-  # < 6.0 agent packages are not available for Debian 12
-  next if version < '6.0' && default[:platform] =~ %r{debian-12}
-
+supported_agent_versions(default[:platform]).each do |version|
   describe "zabbix::agent class with zabbix_version #{version}" do
     before(:all) do
       prepare_host

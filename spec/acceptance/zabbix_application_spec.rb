@@ -3,16 +3,10 @@
 require 'spec_helper_acceptance'
 require 'serverspec_type_zabbixapi'
 
-describe 'zabbix_application type', unless: default[:platform] =~ %r{archlinux} do
-  supported_versions.each do |zabbix_version|
+describe 'zabbix_application type' do
+  supported_server_versions(default[:platform]).each do |zabbix_version|
     # Application API was removed in Zabbix 5.4
     next if zabbix_version >= '5.4'
-    # < 6.0 server packages are not available for RHEL 9
-    next if zabbix_version < '6.0' && default[:platform] == 'el-9-x86_64'
-    # <6.0 server packages are not available for ubuntu 22.04
-    next if zabbix_version < '6.0' && default[:platform] =~ %r{ubuntu-22}
-    # < 6.0 server packages are not available for Debian 12
-    next if zabbix_version < '6.0' && default[:platform] =~ %r{debian-12}
 
     template = case zabbix_version
                when '5.0'

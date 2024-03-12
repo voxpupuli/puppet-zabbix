@@ -9,3 +9,17 @@ def supported_versions
   end
   supported_versions
 end
+
+def supported_agent_versions(platform)
+  supported_versions.reject do |version|
+    version < '6.0' && platform.start_with?('debian-12')
+  end
+end
+
+def supported_server_versions(platform)
+  supported_versions.reject do |version|
+    platform.start_with?('archlinux') ||
+      (version >= '5.2' && platform.start_with?('el-7')) ||
+      (version < '6.0' && platform.start_with?('el-9', 'ubuntu-22', 'debian-12'))
+  end
+end

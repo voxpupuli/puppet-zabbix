@@ -37,16 +37,7 @@ describe 'zabbix::server class', unless: default[:platform] =~ %r{archlinux} do
     end
   end
 
-  supported_versions.each do |zabbix_version|
-    # >= 5.2 server packages are not available for RHEL 7
-    next if zabbix_version >= '5.2' && default[:platform] == 'el-7-x86_64'
-    # < 6.0 server packages are not available for RHEL 9
-    next if zabbix_version < '6.0' && default[:platform] == 'el-9-x86_64'
-    # <6.0 server packages are not available for ubuntu 22.04
-    next if zabbix_version < '6.0' && default[:platform] =~ %r{ubuntu-22}
-    # < 6.0 server packages are not available for Debian 12
-    next if zabbix_version < '6.0' && default[:platform] =~ %r{debian-12}
-
+  supported_server_versions(default[:platform]).each do |zabbix_version|
     context "deploys a zabbix #{zabbix_version} server" do
       it_behaves_like 'an idempotent resource' do
         # this is a minimal working example if you've a postgres server
