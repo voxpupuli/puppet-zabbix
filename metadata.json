@@ -1,6 +1,6 @@
 {
   "name": "puppet-zabbix",
-  "version": "9.2.1-rc0",
+  "version": "10.0.0",
   "summary": "Installing and maintaining Zabbix. Will install server, proxy, java-gateway and agent on RedHat/Debian/Ubuntu (Incl. exported resources).",
   "author": "Vox Pupuli",
   "dependencies": [
