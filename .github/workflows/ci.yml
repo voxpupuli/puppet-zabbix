@@ -19,7 +19,8 @@ concurrency:
 jobs:
   puppet:
     name: Puppet
-    uses: voxpupuli/gha-puppet/.github/workflows/beaker.yml@v3
+    uses: evgeni/gha-puppet/.github/workflows/beaker.yml@podman
     with:
       beaker_facter: 'zabbix_version:Zabbix:5.0,6.0,7.0'
+      beaker_hypervisor: 'container_podman'
       unit_runs_on: 'cern-self-hosted'
