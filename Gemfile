@@ -18,6 +18,8 @@ group :development do
 end
 
 group :system_tests do
+  gem 'beaker-hostgenerator', git: 'https://github.com/bastelfreak/beaker-hostgenerator', branch: 'podman'
+  gem 'beaker-docker', git: 'https://github.com/bastelfreak/beaker-docker', branch: 'foo'
   gem 'voxpupuli-acceptance', '~> 3.0',  :require => false
 end
 
