@@ -13,4 +13,5 @@ spec/spec_helper.rb:
   enabled_lint_checks:
     - parameter_documentation
 .github/workflows/ci.yml:
-  beaker_facter: 'zabbix_version:Zabbix:5.0,6.0'
+  with:
+    beaker_facter: 'zabbix_version:Zabbix:5.0,6.0'
