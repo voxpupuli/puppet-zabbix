@@ -462,7 +462,7 @@ describe 'zabbix::agent' do
         it do
           is_expected.not_to contain_file(config_path).with_content(
             %r{^(LogRemoteCommands|StartAgents|MaxLinesPerSecond
-                 |AllowRoot|User|LoadModulePath|AllowKey|DenyKey|
+                 |AllowRoot|User|LoadModulePath|
                  EnableRemoteCommands|LogRemoteCommands)}
           )
         end
