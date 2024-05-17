@@ -1860,7 +1860,7 @@ Default value: `$zabbix::params::agent_timeout`
 
 ##### <a name="-zabbix--agent--tlsaccept"></a>`tlsaccept`
 
-Data type: `Optional[Enum['unencrypted','psk','cert']]`
+Data type: `Optional[Variant[Array[Enum['unencrypted','psk','cert']],Enum['unencrypted','psk','cert']]]`
 
 What incoming connections to accept from Zabbix server. Used for a passive proxy, ignored on an active proxy.
 
@@ -3279,7 +3279,7 @@ Default value: `$zabbix::params::proxy_timeout`
 
 ##### <a name="-zabbix--proxy--tlsaccept"></a>`tlsaccept`
 
-Data type: `Any`
+Data type: `Optional[Variant[Array[Enum['unencrypted','psk','cert']],Enum['unencrypted','psk','cert']]]`
 
 What incoming connections to accept from Zabbix server. Used for a passive proxy, ignored on an active proxy.
 

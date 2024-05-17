@@ -310,7 +310,7 @@ LoadModulePath=<%= @loadmodulepath %>
 # Mandatory: yes, if TLS certificate or PSK parameters are defined (even for 'unencrypted' connection)
 # Default:
 # TLSAccept=unencrypted
-<% if @tlsaccept %>TLSAccept=<%= @tlsaccept %><% end %>
+<% if @tlsaccept %>TLSAccept=<%= [@tlsaccept].flatten.join(',') %><% end %>
 
 ### Option: TLSCAFile
 #	Full pathname of a file containing the top-level CA(s) certificates for

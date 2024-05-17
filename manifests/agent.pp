@@ -203,7 +203,7 @@ class zabbix::agent (
   $userparameter                                       = $zabbix::params::agent_userparameter,
   Optional[String[1]] $loadmodulepath                  = $zabbix::params::agent_loadmodulepath,
   $loadmodule                                          = $zabbix::params::agent_loadmodule,
-  Optional[Enum['unencrypted','psk','cert']] $tlsaccept = $zabbix::params::agent_tlsaccept,
+  Optional[Variant[Array[Enum['unencrypted','psk','cert']],Enum['unencrypted','psk','cert']]] $tlsaccept = $zabbix::params::agent_tlsaccept,
   $tlscafile                                           = $zabbix::params::agent_tlscafile,
   $tlscertfile                                         = $zabbix::params::agent_tlscertfile,
   Optional[String[1]] $tlscertissuer                   = undef,

@@ -352,6 +352,30 @@ describe 'zabbix::agent' do
         end
       end
 
+      context 'tlsaccept with one value array' do
+        if facts[:kernel] == 'Linux'
+          let :params do
+            {
+              tlsaccept: %w[cert]
+            }
+          end
+
+          it { is_expected.to contain_file(config_path).with_content %r{^TLSAccept=cert$} }
+        end
+      end
+
+      context 'tlsaccept with two value array' do
+        if facts[:kernel] == 'Linux'
+          let :params do
+            {
+              tlsaccept: %w[unencrypted cert]
+            }
+          end
+
+          it { is_expected.to contain_file(config_path).with_content %r{^TLSAccept=unencrypted,cert$} }
+        end
+      end
+
       context 'without ListenIP' do
         let :params do
           {

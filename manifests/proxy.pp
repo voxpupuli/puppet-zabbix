@@ -269,7 +269,7 @@ class zabbix::proxy (
   $historyindexcachesize                                                      = $zabbix::params::proxy_historyindexcachesize,
   $historytextcachesize                                                       = $zabbix::params::proxy_historytextcachesize,
   $timeout                                                                    = $zabbix::params::proxy_timeout,
-  $tlsaccept                                                                  = $zabbix::params::proxy_tlsaccept,
+  Optional[Variant[Array[Enum['unencrypted','psk','cert']],Enum['unencrypted','psk','cert']]] $tlsaccept = $zabbix::params::proxy_tlsaccept,
   $tlscafile                                                                  = $zabbix::params::proxy_tlscafile,
   $tlscertfile                                                                = $zabbix::params::proxy_tlscertfile,
   $tlsconnect                                                                 = $zabbix::params::proxy_tlsconnect,
