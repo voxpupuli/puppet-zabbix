@@ -415,6 +415,37 @@ describe 'zabbix::proxy' do
             it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LogFileSize=10$} }
           end
         end
+
+        context 'tlsaccept with one string value' do
+          let :params do
+            {
+              tlsaccept: 'cert'
+            }
+          end
+
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSAccept=cert$} }
+        end
+
+        context 'tlsaccept with one value array' do
+          let :params do
+            {
+              tlsaccept: %w[cert]
+            }
+          end
+
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSAccept=cert$} }
+        end
+
+        context 'tlsaccept with two value array' do
+          let :params do
+            {
+              tlsaccept: %w[unencrypted cert]
+            }
+          end
+
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSAccept=unencrypted,cert$} }
+        end
+
       end
     end
   end
