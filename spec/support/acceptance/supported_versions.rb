@@ -23,3 +23,10 @@ def supported_server_versions(platform)
       (version < '6.0' && platform.start_with?('el-9', 'ubuntu-22', 'debian-12'))
   end
 end
+
+def supported_proxy_versions(platform)
+  supported_versions.reject do |version|
+    platform.start_with?('archlinux', 'el7', 'el8') ||
+      (version < '6.0' && platform.start_with?('el-9', 'debian-12'))
+  end
+end
