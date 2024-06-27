@@ -42,8 +42,7 @@ describe 'zabbix::database::postgresql' do
                  '/usr/share/doc/zabbix-*-pgsql'
                end
 
-        sql_server = case zabbix_version
-                     when '6.0'
+        sql_server = if Puppet::Util::Package.versioncmp(zabbix_version, '6.0') >= 0
                        'server.sql'
                      else
                        'create.sql'

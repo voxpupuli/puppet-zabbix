@@ -8,6 +8,9 @@ case $facts['os']['name'] {
         target => '/bin/mkdir',
       }
     }
+    package { 'gnupg':
+      ensure => present,
+    }
   }
   'Ubuntu': {
     # The Ubuntu 18.04+ docker image has a dpkg config that won't install docs, to keep used space low
