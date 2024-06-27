@@ -116,12 +116,6 @@
       ]
     },
     {
-      "operatingsystem": "XenServer",
-      "operatingsystemrelease": [
-        "6"
-      ]
-    },
-    {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
         "20.04",
