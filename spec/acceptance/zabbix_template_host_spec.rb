@@ -6,7 +6,7 @@ require 'serverspec_type_zabbixapi'
 describe 'zabbix_template_host type' do
   supported_server_versions(default[:platform]).each do |zabbix_version|
     # Zabbix 6.0 removed the ability to attach templates directly to hosts.
-    next if zabbix_version == '6.0'
+    next if zabbix_version >= '6.0'
 
     context "create zabbix_template_host resources with zabbix version #{zabbix_version}" do
       template = case zabbix_version

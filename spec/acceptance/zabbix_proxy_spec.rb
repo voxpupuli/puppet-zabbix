@@ -6,6 +6,9 @@ require 'serverspec_type_zabbixapi'
 # rubocop:disable RSpec/LetBeforeExamples
 describe 'zabbix_proxy type' do
   supported_server_versions(default[:platform]).each do |zabbix_version|
+    # Zabbix 7.0 removed the deprecated params 'user' in favor to 'username'
+    next if zabbix_version >= '7.0'
+
     context "create zabbix_proxy resources with zabbix version #{zabbix_version}" do
       # This will deploy a running Zabbix setup (server, web, db) which we can
       # use for custom type tests

@@ -31,7 +31,10 @@ class zabbix::repo (
     }
     case $facts['os']['family'] {
       'RedHat': {
-        if versioncmp(fact('os.release.major'), '9') >= 0 {
+        if (versioncmp(fact('os.release.major'), '7') >= 0 and $zabbix_version == '7.0') {
+          $gpgkey_zabbix = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-B5333005'
+          $gpgkey_nonsupported = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-B5333005'
+        } elsif versioncmp(fact('os.release.major'), '9') >= 0 {
           $gpgkey_zabbix = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-08EFA7DD'
           $gpgkey_nonsupported = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-08EFA7DD'
         } else {
@@ -139,6 +142,10 @@ class zabbix::repo (
           id     => 'A1848F5352D022B9471D83D0082AB56BA14FE591',
           source => 'https://repo.zabbix.com/zabbix-official-repo.key',
         }
+        apt::key { 'zabbix-4C3D6F2':
+          id     => '4C3D6F2CC75F5146754FC374D913219AB5333005',
+          source => 'https://repo.zabbix.com/zabbix-official-repo.key',
+        }
 
         # Debian 11 provides Zabbix 5.0 by default. This can cause problems for 4.0 versions
         $pinpriority = $facts['os']['release']['major'] ? {
@@ -153,6 +160,7 @@ class zabbix::repo (
           require  => [
             Apt_key['zabbix-FBABD5F'],
             Apt_key['zabbix-A1848F5'],
+            Apt_key['zabbix-4C3D6F2'],
           ],
         }
 
