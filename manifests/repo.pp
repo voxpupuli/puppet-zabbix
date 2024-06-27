@@ -18,19 +18,9 @@ class zabbix::repo (
   String[1]                 $zabbix_version            = $zabbix::params::zabbix_version,
 ) inherits zabbix::params {
   if $manage_repo {
-    case $facts['os']['name'] {
-      'PSBM': {
-        $majorrelease = '6'
-      }
-      'Amazon': {
-        $majorrelease = '6'
-      }
-      default: {
-        $majorrelease = $facts['os']['release']['major']
-      }
-    }
     case $facts['os']['family'] {
       'RedHat': {
+        $majorrelease = $facts['os']['release']['major']
         if (versioncmp(fact('os.release.major'), '7') >= 0 and $zabbix_version == '7.0') {
           $gpgkey_zabbix = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-B5333005'
           $gpgkey_nonsupported = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-B5333005'
