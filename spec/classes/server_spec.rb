@@ -25,7 +25,7 @@ describe 'zabbix::server' do
         it { is_expected.to contain_class('zabbix::repo') }
         it { is_expected.to contain_class('zabbix::params') }
         it { is_expected.to contain_service('zabbix-server').with_ensure('running') }
-        it { is_expected.to contain_zabbix__startup('zabbix-server') }
+        it { is_expected.not_to contain_zabbix__startup('zabbix-server') }
 
         it { is_expected.to contain_apt__source('zabbix') }      if facts[:os]['family'] == 'Debian'
         it { is_expected.to contain_apt__key('zabbix-A1848F5') } if facts[:os]['family'] == 'Debian'
@@ -159,26 +159,26 @@ describe 'zabbix::server' do
         it { is_expected.not_to contain_firewall('151 zabbix-server') }
       end
 
-      context 'it creates a startup script' do
-        case facts[:os]['family']
-        when 'Archlinux', 'Debian', 'Gentoo', 'RedHat'
-          it { is_expected.to contain_file('/etc/init.d/zabbix-server').with_ensure('absent') }
-          it { is_expected.to contain_file('/etc/systemd/system/zabbix-server.service').with_ensure('file') }
-          it { is_expected.to contain_systemd__unit_file('zabbix-server.service') }
-        else
-          it { is_expected.to contain_file('/etc/init.d/zabbix-server').with_ensure('file') }
-          it { is_expected.not_to contain_file('/etc/systemd/system/zabbix-server.service') }
-        end
-      end
-
-      context 'when declaring manage_startup_script is false' do
+      context 'when declaring manage_startup_script is true' do
         let :params do
           {
-            manage_startup_script: false
+            manage_startup_script: true
           }
         end
 
-        it { is_expected.not_to contain_zabbix__startup('zabbix-server') }
+        context 'it creates a startup script' do
+          case facts[:os]['family']
+          when 'Archlinux', 'Debian', 'Gentoo', 'RedHat'
+            it { is_expected.to contain_file('/etc/init.d/zabbix-server').with_ensure('absent') }
+            it { is_expected.to contain_file('/etc/systemd/system/zabbix-server.service').with_ensure('file') }
+            it { is_expected.to contain_systemd__unit_file('zabbix-server.service') }
+          else
+            it { is_expected.to contain_file('/etc/init.d/zabbix-server').with_ensure('file') }
+            it { is_expected.not_to contain_file('/etc/systemd/system/zabbix-server.service') }
+          end
+        end
+
+        it { is_expected.to contain_zabbix__startup('zabbix-server') }
       end
 
       # If manage_service is true (default), it should create a service

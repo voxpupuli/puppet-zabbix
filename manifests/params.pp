@@ -20,6 +20,7 @@ class zabbix::params {
       $server_zabbix_user       = 'zabbix'
       $zabbix_package_provider  = undef
       $agent_loadmodulepath     = '/usr/lib/modules'
+      $manage_startup_script    = false
     }
     'AIX': {
       $manage_repo              = false
@@ -32,6 +33,7 @@ class zabbix::params {
       $agent_config_group       = 'zabbix'
       $agent_pidfile            = '/var/run/zabbix/zabbix_agentd.pid'
       $agent_servicename        = 'zabbix-agent'
+      $manage_startup_script    = true
     }
     'Archlinux': {
       $server_fpinglocation     = '/usr/bin/fping'
@@ -51,6 +53,7 @@ class zabbix::params {
       $server_zabbix_user       = 'zabbix-server'
       $zabbix_package_provider  = undef
       $agent_loadmodulepath     = '/usr/lib/modules'
+      $manage_startup_script    = false
     }
     'FreeBSD': {
       $manage_repo              = false
@@ -66,6 +69,7 @@ class zabbix::params {
       $server_zabbix_user       = 'zabbix'
       $zabbix_package_provider  = undef
       $agent_loadmodulepath     = '/usr/local/lib/zabbix/modules'
+      $manage_startup_script    = false
     }
     'Gentoo': {
       $server_fpinglocation     = '/usr/sbin/fping'
@@ -85,6 +89,7 @@ class zabbix::params {
       $server_zabbix_user       = 'zabbix'
       $zabbix_package_provider  = undef
       $agent_loadmodulepath     = '/usr/lib/modules'
+      $manage_startup_script    = false
     }
     'windows': {
       $manage_repo             = false
@@ -99,6 +104,7 @@ class zabbix::params {
       $agent_servicename       = 'Zabbix Agent'
       $agent_include           = 'C:/ProgramData/zabbix/zabbix_agentd.d'
       $agent_loadmodulepath    = undef
+      $manage_startup_script   = false
     }
     default  : {
       $server_fpinglocation     = '/usr/sbin/fping'
@@ -118,6 +124,7 @@ class zabbix::params {
       $server_zabbix_user       = 'zabbix'
       $zabbix_package_provider  = undef
       $agent_loadmodulepath     = '/usr/lib/modules'
+      $manage_startup_script    = false
     }
   }
 
@@ -127,12 +134,6 @@ class zabbix::params {
     $zabbix_version = '5.0'
   } else {
     $zabbix_version = '6.0'
-  }
-
-  $manage_startup_script = downcase($facts['kernel']) ? {
-    'windows' => false,
-    'FreeBSD' => false,
-    default   => true,
   }
 
   $zabbix_package_state                     = 'present'

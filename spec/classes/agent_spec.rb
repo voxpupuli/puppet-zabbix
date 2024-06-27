@@ -86,11 +86,10 @@ describe 'zabbix::agent' do
             is_expected.to contain_service(service_name).
               with_ensure('running').
               with_enable(true).
-              with_service_provider(facts[:os]['family'] == 'AIX' ? 'init' : nil).
-              that_requires(["Package[#{package_name}]", "Zabbix::Startup[#{service_name}]"])
+              with_service_provider(facts[:os]['family'] == 'AIX' ? 'init' : nil)
           end
 
-          it { is_expected.to contain_zabbix__startup(service_name).that_requires("Package[#{package_name}]") }
+          it { is_expected.not_to contain_zabbix__startup(service_name) }
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to contain_class('zabbix::params') }
         end
@@ -218,29 +217,37 @@ describe 'zabbix::agent' do
         it { is_expected.not_to contain_firewall('150 zabbix-agent from 10.11.12.13') }
       end
 
-      context 'it creates a startup script' do
-        if facts[:kernel] == 'Linux'
-          case facts[:os]['family']
-          when 'Archlinux', 'Debian', 'Gentoo', 'RedHat'
-            it { is_expected.to contain_file("/etc/init.d/#{service_name}").with_ensure('absent') }
-            it { is_expected.to contain_file("/etc/systemd/system/#{service_name}.service").with_ensure('file') }
-          when 'windows'
-            it { is_expected.to contain_exec("install_agent_#{service_name}") }
-          else
-            it { is_expected.to contain_file("/etc/init.d/#{service_name}").with_ensure('file') }
-            it { is_expected.not_to contain_file("/etc/systemd/system/#{service_name}.service") }
-          end
-        end
-      end
-
-      context 'when declaring manage_startup_script is false' do
+      context 'when declaring manage_startup_script is true' do
         let :params do
           {
-            manage_startup_script: false
+            manage_startup_script: true
           }
         end
 
-        it { is_expected.not_to contain_zabbix__startup(service_name) }
+        context 'it creates a startup script' do
+          if facts[:kernel] == 'Linux'
+            case facts[:os]['family']
+            when 'Archlinux', 'Debian', 'Gentoo', 'RedHat'
+              it { is_expected.to contain_file("/etc/init.d/#{service_name}").with_ensure('absent') }
+              it { is_expected.to contain_file("/etc/systemd/system/#{service_name}.service").with_ensure('file') }
+            when 'windows'
+              it { is_expected.to contain_exec("install_agent_#{service_name}") }
+            else
+              it { is_expected.to contain_file("/etc/init.d/#{service_name}").with_ensure('file') }
+              it { is_expected.not_to contain_file("/etc/systemd/system/#{service_name}.service") }
+            end
+          end
+        end
+
+        it do
+          is_expected.to contain_service(service_name).
+            with_ensure('running').
+            with_enable(true).
+            with_service_provider(facts[:os]['family'] == 'AIX' ? 'init' : nil).
+            that_requires(["Package[#{package_name}]", "Zabbix::Startup[#{service_name}]"])
+        end
+
+        it { is_expected.to contain_zabbix__startup(service_name).that_requires("Package[#{package_name}]") }
       end
 
       context 'when declaring zabbix_alias' do
@@ -460,7 +467,7 @@ describe 'zabbix::agent' do
         end
       end
 
-      describe 'with systemd active' do
+      describe 'with systemd active', skip: 'user package provided instead systemd::unit_file ' do
         if facts[:kernel] == 'Linux'
           let :facts do
             super().merge(systemd: true)
