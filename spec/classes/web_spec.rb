@@ -91,7 +91,7 @@ describe 'zabbix::web' do
 
           packages = if facts[:os]['family'] == 'RedHat'
                        if facts[:os]['release']['major'].to_i == 7 &&
-                          !%w[OracleLinux Scientific].include?(facts[:os]['name'])
+                          !%w[OracleLinux].include?(facts[:os]['name'])
                          %w[zabbix-web-pgsql-scl zabbix-web]
                        else
                          %w[zabbix-web-pgsql zabbix-web]
