@@ -15,3 +15,4 @@ spec/spec_helper.rb:
   with:
     beaker_facter: 'zabbix_version:Zabbix:5.0,6.0'
     unit_runs_on: 'cern-self-hosted'
+    acceptance_runs_on: 'ubuntu-2004-m'
