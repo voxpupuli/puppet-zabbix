@@ -20,7 +20,7 @@ def supported_server_versions(platform)
   supported_versions.reject do |version|
     platform.start_with?('archlinux') ||
       (version >= '5.2' && platform.start_with?('el-7')) ||
-      (version < '6.0' && platform.start_with?('el-9', 'ubuntu-22', 'debian-12')) ||
+      (version < '6.0' && platform.start_with?('el-9', 'ubuntu-22', 'ubuntu-24', 'debian-12')) ||
       (version >= '7.0' && platform.start_with?('ubuntu-20', 'debian-11'))
   end
 end
