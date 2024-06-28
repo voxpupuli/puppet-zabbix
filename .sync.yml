@@ -15,3 +15,4 @@ spec/spec_helper.rb:
 .github/workflows/ci.yml:
   with:
     beaker_facter: 'zabbix_version:Zabbix:5.0,6.0'
+    acceptance_runs_on: 'ubuntu-2004-m'
