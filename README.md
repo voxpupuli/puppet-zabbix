@@ -216,6 +216,9 @@ class { 'zabbix::agent':
 }
 ```
 
+***Note***
+`manage_startup_script => false` was mandatory to run agent2 in module version 10.x.x
+
 ### Usage zabbix-proxy
 
 Like the zabbix-server, the zabbix-proxy can also be used in 2 ways:
