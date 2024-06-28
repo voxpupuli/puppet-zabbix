@@ -4,18 +4,18 @@ require 'deep_merge'
 require 'spec_helper'
 
 describe 'zabbix::repo' do
-  on_supported_os(baseline_os_hash).each do |os, facts|
+  on_supported_os.each do |os, facts|
     context "on #{os}" do
       let :facts do
         facts
       end
 
       case facts[:os]['family']
-      when 'Archlinux'
-        next
+      when 'Archlinux', 'FreeBSD', 'Gentoo', 'AIX'
+        # rubocop:disable RSpec/RepeatedExample
+        it { is_expected.to compile.with_all_deps }
       when 'Debian'
 
-        # rubocop:disable RSpec/RepeatedExample
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to contain_class('zabbix::params') }
         it { is_expected.to contain_class('zabbix::repo') }

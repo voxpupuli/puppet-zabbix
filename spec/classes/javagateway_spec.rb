@@ -7,7 +7,7 @@ describe 'zabbix::javagateway' do
     'rspec.puppet.com'
   end
 
-  on_supported_os(baseline_os_hash).each do |os, facts|
+  on_supported_os.each do |os, facts|
     next if facts[:os]['name'] == 'windows'
 
     context "on #{os}" do
@@ -28,7 +28,7 @@ describe 'zabbix::javagateway' do
         it { is_expected.to contain_service('zabbix-java-gateway').with_require(['Package[zabbix-java-gateway]', 'File[/etc/zabbix/zabbix_java_gateway.conf]']) }
 
         it { is_expected.to contain_yumrepo('zabbix-frontend') }          if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
-        it { is_expected.to contain_package('zabbix-required-scl-repo') } if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
+        it { is_expected.to contain_package('zabbix-required-scl-repo') } if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7' && %w[OracleLinux CentOS].include?(facts[:os]['name'])
         it { is_expected.to contain_apt__key('zabbix-A1848F5') }          if facts[:os]['family'] == 'Debian'
         it { is_expected.to contain_apt__key('zabbix-FBABD5F') }          if facts[:os]['family'] == 'Debian'
       end

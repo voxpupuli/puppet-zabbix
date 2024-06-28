@@ -24,5 +24,4 @@ end
 
 require 'support/acceptance/supported_versions'
 
-require 'spec_helper_methods'
 Dir['./spec/support/spec/**/*.rb'].sort.each { |f| require f }

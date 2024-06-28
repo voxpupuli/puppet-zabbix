@@ -8,7 +8,6 @@ spec/spec_helper.rb:
   mock_with: ':mocha'
   spec_overrides:
     - "require 'support/acceptance/supported_versions'"
-    - "require 'spec_helper_methods'"
 .puppet-lint.rc:
   enabled_lint_checks:
     - parameter_documentation

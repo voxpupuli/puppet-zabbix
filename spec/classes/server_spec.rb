@@ -8,8 +8,8 @@ describe 'zabbix::server' do
     'rspec.puppet.com'
   end
 
-  on_supported_os(baseline_os_hash).each do |os, facts|
-    next if facts[:os]['family'] == 'Archlinux' # zabbix server is currently not supported on archlinux
+  on_supported_os.each do |os, facts|
+    next if %w[Archlinux FreeBSD AIX Gentoo].include?(facts[:os]['family']) # zabbix server is currently not supported
     next if facts[:os]['name'] == 'windows'
 
     context "on #{os}" do
@@ -54,7 +54,7 @@ describe 'zabbix::server' do
           it { is_expected.to contain_yumrepo('zabbix') }
 
           it { is_expected.to contain_yumrepo('zabbix-frontend') }          if facts[:os]['release']['major'] == '7'
-          it { is_expected.to contain_package('zabbix-required-scl-repo') } if facts[:os]['release']['major'] == '7'
+          it { is_expected.to contain_package('zabbix-required-scl-repo') } if facts[:os]['release']['major'] == '7' && %w[OracleLinux CentOS].include?(facts[:os]['name'])
         end
       end
 
