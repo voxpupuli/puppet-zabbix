@@ -14,11 +14,13 @@ describe 'zabbix::agent' do
     }
   end
 
-  on_supported_os(baseline_os_hash).each do |os, facts|
+  on_supported_os.each do |os, facts|
     context "on #{os}" do
       config_path = case facts[:os]['name']
                     when 'windows'
                       'C:/ProgramData/zabbix/zabbix_agentd.conf'
+                    when 'FreeBSD'
+                      '/usr/local/etc/zabbix6/zabbix_agentd.conf'
                     else
                       '/etc/zabbix/zabbix_agentd.conf'
                     end
@@ -32,6 +34,8 @@ describe 'zabbix::agent' do
       include_dir = case facts[:os]['name']
                     when 'windows'
                       'C:/ProgramData/zabbix/zabbix_agentd.d'
+                    when 'FreeBSD'
+                      '/usr/local/etc/zabbix6/zabbix_agentd.d'
                     else
                       '/etc/zabbix/zabbix_agentd.d'
                     end
@@ -50,6 +54,9 @@ describe 'zabbix::agent' do
       when 'windows'
         package_name = 'zabbix-agent'
         service_name = 'Zabbix Agent'
+      when 'FreeBSD'
+        package_name = 'zabbix6-agent'
+        service_name = 'zabbix_agentd'
       else
         package_name = 'zabbix-agent'
         service_name = 'zabbix-agent'
@@ -60,7 +67,7 @@ describe 'zabbix::agent' do
       context 'with all defaults' do
         it { is_expected.to contain_selinux__module('zabbix-agent') }            if facts[:os]['family'] == 'RedHat'
         it { is_expected.to contain_yumrepo('zabbix-frontend') }                 if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
-        it { is_expected.to contain_package('zabbix-required-scl-repo') }        if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
+        it { is_expected.to contain_package('zabbix-required-scl-repo') }        if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7' && %w[OracleLinux CentOS].include?(facts[:os]['name'])
         it { is_expected.to contain_apt__key('zabbix-A1848F5') }                 if facts[:os]['family'] == 'Debian'
         it { is_expected.to contain_apt__key('zabbix-FBABD5F') }                 if facts[:os]['family'] == 'Debian'
         it { is_expected.to contain_file(include_dir).with_ensure('directory') }
@@ -75,11 +82,20 @@ describe 'zabbix::agent' do
             )
           end
         else
-          it do
-            is_expected.to contain_package(package_name).
-              with_ensure('present').
-              with_tag('zabbix').
-              that_requires('Class[zabbix::repo]')
+
+          if facts[:os]['family'] == 'Gentoo'
+            it do
+              is_expected.to contain_package(package_name).
+                with_ensure('present').
+                with_tag('zabbix')
+            end
+          else
+            it do
+              is_expected.to contain_package(package_name).
+                with_ensure('present').
+                with_tag('zabbix').
+                that_requires('Class[zabbix::repo]')
+            end
           end
 
           it do
@@ -103,7 +119,7 @@ describe 'zabbix::agent' do
         end
 
         case facts[:os]['family']
-        when 'Archlinux'
+        when %w[Archlinux Gentoo FreeBSD].include?(facts[:os]['family'])
           it { is_expected.not_to compile.with_all_deps }
         when 'Debian'
           # rubocop:disable RSpec/RepeatedExample
@@ -218,6 +234,9 @@ describe 'zabbix::agent' do
       end
 
       context 'when declaring manage_startup_script is true' do
+        next if facts[:os]['family'] == 'FreeBSD'
+        next if facts[:os]['family'] == 'Gentoo'
+
         let :params do
           {
             manage_startup_script: true
@@ -478,6 +497,8 @@ describe 'zabbix::agent' do
       end
 
       context 'when zabbix_package_agent is zabbix-agent2' do
+        next if facts[:os]['family'] == 'Gentoo'
+
         let :params do
           {
             zabbix_package_agent: 'zabbix-agent2', startagents: 1,

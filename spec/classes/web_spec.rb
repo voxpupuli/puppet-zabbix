@@ -24,11 +24,10 @@ describe 'zabbix::web' do
     PUPPET
   end
 
-  on_supported_os(baseline_os_hash).each do |os, facts|
+  on_supported_os.each do |os, facts|
     supported_versions.each do |zabbix_version|
       next if facts[:os]['name'] == 'windows'
-      next if facts[:os]['name'] == 'Archlinux'
-      next if facts[:os]['name'] == 'Gentoo'
+      next if %w[Archlinux Gentoo FreeBSD].include?(facts[:os]['family'])
 
       context "on #{os}" do
         let :facts do
@@ -47,7 +46,7 @@ describe 'zabbix::web' do
           it { is_expected.to contain_yumrepo('zabbix') }                                  if facts[:os]['family'] == 'RedHat'
           it { is_expected.to contain_yumrepo('zabbix-nonsupported') }                     if facts[:os]['family'] == 'RedHat'
           it { is_expected.to contain_yumrepo('zabbix-frontend') }                         if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
-          it { is_expected.to contain_package('zabbix-required-scl-repo') }                if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
+          it { is_expected.to contain_package('zabbix-required-scl-repo') }                if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7' && %w[OracleLinux CentOS].include?(facts[:os]['name'])
           it { is_expected.to contain_service('rh-php72-php-fpm') }                        if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
           it { is_expected.to contain_file('/etc/opt/rh/rh-php72/php-fpm.d/zabbix.conf') } if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
           it { is_expected.to contain_file('/etc/zabbix/zabbix.conf.php') }                if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
@@ -90,8 +89,7 @@ describe 'zabbix::web' do
           pgsqlpackage = 'php-pgsql'
 
           packages = if facts[:os]['family'] == 'RedHat'
-                       if facts[:os]['release']['major'].to_i == 7 &&
-                          !%w[OracleLinux].include?(facts[:os]['name'])
+                       if facts[:os]['release']['major'].to_i == 7
                          %w[zabbix-web-pgsql-scl zabbix-web]
                        else
                          %w[zabbix-web-pgsql zabbix-web]
