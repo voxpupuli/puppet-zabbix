@@ -15,11 +15,7 @@ describe 'zabbix::sender' do
         facts
       end
 
-      zabbix_version = if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
-                         '5.0'
-                       else
-                         '6.0'
-                       end
+      zabbix_version = '6.0'
 
       context 'with all defaults' do
         it { is_expected.to contain_class('zabbix::sender') }
@@ -48,9 +44,6 @@ describe 'zabbix::sender' do
         when 'RedHat'
           it { is_expected.to contain_yumrepo('zabbix-nonsupported') }
           it { is_expected.to contain_yumrepo('zabbix') }
-
-          it { is_expected.to contain_yumrepo('zabbix-frontend') }          if facts[:os]['release']['major'] == '7'
-          it { is_expected.to contain_package('zabbix-required-scl-repo') } if facts[:os]['release']['major'] == '7' && %w[OracleLinux CentOS].include?(facts[:os]['name'])
         when 'Debian'
           it { is_expected.to contain_apt__source('zabbix') }
           it { is_expected.to contain_apt__key('zabbix-A1848F5') }

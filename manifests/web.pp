@@ -210,24 +210,6 @@ class zabbix::web (
         ],
       }
     }
-    'RedHat': {
-      $zabbix_web_package = 'zabbix-web'
-      if ($facts['os']['release']['major'] == '7') {
-        package { "zabbix-web-${db}-scl":
-          ensure  => $zabbix_package_state,
-          before  => Package[$zabbix_web_package],
-          require => Class['zabbix::repo'],
-          tag     => 'zabbix',
-        }
-      } else {
-        package { "zabbix-web-${db}":
-          ensure  => $zabbix_package_state,
-          before  => Package[$zabbix_web_package],
-          require => Class['zabbix::repo'],
-          tag     => 'zabbix',
-        }
-      }
-    }
     default: {
       $zabbix_web_package = 'zabbix-web'
 
@@ -279,26 +261,18 @@ class zabbix::web (
     include apache
     include apache::mod::dir
     if $facts['os']['family'] == 'RedHat' {
-      if $facts['os']['release']['major'] == '7' {
-        $fpm_service = 'rh-php72-php-fpm'
-        # PHP parameters are moved to /etc/opt/rh/rh-php72/php-fpm.d/zabbix.conf per package zabbix-web-deps-scl
-        $fpm_scl_prefix = '/opt/rh/rh-php72'
-      } else {
-        $fpm_service = 'php-fpm'
-        $fpm_scl_prefix = ''
-      }
       include apache::mod::proxy
       include apache::mod::proxy_fcgi
       $apache_vhost_custom_fragment = ''
 
-      service { $fpm_service:
+      service { 'php-fpm':
         ensure => 'running',
         enable => true,
       }
 
-      file { "/etc${fpm_scl_prefix}/php-fpm.d/zabbix.conf":
+      file { '/etc/php-fpm.d/zabbix.conf':
         ensure  => file,
-        notify  => Service[$fpm_service],
+        notify  => Service['php-fpm'],
         content => epp('zabbix/web/php-fpm.d.zabbix.conf.epp'),
       }
 
@@ -311,7 +285,7 @@ class zabbix::web (
               'php',
               'phar',
             ],
-            handler => "proxy:unix:/var${fpm_scl_prefix}/run/php-fpm/zabbix.sock|fcgi://localhost",
+            handler => 'proxy:unix:/var/run/php-fpm/zabbix.sock|fcgi://localhost',
           },
         ],
       }
