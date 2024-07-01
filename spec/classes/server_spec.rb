@@ -15,11 +15,7 @@ describe 'zabbix::server' do
     context "on #{os}" do
       let(:facts) { facts }
 
-      zabbix_version = if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
-                         '5.0'
-                       else
-                         '6.0'
-                       end
+      zabbix_version = '6.0'
 
       describe 'with default settings' do
         it { is_expected.to contain_class('zabbix::repo') }
@@ -52,9 +48,6 @@ describe 'zabbix::server' do
         describe 'with defaults' do
           it { is_expected.to contain_yumrepo('zabbix-nonsupported') }
           it { is_expected.to contain_yumrepo('zabbix') }
-
-          it { is_expected.to contain_yumrepo('zabbix-frontend') }          if facts[:os]['release']['major'] == '7'
-          it { is_expected.to contain_package('zabbix-required-scl-repo') } if facts[:os]['release']['major'] == '7' && %w[OracleLinux CentOS].include?(facts[:os]['name'])
         end
       end
 
@@ -274,7 +267,7 @@ describe 'zabbix::server' do
             valuecachesize: '4M',
             vmwarecachesize: '8M',
             vmwarefrequency: '60',
-            zabbix_version: '5.0',
+            zabbix_version: '6.0',
             tlsciphercert: 'EECDH+aRSA+AES128:RSA+aRSA+AES128',
             tlsciphercert13: 'EECDH+aRSA+AES128:RSA+aRSA+AES128',
             tlscipherpsk: 'kECDHEPSK+AES128:kPSK+AES128',
@@ -360,6 +353,8 @@ describe 'zabbix::server' do
       end
 
       context 'with zabbix_server.conf and version 5.0' do
+        next if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '9'
+
         let :params do
           {
             socketdir: '/var/run/zabbix',

@@ -45,13 +45,8 @@ describe 'zabbix::web' do
           it { is_expected.to contain_apt__source('zabbix') }                              if facts[:os]['family'] == 'Debian'
           it { is_expected.to contain_yumrepo('zabbix') }                                  if facts[:os]['family'] == 'RedHat'
           it { is_expected.to contain_yumrepo('zabbix-nonsupported') }                     if facts[:os]['family'] == 'RedHat'
-          it { is_expected.to contain_yumrepo('zabbix-frontend') }                         if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
-          it { is_expected.to contain_package('zabbix-required-scl-repo') }                if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7' && %w[OracleLinux CentOS].include?(facts[:os]['name'])
-          it { is_expected.to contain_service('rh-php72-php-fpm') }                        if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
-          it { is_expected.to contain_file('/etc/opt/rh/rh-php72/php-fpm.d/zabbix.conf') } if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
-          it { is_expected.to contain_file('/etc/zabbix/zabbix.conf.php') }                if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
-          it { is_expected.to contain_service('php-fpm') }                                 if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] >= '8'
-          it { is_expected.to contain_file('/etc/php-fpm.d/zabbix.conf') }                 if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] >= '8'
+          it { is_expected.to contain_service('php-fpm') }                                 if facts[:os]['family'] == 'RedHat'
+          it { is_expected.to contain_file('/etc/php-fpm.d/zabbix.conf') }                 if facts[:os]['family'] == 'RedHat'
         end
 
         describe 'with enforcing selinux' do
@@ -86,32 +81,19 @@ describe 'zabbix::web' do
             super().merge(zabbix_version: zabbix_version)
           end
 
-          pgsqlpackage = 'php-pgsql'
-
-          packages = if facts[:os]['family'] == 'RedHat'
-                       if facts[:os]['release']['major'].to_i == 7
-                         %w[zabbix-web-pgsql-scl zabbix-web]
-                       else
-                         %w[zabbix-web-pgsql zabbix-web]
-                       end
-                     else
-                       ['zabbix-frontend-php', pgsqlpackage]
-                     end
-
+          packages = facts[:os]['family'] == 'RedHat' ? %w[zabbix-web zabbix-web-pgsql] : %w[zabbix-frontend-php php-pgsql]
           packages.each do |package|
             it { is_expected.to contain_package(package) }
           end
           it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['TYPE'\]     = 'POSTGRESQL'}) }
         end
 
-        describe 'with database_type as mysql', if: facts[:os]['release']['major'] != '7' && facts[:os]['family'] != 'RedHat' do
+        describe 'with database_type as mysql' do
           let :params do
             super().merge(database_type: 'mysql')
           end
 
-          mysqlpackage = 'php-mysql'
-
-          packages = facts[:os]['family'] == 'RedHat' ? %w[zabbix-web-mysql zabbix-web] : ['zabbix-frontend-php', mysqlpackage]
+          packages = facts[:os]['family'] == 'RedHat' ? %w[zabbix-web-mysql zabbix-web] : %w[zabbix-frontend-php php-mysql]
           packages.each do |package|
             it { is_expected.to contain_package(package) }
           end

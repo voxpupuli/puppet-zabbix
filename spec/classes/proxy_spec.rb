@@ -21,11 +21,7 @@ describe 'zabbix::proxy' do
         }
       end
 
-      zabbix_version = if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
-                         '5.0'
-                       else
-                         '6.0'
-                       end
+      zabbix_version = '6.0'
 
       it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf.d').with_ensure('directory') }
       it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf.d').with_require('File[/etc/zabbix/zabbix_proxy.conf]') }
