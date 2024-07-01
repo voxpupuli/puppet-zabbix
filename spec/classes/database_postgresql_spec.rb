@@ -28,15 +28,7 @@ describe 'zabbix::database::postgresql' do
       end
 
       supported_versions.each do |zabbix_version|
-        path = if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
-                 # Path on EL7
-                 if Puppet::Util::Package.versioncmp(zabbix_version, '6.0') >= 0
-                   '/usr/share/zabbix-sql-scripts/postgresql/'
-                 else
-                   "/usr/share/doc/zabbix-*-pgsql-#{zabbix_version}*/"
-                 end
-               # Path on Debian and EL8
-               elsif Puppet::Util::Package.versioncmp(zabbix_version, '6.0') >= 0
+        path = if Puppet::Util::Package.versioncmp(zabbix_version, '6.0') >= 0
                  '/usr/share/zabbix-sql-scripts/postgresql/'
                else
                  '/usr/share/doc/zabbix-*-pgsql'

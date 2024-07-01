@@ -21,9 +21,13 @@ class zabbix::repo (
     case $facts['os']['family'] {
       'RedHat': {
         $majorrelease = $facts['os']['release']['major']
-        if (versioncmp(fact('os.release.major'), '7') >= 0 and $zabbix_version == '7.0') {
+        if versioncmp($zabbix_version, '7.0') >= 0 {
           $gpgkey_zabbix = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-B5333005'
-          $gpgkey_nonsupported = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-B5333005'
+          if versioncmp(fact('os.release.major'), '9') >= 0 {
+            $gpgkey_nonsupported = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-08EFA7DD'
+          } else {
+            $gpgkey_nonsupported = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-B5333005'
+          }
         } elsif versioncmp(fact('os.release.major'), '9') >= 0 {
           $gpgkey_zabbix = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-08EFA7DD'
           $gpgkey_nonsupported = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-08EFA7DD'
@@ -58,43 +62,6 @@ class zabbix::repo (
           gpgcheck => '1',
           gpgkey   => $gpgkey_nonsupported,
           priority => '1',
-        }
-
-        # Zabbix 5.0 frontend on EL7 has different location.
-        if ($majorrelease == '7' and $zabbix_version == '5.0') {
-          $_frontend_repo_location = $frontend_repo_location ? {
-            undef   => "https://repo.zabbix.com/zabbix/${zabbix_version}/rhel/${majorrelease}/\$basearch/frontend",
-            default => $frontend_repo_location,
-          }
-
-          yumrepo { 'zabbix-frontend':
-            name     => "Zabbix_frontend_${majorrelease}_${facts['os']['architecture']}",
-            descr    => "Zabbix_frontend_${majorrelease}_${facts['os']['architecture']}",
-            baseurl  => $_frontend_repo_location,
-            gpgcheck => '1',
-            gpgkey   => $gpgkey_zabbix,
-            priority => '1',
-          }
-        }
-
-        if ($facts['os']['release']['major'] == '7') {
-          case $facts['os']['name'] {
-            'CentOS': {
-              $scl_package_name = 'centos-release-scl'
-            }
-            'OracleLinux': {
-              $scl_package_name = 'oracle-softwarecollection-release-el7'
-            }
-            default: {
-              $scl_package_name = undef
-            }
-          }
-          if $scl_package_name {
-            package { 'zabbix-required-scl-repo':
-              ensure => 'latest',
-              name   => $scl_package_name,
-            }
-          }
         }
       }
       'Debian': {

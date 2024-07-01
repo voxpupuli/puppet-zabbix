@@ -21,18 +21,3 @@ case $facts['os']['name'] {
   }
   default: {}
 }
-
-case $facts['os']['family'] {
-  'RedHat': {
-    if $facts['os']['release']['major'] == '7' {
-      # The CentOS docker image has a yum config that won't install docs, to keep used space low
-      # zabbix packages their SQL file as doc, we need that for bootstrapping the database
-      augeas { 'remove tsflags=nodocs from yum.conf':
-        changes => [
-          'rm /files/etc/yum.conf/main/tsflags',
-        ],
-      }
-    }
-  }
-  default: {}
-}
