@@ -4044,6 +4044,7 @@ The following parameters are available in the `zabbix::server` class:
 * [`statsallowedip`](#-zabbix--server--statsallowedip)
 * [`loadmodulepath`](#-zabbix--server--loadmodulepath)
 * [`loadmodule`](#-zabbix--server--loadmodule)
+* [`sslcalocation_dir`](#-zabbix--server--sslcalocation_dir)
 * [`sslcertlocation_dir`](#-zabbix--server--sslcertlocation_dir)
 * [`sslkeylocation_dir`](#-zabbix--server--sslkeylocation_dir)
 * [`manage_selinux`](#-zabbix--server--manage_selinux)
@@ -4053,7 +4054,6 @@ The following parameters are available in the `zabbix::server` class:
 * [`socketdir`](#-zabbix--server--socketdir)
 * [`hanodename`](#-zabbix--server--hanodename)
 * [`nodeaddress`](#-zabbix--server--nodeaddress)
-* [`sslcalocation_dir`](#-zabbix--server--sslcalocation_dir)
 
 ##### <a name="-zabbix--server--database_type"></a>`database_type`
 
@@ -4901,6 +4901,14 @@ Module to load at server startup.
 
 Default value: `$zabbix::params::server_loadmodule`
 
+##### <a name="-zabbix--server--sslcalocation_dir"></a>`sslcalocation_dir`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+Location of certificate authority (CA) files for SSL server certificate verification.
+
+Default value: `$zabbix::params::server_sslcalocation`
+
 ##### <a name="-zabbix--server--sslcertlocation_dir"></a>`sslcertlocation_dir`
 
 Data type: `Optional[Stdlib::Absolutepath]`
@@ -4974,14 +4982,6 @@ IPC socket directory.
 Directory to store IPC sockets used by internal Zabbix services.
 
 Default value: `$zabbix::params::server_nodeaddress`
-
-##### <a name="-zabbix--server--sslcalocation_dir"></a>`sslcalocation_dir`
-
-Data type: `Optional[Stdlib::Absolutepath]`
-
-
-
-Default value: `$zabbix::params::server_sslcalocation`
 
 ### <a name="zabbix--userparameter"></a>`zabbix::userparameter`
 
