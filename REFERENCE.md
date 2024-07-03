@@ -539,7 +539,7 @@ Default value: `$zabbix::params::server_api_user`
 
 ##### <a name="-zabbix--zabbix_api_pass"></a>`zabbix_api_pass`
 
-Data type: `Any`
+Data type: `Optional[Variant[String[1], Sensitive[String[1]]]]`
 
 Password of the user which connects to the api. Default: zabbix
 
@@ -653,7 +653,7 @@ Default value: `$zabbix::params::server_database_user`
 
 ##### <a name="-zabbix--database_password"></a>`database_password`
 
-Data type: `Any`
+Data type: `Optional[Variant[String[1], Sensitive[String[1]]]]`
 
 Database password. ignored for sqlite.
 
@@ -2290,7 +2290,7 @@ Default value: `$zabbix::params::server_database_user`
 
 ##### <a name="-zabbix--database--database_password"></a>`database_password`
 
-Data type: `Any`
+Data type: `Optional[Variant[String[1], Sensitive[String[1]]]]`
 
 The password of the database_user.
 
@@ -2898,7 +2898,7 @@ Default value: `$zabbix::params::proxy_database_user`
 
 ##### <a name="-zabbix--proxy--database_password"></a>`database_password`
 
-Data type: `Any`
+Data type: `Optional[Variant[String[1], Sensitive[String[1]]]]`
 
 Database password. ignored for sqlite.
 
@@ -3860,7 +3860,7 @@ API username.
 
 ##### <a name="-zabbix--resources--web--zabbix_pass"></a>`zabbix_pass`
 
-Data type: `String[1]`
+Data type: `Variant[String[1], Sensitive[String[1]]]`
 
 API password.
 
@@ -3996,6 +3996,7 @@ The following parameters are available in the `zabbix::server` class:
 * [`startreportwriters`](#-zabbix--server--startreportwriters)
 * [`webserviceurl`](#-zabbix--server--webserviceurl)
 * [`vmwarefrequency`](#-zabbix--server--vmwarefrequency)
+* [`vmwareperffrequency`](#-zabbix--server--vmwareperffrequency)
 * [`vaultdbpath`](#-zabbix--server--vaultdbpath)
 * [`vaulttoken`](#-zabbix--server--vaulttoken)
 * [`vaulturl`](#-zabbix--server--vaulturl)
@@ -4052,6 +4053,7 @@ The following parameters are available in the `zabbix::server` class:
 * [`socketdir`](#-zabbix--server--socketdir)
 * [`hanodename`](#-zabbix--server--hanodename)
 * [`nodeaddress`](#-zabbix--server--nodeaddress)
+* [`sslcalocation_dir`](#-zabbix--server--sslcalocation_dir)
 
 ##### <a name="-zabbix--server--database_type"></a>`database_type`
 
@@ -4269,7 +4271,7 @@ Default value: `$zabbix::params::server_database_user`
 
 ##### <a name="-zabbix--server--database_password"></a>`database_password`
 
-Data type: `Any`
+Data type: `Optional[Variant[String[1], Sensitive[String[1]]]]`
 
 Database password. ignored for sqlite.
 
@@ -4501,6 +4503,15 @@ Data type: `Any`
 How often zabbix will connect to vmware service to obtain a new datan.
 
 Default value: `$zabbix::params::server_vmwarefrequency`
+
+##### <a name="-zabbix--server--vmwareperffrequency"></a>`vmwareperffrequency`
+
+Data type: `Any`
+
+Delay in seconds between performance counter statistics retrieval from a single VMware service.
+This delay should be set to the least update interval of any VMware monitoring item that uses VMware performance counters.
+
+Default value: `$zabbix::params::server_vmwareperffrequency`
 
 ##### <a name="-zabbix--server--vaultdbpath"></a>`vaultdbpath`
 
@@ -4892,7 +4903,7 @@ Default value: `$zabbix::params::server_loadmodule`
 
 ##### <a name="-zabbix--server--sslcertlocation_dir"></a>`sslcertlocation_dir`
 
-Data type: `Any`
+Data type: `Optional[Stdlib::Absolutepath]`
 
 Location of SSL client certificate files for client authentication.
 
@@ -4900,7 +4911,7 @@ Default value: `$zabbix::params::server_sslcertlocation`
 
 ##### <a name="-zabbix--server--sslkeylocation_dir"></a>`sslkeylocation_dir`
 
-Data type: `Any`
+Data type: `Optional[Stdlib::Absolutepath]`
 
 Location of SSL private key files for client authentication.
 
@@ -4963,6 +4974,14 @@ IPC socket directory.
 Directory to store IPC sockets used by internal Zabbix services.
 
 Default value: `$zabbix::params::server_nodeaddress`
+
+##### <a name="-zabbix--server--sslcalocation_dir"></a>`sslcalocation_dir`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+
+
+Default value: `$zabbix::params::server_sslcalocation`
 
 ### <a name="zabbix--userparameter"></a>`zabbix::userparameter`
 
@@ -5312,7 +5331,7 @@ Default value: `$zabbix::params::server_database_user`
 
 ##### <a name="-zabbix--web--database_password"></a>`database_password`
 
-Data type: `Any`
+Data type: `Optional[Variant[String[1], Sensitive[String[1]]]]`
 
 Database password. ignored for sqlite.
 
