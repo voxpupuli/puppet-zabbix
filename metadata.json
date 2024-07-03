@@ -1,40 +1,40 @@
 {
   "name": "puppet-zabbix",
-  "version": "9.2.1-rc0",
+  "version": "10.0.1-rc0",
   "summary": "Installing and maintaining Zabbix. Will install server, proxy, java-gateway and agent on RedHat/Debian/Ubuntu (Incl. exported resources).",
   "author": "Vox Pupuli",
   "dependencies": [
     {
       "name": "puppetlabs/postgresql",
-      "version_requirement": ">= 6.4.0 < 9.0.0"
+      "version_requirement": ">= 6.4.0 < 11.0.0"
     },
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.25.0 < 9.0.0"
+      "version_requirement": ">= 4.25.0 < 10.0.0"
     },
     {
       "name": "puppetlabs/mysql",
-      "version_requirement": ">= 3.5.0 < 13.0.0"
+      "version_requirement": ">= 6.0.0 < 16.0.0"
     },
     {
       "name": "puppetlabs/apache",
-      "version_requirement": ">= 9.0.0 < 10.0.0"
+      "version_requirement": ">= 9.0.0 < 13.0.0"
     },
     {
       "name": "puppetlabs/firewall",
-      "version_requirement": ">= 1.7.0 < 4.0.0"
+      "version_requirement": ">= 7.0.0 < 9.0.0"
     },
     {
       "name": "puppetlabs/apt",
-      "version_requirement": ">= 2.1.0 < 9.0.0"
+      "version_requirement": ">= 2.1.0 < 10.0.0"
     },
     {
       "name": "puppet/systemd",
-      "version_requirement": ">= 3.1.0 < 5.0.0"
+      "version_requirement": ">= 3.1.0 < 8.0.0"
     },
     {
       "name": "puppet/selinux",
-      "version_requirement": ">= 1.1.0 < 4.0.0"
+      "version_requirement": ">= 1.1.0 < 5.0.0"
     }
   ],
   "source": "https://github.com/voxpupuli/puppet-zabbix.git",
@@ -52,7 +52,7 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 7.0.0 < 8.0.0"
+      "version_requirement": ">= 7.0.0 < 9.0.0"
     }
   ],
   "operatingsystem_support": [
@@ -60,68 +60,51 @@
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
         "7",
-        "8"
-      ]
-    },
-    {
-      "operatingsystem": "Amazon",
-      "operatingsystemrelease": [
-        "7",
-        "8"
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
         "7",
-        "8"
-      ]
-    },
-    {
-      "operatingsystem": "Scientific",
-      "operatingsystemrelease": [
-        "7",
-        "8"
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
         "7",
-        "8"
+        "9"
       ]
     },
     {
-      "operatingsystem": "CloudLinux",
+      "operatingsystem": "AlmaLinux",
       "operatingsystemrelease": [
-        "7",
-        "8"
+        "8",
+        "9"
       ]
     },
     {
-      "operatingsystem": "XenServer",
+      "operatingsystem": "Rocky",
       "operatingsystemrelease": [
-        "6"
+        "8",
+        "9"
       ]
     },
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "18.04",
-        "20.04"
+        "20.04",
+        "22.04"
       ]
     },
     {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
-        "10",
-        "11"
-      ]
-    },
-    {
-      "operatingsystem": "VirtuozzoLinux",
-      "operatingsystemrelease": [
-        "7"
+        "11",
+        "12"
       ]
     },
     {
@@ -140,8 +123,6 @@
     {
       "operatingsystem": "windows",
       "operatingsystemrelease": [
-        "2012",
-        "2012 R2",
         "2016",
         "2019"
       ]
@@ -150,6 +131,12 @@
       "operatingsystem": "AIX",
       "operatingsystemrelease": [
         "7"
+      ]
+    },
+    {
+      "operatingsystem": "FreeBSD",
+      "operatingsystemrelease": [
+        "13"
       ]
     }
   ]

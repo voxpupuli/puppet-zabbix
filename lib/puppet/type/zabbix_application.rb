@@ -1,18 +1,19 @@
 # frozen_string_literal: true
 
 Puppet::Type.newtype(:zabbix_application) do
-  @doc = %q(Manage zabbix applications
+  @doc = <<-DOC
+    Manage zabbix applications
 
+    Example:
       zabbix_application{"app1":
         ensure   => present,
         template => 'template1',
       }
-
-  It Raise exception on deleting an application which is a part of used template.
-
-  )
+    It Raise exception on deleting an application which is a part of used template.
+  DOC
 
   ensurable do
+    desc 'The basic property that the resource should be in.'
     defaultvalues
     defaultto :present
   end

@@ -7,13 +7,19 @@ describe 'zabbix::sender' do
     'agent.example.com'
   end
 
-  on_supported_os(baseline_os_hash).each do |os, facts|
+  on_supported_os.each do |os, facts|
     next if facts[:os]['name'] == 'windows'
 
     context "on #{os}" do
       let :facts do
         facts
       end
+
+      zabbix_version = if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
+                         '5.0'
+                       else
+                         '6.0'
+                       end
 
       context 'with all defaults' do
         it { is_expected.to contain_class('zabbix::sender') }
@@ -31,10 +37,10 @@ describe 'zabbix::sender' do
           }
         end
 
-        if %w[Archlinux Gentoo].include?(facts[:osfamily])
+        if %w[Archlinux Gentoo FreeBSD].include?(facts[:os]['family'])
           it { is_expected.not_to compile.with_all_deps }
         else
-          it { is_expected.to contain_class('zabbix::repo').with_zabbix_version('5.0') }
+          it { is_expected.to contain_class('zabbix::repo').with_zabbix_version(zabbix_version) }
           it { is_expected.to contain_package('zabbix-sender').with_require('Class[Zabbix::Repo]') }
         end
 
@@ -42,6 +48,9 @@ describe 'zabbix::sender' do
         when 'RedHat'
           it { is_expected.to contain_yumrepo('zabbix-nonsupported') }
           it { is_expected.to contain_yumrepo('zabbix') }
+
+          it { is_expected.to contain_yumrepo('zabbix-frontend') }          if facts[:os]['release']['major'] == '7'
+          it { is_expected.to contain_package('zabbix-required-scl-repo') } if facts[:os]['release']['major'] == '7' && %w[OracleLinux CentOS].include?(facts[:os]['name'])
         when 'Debian'
           it { is_expected.to contain_apt__source('zabbix') }
           it { is_expected.to contain_apt__key('zabbix-A1848F5') }

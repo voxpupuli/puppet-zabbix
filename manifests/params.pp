@@ -1,8 +1,8 @@
 # @summary This class manages zabbix server parameters
 class zabbix::params {
   # It seems that ubuntu has an different fping path...
-  case $facts['os']['name'] {
-    'Ubuntu', 'Debian' : {
+  case $facts['os']['family'] {
+    'Debian' : {
       $server_fpinglocation     = '/usr/bin/fping'
       $server_fping6location    = '/usr/bin/fping6'
       $proxy_fpinglocation      = '/usr/bin/fping'
@@ -20,6 +20,7 @@ class zabbix::params {
       $server_zabbix_user       = 'zabbix'
       $zabbix_package_provider  = undef
       $agent_loadmodulepath     = '/usr/lib/modules'
+      $manage_startup_script    = false
     }
     'AIX': {
       $manage_repo              = false
@@ -32,6 +33,7 @@ class zabbix::params {
       $agent_config_group       = 'zabbix'
       $agent_pidfile            = '/var/run/zabbix/zabbix_agentd.pid'
       $agent_servicename        = 'zabbix-agent'
+      $manage_startup_script    = true
     }
     'Archlinux': {
       $server_fpinglocation     = '/usr/bin/fping'
@@ -51,25 +53,23 @@ class zabbix::params {
       $server_zabbix_user       = 'zabbix-server'
       $zabbix_package_provider  = undef
       $agent_loadmodulepath     = '/usr/lib/modules'
+      $manage_startup_script    = false
     }
-    'Fedora': {
-      $server_fpinglocation     = '/usr/sbin/fping'
-      $server_fping6location    = '/usr/sbin/fping6'
-      $proxy_fpinglocation      = '/usr/sbin/fping'
-      $proxy_fping6location     = '/usr/sbin/fping6'
+    'FreeBSD': {
       $manage_repo              = false
       $manage_choco             = false
-      $zabbix_package_agent     = 'zabbix-agent'
-      $agent_configfile_path    = '/etc/zabbix_agentd.conf'
+      $zabbix_package_agent     = 'zabbix6-agent'
+      $agent_configfile_path    = '/usr/local/etc/zabbix6/zabbix_agentd.conf'
       $agent_config_owner       = 'zabbix'
       $agent_zabbix_user        = 'zabbix'
       $agent_config_group       = 'zabbix'
       $agent_pidfile            = '/var/run/zabbix/zabbix_agentd.pid'
-      $agent_servicename        = 'zabbix-agent'
-      $agent_include            = '/etc/zabbix/zabbix_agentd.d'
+      $agent_servicename        = 'zabbix_agentd'
+      $agent_include            = '/usr/local/etc/zabbix6/zabbix_agentd.d'
       $server_zabbix_user       = 'zabbix'
       $zabbix_package_provider  = undef
-      $agent_loadmodulepath     = '/usr/lib/modules'
+      $agent_loadmodulepath     = '/usr/local/lib/zabbix/modules'
+      $manage_startup_script    = false
     }
     'Gentoo': {
       $server_fpinglocation     = '/usr/sbin/fping'
@@ -89,6 +89,7 @@ class zabbix::params {
       $server_zabbix_user       = 'zabbix'
       $zabbix_package_provider  = undef
       $agent_loadmodulepath     = '/usr/lib/modules'
+      $manage_startup_script    = false
     }
     'windows': {
       $manage_repo             = false
@@ -103,6 +104,7 @@ class zabbix::params {
       $agent_servicename       = 'Zabbix Agent'
       $agent_include           = 'C:/ProgramData/zabbix/zabbix_agentd.d'
       $agent_loadmodulepath    = undef
+      $manage_startup_script   = false
     }
     default  : {
       $server_fpinglocation     = '/usr/sbin/fping'
@@ -122,18 +124,16 @@ class zabbix::params {
       $server_zabbix_user       = 'zabbix'
       $zabbix_package_provider  = undef
       $agent_loadmodulepath     = '/usr/lib/modules'
+      $manage_startup_script    = false
     }
   }
 
   if downcase($facts['kernel']) == 'windows' {
     $zabbix_version = '4.4.5'
-  } else {
+  } elsif $facts['os']['family'] == 'RedHat' and $facts['os']['release']['major'] == '7' {
     $zabbix_version = '5.0'
-  }
-
-  $manage_startup_script = downcase($facts['kernel']) ? {
-    'windows' => false,
-    default   => true,
+  } else {
+    $zabbix_version = '6.0'
   }
 
   $zabbix_package_state                     = 'present'
@@ -194,7 +194,7 @@ class zabbix::params {
   # Zabbix-server
   $server_alertscriptspath                  = '/etc/zabbix/alertscripts'
   $server_allowroot                         = '0'
-  $server_cachesize                         = '8M'
+  $server_cachesize                         = '32M'
   $server_cacheupdatefrequency              = '60'
   $server_config_group                      = 'zabbix'
   $server_config_owner                      = 'zabbix'
@@ -252,6 +252,7 @@ class zabbix::params {
   $server_startipmipollers                  = '0'
   $server_startjavapollers                  = '5'
   $server_startlldprocessors                = 2
+  $server_startodbcpollers                  = 1
   $server_startpingers                      = '1'
   $server_startpollers                      = '5'
   $server_startpollersunreachable           = '1'
@@ -261,6 +262,7 @@ class zabbix::params {
   $server_starttimers                       = '1'
   $server_starttrappers                     = '5'
   $server_startvmwarecollectors             = '0'
+  $server_statsallowedip                    = undef
   $server_timeout                           = '3'
   $server_database_tlsconnect               = undef
   $server_database_tlscafile                = undef
@@ -290,8 +292,11 @@ class zabbix::params {
   $server_vaulturl                          = 'https://127.0.0.1:8200'
   $server_vmwarecachesize                   = '8M'
   $server_vmwarefrequency                   = '60'
+  $server_vmwareperffrequency               = undef
   $server_vmwaretimeout                     = undef
   $server_socketdir                         = undef
+  $server_hanodename                        = undef
+  $server_nodeaddress                       = undef
 
   # Agent specific params
   $agent_allowroot                          = '0'
@@ -341,7 +346,6 @@ class zabbix::params {
   $agent_use_ip                             = true
   $agent_userparameter                      = undef
   $agent_zabbix_alias                       = undef
-  $agent_zbx_group                          = 'Linux servers'
   $agent_zbx_groups                         = ['Linux servers',]
   $agent_zbx_group_create                   = true
   $agent_zbx_templates                      = ['Template OS Linux', 'Template App SSH Service']
@@ -366,9 +370,10 @@ class zabbix::params {
 
   # Proxy specific params
   $proxy_allowroot                          = '0'
-  $proxy_cachesize                          = '8M'
+  $proxy_cachesize                          = '32M'
   $proxy_configfile_path                    = '/etc/zabbix/zabbix_proxy.conf'
   $proxy_configfrequency                    = '3600'
+  $proxy_proxyconfigfrequency               = undef
   $proxy_database_host                      = 'localhost'
   $proxy_database_name                      = 'zabbix_proxy'
   $proxy_database_password                  = Sensitive('zabbix-proxy')
@@ -421,11 +426,13 @@ class zabbix::params {
   $proxy_startipmipollers                   = '0'
   $proxy_startjavapollers                   = '5'
   $proxy_startpingers                       = '1'
+  $proxy_startodbcpollers                   = 1
   $proxy_startpollers                       = '5'
   $proxy_startpollersunreachable            = '1'
   $proxy_startpreprocessors                 = 3
   $proxy_starttrappers                      = '5'
   $proxy_startvmwarecollectors              = '0'
+  $proxy_statsallowedip                     = undef
   $proxy_timeout                            = '3'
   $proxy_database_tlsconnect                = undef
   $proxy_database_tlscafile                 = undef
@@ -460,19 +467,17 @@ class zabbix::params {
   $proxy_vaulturl                           = 'https://127.0.0.1:8200'
   $proxy_vmwarecachesize                    = '8M'
   $proxy_vmwarefrequency                    = '60'
+  $proxy_vmwareperffrequency                = undef
   $proxy_vmwaretimeout                      = undef
   $proxy_zabbix_server_host                 = undef
   $proxy_zabbix_server_port                 = '10051'
   $proxy_zbx_templates                      = ['Template App Zabbix Proxy']
-  $proxy_socketdir                          = versioncmp($zabbix_version, '5.0') ? {
-    -1      => undef,
-    default => '/var/run/zabbix',
-  }
+  $proxy_socketdir                          = '/var/run/zabbix'
 
   # Java Gateway specific params
   $javagateway_listenip                     = '0.0.0.0'
   $javagateway_listenport                   = '10052'
-  $javagateway_pidfile                      = '/var/run/zabbix/zabbix_java.pid'
+  $javagateway_pidfile                      = undef
   $javagateway_startpollers                 = '5'
   $javagateway_timeout                      = '3'
 
@@ -488,9 +493,9 @@ class zabbix::params {
   $additional_service_params = '--foreground'
   $service_type              = 'simple'
 
-  $default_web_config_owner = $facts['os']['name'] ? {
-    /(Ubuntu|Debian)/ => 'www-data',
-    default           => 'apache',
+  $default_web_config_owner = $facts['os']['family'] ? {
+    'Debian' => 'www-data',
+    default  => 'apache',
   }
 
   $_web_config_owner = getvar('::apache::user')

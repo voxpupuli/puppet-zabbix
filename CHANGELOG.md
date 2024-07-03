@@ -4,7 +4,97 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
-## [v9.2.0](https://github.com/voxpupuli/puppet-zabbix/tree/v9.2.0) (2022-06-03)
+## [v10.0.0](https://github.com/voxpupuli/puppet-zabbix/tree/v10.0.0) (2024-03-14)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v9.2.0...v10.0.0)
+
+**Breaking changes:**
+
+- drop last bits of Fedora support [\#912](https://github.com/voxpupuli/puppet-zabbix/pull/912) ([evgeni](https://github.com/evgeni))
+- Remove deprecated zabbix\_host.group, zabbix::agent::zbx\_group, zabbix::resources::agent::group parameters [\#909](https://github.com/voxpupuli/puppet-zabbix/pull/909) ([evgeni](https://github.com/evgeni))
+- drop naizvoru.com arm repo for Debian [\#907](https://github.com/voxpupuli/puppet-zabbix/pull/907) ([evgeni](https://github.com/evgeni))
+- puppetlabs/firewall: Require 7.x [\#898](https://github.com/voxpupuli/puppet-zabbix/pull/898) ([evgeni](https://github.com/evgeni))
+- increase default CacheSize to 32M, the default in 6.0  [\#895](https://github.com/voxpupuli/puppet-zabbix/pull/895) ([evgeni](https://github.com/evgeni))
+- install Zabbix 6.0 by default everywhere but EL7 [\#894](https://github.com/voxpupuli/puppet-zabbix/pull/894) ([evgeni](https://github.com/evgeni))
+- Drop support for Zabbix 4.0 [\#891](https://github.com/voxpupuli/puppet-zabbix/pull/891) ([evgeni](https://github.com/evgeni))
+- Drop support for Windows 2012 and 2012 R2 [\#889](https://github.com/voxpupuli/puppet-zabbix/pull/889) ([evgeni](https://github.com/evgeni))
+- Drop Debian 10 and Ubuntu 18.04 support [\#888](https://github.com/voxpupuli/puppet-zabbix/pull/888) ([evgeni](https://github.com/evgeni))
+- Drop support for Zabbix 5.2 and 5.4 which are EOL upstream [\#886](https://github.com/voxpupuli/puppet-zabbix/pull/886) ([evgeni](https://github.com/evgeni))
+- Remove check for Apache 2.4/2.2, require puppetlabs/apache 9.x [\#859](https://github.com/voxpupuli/puppet-zabbix/pull/859) ([JoshuaSmeda](https://github.com/JoshuaSmeda))
+- Drop support for Puppet 6 [\#841](https://github.com/voxpupuli/puppet-zabbix/pull/841) ([smortex](https://github.com/smortex))
+- Drop EoL Debian 9 support [\#837](https://github.com/voxpupuli/puppet-zabbix/pull/837) ([bastelfreak](https://github.com/bastelfreak))
+- puppetlabs/apache: Require 8.x; switch apache ports from string to int [\#835](https://github.com/voxpupuli/puppet-zabbix/pull/835) ([bdeferme](https://github.com/bdeferme))
+- Drop EoL Ubuntu 16.04 [\#833](https://github.com/voxpupuli/puppet-zabbix/pull/833) ([root-expert](https://github.com/root-expert))
+
+**Implemented enhancements:**
+
+- Add Ubuntu 22.04 support [\#925](https://github.com/voxpupuli/puppet-zabbix/issues/925)
+- Centralize the logic which server/agent versions are supported [\#932](https://github.com/voxpupuli/puppet-zabbix/pull/932) ([ekohl](https://github.com/ekohl))
+- Use shared example for indempotent resource [\#931](https://github.com/voxpupuli/puppet-zabbix/pull/931) ([Valantin](https://github.com/Valantin))
+- Bootstrap agent2 support [\#929](https://github.com/voxpupuli/puppet-zabbix/pull/929) ([Valantin](https://github.com/Valantin))
+- Add Debian 12 OS support [\#927](https://github.com/voxpupuli/puppet-zabbix/pull/927) ([Valantin](https://github.com/Valantin))
+- Add Ubuntu 22.04 support [\#926](https://github.com/voxpupuli/puppet-zabbix/pull/926) ([Valantin](https://github.com/Valantin))
+- Allow puppetlabs/postgresql 10, puppetlabs/apache 12 [\#924](https://github.com/voxpupuli/puppet-zabbix/pull/924) ([Valantin](https://github.com/Valantin))
+- Add and remove Zabbix 6.0 + 6.4 options \(HA mode, StatsAllowedIP, ProxyConfigFrequency, HeartbeatFrequency\) [\#921](https://github.com/voxpupuli/puppet-zabbix/pull/921) ([geirra](https://github.com/geirra))
+- Reduce the size of prepare\_host in acceptance tests [\#917](https://github.com/voxpupuli/puppet-zabbix/pull/917) ([ekohl](https://github.com/ekohl))
+- allow specifying custom parameters to apache::vhost [\#915](https://github.com/voxpupuli/puppet-zabbix/pull/915) ([evgeni](https://github.com/evgeni))
+- use os.family fact to detect params [\#913](https://github.com/voxpupuli/puppet-zabbix/pull/913) ([evgeni](https://github.com/evgeni))
+- don't specialcase oracle in the repo config [\#911](https://github.com/voxpupuli/puppet-zabbix/pull/911) ([evgeni](https://github.com/evgeni))
+- add support for arm64 Debian and Ubuntu repos [\#908](https://github.com/voxpupuli/puppet-zabbix/pull/908) ([evgeni](https://github.com/evgeni))
+- remove old version comparison guards for Zabbix pre 5.0 [\#906](https://github.com/voxpupuli/puppet-zabbix/pull/906) ([evgeni](https://github.com/evgeni))
+- Better Hiera compatibility [\#905](https://github.com/voxpupuli/puppet-zabbix/pull/905) ([ekohl](https://github.com/ekohl))
+- Clean up PostgreSQL DB creation logic [\#904](https://github.com/voxpupuli/puppet-zabbix/pull/904) ([ekohl](https://github.com/ekohl))
+- move zabbixapi gem installation into own class [\#903](https://github.com/voxpupuli/puppet-zabbix/pull/903) ([evgeni](https://github.com/evgeni))
+- add support for AlmaLinux and Rocky 8 and 9 [\#897](https://github.com/voxpupuli/puppet-zabbix/pull/897) ([evgeni](https://github.com/evgeni))
+- execute zabbix::proxy tests everywhere [\#896](https://github.com/voxpupuli/puppet-zabbix/pull/896) ([evgeni](https://github.com/evgeni))
+- add EL9 support [\#893](https://github.com/voxpupuli/puppet-zabbix/pull/893) ([evgeni](https://github.com/evgeni))
+- don't call puppet multiple times in prepare host for acceptance [\#892](https://github.com/voxpupuli/puppet-zabbix/pull/892) ([evgeni](https://github.com/evgeni))
+- Add support for ODBC pollers in Zabbix \>= 6.0 [\#881](https://github.com/voxpupuli/puppet-zabbix/pull/881) ([fraenki](https://github.com/fraenki))
+- Replace deprecated use of mysql\_password [\#880](https://github.com/voxpupuli/puppet-zabbix/pull/880) ([DJClean](https://github.com/DJClean))
+- Add Puppet 8 support [\#879](https://github.com/voxpupuli/puppet-zabbix/pull/879) ([bastelfreak](https://github.com/bastelfreak))
+- Allow puppetlabs/stdlib 9.x, puppetlabs/postgresql 9.x, puppetlabs/mysql 15.x, pyppetlabs/apache 11.x, puppetlabs/apt 9.x, puppet/systemd 6.x, puppet/selinux 4.x [\#878](https://github.com/voxpupuli/puppet-zabbix/pull/878) ([bastelfreak](https://github.com/bastelfreak))
+- Use structured $facts hash syntax in spec tests [\#872](https://github.com/voxpupuli/puppet-zabbix/pull/872) ([Phil-Friderici](https://github.com/Phil-Friderici))
+- Add unit tests to reach 100% resource coverage [\#871](https://github.com/voxpupuli/puppet-zabbix/pull/871) ([Phil-Friderici](https://github.com/Phil-Friderici))
+- Add support for FreeBSD only for Zabbix Agent [\#867](https://github.com/voxpupuli/puppet-zabbix/pull/867) ([gizmo15](https://github.com/gizmo15))
+- bump puppet/systemd to \< 5.0.0 [\#863](https://github.com/voxpupuli/puppet-zabbix/pull/863) ([jhoblitt](https://github.com/jhoblitt))
+- Add option to restrict API access to specific hosts [\#856](https://github.com/voxpupuli/puppet-zabbix/pull/856) ([teluq-pbrideau](https://github.com/teluq-pbrideau))
+- Add/rename Linux SNMP templates for Zabbix 6.0+ [\#855](https://github.com/voxpupuli/puppet-zabbix/pull/855) ([teluq-pbrideau](https://github.com/teluq-pbrideau))
+- Add path for Zabbix 6.0 database schema [\#850](https://github.com/voxpupuli/puppet-zabbix/pull/850) ([teluq-pbrideau](https://github.com/teluq-pbrideau))
+- Allow latest version of the PostgreSQL module [\#849](https://github.com/voxpupuli/puppet-zabbix/pull/849) ([teluq-pbrideau](https://github.com/teluq-pbrideau))
+- Certificate authentication in zabbix\_host resource [\#848](https://github.com/voxpupuli/puppet-zabbix/pull/848) ([teluq-pbrideau](https://github.com/teluq-pbrideau))
+- Add charset and collate parameters for zabbix::proxy [\#842](https://github.com/voxpupuli/puppet-zabbix/pull/842) ([xchotard-talentsoft](https://github.com/xchotard-talentsoft))
+
+**Fixed bugs:**
+
+- RHEL 9 packages fails to install [\#858](https://github.com/voxpupuli/puppet-zabbix/issues/858)
+- The centos-release-scl package does not exist for RHEL [\#823](https://github.com/voxpupuli/puppet-zabbix/issues/823)
+- use www-data on all Debian family systems, not only on Debian and Ubuntu [\#910](https://github.com/voxpupuli/puppet-zabbix/pull/910) ([evgeni](https://github.com/evgeni))
+- manifests/proxy.pp: avoid undefined variable for Puppet 8 compat [\#900](https://github.com/voxpupuli/puppet-zabbix/pull/900) ([spicyprogramming](https://github.com/spicyprogramming))
+- OracleLinux fixes [\#887](https://github.com/voxpupuli/puppet-zabbix/pull/887) ([evgeni](https://github.com/evgeni))
+- Fix java-gateway pid different in zabbix 6 [\#885](https://github.com/voxpupuli/puppet-zabbix/pull/885) ([Fabian1976](https://github.com/Fabian1976))
+- Provide correct gpgkey for RHEL family, version \> 8. [\#861](https://github.com/voxpupuli/puppet-zabbix/pull/861) ([Joshua-Snapp](https://github.com/Joshua-Snapp))
+- Configure DirectoryIndex by default [\#854](https://github.com/voxpupuli/puppet-zabbix/pull/854) ([teluq-pbrideau](https://github.com/teluq-pbrideau))
+- use provided database port in pgpass [\#851](https://github.com/voxpupuli/puppet-zabbix/pull/851) ([teluq-pbrideau](https://github.com/teluq-pbrideau))
+- Propagate `default_vhost` to zabbix::web [\#826](https://github.com/voxpupuli/puppet-zabbix/pull/826) ([ikcalB](https://github.com/ikcalB))
+
+**Closed issues:**
+
+- Use shared example in acceptance [\#930](https://github.com/voxpupuli/puppet-zabbix/issues/930)
+- Module dependency version cause Acceptance test failure [\#922](https://github.com/voxpupuli/puppet-zabbix/issues/922)
+- Set DirectoryIndex in the zabbix module [\#853](https://github.com/voxpupuli/puppet-zabbix/issues/853)
+- Proxy schema file incorrect for Zabbix 6 [\#838](https://github.com/voxpupuli/puppet-zabbix/issues/838)
+- Mysql charset \(utf8\) and collate \(utf8\_bin\) not idempotent [\#832](https://github.com/voxpupuli/puppet-zabbix/issues/832)
+- Exec\[update\_pgpass\] failed [\#830](https://github.com/voxpupuli/puppet-zabbix/issues/830)
+- Raspberry PI Agent Install from naizvoru.com - Certificate Expired [\#802](https://github.com/voxpupuli/puppet-zabbix/issues/802)
+- Zabbix:agent error with module puppet-systemd \> 3.3.0 [\#799](https://github.com/voxpupuli/puppet-zabbix/issues/799)
+- Drop deprecated hiera\_hash\(\) [\#777](https://github.com/voxpupuli/puppet-zabbix/issues/777)
+- Add Support for Zabbix Agent 2 [\#692](https://github.com/voxpupuli/puppet-zabbix/issues/692)
+
+**Merged pull requests:**
+
+- add documentation to satisfy linting [\#866](https://github.com/voxpupuli/puppet-zabbix/pull/866) ([Phil-Friderici](https://github.com/Phil-Friderici))
+
+## [v9.2.0](https://github.com/voxpupuli/puppet-zabbix/tree/v9.2.0) (2022-06-05)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v9.1.0...v9.2.0)
 
@@ -12,7 +102,7 @@ These should not affect the functionality of the module.
 
 - Add Zabbix 6.0 support [\#820](https://github.com/voxpupuli/puppet-zabbix/pull/820) ([root-expert](https://github.com/root-expert))
 - add zabbix-server options StartReportWriters and WebServiceURL. [\#811](https://github.com/voxpupuli/puppet-zabbix/pull/811) ([Heidistein](https://github.com/Heidistein))
-- Add AIX 7 support [\#807](https://github.com/voxpupuli/puppet-zabbix/pull/807) ([cchallenorskytap](https://github.com/cchallenorskytap))
+- Add AIX 7 support [\#807](https://github.com/voxpupuli/puppet-zabbix/pull/807) ([ghost](https://github.com/ghost))
 - Add RedHat 8 support [\#805](https://github.com/voxpupuli/puppet-zabbix/pull/805) ([tjikkun](https://github.com/tjikkun))
 - Added ability to keep templates in sync \(no manual changes\) [\#803](https://github.com/voxpupuli/puppet-zabbix/pull/803) ([Fabian1976](https://github.com/Fabian1976))
 - Bump lower bound of systemd to 3.1.0 [\#791](https://github.com/voxpupuli/puppet-zabbix/pull/791) ([root-expert](https://github.com/root-expert))
@@ -407,7 +497,7 @@ These should not affect the functionality of the module.
 
 **Implemented enhancements:**
 
-- add vmwaretimeout as possible server-param [\#482](https://github.com/voxpupuli/puppet-zabbix/pull/482) ([b014651](https://github.com/b014651))
+- add vmwaretimeout as possible server-param [\#482](https://github.com/voxpupuli/puppet-zabbix/pull/482) ([trikke-basel](https://github.com/trikke-basel))
 - \#476 Pass credentials for HTTP auth [\#479](https://github.com/voxpupuli/puppet-zabbix/pull/479) ([tux-o-matic](https://github.com/tux-o-matic))
 
 **Fixed bugs:**

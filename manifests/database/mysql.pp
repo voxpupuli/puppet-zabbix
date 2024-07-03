@@ -32,8 +32,6 @@ class zabbix::database::mysql (
   if ($database_schema_path == false) or ($database_schema_path == '') {
     if versioncmp($zabbix_version, '6.0') >= 0 {
       $schema_path = '/usr/share/zabbix-sql-scripts/mysql/'
-    } elsif versioncmp($zabbix_version, '5.4') >= 0 {
-      $schema_path = '/usr/share/doc/zabbix-sql-scripts/mysql/'
     } else {
       $schema_path = '/usr/share/doc/zabbix-*-mysql*'
     }
@@ -60,8 +58,6 @@ class zabbix::database::mysql (
         true  => "cd ${schema_path} && if [ -f server.sql.gz ]; then gunzip -f server.sql.gz ; fi && mysql -h '${database_host}' -u '${database_user}' -p\"\${database_password}\" ${port}-D '${database_name}' < server.sql && touch /etc/zabbix/.schema.done",
         false => "cd ${schema_path} && if [ -f create.sql.gz ]; then gunzip -f create.sql.gz ; fi && mysql -h '${database_host}' -u '${database_user}' -p\"\${database_password}\" ${port}-D '${database_name}' < create.sql && touch /etc/zabbix/.schema.done"
       }
-      $zabbix_server_images_sql = 'touch /etc/zabbix/.images.done'
-      $zabbix_server_data_sql   = 'touch /etc/zabbix/.data.done'
     }
   }
 
@@ -82,20 +78,6 @@ class zabbix::database::mysql (
         command     => $zabbix_server_create_sql,
         path        => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
         unless      => 'test -f /etc/zabbix/.schema.done',
-        provider    => 'shell',
-        environment => $_mysql_env,
-      }
-      -> exec { 'zabbix_server_images.sql':
-        command     => $zabbix_server_images_sql,
-        path        => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
-        unless      => 'test -f /etc/zabbix/.images.done',
-        provider    => 'shell',
-        environment => $_mysql_env,
-      }
-      -> exec { 'zabbix_server_data.sql':
-        command     => $zabbix_server_data_sql,
-        path        => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
-        unless      => 'test -f /etc/zabbix/.data.done',
         provider    => 'shell',
         environment => $_mysql_env,
       }

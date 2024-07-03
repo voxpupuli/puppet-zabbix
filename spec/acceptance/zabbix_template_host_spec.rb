@@ -3,19 +3,13 @@
 require 'spec_helper_acceptance'
 require 'serverspec_type_zabbixapi'
 
-describe 'zabbix_template_host type', unless: default[:platform] =~ %r{archlinux} do
-  supported_versions.each do |zabbix_version|
+describe 'zabbix_template_host type' do
+  supported_server_versions(default[:platform]).each do |zabbix_version|
     # Zabbix 6.0 removed the ability to attach templates directly to hosts.
-    next if zabbix_version == '6.0'
-    # >= 5.2 server packages are not available for RHEL 7
-    next if zabbix_version >= '5.2' && default[:platform] == 'el-7-x86_64'
-    # No Zabbix 5.2 packages on Debian 11
-    next if zabbix_version == '5.2' && default[:platform] == 'debian-11-amd64'
+    next if zabbix_version >= '6.0'
 
     context "create zabbix_template_host resources with zabbix version #{zabbix_version}" do
       template = case zabbix_version
-                 when '4.0'
-                   'Template OS Linux'
                  when '5.0'
                    'Template OS Linux by Zabbix agent'
                  else
@@ -25,17 +19,6 @@ describe 'zabbix_template_host type', unless: default[:platform] =~ %r{archlinux
       # This will deploy a running Zabbix setup (server, web, db) which we can
       # use for custom type tests
       pp1 = <<-EOS
-        class { 'apache':
-          mpm_module => 'prefork',
-        }
-        include apache::mod::php
-        class { 'postgresql::globals':
-          locale   => 'en_US.UTF-8',
-          manage_package_repo => true,
-          version => '12',
-        }
-        -> class { 'postgresql::server': }
-
         class { 'zabbix':
           zabbix_version   => "#{zabbix_version}",
           zabbix_url       => 'localhost',
@@ -43,7 +26,6 @@ describe 'zabbix_template_host type', unless: default[:platform] =~ %r{archlinux
           zabbix_api_pass  => 'zabbix',
           apache_use_ssl   => false,
           manage_resources => true,
-          require          => [ Class['postgresql::server'], Class['apache'], ],
         }
       EOS
 
@@ -52,7 +34,7 @@ describe 'zabbix_template_host type', unless: default[:platform] =~ %r{archlinux
           ipaddress    => '127.0.0.1',
           use_ip       => true,
           port         => 10050,
-          group        => 'TestgroupOne',
+          groups       => ['TestgroupOne'],
           group_create => true,
           templates    => [ "#{template}", ],
         }

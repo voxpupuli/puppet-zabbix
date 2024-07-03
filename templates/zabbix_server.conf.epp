@@ -20,6 +20,7 @@
     String[1]                                              $externalscripts,
     String[1]                                              $fping6location,
     String[1]                                              $fpinglocation,
+    Optional[String[1]]                                    $hanodename,
     String[1]                                              $historycachesize,
     Optional[String[1]]                                    $historyindexcachesize,
     String[1]                                              $housekeepingfrequency,
@@ -35,6 +36,7 @@
     Variant[Integer,String[1]]                             $logslowqueries,
     Enum['console', 'file', 'system']                      $logtype,
     String[1]                                              $maxhousekeeperdelete,
+    Optional[String[1]]                                    $nodeaddress,
     String[1]                                              $pidfile,
     String[1]                                              $proxyconfigfrequency,
     String[1]                                              $proxydatafrequency,
@@ -42,6 +44,7 @@
     Optional[Stdlib::Absolutepath]                         $socketdir,
     Optional[Stdlib::IP::Address]                          $sourceip,
     Optional[String[1]]                                    $sshkeylocation,
+    Optional[Stdlib::Absolutepath]                         $sslcalocation_dir,
     Optional[Stdlib::Absolutepath]                         $sslcertlocation_dir,
     Optional[Stdlib::Absolutepath]                         $sslkeylocation_dir,
     Integer[1,100]                                         $startalerters,
@@ -52,6 +55,7 @@
     String[1]                                              $startipmipollers,
     String[1]                                              $startjavapollers,
     Integer[1,100]                                         $startlldprocessors,
+    Integer[0, 1000]                                       $startodbcpollers,
     Variant[Integer, String[1]]                            $startpingers,
     Variant[Integer, String[1]]                            $startpollers,
     Variant[Integer, String[1]]                            $startpollersunreachable,
@@ -62,6 +66,7 @@
     Variant[Integer, String[1]]                            $starttimers,
     Variant[Integer, String[1]]                            $starttrappers,
     Variant[Integer, String[1]]                            $startvmwarecollectors,
+    Optional[String[1]]                                    $statsallowedip,
     Variant[Integer, String[1]]                            $timeout,
     Optional[String[1]]                                    $tlscafile,
     Optional[String[1]]                                    $tlscertfile,
@@ -85,6 +90,7 @@
     Optional[Stdlib::HTTPSUrl]                             $vaulturl,
     String[1]                                              $vmwarecachesize,
     String[1]                                              $vmwarefrequency,
+    Optional[String[1]]                                    $vmwareperffrequency,
     Optional[String[1]]                                    $vmwaretimeout,
     Optional[Stdlib::HTTPUrl]                              $webserviceurl,
     String[1]                                              $zabbix_user,
@@ -101,16 +107,12 @@
 #
 # Mandatory: no
 # Range: 1024-32767
-# Default:
-# ListenPort=10051
 ListenPort=<%= $listenport %>
 
 ### Option: SourceIP
 #	Source IP address for outgoing connections.
 #
 # Mandatory: no
-# Default:
-# SourceIP=
 <% if $sourceip { %>SourceIP=<%= $sourceip %><% } -%>
 
 <% if $logtype { %>
@@ -120,18 +122,22 @@ ListenPort=<%= $listenport %>
 #		file    - file specified with LogFile parameter
 #		console - standard output
 #
+# Mandatory: no
 LogType=<%= $logtype %><% } -%>
 
 <% if $logtype == 'file' { -%>
 ### Option: LogFile
 #	Log file name for LogType 'file' parameter.
 #
+# Mandatory: yes, if LogType is set to file, otherwise no
 LogFile=<%= $logfile %>
 
 ### Option: LogFileSize
 #	Maximum size of log file in MB.
 #	0 - disable automatic log rotation.
 #
+# Mandatory: no
+# Range: 0-1024
 LogFileSize=<%= $logfilesize %><% } -%>
 
 ### Option: DebugLevel
@@ -142,80 +148,187 @@ LogFileSize=<%= $logfilesize %><% } -%>
 #	3 - warnings
 #	4 - for debugging (produces lots of information)
 #	5 - extended debugging (produces even more information)
+#
+# Mandatory: no
+# Range: 0-5
 DebugLevel=<%= $debuglevel %>
 
 ### Option: PidFile
 #	Name of PID file.
 #
+# Mandatory: no
 PidFile=<%= $pidfile %>
 
 ### Option: SocketDir
-#       IPC socket directory.
-#               Directory to store IPC sockets used by internal Zabbix services.
+#	IPC socket directory.
+#		Directory to store IPC sockets used by internal Zabbix services.
 #
 # Mandatory: no
-# Default:
 <% if $socketdir { %>SocketDir=<%= $socketdir %><% } -%>
+
+### NOTE: Support for Oracle DB is deprecated since Zabbix 7.0 and will be removed in future versions.
 
 ### Option: DBHost
 #	Database host name.
 #	If set to localhost, socket is used for MySQL.
 #	If set to empty string, socket is used for PostgreSQL.
+#	If set to empty string, the Net Service Name connection method is used to connect to Oracle database; also see
+#	the TNS_ADMIN environment variable to specify the directory where the tnsnames.ora file is located.
 #
+# Mandatory: no
 DBHost=<%= $database_host %>
 
 ### Option: DBName
 #	Database name.
-#	For SQLite3 path to database file must be provided. DBUser and DBPassword are ignored.
+#	If the Net Service Name connection method is used to connect to Oracle database, specify the service name from
+#	the tnsnames.ora file or set to empty string; also see the TWO_TASK environment variable if DBName is set to
+#	empty string.
 #
+# Mandatory: yes
 DBName=<%= $database_name %>
 
 ### Option: DBSchema
-#	Schema name. Used for IBM DB2 and PostgreSQL.
+#	Schema name. Used for PostgreSQL.
 #
+# Mandatory: no
 <% if $database_schema { %>DBSchema=<%= $database_schema %><% } -%>
 
 ### Option: DBUser
-#	Database user. Ignored for SQLite.
+#	Database user.
 #
+# Mandatory: no
 DBUser=<%= $database_user %>
 
 ### Option: DBPassword
-#	Database password. Ignored for SQLite.
+#	Database password.
 #	Comment this line if no password is used.
 #
+# Mandatory: no
 DBPassword=<%= $database_password %>
 
 ### Option: DBSocket
 #	Path to MySQL socket.
 #
+# Mandatory: no
 <% if $database_socket { %>DBSocket=<%= $database_socket %><% } -%>
 
 ### Option: DBPort
-#	Database port when not using local socket. Ignored for SQLite.
+#	Database port when not using local socket.
+#	If the Net Service Name connection method is used to connect to Oracle database, the port number from the
+#	tnsnames.ora file will be used. The port number set here will be ignored.
 #
+# Mandatory: no
+# Range: 1024-65535
 <% if $database_port { %>DBPort=<%= $database_port %><% } -%>
 
+<% if versioncmp($zabbix_version,'7.0') >= 0 { -%>
+### Option: HistoryStorageURL
+#	History storage HTTP[S] URL.
+#
+# Mandatory: no
+# Default:
+# HistoryStorageURL=
+
+### Option: HistoryStorageTypes
+#	Comma separated list of value types to be sent to the history storage.
+#
+# Mandatory: no
+# Default:
+# HistoryStorageTypes=uint,dbl,str,log,text
+
+### Option: HistoryStorageDateIndex
+#	Enable preprocessing of history values in history storage to store values in different indices based on date.
+#	0 - disable
+#	1 - enable
+#
+# Mandatory: no
+# Default:
+# HistoryStorageDateIndex=0
+
+### Option: ExportDir
+#	Directory for real time export of events, history and trends in newline delimited JSON format.
+#	If set, enables real time export.
+#
+# Mandatory: no
+# Default:
+# ExportDir=
+
+### Option: ExportFileSize
+#	Maximum size per export file in bytes.
+#	Only used for rotation if ExportDir is set.
+#
+# Mandatory: no
+# Range: 1M-1G
+# Default:
+# ExportFileSize=1G
+
+### Option: ExportType
+#	List of comma delimited types of real time export - allows to control export entities by their
+#	type (events, history, trends) individually.
+#	Valid only if ExportDir is set.
+#
+# Mandatory: no
+# Default:
+# ExportType=events,history,trends
+
+<% } -%>
 ############ ADVANCED PARAMETERS ################
 
 ### Option: StartPollers
 #	Number of pre-forked instances of pollers.
 #
+# Mandatory: no
+# Range: 0-1000
 StartPollers=<%= $startpollers %>
 
-### Option: StartIPMIPollers
-#	Number of pre-forked instances of IPMI pollers.
+<% if versioncmp($zabbix_version,'7.0') >= 0 { -%>
+### Option: StartAgentPollers
+#	Number of pre-forked instances of asynchronous Zabbix agent pollers. Also see MaxConcurrentChecksPerPoller.
 #
-StartIPMIPollers=<%= $startipmipollers %>
+# Mandatory: no
+# Range: 0-1000
+# Default:
+# StartAgentPollers=1
 
-### Option: StartPreprocessors
-#       Number of pre-forked instances of preprocessing workers.
-#               The preprocessing manager process is automatically started when preprocessor worker is started.
+### Option: StartHTTPAgentPollers
+#	Number of pre-forked instances of asynchronous HTTP agent pollers. Also see MaxConcurrentChecksPerPoller.
+#
+# Mandatory: no
+# Range: 0-1000
+# Default:
+# StartHTTPAgentPollers=1
+
+### Option: StartSNMPPollers
+#	Number of pre-forked instances of asynchronous SNMP pollers. Also see MaxConcurrentChecksPerPoller.
+#
+# Mandatory: no
+# Range: 0-1000
+# Default:
+# StartSNMPPollers=1
+
+### Option: MaxConcurrentChecksPerPoller
+#	Maximum number of asynchronous checks that can be executed at once by each HTTP agent poller or agent poller.
 #
 # Mandatory: no
 # Range: 1-1000
 # Default:
-# StartPreprocessors=3
+# MaxConcurrentChecksPerPoller=1000
+<% } -%>
+
+### Option: StartIPMIPollers
+#	Number of pre-forked instances of IPMI pollers.
+#		The IPMI manager process is automatically started when at least one IPMI poller is started.
+#
+# Mandatory: no
+# Range: 0-1000
+StartIPMIPollers=<%= $startipmipollers %>
+
+
+### Option: StartPreprocessors
+#	Number of pre-started instances of preprocessing workers.
+#
+# Mandatory: no
+# Range: 1-1000
 <% if $startpreprocessors { %>StartPreprocessors=<%= $startpreprocessors -%><% } -%>
 
 ### Option: StartPollersUnreachable
@@ -223,7 +336,32 @@ StartIPMIPollers=<%= $startipmipollers %>
 #	At least one poller for unreachable hosts must be running if regular, IPMI or Java pollers
 #	are started.
 #
+# Mandatory: no
+# Range: 0-1000
 StartPollersUnreachable=<%= $startpollersunreachable %>
+
+<% if versioncmp($zabbix_version,'7.0') >= 0 { -%>
+### Option: StartHistoryPollers
+#	Number of pre-forked instances of history pollers.
+#	Only required for calculated checks.
+#	A database connection is required for each history poller instance.
+#
+# Mandatory: no
+# Range: 0-1000
+# Default:
+# StartHistoryPollers=5
+
+<% } -%>
+<% if versioncmp($zabbix_version,'6.0') >= 0 { -%>
+## Option: StartODBCPollers
+#       Number of pre-forked ODBC poller instances.
+#
+# Mandatory: no
+# Range: 0-1000
+# Default:
+# StartODBCPollers=1
+StartODBCPollers=<%= $startodbcpollers %>
+<% } -%>
 
 ### Option: StartTrappers
 #	Number of pre-forked instances of trappers.
@@ -231,43 +369,54 @@ StartPollersUnreachable=<%= $startpollersunreachable %>
 #	At least one trapper process must be running to display server availability and view queue
 #	in the frontend.
 #
+# Mandatory: no
+# Range: 0-1000
 StartTrappers=<%= $starttrappers %>
 
 ### Option: StartPingers
 #	Number of pre-forked instances of ICMP pingers.
 #
+# Mandatory: no
+# Range: 0-1000
 StartPingers=<%= $startpingers %>
 
 ### Option: StartDiscoverers
-#	Number of pre-forked instances of discoverers.
+#	Number of pre-started instances of discovery workers.
 #
+# Mandatory: no
+# Range: 0-1000
 StartDiscoverers=<%= $startdiscoverers %>
 
 ### Option: StartHTTPPollers
 #	Number of pre-forked instances of HTTP pollers.
 #
+# Mandatory: no
+# Range: 0-1000
 StartHTTPPollers=<%= $starthttppollers %>
 
 ### Option: StartTimers
 #	Number of pre-forked instances of timers.
-#	Timers process time-based trigger functions and maintenance periods.
-#	Only the first timer process handles the maintenance periods.
+#	Timers process maintenance periods.
+#	Only the first timer process handles host maintenance updates. Problem suppression updates are shared
+#	between all timers.
 #
+# Mandatory: no
+# Range: 1-1000
 StartTimers=<%= $starttimers %>
 
 ### Option: StartEscalators
-#   Number of pre-forked instances of escalators.
+#	Number of pre-forked instances of escalators.
 #
+# Mandatory: no
+# Range: 1-100
 <% if $startescalators { %>StartEscalators=<%= $startescalators %><% } -%>
 
 ### Option: StartAlerters
-#       Number of pre-forked instances of alerters.
-#       Alerters send the notifications created by action operations.
+#	Number of pre-forked instances of alerters.
+#	Alerters send the notifications created by action operations.
 #
 # Mandatory: no
-# Range: 0-100
-# Default:
-# StartAlerters=3
+# Range: 1-100
 <% if $startalerters { %>StartAlerters=<%= $startalerters %><% } -%>
 
 <% if $javagateway { -%>
@@ -275,188 +424,254 @@ StartTimers=<%= $starttimers %>
 #	IP address (or hostname) of Zabbix Java gateway.
 #	Only required if Java pollers are started.
 #
+# Mandatory: no
 JavaGateway=<%= $javagateway %>
 
 ### Option: JavaGatewayPort
 #	Port that Zabbix Java gateway listens on.
 #
+# Mandatory: no
+# Range: 1024-32767
 JavaGatewayPort=<%= $javagatewayport %>
 
 ### Option: StartJavaPollers
 #	Number of pre-forked instances of Java pollers.
 #
+# Mandatory: no
+# Range: 0-1000
 StartJavaPollers=<%= $startjavapollers %>
 <% } -%>
 
 ### Option: StartVMwareCollectors
 #	Number of pre-forked vmware collector instances.
 #
+# Mandatory: no
+# Range: 0-250
 StartVMwareCollectors=<%= $startvmwarecollectors %>
 
 ### Option: VMwareFrequency
 #	How often Zabbix will connect to VMware service to obtain a new data.
 #
+# Mandatory: no
+# Range: 10-86400
 VMwareFrequency=<%= $vmwarefrequency %>
 
-### Option: VMwareCacheSize
-#   Size of VMware cache, in bytes.
-#   Shared memory size for storing VMware data.
-#   Only used if VMware collectors are started.
+### Option: VMwarePerfFrequency
+#	How often Zabbix will connect to VMware service to obtain performance data.
 #
+# Mandatory: no
+# Range: 10-86400
+<% if $vmwareperffrequency { %>VMwarePerfFrequency=<%= $vmwareperffrequency %><% } -%>
+
+### Option: VMwareCacheSize
+#	Size of VMware cache, in bytes.
+#	Shared memory size for storing VMware data.
+#	Only used if VMware collectors are started.
+#
+# Mandatory: no
+# Range: 256K-2G
 VMwareCacheSize=<%= $vmwarecachesize %>
 
 ### Option: VMwareTimeout
-#   Specifies how many seconds vmware collector waits for response from VMware service.
+#	Specifies how many seconds vmware collector waits for response from VMware service.
 #
+# Mandatory: no
+# Range: 1-300
 <% if $vmwaretimeout { %>VMwareTimeout=<%= $vmwaretimeout %><% } -%>
 
 ### Option: SNMPTrapperFile
-#   Temporary file used for passing data from SNMP trap daemon to the server.
-#   Must be the same as in zabbix_trap_receiver.pl or SNMPTT configuration file.
+#	Temporary file used for passing data from SNMP trap daemon to the server.
+#	Must be the same as in zabbix_trap_receiver.pl or SNMPTT configuration file.
 #
+# Mandatory: no
 SNMPTrapperFile=<%= $snmptrapperfile %>
 
 ### Option: StartSNMPTrapper
-#   If 1, SNMP trapper process is started.
+#	If 1, SNMP trapper process is started.
 #
+# Mandatory: no
+# Range: 0-1
 StartSNMPTrapper=<%= $startsnmptrapper %>
 
 ### Option: ListenIP
-#   List of comma delimited IP addresses that the trapper should listen on.
-#   Trapper will listen on all network interfaces if this parameter is missing.
+#	List of comma delimited IP addresses that the trapper should listen on.
+#	Trapper will listen on all network interfaces if this parameter is missing.
 #
+# Mandatory: no
 <% if $listenip { %>ListenIP=<%= $listenip %><% } -%>
 
 ### Option: HousekeepingFrequency
-#   How often Zabbix will perform housekeeping procedure (in hours).
-#   Housekeeping is removing outdated information from the database.
-#   To prevent Housekeeper from being overloaded, no more than 4 times HousekeepingFrequency
-#   hours of outdated information are deleted in one housekeeping cycle, for each item.
-#   To lower load on server startup housekeeping is postponed for 30 minutes after server start.
+#	How often Zabbix will perform housekeeping procedure (in hours).
+#	Housekeeping is removing outdated information from the database.
+#	To prevent Housekeeper from being overloaded, no more than 4 times HousekeepingFrequency
+#	hours of outdated information are deleted in one housekeeping cycle, for each item.
+#	To lower load on server startup housekeeping is postponed for 30 minutes after server start.
+#	With HousekeepingFrequency=0 the housekeeper can be only executed using the runtime control option.
+#	In this case the period of outdated information deleted in one housekeeping cycle is 4 times the
+#	period since the last housekeeping cycle, but not less than 4 hours and not greater than 4 days.
 #
+# Mandatory: no
+# Range: 0-24
 HousekeepingFrequency=<%= $housekeepingfrequency %>
 
 ### Option: MaxHousekeeperDelete
-#   The table "housekeeper" contains "tasks" for housekeeping procedure in the format:
-#   [housekeeperid], [tablename], [field], [value].
-#   No more than 'MaxHousekeeperDelete' rows (corresponding to [tablename], [field], [value])
-#   will be deleted per one task in one housekeeping cycle.
-#   SQLite3 does not use this parameter, deletes all corresponding rows without a limit.
-#   If set to 0 then no limit is used at all. In this case you must know what you are doing!
+#	The table "housekeeper" contains "tasks" for housekeeping procedure in the format:
+#	[housekeeperid], [tablename], [field], [value].
+#	No more than 'MaxHousekeeperDelete' rows (corresponding to [tablename], [field], [value])
+#	will be deleted per one task in one housekeeping cycle.
+#	If set to 0 then no limit is used at all. In this case you must know what you are doing!
 #
+# Mandatory: no
+# Range: 0-1000000
 MaxHousekeeperDelete=<%= $maxhousekeeperdelete %>
 
 ### Option: CacheSize
-#   Size of configuration cache, in bytes.
-#   Shared memory size for storing host, item and trigger data.
+#	Size of configuration cache, in bytes.
+#	Shared memory size for storing host, item and trigger data.
 #
+# Mandatory: no
+# Range: 128K-64G
 CacheSize=<%= $cachesize %>
 
 ### Option: CacheUpdateFrequency
-#   How often Zabbix will perform update of configuration cache, in seconds.
+#	How often Zabbix will perform update of configuration cache, in seconds.
 #
+# Mandatory: no
+# Range: 1-3600
 CacheUpdateFrequency=<%= $cacheupdatefrequency %>
 
 ### Option: StartDBSyncers
-#   Number of pre-forked instances of DB Syncers
+#	Number of pre-forked instances of DB Syncers.
 #
+# Mandatory: no
+# Range: 1-100
 StartDBSyncers=<%= $startdbsyncers %>
 
 ### Option: HistoryCacheSize
-#   Size of history cache, in bytes.
-#   Shared memory size for storing history data.
+#	Size of history cache, in bytes.
+#	Shared memory size for storing history data.
 #
+# Mandatory: no
+# Range: 128K-2G
 HistoryCacheSize=<%= $historycachesize %>
 
 ### Option: HistoryIndexCacheSize
-#   Size of history index cache, in bytes.
-#   Shared memory size for indexing history cache.
+#	Size of history index cache, in bytes.
+#	Shared memory size for indexing history cache.
 #
+# Mandatory: no
+# Range: 128K-2G
 <% if $historyindexcachesize { %>HistoryIndexCacheSize=<%= $historyindexcachesize %><% } -%>
 
 ### Option: TrendCacheSize
-#   Size of trend cache, in bytes.
-#   Shared memory size for storing trends data.
+#	Size of trend write cache, in bytes.
+#	Shared memory size for storing trends data.
 #
+# Mandatory: no
+# Range: 128K-2G
 TrendCacheSize=<%= $trendcachesize %>
 
 ### Option: ValueCacheSize
-#   Size of history value cache, in bytes.
-#   Shared memory size for caching item history data requests.
-#   Setting to 0 disables value cache.
+#	Size of history value cache, in bytes.
+#	Shared memory size for caching item history data requests.
+#	Setting to 0 disables value cache.
 #
+# Mandatory: no
+# Range: 0,128K-64G
 ValueCacheSize=<%= $valuecachesize %>
 
 ### Option: Timeout
-#   Specifies how long we wait for agent, SNMP device or external check (in seconds).
+#	Specifies timeout for communications (in seconds).
 #
+# Mandatory: no
+# Range: 1-30
 Timeout=<%= $timeout %>
 
 ### Option: TrapperTimeout
-#   Specifies how many seconds trapper may spend processing new data.
+#	Specifies how many seconds trapper may spend processing new data.
 #
+# Mandatory: no
+# Range: 1-300
 TrapperTimeout=<%= $trappertimeout %>
 
 ### Option: UnreachablePeriod
-#   After how many seconds of unreachability treat a host as unavailable.
+#	After how many seconds of unreachability treat a host as unavailable.
 #
+# Mandatory: no
+# Range: 1-3600
 UnreachablePeriod=<%= $unreachableperiod %>
 
 ### Option: UnavailableDelay
-#   How often host is checked for availability during the unavailability period, in seconds.
+#	How often host is checked for availability during the unavailability period, in seconds.
 #
+# Mandatory: no
+# Range: 1-3600
 UnavailableDelay=<%= $unavailabledelay %>
 
 ### Option: UnreachableDelay
-#   How often host is checked for availability during the unreachability period, in seconds.
+#	How often host is checked for availability during the unreachability period, in seconds.
 #
+# Mandatory: no
+# Range: 1-3600
 UnreachableDelay=<%= $unreachabledelay %>
 
 ### Option: AlertScriptsPath
-#   Full path to location of custom alert scripts.
-#   Default depends on compilation options.
+#	Full path to location of custom alert scripts.
+#	Default depends on compilation options.
+#	To see the default path run command "zabbix_server --help".
 #
+# Mandatory: no
 AlertScriptsPath=<%= $alertscriptspath %>
 
 ### Option: ExternalScripts
-#   Full path to location of external scripts.
-#   Default depends on compilation options.
+#	Full path to location of external scripts.
+#	Default depends on compilation options.
+#	To see the default path run command "zabbix_server --help".
 #
+# Mandatory: no
 ExternalScripts=<%= $externalscripts %>
 
 ### Option: FpingLocation
-#   Location of fping.
-#   Make sure that fping binary has root ownership and SUID flag set.
+#	Location of fping.
+#	Make sure that fping binary has root ownership and SUID flag set.
 #
+# Mandatory: no
 FpingLocation=<%= $fpinglocation %>
 
 ### Option: Fping6Location
-#   Location of fping6.
-#   Make sure that fping6 binary has root ownership and SUID flag set.
-#   Make empty if your fping utility is capable to process IPv6 addresses.
+#	Location of fping6.
+#	Make sure that fping6 binary has root ownership and SUID flag set.
+#	Make empty if your fping utility is capable to process IPv6 addresses.
 #
+# Mandatory: no
 Fping6Location=<%= $fping6location %>
 
 ### Option: SSHKeyLocation
-#   Location of public and private keys for SSH checks and actions.
+#	Location of public and private keys for SSH checks and actions.
 #
+# Mandatory: no
 <% if $sshkeylocation { %>SSHKeyLocation=<%= $sshkeylocation %><% } -%>
 
 ### Option: LogSlowQueries
-#   How long a database query may take before being logged (in milliseconds).
-#   Only works if DebugLevel set to 3 or 4 or 5.
-#   0 - don't log slow queries.
+#	How long a database query may take before being logged (in milliseconds).
+#	Only works if DebugLevel set to 3, 4 or 5.
+#	0 - don't log slow queries.
 #
+# Mandatory: no
+# Range: 1-3600000
 LogSlowQueries=<%= $logslowqueries %>
 
 ### Option: TmpDir
-#   Temporary directory.
+#	Temporary directory.
 #
+# Mandatory: no
 TmpDir=<%= $tmpdir %>
 
 ### Option: StartProxyPollers
-#   Number of pre-forked instances of pollers for passive proxies.
+#	Number of pre-forked instances of pollers for passive proxies.
 #
+# Mandatory: no
+# Range: 0-250
 StartProxyPollers=<%= $startproxypollers %>
 
 ### Option: ProxyConfigFrequency
@@ -465,73 +680,104 @@ StartProxyPollers=<%= $startproxypollers %>
 #
 ProxyConfigFrequency=<%= $proxyconfigfrequency %>
 
-### Option: ProxyDataFrequency
-#   How often Zabbix Server requests history data from a Zabbix Proxy in seconds.
-#   This parameter is used only for proxies in the passive mode.
+### Option: ProxyConfigFrequency
+#	How often Zabbix Server sends configuration data to a Zabbix Proxy in seconds.
+#	This parameter is used only for proxies in the passive mode.
 #
+# Mandatory: no
+# Range: 1-3600*24*7
 ProxyDataFrequency=<%= $proxydatafrequency %>
 
-<% if versioncmp($zabbix_version,'5') >= 0 { -%>
 ### Option: StartLLDProcessors
-#       Number of pre-forked instances of low level discovery processors.
+#	Number of pre-forked instances of low level discovery processors.
 #
 # Mandatory: no
 # Range: 1-100
-# Default:
-# StartLLDProcessors=2
 <% if $startlldprocessors { %>StartLLDProcessors=<%= $startlldprocessors -%><% } -%>
-<% } -%>
 
 ### Option: AllowRoot
-#   Allow the server to run as 'root'. If disabled and the server is started by 'root', the server
-#   will try to switch to the user specified by the User configuration option instead.
-#   Has no effect if started under a regular user.
-#   0 - do not allow
-#   1 - allow
+#	Allow the server to run as 'root'. If disabled and the server is started by 'root', the server
+#	will try to switch to the user specified by the User configuration option instead.
+#	Has no effect if started under a regular user.
+#	0 - do not allow
+#	1 - allow
 #
+# Mandatory: no
 AllowRoot=<%= $allowroot %>
 
 ### Option: User
-#   Drop privileges to a specific, existing user on the system.
-#   Only has effect if run as 'root' and AllowRoot is disabled.
+#	Drop privileges to a specific, existing user on the system.
+#	Only has effect if run as 'root' and AllowRoot is disabled.
 #
 # Mandatory: no
-# Default:
-# User=zabbix
 <% if $zabbix_user { %>User=<%= $zabbix_user %><% } -%>
 
 ### Option: Include
-#   You may include individual files or all files in a directory in the configuration file.
-#   Installing Zabbix will create include directory in /usr/local/etc, unless modified during the compile time.
+#	You may include individual files or all files in a directory in the configuration file.
+#	Installing Zabbix will create include directory in /usr/local/etc, unless modified during the compile time.
 #
+# Mandatory: no
 Include=<%= $include_dir %>
 
 ### Option: SSLCertLocation
-#   Location of SSL client certificates.
-#   This parameter is used only in web monitoring.
+#	Location of SSL client certificates.
+#	This parameter is used in web monitoring and for communication with Vault.
+#	Default depends on compilation options.
+#	To see the default path run command "zabbix_server --help".
 #
+# Mandatory: no
 SSLCertLocation=<%= $sslcertlocation_dir %>
 
 ### Option: SSLKeyLocation
-#   Location of private keys for SSL client certificates.
-#   This parameter is used only in web monitoring.
+#	Location of private keys for SSL client certificates.
+#	This parameter is used in web monitoring and for communication with Vault.
+#	Default depends on compilation options.
+#	To see the default path run command "zabbix_server --help".
 #
+# Mandatory: no
 SSLKeyLocation=<%= $sslkeylocation_dir %>
+
+### Option: SSLCALocation
+#	Override the location of certificate authority (CA) files for SSL server certificate verification.
+#	If not set, system-wide directory will be used.
+#	This parameter is used in web monitoring, SMTP authentication, HTTP agent items and for communication with Vault.
+#
+# Mandatory: no
+<% if $sslcalocation_dir { %>SSLCALocation=<%= $sslcalocation_dir %><% } -%>
+
+### Option: StatsAllowedIP
+#	List of comma delimited IP addresses, optionally in CIDR notation, or DNS names of external Zabbix instances.
+#	Stats request will be accepted only from the addresses listed here. If this parameter is not set no stats requests
+#	will be accepted.
+#	If IPv6 support is enabled then '127.0.0.1', '::127.0.0.1', '::ffff:127.0.0.1' are treated equally
+#	and '::/0' will allow any IPv4 or IPv6 address.
+#	'0.0.0.0/0' can be used to allow any IPv4 address.
+#	Example: StatsAllowedIP=127.0.0.1,192.168.1.0/24,::1,2001:db8::/32,zabbix.example.com
+#
+# Mandatory: no
+<% if $statsallowedip { %>StatsAllowedIP=<%= $statsallowedip %><% } -%>
 
 ####### LOADABLE MODULES #######
 
 ### Option: LoadModulePath
-#   Full path to location of server modules.
-#   Default depends on compilation options.
+#	Full path to location of server modules.
+#	Default depends on compilation options.
+#	To see the default path run command "zabbix_server --help".
 #
+# Mandatory: no
 LoadModulePath=<%= $loadmodulepath %>
 
 ### Option: LoadModule
-#   Module to load at server startup. Modules are used to extend functionality of the server.
-#   Format: LoadModule=<module.so>
-#   The modules must be located in directory specified by LoadModulePath.
-#   It is allowed to include multiple LoadModule parameters.
+#	Module to load at server startup. Modules are used to extend functionality of the server.
+#	Formats:
+#		LoadModule=<module.so>
+#		LoadModule=<path/module.so>
+#		LoadModule=</abs_path/module.so>
+#	Either the module must be located in directory specified by LoadModulePath or the path must precede the module name.
+#	If the preceding path is absolute (starts with '/') then LoadModulePath is ignored.
+#	It is allowed to include multiple LoadModule parameters.
 #
+# Mandatory: no
 <% if $loadmodule { %>LoadModule = <%= $loadmodule %><% } -%>
 
 ####### TLS-RELATED PARAMETERS #######
@@ -541,36 +787,88 @@ LoadModulePath=<%= $loadmodulepath %>
 #	peer certificate verification.
 #
 # Mandatory: no
-# Default:
-# TLSCAFile=
 <% if $tlscafile { %>TLSCAFile=<%= $tlscafile %><% } -%>
 
 ### Option: TLSCRLFile
 #	Full pathname of a file containing revoked certificates.
 #
 # Mandatory: no
-# Default:
-# TLSCRLFile=
 <% if $tlscrlfile { %>TLSCRLFile=<%= $tlscrlfile %><% } -%>
 
 ### Option: TLSCertFile
 #	Full pathname of a file containing the server certificate or certificate chain.
 #
 # Mandatory: no
-# Default:
-# TLSCertFile=
 <% if $tlscertfile { %>TLSCertFile=<%= $tlscertfile %><% } -%>
 
 ### Option: TLSKeyFile
 #	Full pathname of a file containing the server private key.
 #
 # Mandatory: no
-# Default:
-# TLSKeyFile=
 <% if $tlskeyfile { %>TLSKeyFile=<%= $tlskeyfile %><% } -%>
 
 ####### For advanced users - TLS ciphersuite selection criteria #######
-<% if versioncmp($zabbix_version,'5') >= 0 { -%>
+
+### Option: TLSCipherCert13
+#	Cipher string for OpenSSL 1.1.1 or newer in TLS 1.3.
+#	Override the default ciphersuite selection criteria for certificate-based encryption.
+#
+# Mandatory: no
+# Default:
+# TLSCipherCert13=
+<% if $tlsciphercert13 { %>TLSCipherCert13=<%= $tlsciphercert13 %><% } -%>
+
+### Option: TLSCipherCert
+#	GnuTLS priority string or OpenSSL (TLS 1.2) cipher string.
+#	Override the default ciphersuite selection criteria for certificate-based encryption.
+#	Example for GnuTLS:
+#		NONE:+VERS-TLS1.2:+ECDHE-RSA:+RSA:+AES-128-GCM:+AES-128-CBC:+AEAD:+SHA256:+SHA1:+CURVE-ALL:+COMP-NULL:+SIGN-ALL:+CTYPE-X.509
+#	Example for OpenSSL:
+#		EECDH+aRSA+AES128:RSA+aRSA+AES128
+#
+# Mandatory: no
+<% if $tlsciphercert { %>TLSCipherCert=<%= $tlsciphercert %><% } -%>
+
+### Option: TLSCipherPSK13
+#	Cipher string for OpenSSL 1.1.1 or newer in TLS 1.3.
+#	Override the default ciphersuite selection criteria for PSK-based encryption.
+#	Example:
+#		TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256
+#
+# Mandatory: no
+<% if $tlscipherpsk13 { %>TLSCipherPSK13=<%= $tlscipherpsk13 %><% } -%>
+
+### Option: TLSCipherPSK
+#	GnuTLS priority string or OpenSSL (TLS 1.2) cipher string.
+#	Override the default ciphersuite selection criteria for PSK-based encryption.
+#	Example for GnuTLS:
+#		NONE:+VERS-TLS1.2:+ECDHE-PSK:+PSK:+AES-128-GCM:+AES-128-CBC:+AEAD:+SHA256:+SHA1:+CURVE-ALL:+COMP-NULL:+SIGN-ALL
+#	Example for OpenSSL:
+#		kECDHEPSK+AES128:kPSK+AES128
+#
+# Mandatory: no
+<% if $tlscipherpsk { %>TLSCipherPSK=<%= $tlscipherpsk %><% } -%>
+
+### Option: TLSCipherAll13
+#	Cipher string for OpenSSL 1.1.1 or newer in TLS 1.3.
+#	Override the default ciphersuite selection criteria for certificate- and PSK-based encryption.
+#	Example:
+#		TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256
+#
+# Mandatory: no
+<% if $tlscipherall13 { %>TLSCipherAll13=<%= $tlscipherall13 %><% } -%>
+
+### Option: TLSCipherAll
+#	GnuTLS priority string or OpenSSL (TLS 1.2) cipher string.
+#	Override the default ciphersuite selection criteria for certificate- and PSK-based encryption.
+#	Example for GnuTLS:
+#		NONE:+VERS-TLS1.2:+ECDHE-RSA:+RSA:+ECDHE-PSK:+PSK:+AES-128-GCM:+AES-128-CBC:+AEAD:+SHA256:+SHA1:+CURVE-ALL:+COMP-NULL:+SIGN-ALL:+CTYPE-X.509
+#	Example for OpenSSL:
+#		EECDH+aRSA+AES128:RSA+aRSA+AES128:kECDHEPSK+AES128:kPSK+AES128
+#
+# Mandatory: no
+<% if $tlscipherall { %>TLSCipherAll=<%= $tlscipherall %><% } -%>
+
 ### Option: DBTLSConnect
 #       Setting this option enforces to use TLS connection to database.
 #       required    - connect using TLS
@@ -626,78 +924,17 @@ LoadModulePath=<%= $loadmodulepath %>
 # Mandatory no
 # Default:
 <% if $database_tlscipher13 { %>DBTLSCipher13=<%= $database_tlscipher13 %><% } -%>
-<% } %>
 
-<% if versioncmp($zabbix_version,'5') >= 0 { -%>
-### Option: TLSCipherCert13
-#       Cipher string for OpenSSL 1.1.1 or newer in TLS 1.3.
-#       Override the default ciphersuite selection criteria for certificate-based encryption.
+<% if versioncmp($zabbix_version,'6.2') >= 0 { -%>
+### Option: Vault
+#	Specifies vault:
+#		HashiCorp - HashiCorp KV Secrets Engine - Version 2
+#		CyberArk  - CyberArk Central Credential Provider
 #
 # Mandatory: no
 # Default:
-# TLSCipherCert13=
-<% if $tlsciphercert13 { %>TLSCipherCert13=<%= $tlsciphercert13 %><% } -%>
+# Vault=HashiCorp
 
-### Option: TLSCipherCert
-#       GnuTLS priority string or OpenSSL (TLS 1.2) cipher string.
-#       Override the default ciphersuite selection criteria for certificate-based encryption.
-#       Example for GnuTLS:
-#               NONE:+VERS-TLS1.2:+ECDHE-RSA:+RSA:+AES-128-GCM:+AES-128-CBC:+AEAD:+SHA256:+SHA1:+CURVE-ALL:+COMP-NULL:+SIGN-ALL:+CTYPE-X.509
-#       Example for OpenSSL:
-#               EECDH+aRSA+AES128:RSA+aRSA+AES128
-#
-# Mandatory: no
-# Default:
-# TLSCipherCert=
-<% if $tlsciphercert { %>TLSCipherCert=<%= $tlsciphercert %><% } -%>
-
-### Option: TLSCipherPSK13
-#       Cipher string for OpenSSL 1.1.1 or newer in TLS 1.3.
-#       Override the default ciphersuite selection criteria for PSK-based encryption.
-#       Example:
-#               TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256
-#
-# Mandatory: no
-# Default:
-# TLSCipherPSK13=
-<% if $tlscipherpsk13 { %>TLSCipherPSK13=<%= $tlscipherpsk13 %><% } -%>
-
-### Option: TLSCipherPSK
-#       GnuTLS priority string or OpenSSL (TLS 1.2) cipher string.
-#       Override the default ciphersuite selection criteria for PSK-based encryption.
-#       Example for GnuTLS:
-#               NONE:+VERS-TLS1.2:+ECDHE-PSK:+PSK:+AES-128-GCM:+AES-128-CBC:+AEAD:+SHA256:+SHA1:+CURVE-ALL:+COMP-NULL:+SIGN-ALL
-#       Example for OpenSSL:
-#               kECDHEPSK+AES128:kPSK+AES128
-#
-# Mandatory: no
-# Default:
-# TLSCipherPSK=
-<% if $tlscipherpsk { %>TLSCipherPSK=<%= $tlscipherpsk %><% } -%>
-
-### Option: TLSCipherAll13
-#       Cipher string for OpenSSL 1.1.1 or newer in TLS 1.3.
-#       Override the default ciphersuite selection criteria for certificate- and PSK-based encryption.
-#       Example:
-#               TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256
-#
-# Mandatory: no
-# Default:
-# TLSCipherAll13=
-<% if $tlscipherall13 { %>TLSCipherAll13=<%= $tlscipherall13 %><% } -%>
-
-### Option: TLSCipherAll
-#       GnuTLS priority string or OpenSSL (TLS 1.2) cipher string.
-#       Override the default ciphersuite selection criteria for certificate- and PSK-based encryption.
-#       Example for GnuTLS:
-#               NONE:+VERS-TLS1.2:+ECDHE-RSA:+RSA:+ECDHE-PSK:+PSK:+AES-128-GCM:+AES-128-CBC:+AEAD:+SHA256:+SHA1:+CURVE-ALL:+COMP-NULL:+SIGN-ALL:+CTYPE-X.509
-#       Example for OpenSSL:
-#               EECDH+aRSA+AES128:RSA+aRSA+AES128:kECDHEPSK+AES128:kPSK+AES128
-#
-# Mandatory: no
-# Default:
-# TLSCipherAll13=
-<% if $tlscipherall { %>TLSCipherAll=<%= $tlscipherall %><% } -%>
 <% } -%>
 
 <% if versioncmp($zabbix_version,'5.2') >= 0 { -%>
@@ -708,29 +945,63 @@ LoadModulePath=<%= $loadmodulepath %>
 #	It is an error if VaultToken and VAULT_TOKEN environment variable are defined at the same time.
 #
 # Mandatory: no
-# Default:
-# VaultToken=
+#	(yes, if Vault is explicitly set to HashiCorp)
 <% if $vaulttoken { %>VaultToken=<%= $vaulttoken -%><% } -%>
 
 ### Option: VaultURL
 #	Vault server HTTP[S] URL. System-wide CA certificates directory will be used if SSLCALocation is not specified.
 #
 # Mandatory: no
-# Default:
-# VaultURL=https://127.0.0.1:8200
 <% if $vaulturl { %>VaultURL=<%= $vaulturl -%><% } -%>
 
+<% if versioncmp($zabbix_version,'7.0') >= 0 { -%>
+### Option: VaultPrefix
+#	Custom prefix for Vault path or query depending on the Vault.
+#	Most suitable defaults will be used if not specified.
+#	Note that 'data' is automatically appended after mountpoint for HashiCorp if VaultPrefix is not specified.
+#	Example prefix for HashiCorp:
+#		/v1/secret/data/
+#	Example prefix for CyberArk:
+#		/AIMWebService/api/Accounts?
+# Mandatory: no
+# Default:
+# VaultPrefix=
+
+<% } -%>
+
 ### Option: VaultDBPath
-#	Vault path from where credentials for database will be retrieved by keys 'password' and 'username'.
-#	Example: secret/zabbix/database
+#	Vault path or query depending on the Vault from where credentials for database will be retrieved by keys.
+#	Keys used for HashiCorp are 'password' and 'username'.
+#	Example path:
+#		secret/zabbix/database
+#	Keys used for CyberArk are 'Content' and 'UserName'.
+#	Example query:
+#		AppID=zabbix_server&Query=Safe=passwordSafe;Object=zabbix_server_database
 #	This option can only be used if DBUser and DBPassword are not specified.
 #
 # Mandatory: no
-# Default:
-# VaultDBPath=
 <% if $vaultdbpath { %>VaultDBPath=<%= $vaultdbpath -%><% } -%>
-<% } -%>
 
+<% } -%>
+<% if versioncmp($zabbix_version,'6.2') >= 0 { -%>
+### Option: VaultTLSCertFile
+#	Name of the SSL certificate file used for client authentication. The certificate file must be in PEM1 format.
+#	If the certificate file contains also the private key, leave the SSL key file field empty. The directory
+#	containing this file is specified by configuration parameter SSLCertLocation.
+#
+# Mandatory: no
+# Default:
+# VaultTLSCertFile=
+
+### Option: VaultTLSKeyFile
+#	Name of the SSL private key file used for client authentication. The private key file must be in PEM1 format.
+#	The directory containing this file is specified by configuration parameter SSLKeyLocation.
+#
+# Mandatory: no
+# Default:
+# VaultTLSKeyFile=
+
+<% } -%>
 
 <% if versioncmp($zabbix_version,'5.4') >= 0 { -%>
 ### Option: StartReportWriters
@@ -738,8 +1009,6 @@ LoadModulePath=<%= $loadmodulepath %>
 #
 # Mandatory: no
 # Range: 0-100
-# Default:
-# StartReportWriters=0
 <% if $startreportwriters { %>StartReportWriters=<%= $startreportwriters -%><% } -%>
 
 ### Option: WebServiceURL
@@ -747,7 +1016,113 @@ LoadModulePath=<%= $loadmodulepath %>
 #	Example: http://localhost:10053/report
 #
 # Mandatory: no
-# Default:
-# WebServiceURL=
 <% if $webserviceurl { %>WebServiceURL=<%= $webserviceurl -%><% } -%>
+<% } -%>
+
+<% if versioncmp($zabbix_version,'7.0') >= 0 { -%>
+### Option: ServiceManagerSyncFrequency
+#	How often Zabbix will synchronize configuration of a service manager (in seconds).
+#
+# Mandatory: no
+# Range: 1-3600
+# Default:
+# ServiceManagerSyncFrequency=60
+
+### Option: ProblemHousekeepingFrequency
+#	How often Zabbix will delete problems for deleted triggers (in seconds).
+#
+# Mandatory: no
+# Range: 1-3600
+# Default:
+# ProblemHousekeepingFrequency=60
+
+## Option: StartODBCPollers
+#	Number of pre-forked ODBC poller instances.
+#
+# Mandatory: no
+# Range: 0-1000
+# Default:
+# StartODBCPollers=1
+
+### Option: EnableGlobalScripts
+#    Enable global scripts on Zabbix server.
+#       0 - disable
+#       1 - enable
+#
+# Mandatory: no
+# Default:
+# EnableGlobalScripts=1
+
+# Option: AllowSoftwareUpdateCheck
+#       Allow Zabbix UI to receive information about software updates from zabbix.com
+#       0 - disable software update checks
+#       1 - enable software update checks
+#
+# Mandatory: no
+# Default:
+# AllowSoftwareUpdateCheck=1
+
+### Option: SMSDevices
+#	List of comma delimited modem files allowed to use Zabbix server
+#       SMS sending not possible if this parameter is not set
+#	Example: SMSDevices=/dev/ttyUSB0,/dev/ttyUSB1
+#
+# Mandatory: no
+# Default:
+# SMSDevices=
+
+<% } -%>
+<% if versioncmp($zabbix_version,'5.4') >= 0 { -%>
+####### For advanced users - TCP-related fine-tuning parameters #######
+
+## Option: ListenBacklog
+#       The maximum number of pending connections in the queue. This parameter is passed to
+#       listen() function as argument 'backlog' (see "man listen").
+#
+# Mandatory: no
+# Range: 0 - INT_MAX (depends on system, too large values may be silently truncated to implementation-specified maximum)
+# Default: SOMAXCONN (hard-coded constant, depends on system)
+# ListenBacklog=
+
+<% } -%>
+<% if versioncmp($zabbix_version,'6.0') >= 0 { -%>
+####### High availability cluster parameters #######
+
+## Option: HANodeName
+#	The high availability cluster node name.
+#	When empty, server is working in standalone mode; a node with empty name is registered with address for the frontend to connect to.
+#
+# Mandatory: no
+<% if $hanodename { %>HANodeName=<%= $hanodename -%><% } -%>
+
+## Option: NodeAddress
+#	IP or hostname with optional port to specify how frontend should connect to the server.
+#	Format: <address>[:<port>]
+#
+#	If IP or hostname is not set, then ListenIP value will be used. In case ListenIP is not set, localhost will be used.
+#	If port is not set, then ListenPort value will be used. In case ListenPort is not set, 10051 will be used.
+#	This option can be overridden by address specified in frontend configuration.
+#
+# Mandatory: no
+<% if $nodeaddress { %>NodeAddress=<%= $nodeaddress -%><% } -%>
+
+<% } -%>
+<% if versioncmp($zabbix_version,'7.0') >= 0 { -%>
+####### Browser monitoring #######
+
+### Option: WebDriverURL
+#	WebDriver interface HTTP[S] URL. For example http://localhost:4444 used with Selenium WebDriver standalone server.
+#
+# Mandatory: no
+# Default:
+# WebDriverURL=
+
+### Option: StartBrowserPollers
+#	Number of pre-forked instances of browser item pollers.
+#
+# Mandatory: no
+# Range: 0-1000
+# Default:
+# StartBrowserPollers=1
+
 <% } -%>

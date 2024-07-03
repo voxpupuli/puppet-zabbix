@@ -94,12 +94,13 @@ class zabbix::database (
     case $database_type {
       'postgresql': {
         # This is the PostgreSQL part.
+
+        include postgresql::server
         # Create the postgres database.
         postgresql::server::db { $database_name:
           user       => $database_user,
           owner      => $database_user,
           password   => postgresql::postgresql_password($database_user, $database_password),
-          require    => Class['postgresql::server'],
           tablespace => $database_tablespace,
         }
 
@@ -145,6 +146,7 @@ class zabbix::database (
       }
       'mysql': {
         # This is the MySQL part.
+        include mysql::server
 
         # First we check what kind of zabbix component it is. We have to use clear names
         # as it may be confusing when you need to fill in the zabbix-proxy name into the
@@ -180,7 +182,7 @@ class zabbix::database (
         if $zabbix_web != $zabbix_server {
           mysql_user { "${database_user}@${zabbix_web}":
             ensure        => 'present',
-            password_hash => mysql_password($database_password),
+            password_hash => mysql::password($database_password),
           }
 
           # And this is the grant part. It will grant the users which is created earlier

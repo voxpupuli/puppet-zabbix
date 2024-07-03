@@ -18,24 +18,19 @@ class zabbix::repo (
   String[1]                 $zabbix_version            = $zabbix::params::zabbix_version,
 ) inherits zabbix::params {
   if $manage_repo {
-    case $facts['os']['name'] {
-      'PSBM': {
-        $majorrelease = '6'
-      }
-      'Amazon': {
-        $majorrelease = '6'
-      }
-      'oraclelinux': {
-        $majorrelease = $facts['os']['release']['major']
-      }
-      default: {
-        $majorrelease = $facts['os']['release']['major']
-      }
-    }
     case $facts['os']['family'] {
       'RedHat': {
-        $gpgkey_zabbix = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591'
-        $gpgkey_nonsupported = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-79EA5ED4'
+        $majorrelease = $facts['os']['release']['major']
+        if (versioncmp(fact('os.release.major'), '7') >= 0 and $zabbix_version == '7.0') {
+          $gpgkey_zabbix = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-B5333005'
+          $gpgkey_nonsupported = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-B5333005'
+        } elsif versioncmp(fact('os.release.major'), '9') >= 0 {
+          $gpgkey_zabbix = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-08EFA7DD'
+          $gpgkey_nonsupported = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-08EFA7DD'
+        } else {
+          $gpgkey_zabbix = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591'
+          $gpgkey_nonsupported = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-79EA5ED4'
+        }
 
         $_repo_location = $repo_location ? {
           undef   => "https://repo.zabbix.com/zabbix/${zabbix_version}/rhel/${majorrelease}/\$basearch/",
@@ -65,8 +60,8 @@ class zabbix::repo (
           priority => '1',
         }
 
-        # Zabbix 5.0 frontend on CentOS 7 has different location.
-        if ($facts['os']['name'] == 'CentOS' and $majorrelease == '7' and $zabbix_version == '5.0') {
+        # Zabbix 5.0 frontend on EL7 has different location.
+        if ($majorrelease == '7' and $zabbix_version == '5.0') {
           $_frontend_repo_location = $frontend_repo_location ? {
             undef   => "https://repo.zabbix.com/zabbix/${zabbix_version}/rhel/${majorrelease}/\$basearch/frontend",
             default => $frontend_repo_location,
@@ -82,10 +77,23 @@ class zabbix::repo (
           }
         }
 
-        if ($facts['os']['release']['major'] == '7' and versioncmp($zabbix_version, '5.0') >= 0) {
-          package { 'zabbix-required-scl-repo':
-            ensure => 'latest',
-            name   => 'centos-release-scl',
+        if ($facts['os']['release']['major'] == '7') {
+          case $facts['os']['name'] {
+            'CentOS': {
+              $scl_package_name = 'centos-release-scl'
+            }
+            'OracleLinux': {
+              $scl_package_name = 'oracle-softwarecollection-release-el7'
+            }
+            default: {
+              $scl_package_name = undef
+            }
+          }
+          if $scl_package_name {
+            package { 'zabbix-required-scl-repo':
+              ensure => 'latest',
+              name   => $scl_package_name,
+            }
           }
         }
       }
@@ -98,66 +106,54 @@ class zabbix::repo (
           include apt
         }
 
-        if ($facts['os']['architecture'] == 'armv6l') {
-          $_repo_location = $repo_location ? {
-            undef   => 'http://naizvoru.com/raspbian/zabbix',
-            default => $repo_location,
-          }
-
-          apt::source { 'zabbix':
-            location => $_repo_location,
-            repos    => 'main',
-            key      => {
-              'id'     => 'BC274A7EA7FD5DD267C9A18FD54A213C80E871A7',
-              'source' => 'https://naizvoru.com/raspbian/zabbix/conf/boris@steki.net.gpg.key',
-            }
-            ,
-            include  => {
-              'src' => false,
-            }
-            ,
-          }
+        if ($facts['os']['distro']['id'] == 'Raspbian') {
+          $operatingsystem = 'raspbian'
+        } elsif ($facts['os']['architecture'] in ['arm64', 'aarch64']) {
+          # arm64 is the Debian name, but some facter versions report aarch64 instead
+          $operatingsystem = "${downcase($facts['os']['name'])}-arm64"
         } else {
-          if ($facts['os']['distro']['id'] == 'Raspbian') {
-            $operatingsystem = 'raspbian'
-          } else {
-            $operatingsystem = downcase($facts['os']['name'])
-          }
-          case $facts['os']['release']['full'] {
-            /\/sid$/: { $releasename = regsubst($facts['os']['release']['full'], '/sid$', '') }
-            default: { $releasename = $facts['os']['distro']['codename'] }
-          }
-
-          $_repo_location = $repo_location ? {
-            undef   => "http://repo.zabbix.com/zabbix/${zabbix_version}/${operatingsystem}/",
-            default => $repo_location,
-          }
-
-          apt::key { 'zabbix-FBABD5F':
-            id     => 'FBABD5FB20255ECAB22EE194D13D58E479EA5ED4',
-            source => 'https://repo.zabbix.com/zabbix-official-repo.key',
-          }
-          apt::key { 'zabbix-A1848F5':
-            id     => 'A1848F5352D022B9471D83D0082AB56BA14FE591',
-            source => 'https://repo.zabbix.com/zabbix-official-repo.key',
-          }
-
-          # Debian 11 provides Zabbix 5.0 by default. This can cause problems for 4.0 versions
-          $pinpriority = $facts['os']['release']['major'] ? {
-            '11'    => 1000,
-            default => undef,
-          }
-          apt::source { 'zabbix':
-            location => $_repo_location,
-            repos    => 'main',
-            release  => $releasename,
-            pin      => $pinpriority,
-            require  => [
-              Apt_key['zabbix-FBABD5F'],
-              Apt_key['zabbix-A1848F5'],
-            ],
-          }
+          $operatingsystem = downcase($facts['os']['name'])
         }
+        case $facts['os']['release']['full'] {
+          /\/sid$/: { $releasename = regsubst($facts['os']['release']['full'], '/sid$', '') }
+          default: { $releasename = $facts['os']['distro']['codename'] }
+        }
+
+        $_repo_location = $repo_location ? {
+          undef   => "http://repo.zabbix.com/zabbix/${zabbix_version}/${operatingsystem}/",
+          default => $repo_location,
+        }
+
+        apt::key { 'zabbix-FBABD5F':
+          id     => 'FBABD5FB20255ECAB22EE194D13D58E479EA5ED4',
+          source => 'https://repo.zabbix.com/zabbix-official-repo.key',
+        }
+        apt::key { 'zabbix-A1848F5':
+          id     => 'A1848F5352D022B9471D83D0082AB56BA14FE591',
+          source => 'https://repo.zabbix.com/zabbix-official-repo.key',
+        }
+        apt::key { 'zabbix-4C3D6F2':
+          id     => '4C3D6F2CC75F5146754FC374D913219AB5333005',
+          source => 'https://repo.zabbix.com/zabbix-official-repo.key',
+        }
+
+        # Debian 11 provides Zabbix 5.0 by default. This can cause problems for 4.0 versions
+        $pinpriority = $facts['os']['release']['major'] ? {
+          '11'    => 1000,
+          default => undef,
+        }
+        apt::source { 'zabbix':
+          location => $_repo_location,
+          repos    => 'main',
+          release  => $releasename,
+          pin      => $pinpriority,
+          require  => [
+            Apt_key['zabbix-FBABD5F'],
+            Apt_key['zabbix-A1848F5'],
+            Apt_key['zabbix-4C3D6F2'],
+          ],
+        }
+
         Apt::Source['zabbix'] -> Package<|tag == 'zabbix'|>
         Class['Apt::Update'] -> Package<|tag == 'zabbix'|>
       }

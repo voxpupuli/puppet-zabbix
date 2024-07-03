@@ -10,7 +10,7 @@
 # @param timeout Number of worker threads to start.
 # @example
 #  class { 'zabbix::javagateway':
-#    zabbix_version => '5.2',
+#    zabbix_version => '6.0',
 #  }
 # @author Werner Dijkerman ikben@werner-dijkerman.nl
 class zabbix::javagateway (
@@ -24,6 +24,11 @@ class zabbix::javagateway (
   $startpollers             = $zabbix::params::javagateway_startpollers,
   $timeout                  = $zabbix::params::javagateway_timeout,
 ) inherits zabbix::params {
+  # Fix for pid file. Is different in Zabbix (4, 5) and 6
+  $real_pidfile = $zabbix_version ? {
+    /^[45]\.[024]/ => pick($pidfile, '/var/run/zabbix/zabbix_java.pid'),
+    /^[6]\.[024]/  => pick($pidfile, '/var/run/zabbix/zabbix_java_gateway.pid'),
+  }
   # Only include the repo class if it has not yet been included
   unless defined(Class['Zabbix::Repo']) {
     class { 'zabbix::repo':
@@ -66,10 +71,10 @@ class zabbix::javagateway (
   # Manage firewall
   if $manage_firewall {
     firewall { '152 zabbix-javagateway':
-      dport  => $listenport,
-      proto  => 'tcp',
-      action => 'accept',
-      state  => ['NEW','RELATED', 'ESTABLISHED'],
+      dport => $listenport,
+      proto => 'tcp',
+      jump  => 'accept',
+      state => ['NEW','RELATED', 'ESTABLISHED'],
     }
   }
 }

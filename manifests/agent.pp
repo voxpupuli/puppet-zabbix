@@ -23,7 +23,6 @@
 # @param agent_use_ip
 #   When true, when creating hosts via the zabbix-api, it will configure that
 #   connection should me made via ip, not fqdn.
-# @param zbx_group *Deprecated* (see zbx_groups) Name of the hostgroup where this host needs to be added.
 # @param zbx_groups An array of hostgroups where this host needs to be added.
 # @param zbx_group_create Whether to create hostgroup if missing.
 # @param zbx_templates List of templates which will be added when host is configured.
@@ -125,7 +124,7 @@
 #  agent_configfile_path)
 # @example Basic installation:
 #  class { 'zabbix::agent':
-#    zabbix_version => '5.2',
+#    zabbix_version => '6.0',
 #    server         => '192.168.1.1',
 #  }
 #
@@ -135,6 +134,17 @@
 #    monitored_by_proxy => 'my_proxy_host',
 #    server             => '192.168.1.1',
 #  }
+#
+# @example Using Zabbix Agent 2
+#   class { 'zabbix::agent':
+#     agent_configfile_path => '/etc/zabbix/zabbix_agent2.conf',
+#     include_dir           => '/etc/zabbix/zabbix_agent2.d',
+#     include_dir_purge     => false,
+#     zabbix_package_agent  => 'zabbix-agent2',
+#     servicename           => 'zabbix-agent2',
+#     manage_startup_script => false,
+#   }
+#
 # @author Werner Dijkerman ikben@werner-dijkerman.nl
 class zabbix::agent (
   $zabbix_version                                      = $zabbix::params::zabbix_version,
@@ -148,7 +158,6 @@ class zabbix::agent (
   Boolean $manage_resources                            = $zabbix::params::manage_resources,
   $monitored_by_proxy                                  = $zabbix::params::monitored_by_proxy,
   $agent_use_ip                                        = $zabbix::params::agent_use_ip,
-  $zbx_group                                           = $zabbix::params::agent_zbx_group,
   Variant[String[1],Array[String[1]]] $zbx_groups      = $zabbix::params::agent_zbx_groups,
   $zbx_group_create                                    = $zabbix::params::agent_zbx_group_create,
   $zbx_templates                                       = $zabbix::params::agent_zbx_templates,
@@ -194,7 +203,7 @@ class zabbix::agent (
   $userparameter                                       = $zabbix::params::agent_userparameter,
   Optional[String[1]] $loadmodulepath                  = $zabbix::params::agent_loadmodulepath,
   $loadmodule                                          = $zabbix::params::agent_loadmodule,
-  Optional[Enum['unencrypted','psk','cert']] $tlsaccept = $zabbix::params::agent_tlsaccept,
+  Optional[Variant[Array[Enum['unencrypted','psk','cert']],Enum['unencrypted','psk','cert']]] $tlsaccept = $zabbix::params::agent_tlsaccept,
   $tlscafile                                           = $zabbix::params::agent_tlscafile,
   $tlscertfile                                         = $zabbix::params::agent_tlscertfile,
   Optional[String[1]] $tlscertissuer                   = undef,
@@ -221,11 +230,7 @@ class zabbix::agent (
   String $service_type                                 = $zabbix::params::service_type,
   Boolean $manage_startup_script                       = $zabbix::params::manage_startup_script,
 ) inherits zabbix::params {
-  if $facts['os']['family'] == 'Debian' and versioncmp($facts['os']['release']['major'], '11') == 0 {
-    if versioncmp($zabbix_version, '5.2') == 0 {
-      fail('Zabbix 5.2 is not supported on Debian 11!')
-    }
-  }
+  $agent2 = $zabbix_package_agent == 'zabbix-agent2'
 
   # Find if listenip is set. If not, we can set to specific ip or
   # to network name. If more than 1 interfaces are available, we
@@ -242,22 +247,6 @@ class zabbix::agent (
   # is set to false, you'll get warnings like this:
   # "Warning: You cannot collect without storeconfigs being set"
   if $manage_resources {
-    # Migrate deprecated zbx_group parameter
-    if $zbx_group == $zabbix::params::agent_zbx_group and $zbx_groups == $zabbix::params::agent_zbx_groups {
-      $groups = $zabbix::params::agent_zbx_groups
-    } else {
-      if $zbx_group != $zabbix::params::agent_zbx_group and $zbx_groups != $zabbix::params::agent_zbx_groups {
-        fail("Seems like you have filled zbx_group and zbx_groups with custom values. This isn't support! Please use zbx_groups only.")
-      }
-
-      if $zbx_group != $zabbix::params::agent_zbx_group {
-        warning('Passing zbx_group to zabbix::agent is deprecated and will be removed. Use zbx_groups instead.')
-        $groups = Array($zbx_group)
-      } else {
-        $groups = $zbx_groups
-      }
-    }
-
     if $monitored_by_proxy != '' {
       $use_proxy = $monitored_by_proxy
     } else {
@@ -270,7 +259,7 @@ class zabbix::agent (
       ipaddress        => $listen_ip,
       use_ip           => $agent_use_ip,
       port             => $listenport,
-      groups           => [$groups].flatten(),
+      groups           => [$zbx_groups].flatten(),
       group_create     => $zbx_group_create,
       templates        => $zbx_templates,
       macros           => $zbx_macros,
@@ -391,7 +380,7 @@ class zabbix::agent (
       firewall { "150 zabbix-agent from ${_server}":
         dport  => $listenport,
         proto  => 'tcp',
-        action => 'accept',
+        jump   => 'accept',
         source => $_server,
         state  => [
           'NEW',

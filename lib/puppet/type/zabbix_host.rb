@@ -1,19 +1,12 @@
 # frozen_string_literal: true
 
 Puppet::Type.newtype(:zabbix_host) do
+  @doc = 'Manage zabbix hosts'
+
   ensurable do
+    desc 'The basic property that the resource should be in.'
     defaultvalues
     defaultto :present
-  end
-
-  def initialize(*args)
-    super
-
-    # Migrate group to groups
-    return if self[:group].nil?
-
-    self[:groups] = self[:group]
-    delete(:group)
   end
 
   def munge_boolean(value)
@@ -93,14 +86,6 @@ Puppet::Type.newtype(:zabbix_host) do
     end
   end
 
-  newproperty(:group) do
-    desc 'Deprecated! Name of the hostgroup.'
-
-    validate do |_value|
-      Puppet.warning('Passing group to zabbix_host is deprecated and will be removed. Use groups instead.')
-    end
-  end
-
   newproperty(:groups, array_matching: :all) do
     desc 'An array of groups the host belongs to.'
     def insync?(is)
@@ -167,8 +152,4 @@ Puppet::Type.newtype(:zabbix_host) do
   end
 
   autorequire(:file) { '/etc/zabbix/api.conf' }
-
-  validate do
-    raise(_('The properties group and groups are mutually exclusive.')) if self[:group] && self[:groups]
-  end
 end

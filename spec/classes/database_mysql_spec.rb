@@ -7,11 +7,7 @@ describe 'zabbix::database::mysql' do
     'rspec.puppet.com'
   end
 
-  let :pre_condition do
-    "include 'mysql::server'"
-  end
-
-  on_supported_os(baseline_os_hash).each do |os, facts|
+  on_supported_os.each do |os, facts|
     next if facts[:os]['name'] == 'windows'
 
     context "on #{os}" do
@@ -29,14 +25,11 @@ describe 'zabbix::database::mysql' do
         # path to sql files on Debian and RedHat
         path = if Puppet::Util::Package.versioncmp(zabbix_version, '6.0') >= 0
                  '/usr/share/zabbix-sql-scripts/mysql/'
-               elsif Puppet::Util::Package.versioncmp(zabbix_version, '5.4') >= 0
-                 '/usr/share/doc/zabbix-sql-scripts/mysql/'
                else
                  '/usr/share/doc/zabbix-*-mysql*'
                end
 
-        sql_server = case zabbix_version
-                     when '6.0'
+        sql_server = if Puppet::Util::Package.versioncmp(zabbix_version, '6.0') >= 0
                        'server.sql'
                      else
                        'create.sql'
@@ -56,11 +49,10 @@ describe 'zabbix::database::mysql' do
               }
             end
 
+            it { is_expected.to contain_class('zabbix::params') }
             it { is_expected.to contain_class('zabbix::database::mysql') }
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to contain_exec('zabbix_server_create.sql').with_command("cd #{path} && if [ -f #{sql_server}.gz ]; then gunzip -f #{sql_server}.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-server' -p\"${database_password}\" -P 3306 -D 'zabbix-server' < #{sql_server} && touch /etc/zabbix/.schema.done") }
-            it { is_expected.to contain_exec('zabbix_server_images.sql').with_command('touch /etc/zabbix/.images.done') }
-            it { is_expected.to contain_exec('zabbix_server_data.sql').with_command('touch /etc/zabbix/.data.done') }
           end
 
           describe 'and no database_port is defined' do
@@ -75,11 +67,10 @@ describe 'zabbix::database::mysql' do
               }
             end
 
+            it { is_expected.to contain_class('zabbix::params') }
             it { is_expected.to contain_class('zabbix::database::mysql') }
             it { is_expected.to compile.with_all_deps }
             it { is_expected.to contain_exec('zabbix_server_create.sql').with_command("cd #{path} && if [ -f #{sql_server}.gz ]; then gunzip -f #{sql_server}.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-server' -p\"${database_password}\" -D 'zabbix-server' < #{sql_server} && touch /etc/zabbix/.schema.done") }
-            it { is_expected.to contain_exec('zabbix_server_images.sql').with_command('touch /etc/zabbix/.images.done') }
-            it { is_expected.to contain_exec('zabbix_server_data.sql').with_command('touch /etc/zabbix/.data.done') }
           end
         end
 
@@ -97,6 +88,7 @@ describe 'zabbix::database::mysql' do
               }
             end
 
+            it { is_expected.to contain_class('zabbix::params') }
             it { is_expected.to contain_class('zabbix::database::mysql') }
             it { is_expected.to compile.with_all_deps }
 
@@ -119,6 +111,7 @@ describe 'zabbix::database::mysql' do
               }
             end
 
+            it { is_expected.to contain_class('zabbix::params') }
             it { is_expected.to contain_class('zabbix::database::mysql') }
             it { is_expected.to compile.with_all_deps }
 

@@ -22,6 +22,7 @@
 5. [Usage - Configuration options and additional functionality](#usage)
     * [zabbix-server](#usage-zabbix-server)
     * [zabbix-agent](#usage-zabbix-agent)
+    * [zabbix-agent2](#usage-zabbix-agent2)
     * [zabbix-proxy](#usage-zabbix-proxy)
     * [zabbix-javagateway](#usage-zabbix-javagateway)
     * [zabbix-sender](#usage-zabbix-sender)
@@ -136,9 +137,6 @@ node 'zabbix.example.com' {
   class { 'apache':
     mpm_module => 'prefork',
   }
-  include apache::mod::php
-
-  class { 'postgresql::server': }
 
   class { 'zabbix':
     zabbix_url    => 'zabbix.example.com',
@@ -152,9 +150,6 @@ node 'zabbix.example.com' {
   class { 'apache':
     mpm_module => 'prefork',
   }
-  include apache::mod::php
-
-  class { 'mysql::server': }
 
   class { 'zabbix':
     zabbix_url    => 'zabbix.example.com',
@@ -206,6 +201,24 @@ class { 'zabbix::agent':
 }
 ```
 
+### Usage zabbix-agent2
+
+Basic one way of setup, wheter it is monitored by zabbix-server or zabbix-proxy:
+```ruby
+class { 'zabbix::agent':
+  agent_configfile_path => '/etc/zabbix/zabbix_agent2.conf',
+  include_dir           => '/etc/zabbix/zabbix_agent2.d',
+  include_dir_purge     => false,
+  zabbix_package_agent  => 'zabbix-agent2',
+  servicename           => 'zabbix-agent2',
+  manage_startup_script => false,
+  server                => '192.168.20.11',
+}
+```
+
+***Note***
+`manage_startup_script => false` was mandatory to run agent2 in module version 10.x.x
+
 ### Usage zabbix-proxy
 
 Like the zabbix-server, the zabbix-proxy can also be used in 2 ways:
@@ -215,8 +228,6 @@ Like the zabbix-server, the zabbix-proxy can also be used in 2 ways:
 The following is an example for using the PostgreSQL as database:
 ```ruby
 node 'proxy.example.com' {
-  class { 'postgresql::server': }
-
   class { 'zabbix::database':
     database_type => 'postgresql',
   }
@@ -231,8 +242,6 @@ node 'proxy.example.com' {
 When you want to make use of an MySQL database as backend:
 ```ruby
 node 'proxy.example.com' {
-  class { 'mysql::server': }
-
   class { 'zabbix::database':
     database_type => 'mysql',
   }
@@ -427,7 +436,7 @@ Take a look at the [REFERENCE.md](https://github.com/voxpupuli/puppet-zabbix/blo
 
 ## Limitations
 
-This module supports Zabbix 4.0, 5.0, 5.2, 5.4 and 6.0. The upstream supported versions are documented [here](https://www.zabbix.com/de/life_cycle_and_release_policy)
+This module supports Zabbix 5.0, 6.0 and 7.0. The upstream supported versions are documented [here](https://www.zabbix.com/life_cycle_and_release_policy)
 Please have a look into the metadata.json for all supported operating systems.
 
 This module is supported on both the community and the Enterprise version of Puppet.
@@ -435,65 +444,10 @@ This module is supported on both the community and the Enterprise version of Pup
 Please be aware, that when manage_resources is enabled, it can increase an puppet run on the zabbix-server a lot when you have a lot of hosts.
 
 ## Contributors
+Take a look at the [CONTRIBUTING.md](https://github.com/voxpupuli/puppet-zabbix/blob/master/.github/CONTRIBUTING.md)
 
-**ericsysmin** will be helping and maintaining this puppet module. In Github terms he is an Collaborator. So don't be suprised if he acceps/rejects Pull Requests and comment in issues.
-
-The following have contributed to this puppet module:
-
- * Suff
- * gattebury
- * sq4ind
- * nburtsev
- * actionjack
- * karolisc
- * lucas42
- * f0
- * mmerfort
- * genebean
- * meganuke19
- * fredprod
- * ericsysmin
- * JvdW
- * rleemorlang
- * genebean
- * exptom
- * sbaryakov
- * roidelapluie
- * andresvia
- * ju5t
- * elricsfate
- * IceBear2k
- * altvnk
- * rnelson0
- * hkumarmk
- * Wprosdocimo
- * 1n
- * szemlyanoy
- * Wprosdocimo
- * sgnl05
- * hmn
- * BcTpe4HbIu
- * mschuett
- * claflico
- * bastelfreak
- * Oyabi
- * akostetskiy
- * DjxDeaf
- * tcatut
- * inspired-geek
- * ekohl
- * z3rogate
- * mkrakowitzer
- * eander210
- * hkumarmk
- * ITler
- * slashr00t
- * channone-arif-nbcuni
- * BcTpe4HbIu
- * vide
-
-Many thanks for this!
-(If I have forgotten you, please let me know and put you in the list of fame. :-))
+Contributors List:
+* https://github.com/voxpupuli/puppet-zabbix/graphs/contributors
 
 ## Note
 ### Standard usage

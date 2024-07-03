@@ -50,6 +50,7 @@
 # @param startpollers Number of pre-forked instances of pollers.
 # @param startpreprocessors Number of pre-forked instances of preprocessing workers
 # @param startipmipollers Number of pre-forked instances of ipmi pollers.
+# @param startodbcpollers Number of pre-forked instances of ODBC pollers.
 # @param startpollersunreachable Number of pre-forked instances of pollers for unreachable hosts (including ipmi).
 # @param starttrappers Number of pre-forked instances of trappers.
 # @param startpingers Number of pre-forked instances of icmp pingers.
@@ -66,6 +67,9 @@
 # @param startreportwriters Number of pre-forked report writer instances.
 # @param webserviceurl URL to Zabbix web service, used to perform web related tasks.
 # @param vmwarefrequency How often zabbix will connect to vmware service to obtain a new datan.
+# @param vmwareperffrequency
+#   Delay in seconds between performance counter statistics retrieval from a single VMware service.
+#   This delay should be set to the least update interval of any VMware monitoring item that uses VMware performance counters.
 # @param vaultdbpath Vault path from where credentials for database will be retrieved by keys 'password' and 'username'.
 # @param vaulttoken
 #   Vault authentication token that should have been generated exclusively for Zabbix proxy with read-only
@@ -130,6 +134,7 @@
 # @param proxydatafrequency How often zabbix server requests history data from a zabbix proxy in seconds.
 # @param allowroot Allow the server to run as 'root'.
 # @param include_dir You may include individual files or all files in a directory in the configuration file.
+# @param statsallowedip list of allowed ipadresses that can access the internal stats of zabbix server over network
 # @param loadmodulepath Full path to location of server modules.
 # @param loadmodule Module to load at server startup.
 # @param sslcertlocation_dir Location of SSL client certificate files for client authentication.
@@ -139,6 +144,8 @@
 # @param zabbix_user User the zabbix service will run as.
 # @param manage_startup_script If the init script should be managed by this module. Attention: This might cause problems with some config options of this module (e.g server_configfile_path)
 # @param socketdir
+# @param hanodename Node name identifier in HA setup
+# @param nodeaddress Connection details to the HA node, used to check if zabbix-web can talk to zabbix server
 #   IPC socket directory.
 #   Directory to store IPC sockets used by internal Zabbix services.
 # @example
@@ -202,6 +209,7 @@ class zabbix::server (
   Optional[String[1]] $database_tlscipher13                                   = $zabbix::params::server_database_tlscipher13,
   $startpollers                                                               = $zabbix::params::server_startpollers,
   $startipmipollers                                                           = $zabbix::params::server_startipmipollers,
+  Integer[0, 1000] $startodbcpollers                                          = $zabbix::params::server_startodbcpollers,
   $startpollersunreachable                                                    = $zabbix::params::server_startpollersunreachable,
   Integer[1, 1000] $startpreprocessors                                        = $zabbix::params::server_startpreprocessors,
   $starttrappers                                                              = $zabbix::params::server_starttrappers,
@@ -221,6 +229,7 @@ class zabbix::server (
   Optional[String[1]] $vaulttoken                                             = $zabbix::params::server_vaulttoken,
   Stdlib::HTTPSUrl $vaulturl                                                  = $zabbix::params::server_vaulturl,
   $vmwarefrequency                                                            = $zabbix::params::server_vmwarefrequency,
+  $vmwareperffrequency                                                        = $zabbix::params::server_vmwareperffrequency,
   $vmwarecachesize                                                            = $zabbix::params::server_vmwarecachesize,
   $vmwaretimeout                                                              = $zabbix::params::server_vmwaretimeout,
   $snmptrapperfile                                                            = $zabbix::params::server_snmptrapperfile,
@@ -264,26 +273,24 @@ class zabbix::server (
   $include_dir                                                                = $zabbix::params::server_include,
   $loadmodulepath                                                             = $zabbix::params::server_loadmodulepath,
   $loadmodule                                                                 = $zabbix::params::server_loadmodule,
+  Optional[Stdlib::Absolutepath] $sslcalocation_dir                           = $zabbix::params::server_sslcalocation,
   Optional[Stdlib::Absolutepath] $sslcertlocation_dir                         = $zabbix::params::server_sslcertlocation,
   Optional[Stdlib::Absolutepath] $sslkeylocation_dir                          = $zabbix::params::server_sslkeylocation,
+  Optional[String[1]] $statsallowedip                                         = $zabbix::params::server_statsallowedip,
   Boolean $manage_selinux                                                     = $zabbix::params::manage_selinux,
   String $additional_service_params                                           = $zabbix::params::additional_service_params,
   Optional[String[1]] $zabbix_user                                            = $zabbix::params::server_zabbix_user,
   Boolean $manage_startup_script                                              = $zabbix::params::manage_startup_script,
   Optional[Stdlib::Absolutepath] $socketdir                                   = $zabbix::params::server_socketdir,
   Optional[Stdlib::HTTPUrl] $webserviceurl                                    = undef,
+  Optional[String[1]] $hanodename                                             = $zabbix::params::server_hanodename,
+  Optional[String[1]] $nodeaddress                                            = $zabbix::params::server_nodeaddress,
 ) inherits zabbix::params {
   # zabbix server 5.2, 5.4 and 6.0 is not supported on RHEL 7.
   # https://www.zabbix.com/documentation/current/manual/installation/install_from_packages/rhel_centos
   if $facts['os']['family'] == 'RedHat' and versioncmp($zabbix_version, '5.2') >= 0 {
     if versioncmp($facts['os']['release']['major'], '7') == 0 {
       fail("${facts['os']['family']} ${$facts['os']['release']['major']} is not supported for zabbix::server (version ${$zabbix_version}) (yet)")
-    }
-  }
-
-  if $facts['os']['family'] == 'Debian' and versioncmp($facts['os']['release']['major'], '11') == 0 {
-    if versioncmp($zabbix_version, '5.2') == 0 {
-      fail('Zabbix 5.2 is not supported on Debian 11!')
     }
   }
 
@@ -468,6 +475,7 @@ class zabbix::server (
         'externalscripts'         => $externalscripts,
         'fping6location'          => $fping6location,
         'fpinglocation'           => $fpinglocation,
+        'hanodename'              => $hanodename,
         'historycachesize'        => $historycachesize,
         'historyindexcachesize'   => $historyindexcachesize,
         'housekeepingfrequency'   => $housekeepingfrequency,
@@ -483,6 +491,7 @@ class zabbix::server (
         'logslowqueries'          => $logslowqueries,
         'logtype'                 => $logtype,
         'maxhousekeeperdelete'    => $maxhousekeeperdelete,
+        'nodeaddress'             => $nodeaddress,
         'pidfile'                 => $pidfile,
         'proxyconfigfrequency'    => $proxyconfigfrequency,
         'proxydatafrequency'      => $proxydatafrequency,
@@ -490,6 +499,7 @@ class zabbix::server (
         'socketdir'               => $socketdir,
         'sourceip'                => $sourceip,
         'sshkeylocation'          => $sshkeylocation,
+        'sslcalocation_dir'       => $sslcalocation_dir,
         'sslcertlocation_dir'     => $sslcertlocation_dir,
         'sslkeylocation_dir'      => $sslkeylocation_dir,
         'startalerters'           => $startalerters,
@@ -500,6 +510,7 @@ class zabbix::server (
         'startipmipollers'        => $startipmipollers,
         'startjavapollers'        => $startjavapollers,
         'startlldprocessors'      => $startlldprocessors,
+        'startodbcpollers'        => $startodbcpollers,
         'startpingers'            => $startpingers,
         'startpollers'            => $startpollers,
         'startpollersunreachable' => $startpollersunreachable,
@@ -510,6 +521,7 @@ class zabbix::server (
         'starttimers'             => $starttimers,
         'starttrappers'           => $starttrappers,
         'startvmwarecollectors'   => $startvmwarecollectors,
+        'statsallowedip'          => $statsallowedip,
         'timeout'                 => $timeout,
         'tlscafile'               => $tlscafile,
         'tlscertfile'             => $tlscertfile,
@@ -533,6 +545,7 @@ class zabbix::server (
         'vaulturl'                => $vaulturl,
         'vmwarecachesize'         => $vmwarecachesize,
         'vmwarefrequency'         => $vmwarefrequency,
+        'vmwareperffrequency'     => $vmwareperffrequency,
         'vmwaretimeout'           => $vmwaretimeout,
         'webserviceurl'           => $webserviceurl,
         'zabbix_user'             => $zabbix::params::server_zabbix_user,
@@ -551,10 +564,10 @@ class zabbix::server (
   # Manage firewall
   if $manage_firewall {
     firewall { '151 zabbix-server':
-      dport  => $listenport,
-      proto  => 'tcp',
-      action => 'accept',
-      state  => [
+      dport => $listenport,
+      proto => 'tcp',
+      jump  => 'accept',
+      state => [
         'NEW',
         'RELATED',
         'ESTABLISHED',

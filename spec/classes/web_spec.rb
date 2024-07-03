@@ -14,13 +14,20 @@ describe 'zabbix::web' do
     }
   end
 
-  on_supported_os(baseline_os_hash).each do |os, facts|
+  let :pre_condition do
+    <<~PUPPET
+      if $facts['os']['family'] != 'RedHat' {
+        class { 'apache':
+          mpm_module => 'prefork',
+        }
+      }
+    PUPPET
+  end
+
+  on_supported_os.each do |os, facts|
     supported_versions.each do |zabbix_version|
       next if facts[:os]['name'] == 'windows'
-      next if facts[:os]['name'] == 'Archlinux'
-      next if facts[:os]['name'] == 'Gentoo'
-      # There are no zabbix 5.2 packages for Debian 11
-      next if facts[:os]['name'] == 'Debian' && facts[:os]['release']['major'] == '11' && zabbix_version == '5.2'
+      next if %w[Archlinux Gentoo FreeBSD].include?(facts[:os]['family'])
 
       context "on #{os}" do
         let :facts do
@@ -29,7 +36,22 @@ describe 'zabbix::web' do
 
         context 'with all defaults' do
           it { is_expected.to compile.with_all_deps }
+          it { is_expected.to contain_class('Zabbix::Params') }
+          it { is_expected.to contain_class('Zabbix::Repo') }
           it { is_expected.to contain_file('/etc/zabbix/web').with_ensure('directory') }
+
+          it { is_expected.to contain_apt__key('zabbix-A1848F5') }                         if facts[:os]['family'] == 'Debian'
+          it { is_expected.to contain_apt__key('zabbix-FBABD5F') }                         if facts[:os]['family'] == 'Debian'
+          it { is_expected.to contain_apt__source('zabbix') }                              if facts[:os]['family'] == 'Debian'
+          it { is_expected.to contain_yumrepo('zabbix') }                                  if facts[:os]['family'] == 'RedHat'
+          it { is_expected.to contain_yumrepo('zabbix-nonsupported') }                     if facts[:os]['family'] == 'RedHat'
+          it { is_expected.to contain_yumrepo('zabbix-frontend') }                         if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
+          it { is_expected.to contain_package('zabbix-required-scl-repo') }                if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7' && %w[OracleLinux CentOS].include?(facts[:os]['name'])
+          it { is_expected.to contain_service('rh-php72-php-fpm') }                        if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
+          it { is_expected.to contain_file('/etc/opt/rh/rh-php72/php-fpm.d/zabbix.conf') } if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
+          it { is_expected.to contain_file('/etc/zabbix/zabbix.conf.php') }                if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
+          it { is_expected.to contain_service('php-fpm') }                                 if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] >= '8'
+          it { is_expected.to contain_file('/etc/php-fpm.d/zabbix.conf') }                 if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] >= '8'
         end
 
         describe 'with enforcing selinux' do
@@ -44,6 +66,8 @@ describe 'zabbix::web' do
           end
 
           it { is_expected.to contain_selboolean('httpd_can_connect_zabbix').with('value' => 'on', 'persistent' => true) }
+          it { is_expected.to contain_selboolean('httpd_can_network_connect_db').with('value' => 'on', 'persistent' => true) }
+          it { is_expected.to contain_apache__vhost('localhost') }
         end
 
         describe 'with false selinux' do
@@ -64,10 +88,8 @@ describe 'zabbix::web' do
 
           pgsqlpackage = 'php-pgsql'
 
-          packages = if facts[:osfamily] == 'RedHat'
-                       if facts[:operatingsystemmajrelease].to_i == 7 &&
-                          !%w[VirtuozzoLinux OracleLinux Scientific].include?(facts[:os]['name']) &&
-                          Puppet::Util::Package.versioncmp(zabbix_version, '5.0') >= 0
+          packages = if facts[:os]['family'] == 'RedHat'
+                       if facts[:os]['release']['major'].to_i == 7
                          %w[zabbix-web-pgsql-scl zabbix-web]
                        else
                          %w[zabbix-web-pgsql zabbix-web]
@@ -89,7 +111,7 @@ describe 'zabbix::web' do
 
           mysqlpackage = 'php-mysql'
 
-          packages = facts[:osfamily] == 'RedHat' ? %w[zabbix-web-mysql zabbix-web] : ['zabbix-frontend-php', mysqlpackage]
+          packages = facts[:os]['family'] == 'RedHat' ? %w[zabbix-web-mysql zabbix-web] : ['zabbix-frontend-php', mysqlpackage]
           packages.each do |package|
             it { is_expected.to contain_package(package) }
           end
@@ -174,7 +196,7 @@ describe 'zabbix::web' do
 
         it { is_expected.to contain_apache__vhost('zabbix.example.com').with_name('zabbix.example.com') }
 
-        context 'with database_* settings' do
+        context 'with database_* settings and zabbix_version 6.0' do
           let :params do
             super().merge(
               database_host: 'localhost',
@@ -184,7 +206,28 @@ describe 'zabbix::web' do
               zabbix_server: 'localhost',
               zabbix_listenport: '3306',
               zabbix_server_name: 'localhost',
-              zabbix_version: '4.0'
+              zabbix_version: '6.0'
+            )
+          end
+
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['SERVER'\]   = 'localhost'}) }
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['DATABASE'\] = 'zabbix-server'}) }
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['USER'\]     = 'zabbix-server'}) }
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['PASSWORD'\] = 'zabbix-server'}) }
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$ZBX_SERVER_NAME = 'localhost'}) }
+        end
+
+        context 'with database_* settings and zabbix_version 5.0' do
+          let :params do
+            super().merge(
+              database_host: 'localhost',
+              database_name: 'zabbix-server',
+              database_user: 'zabbix-server',
+              database_password: 'zabbix-server',
+              zabbix_server: 'localhost',
+              zabbix_listenport: '3306',
+              zabbix_server_name: 'localhost',
+              zabbix_version: '5.0'
             )
           end
 
@@ -261,6 +304,16 @@ describe 'zabbix::web' do
               content: %r{^\s+Require host 127\.0\.0\.1$}
             )
           }
+        end
+
+        describe 'with custom vhost params' do
+          let :params do
+            super().merge(
+              apache_vhost_custom_params: { mdomain: true }
+            )
+          end
+
+          it { is_expected.to contain_apache__vhost('zabbix.example.com').with_mdomain(true) }
         end
       end
     end

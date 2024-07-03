@@ -2,6 +2,7 @@
 
 require_relative '../zabbix'
 Puppet::Type.type(:zabbix_template).provide(:ruby, parent: Puppet::Provider::Zabbix) do
+  desc 'Puppet provider that manages Zabbix templates by importing and exporting them in XML format, and creating, updating, or deleting various Zabbix configuration objects. It includes conditional logic based on the Zabbix version being used.'
   confine feature: :zabbixapi
 
   def create
