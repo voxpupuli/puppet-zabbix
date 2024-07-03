@@ -101,6 +101,7 @@ describe 'zabbix::proxy' do
         let :params do
           {
             database_type: 'postgresql',
+            database_password: 'zabbix-proxy',
             manage_database: true
           }
         end
@@ -117,6 +118,7 @@ describe 'zabbix::proxy' do
         let(:params) do
           {
             database_type: 'mysql',
+            database_password: 'zabbix-proxy',
             manage_database: true
           }
         end
@@ -133,6 +135,7 @@ describe 'zabbix::proxy' do
       context 'when manage_database is true' do
         let(:params) do
           {
+            database_password: 'zabbix-proxy',
             manage_database: true
           }
         end
@@ -349,6 +352,7 @@ describe 'zabbix::proxy' do
       context 'with zabbix_proxy.conf and version 5.0' do
         let :params do
           {
+            database_password: 'zabbix-proxy',
             socketdir: '/var/run/zabbix',
             startodbcpollers: 1,
             zabbix_version: '5.0'
@@ -362,6 +366,7 @@ describe 'zabbix::proxy' do
       context 'with zabbix_proxy.conf and version 6.0' do
         let :params do
           {
+            database_password: 'zabbix-proxy',
             socketdir: '/var/run/zabbix',
             startodbcpollers: 1,
             zabbix_version: '6.0'
@@ -376,6 +381,7 @@ describe 'zabbix::proxy' do
         describe 'as system' do
           let :params do
             {
+              database_password: 'zabbix-proxy',
               logtype: 'system'
             }
           end
@@ -388,6 +394,7 @@ describe 'zabbix::proxy' do
         describe 'as console' do
           let :params do
             {
+              database_password: 'zabbix-proxy',
               logtype: 'console'
             }
           end
@@ -400,6 +407,7 @@ describe 'zabbix::proxy' do
         describe 'as file' do
           let :params do
             {
+              database_password: 'zabbix-proxy',
               logtype: 'file'
             }
           end
@@ -413,6 +421,7 @@ describe 'zabbix::proxy' do
       context 'tlsaccept with one string value' do
         let :params do
           {
+            database_password: 'zabbix-proxy',
             tlsaccept: 'cert'
           }
         end
@@ -423,6 +432,7 @@ describe 'zabbix::proxy' do
       context 'tlsaccept with one value array' do
         let :params do
           {
+            database_password: 'zabbix-proxy',
             tlsaccept: %w[cert]
           }
         end
@@ -433,6 +443,7 @@ describe 'zabbix::proxy' do
       context 'tlsaccept with two value array' do
         let :params do
           {
+            database_password: 'zabbix-proxy',
             tlsaccept: %w[unencrypted cert]
           }
         end

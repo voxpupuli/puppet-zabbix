@@ -359,9 +359,20 @@ describe 'zabbix::server' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCipherAll13=EECDH\+aRSA\+AES128:RSA\+aRSA\+AES128:kECDHEPSK\+AES128:kPSK\+AES128$} }
       end
 
+      context 'with zabbix_server.conf and sensitive database_password' do
+        let :params do
+          {
+            database_password: sensitive('secret')
+          }
+        end
+
+        it { is_expected.to compile }
+      end
+
       context 'with zabbix_server.conf and version 5.0' do
         let :params do
           {
+            database_password: 'notsecret', # cleartext password must be explicitly declared in this test, otherwise the parser will secure content of the file
             socketdir: '/var/run/zabbix',
             startodbcpollers: 1,
             zabbix_version: '5.0'
@@ -376,6 +387,7 @@ describe 'zabbix::server' do
         describe 'as system' do
           let :params do
             {
+              database_password: 'notsecret', # cleartext password must be explicitly declared in this test, otherwise the parser will secure content of the file
               logtype: 'system'
             }
           end
@@ -388,6 +400,7 @@ describe 'zabbix::server' do
         describe 'as console' do
           let :params do
             {
+              database_password: 'notsecret', # cleartext password must be explicitly declared in this test, otherwise the parser will secure content of the file
               logtype: 'console'
             }
           end
@@ -400,6 +413,7 @@ describe 'zabbix::server' do
         describe 'as file' do
           let :params do
             {
+              database_password: 'notsecret', # cleartext password must be explicitly declared in this test, otherwise the parser will secure content of the file
               logtype: 'file'
             }
           end
