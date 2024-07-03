@@ -23,6 +23,12 @@ class zabbix::database::postgresql (
 ) inherits zabbix::params {
   assert_private()
 
+  $database_password_unsensitive = if $database_password =~ Sensitive[String] {
+    $database_password.unwrap
+  } else {
+    $database_password
+  }
+
   if $database_schema_path != false and $database_schema_path != '' {
     $schema_path = $database_schema_path
   } elsif versioncmp($zabbix_version, '6.0') >= 0 {
@@ -56,7 +62,7 @@ class zabbix::database::postgresql (
     "PGHOST=${database_host}",
     "PGPORT=${database_port}",
     "PGUSER=${database_user}",
-    "PGPASSWORD=${database_password}",
+    "PGPASSWORD=${database_password_unsensitive}",
     "PGDATABASE=${database_name}",
   ]
 
