@@ -548,7 +548,7 @@ Default value: `$zabbix::params::server_api_user`
 
 ##### <a name="-zabbix--zabbix_api_pass"></a>`zabbix_api_pass`
 
-Data type: `Any`
+Data type: `Variant[Sensitive[String], String]`
 
 Password of the user which connects to the api. Default: zabbix
 
@@ -662,7 +662,7 @@ Default value: `$zabbix::params::server_database_user`
 
 ##### <a name="-zabbix--database_password"></a>`database_password`
 
-Data type: `Any`
+Data type: `Variant[Sensitive[String], String]`
 
 Database password. ignored for sqlite.
 
@@ -1877,7 +1877,16 @@ Default value: `$zabbix::params::agent_timeout`
 
 ##### <a name="-zabbix--agent--tlsaccept"></a>`tlsaccept`
 
-Data type: `Optional[Variant[Array[Enum['unencrypted','psk','cert']],Enum['unencrypted','psk','cert']]]`
+Data type:
+
+```puppet
+Optional[
+    Variant[
+      Array[Enum['unencrypted','psk','cert']],
+      Enum['unencrypted','psk','cert']
+    ]
+  ]
+```
 
 What incoming connections to accept from Zabbix server. Used for a passive proxy, ignored on an active proxy.
 
@@ -2307,7 +2316,7 @@ Default value: `$zabbix::params::server_database_user`
 
 ##### <a name="-zabbix--database--database_password"></a>`database_password`
 
-Data type: `Any`
+Data type: `Variant[Sensitive[String], String]`
 
 The password of the database_user.
 
@@ -2363,7 +2372,7 @@ This will install and configure the zabbix-agent deamon
 
 #### Examples
 
-##### 
+#####
 
 ```puppet
 class { 'zabbix::javagateway':
@@ -2933,7 +2942,7 @@ Default value: `$zabbix::params::proxy_database_user`
 
 ##### <a name="-zabbix--proxy--database_password"></a>`database_password`
 
-Data type: `Any`
+Data type: `Variant[Sensitive[String], String]`
 
 Database password. ignored for sqlite.
 
@@ -3314,7 +3323,16 @@ Default value: `$zabbix::params::proxy_timeout`
 
 ##### <a name="-zabbix--proxy--tlsaccept"></a>`tlsaccept`
 
-Data type: `Optional[Variant[Array[Enum['unencrypted','psk','cert']],Enum['unencrypted','psk','cert']]]`
+Data type:
+
+```puppet
+Optional[
+    Variant[
+      Array[Enum['unencrypted', 'psk', 'cert']],
+      Enum['unencrypted', 'psk', 'cert']
+    ]
+  ]
+```
 
 What incoming connections to accept from Zabbix server. Used for a passive proxy, ignored on an active proxy.
 
@@ -3913,7 +3931,7 @@ API username.
 
 ##### <a name="-zabbix--resources--web--zabbix_pass"></a>`zabbix_pass`
 
-Data type: `String[1]`
+Data type: `Variant[Sensitive[String[1]], String[1]]`
 
 API password.
 
@@ -3965,7 +3983,7 @@ This will install and configure the zabbix-server deamon
 
 #### Examples
 
-##### 
+#####
 
 ```puppet
 When running everything on a single node, please check
@@ -4332,7 +4350,7 @@ Default value: `$zabbix::params::server_database_user`
 
 ##### <a name="-zabbix--server--database_password"></a>`database_password`
 
-Data type: `Any`
+Data type: `Variant[Sensitive[String], String]`
 
 Database password. ignored for sqlite.
 
@@ -5041,7 +5059,7 @@ This class can be used when you use hiera or The Foreman. With this tools you ca
 
 #### Examples
 
-##### 
+#####
 
 ```puppet
 zabbix::userparameter::data:
@@ -5326,7 +5344,7 @@ Default value: `$zabbix::params::server_api_user`
 
 ##### <a name="-zabbix--web--zabbix_api_pass"></a>`zabbix_api_pass`
 
-Data type: `Any`
+Data type: `Variant[Sensitive[String], String]`
 
 Password of the user which connects to the api. Default: zabbix
 
@@ -5384,7 +5402,7 @@ Default value: `$zabbix::params::server_database_user`
 
 ##### <a name="-zabbix--web--database_password"></a>`database_password`
 
-Data type: `Any`
+Data type: `Variant[Sensitive[String], String]`
 
 Database password. ignored for sqlite.
 
@@ -5787,13 +5805,13 @@ This manage the zabbix related service startup script.
 
 #### Examples
 
-##### 
+#####
 
 ```puppet
 zabbix::startup { 'agent': }
 ```
 
-##### 
+#####
 
 ```puppet
 zabbix::startup { 'server': }
@@ -5893,7 +5911,7 @@ This will upload an Zabbix Template (XML format)
 
 #### Examples
 
-##### 
+#####
 
 ```puppet
 zabbix::template { 'Template App MySQL':
@@ -6002,7 +6020,7 @@ This will install an userparameters file with keys for items that can be checked
 
 #### Examples
 
-##### 
+#####
 
 ```puppet
 zabbix::userparameters { 'mysql':
@@ -6010,7 +6028,7 @@ zabbix::userparameters { 'mysql':
 }
 ```
 
-##### 
+#####
 
 ```puppet
 zabbix::userparameters { 'mysql':
@@ -6436,4 +6454,3 @@ Alias of `Enum['postgresql', 'mysql', 'sqlite']`
 Type for size values in bytes (also allows k/K and m/M as appendix)
 
 Alias of `Optional[Pattern[/^\d+[k|K|m|M]?$/]]`
-
