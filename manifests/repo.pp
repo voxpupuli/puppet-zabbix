@@ -129,8 +129,7 @@ class zabbix::repo (
           default => "${repo_gpg_key_location}/zabbix-official-repo.key",
         }
 
-        if (fact('os.name') == 'Ubuntu' and versioncmp(fact('os.release.major'), '22.04') >=0 or
-            fact('os.name') == 'Debian' and versioncmp(fact('os.release.major'), '12') >= 0) {
+        if (fact('os.name') == 'Ubuntu' and versioncmp(fact('os.release.major'), '22.04') >= 0 or fact('os.name') == 'Debian' and versioncmp(fact('os.release.major'), '12') >= 0) {
           apt::source { 'zabbix':
             location => $_repo_location,
             repos    => 'main',
@@ -163,7 +162,7 @@ class zabbix::repo (
               Apt::Key['zabbix-FBABD5F'],
               Apt::Key['zabbix-A1848F5'],
               Apt::Key['zabbix-4C3D6F2'],
-            ]
+            ],
           }
         }
 
