@@ -2,6 +2,7 @@
 
 require 'deep_merge'
 require 'spec_helper'
+include Puppet::Util
 
 describe 'zabbix::repo' do
   on_supported_os.each do |os, facts|
@@ -19,9 +20,16 @@ describe 'zabbix::repo' do
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to contain_class('zabbix::params') }
         it { is_expected.to contain_class('zabbix::repo') }
-
-        it { is_expected.to contain_apt__key('zabbix-A1848F5') } if facts[:os]['family'] == 'Debian'
-        it { is_expected.to contain_apt__key('zabbix-FBABD5F') } if facts[:os]['family'] == 'Debian'
+        case facts[:os]['name']
+        when 'Debian'
+          it { is_expected.to contain_apt__key('zabbix-A1848F5') }               if Package.versioncmp(facts[:os]['release']['major'], '12') < 0
+          it { is_expected.to contain_apt__key('zabbix-FBABD5F') }               if Package.versioncmp(facts[:os]['release']['major'], '12') < 0
+          it { is_expected.to contain_apt__keyring('zabbix-official-repo.asc') } if Package.versioncmp(facts[:os]['release']['major'], '12') >= 0
+        when 'Ubuntu'
+          it { is_expected.to contain_apt__key('zabbix-A1848F5') }               if Package.versioncmp(facts[:os]['release']['major'], '22.04') < 0
+          it { is_expected.to contain_apt__key('zabbix-FBABD5F') }               if Package.versioncmp(facts[:os]['release']['major'], '22.04') < 0
+          it { is_expected.to contain_apt__keyring('zabbix-official-repo.asc') } if Package.versioncmp(facts[:os]['release']['major'], '22.04') >= 0
+        end
 
         context 'when repo_location is "https://example.com/foo"' do
           let :params do
