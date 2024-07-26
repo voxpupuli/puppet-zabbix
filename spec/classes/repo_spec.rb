@@ -2,7 +2,7 @@
 
 require 'deep_merge'
 require 'spec_helper'
-include Puppet::Util
+Package = Puppet::Util::Package
 
 describe 'zabbix::repo' do
   on_supported_os.each do |os, facts|
@@ -20,16 +20,10 @@ describe 'zabbix::repo' do
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to contain_class('zabbix::params') }
         it { is_expected.to contain_class('zabbix::repo') }
-        case facts[:os]['name']
-        when 'Debian'
-          it { is_expected.to contain_apt__key('zabbix-A1848F5') }               if Package.versioncmp(facts[:os]['release']['major'], '12') < 0
-          it { is_expected.to contain_apt__key('zabbix-FBABD5F') }               if Package.versioncmp(facts[:os]['release']['major'], '12') < 0
-          it { is_expected.to contain_apt__keyring('zabbix-official-repo.asc') } if Package.versioncmp(facts[:os]['release']['major'], '12') >= 0
-        when 'Ubuntu'
-          it { is_expected.to contain_apt__key('zabbix-A1848F5') }               if Package.versioncmp(facts[:os]['release']['major'], '22.04') < 0
-          it { is_expected.to contain_apt__key('zabbix-FBABD5F') }               if Package.versioncmp(facts[:os]['release']['major'], '22.04') < 0
-          it { is_expected.to contain_apt__keyring('zabbix-official-repo.asc') } if Package.versioncmp(facts[:os]['release']['major'], '22.04') >= 0
-        end
+
+        it { is_expected.to contain_apt__key('zabbix-A1848F5') }               if (facts[:os]['name'] == 'Debian' && Package.versioncmp(facts[:os]['release']['major'], '12') < 0) || (facts[:os]['name'] == 'Ubuntu' && Package.versioncmp(facts[:os]['release']['major'], '22.04') < 0)
+        it { is_expected.to contain_apt__key('zabbix-FBABD5F') }               if (facts[:os]['name'] == 'Debian' && Package.versioncmp(facts[:os]['release']['major'], '12') < 0) || (facts[:os]['name'] == 'Ubuntu' && Package.versioncmp(facts[:os]['release']['major'], '22.04') < 0)
+        it { is_expected.to contain_apt__keyring('zabbix-official-repo.asc') } if (facts[:os]['name'] == 'Debian' && Package.versioncmp(facts[:os]['release']['major'], '12') >= 0) || (facts[:os]['name'] == 'Ubuntu' && Package.versioncmp(facts[:os]['release']['major'], '22.04') >= 0)
 
         context 'when repo_location is "https://example.com/foo"' do
           let :params do
