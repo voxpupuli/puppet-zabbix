@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+include Puppet::Util
 
 describe 'zabbix::sender' do
   let :node do
@@ -53,8 +54,16 @@ describe 'zabbix::sender' do
           it { is_expected.to contain_package('zabbix-required-scl-repo') } if facts[:os]['release']['major'] == '7' && %w[OracleLinux CentOS].include?(facts[:os]['name'])
         when 'Debian'
           it { is_expected.to contain_apt__source('zabbix') }
-          it { is_expected.to contain_apt__key('zabbix-A1848F5') }
-          it { is_expected.to contain_apt__key('zabbix-FBABD5F') }
+          case facts[:os]['name']
+          when 'Debian'
+            it { is_expected.to contain_apt__key('zabbix-A1848F5') }               if Package.versioncmp(facts[:os]['release']['major'], '12') < 0
+            it { is_expected.to contain_apt__key('zabbix-FBABD5F') }               if Package.versioncmp(facts[:os]['release']['major'], '12') < 0
+            it { is_expected.to contain_apt__keyring('zabbix-official-repo.asc') } if Package.versioncmp(facts[:os]['release']['major'], '12') >= 0
+          when 'Ubuntu'
+            it { is_expected.to contain_apt__key('zabbix-A1848F5') }               if Package.versioncmp(facts[:os]['release']['major'], '22.04') < 0
+            it { is_expected.to contain_apt__key('zabbix-FBABD5F') }               if Package.versioncmp(facts[:os]['release']['major'], '22.04') < 0
+            it { is_expected.to contain_apt__keyring('zabbix-official-repo.asc') } if Package.versioncmp(facts[:os]['release']['major'], '22.04') >= 0
+          end
         end
       end
     end
