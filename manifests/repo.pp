@@ -124,34 +124,47 @@ class zabbix::repo (
           default => $repo_location,
         }
 
-        apt::key { 'zabbix-FBABD5F':
-          id     => 'FBABD5FB20255ECAB22EE194D13D58E479EA5ED4',
-          source => 'https://repo.zabbix.com/zabbix-official-repo.key',
-        }
-        apt::key { 'zabbix-A1848F5':
-          id     => 'A1848F5352D022B9471D83D0082AB56BA14FE591',
-          source => 'https://repo.zabbix.com/zabbix-official-repo.key',
-        }
-        apt::key { 'zabbix-4C3D6F2':
-          id     => '4C3D6F2CC75F5146754FC374D913219AB5333005',
-          source => 'https://repo.zabbix.com/zabbix-official-repo.key',
-        }
-
         # Debian 11 provides Zabbix 5.0 by default. This can cause problems for 4.0 versions
         $pinpriority = $facts['os']['release']['major'] ? {
           '11'    => 1000,
           default => undef,
         }
-        apt::source { 'zabbix':
-          location => $_repo_location,
-          repos    => 'main',
-          release  => $releasename,
-          pin      => $pinpriority,
-          require  => [
-            Apt_key['zabbix-FBABD5F'],
-            Apt_key['zabbix-A1848F5'],
-            Apt_key['zabbix-4C3D6F2'],
-          ],
+
+        if (fact('os.name') == 'Ubuntu' and versioncmp(fact('os.release.major'), '22.04') >= 0 or fact('os.name') == 'Debian' and versioncmp(fact('os.release.major'), '12') >= 0) {
+          apt::source { 'zabbix':
+            location => $_repo_location,
+            repos    => 'main',
+            release  => $releasename,
+            pin      => $pinpriority,
+            key      => {
+              name   => 'zabbix-official-repo.asc',
+              source => 'https://repo.zabbix.com/zabbix-official-repo.key',
+            },
+          }
+        } else {
+          apt::key { 'zabbix-FBABD5F':
+            id     => 'FBABD5FB20255ECAB22EE194D13D58E479EA5ED4',
+            source => 'https://repo.zabbix.com/zabbix-official-repo.key',
+          }
+          apt::key { 'zabbix-A1848F5':
+            id     => 'A1848F5352D022B9471D83D0082AB56BA14FE591',
+            source => 'https://repo.zabbix.com/zabbix-official-repo.key',
+          }
+          apt::key { 'zabbix-4C3D6F2':
+            id     => '4C3D6F2CC75F5146754FC374D913219AB5333005',
+            source => 'https://repo.zabbix.com/zabbix-official-repo.key',
+          }
+          apt::source { 'zabbix':
+            location => $_repo_location,
+            repos    => 'main',
+            release  => $releasename,
+            pin      => $pinpriority,
+            require  => [
+              Apt::Key['zabbix-FBABD5F'],
+              Apt::Key['zabbix-A1848F5'],
+              Apt::Key['zabbix-4C3D6F2'],
+            ],
+          }
         }
 
         Apt::Source['zabbix'] -> Package<|tag == 'zabbix'|>
