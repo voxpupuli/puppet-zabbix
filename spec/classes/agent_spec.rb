@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-Package = Puppet::Util::Package
 
 describe 'zabbix::agent' do
   let :node do
@@ -69,9 +68,9 @@ describe 'zabbix::agent' do
         it { is_expected.to contain_selinux__module('zabbix-agent') }          if facts[:os]['family'] == 'RedHat'
         it { is_expected.to contain_yumrepo('zabbix-frontend') }               if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7'
         it { is_expected.to contain_package('zabbix-required-scl-repo') }      if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '7' && %w[OracleLinux CentOS].include?(facts[:os]['name'])
-        it { is_expected.to contain_apt__key('zabbix-A1848F5') }               if (facts[:os]['name'] == 'Debian' && Package.versioncmp(facts[:os]['release']['major'], '12') < 0) || (facts[:os]['name'] == 'Ubuntu' && Package.versioncmp(facts[:os]['release']['major'], '22.04') < 0)
-        it { is_expected.to contain_apt__key('zabbix-FBABD5F') }               if (facts[:os]['name'] == 'Debian' && Package.versioncmp(facts[:os]['release']['major'], '12') < 0) || (facts[:os]['name'] == 'Ubuntu' && Package.versioncmp(facts[:os]['release']['major'], '22.04') < 0)
-        it { is_expected.to contain_apt__keyring('zabbix-official-repo.asc') } if (facts[:os]['name'] == 'Debian' && Package.versioncmp(facts[:os]['release']['major'], '12') >= 0) || (facts[:os]['name'] == 'Ubuntu' && Package.versioncmp(facts[:os]['release']['major'], '22.04') >= 0)
+        it { is_expected.to contain_apt__key('zabbix-A1848F5') }               if (facts[:os]['name'] == 'Debian' && Puppet::Util::Package.versioncmp(facts[:os]['release']['major'], '12') < 0) || (facts[:os]['name'] == 'Ubuntu' && Puppet::Util::Package.versioncmp(facts[:os]['release']['major'], '22.04') < 0)
+        it { is_expected.to contain_apt__key('zabbix-FBABD5F') }               if (facts[:os]['name'] == 'Debian' && Puppet::Util::Package.versioncmp(facts[:os]['release']['major'], '12') < 0) || (facts[:os]['name'] == 'Ubuntu' && Puppet::Util::Package.versioncmp(facts[:os]['release']['major'], '22.04') < 0)
+        it { is_expected.to contain_apt__keyring('zabbix-official-repo.asc') } if (facts[:os]['name'] == 'Debian' && Puppet::Util::Package.versioncmp(facts[:os]['release']['major'], '12') >= 0) || (facts[:os]['name'] == 'Ubuntu' && Puppet::Util::Package.versioncmp(facts[:os]['release']['major'], '22.04') >= 0)
         it { is_expected.to contain_file(include_dir).with_ensure('directory') }
 
         # Make sure package will be installed, service running and ensure of directory.

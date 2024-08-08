@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-Package = Puppet::Util::Package
 
 describe 'zabbix::sender' do
   let :node do
@@ -55,9 +54,9 @@ describe 'zabbix::sender' do
         when 'Debian'
           it { is_expected.to contain_apt__source('zabbix') }
 
-          it { is_expected.to contain_apt__key('zabbix-A1848F5') }               if (facts[:os]['name'] == 'Debian' && Package.versioncmp(facts[:os]['release']['major'], '12') < 0) || (facts[:os]['name'] == 'Ubuntu' && Package.versioncmp(facts[:os]['release']['major'], '22.04') < 0)
-          it { is_expected.to contain_apt__key('zabbix-FBABD5F') }               if (facts[:os]['name'] == 'Debian' && Package.versioncmp(facts[:os]['release']['major'], '12') < 0) || (facts[:os]['name'] == 'Ubuntu' && Package.versioncmp(facts[:os]['release']['major'], '22.04') < 0)
-          it { is_expected.to contain_apt__keyring('zabbix-official-repo.asc') } if (facts[:os]['name'] == 'Debian' && Package.versioncmp(facts[:os]['release']['major'], '12') >= 0) || (facts[:os]['name'] == 'Ubuntu' && Package.versioncmp(facts[:os]['release']['major'], '22.04') >= 0)
+          it { is_expected.to contain_apt__key('zabbix-A1848F5') }               if (facts[:os]['name'] == 'Debian' && Puppet::Util::Package.versioncmp(facts[:os]['release']['major'], '12') < 0) || (facts[:os]['name'] == 'Ubuntu' && Puppet::Util::Package.versioncmp(facts[:os]['release']['major'], '22.04') < 0)
+          it { is_expected.to contain_apt__key('zabbix-FBABD5F') }               if (facts[:os]['name'] == 'Debian' && Puppet::Util::Package.versioncmp(facts[:os]['release']['major'], '12') < 0) || (facts[:os]['name'] == 'Ubuntu' && Puppet::Util::Package.versioncmp(facts[:os]['release']['major'], '22.04') < 0)
+          it { is_expected.to contain_apt__keyring('zabbix-official-repo.asc') } if (facts[:os]['name'] == 'Debian' && Puppet::Util::Package.versioncmp(facts[:os]['release']['major'], '12') >= 0) || (facts[:os]['name'] == 'Ubuntu' && Puppet::Util::Package.versioncmp(facts[:os]['release']['major'], '22.04') >= 0)
         end
       end
     end
