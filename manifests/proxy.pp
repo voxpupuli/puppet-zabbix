@@ -57,6 +57,9 @@
 # @param database_tlscipher13 The list of encryption ciphersuites that Zabbix server permits for TLSv1.3 protocol.
 # @param localbuffer Proxy will keep data locally for N hours, even if the data have already been synced with the server
 # @param offlinebuffer Proxy will keep data for N hours in case if no connectivity with Zabbix Server
+# @param buffermode Specifies history, discovery and auto registration data storage mechanism: disk, memory, hybrid
+# @param memorybuffersize Size of shared memory cache for collected history, discovery and auto registration data, in bytes.
+# @param memorybufferage Maximum age of data in proxy memory buffer, in seconds.
 # @param heartbeatfrequency Unique nodeid in distributed setup.
 # @param configfrequency How often proxy retrieves configuration data from Zabbix Server in seconds.
 # @param proxyconfigfrequency How often proxy retrieves configuration data from Zabbix Server in seconds (Zabbix 6.4).
@@ -235,6 +238,9 @@ class zabbix::proxy (
   Optional[String[1]] $database_tlscipher13                                   = $zabbix::params::proxy_database_tlscipher13,
   $localbuffer                                                                = $zabbix::params::proxy_localbuffer,
   $offlinebuffer                                                              = $zabbix::params::proxy_offlinebuffer,
+  Optional[Enum['disk', 'memory', 'hybrid']] $buffermode                      = $zabbix::params::proxy_buffermode,
+  Optional[String[1]] $memorybuffersize                                       = $zabbix::params::proxy_memorybuffersize,
+  Optional[Variant[Integer[0], Integer[600, 864000]]] $memorybufferage        = $zabbix::params::proxy_memorybufferage,
   $heartbeatfrequency                                                         = $zabbix::params::proxy_heartbeatfrequency,
   $configfrequency                                                            = $zabbix::params::proxy_configfrequency,
   Optional[Integer[1,604800]] $proxyconfigfrequency                           = $zabbix::params::proxy_proxyconfigfrequency,
