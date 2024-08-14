@@ -53,6 +53,7 @@
 #   It will find out which ip is configured for this ipaddress. Can be handy
 #   if more than 1 interface is on the server.
 #
+# @param statusport Agent will listen on this port for HTTP status requests.
 # @param startagents Number of pre-forked instances of zabbix_agentd that process passive checks.
 # @param serveractive List of comma delimited ip:port (or hostname:port) pairs of zabbix servers for active checks.
 # @param service_ensure Start / stop the agent service. E.g. to preconfigure a hosts agent and turn on the service at a later time (when the server reaches production SLA)
@@ -70,6 +71,9 @@
 # @param refreshactivechecks How often list of active checks is refreshed, in seconds.
 # @param buffersend Do not keep data longer than n seconds in buffer.
 # @param buffersize Maximum number of values in a memory buffer.
+# @param enablepersistentbuffer Use persistent buffer (set to 1), or in-memory buffer is used (default).
+# @param persistentbufferperiod Zabbix Agent2 will keep data for this time period in case of no connectivity with Zabbix server or proxy.
+# @param persistentbufferfile Full filename. Zabbix Agent2 will keep SQLite database in this file.
 # @param maxlinespersecond Maximum number of new lines the agent will send per second to zabbix server or proxy processing.
 # @param allowroot Allow the agent to run as 'root'.
 # @param zabbix_user Drop privileges to a specific, existing user on the system. Only has effect if run as 'root' and AllowRoot is disabled.
@@ -116,6 +120,7 @@
 # @param include_dir_purge Include dir to purge.
 # @param unsafeuserparameters Allow all characters to be passed in arguments to user-defined parameters.
 # @param userparameter User-defined parameter to monitor.
+# @param controlsocket The control socket, used to send runtime commands with '-R' option.
 # @param loadmodulepath Full path to location of agent modules.
 # @param loadmodule Module to load at agent startup.
 # @param manage_startup_script
@@ -179,6 +184,7 @@ class zabbix::agent (
   $server                                              = $zabbix::params::agent_server,
   $listenport                                          = $zabbix::params::agent_listenport,
   $listenip                                            = $zabbix::params::agent_listenip,
+  Optional[Integer[1024,32767]] $statusport            = $zabbix::params::agent_statusport,
   $startagents                                         = $zabbix::params::agent_startagents,
   $serveractive                                        = $zabbix::params::agent_serveractive,
   Stdlib::Ensure::Service $service_ensure              = $zabbix::params::agent_service_ensure,
@@ -192,6 +198,9 @@ class zabbix::agent (
   $refreshactivechecks                                 = $zabbix::params::agent_refreshactivechecks,
   $buffersend                                          = $zabbix::params::agent_buffersend,
   $buffersize                                          = $zabbix::params::agent_buffersize,
+  Optional[Integer[0,1]] $enablepersistentbuffer       = $zabbix::params::agent_enablepersistentbuffer,
+  Optional[Stdlib::Absolutepath] $persistentbufferfile = $zabbix::params::agent_persistentbufferfile,
+  Optional[String[1]] $persistentbufferperiod          = $zabbix::params::agent_persistentbufferperiod,
   $maxlinespersecond                                   = $zabbix::params::agent_maxlinespersecond,
   Optional[Array] $zabbix_alias                        = $zabbix::params::agent_zabbix_alias,
   $timeout                                             = $zabbix::params::agent_timeout,
@@ -201,6 +210,7 @@ class zabbix::agent (
   $include_dir_purge                                   = $zabbix::params::agent_include_purge,
   $unsafeuserparameters                                = $zabbix::params::agent_unsafeuserparameters,
   $userparameter                                       = $zabbix::params::agent_userparameter,
+  Optional[Stdlib::Absolutepath] $controlsocket        = $zabbix::params::agent_controlsocket,
   Optional[String[1]] $loadmodulepath                  = $zabbix::params::agent_loadmodulepath,
   $loadmodule                                          = $zabbix::params::agent_loadmodule,
   Optional[Variant[Array[Enum['unencrypted','psk','cert']],Enum['unencrypted','psk','cert']]] $tlsaccept = $zabbix::params::agent_tlsaccept,

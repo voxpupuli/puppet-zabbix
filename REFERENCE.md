@@ -1400,6 +1400,7 @@ The following parameters are available in the `zabbix::agent` class:
 * [`server`](#-zabbix--agent--server)
 * [`listenport`](#-zabbix--agent--listenport)
 * [`listenip`](#-zabbix--agent--listenip)
+* [`statusport`](#-zabbix--agent--statusport)
 * [`startagents`](#-zabbix--agent--startagents)
 * [`serveractive`](#-zabbix--agent--serveractive)
 * [`service_ensure`](#-zabbix--agent--service_ensure)
@@ -1413,6 +1414,9 @@ The following parameters are available in the `zabbix::agent` class:
 * [`refreshactivechecks`](#-zabbix--agent--refreshactivechecks)
 * [`buffersend`](#-zabbix--agent--buffersend)
 * [`buffersize`](#-zabbix--agent--buffersize)
+* [`enablepersistentbuffer`](#-zabbix--agent--enablepersistentbuffer)
+* [`persistentbufferperiod`](#-zabbix--agent--persistentbufferperiod)
+* [`persistentbufferfile`](#-zabbix--agent--persistentbufferfile)
 * [`maxlinespersecond`](#-zabbix--agent--maxlinespersecond)
 * [`allowroot`](#-zabbix--agent--allowroot)
 * [`zabbix_user`](#-zabbix--agent--zabbix_user)
@@ -1447,6 +1451,7 @@ The following parameters are available in the `zabbix::agent` class:
 * [`include_dir_purge`](#-zabbix--agent--include_dir_purge)
 * [`unsafeuserparameters`](#-zabbix--agent--unsafeuserparameters)
 * [`userparameter`](#-zabbix--agent--userparameter)
+* [`controlsocket`](#-zabbix--agent--controlsocket)
 * [`loadmodulepath`](#-zabbix--agent--loadmodulepath)
 * [`loadmodule`](#-zabbix--agent--loadmodule)
 * [`manage_startup_script`](#-zabbix--agent--manage_startup_script)
@@ -1721,6 +1726,14 @@ if more than 1 interface is on the server.
 
 Default value: `$zabbix::params::agent_listenip`
 
+##### <a name="-zabbix--agent--statusport"></a>`statusport`
+
+Data type: `Optional[Integer[1024,32767]]`
+
+Agent will listen on this port for HTTP status requests.
+
+Default value: `$zabbix::params::agent_statusport`
+
 ##### <a name="-zabbix--agent--startagents"></a>`startagents`
 
 Data type: `Any`
@@ -1826,6 +1839,30 @@ Data type: `Any`
 Maximum number of values in a memory buffer.
 
 Default value: `$zabbix::params::agent_buffersize`
+
+##### <a name="-zabbix--agent--enablepersistentbuffer"></a>`enablepersistentbuffer`
+
+Data type: `Optional[Integer[0,1]]`
+
+Use persistent buffer (set to 1), or in-memory buffer is used (default).
+
+Default value: `$zabbix::params::agent_enablepersistentbuffer`
+
+##### <a name="-zabbix--agent--persistentbufferperiod"></a>`persistentbufferperiod`
+
+Data type: `Optional[String[1]]`
+
+Zabbix Agent2 will keep data for this time period in case of no connectivity with Zabbix server or proxy.
+
+Default value: `$zabbix::params::agent_persistentbufferperiod`
+
+##### <a name="-zabbix--agent--persistentbufferfile"></a>`persistentbufferfile`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+Full filename. Zabbix Agent2 will keep SQLite database in this file.
+
+Default value: `$zabbix::params::agent_persistentbufferfile`
 
 ##### <a name="-zabbix--agent--maxlinespersecond"></a>`maxlinespersecond`
 
@@ -2104,6 +2141,14 @@ Data type: `Any`
 User-defined parameter to monitor.
 
 Default value: `$zabbix::params::agent_userparameter`
+
+##### <a name="-zabbix--agent--controlsocket"></a>`controlsocket`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+The control socket, used to send runtime commands with '-R' option.
+
+Default value: `$zabbix::params::agent_controlsocket`
 
 ##### <a name="-zabbix--agent--loadmodulepath"></a>`loadmodulepath`
 
@@ -4013,6 +4058,7 @@ The following parameters are available in the `zabbix::server` class:
 * [`startalerters`](#-zabbix--server--startalerters)
 * [`startdiscoverers`](#-zabbix--server--startdiscoverers)
 * [`startescalators`](#-zabbix--server--startescalators)
+* [`starthistorypollers`](#-zabbix--server--starthistorypollers)
 * [`starthttppollers`](#-zabbix--server--starthttppollers)
 * [`starttimers`](#-zabbix--server--starttimers)
 * [`javagateway`](#-zabbix--server--javagateway)
@@ -4040,6 +4086,7 @@ The following parameters are available in the `zabbix::server` class:
 * [`historycachesize`](#-zabbix--server--historycachesize)
 * [`historyindexcachesize`](#-zabbix--server--historyindexcachesize)
 * [`trendcachesize`](#-zabbix--server--trendcachesize)
+* [`trendfunctioncachesize`](#-zabbix--server--trendfunctioncachesize)
 * [`valuecachesize`](#-zabbix--server--valuecachesize)
 * [`timeout`](#-zabbix--server--timeout)
 * [`tlscafile`](#-zabbix--server--tlscafile)
@@ -4450,6 +4497,14 @@ Number of pre-forked instances of escalators.
 
 Default value: `$zabbix::params::server_startescalators`
 
+##### <a name="-zabbix--server--starthistorypollers"></a>`starthistorypollers`
+
+Data type: `Optional[Integer[0, 100]]`
+
+Number of pre-forked instances of history pollers.
+
+Default value: `$zabbix::params::server_starthistorypollers`
+
 ##### <a name="-zabbix--server--starthttppollers"></a>`starthttppollers`
 
 Data type: `Any`
@@ -4671,6 +4726,14 @@ Data type: `Any`
 Size of trend cache, in bytes.
 
 Default value: `$zabbix::params::server_trendcachesize`
+
+##### <a name="-zabbix--server--trendfunctioncachesize"></a>`trendfunctioncachesize`
+
+Data type: `Optional[String[1]]`
+
+Size of trend function cache, in bytes.
+
+Default value: `$zabbix::params::server_trendfunctioncachesize`
 
 ##### <a name="-zabbix--server--valuecachesize"></a>`valuecachesize`
 
