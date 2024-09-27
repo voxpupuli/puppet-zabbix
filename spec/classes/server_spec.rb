@@ -27,9 +27,10 @@ describe 'zabbix::server' do
         it { is_expected.to contain_service('zabbix-server').with_ensure('running') }
         it { is_expected.not_to contain_zabbix__startup('zabbix-server') }
 
-        it { is_expected.to contain_apt__source('zabbix') }      if facts[:os]['family'] == 'Debian'
-        it { is_expected.to contain_apt__key('zabbix-A1848F5') } if facts[:os]['family'] == 'Debian'
-        it { is_expected.to contain_apt__key('zabbix-FBABD5F') } if facts[:os]['family'] == 'Debian'
+        it { is_expected.to contain_apt__source('zabbix') } if facts[:os]['family'] == 'Debian'
+        it { is_expected.to contain_apt__key('zabbix-A1848F5') }                 if (facts[:os]['name'] == 'Debian' && Puppet::Util::Package.versioncmp(facts[:os]['release']['major'], '12') < 0) || (facts[:os]['name'] == 'Ubuntu' && Puppet::Util::Package.versioncmp(facts[:os]['release']['major'], '22.04') < 0)
+        it { is_expected.to contain_apt__key('zabbix-FBABD5F') }                 if (facts[:os]['name'] == 'Debian' && Puppet::Util::Package.versioncmp(facts[:os]['release']['major'], '12') < 0) || (facts[:os]['name'] == 'Ubuntu' && Puppet::Util::Package.versioncmp(facts[:os]['release']['major'], '22.04') < 0)
+        it { is_expected.to contain_apt__keyring('zabbix-official-repo.asc') }   if (facts[:os]['name'] == 'Debian' && Puppet::Util::Package.versioncmp(facts[:os]['release']['major'], '12') >= 0) || (facts[:os]['name'] == 'Ubuntu' && Puppet::Util::Package.versioncmp(facts[:os]['release']['major'], '22.04') >= 0)
       end
 
       if facts[:os]['family'] == 'RedHat'
