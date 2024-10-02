@@ -1,0 +1,4 @@
+---
+postgresql::globals::manage_dnf_module: true
+postgresql::globals::manage_package_repo: false
+postgresql::globals::version: '15'
