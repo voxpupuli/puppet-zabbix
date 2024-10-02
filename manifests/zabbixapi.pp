@@ -4,7 +4,7 @@
 # @param puppetgem Provider for the zabbixapi gem package.
 class zabbix::zabbixapi (
   $zabbix_version = $zabbix::params::zabbix_version,
-  $puppetgem = $zabbix::params::puppetgem,
+  $puppetgem      = $zabbix::params::puppetgem,
 ) inherits zabbix::params {
   # Determine correct zabbixapi version.
   case $zabbix_version {

@@ -11,17 +11,20 @@
 # @param database_path Path to the database executable
 # @author Werner Dijkerman <ikben@werner-dijkerman.nl>
 class zabbix::database::postgresql (
-  $zabbix_type                                        = '',
-  $zabbix_version                                     = $zabbix::params::zabbix_version,
-  $database_schema_path                               = '',
-  $database_name                                      = '',
-  $database_user                                      = '',
-  $database_password                                  = '',
-  $database_host                                      = '',
-  Stdlib::Port::Unprivileged $database_port           = 5432,
-  $database_path                                      = $zabbix::params::database_path,
+  $zabbix_type                                          = '',
+  $zabbix_version                                       = $zabbix::params::zabbix_version,
+  $database_schema_path                                 = '',
+  $database_name                                        = '',
+  $database_user                                        = '',
+  Variant[Sensitive[String], String] $database_password = '', # lint:ignore:params_empty_string_assignment
+  $database_host                                        = '',
+  Stdlib::Port::Unprivileged $database_port             = 5432,
+  $database_path                                        = $zabbix::params::database_path,
 ) inherits zabbix::params {
   assert_private()
+
+  # TODO: use EPP instead of ERB, as EPP can handle Sensitive natively
+  $database_password_unsensitive = $database_password.unwrap
 
   if $database_schema_path != false and $database_schema_path != '' {
     $schema_path = $database_schema_path
@@ -56,7 +59,7 @@ class zabbix::database::postgresql (
     "PGHOST=${database_host}",
     "PGPORT=${database_port}",
     "PGUSER=${database_user}",
-    "PGPASSWORD=${database_password}",
+    "PGPASSWORD=${database_password_unsensitive}",
     "PGDATABASE=${database_name}",
   ]
 
