@@ -5580,6 +5580,7 @@ The following parameters are available in the `zabbix::resources::template` defi
 * [`delete_missing_graphs`](#-zabbix--resources--template--delete_missing_graphs)
 * [`delete_missing_httptests`](#-zabbix--resources--template--delete_missing_httptests)
 * [`delete_missing_items`](#-zabbix--resources--template--delete_missing_items)
+* [`delete_missing_linkage`](#-zabbix--resources--template--delete_missing_linkage)
 * [`delete_missing_templatescreens`](#-zabbix--resources--template--delete_missing_templatescreens)
 * [`delete_missing_triggers`](#-zabbix--resources--template--delete_missing_triggers)
 
@@ -5652,6 +5653,14 @@ Default value: `false`
 Data type: `Boolean`
 
 Deletes items from zabbix that are not in the template when set to true
+
+Default value: `false`
+
+##### <a name="-zabbix--resources--template--delete_missing_linkage"></a>`delete_missing_linkage`
+
+Data type: `Boolean`
+
+Delete linked templates when they are no longer present
 
 Default value: `false`
 
@@ -5833,6 +5842,7 @@ The following parameters are available in the `zabbix::template` defined type:
 * [`delete_missing_graphs`](#-zabbix--template--delete_missing_graphs)
 * [`delete_missing_httptests`](#-zabbix--template--delete_missing_httptests)
 * [`delete_missing_items`](#-zabbix--template--delete_missing_items)
+* [`delete_missing_linkage`](#-zabbix--template--delete_missing_linkage)
 * [`delete_missing_templatescreens`](#-zabbix--template--delete_missing_templatescreens)
 * [`delete_missing_triggers`](#-zabbix--template--delete_missing_triggers)
 
@@ -5897,6 +5907,14 @@ Default value: `false`
 Data type: `Boolean`
 
 Deletes items from zabbix that are not in the template when set to true
+
+Default value: `false`
+
+##### <a name="-zabbix--template--delete_missing_linkage"></a>`delete_missing_linkage`
+
+Data type: `Boolean`
+
+Delete linked templates when they are no longer present
 
 Default value: `false`
 
@@ -6293,6 +6311,7 @@ The following parameters are available in the `zabbix_template` type.
 * [`delete_missing_graphs`](#-zabbix_template--delete_missing_graphs)
 * [`delete_missing_httptests`](#-zabbix_template--delete_missing_httptests)
 * [`delete_missing_items`](#-zabbix_template--delete_missing_items)
+* [`delete_missing_linkage`](#-zabbix_template--delete_missing_linkage)
 * [`delete_missing_templatescreens`](#-zabbix_template--delete_missing_templatescreens)
 * [`delete_missing_triggers`](#-zabbix_template--delete_missing_triggers)
 * [`provider`](#-zabbix_template--provider)
@@ -6319,6 +6338,10 @@ Delete web scenarios from zabbix which are not in the template.
 ##### <a name="-zabbix_template--delete_missing_items"></a>`delete_missing_items`
 
 Delete items from zabbix which are not in the template.
+
+##### <a name="-zabbix_template--delete_missing_linkage"></a>`delete_missing_linkage`
+
+Delete linked templates when they are no longer present.
 
 ##### <a name="-zabbix_template--delete_missing_templatescreens"></a>`delete_missing_templatescreens`
 

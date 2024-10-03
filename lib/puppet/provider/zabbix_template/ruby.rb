@@ -51,7 +51,8 @@ Puppet::Type.type(:zabbix_template).provide(:ruby, parent: Puppet::Provider::Zab
           updateExisting: true
         },
         templateLinkage: {
-          createMissing: true
+          createMissing: true,
+          deleteMissing: (@resource[:delete_missing_linkage].nil? ? false : @resource[:delete_missing_linkage])
         },
         templates: {
           createMissing: true,
