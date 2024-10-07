@@ -1,3 +1,101 @@
+<%- |
+    String[1]                                              $alertscriptspath,
+    String[1]                                              $allowroot,
+    String[1]                                              $cachesize,
+    String[1]                                              $cacheupdatefrequency,
+    String[1]                                              $database_host,
+    String[1]                                              $database_name,
+    Variant[String[1], Sensitive[String[8]]]               $database_password,
+    Optional[Stdlib::Port::Unprivileged]                   $database_port,
+    Optional[String[1]]                                    $database_schema,
+    Optional[String[1]]                                    $database_socket,
+    Optional[Stdlib::Absolutepath]                         $database_tlscafile,
+    Optional[Stdlib::Absolutepath]                         $database_tlscertfile,
+    Optional[String[1]]                                    $database_tlscipher,
+    Optional[String[1]]                                    $database_tlscipher13,
+    Optional[Enum['required', 'verify_ca', 'verify_full']] $database_tlsconnect,
+    Optional[Stdlib::Absolutepath]                         $database_tlskeyfile,
+    String[1]                                              $database_user,
+    String[1]                                              $debuglevel,
+    String[1]                                              $externalscripts,
+    String[1]                                              $fping6location,
+    String[1]                                              $fpinglocation,
+    Optional[String[1]]                                    $hanodename,
+    String[1]                                              $historycachesize,
+    Optional[String[1]]                                    $historyindexcachesize,
+    String[1]                                              $housekeepingfrequency,
+    String[1]                                              $include_dir,
+    Optional[String[1]]                                    $javagateway,
+    String[1]                                              $javagatewayport,
+    Optional[Stdlib::IP::Address]                          $listenip,
+    String[1]                                              $listenport,
+    Optional[String[1]]                                    $loadmodule,
+    String[1]                                              $loadmodulepath,
+    Optional[Stdlib::Absolutepath]                         $logfile,
+    String[1]                                              $logfilesize,
+    Variant[Integer,String[1]]                             $logslowqueries,
+    Enum['console', 'file', 'system']                      $logtype,
+    String[1]                                              $maxhousekeeperdelete,
+    Optional[String[1]]                                    $nodeaddress,
+    String[1]                                              $pidfile,
+    String[1]                                              $proxyconfigfrequency,
+    String[1]                                              $proxydatafrequency,
+    String[1]                                              $snmptrapperfile,
+    Optional[Stdlib::Absolutepath]                         $socketdir,
+    Optional[Stdlib::IP::Address]                          $sourceip,
+    Optional[String[1]]                                    $sshkeylocation,
+    Optional[Stdlib::Absolutepath]                         $sslcalocation_dir,
+    Optional[Stdlib::Absolutepath]                         $sslcertlocation_dir,
+    Optional[Stdlib::Absolutepath]                         $sslkeylocation_dir,
+    Integer[1,100]                                         $startalerters,
+    String[1]                                              $startdbsyncers,
+    String[1]                                              $startdiscoverers,
+    Integer[1,100]                                         $startescalators,
+    String[1]                                              $starthttppollers,
+    String[1]                                              $startipmipollers,
+    String[1]                                              $startjavapollers,
+    Integer[1,100]                                         $startlldprocessors,
+    Integer[0, 1000]                                       $startodbcpollers,
+    Variant[Integer, String[1]]                            $startpingers,
+    Variant[Integer, String[1]]                            $startpollers,
+    Variant[Integer, String[1]]                            $startpollersunreachable,
+    Integer[1, 1000]                                       $startpreprocessors,
+    Variant[Integer, String[1]]                            $startproxypollers,
+    Optional[Integer]                                      $startreportwriters,
+    Variant[Integer, String[1]]                            $startsnmptrapper,
+    Variant[Integer, String[1]]                            $starttimers,
+    Variant[Integer, String[1]]                            $starttrappers,
+    Variant[Integer, String[1]]                            $startvmwarecollectors,
+    Optional[String[1]]                                    $statsallowedip,
+    Variant[Integer, String[1]]                            $timeout,
+    Optional[String[1]]                                    $tlscafile,
+    Optional[String[1]]                                    $tlscertfile,
+    Optional[String[1]]                                    $tlscipherall,
+    Optional[String[1]]                                    $tlscipherall13,
+    Optional[String[1]]                                    $tlsciphercert,
+    Optional[String[1]]                                    $tlsciphercert13,
+    Optional[String[1]]                                    $tlscipherpsk,
+    Optional[String[1]]                                    $tlscipherpsk13,
+    Optional[String[1]]                                    $tlscrlfile,
+    Optional[String[1]]                                    $tlskeyfile,
+    String[1]                                              $tmpdir,
+    Variant[Integer, String[1]]                            $trappertimeout,
+    String[1]                                              $trendcachesize,
+    String[1]                                              $unavailabledelay,
+    Optional[String[1]]                                    $unreachabledelay,
+    String[1]                                              $unreachableperiod,
+    String[1]                                              $valuecachesize,
+    Optional[String[1]]                                    $vaultdbpath,
+    Optional[String[1]]                                    $vaulttoken,
+    Optional[Stdlib::HTTPSUrl]                             $vaulturl,
+    String[1]                                              $vmwarecachesize,
+    String[1]                                              $vmwarefrequency,
+    Optional[String[1]]                                    $vmwareperffrequency,
+    Optional[String[1]]                                    $vmwaretimeout,
+    Optional[Stdlib::HTTPUrl]                              $webserviceurl,
+    String[1]                                              $zabbix_user,
+    String[1]                                              $zabbix_version,
+    | -%>
 # this is a configuration file for zabbix server process
 # to get more information about zabbix,
 # visit http://www.zabbix.com
@@ -9,15 +107,15 @@
 #
 # Mandatory: no
 # Range: 1024-32767
-ListenPort=<%= @listenport %>
+ListenPort=<%= $listenport %>
 
 ### Option: SourceIP
 #	Source IP address for outgoing connections.
 #
 # Mandatory: no
-<% if @sourceip %>SourceIP=<%= @sourceip %><% end %>
+<% if $sourceip { %>SourceIP=<%= $sourceip %><% } -%>
 
-<% if @logtype %>
+<% if $logtype { %>
 ### Option: LogType
 #	Specifies where log messages are written to:
 #		system  - syslog
@@ -25,14 +123,14 @@ ListenPort=<%= @listenport %>
 #		console - standard output
 #
 # Mandatory: no
-LogType=<%= @logtype %><% end %>
+LogType=<%= $logtype %><% } -%>
 
-<% if @logtype == 'file' -%>
+<% if $logtype == 'file' { -%>
 ### Option: LogFile
 #	Log file name for LogType 'file' parameter.
 #
 # Mandatory: yes, if LogType is set to file, otherwise no
-LogFile=<%= @logfile %>
+LogFile=<%= $logfile %>
 
 ### Option: LogFileSize
 #	Maximum size of log file in MB.
@@ -40,7 +138,7 @@ LogFile=<%= @logfile %>
 #
 # Mandatory: no
 # Range: 0-1024
-LogFileSize=<%= @logfilesize %><% end -%>
+LogFileSize=<%= $logfilesize %><% } -%>
 
 ### Option: DebugLevel
 #	Specifies debug level:
@@ -53,20 +151,20 @@ LogFileSize=<%= @logfilesize %><% end -%>
 #
 # Mandatory: no
 # Range: 0-5
-DebugLevel=<%= @debuglevel %>
+DebugLevel=<%= $debuglevel %>
 
 ### Option: PidFile
 #	Name of PID file.
 #
 # Mandatory: no
-PidFile=<%= @pidfile %>
+PidFile=<%= $pidfile %>
 
 ### Option: SocketDir
 #	IPC socket directory.
 #		Directory to store IPC sockets used by internal Zabbix services.
 #
 # Mandatory: no
-<% if @socketdir %>SocketDir=<%= @socketdir %><% end %>
+<% if $socketdir { %>SocketDir=<%= $socketdir %><% } -%>
 
 ### NOTE: Support for Oracle DB is deprecated since Zabbix 7.0 and will be removed in future versions.
 
@@ -78,7 +176,7 @@ PidFile=<%= @pidfile %>
 #	the TNS_ADMIN environment variable to specify the directory where the tnsnames.ora file is located.
 #
 # Mandatory: no
-DBHost=<%= @database_host %>
+DBHost=<%= $database_host %>
 
 ### Option: DBName
 #	Database name.
@@ -87,32 +185,32 @@ DBHost=<%= @database_host %>
 #	empty string.
 #
 # Mandatory: yes
-DBName=<%= @database_name %>
+DBName=<%= $database_name %>
 
 ### Option: DBSchema
 #	Schema name. Used for PostgreSQL.
 #
 # Mandatory: no
-<% if @database_schema %>DBSchema=<%= @database_schema %><% end %>
+<% if $database_schema { %>DBSchema=<%= $database_schema %><% } -%>
 
 ### Option: DBUser
 #	Database user.
 #
 # Mandatory: no
-DBUser=<%= @database_user %>
+DBUser=<%= $database_user %>
 
 ### Option: DBPassword
 #	Database password.
 #	Comment this line if no password is used.
 #
 # Mandatory: no
-DBPassword=<%= @database_password %>
+DBPassword=<%= $database_password %>
 
 ### Option: DBSocket
 #	Path to MySQL socket.
 #
 # Mandatory: no
-<% if @database_socket %>DBSocket=<%= @database_socket %><% end %>
+<% if $database_socket { %>DBSocket=<%= $database_socket %><% } -%>
 
 ### Option: DBPort
 #	Database port when not using local socket.
@@ -121,9 +219,9 @@ DBPassword=<%= @database_password %>
 #
 # Mandatory: no
 # Range: 1024-65535
-<% if @database_port %>DBPort=<%= @database_port %><% end %>
+<% if $database_port { %>DBPort=<%= $database_port %><% } -%>
 
-<% if @zabbix_version.to_f >= 7.0 %>
+<% if versioncmp($zabbix_version,'7.0') >= 0 { -%>
 ### Option: HistoryStorageURL
 #	History storage HTTP[S] URL.
 #
@@ -173,7 +271,7 @@ DBPassword=<%= @database_password %>
 # Default:
 # ExportType=events,history,trends
 
-<% end %>
+<% } -%>
 ############ ADVANCED PARAMETERS ################
 
 ### Option: StartPollers
@@ -181,9 +279,9 @@ DBPassword=<%= @database_password %>
 #
 # Mandatory: no
 # Range: 0-1000
-StartPollers=<%= @startpollers %>
+StartPollers=<%= $startpollers %>
 
-<% if @zabbix_version.to_f >= 7.0 %>
+<% if versioncmp($zabbix_version,'7.0') >= 0 { -%>
 ### Option: StartAgentPollers
 #	Number of pre-forked instances of asynchronous Zabbix agent pollers. Also see MaxConcurrentChecksPerPoller.
 #
@@ -215,7 +313,7 @@ StartPollers=<%= @startpollers %>
 # Range: 1-1000
 # Default:
 # MaxConcurrentChecksPerPoller=1000
-<% end %>
+<% } -%>
 
 ### Option: StartIPMIPollers
 #	Number of pre-forked instances of IPMI pollers.
@@ -223,14 +321,15 @@ StartPollers=<%= @startpollers %>
 #
 # Mandatory: no
 # Range: 0-1000
-StartIPMIPollers=<%= @startipmipollers %>
+StartIPMIPollers=<%= $startipmipollers %>
+
 
 ### Option: StartPreprocessors
 #	Number of pre-started instances of preprocessing workers.
 #
 # Mandatory: no
 # Range: 1-1000
-<% if @startpreprocessors %>StartPreprocessors=<%= @startpreprocessors -%><% end %>
+<% if $startpreprocessors { %>StartPreprocessors=<%= $startpreprocessors -%><% } -%>
 
 ### Option: StartPollersUnreachable
 #	Number of pre-forked instances of pollers for unreachable hosts (including IPMI and Java).
@@ -239,9 +338,9 @@ StartIPMIPollers=<%= @startipmipollers %>
 #
 # Mandatory: no
 # Range: 0-1000
-StartPollersUnreachable=<%= @startpollersunreachable %>
+StartPollersUnreachable=<%= $startpollersunreachable %>
 
-<% if @zabbix_version.to_f >= 7.0 %>
+<% if versioncmp($zabbix_version,'7.0') >= 0 { -%>
 ### Option: StartHistoryPollers
 #	Number of pre-forked instances of history pollers.
 #	Only required for calculated checks.
@@ -252,8 +351,8 @@ StartPollersUnreachable=<%= @startpollersunreachable %>
 # Default:
 # StartHistoryPollers=5
 
-<% end %>
-<% if @zabbix_version.to_f >= 6.0 %>
+<% } -%>
+<% if versioncmp($zabbix_version,'6.0') >= 0 { -%>
 ## Option: StartODBCPollers
 #       Number of pre-forked ODBC poller instances.
 #
@@ -261,8 +360,8 @@ StartPollersUnreachable=<%= @startpollersunreachable %>
 # Range: 0-1000
 # Default:
 # StartODBCPollers=1
-StartODBCPollers=<%= @startodbcpollers %>
-<% end %>
+StartODBCPollers=<%= $startodbcpollers %>
+<% } -%>
 
 ### Option: StartTrappers
 #	Number of pre-forked instances of trappers.
@@ -272,28 +371,28 @@ StartODBCPollers=<%= @startodbcpollers %>
 #
 # Mandatory: no
 # Range: 0-1000
-StartTrappers=<%= @starttrappers %>
+StartTrappers=<%= $starttrappers %>
 
 ### Option: StartPingers
 #	Number of pre-forked instances of ICMP pingers.
 #
 # Mandatory: no
 # Range: 0-1000
-StartPingers=<%= @startpingers %>
+StartPingers=<%= $startpingers %>
 
 ### Option: StartDiscoverers
 #	Number of pre-started instances of discovery workers.
 #
 # Mandatory: no
 # Range: 0-1000
-StartDiscoverers=<%= @startdiscoverers %>
+StartDiscoverers=<%= $startdiscoverers %>
 
 ### Option: StartHTTPPollers
 #	Number of pre-forked instances of HTTP pollers.
 #
 # Mandatory: no
 # Range: 0-1000
-StartHTTPPollers=<%= @starthttppollers %>
+StartHTTPPollers=<%= $starthttppollers %>
 
 ### Option: StartTimers
 #	Number of pre-forked instances of timers.
@@ -303,14 +402,14 @@ StartHTTPPollers=<%= @starthttppollers %>
 #
 # Mandatory: no
 # Range: 1-1000
-StartTimers=<%= @starttimers %>
+StartTimers=<%= $starttimers %>
 
 ### Option: StartEscalators
 #	Number of pre-forked instances of escalators.
 #
 # Mandatory: no
 # Range: 1-100
-<% if @startescalators %>StartEscalators=<%= @startescalators %><% end %>
+<% if $startescalators { %>StartEscalators=<%= $startescalators %><% } -%>
 
 ### Option: StartAlerters
 #	Number of pre-forked instances of alerters.
@@ -318,51 +417,51 @@ StartTimers=<%= @starttimers %>
 #
 # Mandatory: no
 # Range: 1-100
-<% if @startalerters %>StartAlerters=<%= @startalerters %><% end %>
+<% if $startalerters { %>StartAlerters=<%= $startalerters %><% } -%>
 
-<% if @javagateway %>
+<% if $javagateway { -%>
 ### Option: JavaGateway
 #	IP address (or hostname) of Zabbix Java gateway.
 #	Only required if Java pollers are started.
 #
 # Mandatory: no
-JavaGateway=<%= @javagateway %>
+JavaGateway=<%= $javagateway %>
 
 ### Option: JavaGatewayPort
 #	Port that Zabbix Java gateway listens on.
 #
 # Mandatory: no
 # Range: 1024-32767
-JavaGatewayPort=<%= @javagatewayport %>
+JavaGatewayPort=<%= $javagatewayport %>
 
 ### Option: StartJavaPollers
 #	Number of pre-forked instances of Java pollers.
 #
 # Mandatory: no
 # Range: 0-1000
-StartJavaPollers=<%= @startjavapollers %>
-<% end %>
+StartJavaPollers=<%= $startjavapollers %>
+<% } -%>
 
 ### Option: StartVMwareCollectors
 #	Number of pre-forked vmware collector instances.
 #
 # Mandatory: no
 # Range: 0-250
-StartVMwareCollectors=<%= @startvmwarecollectors %>
+StartVMwareCollectors=<%= $startvmwarecollectors %>
 
 ### Option: VMwareFrequency
 #	How often Zabbix will connect to VMware service to obtain a new data.
 #
 # Mandatory: no
 # Range: 10-86400
-VMwareFrequency=<%= @vmwarefrequency %>
+VMwareFrequency=<%= $vmwarefrequency %>
 
 ### Option: VMwarePerfFrequency
 #	How often Zabbix will connect to VMware service to obtain performance data.
 #
 # Mandatory: no
 # Range: 10-86400
-<% if @vmwareperffrequency %>VMwarePerfFrequency=<%= @vmwareperffrequency %><% end %>
+<% if $vmwareperffrequency { %>VMwarePerfFrequency=<%= $vmwareperffrequency %><% } -%>
 
 ### Option: VMwareCacheSize
 #	Size of VMware cache, in bytes.
@@ -371,35 +470,35 @@ VMwareFrequency=<%= @vmwarefrequency %>
 #
 # Mandatory: no
 # Range: 256K-2G
-VMwareCacheSize=<%= @vmwarecachesize %>
+VMwareCacheSize=<%= $vmwarecachesize %>
 
 ### Option: VMwareTimeout
 #	Specifies how many seconds vmware collector waits for response from VMware service.
 #
 # Mandatory: no
 # Range: 1-300
-<% if @vmwaretimeout %>VMwareTimeout=<%= @vmwaretimeout %><% end %>
+<% if $vmwaretimeout { %>VMwareTimeout=<%= $vmwaretimeout %><% } -%>
 
 ### Option: SNMPTrapperFile
 #	Temporary file used for passing data from SNMP trap daemon to the server.
 #	Must be the same as in zabbix_trap_receiver.pl or SNMPTT configuration file.
 #
 # Mandatory: no
-SNMPTrapperFile=<%= @snmptrapperfile %>
+SNMPTrapperFile=<%= $snmptrapperfile %>
 
 ### Option: StartSNMPTrapper
 #	If 1, SNMP trapper process is started.
 #
 # Mandatory: no
 # Range: 0-1
-StartSNMPTrapper=<%= @startsnmptrapper %>
+StartSNMPTrapper=<%= $startsnmptrapper %>
 
 ### Option: ListenIP
 #	List of comma delimited IP addresses that the trapper should listen on.
 #	Trapper will listen on all network interfaces if this parameter is missing.
 #
 # Mandatory: no
-<% if @listenip %>ListenIP=<%= @listenip %><% end %>
+<% if $listenip { %>ListenIP=<%= $listenip %><% } -%>
 
 ### Option: HousekeepingFrequency
 #	How often Zabbix will perform housekeeping procedure (in hours).
@@ -413,7 +512,7 @@ StartSNMPTrapper=<%= @startsnmptrapper %>
 #
 # Mandatory: no
 # Range: 0-24
-HousekeepingFrequency=<%= @housekeepingfrequency %>
+HousekeepingFrequency=<%= $housekeepingfrequency %>
 
 ### Option: MaxHousekeeperDelete
 #	The table "housekeeper" contains "tasks" for housekeeping procedure in the format:
@@ -424,7 +523,7 @@ HousekeepingFrequency=<%= @housekeepingfrequency %>
 #
 # Mandatory: no
 # Range: 0-1000000
-MaxHousekeeperDelete=<%= @maxhousekeeperdelete %>
+MaxHousekeeperDelete=<%= $maxhousekeeperdelete %>
 
 ### Option: CacheSize
 #	Size of configuration cache, in bytes.
@@ -432,21 +531,21 @@ MaxHousekeeperDelete=<%= @maxhousekeeperdelete %>
 #
 # Mandatory: no
 # Range: 128K-64G
-CacheSize=<%= @cachesize %>
+CacheSize=<%= $cachesize %>
 
 ### Option: CacheUpdateFrequency
 #	How often Zabbix will perform update of configuration cache, in seconds.
 #
 # Mandatory: no
 # Range: 1-3600
-CacheUpdateFrequency=<%= @cacheupdatefrequency %>
+CacheUpdateFrequency=<%= $cacheupdatefrequency %>
 
 ### Option: StartDBSyncers
 #	Number of pre-forked instances of DB Syncers.
 #
 # Mandatory: no
 # Range: 1-100
-StartDBSyncers=<%= @startdbsyncers %>
+StartDBSyncers=<%= $startdbsyncers %>
 
 ### Option: HistoryCacheSize
 #	Size of history cache, in bytes.
@@ -454,7 +553,7 @@ StartDBSyncers=<%= @startdbsyncers %>
 #
 # Mandatory: no
 # Range: 128K-2G
-HistoryCacheSize=<%= @historycachesize %>
+HistoryCacheSize=<%= $historycachesize %>
 
 ### Option: HistoryIndexCacheSize
 #	Size of history index cache, in bytes.
@@ -462,7 +561,7 @@ HistoryCacheSize=<%= @historycachesize %>
 #
 # Mandatory: no
 # Range: 128K-2G
-<% if @historyindexcachesize %>HistoryIndexCacheSize=<%= @historyindexcachesize %><% end %>
+<% if $historyindexcachesize { %>HistoryIndexCacheSize=<%= $historyindexcachesize %><% } -%>
 
 ### Option: TrendCacheSize
 #	Size of trend write cache, in bytes.
@@ -470,7 +569,7 @@ HistoryCacheSize=<%= @historycachesize %>
 #
 # Mandatory: no
 # Range: 128K-2G
-TrendCacheSize=<%= @trendcachesize %>
+TrendCacheSize=<%= $trendcachesize %>
 
 ### Option: ValueCacheSize
 #	Size of history value cache, in bytes.
@@ -479,42 +578,42 @@ TrendCacheSize=<%= @trendcachesize %>
 #
 # Mandatory: no
 # Range: 0,128K-64G
-ValueCacheSize=<%= @valuecachesize %>
+ValueCacheSize=<%= $valuecachesize %>
 
 ### Option: Timeout
 #	Specifies timeout for communications (in seconds).
 #
 # Mandatory: no
 # Range: 1-30
-Timeout=<%= @timeout %>
+Timeout=<%= $timeout %>
 
 ### Option: TrapperTimeout
 #	Specifies how many seconds trapper may spend processing new data.
 #
 # Mandatory: no
 # Range: 1-300
-TrapperTimeout=<%= @trappertimeout %>
+TrapperTimeout=<%= $trappertimeout %>
 
 ### Option: UnreachablePeriod
 #	After how many seconds of unreachability treat a host as unavailable.
 #
 # Mandatory: no
 # Range: 1-3600
-UnreachablePeriod=<%= @unreachableperiod %>
+UnreachablePeriod=<%= $unreachableperiod %>
 
 ### Option: UnavailableDelay
 #	How often host is checked for availability during the unavailability period, in seconds.
 #
 # Mandatory: no
 # Range: 1-3600
-UnavailableDelay=<%= @unavailabledelay %>
+UnavailableDelay=<%= $unavailabledelay %>
 
 ### Option: UnreachableDelay
 #	How often host is checked for availability during the unreachability period, in seconds.
 #
 # Mandatory: no
 # Range: 1-3600
-UnreachableDelay=<%= @unreachabledelay %>
+UnreachableDelay=<%= $unreachabledelay %>
 
 ### Option: AlertScriptsPath
 #	Full path to location of custom alert scripts.
@@ -522,7 +621,7 @@ UnreachableDelay=<%= @unreachabledelay %>
 #	To see the default path run command "zabbix_server --help".
 #
 # Mandatory: no
-AlertScriptsPath=<%= @alertscriptspath %>
+AlertScriptsPath=<%= $alertscriptspath %>
 
 ### Option: ExternalScripts
 #	Full path to location of external scripts.
@@ -530,14 +629,14 @@ AlertScriptsPath=<%= @alertscriptspath %>
 #	To see the default path run command "zabbix_server --help".
 #
 # Mandatory: no
-ExternalScripts=<%= @externalscripts %>
+ExternalScripts=<%= $externalscripts %>
 
 ### Option: FpingLocation
 #	Location of fping.
 #	Make sure that fping binary has root ownership and SUID flag set.
 #
 # Mandatory: no
-FpingLocation=<%= @fpinglocation %>
+FpingLocation=<%= $fpinglocation %>
 
 ### Option: Fping6Location
 #	Location of fping6.
@@ -545,13 +644,13 @@ FpingLocation=<%= @fpinglocation %>
 #	Make empty if your fping utility is capable to process IPv6 addresses.
 #
 # Mandatory: no
-Fping6Location=<%= @fping6location %>
+Fping6Location=<%= $fping6location %>
 
 ### Option: SSHKeyLocation
 #	Location of public and private keys for SSH checks and actions.
 #
 # Mandatory: no
-<% if @sshkeylocation %>SSHKeyLocation=<%= @sshkeylocation %><% end %>
+<% if $sshkeylocation { %>SSHKeyLocation=<%= $sshkeylocation %><% } -%>
 
 ### Option: LogSlowQueries
 #	How long a database query may take before being logged (in milliseconds).
@@ -560,26 +659,26 @@ Fping6Location=<%= @fping6location %>
 #
 # Mandatory: no
 # Range: 1-3600000
-LogSlowQueries=<%= @logslowqueries %>
+LogSlowQueries=<%= $logslowqueries %>
 
 ### Option: TmpDir
 #	Temporary directory.
 #
 # Mandatory: no
-TmpDir=<%= @tmpdir %>
+TmpDir=<%= $tmpdir %>
 
 ### Option: StartProxyPollers
 #	Number of pre-forked instances of pollers for passive proxies.
 #
 # Mandatory: no
 # Range: 0-250
-StartProxyPollers=<%= @startproxypollers %>
+StartProxyPollers=<%= $startproxypollers %>
 
 ### Option: ProxyConfigFrequency
 #   How often Zabbix Server sends configuration data to a Zabbix Proxy in seconds.
 #   This parameter is used only for proxies in the passive mode.
 #
-ProxyConfigFrequency=<%= @proxyconfigfrequency %>
+ProxyConfigFrequency=<%= $proxyconfigfrequency %>
 
 ### Option: ProxyConfigFrequency
 #	How often Zabbix Server sends configuration data to a Zabbix Proxy in seconds.
@@ -587,14 +686,14 @@ ProxyConfigFrequency=<%= @proxyconfigfrequency %>
 #
 # Mandatory: no
 # Range: 1-3600*24*7
-ProxyDataFrequency=<%= @proxydatafrequency %>
+ProxyDataFrequency=<%= $proxydatafrequency %>
 
 ### Option: StartLLDProcessors
 #	Number of pre-forked instances of low level discovery processors.
 #
 # Mandatory: no
 # Range: 1-100
-<% if @startlldprocessors %>StartLLDProcessors=<%= @startlldprocessors -%><% end %>
+<% if $startlldprocessors { %>StartLLDProcessors=<%= $startlldprocessors -%><% } -%>
 
 ### Option: AllowRoot
 #	Allow the server to run as 'root'. If disabled and the server is started by 'root', the server
@@ -604,21 +703,21 @@ ProxyDataFrequency=<%= @proxydatafrequency %>
 #	1 - allow
 #
 # Mandatory: no
-AllowRoot=<%= @allowroot %>
+AllowRoot=<%= $allowroot %>
 
 ### Option: User
 #	Drop privileges to a specific, existing user on the system.
 #	Only has effect if run as 'root' and AllowRoot is disabled.
 #
 # Mandatory: no
-<% if @zabbix_user %>User=<%= @zabbix_user %><% end %>
+<% if $zabbix_user { %>User=<%= $zabbix_user %><% } -%>
 
 ### Option: Include
 #	You may include individual files or all files in a directory in the configuration file.
 #	Installing Zabbix will create include directory in /usr/local/etc, unless modified during the compile time.
 #
 # Mandatory: no
-Include=<%= @include_dir %>
+Include=<%= $include_dir %>
 
 ### Option: SSLCertLocation
 #	Location of SSL client certificates.
@@ -627,7 +726,7 @@ Include=<%= @include_dir %>
 #	To see the default path run command "zabbix_server --help".
 #
 # Mandatory: no
-SSLCertLocation=<%= @sslcertlocation_dir %>
+SSLCertLocation=<%= $sslcertlocation_dir %>
 
 ### Option: SSLKeyLocation
 #	Location of private keys for SSL client certificates.
@@ -636,7 +735,7 @@ SSLCertLocation=<%= @sslcertlocation_dir %>
 #	To see the default path run command "zabbix_server --help".
 #
 # Mandatory: no
-SSLKeyLocation=<%= @sslkeylocation_dir %>
+SSLKeyLocation=<%= $sslkeylocation_dir %>
 
 ### Option: SSLCALocation
 #	Override the location of certificate authority (CA) files for SSL server certificate verification.
@@ -644,7 +743,7 @@ SSLKeyLocation=<%= @sslkeylocation_dir %>
 #	This parameter is used in web monitoring, SMTP authentication, HTTP agent items and for communication with Vault.
 #
 # Mandatory: no
-<% if @sslcalocation_dir %>SSLCALocation=<%= @sslcalocation_dir %><% end %>
+<% if $sslcalocation_dir { %>SSLCALocation=<%= $sslcalocation_dir %><% } -%>
 
 ### Option: StatsAllowedIP
 #	List of comma delimited IP addresses, optionally in CIDR notation, or DNS names of external Zabbix instances.
@@ -656,7 +755,7 @@ SSLKeyLocation=<%= @sslkeylocation_dir %>
 #	Example: StatsAllowedIP=127.0.0.1,192.168.1.0/24,::1,2001:db8::/32,zabbix.example.com
 #
 # Mandatory: no
-<% if @statsallowedip %>StatsAllowedIP=<%= @statsallowedip %><% end %>
+<% if $statsallowedip { %>StatsAllowedIP=<%= $statsallowedip %><% } -%>
 
 ####### LOADABLE MODULES #######
 
@@ -666,7 +765,7 @@ SSLKeyLocation=<%= @sslkeylocation_dir %>
 #	To see the default path run command "zabbix_server --help".
 #
 # Mandatory: no
-LoadModulePath=<%= @loadmodulepath %>
+LoadModulePath=<%= $loadmodulepath %>
 
 ### Option: LoadModule
 #	Module to load at server startup. Modules are used to extend functionality of the server.
@@ -679,7 +778,7 @@ LoadModulePath=<%= @loadmodulepath %>
 #	It is allowed to include multiple LoadModule parameters.
 #
 # Mandatory: no
-<% if @loadmodule %>LoadModule = <%= @loadmodule %><% end %>
+<% if $loadmodule { %>LoadModule = <%= $loadmodule %><% } -%>
 
 ####### TLS-RELATED PARAMETERS #######
 
@@ -688,25 +787,25 @@ LoadModulePath=<%= @loadmodulepath %>
 #	peer certificate verification.
 #
 # Mandatory: no
-<% if @tlscafile %>TLSCAFile=<%= @tlscafile %><% end %>
+<% if $tlscafile { %>TLSCAFile=<%= $tlscafile %><% } -%>
 
 ### Option: TLSCRLFile
 #	Full pathname of a file containing revoked certificates.
 #
 # Mandatory: no
-<% if @tlscrlfile %>TLSCRLFile=<%= @tlscrlfile %><% end %>
+<% if $tlscrlfile { %>TLSCRLFile=<%= $tlscrlfile %><% } -%>
 
 ### Option: TLSCertFile
 #	Full pathname of a file containing the server certificate or certificate chain.
 #
 # Mandatory: no
-<% if @tlscertfile %>TLSCertFile=<%= @tlscertfile %><% end %>
+<% if $tlscertfile { %>TLSCertFile=<%= $tlscertfile %><% } -%>
 
 ### Option: TLSKeyFile
 #	Full pathname of a file containing the server private key.
 #
 # Mandatory: no
-<% if @tlskeyfile %>TLSKeyFile=<%= @tlskeyfile %><% end %>
+<% if $tlskeyfile { %>TLSKeyFile=<%= $tlskeyfile %><% } -%>
 
 ####### For advanced users - TLS ciphersuite selection criteria #######
 
@@ -715,7 +814,9 @@ LoadModulePath=<%= @loadmodulepath %>
 #	Override the default ciphersuite selection criteria for certificate-based encryption.
 #
 # Mandatory: no
-<% if @tlsciphercert13 %>TLSCipherCert13=<%= @tlsciphercert13 %><% end %>
+# Default:
+# TLSCipherCert13=
+<% if $tlsciphercert13 { %>TLSCipherCert13=<%= $tlsciphercert13 %><% } -%>
 
 ### Option: TLSCipherCert
 #	GnuTLS priority string or OpenSSL (TLS 1.2) cipher string.
@@ -726,7 +827,7 @@ LoadModulePath=<%= @loadmodulepath %>
 #		EECDH+aRSA+AES128:RSA+aRSA+AES128
 #
 # Mandatory: no
-<% if @tlsciphercert %>TLSCipherCert=<%= @tlsciphercert %><% end %>
+<% if $tlsciphercert { %>TLSCipherCert=<%= $tlsciphercert %><% } -%>
 
 ### Option: TLSCipherPSK13
 #	Cipher string for OpenSSL 1.1.1 or newer in TLS 1.3.
@@ -735,7 +836,7 @@ LoadModulePath=<%= @loadmodulepath %>
 #		TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256
 #
 # Mandatory: no
-<% if @tlscipherpsk13 %>TLSCipherPSK13=<%= @tlscipherpsk13 %><% end %>
+<% if $tlscipherpsk13 { %>TLSCipherPSK13=<%= $tlscipherpsk13 %><% } -%>
 
 ### Option: TLSCipherPSK
 #	GnuTLS priority string or OpenSSL (TLS 1.2) cipher string.
@@ -746,7 +847,7 @@ LoadModulePath=<%= @loadmodulepath %>
 #		kECDHEPSK+AES128:kPSK+AES128
 #
 # Mandatory: no
-<% if @tlscipherpsk %>TLSCipherPSK=<%= @tlscipherpsk %><% end %>
+<% if $tlscipherpsk { %>TLSCipherPSK=<%= $tlscipherpsk %><% } -%>
 
 ### Option: TLSCipherAll13
 #	Cipher string for OpenSSL 1.1.1 or newer in TLS 1.3.
@@ -755,7 +856,7 @@ LoadModulePath=<%= @loadmodulepath %>
 #		TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256
 #
 # Mandatory: no
-<% if @tlscipherall13 %>TLSCipherAll13=<%= @tlscipherall13 %><% end %>
+<% if $tlscipherall13 { %>TLSCipherAll13=<%= $tlscipherall13 %><% } -%>
 
 ### Option: TLSCipherAll
 #	GnuTLS priority string or OpenSSL (TLS 1.2) cipher string.
@@ -766,59 +867,65 @@ LoadModulePath=<%= @loadmodulepath %>
 #		EECDH+aRSA+AES128:RSA+aRSA+AES128:kECDHEPSK+AES128:kPSK+AES128
 #
 # Mandatory: no
-<% if @tlscipherall %>TLSCipherAll=<%= @tlscipherall %><% end %>
+<% if $tlscipherall { %>TLSCipherAll=<%= $tlscipherall %><% } -%>
 
 ### Option: DBTLSConnect
-#	Setting this option enforces to use TLS connection to database.
-#	required    - connect using TLS
-#	verify_ca   - connect using TLS and verify certificate
-#	verify_full - connect using TLS, verify certificate and verify that database identity specified by DBHost
-#	              matches its certificate
-#	On MySQL starting from 5.7.11 and PostgreSQL following values are supported: "required", "verify_ca" and
-#	"verify_full".
-#	On MariaDB starting from version 10.2.6 "required" and "verify_full" values are supported.
-#	Default is not to set any option and behavior depends on database configuration
+#       Setting this option enforces to use TLS connection to database.
+#       required    - connect using TLS
+#       verify_ca   - connect using TLS and verify certificate
+#       verify_full - connect using TLS, verify certificate and verify that database identity specified by DBHost
+#                     matches its certificate
+#       On MySQL starting from 5.7.11 and PostgreSQL following values are supported: "required", "verify_ca" and
+#       "verify_full".
+#       On MariaDB starting from version 10.2.6 "required" and "verify_full" values are supported.
+#       Default is not to set any option and behavior depends on database configuration
 #
 # Mandatory: no
-<% if @database_tlsconnect %>DBTLSConnect=<%= @database_tlsconnect %><% end %>
+# Default:
+<% if $database_tlsconnect { %>DBTLSConnect=<%= $database_tlsconnect %><% } -%>
 
 ### Option: DBTLSCAFile
-#	Full pathname of a file containing the top-level CA(s) certificates for database certificate verification.
-#	Supported only for MySQL and PostgreSQL
+#       Full pathname of a file containing the top-level CA(s) certificates for database certificate verification.
+#       Supported only for MySQL and PostgreSQL
 #
 # Mandatory: no
-#	(yes, if DBTLSConnect set to one of: verify_ca, verify_full)
-<% if @database_tlscafile %>DBTLSCAFile=<%= @database_tlscafile %><% end %>
+#       (yes, if DBTLSConnect set to one of: verify_ca, verify_full)
+# Default:
+<% if $database_tlscafile { %>DBTLSCAFile=<%= $database_tlscafile %><% } -%>
 
 ### Option: DBTLSCertFile
-#	Full pathname of file containing Zabbix server certificate for authenticating to database.
-#	Supported only for MySQL and PostgreSQL
+#       Full pathname of file containing Zabbix server certificate for authenticating to database.
+#       Supported only for MySQL and PostgreSQL
 #
 # Mandatory: no
-<% if @database_tlscertfile %>DBTLSCertFile=<%= @database_tlscertfile %><% end %>
+# Default:
+<% if $database_tlscertfile { %>DBTLSCertFile=<%= $database_tlscertfile %><% } -%>
 
 ### Option: DBTLSKeyFile
-#	Full pathname of file containing the private key for authenticating to database.
-#	Supported only for MySQL and PostgreSQL
+#       Full pathname of file containing the private key for authenticating to database.
+#       Supported only for MySQL and PostgreSQL
 #
 # Mandatory: no
-<% if @database_tlskeyfile %>DBTLSKeyFile=<%= @database_tlskeyfile %><% end %>
+# Default:
+<% if $database_tlskeyfile { %>DBTLSKeyFile=<%= $database_tlskeyfile %><% } -%>
 
 ### Option: DBTLSCipher
-#	The list of encryption ciphers that Zabbix server permits for TLS protocols up through TLSv1.2
-#	Supported only for MySQL
+#       The list of encryption ciphers that Zabbix server permits for TLS protocols up through TLSv1.2
+#       Supported only for MySQL
 #
 # Mandatory no
-<% if @database_tlscipher %>DBTLSCipher=<%= @database_tlscipher %><% end %>
+# Default:
+<% if $database_tlscipher { %>DBTLSCipher=<%= $database_tlscipher %><% } -%>
 
 ### Option: DBTLSCipher13
-#	The list of encryption ciphersuites that Zabbix server permits for TLSv1.3 protocol
-#	Supported only for MySQL, starting from version 8.0.16
+#       The list of encryption ciphersuites that Zabbix server permits for TLSv1.3 protocol
+#       Supported only for MySQL, starting from version 8.0.16
 #
 # Mandatory no
-<% if @database_tlscipher13 %>DBTLSCipher13=<%= @database_tlscipher13 %><% end %>
+# Default:
+<% if $database_tlscipher13 { %>DBTLSCipher13=<%= $database_tlscipher13 %><% } -%>
 
-<% if @zabbix_version.to_f >= 6.2 %>
+<% if versioncmp($zabbix_version,'6.2') >= 0 { -%>
 ### Option: Vault
 #	Specifies vault:
 #		HashiCorp - HashiCorp KV Secrets Engine - Version 2
@@ -828,8 +935,9 @@ LoadModulePath=<%= @loadmodulepath %>
 # Default:
 # Vault=HashiCorp
 
-<% end %>
-<% if @zabbix_version.to_f >= 5.2 %>
+<% } -%>
+
+<% if versioncmp($zabbix_version,'5.2') >= 0 { -%>
 ### Option: VaultToken
 #	Vault authentication token that should have been generated exclusively for Zabbix server with read only permission
 #	to paths specified in Vault macros and read only permission to path specified in optional VaultDBPath
@@ -838,18 +946,18 @@ LoadModulePath=<%= @loadmodulepath %>
 #
 # Mandatory: no
 #	(yes, if Vault is explicitly set to HashiCorp)
-<% if @vaulttoken %>VaultToken=<%= @vaulttoken -%><% end %>
+<% if $vaulttoken { %>VaultToken=<%= $vaulttoken -%><% } -%>
 
 ### Option: VaultURL
 #	Vault server HTTP[S] URL. System-wide CA certificates directory will be used if SSLCALocation is not specified.
 #
 # Mandatory: no
-<% if @vaulturl %>VaultURL=<%= @vaulturl -%><% end %>
+<% if $vaulturl { %>VaultURL=<%= $vaulturl -%><% } -%>
 
-<% if @zabbix_version.to_f >= 7.0 %>
+<% if versioncmp($zabbix_version,'7.0') >= 0 { -%>
 ### Option: VaultPrefix
 #	Custom prefix for Vault path or query depending on the Vault.
-#	Most suitable defaults will be used if not specified. 
+#	Most suitable defaults will be used if not specified.
 #	Note that 'data' is automatically appended after mountpoint for HashiCorp if VaultPrefix is not specified.
 #	Example prefix for HashiCorp:
 #		/v1/secret/data/
@@ -859,7 +967,7 @@ LoadModulePath=<%= @loadmodulepath %>
 # Default:
 # VaultPrefix=
 
-<% end %>
+<% } -%>
 
 ### Option: VaultDBPath
 #	Vault path or query depending on the Vault from where credentials for database will be retrieved by keys.
@@ -872,10 +980,10 @@ LoadModulePath=<%= @loadmodulepath %>
 #	This option can only be used if DBUser and DBPassword are not specified.
 #
 # Mandatory: no
-<% if @vaultdbpath %>VaultDBPath=<%= @vaultdbpath -%><% end %>
+<% if $vaultdbpath { %>VaultDBPath=<%= $vaultdbpath -%><% } -%>
 
-<% end %>
-<% if @zabbix_version.to_f >= 6.2 %>
+<% } -%>
+<% if versioncmp($zabbix_version,'6.2') >= 0 { -%>
 ### Option: VaultTLSCertFile
 #	Name of the SSL certificate file used for client authentication. The certificate file must be in PEM1 format.
 #	If the certificate file contains also the private key, leave the SSL key file field empty. The directory
@@ -893,25 +1001,25 @@ LoadModulePath=<%= @loadmodulepath %>
 # Default:
 # VaultTLSKeyFile=
 
-<% end %>
+<% } -%>
 
-<% if @zabbix_version.to_f >= 5.4 %>
+<% if versioncmp($zabbix_version,'5.4') >= 0 { -%>
 ### Option: StartReportWriters
 #	Number of pre-forked report writer instances.
 #
 # Mandatory: no
 # Range: 0-100
-<% if @startreportwriters %>StartReportWriters=<%= @startreportwriters -%><% end %>
+<% if $startreportwriters { %>StartReportWriters=<%= $startreportwriters -%><% } -%>
 
 ### Option: WebServiceURL
 #	URL to Zabbix web service, used to perform web related tasks.
 #	Example: http://localhost:10053/report
 #
 # Mandatory: no
-<% if @webserviceurl %>WebServiceURL=<%= @webserviceurl -%><% end %>
-<% end %>
+<% if $webserviceurl { %>WebServiceURL=<%= $webserviceurl -%><% } -%>
+<% } -%>
 
-<% if @zabbix_version.to_f >= 7.0 %>
+<% if versioncmp($zabbix_version,'7.0') >= 0 { -%>
 ### Option: ServiceManagerSyncFrequency
 #	How often Zabbix will synchronize configuration of a service manager (in seconds).
 #
@@ -946,7 +1054,7 @@ LoadModulePath=<%= @loadmodulepath %>
 # EnableGlobalScripts=1
 
 # Option: AllowSoftwareUpdateCheck
-#       Allow Zabbix UI to receive information about software updates from zabbix.com 
+#       Allow Zabbix UI to receive information about software updates from zabbix.com
 #       0 - disable software update checks
 #       1 - enable software update checks
 #
@@ -963,8 +1071,8 @@ LoadModulePath=<%= @loadmodulepath %>
 # Default:
 # SMSDevices=
 
-<% end %>
-<% if @zabbix_version.to_f >= 5.4 %>
+<% } -%>
+<% if versioncmp($zabbix_version,'5.4') >= 0 { -%>
 ####### For advanced users - TCP-related fine-tuning parameters #######
 
 ## Option: ListenBacklog
@@ -976,8 +1084,8 @@ LoadModulePath=<%= @loadmodulepath %>
 # Default: SOMAXCONN (hard-coded constant, depends on system)
 # ListenBacklog=
 
-<% end %>
-<% if @zabbix_version.to_f >= 6.0 %>
+<% } -%>
+<% if versioncmp($zabbix_version,'6.0') >= 0 { -%>
 ####### High availability cluster parameters #######
 
 ## Option: HANodeName
@@ -985,7 +1093,7 @@ LoadModulePath=<%= @loadmodulepath %>
 #	When empty, server is working in standalone mode; a node with empty name is registered with address for the frontend to connect to.
 #
 # Mandatory: no
-<% if @hanodename %>HANodeName=<%= @hanodename -%><% end %>
+<% if $hanodename { %>HANodeName=<%= $hanodename -%><% } -%>
 
 ## Option: NodeAddress
 #	IP or hostname with optional port to specify how frontend should connect to the server.
@@ -996,10 +1104,10 @@ LoadModulePath=<%= @loadmodulepath %>
 #	This option can be overridden by address specified in frontend configuration.
 #
 # Mandatory: no
-<% if @nodeaddress %>NodeAddress=<%= @nodeaddress -%><% end %>
+<% if $nodeaddress { %>NodeAddress=<%= $nodeaddress -%><% } -%>
 
-<% end %>
-<% if @zabbix_version.to_f >= 7.0 %>
+<% } -%>
+<% if versioncmp($zabbix_version,'7.0') >= 0 { -%>
 ####### Browser monitoring #######
 
 ### Option: WebDriverURL
@@ -1017,4 +1125,4 @@ LoadModulePath=<%= @loadmodulepath %>
 # Default:
 # StartBrowserPollers=1
 
-<% end %>
+<% } -%>
