@@ -345,7 +345,7 @@ class zabbix::web (
 
     if versioncmp($zabbix_version, '6.4') >= 0 {
       $setenvif_auth = [
-        'Authorization "(.*)" HTTP_AUTHORIZATION=$1'
+        'Authorization "(.*)" HTTP_AUTHORIZATION=$1',
       ]
     } else {
       $setenvif_auth = undef
