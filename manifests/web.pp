@@ -343,6 +343,14 @@ class zabbix::web (
       default => $zabbix_api_access.map |$host| { "host ${host}" },
     }
 
+    if versioncmp($zabbix_version, '6.4') >= 0 {
+      $setenvif_auth = [
+        'Authorization "(.*)" HTTP_AUTHORIZATION=$1'
+      ]
+    } else {
+      $setenvif_auth = undef
+    }
+
     apache::vhost { $zabbix_url:
       docroot         => '/usr/share/zabbix',
       ip              => $apache_listen_ip,
@@ -387,6 +395,7 @@ class zabbix::web (
         {
         rewrite_rule => ['^$ /index.php [L]'] }
       ],
+      setenvif        => $setenvif_auth,
       ssl             => $apache_use_ssl,
       ssl_cert        => $apache_ssl_cert,
       ssl_key         => $apache_ssl_key,
