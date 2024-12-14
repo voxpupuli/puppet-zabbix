@@ -29,7 +29,12 @@ describe 'zabbix::database::postgresql' do
         ]
       end
 
-      path = '/usr/share/zabbix-sql-scripts/postgresql/'
+      path = if Puppet::Util::Package.versioncmp(zabbix_version, '8.0') >= 0
+               '/usr/share/zabbix/sql-scripts/postgresql/'
+             else
+               '/usr/share/zabbix-sql-scripts/postgresql/'
+             end
+
       sql_server = 'server.sql'
 
       describe "when version is #{zabbix_version}" do
