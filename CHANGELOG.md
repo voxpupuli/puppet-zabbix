@@ -4,7 +4,41 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
-## [v10.0.0](https://github.com/voxpupuli/puppet-zabbix/tree/v10.0.0) (2024-03-14)
+## [v11.0.0](https://github.com/voxpupuli/puppet-zabbix/tree/v11.0.0) (2024-10-24)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v10.0.0...v11.0.0)
+
+**Breaking changes:**
+
+- Remove EL7 support [\#970](https://github.com/voxpupuli/puppet-zabbix/pull/970) ([Valantin](https://github.com/Valantin))
+- Change `manage_startup_script` default to false [\#965](https://github.com/voxpupuli/puppet-zabbix/pull/965) ([Valantin](https://github.com/Valantin))
+- Remove unsupported OS [\#957](https://github.com/voxpupuli/puppet-zabbix/pull/957) ([Valantin](https://github.com/Valantin))
+- Support multiple values in TLSAccept [\#947](https://github.com/voxpupuli/puppet-zabbix/pull/947) ([wolfaba](https://github.com/wolfaba))
+
+**Implemented enhancements:**
+
+- Add zabbix 7.0 support in CI [\#952](https://github.com/voxpupuli/puppet-zabbix/pull/952) ([Valantin](https://github.com/Valantin))
+- puppetlabs/firewall: Allow 8.x [\#938](https://github.com/voxpupuli/puppet-zabbix/pull/938) ([zilchms](https://github.com/zilchms))
+
+**Fixed bugs:**
+
+- fix zabbixapi gem dependency for ruby 2.x [\#963](https://github.com/voxpupuli/puppet-zabbix/pull/963) ([Valantin](https://github.com/Valantin))
+
+**Closed issues:**
+
+- Zabbix server in HA mode not corretly work with managed service on ubuntu 22.04 [\#960](https://github.com/voxpupuli/puppet-zabbix/issues/960)
+- Update documentation in conf template [\#948](https://github.com/voxpupuli/puppet-zabbix/issues/948)
+- Zabbix Proxy 10.0.0 redeclare issue [\#940](https://github.com/voxpupuli/puppet-zabbix/issues/940)
+- zabbix::proxy on 10.0.0 fails to build [\#939](https://github.com/voxpupuli/puppet-zabbix/issues/939)
+
+**Merged pull requests:**
+
+- Unit tests: run on CERN runners [\#967](https://github.com/voxpupuli/puppet-zabbix/pull/967) ([bastelfreak](https://github.com/bastelfreak))
+- Update documentation in config file [\#964](https://github.com/voxpupuli/puppet-zabbix/pull/964) ([Valantin](https://github.com/Valantin))
+- Allow allowkey and denykey on agent2 [\#946](https://github.com/voxpupuli/puppet-zabbix/pull/946) ([trenta](https://github.com/trenta))
+- update puppet-systemd upper bound to 8.0.0 [\#944](https://github.com/voxpupuli/puppet-zabbix/pull/944) ([TheMeier](https://github.com/TheMeier))
+
+## [v10.0.0](https://github.com/voxpupuli/puppet-zabbix/tree/v10.0.0) (2024-03-15)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v9.2.0...v10.0.0)
 
@@ -860,7 +894,7 @@ These should not affect the functionality of the module.
 - Update rspec [\#203](https://github.com/voxpupuli/puppet-zabbix/pull/203) ([bastelfreak](https://github.com/bastelfreak))
 - Add archlinux support [\#201](https://github.com/voxpupuli/puppet-zabbix/pull/201) ([bastelfreak](https://github.com/bastelfreak))
 - there is no zabbix proxy package in zbx-3.0 [\#198](https://github.com/voxpupuli/puppet-zabbix/pull/198) ([BcTpe4HbIu](https://github.com/BcTpe4HbIu))
-- Zabbix as default vhost \#180 [\#197](https://github.com/voxpupuli/puppet-zabbix/pull/197) ([szemlyanoy](https://github.com/szemlyanoy))
+- Zabbix as default vhost \#180 [\#197](https://github.com/voxpupuli/puppet-zabbix/pull/197) ([sergii-zemlianyi](https://github.com/sergii-zemlianyi))
 - Add Zabbix sender support [\#195](https://github.com/voxpupuli/puppet-zabbix/pull/195) ([vide](https://github.com/vide))
 - fix wrong comment for configfrequency [\#192](https://github.com/voxpupuli/puppet-zabbix/pull/192) ([BcTpe4HbIu](https://github.com/BcTpe4HbIu))
 - Feature selinux [\#191](https://github.com/voxpupuli/puppet-zabbix/pull/191) ([bastelfreak](https://github.com/bastelfreak))
@@ -1030,7 +1064,7 @@ These should not affect the functionality of the module.
 
 **Merged pull requests:**
 
-- merge of hiera hashes from entire hierarchy [\#98](https://github.com/voxpupuli/puppet-zabbix/pull/98) ([szemlyanoy](https://github.com/szemlyanoy))
+- merge of hiera hashes from entire hierarchy [\#98](https://github.com/voxpupuli/puppet-zabbix/pull/98) ([sergii-zemlianyi](https://github.com/sergii-zemlianyi))
 - Added support to Amazon Linux with epel 6. [\#96](https://github.com/voxpupuli/puppet-zabbix/pull/96) ([Wprosdocimo](https://github.com/Wprosdocimo))
 - import templates and create hostgroup if missing [\#95](https://github.com/voxpupuli/puppet-zabbix/pull/95) ([1n](https://github.com/1n))
 - Added Support For Zapache monitoring script [\#94](https://github.com/voxpupuli/puppet-zabbix/pull/94) ([rtizzy](https://github.com/rtizzy))
