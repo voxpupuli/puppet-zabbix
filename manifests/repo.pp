@@ -3,7 +3,7 @@
 # @param manage_apt Whether the module should manage apt repositories for Debian based systems.
 # @param zabbix_version This is the zabbix version.
 # @param repo_location A custom repo location (e.g. your own mirror)
-# @param repo_gpg_key_location 
+# @param repo_gpg_key_location
 #   A custom repo GPG key location (e.g. an airlocked copy of the gpg key)
 # @param frontend_repo_location A custom repo location for frontend package.
 # @param unsupported_repo_location
@@ -44,7 +44,12 @@ class zabbix::repo (
         }
 
         $_repo_location = $repo_location ? {
-          undef   => "https://repo.zabbix.com/zabbix/${zabbix_version}/rhel/${majorrelease}/\$basearch/",
+          undef   => versioncmp($zabbix_version, '7.2') ? {
+            # Version older than 7.2
+            -1      => "https://repo.zabbix.com/zabbix/${zabbix_version}/rhel/${majorrelease}/\$basearch/",
+            # Version 7.2 and newer
+            default => "https://repo.zabbix.com/zabbix/${zabbix_version}/stable/rhel/${majorrelease}/\$basearch/",
+          },
           default => $repo_location,
         }
 
@@ -94,7 +99,12 @@ class zabbix::repo (
         }
 
         $_repo_location = $repo_location ? {
-          undef   => "http://repo.zabbix.com/zabbix/${zabbix_version}/${operatingsystem}/",
+          undef   => versioncmp($zabbix_version, '7.2') ? {
+            # Version older than 7.2
+            -1      => "http://repo.zabbix.com/zabbix/${zabbix_version}/${operatingsystem}/",
+            # Version 7.2 and newer
+            default => "http://repo.zabbix.com/zabbix/${zabbix_version}/stable/${operatingsystem}/",
+          },
           default => $repo_location,
         }
 
