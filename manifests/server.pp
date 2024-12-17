@@ -48,6 +48,10 @@
 # @param database_tlscipher The list of encryption ciphers that Zabbix server permits for TLS protocols up through TLSv1.2.
 # @param database_tlscipher13 The list of encryption ciphersuites that Zabbix server permits for TLSv1.3 protocol.
 # @param startpollers Number of pre-forked instances of pollers.
+# @param startagentpollers Number of pre-forked instances of asynchronous Zabbix agent pollers. Also see MaxConcurrentChecksPerPoller.
+# @param starthttpagentpollers Number of pre-forked instances of asynchronous HTTP agent pollers. Also see MaxConcurrentChecksPerPoller.
+# @param startsnmppollers Number of pre-forked instances of asynchronous SNMP pollers. Also see MaxConcurrentChecksPerPoller.
+# @param maxconcurrentchecksperpoller Maximum number of asynchronous checks that can be executed at once by each HTTP agent poller or agent poller.
 # @param startpreprocessors Number of pre-forked instances of preprocessing workers
 # @param startipmipollers Number of pre-forked instances of ipmi pollers.
 # @param startodbcpollers Number of pre-forked instances of ODBC pollers.
@@ -205,6 +209,10 @@ class zabbix::server (
   Optional[String[1]] $database_tlscipher                                     = $zabbix::params::server_database_tlscipher,
   Optional[String[1]] $database_tlscipher13                                   = $zabbix::params::server_database_tlscipher13,
   $startpollers                                                               = $zabbix::params::server_startpollers,
+  Integer[1, 100] $startagentpollers                                          = $zabbix::params::server_startagentpollers,
+  Integer[1, 100] $starthttpagentpollers                                      = $zabbix::params::server_starthttpagentpollers,
+  Integer[1, 100] $startsnmppollers                                           = $zabbix::params::server_startsnmppollers,
+  Integer[1, 1000] $maxconcurrentchecksperpoller                              = $zabbix::params::server_maxconcurrentchecksperpoller,
   $startipmipollers                                                           = $zabbix::params::server_startipmipollers,
   Integer[0, 1000] $startodbcpollers                                          = $zabbix::params::server_startodbcpollers,
   $startpollersunreachable                                                    = $zabbix::params::server_startpollersunreachable,
