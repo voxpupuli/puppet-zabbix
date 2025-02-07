@@ -205,7 +205,7 @@ class zabbix::server (
   Optional[Stdlib::Absolutepath] $database_tlskeyfile                         = $zabbix::params::server_database_tlskeyfile,
   Optional[String[1]] $database_tlscipher                                     = $zabbix::params::server_database_tlscipher,
   Optional[String[1]] $database_tlscipher13                                   = $zabbix::params::server_database_tlscipher13,
-  Optional[String] $server_smsdevices                                         = $zabbix::params::server_smsdevices,
+  Optional[String] $smsdevices                                                = $zabbix::params::server_smsdevices,
   $startpollers                                                               = $zabbix::params::server_startpollers,
   $startipmipollers                                                           = $zabbix::params::server_startipmipollers,
   Integer[0, 1000] $startodbcpollers                                          = $zabbix::params::server_startodbcpollers,

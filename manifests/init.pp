@@ -76,7 +76,6 @@
 # @param zabbix_api_pass Password of the user which connects to the api. Default: zabbix
 # @param zabbix_api_access Which host has access to the api. Default: no restriction
 # @param listenport Listen port for the zabbix-server. Default: 10051
-# @param smsdevices Which devices to use for sms texting
 # @param sourceip Source ip address for outgoing connections.
 # @param logfile Name of log file.
 # @param logfilesize Maximum size of log file in MB.
@@ -117,6 +116,7 @@
 # @param starttimers Number of pre-forked instances of timers.
 # @param javagateway IP address (or hostname) of zabbix java gateway.
 # @param javagatewayport Port that zabbix java gateway listens on.
+# @param server::smsdevices Which devices to use for sms texting
 # @param startjavapollers Number of pre-forked instances of java pollers.
 # @param startlldprocessors Number of pre-forked instances of low-level discovery (LLD) workers.
 # @param startvmwarecollectors Number of pre-forked vmware collector instances.
@@ -437,6 +437,7 @@ class zabbix (
     starttimers               => $starttimers,
     javagateway               => $javagateway,
     javagatewayport           => $javagatewayport,
+    smsdevices                => $smsdevices,
     startjavapollers          => $startjavapollers,
     startlldprocessors        => $startlldprocessors,
     startvmwarecollectors     => $startvmwarecollectors,
