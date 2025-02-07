@@ -158,6 +158,7 @@ The following parameters are available in the `zabbix` class:
 * [`starttimers`](#-zabbix--starttimers)
 * [`javagateway`](#-zabbix--javagateway)
 * [`javagatewayport`](#-zabbix--javagatewayport)
+* [`smsdevices`](#-zabbix--smsdevices)
 * [`startjavapollers`](#-zabbix--startjavapollers)
 * [`startlldprocessors`](#-zabbix--startlldprocessors)
 * [`startvmwarecollectors`](#-zabbix--startvmwarecollectors)
@@ -829,6 +830,14 @@ Data type: `Any`
 Port that zabbix java gateway listens on.
 
 Default value: `$zabbix::params::server_javagatewayport`
+
+##### <a name="-zabbix--smsdevices"></a>`smsdevices`
+
+Data type: `Any`
+
+Which devices to use for sms texting
+
+Default value: `$zabbix::params::server_smsdevices`
 
 ##### <a name="-zabbix--startjavapollers"></a>`startjavapollers`
 
@@ -4008,6 +4017,7 @@ The following parameters are available in the `zabbix::server` class:
 * [`maxhousekeeperdelete`](#-zabbix--server--maxhousekeeperdelete)
 * [`cachesize`](#-zabbix--server--cachesize)
 * [`cacheupdatefrequency`](#-zabbix--server--cacheupdatefrequency)
+* [`smsdevices`](#-zabbix--server--smsdevices)
 * [`startdbsyncers`](#-zabbix--server--startdbsyncers)
 * [`historycachesize`](#-zabbix--server--historycachesize)
 * [`historyindexcachesize`](#-zabbix--server--historyindexcachesize)
@@ -4036,7 +4046,6 @@ The following parameters are available in the `zabbix::server` class:
 * [`logslowqueries`](#-zabbix--server--logslowqueries)
 * [`tmpdir`](#-zabbix--server--tmpdir)
 * [`startproxypollers`](#-zabbix--server--startproxypollers)
-* [`smsdevices`](#-zabbix--server--smsdevices)
 * [`proxyconfigfrequency`](#-zabbix--server--proxyconfigfrequency)
 * [`proxydatafrequency`](#-zabbix--server--proxydatafrequency)
 * [`allowroot`](#-zabbix--server--allowroot)
@@ -4351,14 +4360,6 @@ Number of pre-forked instances of pollers.
 
 Default value: `$zabbix::params::server_startpollers`
 
-#### <a name="-zabbix--server--smsdevices"></a>smsdevices
-
-Data type: `Optional[String]`
-
-The devices used for sending text messages normally GSM modem dittos
-
-Default value: `undef`
-
 ##### <a name="-zabbix--server--startpreprocessors"></a>`startpreprocessors`
 
 Data type: `Integer[1, 1000]`
@@ -4612,6 +4613,14 @@ Data type: `Any`
 How often zabbix will perform update of configuration cache, in seconds.
 
 Default value: `$zabbix::params::server_cacheupdatefrequency`
+
+##### <a name="-zabbix--server--smsdevices"></a>`smsdevices`
+
+Data type: `Optional[String]`
+
+What devices to use for texting
+
+Default value: `$zabbix::params::server_smsdevices`
 
 ##### <a name="-zabbix--server--startdbsyncers"></a>`startdbsyncers`
 

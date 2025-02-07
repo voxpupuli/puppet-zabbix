@@ -116,7 +116,7 @@
 # @param starttimers Number of pre-forked instances of timers.
 # @param javagateway IP address (or hostname) of zabbix java gateway.
 # @param javagatewayport Port that zabbix java gateway listens on.
-# @param server::smsdevices Which devices to use for sms texting
+# @param smsdevices Which devices to use for sms texting
 # @param startjavapollers Number of pre-forked instances of java pollers.
 # @param startlldprocessors Number of pre-forked instances of low-level discovery (LLD) workers.
 # @param startvmwarecollectors Number of pre-forked vmware collector instances.
@@ -274,6 +274,7 @@ class zabbix (
   $database_tablespace                                                        = $zabbix::params::server_database_tablespace,
   Optional[Enum['required', 'verify_ca', 'verify_full']] $database_tlsconnect = $zabbix::params::server_database_tlsconnect,
   Optional[Stdlib::Absolutepath] $database_tlscafile                          = $zabbix::params::server_database_tlscafile,
+  $smsdevices                                                                 = $zabbix::params::server_smsdevices,
   $startpollers                                                               = $zabbix::params::server_startpollers,
   $startipmipollers                                                           = $zabbix::params::server_startipmipollers,
   Integer[0, 1000] $startodbcpollers                                          = $zabbix::params::server_startodbcpollers,
