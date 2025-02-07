@@ -4036,6 +4036,7 @@ The following parameters are available in the `zabbix::server` class:
 * [`logslowqueries`](#-zabbix--server--logslowqueries)
 * [`tmpdir`](#-zabbix--server--tmpdir)
 * [`startproxypollers`](#-zabbix--server--startproxypollers)
+* [`smsdevices`](#-zabbix--server--smsdevices)
 * [`proxyconfigfrequency`](#-zabbix--server--proxyconfigfrequency)
 * [`proxydatafrequency`](#-zabbix--server--proxydatafrequency)
 * [`allowroot`](#-zabbix--server--allowroot)
@@ -4349,6 +4350,14 @@ Data type: `Any`
 Number of pre-forked instances of pollers.
 
 Default value: `$zabbix::params::server_startpollers`
+
+#### <a name="-zabbix--server--smsdevices"></a>smsdevices
+
+Data type: `Optional[String]`
+
+The devices used for sending text messages normally GSM modem dittos
+
+Default value: `undef`
 
 ##### <a name="-zabbix--server--startpreprocessors"></a>`startpreprocessors`
 

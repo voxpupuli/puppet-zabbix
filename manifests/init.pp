@@ -76,6 +76,7 @@
 # @param zabbix_api_pass Password of the user which connects to the api. Default: zabbix
 # @param zabbix_api_access Which host has access to the api. Default: no restriction
 # @param listenport Listen port for the zabbix-server. Default: 10051
+# @param smsdevices Which devices to use for sms texting
 # @param sourceip Source ip address for outgoing connections.
 # @param logfile Name of log file.
 # @param logfilesize Maximum size of log file in MB.
