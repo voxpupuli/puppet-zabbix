@@ -145,6 +145,10 @@ The following parameters are available in the `zabbix` class:
 * [`database_tlsconnect`](#-zabbix--database_tlsconnect)
 * [`database_tlscafile`](#-zabbix--database_tlscafile)
 * [`startpollers`](#-zabbix--startpollers)
+* [`startagentpollers`](#-zabbix--startagentpollers)
+* [`starthttpagentpollers`](#-zabbix--starthttpagentpollers)
+* [`startsnmppollers`](#-zabbix--startsnmppollers)
+* [`maxconcurrentchecksperpoller`](#-zabbix--maxconcurrentchecksperpoller)
 * [`startpreprocessors`](#-zabbix--startpreprocessors)
 * [`startipmipollers`](#-zabbix--startipmipollers)
 * [`startodbcpollers`](#-zabbix--startodbcpollers)
@@ -725,6 +729,38 @@ Data type: `Any`
 Number of pre-forked instances of pollers.
 
 Default value: `$zabbix::params::server_startpollers`
+
+##### <a name="-zabbix--startagentpollers"></a>`startagentpollers`
+
+Data type: `Integer[1, 100]`
+
+Number of pre-forked instances of asynchronous Zabbix agent pollers. Also see MaxConcurrentChecksPerPoller.
+
+Default value: `$zabbix::params::server_startagentpollers`
+
+##### <a name="-zabbix--starthttpagentpollers"></a>`starthttpagentpollers`
+
+Data type: `Integer[1, 100]`
+
+Number of pre-forked instances of asynchronous HTTP agent pollers. Also see MaxConcurrentChecksPerPoller.
+
+Default value: `$zabbix::params::server_starthttpagentpollers`
+
+##### <a name="-zabbix--startsnmppollers"></a>`startsnmppollers`
+
+Data type: `Integer[1, 100]`
+
+Number of pre-forked instances of asynchronous SNMP pollers. Also see MaxConcurrentChecksPerPoller.
+
+Default value: `$zabbix::params::server_startsnmppollers`
+
+##### <a name="-zabbix--maxconcurrentchecksperpoller"></a>`maxconcurrentchecksperpoller`
+
+Data type: `Integer[1, 1000]`
+
+Maximum number of asynchronous checks that can be executed at once by each HTTP agent poller or agent poller.
+
+Default value: `$zabbix::params::server_maxconcurrentchecksperpoller`
 
 ##### <a name="-zabbix--startpreprocessors"></a>`startpreprocessors`
 
@@ -3977,6 +4013,10 @@ The following parameters are available in the `zabbix::server` class:
 * [`database_tlscipher`](#-zabbix--server--database_tlscipher)
 * [`database_tlscipher13`](#-zabbix--server--database_tlscipher13)
 * [`startpollers`](#-zabbix--server--startpollers)
+* [`startagentpollers`](#-zabbix--server--startagentpollers)
+* [`starthttpagentpollers`](#-zabbix--server--starthttpagentpollers)
+* [`startsnmppollers`](#-zabbix--server--startsnmppollers)
+* [`maxconcurrentchecksperpoller`](#-zabbix--server--maxconcurrentchecksperpoller)
 * [`startpreprocessors`](#-zabbix--server--startpreprocessors)
 * [`startipmipollers`](#-zabbix--server--startipmipollers)
 * [`startodbcpollers`](#-zabbix--server--startodbcpollers)
@@ -4349,6 +4389,38 @@ Data type: `Any`
 Number of pre-forked instances of pollers.
 
 Default value: `$zabbix::params::server_startpollers`
+
+##### <a name="-zabbix--server--startagentpollers"></a>`startagentpollers`
+
+Data type: `Integer[1, 100]`
+
+Number of pre-forked instances of asynchronous Zabbix agent pollers. Also see MaxConcurrentChecksPerPoller.
+
+Default value: `$zabbix::params::server_startagentpollers`
+
+##### <a name="-zabbix--server--starthttpagentpollers"></a>`starthttpagentpollers`
+
+Data type: `Integer[1, 100]`
+
+Number of pre-forked instances of asynchronous HTTP agent pollers. Also see MaxConcurrentChecksPerPoller.
+
+Default value: `$zabbix::params::server_starthttpagentpollers`
+
+##### <a name="-zabbix--server--startsnmppollers"></a>`startsnmppollers`
+
+Data type: `Integer[1, 100]`
+
+Number of pre-forked instances of asynchronous SNMP pollers. Also see MaxConcurrentChecksPerPoller.
+
+Default value: `$zabbix::params::server_startsnmppollers`
+
+##### <a name="-zabbix--server--maxconcurrentchecksperpoller"></a>`maxconcurrentchecksperpoller`
+
+Data type: `Integer[1, 1000]`
+
+Maximum number of asynchronous checks that can be executed at once by each HTTP agent poller or agent poller.
+
+Default value: `$zabbix::params::server_maxconcurrentchecksperpoller`
 
 ##### <a name="-zabbix--server--startpreprocessors"></a>`startpreprocessors`
 
