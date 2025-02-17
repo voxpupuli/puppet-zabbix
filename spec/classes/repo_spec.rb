@@ -73,6 +73,17 @@ describe 'zabbix::repo' do
           it { is_expected.to contain_yumrepo('zabbix').with_baseurl('https://example.com/foo') }
         end
 
+        context 'when repo_gpg_key_location is "https://example.com/bar"' do
+          let :params do
+            {
+              repo_gpg_key_location: 'https://example.com/bar'
+            }
+          end
+
+          it { is_expected.to contain_yumrepo('zabbix').with_gpgkey('https://example.com/bar/RPM-GPG-KEY-ZABBIX-A14FE591') } if facts[:os]['release']['major'].to_i < 9
+          it { is_expected.to contain_yumrepo('zabbix').with_gpgkey('https://example.com/bar/RPM-GPG-KEY-ZABBIX-08EFA7DD') } if facts[:os]['release']['major'].to_i >= 9
+        end
+
         context 'when unsupported_repo_location is "https://example.com/foo"' do
           let :params do
             {
@@ -81,6 +92,17 @@ describe 'zabbix::repo' do
           end
 
           it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_baseurl('https://example.com/foo') }
+        end
+
+        context 'when unsupported_repo_gpg_key_location is "https://example.com/bar"' do
+          let :params do
+            {
+              unsupported_repo_gpg_key_location: 'https://example.com/bar'
+            }
+          end
+
+          it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_gpgkey('https://example.com/bar/RPM-GPG-KEY-ZABBIX-79EA5ED4') } if facts[:os]['release']['major'].to_i < 9
+          it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_gpgkey('https://example.com/bar/RPM-GPG-KEY-ZABBIX-08EFA7DD') } if facts[:os]['release']['major'].to_i >= 9
         end
 
         major = facts[:os]['release']['major']

@@ -150,7 +150,9 @@ class zabbix::params {
   $manage_firewall                          = false
   $manage_apt                               = true
   $repo_location                            = undef
+  $repo_gpg_key_location                    = undef
   $unsupported_repo_location                = undef
+  $unsupported_repo_gpg_key_location        = undef
   $frontend_repo_location                   = undef
   $manage_resources                         = false
   $manage_vhost                             = true
