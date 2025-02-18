@@ -1,4 +1,5 @@
 # @summary This will install and configure the zabbix-agent deamon
+# @param ensure Ensure that the agent is either present or absent
 # @param zabbix_version This is the zabbix version.
 # @param zabbix_package_state The state of the package that needs to be installed: present or latest.
 # @param zabbix_package_agent The name of the agent package that we manage
@@ -147,6 +148,7 @@
 #
 # @author Werner Dijkerman ikben@werner-dijkerman.nl
 class zabbix::agent (
+  Enum['absent', 'present'] $ensure                    = 'present',
   $zabbix_version                                      = $zabbix::params::zabbix_version,
   $zabbix_package_state                                = $zabbix::params::zabbix_package_state,
   $zabbix_package_agent                                = $zabbix::params::zabbix_package_agent,
@@ -232,6 +234,16 @@ class zabbix::agent (
 ) inherits zabbix::params {
   $agent2 = $zabbix_package_agent == 'zabbix-agent2'
 
+  # Set up overrides if the ensure parameter is set to 'absent'
+  $dir_ensure = $ensure ? { 'absent' => $ensure, default => 'directory' }
+  $file_ensure = $ensure ? { 'absent' => $ensure, default => 'file' }
+  $include_dir_force = $ensure ? { 'absent' => true, default => undef }
+  $_include_dir_purge = $ensure ? { 'absent' => true, default => $include_dir_purge }
+  $_manage_repo = $ensure ? { 'absent' => false, default => $manage_repo }
+  $_service_enable = $ensure ? { 'absent' => false, default => $service_enable }
+  $_service_ensure = $ensure ? { 'absent' => 'stopped', default => $service_ensure }
+  $_zabbix_package_state = $ensure ? { 'absent' => $ensure, default => $zabbix_package_state }
+
   # Find if listenip is set. If not, we can set to specific ip or
   # to network name. If more than 1 interfaces are available, we
   # can find the ipaddress of this specific interface if listenip
@@ -276,7 +288,7 @@ class zabbix::agent (
   # Only include the repo class if it has not yet been included
   unless defined(Class['Zabbix::Repo']) {
     class { 'zabbix::repo':
-      manage_repo    => $manage_repo,
+      manage_repo    => $_manage_repo,
       zabbix_version => $zabbix_version,
     }
   }
@@ -291,7 +303,7 @@ class zabbix::agent (
     } else {
       assert_type(Stdlib::Windowspath, $zabbix_package_source)
       package { $zabbix_package_agent:
-        ensure          => $zabbix_package_state,
+        ensure          => $_zabbix_package_state,
         tag             => 'zabbix',
         provider        => $zabbix_package_provider,
         source          => $zabbix_package_source,
@@ -302,7 +314,7 @@ class zabbix::agent (
   else {
     # Installing the package
     package { $zabbix_package_agent:
-      ensure   => $zabbix_package_state,
+      ensure   => $_zabbix_package_state,
       require  => Class['zabbix::repo'],
       tag      => 'zabbix',
       provider => $zabbix_package_provider,
@@ -336,8 +348,8 @@ class zabbix::agent (
 
   # Controlling the 'zabbix-agent' service
   service { $servicename:
-    ensure  => $service_ensure,
-    enable  => $service_enable,
+    ensure  => $_service_ensure,
+    enable  => $_service_enable,
     require => $service_require,
   }
 
@@ -352,7 +364,7 @@ class zabbix::agent (
 
   # Configuring the zabbix-agent configuration file
   file { $agent_configfile_path:
-    ensure  => file,
+    ensure  => $file_ensure,
     owner   => $agent_config_owner,
     group   => $agent_config_group,
     mode    => '0644',
@@ -364,11 +376,12 @@ class zabbix::agent (
 
   # Include dir for specific zabbix-agent checks.
   file { $include_dir:
-    ensure  => directory,
+    ensure  => $dir_ensure,
     owner   => $agent_config_owner,
     group   => $agent_config_group,
+    force   => $include_dir_force,
     recurse => true,
-    purge   => $include_dir_purge,
+    purge   => $_include_dir_purge,
     notify  => Service[$servicename],
     require => File[$agent_configfile_path],
   }
@@ -394,7 +407,7 @@ class zabbix::agent (
   # https://support.zabbix.com/browse/ZBX-11631
   if fact('os.selinux.enabled') == true and $manage_selinux {
     selinux::module { 'zabbix-agent':
-      ensure     => 'present',
+      ensure     => $ensure,
       content_te => template('zabbix/selinux/zabbix-agent.te.erb'),
       before     => Service[$servicename],
     }
