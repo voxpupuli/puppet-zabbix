@@ -251,6 +251,7 @@ StartPollersUnreachable=<%= @startpollersunreachable %>
 # Range: 0-1000
 # Default:
 # StartHistoryPollers=5
+<% if @starthistorypollers %>StartHistoryPollers=<%= @starthistorypollers %><% end %>
 
 <% end %>
 <% if @zabbix_version.to_f >= 6.0 %>
@@ -471,6 +472,14 @@ HistoryCacheSize=<%= @historycachesize %>
 # Mandatory: no
 # Range: 128K-2G
 TrendCacheSize=<%= @trendcachesize %>
+
+### Option: TrendFunctionCacheSize
+#   Size of trend function cache, in bytes.
+#   Shared memory size for caching calculated trend function data
+#
+# Mandatory: no
+# Range: 128K-2G
+<% if @trendfunctioncachesize %>TrendFunctionCacheSize=<%= @trendfunctioncachesize %><% end %>
 
 ### Option: ValueCacheSize
 #	Size of history value cache, in bytes.
