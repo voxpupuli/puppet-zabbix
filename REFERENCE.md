@@ -3583,8 +3583,10 @@ The following parameters are available in the `zabbix::repo` class:
 * [`manage_apt`](#-zabbix--repo--manage_apt)
 * [`zabbix_version`](#-zabbix--repo--zabbix_version)
 * [`repo_location`](#-zabbix--repo--repo_location)
+* [`repo_gpg_key_location`](#-zabbix--repo--repo_gpg_key_location)
 * [`frontend_repo_location`](#-zabbix--repo--frontend_repo_location)
 * [`unsupported_repo_location`](#-zabbix--repo--unsupported_repo_location)
+* [`unsupported_repo_gpg_key_location`](#-zabbix--repo--unsupported_repo_gpg_key_location)
 
 ##### <a name="-zabbix--repo--manage_repo"></a>`manage_repo`
 
@@ -3618,6 +3620,14 @@ A custom repo location (e.g. your own mirror)
 
 Default value: `$zabbix::params::repo_location`
 
+##### <a name="-zabbix--repo--repo_gpg_key_location"></a>`repo_gpg_key_location`
+
+Data type: `Optional[Stdlib::HTTPUrl]`
+
+A custom repo GPG key location (e.g. an airlocked copy of the gpg key)
+
+Default value: `$zabbix::params::repo_gpg_key_location`
+
 ##### <a name="-zabbix--repo--frontend_repo_location"></a>`frontend_repo_location`
 
 Data type: `Optional[Stdlib::HTTPUrl]`
@@ -3634,6 +3644,14 @@ A custom repo location for unsupported content (e.g. your own mirror)
 Currently only supported under RedHat based systems.
 
 Default value: `$zabbix::params::unsupported_repo_location`
+
+##### <a name="-zabbix--repo--unsupported_repo_gpg_key_location"></a>`unsupported_repo_gpg_key_location`
+
+Data type: `Optional[Stdlib::HTTPUrl]`
+
+A custom repo GPG key location (e.g. an airlocked copy of the gpg key)
+
+Default value: `$zabbix::params::unsupported_repo_gpg_key_location`
 
 ### <a name="zabbix--resources--agent"></a>`zabbix::resources::agent`
 
