@@ -911,6 +911,7 @@ LoadModulePath=<%= @loadmodulepath %>
 <% if @webserviceurl %>WebServiceURL=<%= @webserviceurl -%><% end %>
 <% end %>
 
+<%# FIXME: vi får v 6.0 %>
 <% if @zabbix_version.to_f >= 7.0 %>
 ### Option: ServiceManagerSyncFrequency
 #	How often Zabbix will synchronize configuration of a service manager (in seconds).
@@ -962,7 +963,7 @@ LoadModulePath=<%= @loadmodulepath %>
 # Mandatory: no
 # Default:
 # SMSDevices=
-<% if @smsdevices != '' %>SMSDevices=<%= @smsdevices -%><% end %>
+<% if @smsdevices -%>SMSDevices=<%= @smsdevices %><% end %>
 <% end %>
 
 <% if @zabbix_version.to_f >= 5.4 %>
