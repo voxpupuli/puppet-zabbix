@@ -159,6 +159,22 @@ describe 'zabbix::repo' do
           it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_gpgkey('https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-B5333005') } if facts[:os]['release']['major'].to_i < 9
           it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_gpgkey('https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-08EFA7DD') } if facts[:os]['release']['major'].to_i >= 9
         end
+
+        context "on RedHat #{major} and Zabbix 7.2" do
+          let :params do
+            {
+              zabbix_version: '7.2',
+              manage_repo: true
+            }
+          end
+
+          it { is_expected.to contain_yumrepo('zabbix').with_baseurl("https://repo.zabbix.com/zabbix/7.2/stable/rhel/#{major}/$basearch/") }
+          it { is_expected.to contain_yumrepo('zabbix').with_gpgkey('https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-B5333005') }
+          it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_baseurl("https://repo.zabbix.com/non-supported/rhel/#{major}/$basearch/") }
+
+          it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_gpgkey('https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-B5333005') } if facts[:os]['release']['major'].to_i < 9
+          it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_gpgkey('https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-08EFA7DD') } if facts[:os]['release']['major'].to_i >= 9
+        end
       end
     end
   end

@@ -258,6 +258,13 @@ class zabbix::web (
 
   # Is set to true, it will create the apache vhost.
   if $manage_vhost {
+    $zabbix_ui_dir = versioncmp($zabbix_version, '7.2') ? {
+      # Version older than 7.2
+      -1      => '/usr/share/zabbix',
+      # Version 7.2 and newer
+      default => '/usr/share/zabbix/ui',
+    }
+
     include apache
     include apache::mod::dir
     if $facts['os']['family'] == 'RedHat' {
@@ -277,7 +284,7 @@ class zabbix::web (
       }
 
       $fcgi_filematch = {
-        path     => '/usr/share/zabbix',
+        path     => $zabbix_ui_dir,
         provider => 'directory',
         addhandlers => [
           {
@@ -319,7 +326,7 @@ class zabbix::web (
       # We create nonssl vhost for redirecting non ssl
       # traffic to https.
       apache::vhost { "${zabbix_url}_nonssl":
-        docroot        => '/usr/share/zabbix',
+        docroot        => $zabbix_ui_dir,
         manage_docroot => false,
         default_vhost  => $default_vhost,
         port           => $apache_listenport,
@@ -344,35 +351,35 @@ class zabbix::web (
     }
 
     apache::vhost { $zabbix_url:
-      docroot         => '/usr/share/zabbix',
+      docroot         => $zabbix_ui_dir,
       ip              => $apache_listen_ip,
       port            => $apache_listen_port,
       default_vhost   => $default_vhost,
       add_listen      => true,
       directories     => [
         merge({
-            path     => '/usr/share/zabbix',
+            path     => $zabbix_ui_dir,
             provider => 'directory',
             require  => 'all granted',
           }, $fcgi_filematch
         ),
         {
-          path     => '/usr/share/zabbix/conf',
+          path     => "${zabbix_ui_dir}/conf",
           provider => 'directory',
           require  => 'all denied',
         },
         {
-          path     => '/usr/share/zabbix/api',
+          path     => "${zabbix_ui_dir}/api",
           provider => 'directory',
           require  => 'all denied',
         },
         {
-          path     => '/usr/share/zabbix/include',
+          path     => "${zabbix_ui_dir}/include",
           provider => 'directory',
           require  => 'all denied',
         },
         {
-          path     => '/usr/share/zabbix/include/classes',
+          path     => "${zabbix_ui_dir}/include/classes",
           provider => 'directory',
           require  => 'all denied',
         },
