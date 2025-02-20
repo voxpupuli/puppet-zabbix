@@ -240,6 +240,7 @@ class zabbix::params {
   $server_pacemaker_resource                = undef
   $server_snmptrapperfile                   = '/tmp/zabbix_traps.tmp'
   $server_sourceip                          = undef
+  $server_smsdevices                        = undef
   $server_sshkeylocation                    = undef
   $server_sslcertlocation                   = '/usr/lib/zabbix/ssl/certs'
   $server_sslkeylocation                    = '/usr/lib/zabbix/ssl/keys'
