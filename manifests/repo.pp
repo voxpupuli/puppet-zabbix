@@ -3,37 +3,64 @@
 # @param manage_apt Whether the module should manage apt repositories for Debian based systems.
 # @param zabbix_version This is the zabbix version.
 # @param repo_location A custom repo location (e.g. your own mirror)
+# @param repo_gpg_key_location 
+#   A custom repo GPG key location (e.g. an airlocked copy of the gpg key)
 # @param frontend_repo_location A custom repo location for frontend package.
 # @param unsupported_repo_location
 #   A custom repo location for unsupported content (e.g. your own mirror)
 #   Currently only supported under RedHat based systems.
+# @param unsupported_repo_gpg_key_location
+#   A custom repo GPG key location (e.g. an airlocked copy of the gpg key)
 # @author Werner Dijkerman <ikben@werner-dijkerman.nl>
 # @author Tim Meusel <tim@bastelfreak.de>
 class zabbix::repo (
-  Boolean                   $manage_repo               = $zabbix::params::manage_repo,
-  Boolean                   $manage_apt                = $zabbix::params::manage_apt,
-  Optional[Stdlib::HTTPUrl] $repo_location             = $zabbix::params::repo_location,
-  Optional[Stdlib::HTTPUrl] $frontend_repo_location    = $zabbix::params::frontend_repo_location,
-  Optional[Stdlib::HTTPUrl] $unsupported_repo_location = $zabbix::params::unsupported_repo_location,
-  String[1]                 $zabbix_version            = $zabbix::params::zabbix_version,
+  Boolean                   $manage_repo                       = $zabbix::params::manage_repo,
+  Boolean                   $manage_apt                        = $zabbix::params::manage_apt,
+  Optional[Stdlib::HTTPUrl] $repo_location                     = $zabbix::params::repo_location,
+  Optional[Stdlib::HTTPUrl] $repo_gpg_key_location             = $zabbix::params::repo_gpg_key_location,
+  Optional[Stdlib::HTTPUrl] $frontend_repo_location            = $zabbix::params::frontend_repo_location,
+  Optional[Stdlib::HTTPUrl] $unsupported_repo_location         = $zabbix::params::unsupported_repo_location,
+  Optional[Stdlib::HTTPUrl] $unsupported_repo_gpg_key_location = $zabbix::params::unsupported_repo_gpg_key_location,
+  String[1]                 $zabbix_version                    = $zabbix::params::zabbix_version,
 ) inherits zabbix::params {
   if $manage_repo {
     case $facts['os']['family'] {
       'RedHat': {
         $majorrelease = $facts['os']['release']['major']
         if versioncmp($zabbix_version, '7.0') >= 0 {
-          $gpgkey_zabbix = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-B5333005'
+          $_gpgkey_zabbix = $repo_gpg_key_location ? {
+            undef   => 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-B5333005',
+            default => "${repo_gpg_key_location}/RPM-GPG-KEY-ZABBIX-B5333005",
+          }
           if versioncmp(fact('os.release.major'), '9') >= 0 {
-            $gpgkey_nonsupported = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-08EFA7DD'
+            $_gpgkey_nonsupported = $unsupported_repo_gpg_key_location ? {
+              undef   => 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-08EFA7DD',
+              default => "${unsupported_repo_gpg_key_location}/RPM-GPG-KEY-ZABBIX-08EFA7DD",
+            }
           } else {
-            $gpgkey_nonsupported = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-B5333005'
+            $_gpgkey_nonsupported = $unsupported_repo_gpg_key_location ? {
+              undef   => 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-B5333005',
+              default => "${unsupported_repo_gpg_key_location}/RPM-GPG-KEY-ZABBIX-B5333005",
+            }
           }
         } elsif versioncmp(fact('os.release.major'), '9') >= 0 {
-          $gpgkey_zabbix = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-08EFA7DD'
-          $gpgkey_nonsupported = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-08EFA7DD'
+          $_gpgkey_zabbix = $repo_gpg_key_location ? {
+            undef   => 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-08EFA7DD',
+            default => "${repo_gpg_key_location}/RPM-GPG-KEY-ZABBIX-08EFA7DD",
+          }
+          $_gpgkey_nonsupported = $unsupported_repo_gpg_key_location ? {
+            undef   => 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-08EFA7DD',
+            default => "${unsupported_repo_gpg_key_location}/RPM-GPG-KEY-ZABBIX-08EFA7DD",
+          }
         } else {
-          $gpgkey_zabbix = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591'
-          $gpgkey_nonsupported = 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-79EA5ED4'
+          $_gpgkey_zabbix = $repo_gpg_key_location ? {
+            undef   => 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591',
+            default => "${repo_gpg_key_location}/RPM-GPG-KEY-ZABBIX-A14FE591",
+          }
+          $_gpgkey_nonsupported = $unsupported_repo_gpg_key_location ? {
+            undef   => 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-79EA5ED4',
+            default => "${unsupported_repo_gpg_key_location}/RPM-GPG-KEY-ZABBIX-79EA5ED4",
+          }
         }
 
         $_repo_location = $repo_location ? {
@@ -46,7 +73,7 @@ class zabbix::repo (
           descr    => "Zabbix_${majorrelease}_${facts['os']['architecture']}",
           baseurl  => $_repo_location,
           gpgcheck => '1',
-          gpgkey   => $gpgkey_zabbix,
+          gpgkey   => $_gpgkey_zabbix,
           priority => '1',
         }
 
@@ -60,7 +87,7 @@ class zabbix::repo (
           descr    => "Zabbix_nonsupported_${majorrelease}_${facts['os']['architecture']}",
           baseurl  => $_unsupported_repo_location,
           gpgcheck => '1',
-          gpgkey   => $gpgkey_nonsupported,
+          gpgkey   => $_gpgkey_nonsupported,
           priority => '1',
         }
       }
@@ -91,17 +118,22 @@ class zabbix::repo (
           default => $repo_location,
         }
 
+        $_gpgkey_zabbix = $repo_gpg_key_location ? {
+          undef   => 'https://repo.zabbix.com/zabbix-official-repo.key',
+          default => "${repo_gpg_key_location}/zabbix-official-repo.key",
+        }
+
         apt::key { 'zabbix-FBABD5F':
           id     => 'FBABD5FB20255ECAB22EE194D13D58E479EA5ED4',
-          source => 'https://repo.zabbix.com/zabbix-official-repo.key',
+          source => $_gpgkey_zabbix,
         }
         apt::key { 'zabbix-A1848F5':
           id     => 'A1848F5352D022B9471D83D0082AB56BA14FE591',
-          source => 'https://repo.zabbix.com/zabbix-official-repo.key',
+          source => $_gpgkey_zabbix,
         }
         apt::key { 'zabbix-4C3D6F2':
           id     => '4C3D6F2CC75F5146754FC374D913219AB5333005',
-          source => 'https://repo.zabbix.com/zabbix-official-repo.key',
+          source => $_gpgkey_zabbix,
         }
 
         # Debian 11 provides Zabbix 5.0 by default. This can cause problems for 4.0 versions
