@@ -11,17 +11,23 @@
 # @param database_path Path to the database executable
 # @author Werner Dijkerman <ikben@werner-dijkerman.nl>
 class zabbix::database::postgresql (
-  $zabbix_type                                        = '',
-  $zabbix_version                                     = $zabbix::params::zabbix_version,
-  $database_schema_path                               = '',
-  $database_name                                      = '',
-  $database_user                                      = '',
-  $database_password                                  = '',
-  $database_host                                      = '',
-  Stdlib::Port::Unprivileged $database_port           = 5432,
-  $database_path                                      = $zabbix::params::database_path,
+  $zabbix_type                                                          = '',
+  $zabbix_version                                                       = $zabbix::params::zabbix_version,
+  $database_schema_path                                                 = '',
+  $database_name                                                        = '',
+  $database_user                                                        = '',
+  Optional[Variant[String[1], Sensitive[String[1]]]] $database_password = undef,
+  $database_host                                                        = '',
+  Stdlib::Port::Unprivileged $database_port                             = 5432,
+  $database_path                                                        = $zabbix::params::database_path,
 ) inherits zabbix::params {
   assert_private()
+
+  $database_password_unsensitive = if $database_password =~ Sensitive[String] {
+    $database_password.unwrap
+  } else {
+    $database_password
+  }
 
   if $database_schema_path != false and $database_schema_path != '' {
     $schema_path = $database_schema_path
@@ -56,7 +62,7 @@ class zabbix::database::postgresql (
     "PGHOST=${database_host}",
     "PGPORT=${database_port}",
     "PGUSER=${database_user}",
-    "PGPASSWORD=${database_password}",
+    "PGPASSWORD=${database_password_unsensitive}",
     "PGDATABASE=${database_name}",
   ]
 
