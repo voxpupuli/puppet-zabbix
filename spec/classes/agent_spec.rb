@@ -284,6 +284,32 @@ describe 'zabbix::agent' do
         it { is_expected.to contain_file(config_path).with_content %r{^Alias=name2$} }
       end
 
+      context 'when declaring ensure is absent' do
+        let :params do
+          {
+            ensure: 'absent'
+          }
+        end
+
+        it { is_expected.to contain_package(package_name).with_ensure('absent') } if facts[:kernel] == 'Linux'
+
+        it { is_expected.to contain_class('zabbix::repo').with_manage_repo(false) }
+
+        it do
+          is_expected.to contain_service(service_name).
+            with_ensure('stopped').
+            with_enable(false).
+            that_requires("Package[#{package_name}]")
+        end
+
+        it do
+          is_expected.to contain_file(include_dir).
+            with_ensure('absent').
+            with_force(true).
+            with_purge(true)
+        end
+      end
+
       context 'configuration file with full options' do
         if facts[:kernel] == 'Linux'
           let :params do
