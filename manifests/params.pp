@@ -247,6 +247,7 @@ class zabbix::params {
   $server_startalerters                     = 3
   $server_startdiscoverers                  = '1'
   $server_startescalators                   = 1
+  $server_starthistorypollers               = 5
   $server_starthttppollers                  = '1'
   $server_startipmipollers                  = '0'
   $server_startjavapollers                  = '5'
@@ -282,6 +283,7 @@ class zabbix::params {
   $server_tmpdir                            = '/tmp'
   $server_trappertimeout                    = '300'
   $server_trendcachesize                    = '4M'
+  $server_trendfunctioncachesize            = undef
   $server_unavailabledelay                  = '60'
   $server_unreachabledelay                  = '15'
   $server_unreachableperiod                 = '45'
@@ -300,9 +302,11 @@ class zabbix::params {
   $agent_allowroot                          = '0'
   $agent_buffersend                         = '5'
   $agent_buffersize                         = '100'
+  $agent_controlsocket                      = undef
   $agent_debuglevel                         = '3'
   $agent_allowkey                           = undef
   $agent_denykey                            = undef
+  $agent_enablepersistentbuffer             = undef
   $agent_enableremotecommands               = '0'
   $agent_hostmetadata                       = undef
   $agent_hostmetadataitem                   = undef
@@ -313,9 +317,12 @@ class zabbix::params {
   $agent_include_purge                      = true
   $agent_listenip                           = undef
   $agent_listenport                         = '10050'
+  $agent_statusport                         = undef
   $agent_loadmodule                         = undef
   $agent_logremotecommands                  = '0'
   $agent_maxlinespersecond                  = '100'
+  $agent_persistentbufferfile               = undef
+  $agent_persistentbufferperiod             = undef
   $agent_refreshactivechecks                = '120'
   $agent_server                             = '127.0.0.1'
   $agent_serveractive                       = undef
