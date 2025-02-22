@@ -254,6 +254,10 @@ class zabbix::params {
   $server_startodbcpollers                  = 1
   $server_startpingers                      = '1'
   $server_startpollers                      = '5'
+  $server_startagentpollers                 = 1
+  $server_starthttpagentpollers             = 1
+  $server_startsnmppollers                  = 1
+  $server_maxconcurrentchecksperpoller      = 1000
   $server_startpollersunreachable           = '1'
   $server_startpreprocessors                = 3
   $server_startproxypollers                 = '1'
