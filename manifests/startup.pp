@@ -48,7 +48,7 @@ define zabbix::startup (
       content => template("zabbix/${service_name}-systemd.init.erb"),
     }
     file { "/etc/init.d/${name}":
-      ensure  => absent,
+      ensure => absent,
     }
   } elsif $facts['os']['family'] in ['Debian', 'RedHat'] {
     # Currently other osfamily without systemd is not supported
