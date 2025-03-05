@@ -962,6 +962,7 @@ LoadModulePath=<%= @loadmodulepath %>
 # Mandatory: no
 # Default:
 # SMSDevices=
+<% if @smsdevices %>SMSDevices=<%= @smsdevices.is_a?(Array) ? @smsdevices.join(',') : @smsdevices -%><% end %>
 
 <% end %>
 <% if @zabbix_version.to_f >= 5.4 %>

@@ -367,6 +367,20 @@ describe 'zabbix::server' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').without_content %r{^StartODBCPollers=1} }
       end
 
+      context 'with zabbix_server.conf and version 7.0' do
+        next if facts[:os]['name'] == 'Debian' && facts[:os]['release']['major'].to_i <= 11
+        next if facts[:os]['name'] == 'Ubuntu' && facts[:os]['release']['major'].to_i <= 20
+
+        let :params do
+          {
+            smsdevices: 'modem0',
+            zabbix_version: '7.0'
+          }
+        end
+
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SMSDevices=modem0} }
+      end
+
       context 'with zabbix_server.conf and logtype declared' do
         describe 'as system' do
           let :params do
