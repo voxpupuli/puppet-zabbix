@@ -48,10 +48,18 @@
 # @param database_tlscipher The list of encryption ciphers that Zabbix server permits for TLS protocols up through TLSv1.2.
 # @param database_tlscipher13 The list of encryption ciphersuites that Zabbix server permits for TLSv1.3 protocol.
 # @param startpollers Number of pre-forked instances of pollers.
+# @param startagentpollers Number of pre-forked instances of asynchronous Zabbix agent pollers. Also see MaxConcurrentChecksPerPoller.
+# @param starthttpagentpollers Number of pre-forked instances of asynchronous HTTP agent pollers. Also see MaxConcurrentChecksPerPoller.
+# @param startsnmppollers Number of pre-forked instances of asynchronous SNMP pollers. Also see MaxConcurrentChecksPerPoller.
+# @param maxconcurrentchecksperpoller Maximum number of asynchronous checks that can be executed at once by each HTTP agent poller or agent poller.
 # @param startpreprocessors Number of pre-forked instances of preprocessing workers
 # @param startipmipollers Number of pre-forked instances of ipmi pollers.
 # @param startodbcpollers Number of pre-forked instances of ODBC pollers.
 # @param startpollersunreachable Number of pre-forked instances of pollers for unreachable hosts (including ipmi).
+# @param starthistorypollers
+#   Number of pre-forked instances of history pollers.
+#   Only required for calculated checks.
+#   A database connection is required for each history poller instance.
 # @param starttrappers Number of pre-forked instances of trappers.
 # @param startpingers Number of pre-forked instances of icmp pingers.
 # @param startalerters Number of pre-forked instances of alerters.
@@ -87,6 +95,7 @@
 #   if set to 0 then no limit is used at all. in this case you must know what you are doing!
 # @param cachesize Size of configuration cache, in bytes.
 # @param cacheupdatefrequency How often zabbix will perform update of configuration cache, in seconds.
+# @param smsdevices Devices to use for sms texting
 # @param startdbsyncers Number of pre-forked instances of db syncers.
 # @param historycachesize Size of history cache, in bytes.
 # @param historyindexcachesize Size of history index cache, in bytes.
@@ -204,10 +213,16 @@ class zabbix::server (
   Optional[Stdlib::Absolutepath] $database_tlskeyfile                         = $zabbix::params::server_database_tlskeyfile,
   Optional[String[1]] $database_tlscipher                                     = $zabbix::params::server_database_tlscipher,
   Optional[String[1]] $database_tlscipher13                                   = $zabbix::params::server_database_tlscipher13,
-  $startpollers                                                               = $zabbix::params::server_startpollers,
-  $startipmipollers                                                           = $zabbix::params::server_startipmipollers,
+  Optional[Variant[String[1],Array[String[1]]]] $smsdevices                   = $zabbix::params::server_smsdevices,
+  Integer[0, 1000] $startpollers                                              = $zabbix::params::server_startpollers,
+  Integer[0, 1000] $startagentpollers                                         = $zabbis::params::server_startagentpollers,
+  Integer[0, 1000] $starthttpagentpollers                                     = $zabbix::params::server_starthttpagentpollers,
+  Integer[0, 1000] $startsnmppollers                                          = $zabbix::params::server_startsnmppollers,
+  Integer[0, 1000] $maxconcurrentchecksperpoller                              = $zabbix::params::server_maxconcurrentchecksperpoller,
+  Integer[0, 1000] $startipmipollers                                          = $zabbix::params::server_startipmipollers,
   Integer[0, 1000] $startodbcpollers                                          = $zabbix::params::server_startodbcpollers,
-  $startpollersunreachable                                                    = $zabbix::params::server_startpollersunreachable,
+  Integer[0, 1000] $startpollersunreachable                                   = $zabbix::params::server_startpollersunreachable,
+  Integer[0, 1000] $starthistorypollers                                       = $zabbix::params::server_starthistorypollers,
   Integer[1, 1000] $startpreprocessors                                        = $zabbix::params::server_startpreprocessors,
   $starttrappers                                                              = $zabbix::params::server_starttrappers,
   $startpingers                                                               = $zabbix::params::server_startpingers,
