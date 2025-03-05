@@ -145,10 +145,15 @@ The following parameters are available in the `zabbix` class:
 * [`database_tlsconnect`](#-zabbix--database_tlsconnect)
 * [`database_tlscafile`](#-zabbix--database_tlscafile)
 * [`startpollers`](#-zabbix--startpollers)
+* [`startagentpollers`](#-zabbix--startagentpollers)
+* [`starthttpagentpollers`](#-zabbix--starthttpagentpollers)
+* [`startsnmppollers`](#-zabbix--startsnmppollers)
+* [`maxconcurrentchecksperpoller`](#-zabbix--maxconcurrentchecksperpoller)
 * [`startpreprocessors`](#-zabbix--startpreprocessors)
 * [`startipmipollers`](#-zabbix--startipmipollers)
 * [`startodbcpollers`](#-zabbix--startodbcpollers)
 * [`startpollersunreachable`](#-zabbix--startpollersunreachable)
+* [`starthistorypollers`](#-zabbix--starthistorypollers)
 * [`starttrappers`](#-zabbix--starttrappers)
 * [`startpingers`](#-zabbix--startpingers)
 * [`startalerters`](#-zabbix--startalerters)
@@ -721,11 +726,43 @@ Default value: `$zabbix::params::server_database_tlscafile`
 
 ##### <a name="-zabbix--startpollers"></a>`startpollers`
 
-Data type: `Any`
+Data type: `Integer[0, 1000]`
 
 Number of pre-forked instances of pollers.
 
 Default value: `$zabbix::params::server_startpollers`
+
+##### <a name="-zabbix--startagentpollers"></a>`startagentpollers`
+
+Data type: `Integer[0, 1000]`
+
+Number of pre-forked instances of asynchronous Zabbix agent pollers. Also see MaxConcurrentChecksPerPoller.
+
+Default value: `$zabbix::params::server_startagentpollers`
+
+##### <a name="-zabbix--starthttpagentpollers"></a>`starthttpagentpollers`
+
+Data type: `Integer[0, 1000]`
+
+Number of pre-forked instances of asynchronous HTTP agent pollers. Also see MaxConcurrentChecksPerPoller.
+
+Default value: `$zabbix::params::server_starthttpagentpollers`
+
+##### <a name="-zabbix--startsnmppollers"></a>`startsnmppollers`
+
+Data type: `Integer[0, 1000]`
+
+Number of pre-forked instances of asynchronous SNMP pollers. Also see MaxConcurrentChecksPerPoller.
+
+Default value: `$zabbix::params::server_startsnmppollers`
+
+##### <a name="-zabbix--maxconcurrentchecksperpoller"></a>`maxconcurrentchecksperpoller`
+
+Data type: `Integer[0, 1000]`
+
+Maximum number of asynchronous checks that can be executed at once by each HTTP agent poller or agent poller.
+
+Default value: `$zabbix::params::server_maxconcurrentchecksperpoller`
 
 ##### <a name="-zabbix--startpreprocessors"></a>`startpreprocessors`
 
@@ -737,7 +774,7 @@ Default value: `$zabbix::params::server_startpreprocessors`
 
 ##### <a name="-zabbix--startipmipollers"></a>`startipmipollers`
 
-Data type: `Any`
+Data type: `Integer[0, 1000]`
 
 Number of pre-forked instances of ipmi pollers.
 
@@ -753,11 +790,21 @@ Default value: `$zabbix::params::server_startodbcpollers`
 
 ##### <a name="-zabbix--startpollersunreachable"></a>`startpollersunreachable`
 
-Data type: `Any`
+Data type: `Integer[0, 1000]`
 
 Number of pre-forked instances of pollers for unreachable hosts (including ipmi).
 
 Default value: `$zabbix::params::server_startpollersunreachable`
+
+##### <a name="-zabbix--starthistorypollers"></a>`starthistorypollers`
+
+Data type: `Integer[0, 1000]`
+
+Number of pre-forked instances of history pollers.
+Only required for calculated checks.
+A database connection is required for each history poller instance.
+
+Default value: `$zabbix::params::server_starthistorypollers`
 
 ##### <a name="-zabbix--starttrappers"></a>`starttrappers`
 
@@ -2570,6 +2617,10 @@ The following parameters are available in the `zabbix::proxy` class:
 * [`proxyconfigfrequency`](#-zabbix--proxy--proxyconfigfrequency)
 * [`datasenderfrequency`](#-zabbix--proxy--datasenderfrequency)
 * [`startpollers`](#-zabbix--proxy--startpollers)
+* [`startagentpollers`](#-zabbix--proxy--startagentpollers)
+* [`starthttpagentpollers`](#-zabbix--proxy--starthttpagentpollers)
+* [`startsnmppollers`](#-zabbix--proxy--startsnmppollers)
+* [`maxconcurrentchecksperpoller`](#-zabbix--proxy--maxconcurrentchecksperpoller)
 * [`startpreprocessors`](#-zabbix--proxy--startpreprocessors)
 * [`startipmipollers`](#-zabbix--proxy--startipmipollers)
 * [`startodbcpollers`](#-zabbix--proxy--startodbcpollers)
@@ -3046,11 +3097,43 @@ Default value: `$zabbix::params::proxy_datasenderfrequency`
 
 ##### <a name="-zabbix--proxy--startpollers"></a>`startpollers`
 
-Data type: `Any`
+Data type: `Integer[0, 1000]`
 
 Number of pre-forked instances of pollers.
 
 Default value: `$zabbix::params::proxy_startpollers`
+
+##### <a name="-zabbix--proxy--startagentpollers"></a>`startagentpollers`
+
+Data type: `Integer[0, 1000]`
+
+Number of pre-forked instances of asynchronous Zabbix agent pollers. Also see MaxConcurrentChecksPerPoller.
+
+Default value: `$zabbis::params::proxy_startagentpollers`
+
+##### <a name="-zabbix--proxy--starthttpagentpollers"></a>`starthttpagentpollers`
+
+Data type: `Integer[0, 1000]`
+
+Number of pre-forked instances of asynchronous HTTP agent pollers. Also see MaxConcurrentChecksPerPoller.
+
+Default value: `$zabbix::params::proxy_starthttpagentpollers`
+
+##### <a name="-zabbix--proxy--startsnmppollers"></a>`startsnmppollers`
+
+Data type: `Integer[0, 1000]`
+
+Number of pre-forked instances of asynchronous SNMP pollers. Also see MaxConcurrentChecksPerPoller.
+
+Default value: `$zabbix::params::proxy_startsnmppollers`
+
+##### <a name="-zabbix--proxy--maxconcurrentchecksperpoller"></a>`maxconcurrentchecksperpoller`
+
+Data type: `Integer[0, 1000]`
+
+Maximum number of asynchronous checks that can be executed at once by each HTTP agent poller or agent poller.
+
+Default value: `$zabbix::params::proxy_maxconcurrentchecksperpoller`
 
 ##### <a name="-zabbix--proxy--startpreprocessors"></a>`startpreprocessors`
 
@@ -3062,7 +3145,7 @@ Default value: `$zabbix::params::proxy_startpreprocessors`
 
 ##### <a name="-zabbix--proxy--startipmipollers"></a>`startipmipollers`
 
-Data type: `Any`
+Data type: `Integer[0, 1000]`
 
 Number of pre-forked instances of ipmi pollers.
 
@@ -3078,7 +3161,7 @@ Default value: `$zabbix::params::proxy_startodbcpollers`
 
 ##### <a name="-zabbix--proxy--startpollersunreachable"></a>`startpollersunreachable`
 
-Data type: `Any`
+Data type: `Integer[0, 1000]`
 
 Number of pre-forked instances of pollers for unreachable hosts (including ipmi).
 
@@ -4004,10 +4087,15 @@ The following parameters are available in the `zabbix::server` class:
 * [`database_tlscipher`](#-zabbix--server--database_tlscipher)
 * [`database_tlscipher13`](#-zabbix--server--database_tlscipher13)
 * [`startpollers`](#-zabbix--server--startpollers)
+* [`startagentpollers`](#-zabbix--server--startagentpollers)
+* [`starthttpagentpollers`](#-zabbix--server--starthttpagentpollers)
+* [`startsnmppollers`](#-zabbix--server--startsnmppollers)
+* [`maxconcurrentchecksperpoller`](#-zabbix--server--maxconcurrentchecksperpoller)
 * [`startpreprocessors`](#-zabbix--server--startpreprocessors)
 * [`startipmipollers`](#-zabbix--server--startipmipollers)
 * [`startodbcpollers`](#-zabbix--server--startodbcpollers)
 * [`startpollersunreachable`](#-zabbix--server--startpollersunreachable)
+* [`starthistorypollers`](#-zabbix--server--starthistorypollers)
 * [`starttrappers`](#-zabbix--server--starttrappers)
 * [`startpingers`](#-zabbix--server--startpingers)
 * [`startalerters`](#-zabbix--server--startalerters)
@@ -4372,11 +4460,43 @@ Default value: `$zabbix::params::server_database_tlscipher13`
 
 ##### <a name="-zabbix--server--startpollers"></a>`startpollers`
 
-Data type: `Any`
+Data type: `Integer[0, 1000]`
 
 Number of pre-forked instances of pollers.
 
 Default value: `$zabbix::params::server_startpollers`
+
+##### <a name="-zabbix--server--startagentpollers"></a>`startagentpollers`
+
+Data type: `Integer[0, 1000]`
+
+Number of pre-forked instances of asynchronous Zabbix agent pollers. Also see MaxConcurrentChecksPerPoller.
+
+Default value: `$zabbix::params::server_startagentpollers`
+
+##### <a name="-zabbix--server--starthttpagentpollers"></a>`starthttpagentpollers`
+
+Data type: `Integer[0, 1000]`
+
+Number of pre-forked instances of asynchronous HTTP agent pollers. Also see MaxConcurrentChecksPerPoller.
+
+Default value: `$zabbix::params::server_starthttpagentpollers`
+
+##### <a name="-zabbix--server--startsnmppollers"></a>`startsnmppollers`
+
+Data type: `Integer[0, 1000]`
+
+Number of pre-forked instances of asynchronous SNMP pollers. Also see MaxConcurrentChecksPerPoller.
+
+Default value: `$zabbix::params::server_startsnmppollers`
+
+##### <a name="-zabbix--server--maxconcurrentchecksperpoller"></a>`maxconcurrentchecksperpoller`
+
+Data type: `Integer[0, 1000]`
+
+Maximum number of asynchronous checks that can be executed at once by each HTTP agent poller or agent poller.
+
+Default value: `$zabbix::params::server_maxconcurrentchecksperpoller`
 
 ##### <a name="-zabbix--server--startpreprocessors"></a>`startpreprocessors`
 
@@ -4388,7 +4508,7 @@ Default value: `$zabbix::params::server_startpreprocessors`
 
 ##### <a name="-zabbix--server--startipmipollers"></a>`startipmipollers`
 
-Data type: `Any`
+Data type: `Integer[0, 1000]`
 
 Number of pre-forked instances of ipmi pollers.
 
@@ -4404,11 +4524,21 @@ Default value: `$zabbix::params::server_startodbcpollers`
 
 ##### <a name="-zabbix--server--startpollersunreachable"></a>`startpollersunreachable`
 
-Data type: `Any`
+Data type: `Integer[0, 1000]`
 
 Number of pre-forked instances of pollers for unreachable hosts (including ipmi).
 
 Default value: `$zabbix::params::server_startpollersunreachable`
+
+##### <a name="-zabbix--server--starthistorypollers"></a>`starthistorypollers`
+
+Data type: `Integer[0, 1000]`
+
+Number of pre-forked instances of history pollers.
+Only required for calculated checks.
+A database connection is required for each history poller instance.
+
+Default value: `$zabbix::params::server_starthistorypollers`
 
 ##### <a name="-zabbix--server--starttrappers"></a>`starttrappers`
 
