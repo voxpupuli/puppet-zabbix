@@ -158,6 +158,7 @@ The following parameters are available in the `zabbix` class:
 * [`starttimers`](#-zabbix--starttimers)
 * [`javagateway`](#-zabbix--javagateway)
 * [`javagatewayport`](#-zabbix--javagatewayport)
+* [`smsdevices`](#-zabbix--smsdevices)
 * [`startjavapollers`](#-zabbix--startjavapollers)
 * [`startlldprocessors`](#-zabbix--startlldprocessors)
 * [`startvmwarecollectors`](#-zabbix--startvmwarecollectors)
@@ -829,6 +830,14 @@ Data type: `Any`
 Port that zabbix java gateway listens on.
 
 Default value: `$zabbix::params::server_javagatewayport`
+
+##### <a name="-zabbix--smsdevices"></a>`smsdevices`
+
+Data type: `Optional[Variant[String[1],Array[String[1]]]]`
+
+Devices to use for sms texting
+
+Default value: `$zabbix::params::server_smsdevices`
 
 ##### <a name="-zabbix--startjavapollers"></a>`startjavapollers`
 
@@ -4026,6 +4035,7 @@ The following parameters are available in the `zabbix::server` class:
 * [`maxhousekeeperdelete`](#-zabbix--server--maxhousekeeperdelete)
 * [`cachesize`](#-zabbix--server--cachesize)
 * [`cacheupdatefrequency`](#-zabbix--server--cacheupdatefrequency)
+* [`smsdevices`](#-zabbix--server--smsdevices)
 * [`startdbsyncers`](#-zabbix--server--startdbsyncers)
 * [`historycachesize`](#-zabbix--server--historycachesize)
 * [`historyindexcachesize`](#-zabbix--server--historyindexcachesize)
@@ -4621,6 +4631,14 @@ Data type: `Any`
 How often zabbix will perform update of configuration cache, in seconds.
 
 Default value: `$zabbix::params::server_cacheupdatefrequency`
+
+##### <a name="-zabbix--server--smsdevices"></a>`smsdevices`
+
+Data type: `Optional[Variant[String[1],Array[String[1]]]]`
+
+Devices to use for sms texting
+
+Default value: `$zabbix::params::server_smsdevices`
 
 ##### <a name="-zabbix--server--startdbsyncers"></a>`startdbsyncers`
 
