@@ -52,7 +52,7 @@ describe 'zabbix::database::mysql' do
             it { is_expected.to contain_class('zabbix::params') }
             it { is_expected.to contain_class('zabbix::database::mysql') }
             it { is_expected.to compile.with_all_deps }
-            it { is_expected.to contain_exec('zabbix_server_create.sql').with_command("cd #{path} && if [ -f #{sql_server}.gz ]; then gunzip -f #{sql_server}.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-server' -p'zabbix-server' -P 3306 -D 'zabbix-server' < #{sql_server} && touch /etc/zabbix/.schema.done") }
+            it { is_expected.to contain_exec('zabbix_server_create.sql').with_command("cd #{path} && if [ -f #{sql_server}.gz ]; then gunzip -f #{sql_server}.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-server' -p\"${database_password}\" -P 3306 -D 'zabbix-server' < #{sql_server} && touch /etc/zabbix/.schema.done") }
           end
 
           describe 'and no database_port is defined' do
@@ -70,7 +70,7 @@ describe 'zabbix::database::mysql' do
             it { is_expected.to contain_class('zabbix::params') }
             it { is_expected.to contain_class('zabbix::database::mysql') }
             it { is_expected.to compile.with_all_deps }
-            it { is_expected.to contain_exec('zabbix_server_create.sql').with_command("cd #{path} && if [ -f #{sql_server}.gz ]; then gunzip -f #{sql_server}.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-server' -p'zabbix-server' -D 'zabbix-server' < #{sql_server} && touch /etc/zabbix/.schema.done") }
+            it { is_expected.to contain_exec('zabbix_server_create.sql').with_command("cd #{path} && if [ -f #{sql_server}.gz ]; then gunzip -f #{sql_server}.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-server' -p\"${database_password}\" -D 'zabbix-server' < #{sql_server} && touch /etc/zabbix/.schema.done") }
           end
         end
 
@@ -93,9 +93,9 @@ describe 'zabbix::database::mysql' do
             it { is_expected.to compile.with_all_deps }
 
             if Puppet::Util::Package.versioncmp(zabbix_version, '6.0') < 0
-              it { is_expected.to contain_exec('zabbix_proxy_create.sql').with_command("cd #{path} && if [ -f schema.sql.gz ]; then gunzip -f schema.sql.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-proxy' -p'zabbix-proxy' -P 3306 -D 'zabbix-proxy' < schema.sql && touch /etc/zabbix/.schema.done") }
+              it { is_expected.to contain_exec('zabbix_proxy_create.sql').with_command("cd #{path} && if [ -f schema.sql.gz ]; then gunzip -f schema.sql.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-proxy' -p\"${database_password}\" -P 3306 -D 'zabbix-proxy' < schema.sql && touch /etc/zabbix/.schema.done") }
             else
-              it { is_expected.to contain_exec('zabbix_proxy_create.sql').with_command("cd #{path} && mysql -h 'rspec.puppet.com' -u 'zabbix-proxy' -p'zabbix-proxy' -P 3306 -D 'zabbix-proxy' < proxy.sql && touch /etc/zabbix/.schema.done") }
+              it { is_expected.to contain_exec('zabbix_proxy_create.sql').with_command("cd #{path} && mysql -h 'rspec.puppet.com' -u 'zabbix-proxy' -p\"${database_password}\" -P 3306 -D 'zabbix-proxy' < proxy.sql && touch /etc/zabbix/.schema.done") }
             end
           end
 
@@ -116,9 +116,9 @@ describe 'zabbix::database::mysql' do
             it { is_expected.to compile.with_all_deps }
 
             if Puppet::Util::Package.versioncmp(zabbix_version, '6.0') < 0
-              it { is_expected.to contain_exec('zabbix_proxy_create.sql').with_command("cd #{path} && if [ -f schema.sql.gz ]; then gunzip -f schema.sql.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-proxy' -p'zabbix-proxy' -D 'zabbix-proxy' < schema.sql && touch /etc/zabbix/.schema.done") }
+              it { is_expected.to contain_exec('zabbix_proxy_create.sql').with_command("cd #{path} && if [ -f schema.sql.gz ]; then gunzip -f schema.sql.gz ; fi && mysql -h 'rspec.puppet.com' -u 'zabbix-proxy' -p\"${database_password}\" -D 'zabbix-proxy' < schema.sql && touch /etc/zabbix/.schema.done") }
             else
-              it { is_expected.to contain_exec('zabbix_proxy_create.sql').with_command("cd #{path} && mysql -h 'rspec.puppet.com' -u 'zabbix-proxy' -p'zabbix-proxy' -D 'zabbix-proxy' < proxy.sql && touch /etc/zabbix/.schema.done") }
+              it { is_expected.to contain_exec('zabbix_proxy_create.sql').with_command("cd #{path} && mysql -h 'rspec.puppet.com' -u 'zabbix-proxy' -p\"${database_password}\" -D 'zabbix-proxy' < proxy.sql && touch /etc/zabbix/.schema.done") }
             end
           end
         end
