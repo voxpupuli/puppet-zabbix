@@ -87,6 +87,7 @@
 #   if set to 0 then no limit is used at all. in this case you must know what you are doing!
 # @param cachesize Size of configuration cache, in bytes.
 # @param cacheupdatefrequency How often zabbix will perform update of configuration cache, in seconds.
+# @param smsdevices What devices to use for texting
 # @param startdbsyncers Number of pre-forked instances of db syncers.
 # @param historycachesize Size of history cache, in bytes.
 # @param historyindexcachesize Size of history index cache, in bytes.
@@ -204,6 +205,7 @@ class zabbix::server (
   Optional[Stdlib::Absolutepath] $database_tlskeyfile                         = $zabbix::params::server_database_tlskeyfile,
   Optional[String[1]] $database_tlscipher                                     = $zabbix::params::server_database_tlscipher,
   Optional[String[1]] $database_tlscipher13                                   = $zabbix::params::server_database_tlscipher13,
+  Array[String[1]] $smsdevices                                                = $zabbix::params::server_smsdevices,
   $startpollers                                                               = $zabbix::params::server_startpollers,
   $startipmipollers                                                           = $zabbix::params::server_startipmipollers,
   Integer[0, 1000] $startodbcpollers                                          = $zabbix::params::server_startodbcpollers,

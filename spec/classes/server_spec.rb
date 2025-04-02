@@ -367,6 +367,28 @@ describe 'zabbix::server' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').without_content %r{^StartODBCPollers=1} }
       end
 
+      context 'with zabbix_server.conf and version 7.0' do
+        let :params do
+          {
+            smsdevices: ['/dev/ttyS0'],
+            zabbix_version: '7.0'
+          }
+        end
+
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SMSDevices=/dev/ttyS0} }
+      end
+
+      context 'with zabbix_server.conf and version 7.2' do
+        let :params do
+          {
+            smsdevices: ['/dev/ttyS0'],
+            zabbix_version: '7.2'
+          }
+        end
+
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SMSDevices=/dev/ttyS0} }
+      end
+
       context 'with zabbix_server.conf and logtype declared' do
         describe 'as system' do
           let :params do
