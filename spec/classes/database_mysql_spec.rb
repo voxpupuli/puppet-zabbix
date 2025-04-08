@@ -23,7 +23,9 @@ describe 'zabbix::database::mysql' do
 
       supported_versions.each do |zabbix_version|
         # path to sql files on Debian and RedHat
-        path = if Puppet::Util::Package.versioncmp(zabbix_version, '6.0') >= 0
+        path = if Puppet::Util::Package.versioncmp(zabbix_version, '7.2') >= 0
+                 '/usr/share/zabbix/sql-scripts/mysql/'
+               elsif Puppet::Util::Package.versioncmp(zabbix_version, '6.0') >= 0
                  '/usr/share/zabbix-sql-scripts/mysql/'
                else
                  '/usr/share/doc/zabbix-*-mysql*'

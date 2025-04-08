@@ -25,7 +25,9 @@ class zabbix::database::postgresql (
 
   if $database_schema_path != false and $database_schema_path != '' {
     $schema_path = $database_schema_path
-  } elsif versioncmp($zabbix_version, '6.0') >= 0 {
+  } elsif versioncmp($zabbix_version, '7.2') >= 0 {
+    $schema_path = '/usr/share/zabbix/sql-scripts/postgresql/'
+  }  elsif versioncmp($zabbix_version, '6.0') >= 0 {
     $schema_path = '/usr/share/zabbix-sql-scripts/postgresql/'
   } elsif $facts['os']['family'] == 'RedHat' and $facts['os']['release']['major'] == '7' {
     $schema_path = "/usr/share/doc/zabbix-*-pgsql-${zabbix_version}*/"
