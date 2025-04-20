@@ -137,7 +137,8 @@
     {
       "operatingsystem": "FreeBSD",
       "operatingsystemrelease": [
-        "13"
+        "13",
+        "14"
       ]
     }
   ]
