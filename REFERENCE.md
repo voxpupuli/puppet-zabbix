@@ -42,11 +42,15 @@
 ### Resource types
 
 * [`zabbix_application`](#zabbix_application): Manage zabbix applications  Example:   zabbix_application{"app1":     ensure   => present,     template => 'template1',   } It Raise exceptio
+* [`zabbix_authcfg`](#zabbix_authcfg): %q("Manage zabbix authentication configuration  zabbix_authcfg { '1':   ensure                => present,   ldap_configured       => true,   
 * [`zabbix_host`](#zabbix_host): Manage zabbix hosts
 * [`zabbix_hostgroup`](#zabbix_hostgroup): Manage zabbix hostgroups
 * [`zabbix_proxy`](#zabbix_proxy): Manage zabbix proxies
+* [`zabbix_role`](#zabbix_role): %q("Manage zabbix role objects  zabbix_role { 'My custom role':   ensure => present,   type => 'Admin',   readonly => false,   rules => {    
 * [`zabbix_template`](#zabbix_template): Manage zabbix templates
 * [`zabbix_template_host`](#zabbix_template_host): Link or Unlink template to host. Only for Zabbix < 6.0!  Example:   zabbix_template_host{ 'mysql_template@db1':     ensure => present,   } Na
+* [`zabbix_user`](#zabbix_user): %q("Manage zabbix users  zabbix_user{ 'username':   ensure     => present,   firstname  => 'firstname',   surname    => 'surname',   passwd  
+* [`zabbix_usergroup`](#zabbix_usergroup): %q("Manage zabbix usergroups  zabbix_usergroup{ 'group1':   ensure       => present,   gui_access   => 2,   debug_mode   => true,   users_sta
 * [`zabbix_userparameters`](#zabbix_userparameters): Manage zabbix user templates
 
 ### Data types
@@ -6111,6 +6115,102 @@ usually discover the appropriate provider for your platform.
 
 template to which the application is linked
 
+### <a name="zabbix_authcfg"></a>`zabbix_authcfg`
+
+%q("Manage zabbix authentication configuration
+
+zabbix_authcfg { '1':
+  ensure                => present,
+  ldap_configured       => true,
+  ldap_host             => 'ldap://host.name',
+  ldap_port             => '389',
+  ldap_base_dn          => 'dc=example,dc=com',
+  ldap_search_attribute => 'uid',
+  ldap_bind_dn          => 'cn=Manager',
+  ldap_bind_password    => Sensitive('password'),
+  ldap_case_sensitive   => true,
+}")
+
+#### Properties
+
+The following properties are available in the `zabbix_authcfg` type.
+
+##### `authentication_type`
+
+Valid values: `internal`, `LDAP`
+
+authentication type
+
+Default value: `internal`
+
+##### `ensure`
+
+Valid values: `present`
+
+The basic property that the resource should be in.
+
+Default value: `present`
+
+##### `ldap_base_dn`
+
+LDAP base DN
+
+##### `ldap_bind_dn`
+
+LDAP bind DN
+
+##### `ldap_bind_password`
+
+LDAP bind password
+
+##### `ldap_case_sensitive`
+
+Valid values: `true`, `false`
+
+LDAP case sensitive login
+
+Default value: `true`
+
+##### `ldap_configured`
+
+Valid values: `true`, `false`
+
+Enable LDAP authentication
+
+Default value: `true`
+
+##### `ldap_host`
+
+LDAP host
+
+##### `ldap_port`
+
+LDAP port
+
+##### `ldap_search_attribute`
+
+Valid values: `uid`, `sAMAccountName`
+
+LDAP search attribute
+
+#### Parameters
+
+The following parameters are available in the `zabbix_authcfg` type.
+
+* [`id`](#-zabbix_authcfg--id)
+* [`provider`](#-zabbix_authcfg--provider)
+
+##### <a name="-zabbix_authcfg--id"></a>`id`
+
+Valid values: `1`
+
+authentication settings id
+
+##### <a name="-zabbix_authcfg--provider"></a>`provider`
+
+The specific backend to use for this `zabbix_authcfg` resource. You will seldom need to specify this --- Puppet will
+usually discover the appropriate provider for your platform.
+
 ### <a name="zabbix_host"></a>`zabbix_host`
 
 Manage zabbix hosts
@@ -6304,6 +6404,83 @@ FQDN of the proxy.
 The specific backend to use for this `zabbix_proxy` resource. You will seldom need to specify this --- Puppet will
 usually discover the appropriate provider for your platform.
 
+### <a name="zabbix_role"></a>`zabbix_role`
+
+%q("Manage zabbix role objects
+
+zabbix_role { 'My custom role':
+  ensure => present,
+  type => 'Admin',
+  readonly => false,
+  rules => {
+    'ui'=> [
+       {
+         'name' => 'configuration.actions',
+         'status' => '1'
+       },
+       {
+         'name' => 'configuration.discovery',
+         'status'=>'0'
+       },
+    ],
+    'ui.default_access' => '1',
+    'services.read.mode' => '1',
+    'services.write.mode' => '0',
+    'modules.default_access' => '0',
+    'api.access' => '0',
+  }
+}")
+
+#### Properties
+
+The following properties are available in the `zabbix_role` type.
+
+##### `ensure`
+
+Valid values: `present`, `absent`
+
+The basic property that the resource should be in.
+
+Default value: `present`
+
+##### `readonly`
+
+Valid values: `true`, `false`
+
+Whether the role is readonly
+
+Default value: `false`
+
+##### `rules`
+
+The role rules
+
+##### `type`
+
+Valid values: `User`, `Admin`, `Super admin`
+
+role type
+
+Default value: `User`
+
+#### Parameters
+
+The following parameters are available in the `zabbix_role` type.
+
+* [`name`](#-zabbix_role--name)
+* [`provider`](#-zabbix_role--provider)
+
+##### <a name="-zabbix_role--name"></a>`name`
+
+namevar
+
+the name of the role
+
+##### <a name="-zabbix_role--provider"></a>`provider`
+
+The specific backend to use for this `zabbix_role` resource. You will seldom need to specify this --- Puppet will
+usually discover the appropriate provider for your platform.
+
 ### <a name="zabbix_template"></a>`zabbix_template`
 
 Manage zabbix templates
@@ -6422,6 +6599,145 @@ template_name@host_name
 
 The specific backend to use for this `zabbix_template_host` resource. You will seldom need to specify this --- Puppet
 will usually discover the appropriate provider for your platform.
+
+### <a name="zabbix_user"></a>`zabbix_user`
+
+%q("Manage zabbix users
+
+zabbix_user{ 'username':
+  ensure     => present,
+  firstname  => 'firstname',
+  surname    => 'surname',
+  passwd     => Sensitive(password),
+  autologin  => 0,
+  role       => 'Admin role',
+  usrgrps    => [ 'Group1' ],
+}")
+
+#### Properties
+
+The following properties are available in the `zabbix_user` type.
+
+##### `autologin`
+
+Valid values: `true`, `false`
+
+Whether auto login is enabled or disabled.
+
+Default value: `false`
+
+##### `ensure`
+
+Valid values: `present`, `absent`
+
+The basic property that the resource should be in.
+
+Default value: `present`
+
+##### `firstname`
+
+user firstname
+
+##### `passwd`
+
+user password
+
+##### `role`
+
+user role
+
+Default value: `User role`
+
+##### `surname`
+
+user surname
+
+##### `usrgrps`
+
+user groups
+
+Default value: `[]`
+
+#### Parameters
+
+The following parameters are available in the `zabbix_user` type.
+
+* [`provider`](#-zabbix_user--provider)
+* [`username`](#-zabbix_user--username)
+
+##### <a name="-zabbix_user--provider"></a>`provider`
+
+The specific backend to use for this `zabbix_user` resource. You will seldom need to specify this --- Puppet will
+usually discover the appropriate provider for your platform.
+
+##### <a name="-zabbix_user--username"></a>`username`
+
+user name
+
+### <a name="zabbix_usergroup"></a>`zabbix_usergroup`
+
+%q("Manage zabbix usergroups
+
+zabbix_usergroup{ 'group1':
+  ensure       => present,
+  gui_access   => 2,
+  debug_mode   => true,
+  users_status => true,
+}")
+
+#### Properties
+
+The following properties are available in the `zabbix_usergroup` type.
+
+##### `debug_mode`
+
+Valid values: `true`, `false`
+
+Whether debug mode is enabled or disabled.
+
+Default value: `false`
+
+##### `ensure`
+
+Valid values: `present`, `absent`
+
+The basic property that the resource should be in.
+
+Default value: `present`
+
+##### `gui_access`
+
+Valid values: `default`, `internal`, `LDAP`, `none`
+
+The type of access for this group.
+
+Default value: `default`
+
+##### `users_status`
+
+Valid values: `true`, `false`
+
+Whether the user group is enabled or disabled.
+
+Default value: `true`
+
+#### Parameters
+
+The following parameters are available in the `zabbix_usergroup` type.
+
+* [`name`](#-zabbix_usergroup--name)
+* [`provider`](#-zabbix_usergroup--provider)
+
+##### <a name="-zabbix_usergroup--name"></a>`name`
+
+namevar
+
+usergroup name
+
+##### <a name="-zabbix_usergroup--provider"></a>`provider`
+
+The specific backend to use for this `zabbix_usergroup` resource. You will seldom need to specify this --- Puppet will
+usually discover the appropriate provider for your platform.
 
 ### <a name="zabbix_userparameters"></a>`zabbix_userparameters`
 
