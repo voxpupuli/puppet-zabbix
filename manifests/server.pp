@@ -196,7 +196,7 @@ class zabbix::server (
   $database_name                                                              = $zabbix::params::server_database_name,
   $database_schema                                                            = $zabbix::params::server_database_schema,
   $database_user                                                              = $zabbix::params::server_database_user,
-  $database_password                                                          = $zabbix::params::server_database_password,
+  Variant[Sensitive[String], String] $database_password                       = $zabbix::params::server_database_password,
   $database_socket                                                            = $zabbix::params::server_database_socket,
   Optional[Stdlib::Port::Unprivileged] $database_port                         = $zabbix::params::server_database_port,
   Optional[Enum['required', 'verify_ca', 'verify_full']] $database_tlsconnect = $zabbix::params::server_database_tlsconnect,
@@ -283,6 +283,17 @@ class zabbix::server (
   Optional[String[1]] $hanodename                                             = $zabbix::params::server_hanodename,
   Optional[String[1]] $nodeaddress                                            = $zabbix::params::server_nodeaddress,
 ) inherits zabbix::params {
+  # TODO: use EPP instead of ERB, as EPP can handle Sensitive natively
+  $database_password_unsensitive = $database_password.unwrap
+
+  # zabbix server 5.2, 5.4 and 6.0 is not supported on RHEL 7.
+  # https://www.zabbix.com/documentation/current/manual/installation/install_from_packages/rhel_centos
+  if $facts['os']['family'] == 'RedHat' and versioncmp($zabbix_version, '5.2') >= 0 {
+    if versioncmp($facts['os']['release']['major'], '7') == 0 {
+      fail("${facts['os']['family']} ${$facts['os']['release']['major']} is not supported for zabbix::server (version ${$zabbix_version}) (yet)")
+    }
+  }
+
   # Only include the repo class if it has not yet been included
   unless defined(Class['Zabbix::Repo']) {
     class { 'zabbix::repo':
@@ -435,6 +446,7 @@ class zabbix::server (
   }
 
   # Configuring the zabbix-server configuration file
+  $content = template('zabbix/zabbix_server.conf.erb')
   file { $server_configfile_path:
     ensure  => file,
     owner   => $server_config_owner,
@@ -442,7 +454,11 @@ class zabbix::server (
     mode    => '0640',
     require => Package["zabbix-server-${db}"],
     replace => true,
-    content => template('zabbix/zabbix_server.conf.erb'),
+    content => if $database_password =~ Sensitive {
+      Sensitive($content)
+    } else {
+      $content
+    },
   }
 
   # Include dir for specific zabbix-server checks.
