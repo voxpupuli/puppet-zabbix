@@ -261,6 +261,7 @@ describe 'zabbix::server' do
             tmpdir: '/tmp',
             trappertimeout: '30',
             trendcachesize: '4M',
+            trendfunctioncachesize: '4M',
             unavailabledelay: '30',
             unreachabledelay: '30',
             unreachableperiod: '30',
@@ -338,6 +339,7 @@ describe 'zabbix::server' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TmpDir=/tmp} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TrapperTimeout=30} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TrendCacheSize=4M} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TrendFunctionCacheSize=4M} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^UnavailableDelay=30} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^UnreachableDelay=30} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^UnreachablePeriod=30} }
@@ -350,6 +352,17 @@ describe 'zabbix::server' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCipherPSK13=TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCipherAll=TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCipherAll13=EECDH\+aRSA\+AES128:RSA\+aRSA\+AES128:kECDHEPSK\+AES128:kPSK\+AES128$} }
+      end
+
+      context 'with zabbix_server.conf, version 7.0 and historypoller' do
+        let :params do
+          {
+            starthistorypollers: 5,
+            zabbix_version: '7.0'
+          }
+        end
+
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^StartHistoryPollers=5} }
       end
 
       context 'with zabbix_server.conf and version 5.0' do

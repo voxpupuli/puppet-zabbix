@@ -212,6 +212,7 @@ ProxyLocalBuffer=<%= @localbuffer %>
 # Range: 1-720
 ProxyOfflineBuffer=<%= @offlinebuffer %>
 
+<% if @zabbix_version.to_f >= 7.0 %>
 ### Option: ProxyBufferMode
 #	Specifies history, discovery and auto registration data storage mechanism:
 #		disk	- data are stored in database and uploaded from database
@@ -227,7 +228,7 @@ ProxyOfflineBuffer=<%= @offlinebuffer %>
 # Mandatory: no
 # Values: disk, memory, hybrid
 # Default:
-# ProxyBufferMode=disk
+ProxyBufferMode=<%= @buffermode %>
 
 ### Option: ProxyMemoryBufferSize
 #	Size of shared memory cache for collected history, discovery and auto registration data, in bytes.
@@ -238,7 +239,7 @@ ProxyOfflineBuffer=<%= @offlinebuffer %>
 # Mandatory: no
 # Range: 0,128K-2G
 # Default:
-# ProxyMemoryBufferSize=0
+ProxyMemoryBufferSize=<%= @memorybuffersize %>
 
 ### Option: ProxyMemoryBufferAge
 #	Maximum age of data in proxy memory buffer, in seconds.
@@ -249,7 +250,8 @@ ProxyOfflineBuffer=<%= @offlinebuffer %>
 # Mandatory: no
 # Range: 0,600-864000
 # Default:
-# ProxyMemoryBufferAge=0
+ProxyMemoryBufferAge=<%= @memorybufferage %>
+<% end %>
 
 <% if @zabbix_version.to_f < 6.4 %>
 ### Option: HeartbeatFrequency
