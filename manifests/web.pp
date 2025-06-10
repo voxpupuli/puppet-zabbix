@@ -409,5 +409,10 @@ class zabbix::web (
       persistent => true,
       value      => 'on',
     }
+    # needed for LDAP authentication
+    selboolean { 'httpd_can_connect_ldap':
+      persistent => true,
+      value      => 'on',
+    }
   }
 }
