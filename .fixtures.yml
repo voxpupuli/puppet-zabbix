@@ -1,18 +1,19 @@
+---
 fixtures:
   repositories:
     apache: https://github.com/puppetlabs/puppetlabs-apache.git
     apt:
       repo: https://github.com/puppetlabs/puppetlabs-apt.git
       tag: v10.0.1
-    firewall: https://github.com/puppetlabs/puppetlabs-firewall
-    stdlib: https://github.com/puppetlabs/puppetlabs-stdlib.git
-    concat: https://github.com/puppetlabs/puppetlabs-concat.git
-    postgresql: https://github.com/puppetlabs/puppet-postgresql.git
-    mysql: https://github.com/puppetlabs/puppetlabs-mysql.git
-    ruby: https://github.com/puppetlabs/puppetlabs-ruby.git
-    systemd: https://github.com/voxpupuli/puppet-systemd.git
-    selinux: https://github.com/voxpupuli/puppet-selinux.git
-    chocolatey: https://github.com/puppetlabs/puppetlabs-chocolatey.git
-    yumrepo_core: https://github.com/puppetlabs/puppetlabs-yumrepo_core.git
-    selinux_core: https://github.com/puppetlabs/puppetlabs-selinux_core.git
     augeas_core: https://github.com/puppetlabs/puppetlabs-augeas_core.git
+    chocolatey: https://github.com/puppetlabs/puppetlabs-chocolatey.git
+    concat: https://github.com/puppetlabs/puppetlabs-concat.git
+    firewall: https://github.com/puppetlabs/puppetlabs-firewall
+    mysql: https://github.com/puppetlabs/puppetlabs-mysql.git
+    postgresql: https://github.com/puppetlabs/puppet-postgresql.git
+    ruby: https://github.com/puppetlabs/puppetlabs-ruby.git
+    selinux: https://github.com/voxpupuli/puppet-selinux.git
+    selinux_core: https://github.com/puppetlabs/puppetlabs-selinux_core.git
+    stdlib: https://github.com/puppetlabs/puppetlabs-stdlib.git
+    systemd: https://github.com/voxpupuli/puppet-systemd.git
+    yumrepo_core: https://github.com/puppetlabs/puppetlabs-yumrepo_core.git
