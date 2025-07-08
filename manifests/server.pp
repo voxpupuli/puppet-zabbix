@@ -57,6 +57,7 @@
 # @param startalerters Number of pre-forked instances of alerters.
 # @param startdiscoverers Number of pre-forked instances of discoverers.
 # @param startescalators Number of pre-forked instances of escalators.
+# @param starthistorypollers Number of pre-forked instances of history pollers.
 # @param starthttppollers Number of pre-forked instances of http pollers.
 # @param starttimers Number of pre-forked instances of timers.
 # @param javagateway IP address (or hostname) of zabbix java gateway.
@@ -92,6 +93,7 @@
 # @param historycachesize Size of history cache, in bytes.
 # @param historyindexcachesize Size of history index cache, in bytes.
 # @param trendcachesize Size of trend cache, in bytes.
+# @param trendfunctioncachesize Size of trend function cache, in bytes.
 # @param valuecachesize Size of history value cache, in bytes.
 # @param timeout Specifies how long we wait for agent, snmp device or external check (in seconds).
 # @param tlscafile Full pathname of a file containing the top-level CA(s) certificates for peer certificate verification.
@@ -216,6 +218,7 @@ class zabbix::server (
   Integer[1, 100] $startalerters                                              = $zabbix::params::server_startalerters,
   $startdiscoverers                                                           = $zabbix::params::server_startdiscoverers,
   Integer[1, 100] $startescalators                                            = $zabbix::params::server_startescalators,
+  Optional[Integer[0, 100]] $starthistorypollers                              = $zabbix::params::server_starthistorypollers,
   $starthttppollers                                                           = $zabbix::params::server_starthttppollers,
   $starttimers                                                                = $zabbix::params::server_starttimers,
   $javagateway                                                                = $zabbix::params::server_javagateway,
@@ -241,6 +244,7 @@ class zabbix::server (
   $historycachesize                                                           = $zabbix::params::server_historycachesize,
   $historyindexcachesize                                                      = $zabbix::params::server_historyindexcachesize,
   $trendcachesize                                                             = $zabbix::params::server_trendcachesize,
+  Optional[String[1]] $trendfunctioncachesize                                 = $zabbix::params::server_trendfunctioncachesize,
   $valuecachesize                                                             = $zabbix::params::server_valuecachesize,
   $timeout                                                                    = $zabbix::params::server_timeout,
   $tlscafile                                                                  = $zabbix::params::server_tlscafile,
