@@ -62,6 +62,7 @@ describe 'zabbix::web' do
 
           it { is_expected.to contain_selboolean('httpd_can_connect_zabbix').with('value' => 'on', 'persistent' => true) }
           it { is_expected.to contain_selboolean('httpd_can_network_connect_db').with('value' => 'on', 'persistent' => true) }
+          it { is_expected.to contain_selboolean('httpd_can_connect_ldap').with('value' => 'on', 'persistent' => true) }
           it { is_expected.to contain_apache__vhost('localhost') }
         end
 
@@ -73,6 +74,8 @@ describe 'zabbix::web' do
           end
 
           it { is_expected.not_to contain_selboolean('httpd_can_connect_zabbix') }
+          it { is_expected.not_to contain_selboolean('httpd_can_network_connect_db') }
+          it { is_expected.not_to contain_selboolean('httpd_can_connect_ldap') }
         end
 
         describe "with database_type as postgresql and zabbix_version #{zabbix_version}" do

@@ -50,6 +50,21 @@ describe 'zabbix_host type' do
         apply_manifest(pp1, catch_failures: true)
       end
 
+      # Zabbix 6.0 on EL9 tests seem to fail as Zabbix is still starting when trying to add the hosts
+      # This adds a wait in case of Zabbix 6.0 on all EL (to be sure)
+      if zabbix_version == '6.0'
+        pp_wait = <<-EOS
+          if $facts['os']['family'] == 'RedHat' {
+            exec { 'Sleep 15 seconds' :
+              command => 'sleep 15',
+              path    => '/usr/bin:/bin',
+            }
+          }
+        EOS
+        it 'waits 15 seconds before proceeding' do
+          apply_manifest(pp_wait, catch_failures: true)
+        end
+      end
       # setup hosts within zabbix
       pp2 = <<-EOS
         zabbix_host { 'test1.example.com':
