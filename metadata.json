@@ -14,7 +14,7 @@
     },
     {
       "name": "puppetlabs/mysql",
-      "version_requirement": ">= 6.0.0 < 16.0.0"
+      "version_requirement": ">= 6.0.0 < 17.0.0"
     },
     {
       "name": "puppetlabs/apache",
@@ -26,7 +26,7 @@
     },
     {
       "name": "puppetlabs/apt",
-      "version_requirement": ">= 2.1.0 < 10.0.0"
+      "version_requirement": ">= 2.1.0 < 11.0.0"
     },
     {
       "name": "puppet/systemd",
@@ -34,7 +34,7 @@
     },
     {
       "name": "puppet/selinux",
-      "version_requirement": ">= 1.1.0 < 5.0.0"
+      "version_requirement": ">= 1.1.0 < 6.0.0"
     }
   ],
   "source": "https://github.com/voxpupuli/puppet-zabbix.git",
