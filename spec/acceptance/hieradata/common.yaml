@@ -5,3 +5,5 @@ postgresql::globals::encoding: 'UTF-8'
 postgresql::globals::locale: 'en_US.UTF-8'
 postgresql::globals::manage_package_repo: true
 postgresql::globals::version: '13'
+# workaround for https://github.com/puppetlabs/puppetlabs-postgresql/issues/1572
+postgresql::server::service_status: systemctl status postgresql > /dev/null
