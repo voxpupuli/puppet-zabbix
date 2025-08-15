@@ -44,13 +44,13 @@ class zabbix::params {
       $manage_choco             = false
       $zabbix_package_agent     = 'zabbix-agent'
       $agent_configfile_path    = '/etc/zabbix/zabbix_agentd.conf'
-      $agent_config_owner       = 'zabbix-agent'
-      $agent_zabbix_user        = 'zabbix-agent'
-      $agent_config_group       = 'zabbix-agent'
+      $agent_config_owner       = 'zabbix'
+      $agent_zabbix_user        = 'zabbix'
+      $agent_config_group       = 'zabbix'
       $agent_pidfile            = undef
       $agent_servicename        = 'zabbix-agent'
       $agent_include            = '/etc/zabbix/zabbix_agentd.d'
-      $server_zabbix_user       = 'zabbix-server'
+      $server_zabbix_user       = 'zabbix'
       $zabbix_package_provider  = undef
       $agent_loadmodulepath     = '/usr/lib/modules'
       $manage_startup_script    = false
