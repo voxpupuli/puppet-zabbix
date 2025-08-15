@@ -4,9 +4,7 @@ Gemfile:
     ':test':
       - gem: 'fakefs'
       - gem: 'zabbixapi'
-      - gem: 'mocha'
 spec/spec_helper.rb:
-  mock_with: ':mocha'
   spec_overrides:
     - "require 'support/acceptance/supported_versions'"
 .puppet-lint.rc:

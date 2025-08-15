@@ -11,7 +11,7 @@ describe Puppet::Type.type(:zabbix_template) do
     )
   end
   let(:provider_class) { Puppet::Type.type(:zabbix_template).provider(:ruby) }
-  let(:provider) { stub('provider', class: provider_class, clear: nil) }
+  let(:provider) { instance_double(provider_class, class: provider_class, clear: nil) }
 
   describe 'when validating attributes' do
     %i[
@@ -51,13 +51,13 @@ describe Puppet::Type.type(:zabbix_template) do
     context 'when testing whether \'ensure\' is in sync' do
       it 'is insync if ensure is set to :present and the server template matches' do
         property.should = :present
-        property.expects(:template_xmls_match?).returns true
+        expect(property).to receive(:template_xmls_match?).and_return(true)
         expect(property).to be_safe_insync(:present)
       end
 
       it 'is not insync if ensure is set to :present but the source and server templates don\'t match' do
         property.should = :present
-        property.expects(:template_xmls_match?).returns false
+        expect(property).to receive(:template_xmls_match?).and_return(false)
         expect(property).not_to be_safe_insync(:present)
       end
     end
@@ -99,9 +99,9 @@ describe Puppet::Type.type(:zabbix_template) do
         <zabbix_export><version>3.2</version><date>2016-11-30T12:06:25Z</date><groups><group><name>Templates</name></group></groups><templates><template><template>MyTemplate</template><name>MyTemplate</name><description>foo</description><groups><group><name>Templates</name></group></groups><applications/><items/><discovery_rules/><httptests/><macros/><templates/><screens/></template></templates></zabbix_export>
       EOS
       it 'returns true when cleaned source xml matches cleaned server xml' do
-        provider_class.stubs(:new).returns(provider)
-        property.expects(:source_xml).returns(mock_source_xml)
-        provider.expects(:xml).returns(mock_provider_xml)
+        allow(provider_class).to receive(:new).and_return(provider)
+        expect(property).to receive(:source_xml).and_return(mock_source_xml)
+        expect(provider).to receive(:xml).and_return(mock_provider_xml)
         expect(property.template_xmls_match?).to eq true
       end
     end
