@@ -41,12 +41,10 @@
 
 ### Resource types
 
-* [`zabbix_application`](#zabbix_application): Manage zabbix applications  Example:   zabbix_application{"app1":     ensure   => present,     template => 'template1',   } It Raise exceptio
 * [`zabbix_host`](#zabbix_host): Manage zabbix hosts
 * [`zabbix_hostgroup`](#zabbix_hostgroup): Manage zabbix hostgroups
 * [`zabbix_proxy`](#zabbix_proxy): Manage zabbix proxies
 * [`zabbix_template`](#zabbix_template): Manage zabbix templates
-* [`zabbix_template_host`](#zabbix_template_host): Link or Unlink template to host. Only for Zabbix < 6.0!  Example:   zabbix_template_host{ 'mysql_template@db1':     ensure => present,   } Na
 * [`zabbix_userparameters`](#zabbix_userparameters): Manage zabbix user templates
 
 ### Data types
@@ -4106,7 +4104,7 @@ Default value: `$zabbix::params::database_path`
 
 Data type: `Any`
 
-This is the zabbix version. Example: 5.0
+This is the zabbix version. Example: 7.0
 
 Default value: `$zabbix::params::zabbix_version`
 
@@ -6065,52 +6063,6 @@ Default value: `'0644'`
 
 ## Resource types
 
-### <a name="zabbix_application"></a>`zabbix_application`
-
-Manage zabbix applications
-
-Example:
-  zabbix_application{"app1":
-    ensure   => present,
-    template => 'template1',
-  }
-It Raise exception on deleting an application which is a part of used template.
-
-#### Properties
-
-The following properties are available in the `zabbix_application` type.
-
-##### `ensure`
-
-Valid values: `present`, `absent`
-
-The basic property that the resource should be in.
-
-Default value: `present`
-
-#### Parameters
-
-The following parameters are available in the `zabbix_application` type.
-
-* [`name`](#-zabbix_application--name)
-* [`provider`](#-zabbix_application--provider)
-* [`template`](#-zabbix_application--template)
-
-##### <a name="-zabbix_application--name"></a>`name`
-
-namevar
-
-application name
-
-##### <a name="-zabbix_application--provider"></a>`provider`
-
-The specific backend to use for this `zabbix_application` resource. You will seldom need to specify this --- Puppet will
-usually discover the appropriate provider for your platform.
-
-##### <a name="-zabbix_application--template"></a>`template`
-
-template to which the application is linked
-
 ### <a name="zabbix_host"></a>`zabbix_host`
 
 Manage zabbix hosts
@@ -6380,48 +6332,6 @@ Template source file.
 ##### <a name="-zabbix_template--zabbix_version"></a>`zabbix_version`
 
 Zabbix version that the template will be installed on.
-
-### <a name="zabbix_template_host"></a>`zabbix_template_host`
-
-Link or Unlink template to host. Only for Zabbix < 6.0!
-
-Example:
-  zabbix_template_host{ 'mysql_template@db1':
-    ensure => present,
-  }
-Name should be in the format of "template_name@hostname"
-
-#### Properties
-
-The following properties are available in the `zabbix_template_host` type.
-
-##### `ensure`
-
-Valid values: `present`, `absent`
-
-The basic property that the resource should be in.
-
-Default value: `present`
-
-#### Parameters
-
-The following parameters are available in the `zabbix_template_host` type.
-
-* [`name`](#-zabbix_template_host--name)
-* [`provider`](#-zabbix_template_host--provider)
-
-##### <a name="-zabbix_template_host--name"></a>`name`
-
-Valid values: `%r{.+@.+}`
-
-namevar
-
-template_name@host_name
-
-##### <a name="-zabbix_template_host--provider"></a>`provider`
-
-The specific backend to use for this `zabbix_template_host` resource. You will seldom need to specify this --- Puppet
-will usually discover the appropriate provider for your platform.
 
 ### <a name="zabbix_userparameters"></a>`zabbix_userparameters`
 

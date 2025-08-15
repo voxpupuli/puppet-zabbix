@@ -352,21 +352,6 @@ describe 'zabbix::server' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^TLSCipherAll13=EECDH\+aRSA\+AES128:RSA\+aRSA\+AES128:kECDHEPSK\+AES128:kPSK\+AES128$} }
       end
 
-      context 'with zabbix_server.conf and version 5.0' do
-        next if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'] == '9'
-
-        let :params do
-          {
-            socketdir: '/var/run/zabbix',
-            startodbcpollers: 1,
-            zabbix_version: '5.0'
-          }
-        end
-
-        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').with_content %r{^SocketDir=/var/run/zabbix} }
-        it { is_expected.to contain_file('/etc/zabbix/zabbix_server.conf').without_content %r{^StartODBCPollers=1} }
-      end
-
       context 'with zabbix_server.conf and version 7.0' do
         let :params do
           {

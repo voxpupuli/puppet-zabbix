@@ -24,5 +24,5 @@ jobs:
     name: Puppet
     uses: voxpupuli/gha-puppet/.github/workflows/beaker.yml@v3
     with:
-      beaker_facter: 'zabbix_version:Zabbix:5.0,6.0,7.0'
+      beaker_facter: 'zabbix_version:Zabbix:6.0,7.0'
       unit_runs_on: 'cern-self-hosted'

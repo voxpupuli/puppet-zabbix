@@ -25,29 +25,17 @@ class zabbix::database::postgresql (
 
   if $database_schema_path != false and $database_schema_path != '' {
     $schema_path = $database_schema_path
-  } elsif versioncmp($zabbix_version, '6.0') >= 0 {
-    $schema_path = '/usr/share/zabbix-sql-scripts/postgresql/'
-  } elsif $facts['os']['family'] == 'RedHat' and $facts['os']['release']['major'] == '7' {
-    $schema_path = "/usr/share/doc/zabbix-*-pgsql-${zabbix_version}*/"
   } else {
-    $schema_path = '/usr/share/doc/zabbix-*-pgsql'
+    $schema_path = '/usr/share/zabbix-sql-scripts/postgresql/'
   }
 
   $done_file = '/etc/zabbix/.schema.done'
   $schema_file = case $zabbix_type {
     'proxy': {
-      if versioncmp($zabbix_version, '6.0') >= 0 {
-        'proxy.sql'
-      } else {
-        'schema.sql'
-      }
+      'proxy.sql'
     }
     default: {
-      if versioncmp($zabbix_version, '6.0') >= 0 {
-        'server.sql'
-      } else {
-        'create.sql'
-      }
+      'server.sql'
     }
   }
 

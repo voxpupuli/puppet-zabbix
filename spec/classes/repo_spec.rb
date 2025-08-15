@@ -33,20 +33,6 @@ describe 'zabbix::repo' do
           it { is_expected.to contain_apt__source('zabbix').with_location('https://example.com/foo') }
         end
 
-        case facts[:os]['release']['major']
-        when '10'
-          context 'on Debian 10 and Zabbix 5.0' do
-            let :params do
-              {
-                zabbix_version: '5.0',
-                manage_repo: true
-              }
-            end
-
-            it { is_expected.to contain_apt__source('zabbix').with_location('http://repo.zabbix.com/zabbix/5.0/debian/') }
-          end
-        end
-
         %w[arm64 aarch64].each do |arch|
           context "on #{arch}" do
             let :facts do
@@ -106,24 +92,6 @@ describe 'zabbix::repo' do
         end
 
         major = facts[:os]['release']['major']
-        context "on RedHat #{major} and Zabbix 5.0" do
-          let :params do
-            {
-              zabbix_version: '5.0',
-              manage_repo: true
-            }
-          end
-
-          it { is_expected.to contain_yumrepo('zabbix').with_baseurl("https://repo.zabbix.com/zabbix/5.0/rhel/#{major}/$basearch/") }
-
-          it { is_expected.to contain_yumrepo('zabbix').with_gpgkey('https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591') } if facts[:os]['release']['major'].to_i < 9
-          it { is_expected.to contain_yumrepo('zabbix').with_gpgkey('https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-08EFA7DD') } if facts[:os]['release']['major'].to_i >= 9
-
-          it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_baseurl("https://repo.zabbix.com/non-supported/rhel/#{major}/$basearch/") }
-
-          it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_gpgkey('https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-79EA5ED4') } if facts[:os]['release']['major'].to_i < 9
-          it { is_expected.to contain_yumrepo('zabbix-nonsupported').with_gpgkey('https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-08EFA7DD') } if facts[:os]['release']['major'].to_i >= 9
-        end
 
         context "on RedHat #{major} and Zabbix 6.0" do
           let :params do

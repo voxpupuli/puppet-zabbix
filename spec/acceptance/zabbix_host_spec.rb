@@ -13,19 +13,9 @@ describe 'zabbix_host type' do
       # This will deploy a running Zabbix setup (server, web, db) which we can
       # use for custom type tests
 
-      template = case zabbix_version
-                 when '5.0'
-                   ['Template OS Linux by Zabbix agent', 'Template Module ICMP Ping']
-                 else
-                   ['Linux by Zabbix agent', 'ICMP Ping']
-                 end
+      template = ['Linux by Zabbix agent', 'ICMP Ping']
 
-      template_snmp = case zabbix_version
-                      when '5.0'
-                        ['Template OS Linux SNMP']
-                      else
-                        ['Linux by SNMP']
-                      end
+      template_snmp = ['Linux by SNMP']
 
       pp1 = <<-EOS
         class { 'zabbix':
