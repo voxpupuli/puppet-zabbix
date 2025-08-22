@@ -292,6 +292,7 @@ describe 'zabbix::agent' do
               agent_configfile_path: '/etc/zabbix/zabbix_agentd.conf',
               buffersend: '5',
               buffersize: '100',
+              controlsocket: '/tmp/agent.sock',
               debuglevel: '4',
               allowkey: 'system.run[*]',
               denykey: 'system.run[*]',
@@ -334,6 +335,7 @@ describe 'zabbix::agent' do
           it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^AllowRoot=0$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^BufferSend=5$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^BufferSize=100$} }
+          it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^ControlSocket=/tmp/agent.sock$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^DebugLevel=4$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^AllowKey=system.run\[\*\]$} }
           it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.conf').with_content %r{^DenyKey=system.run\[\*\]$} }
@@ -499,7 +501,9 @@ describe 'zabbix::agent' do
             maxlinespersecond: 1, allowroot: 1, zabbix_user: 'root',
             loadmodulepath: '/tmp', allowkey: 'system.run[*]',
             denykey: 'system.run[*]', enableremotecommands: 1,
-            logremotecommands: 1
+            logremotecommands: 1, enablepersistentbuffer: 1,
+            persistentbufferfile: '/var/lib/zabbix/zabbix_agent2.zbxtmp',
+            persistentbufferperiod: '1h',
           }
         end
 
@@ -509,7 +513,9 @@ describe 'zabbix::agent' do
           is_expected.not_to contain_file(config_path).with_content(
             %r{^(LogRemoteCommands|StartAgents|MaxLinesPerSecond
                  |AllowRoot|User|LoadModulePath|
-                 EnableRemoteCommands|LogRemoteCommands)}
+                 EnableRemoteCommands|LogRemoteCommands|
+                 EnablePersistentBuffer|PersistentBufferFile|
+                 PersistentBufferPeriod)}
           )
         end
       end

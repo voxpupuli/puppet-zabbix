@@ -368,6 +368,25 @@ describe 'zabbix::proxy' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartODBCPollers=1$} }
       end
 
+      context 'with zabbix_proxy.conf and version 7.0' do
+        let :params do
+          {
+            buffermode: 'disk',
+            memorybufferage: 0,
+            memorybuffersize: '0',
+            socketdir: '/var/run/zabbix',
+            startodbcpollers: 1,
+            zabbix_version: '7.0'
+          }
+        end
+
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^ProxyBufferMode=disk$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^ProxyMemoryBufferSize=0$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^ProxyMemoryBufferAge=0$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^SocketDir=/var/run/zabbix} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartODBCPollers=1$} }
+      end
+
       context 'with zabbix_proxy.conf and logtype declared' do
         describe 'as system' do
           let :params do
