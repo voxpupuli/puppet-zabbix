@@ -222,7 +222,7 @@ class zabbix::proxy (
   $database_name                                                              = $zabbix::params::proxy_database_name,
   $database_schema                                                            = $zabbix::params::proxy_database_schema,
   $database_user                                                              = $zabbix::params::proxy_database_user,
-  $database_password                                                          = $zabbix::params::proxy_database_password,
+  Variant[Sensitive[String], String] $database_password                       = $zabbix::params::proxy_database_password,
   $database_socket                                                            = $zabbix::params::proxy_database_socket,
   $database_port                                                              = $zabbix::params::proxy_database_port,
   $database_charset                                                           = $zabbix::params::server_database_charset,
@@ -269,7 +269,12 @@ class zabbix::proxy (
   $historyindexcachesize                                                      = $zabbix::params::proxy_historyindexcachesize,
   $historytextcachesize                                                       = $zabbix::params::proxy_historytextcachesize,
   $timeout                                                                    = $zabbix::params::proxy_timeout,
-  Optional[Variant[Array[Enum['unencrypted','psk','cert']],Enum['unencrypted','psk','cert']]] $tlsaccept = $zabbix::params::proxy_tlsaccept,
+  Optional[
+    Variant[
+      Array[Enum['unencrypted', 'psk', 'cert']],
+      Enum['unencrypted', 'psk', 'cert']
+    ]
+  ] $tlsaccept                                                                = $zabbix::params::proxy_tlsaccept,
   $tlscafile                                                                  = $zabbix::params::proxy_tlscafile,
   $tlscertfile                                                                = $zabbix::params::proxy_tlscertfile,
   $tlsconnect                                                                 = $zabbix::params::proxy_tlsconnect,
@@ -306,6 +311,9 @@ class zabbix::proxy (
   Boolean $manage_selinux                                                     = $zabbix::params::manage_selinux,
   Optional[Stdlib::Absolutepath] $socketdir                                   = $zabbix::params::proxy_socketdir,
 ) inherits zabbix::params {
+  # TODO: use EPP instead of ERB, as EPP can handle Sensitive natively
+  $database_password_unsensitive = $database_password.unwrap
+
   # check osfamily, Arch is currently not supported for web
   if $facts['os']['family'] == 'Archlinux' {
     fail('Archlinux is currently not supported for zabbix::proxy ')
@@ -481,6 +489,7 @@ class zabbix::proxy (
   }
 
   # Configuring the zabbix-proxy configuration file
+  $content = template('zabbix/zabbix_proxy.conf.erb')
   file { $proxy_configfile_path:
     ensure  => file,
     owner   => 'zabbix',
@@ -488,7 +497,11 @@ class zabbix::proxy (
     mode    => '0644',
     require => Package["zabbix-proxy-${db}"],
     replace => true,
-    content => template('zabbix/zabbix_proxy.conf.erb'),
+    content => if $database_password =~ Sensitive {
+      Sensitive($content)
+    } else {
+      $content
+    },
   }
 
   # Include dir for specific zabbix-proxy checks.

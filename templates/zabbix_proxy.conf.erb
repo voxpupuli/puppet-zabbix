@@ -169,7 +169,7 @@ DBUser=<%= @database_user %>
 #	Comment this line if no password is used.
 #
 # Mandatory: no
-DBPassword=<%= @database_password %>
+DBPassword=<%= @database_password_unsensitive %>
 
 ### Option: DBSocket
 #	Path to MySQL socket.
@@ -894,7 +894,7 @@ LoadModulePath=<%= @loadmodulepath %>
 <% if @zabbix_version.to_f >= 7.0 %>
 ### Option: VaultPrefix
 #	Custom prefix for Vault path or query depending on the Vault.
-#	Most suitable defaults will be used if not specified. 
+#	Most suitable defaults will be used if not specified.
 #	Note that 'data' is automatically appended after mountpoint for HashiCorp if VaultPrefix is not specified.
 #	Example prefix for HashiCorp:
 #		/v1/secret/data/

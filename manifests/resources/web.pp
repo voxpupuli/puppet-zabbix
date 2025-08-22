@@ -6,7 +6,7 @@
 class zabbix::resources::web (
   String[1] $zabbix_url,
   String[1] $zabbix_user,
-  String[1] $zabbix_pass,
+  Variant[Sensitive[String[1]], String[1]] $zabbix_pass,
   Boolean   $apache_use_ssl,
 ) {
   file { '/etc/zabbix/api.conf':

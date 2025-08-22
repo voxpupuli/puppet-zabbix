@@ -114,14 +114,14 @@ class zabbix::web (
   Variant[Array[Stdlib::Port], Stdlib::Port] $apache_listenport       = $zabbix::params::apache_listenport,
   Variant[Array[Stdlib::Port], Stdlib::Port] $apache_listenport_ssl   = $zabbix::params::apache_listenport_ssl,
   $zabbix_api_user                                                    = $zabbix::params::server_api_user,
-  $zabbix_api_pass                                                    = $zabbix::params::server_api_pass,
+  Variant[Sensitive[String], String] $zabbix_api_pass                 = $zabbix::params::server_api_pass,
   Optional[Array[Stdlib::Host,1]] $zabbix_api_access                  = $zabbix::params::server_api_access,
   $database_host                                                      = $zabbix::params::server_database_host,
   $database_name                                                      = $zabbix::params::server_database_name,
   $database_schema                                                    = $zabbix::params::server_database_schema,
   Boolean $database_double_ieee754                                    = $zabbix::params::server_database_double_ieee754,
   $database_user                                                      = $zabbix::params::server_database_user,
-  $database_password                                                  = $zabbix::params::server_database_password,
+  Variant[Sensitive[String], String] $database_password               = $zabbix::params::server_database_password,
   $database_socket                                                    = $zabbix::params::server_database_socket,
   $database_port                                                      = $zabbix::params::server_database_port,
   $zabbix_server                                                      = $zabbix::params::zabbix_server,
@@ -146,6 +146,9 @@ class zabbix::web (
   Boolean $manage_selinux                                             = $zabbix::params::manage_selinux,
   Hash[String[1], Any] $apache_vhost_custom_params                    = {},
 ) inherits zabbix::params {
+  # TODO: use EPP instead of ERB, as EPP can handle Sensitive natively
+  $database_password_unsensitive = $database_password.unwrap
+
   # check osfamily, Arch is currently not supported for web
   if $facts['os']['family'] in ['Archlinux', 'Gentoo',] {
     fail("${facts['os']['family']} is currently not supported for zabbix::web")
@@ -238,13 +241,18 @@ class zabbix::web (
   }
 
   # Webinterface config file
+  $content = template('zabbix/web/zabbix.conf.php.erb')
   file { '/etc/zabbix/web/zabbix.conf.php':
     ensure  => file,
     owner   => $web_config_owner,
     group   => $web_config_group,
     mode    => '0640',
     replace => true,
-    content => template('zabbix/web/zabbix.conf.php.erb'),
+    content => if $database_password =~ Sensitive {
+      Sensitive($content)
+    } else {
+      $content
+    },
   }
 
   # For API to work on Zabbix 5.x zabbix.conf.php needs to be in the root folder.
