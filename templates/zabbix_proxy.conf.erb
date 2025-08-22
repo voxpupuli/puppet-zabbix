@@ -300,32 +300,28 @@ StartPollers=<%= @startpollers %>
 #
 # Mandatory: no
 # Range: 0-1000
-# Default:
-# StartAgentPollers=1
+StartAgentPollers=<%= @startagentpollers %>
 
 ### Option: StartHTTPAgentPollers
 #	Number of pre-forked instances of asynchronous HTTP agent pollers. Also see MaxConcurrentChecksPerPoller.
 #
 # Mandatory: no
 # Range: 0-1000
-# Default:
-# StartHTTPAgentPollers=1
+StartHTTPAgentPollers=<%= @starthttpagentpollers %>
 
 ### Option: StartSNMPPollers
 #	Number of pre-forked instances of asynchronous SNMP pollers. Also see MaxConcurrentChecksPerPoller.
 #
 # Mandatory: no
 # Range: 0-1000
-# Default:
-# StartSNMPPollers=1
+StartSNMPPollers=<%= @startsnmpagentpollers %>
 
 ### Option: MaxConcurrentChecksPerPoller
 #	Maximum number of asynchronous checks that can be executed at once by each HTTP agent poller or agent poller.
 #
 # Mandatory: no
 # Range: 1-1000
-# Default:
-# MaxConcurrentChecksPerPoller=1000
+MaxConcurrentChecksPerPoller=<%= @maxconcurrentchecksperpoller %>
 
 <% end %>
 ### Option: StartIPMIPollers
