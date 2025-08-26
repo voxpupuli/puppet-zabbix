@@ -129,7 +129,7 @@ class zabbix::params {
   }
 
   if downcase($facts['kernel']) == 'windows' {
-    $zabbix_version = '4.4.5'
+    $zabbix_version = '4.4.5' # FIXME
   } else {
     $zabbix_version = '6.0'
   }

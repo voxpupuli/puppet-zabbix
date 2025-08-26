@@ -28,17 +28,8 @@ describe 'zabbix::database::postgresql' do
       end
 
       supported_versions.each do |zabbix_version|
-        path = if Puppet::Util::Package.versioncmp(zabbix_version, '6.0') >= 0
-                 '/usr/share/zabbix-sql-scripts/postgresql/'
-               else
-                 '/usr/share/doc/zabbix-*-pgsql'
-               end
-
-        sql_server = if Puppet::Util::Package.versioncmp(zabbix_version, '6.0') >= 0
-                       'server.sql'
-                     else
-                       'create.sql'
-                     end
+        path = '/usr/share/zabbix-sql-scripts/postgresql/'
+        sql_server = 'server.sql'
 
         describe "when version is #{zabbix_version}" do
           let(:params) { super().merge(zabbix_version: zabbix_version) }
@@ -94,11 +85,7 @@ describe 'zabbix::database::postgresql' do
 
             it { is_expected.to compile.with_all_deps }
 
-            if Puppet::Util::Package.versioncmp(zabbix_version, '6.0') < 0
-              it { is_expected.to contain_exec('zabbix_create.sql').with_command("cd #{path} && if [ -f schema.sql.gz ]; then zcat schema.sql.gz | psql ; else psql -f schema.sql; fi && touch /etc/zabbix/.schema.done").with_environment(expected_environment) }
-            else
-              it { is_expected.to contain_exec('zabbix_create.sql').with_command("cd #{path} && if [ -f proxy.sql.gz ]; then zcat proxy.sql.gz | psql ; else psql -f proxy.sql; fi && touch /etc/zabbix/.schema.done").with_environment(expected_environment) }
-            end
+            it { is_expected.to contain_exec('zabbix_create.sql').with_command("cd #{path} && if [ -f proxy.sql.gz ]; then zcat proxy.sql.gz | psql ; else psql -f proxy.sql; fi && touch /etc/zabbix/.schema.done").with_environment(expected_environment) }
             it { is_expected.to contain_class('zabbix::params') }
 
             describe 'with a custom port' do

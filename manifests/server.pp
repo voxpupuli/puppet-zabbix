@@ -8,7 +8,7 @@
 #   /bin:/usr/bin:/usr/local/sbin:/usr/local/bin
 #   you can use this parameter to add the database_path to the above mentioned
 #   path.
-# @param zabbix_version This is the zabbix version. Example: 5.0
+# @param zabbix_version This is the zabbix version. Example: 7.0
 # @param manage_repo When true (default) this module will manage the Zabbix repository.
 # @param manage_database When true, it will configure the database and execute the sql scripts.
 # @param zabbix_package_state The state of the package that needs to be installed: present or latest.
@@ -291,12 +291,10 @@ class zabbix::server (
     }
   }
 
-  if versioncmp($zabbix_version, '5.4') >= 0 {
-    package { 'zabbix-sql-scripts':
-      ensure  => present,
-      require => Class['zabbix::repo'],
-      tag     => 'zabbix',
-    }
+  package { 'zabbix-sql-scripts':
+    ensure  => present,
+    require => Class['zabbix::repo'],
+    tag     => 'zabbix',
   }
 
   # Get the correct database_type. We need this for installing the
@@ -305,12 +303,7 @@ class zabbix::server (
     'postgresql' : {
       $db = 'pgsql'
 
-      # Zabbix version >= 5.4 uses zabbix-sql-scripts for initializing the database.
-      if versioncmp($zabbix_version, '5.4') >= 0 {
-        $zabbix_database_require = [Package["zabbix-server-${db}"], Package['zabbix-sql-scripts']]
-      } else {
-        $zabbix_database_require = Package["zabbix-server-${db}"]
-      }
+      $zabbix_database_require = [Package["zabbix-server-${db}"], Package['zabbix-sql-scripts']]
 
       if $manage_database {
         # Execute the postgresql scripts
@@ -331,12 +324,7 @@ class zabbix::server (
     'mysql' : {
       $db = 'mysql'
 
-      # Zabbix version >= 5.4 uses zabbix-sql-scripts for initializing the database.
-      if versioncmp($zabbix_version, '5.4') >= 0 {
-        $zabbix_database_require = [Package["zabbix-server-${db}"], Package['zabbix-sql-scripts']]
-      } else {
-        $zabbix_database_require = Package["zabbix-server-${db}"]
-      }
+      $zabbix_database_require = [Package["zabbix-server-${db}"], Package['zabbix-sql-scripts']]
 
       if $manage_database {
         # Execute the mysql scripts

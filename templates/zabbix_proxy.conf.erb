@@ -875,7 +875,6 @@ LoadModulePath=<%= @loadmodulepath %>
 # Vault=HashiCorp
 <% end %>
 
-<% if @zabbix_version.to_f >= 5.2 %>
 ### Option: VaultToken
 #	Vault authentication token that should have been generated exclusively for Zabbix proxy with read only permission to path
 #	specified in optional VaultDBPath configuration parameter.
@@ -894,7 +893,7 @@ LoadModulePath=<%= @loadmodulepath %>
 <% if @zabbix_version.to_f >= 7.0 %>
 ### Option: VaultPrefix
 #	Custom prefix for Vault path or query depending on the Vault.
-#	Most suitable defaults will be used if not specified. 
+#	Most suitable defaults will be used if not specified.
 #	Note that 'data' is automatically appended after mountpoint for HashiCorp if VaultPrefix is not specified.
 #	Example prefix for HashiCorp:
 #		/v1/secret/data/
@@ -918,7 +917,6 @@ LoadModulePath=<%= @loadmodulepath %>
 # Mandatory: no
 <% if @vaultdbpath %>VaultDBPath=<%= @vaultdbpath -%><% end %>
 
-<% end %>
 <% if @zabbix_version.to_f >= 6.2 %>
 ### Option: VaultTLSCertFile
 #	Name of the SSL certificate file used for client authentication. The certificate file must be in PEM1 format.
@@ -938,7 +936,7 @@ LoadModulePath=<%= @loadmodulepath %>
 # VaultTLSKeyFile=
 
 <% end %>
-<% if @zabbix_version.to_f >= 5.4 %>
+
 ####### For advanced users - TCP-related fine-tuning parameters #######
 
 ## Option: ListenBacklog
@@ -950,7 +948,6 @@ LoadModulePath=<%= @loadmodulepath %>
 # Default: SOMAXCONN (hard-coded constant, depends on system)
 # ListenBacklog=
 
-<% end %>
 <% if @zabbix_version.to_f >= 7.0 %>
 ####### Browser monitoring #######
 
