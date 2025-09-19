@@ -113,7 +113,7 @@
 # @param additional_service_params Additional parameters to pass to the service.
 # @param service_type Systemd service type
 # @param include_dir You may include individual files or all files in a directory in the configuration file.
-# @param include_dir_force force purbe of inclide dir, needed if it contains sub directories.
+# @param include_dir_force force purge of include dir, needed if it contains sub directories.
 # @param include_dir_purge Include dir to purge.
 # @param unsafeuserparameters Allow all characters to be passed in arguments to user-defined parameters.
 # @param userparameter User-defined parameter to monitor.
