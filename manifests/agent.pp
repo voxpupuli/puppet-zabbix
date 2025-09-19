@@ -113,6 +113,7 @@
 # @param additional_service_params Additional parameters to pass to the service.
 # @param service_type Systemd service type
 # @param include_dir You may include individual files or all files in a directory in the configuration file.
+# @param include_dir_force force purbe of inclide dir, needed if it contains sub directories.
 # @param include_dir_purge Include dir to purge.
 # @param unsafeuserparameters Allow all characters to be passed in arguments to user-defined parameters.
 # @param userparameter User-defined parameter to monitor.
@@ -198,6 +199,7 @@ class zabbix::agent (
   $allowroot                                           = $zabbix::params::agent_allowroot,
   Optional[String[1]] $zabbix_user                     = $zabbix::params::agent_zabbix_user,
   $include_dir                                         = $zabbix::params::agent_include,
+  $include_dir_force                                   = $zabbix::params::agent_include_force,
   $include_dir_purge                                   = $zabbix::params::agent_include_purge,
   $unsafeuserparameters                                = $zabbix::params::agent_unsafeuserparameters,
   $userparameter                                       = $zabbix::params::agent_userparameter,
@@ -368,6 +370,7 @@ class zabbix::agent (
     owner   => $agent_config_owner,
     group   => $agent_config_group,
     recurse => true,
+    force   => $include_dir_force,
     purge   => $include_dir_purge,
     notify  => Service[$servicename],
     require => File[$agent_configfile_path],
