@@ -1366,6 +1366,7 @@ class { 'zabbix::agent':
 
 The following parameters are available in the `zabbix::agent` class:
 
+* [`ensure`](#-zabbix--agent--ensure)
 * [`zabbix_version`](#-zabbix--agent--zabbix_version)
 * [`zabbix_package_state`](#-zabbix--agent--zabbix_package_state)
 * [`zabbix_package_agent`](#-zabbix--agent--zabbix_package_agent)
@@ -1448,6 +1449,14 @@ The following parameters are available in the `zabbix::agent` class:
 * [`loadmodulepath`](#-zabbix--agent--loadmodulepath)
 * [`loadmodule`](#-zabbix--agent--loadmodule)
 * [`manage_startup_script`](#-zabbix--agent--manage_startup_script)
+
+##### <a name="-zabbix--agent--ensure"></a>`ensure`
+
+Data type: `Enum['absent', 'present']`
+
+Ensure that the agent is either present or absent
+
+Default value: `'present'`
 
 ##### <a name="-zabbix--agent--zabbix_version"></a>`zabbix_version`
 
