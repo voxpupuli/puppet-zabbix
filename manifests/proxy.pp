@@ -62,6 +62,10 @@
 # @param proxyconfigfrequency How often proxy retrieves configuration data from Zabbix Server in seconds (Zabbix 6.4).
 # @param datasenderfrequency Proxy will send collected data to the Server every N seconds.
 # @param startpollers Number of pre-forked instances of pollers.
+# @param startagentpollers Number of pre-forked instances of asynchronous Zabbix agent pollers. Also see MaxConcurrentChecksPerPoller.
+# @param starthttpagentpollers Number of pre-forked instances of asynchronous HTTP agent pollers. Also see MaxConcurrentChecksPerPoller.
+# @param startsnmppollers Number of pre-forked instances of asynchronous SNMP pollers. Also see MaxConcurrentChecksPerPoller.
+# @param maxconcurrentchecksperpoller Maximum number of asynchronous checks that can be executed at once by each HTTP agent poller or agent poller.
 # @param startpreprocessors Number of pre-forked instances of preprocessing workers
 # @param startipmipollers Number of pre-forked instances of ipmi pollers.
 # @param startodbcpollers Number of pre-forked instances of ODBC pollers.
@@ -239,10 +243,14 @@ class zabbix::proxy (
   $configfrequency                                                            = $zabbix::params::proxy_configfrequency,
   Optional[Integer[1,604800]] $proxyconfigfrequency                           = $zabbix::params::proxy_proxyconfigfrequency,
   $datasenderfrequency                                                        = $zabbix::params::proxy_datasenderfrequency,
-  $startpollers                                                               = $zabbix::params::proxy_startpollers,
-  $startipmipollers                                                           = $zabbix::params::proxy_startipmipollers,
+  Integer[0, 1000] $startpollers                                              = $zabbix::params::proxy_startpollers,
+  Integer[0, 1000] $startagentpollers                                         = $zabbis::params::proxy_startagentpollers,
+  Integer[0, 1000] $starthttpagentpollers                                     = $zabbix::params::proxy_starthttpagentpollers,
+  Integer[0, 1000] $startsnmppollers                                          = $zabbix::params::proxy_startsnmppollers,
+  Integer[0, 1000] $maxconcurrentchecksperpoller                              = $zabbix::params::proxy_maxconcurrentchecksperpoller,
+  Integer[0, 1000] $startipmipollers                                          = $zabbix::params::proxy_startipmipollers,
   Integer[0, 1000] $startodbcpollers                                          = $zabbix::params::proxy_startodbcpollers,
-  $startpollersunreachable                                                    = $zabbix::params::proxy_startpollersunreachable,
+  Integer[0, 1000] $startpollersunreachable                                   = $zabbix::params::proxy_startpollersunreachable,
   Integer[1, 1000] $startpreprocessors                                        = $zabbix::params::proxy_startpreprocessors,
   $starttrappers                                                              = $zabbix::params::proxy_starttrappers,
   $startpingers                                                               = $zabbix::params::proxy_startpingers,
