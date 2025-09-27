@@ -19,7 +19,7 @@ class zabbix::resources::agent (
   $ipaddress                          = undef,
   $use_ip                             = undef,
   $port                               = undef,
-  Array[String[1]] $groups            = undef,
+  Optional[Array[String[1]]] $groups  = undef,
   $group_create                       = undef,
   $templates                          = undef,
   $macros                             = undef,
