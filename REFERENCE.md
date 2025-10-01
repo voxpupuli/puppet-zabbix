@@ -3718,7 +3718,7 @@ Default value: `undef`
 
 ##### <a name="-zabbix--resources--agent--groups"></a>`groups`
 
-Data type: `Array[String[1]]`
+Data type: `Optional[Array[String[1]]]`
 
 An array of groups the host belongs to.
 
