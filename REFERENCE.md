@@ -5094,6 +5094,11 @@ The following parameters are available in the `zabbix::web` class:
 * [`apache_php_max_input_time`](#-zabbix--web--apache_php_max_input_time)
 * [`apache_php_always_populate_raw_post_data`](#-zabbix--web--apache_php_always_populate_raw_post_data)
 * [`apache_php_max_input_vars`](#-zabbix--web--apache_php_max_input_vars)
+* [`database_verifyhost`](#-zabbix--web--database_verifyhost)
+* [`database_tlscafile`](#-zabbix--web--database_tlscafile)
+* [`database_tlscertfile`](#-zabbix--web--database_tlscertfile)
+* [`database_tlscipher`](#-zabbix--web--database_tlscipher)
+* [`database_tlskeyfile`](#-zabbix--web--database_tlskeyfile)
 * [`ldap_cacert`](#-zabbix--web--ldap_cacert)
 * [`ldap_clientcert`](#-zabbix--web--ldap_clientcert)
 * [`ldap_clientkey`](#-zabbix--web--ldap_clientkey)
@@ -5449,6 +5454,46 @@ Data type: `Any`
 Max amount of vars for GET/POST requests
 
 Default value: `$zabbix::params::apache_php_max_input_vars`
+
+##### <a name="-zabbix--web--database_verifyhost"></a>`database_verifyhost`
+
+Data type: `Any`
+
+Whether to validate that the host name for the connection matches the one in the host's certificate.
+
+Default value: `$zabbix::params::web_database_verifyhost`
+
+##### <a name="-zabbix--web--database_tlscafile"></a>`database_tlscafile`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+The full pathname of a file containing the top-level CA(s) certificates for peer certificate verification, used for encrypted communications between Zabbix components.
+
+Default value: `$zabbix::params::server_database_tlscafile`
+
+##### <a name="-zabbix--web--database_tlscertfile"></a>`database_tlscertfile`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+The full pathname of a file containing the service certificate or certificate chain, used for encrypted communications between Zabbix components.
+
+Default value: `$zabbix::params::server_database_tlscertfile`
+
+##### <a name="-zabbix--web--database_tlscipher"></a>`database_tlscipher`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+All The GnuTLS priority string or OpenSSL (TLS 1.2) cipher string.
+
+Default value: `$zabbix::params::server_database_tlscipher`
+
+##### <a name="-zabbix--web--database_tlskeyfile"></a>`database_tlskeyfile`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+The full pathname of a file containing the service private key, used for encrypted communications between Zabbix components.
+
+Default value: `$zabbix::params::server_database_tlskeyfile`
 
 ##### <a name="-zabbix--web--ldap_cacert"></a>`ldap_cacert`
 
