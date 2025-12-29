@@ -436,13 +436,13 @@ class zabbix::proxy (
       enable     => true,
       subscribe  => [
         File[$proxy_configfile_path],
-        Class['zabbix::database']
+        Class['zabbix::database'],
       ],
       require    => [
         Package["zabbix-proxy-${db}"],
         File[$include_dir],
         File[$proxy_configfile_path],
-        Class['zabbix::database']
+        Class['zabbix::database'],
       ],
     }
   }
@@ -450,7 +450,7 @@ class zabbix::proxy (
   $before_database = $manage_service ? {
     true  => [
       Service[$proxy_service_name],
-      Class["zabbix::database::${database_type}"]
+      Class["zabbix::database::${database_type}"],
     ],
     false => Class["zabbix::database::${database_type}"],
   }
