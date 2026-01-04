@@ -26,7 +26,7 @@
     },
     {
       "name": "puppetlabs/apt",
-      "version_requirement": ">= 2.1.0 < 11.0.0"
+      "version_requirement": ">= 2.1.0 < 12.0.0"
     },
     {
       "name": "puppet/systemd",
@@ -94,14 +94,16 @@
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
         "20.04",
-        "22.04"
+        "22.04",
+        "24.04"
       ]
     },
     {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
         "11",
-        "12"
+        "12",
+        "13"
       ]
     },
     {
