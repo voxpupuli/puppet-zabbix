@@ -330,7 +330,7 @@ class zabbix::web (
             comment      => 'redirect all to https',
             rewrite_cond => ['%{SERVER_PORT} !^443$'],
             rewrite_rule => ["^/(.*)$ https://${zabbix_url}/\$1 [L,R]"],
-          }
+          },
         ],
       }
     } else {
@@ -385,7 +385,7 @@ class zabbix::web (
       custom_fragment => $apache_vhost_custom_fragment,
       rewrites        => [
         {
-        rewrite_rule => ['^$ /index.php [L]'] }
+        rewrite_rule => ['^$ /index.php [L]'] },
       ],
       ssl             => $apache_use_ssl,
       ssl_cert        => $apache_ssl_cert,

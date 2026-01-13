@@ -197,7 +197,7 @@ class zabbix::database (
             require    => [
               Class['mysql::server'],
               Mysql::Db[$database_name],
-              Mysql_user["${database_user}@${zabbix_web}"]
+              Mysql_user["${database_user}@${zabbix_web}"],
             ],
           }
         } # END if $zabbix_web != $zabbix_server
