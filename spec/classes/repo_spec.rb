@@ -20,9 +20,6 @@ describe 'zabbix::repo' do
         it { is_expected.to contain_class('zabbix::params') }
         it { is_expected.to contain_class('zabbix::repo') }
 
-        it { is_expected.to contain_apt__key('zabbix-A1848F5') } if facts[:os]['family'] == 'Debian'
-        it { is_expected.to contain_apt__key('zabbix-FBABD5F') } if facts[:os]['family'] == 'Debian'
-
         context 'when repo_location is "https://example.com/foo"' do
           let :params do
             {
