@@ -7,6 +7,8 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
 
   def self.instances
     proxies = zbx.proxies.all
+    proxygroups = zbx.proxygroup.all
+
     api_hosts = zbx.query(
       method: 'host.get',
       params: {
@@ -14,7 +16,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
         selectInterfaces: %w[interfaceid type main ip port useip details],
         selectGroups: ['name'],
         selectMacros: %w[macro value],
-        output: %w[host proxy_hostid tls_accept tls_connect tls_issuer tls_subject]
+        output: %w[host proxyid proxy_groupid tls_accept tls_connect tls_issuer tls_subject]
       }
     )
 
@@ -23,8 +25,10 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
       # there is only 1 interface that can be default
       interface = h['interfaces'].select { |i| i['main'].to_i == 1 }.first
       use_ip = !interface['useip'].to_i.zero?
-      proxy_select = proxies.select { |_name, id| id == h['proxy_hostid'] }.keys.first
+      proxy_select = proxies.select { |_name, id| id == h['proxyid'] }.keys.first
       proxy_select = '' if proxy_select.nil?
+      proxygroup_select = proxygroups.select { |_name, id| id == h['proxy_groupid'] }.keys.first
+      proxygroup_select = '' if proxygroup_select.nil?
       new(
         ensure: :present,
         id: h['hostid'].to_i,
@@ -38,6 +42,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
         templates: h['parentTemplates'].map { |x| x['host'] },
         macros: h['macros'].map { |macro| { macro['macro'] => macro['value'] } },
         proxy: proxy_select,
+        proxygroup: proxygroup_select,
         interfacetype: interface['type'].to_i,
         interfacedetails: interface['details'],
         tls_accept: h['tls_accept'].to_i,
@@ -63,15 +68,18 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
     gids = get_groupids(@resource[:groups], @resource[:group_create])
     groups = transform_to_array_hash('groupid', gids)
 
-    proxy_hostid = @resource[:proxy].nil? || @resource[:proxy].empty? ? nil : zbx.proxies.get_id(host: @resource[:proxy])
+    proxyid = @resource[:proxy].nil? || @resource[:proxy].empty? ? nil : zbx.proxies.get_id(name: @resource[:proxy])
+    proxy_groupid = @resource[:proxygroup].nil? || @resource[:proxygroup].empty? ? nil : zbx.proxygroup.get_id(name: @resource[:proxygroup])
+    monitored_by = proxy_groupid && proxyid.nil? ? 2 : 1
 
     tls_accept = @resource[:tls_accept].nil? ? 1 : @resource[:tls_accept]
     tls_connect = @resource[:tls_connect].nil? ? 1 : @resource[:tls_connect]
 
-    # Now we create the host
-    zbx.hosts.create(
+    host_params = {
       host: @resource[:hostname],
-      proxy_hostid: proxy_hostid,
+      proxyid: proxyid,
+      proxy_groupid: proxy_groupid,
+      monitored_by: monitored_by,
       interfaces: [
         {
           type: @resource[:interfacetype].nil? ? 1 : @resource[:interfacetype],
@@ -89,7 +97,13 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
       tls_accept: tls_accept,
       tls_issuer: @resource[:tls_issuer].nil? ? '' : @resource[:tls_issuer],
       tls_subject: @resource[:tls_subject].nil? ? '' : @resource[:tls_subject]
-    )
+    }
+
+    host_params.delete(:proxyid) if host_params[:proxy_groupid] || host_params[:proxyid].nil?
+    host_params.delete(:proxy_groupid) if host_params[:proxy_groupid].nil?
+
+    # Now we create the host
+    zbx.hosts.create(host_params)
   end
 
   def exists?
@@ -233,7 +247,16 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
   def proxy=(string)
     zbx.hosts.create_or_update(
       host: @resource[:hostname],
-      proxy_hostid: zbx.proxies.get_id(host: string)
+      monitored_by: '1',
+      proxyid: zbx.proxies.get_id(name: string)
+    )
+  end
+
+  def proxygroup=(string)
+    zbx.hosts.create_or_update(
+      host: @resource[:hostname],
+      monitored_by: '2',
+      proxy_groupid: zbx.proxygroup.get_id(name: string)
     )
   end
 
