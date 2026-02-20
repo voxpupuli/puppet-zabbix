@@ -5,9 +5,20 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
   desc 'Puppet provider for managing Zabbix hosts. It uses the Zabbix API to create, read, update and delete hosts.'
   confine feature: :zabbixapi
 
+  def self.supports_proxy_groups?
+    Gem::Version.new(zbx.client.api_version) >= Gem::Version.new('7.0.0')
+  end
+
+  def supports_proxy_groups?
+    self.class.supports_proxy_groups?
+  end
+
   def self.instances
     proxies = zbx.proxies.all
-    proxygroups = zbx.proxygroup.all
+    proxygroups = supports_proxy_groups? ? zbx.proxygroup.all : {}
+
+    output_fields = %w[host proxyid tls_accept tls_connect tls_issuer tls_subject]
+    output_fields << 'proxy_groupid' if supports_proxy_groups?
 
     api_hosts = zbx.query(
       method: 'host.get',
@@ -16,7 +27,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
         selectInterfaces: %w[interfaceid type main ip port useip details],
         selectGroups: ['name'],
         selectMacros: %w[macro value],
-        output: %w[host proxyid proxy_groupid tls_accept tls_connect tls_issuer tls_subject]
+        output: output_fields
       }
     )
 
@@ -27,8 +38,13 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
       use_ip = !interface['useip'].to_i.zero?
       proxy_select = proxies.select { |_name, id| id == h['proxyid'] }.keys.first
       proxy_select = '' if proxy_select.nil?
-      proxygroup_select = proxygroups.select { |_name, id| id == h['proxy_groupid'] }.keys.first
-      proxygroup_select = '' if proxygroup_select.nil?
+
+      proxygroup_select = ''
+      if supports_proxy_groups?
+        proxygroup_select = proxygroups.select { |_name, id| id == h['proxy_groupid'] }.keys.first
+        proxygroup_select = '' if proxygroup_select.nil?
+      end
+
       new(
         ensure: :present,
         id: h['hostid'].to_i,
@@ -69,7 +85,10 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
     groups = transform_to_array_hash('groupid', gids)
 
     proxyid = @resource[:proxy].nil? || @resource[:proxy].empty? ? nil : zbx.proxies.get_id(name: @resource[:proxy])
-    proxy_groupid = @resource[:proxygroup].nil? || @resource[:proxygroup].empty? ? nil : zbx.proxygroup.get_id(name: @resource[:proxygroup])
+    proxy_groupid = nil
+    if supports_proxy_groups?
+      proxy_groupid = @resource[:proxygroup].nil? || @resource[:proxygroup].empty? ? nil : zbx.proxygroup.get_id(name: @resource[:proxygroup])
+    end
     monitored_by = proxy_groupid && proxyid.nil? ? 2 : 1
 
     tls_accept = @resource[:tls_accept].nil? ? 1 : @resource[:tls_accept]
@@ -99,6 +118,10 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
       tls_subject: @resource[:tls_subject].nil? ? '' : @resource[:tls_subject]
     }
 
+    unless supports_proxy_groups?
+      host_params.delete(:proxy_groupid)
+      host_params.delete(:monitored_by)
+    end
     host_params.delete(:proxyid) if host_params[:proxy_groupid] || host_params[:proxyid].nil?
     host_params.delete(:proxy_groupid) if host_params[:proxy_groupid].nil?
 
@@ -245,14 +268,17 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
   end
 
   def proxy=(string)
-    zbx.hosts.create_or_update(
+    params = {
       host: @resource[:hostname],
-      monitored_by: '1',
       proxyid: zbx.proxies.get_id(name: string)
-    )
+    }
+    params[:monitored_by] = '1' if supports_proxy_groups?
+    zbx.hosts.create_or_update(params)
   end
 
   def proxygroup=(string)
+    raise Puppet::Error, 'Proxy groups are only supported in Zabbix >= 7.0' unless supports_proxy_groups?
+
     zbx.hosts.create_or_update(
       host: @resource[:hostname],
       monitored_by: '2',
