@@ -255,6 +255,20 @@ describe 'zabbix::web' do
           }
         end
 
+        describe 'with vhost custom fragment' do
+          let :params do
+            super().merge(
+              apache_vhost_custom_fragment: 'CGIPassAuth On'
+            )
+          end
+
+          it {
+            is_expected.to contain_concat__fragment('zabbix.example.com-custom_fragment').with(
+              content: %r{^\s+CGIPassAuth On$}
+            )
+          }
+        end
+
         describe 'with custom vhost params' do
           let :params do
             super().merge(
