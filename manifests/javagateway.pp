@@ -64,7 +64,7 @@ class zabbix::javagateway (
     hasrestart => true,
     require    => [
       Package['zabbix-java-gateway'],
-      File['/etc/zabbix/zabbix_java_gateway.conf']
+      File['/etc/zabbix/zabbix_java_gateway.conf'],
     ],
   }
 
