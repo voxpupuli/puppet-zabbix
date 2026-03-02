@@ -77,6 +77,7 @@
 # @param saml_settings A hash of additional SAML SSO settings.
 # @param puppetgem Provider for the zabbixapi gem package.
 # @param manage_selinux Whether we should manage SELinux rules.
+# @param apache_vhost_custom_fragment custom_fragment to pass to apache::vhost.
 # @param apache_vhost_custom_params Additional parameters to pass to apache::vhost.
 # @example For multiple host setup:
 #   node 'wdpuppet02.dj-wasabi.local' {
@@ -144,6 +145,7 @@ class zabbix::web (
   Hash[String[1], Variant[ScalarData, Hash]] $saml_settings           = $zabbix::params::saml_settings,
   $puppetgem                                                          = $zabbix::params::puppetgem,
   Boolean $manage_selinux                                             = $zabbix::params::manage_selinux,
+  Optional[String[1]] $apache_vhost_custom_fragment                   = undef,
   Hash[String[1], Any] $apache_vhost_custom_params                    = {},
 ) inherits zabbix::params {
   # check osfamily, Arch is currently not supported for web
@@ -263,7 +265,7 @@ class zabbix::web (
     if $facts['os']['family'] == 'RedHat' {
       include apache::mod::proxy
       include apache::mod::proxy_fcgi
-      $apache_vhost_custom_fragment = ''
+      $apache_vhost_custom_fragments = $apache_vhost_custom_fragment ? { undef => '', default => $apache_vhost_custom_fragment }
 
       service { 'php-fpm':
         ensure => 'running',
@@ -297,7 +299,7 @@ class zabbix::web (
     else {
       include apache::mod::php
 
-      $apache_vhost_custom_fragment = "
+      $apache_vhost_custom_fragments = "${apache_vhost_custom_fragment}
         php_value max_execution_time ${apache_php_max_execution_time}
         php_value memory_limit ${apache_php_memory_limit}
         php_value post_max_size ${apache_php_post_max_size}
@@ -330,7 +332,7 @@ class zabbix::web (
             comment      => 'redirect all to https',
             rewrite_cond => ['%{SERVER_PORT} !^443$'],
             rewrite_rule => ["^/(.*)$ https://${zabbix_url}/\$1 [L,R]"],
-          }
+          },
         ],
       }
     } else {
@@ -382,10 +384,10 @@ class zabbix::web (
           require  => $location_api_access,
         },
       ],
-      custom_fragment => $apache_vhost_custom_fragment,
+      custom_fragment => $apache_vhost_custom_fragments,
       rewrites        => [
         {
-        rewrite_rule => ['^$ /index.php [L]'] }
+        rewrite_rule => ['^$ /index.php [L]'] },
       ],
       ssl             => $apache_use_ssl,
       ssl_cert        => $apache_ssl_cert,
