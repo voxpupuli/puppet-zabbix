@@ -67,6 +67,11 @@
 # @param apache_php_max_input_time Max input time for php. Default: 300
 # @param apache_php_always_populate_raw_post_data Default: -1
 # @param apache_php_max_input_vars Max amount of vars for GET/POST requests
+# @param database_verifyhost Whether to validate that the host name for the connection matches the one in the host's certificate.
+# @param database_tlscafile The full pathname of a file containing the top-level CA(s) certificates for peer certificate verification, used for encrypted communications between Zabbix components.
+# @param database_tlscertfile The full pathname of a file containing the service certificate or certificate chain, used for encrypted communications between Zabbix components.
+# @param database_tlscipher All The GnuTLS priority string or OpenSSL (TLS 1.2) cipher string.
+# @param database_tlskeyfile The full pathname of a file containing the service private key, used for encrypted communications between Zabbix components.
 # @param ldap_cacert Set location of ca_cert used by LDAP authentication.
 # @param ldap_clientcert Set location of client cert used by LDAP authentication.
 # @param ldap_clientkey Set location of client key used by LDAP authentication.
@@ -135,6 +140,11 @@ class zabbix::web (
   $apache_php_max_input_time                                          = $zabbix::params::apache_php_max_input_time,
   $apache_php_always_populate_raw_post_data                           = $zabbix::params::apache_php_always_populate_raw_post_data,
   $apache_php_max_input_vars                                          = $zabbix::params::apache_php_max_input_vars,
+  $database_verifyhost                                                = $zabbix::params::web_database_verifyhost,
+  Optional[Stdlib::Absolutepath] $database_tlscafile                  = $zabbix::params::server_database_tlscafile,
+  Optional[Stdlib::Absolutepath] $database_tlscertfile                = $zabbix::params::server_database_tlscertfile,
+  Optional[Stdlib::Absolutepath] $database_tlscipher                  = $zabbix::params::server_database_tlscipher,
+  Optional[Stdlib::Absolutepath] $database_tlskeyfile                 = $zabbix::params::server_database_tlskeyfile,
   Optional[Stdlib::Absolutepath] $ldap_cacert                         = $zabbix::params::ldap_cacert,
   Optional[Stdlib::Absolutepath] $ldap_clientcert                     = $zabbix::params::ldap_clientcert,
   Optional[Stdlib::Absolutepath] $ldap_clientkey                      = $zabbix::params::ldap_clientkey,

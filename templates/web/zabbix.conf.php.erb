@@ -26,6 +26,22 @@ $DB['SCHEMA'] = '';
 $DB['DOUBLE_IEEE754'] = 'true';
 <% end -%>
 
+// Used for TLS connection.
+<% if @database_tlscafile and @database_tlscertfile and @database_tlskeyfile -%>
+$DB['ENCRYPTION']               = 'true';
+$DB['KEY_FILE']                 = '<%= @database_tlskeyfile %>';
+$DB['CERT_FILE']                = '<%= @database_tlscertfile %>';
+$DB['CA_FILE']                  = '<%= @database_tlscafile %>';
+<% if @database_verifyhost -%>
+$DB['VERIFY_HOST']              = 'true';
+<% else -%>
+$DB['VERIFY_HOST']              = 'false';
+<% end -%>
+<% if @database_tlscipher -%>
+$DB['CIPHER_LIST']              = '<%= @database_tlscipher %>';
+<% end -%>
+<% end -%>
+
 <% if @zabbix_version.to_f < 6.0 -%>
 $ZBX_SERVER      = '<%= @zabbix_server %>';
 $ZBX_SERVER_PORT = '<%= @zabbix_listenport %>';
