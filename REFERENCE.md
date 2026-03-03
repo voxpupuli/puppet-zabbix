@@ -1376,6 +1376,7 @@ The following parameters are available in the `zabbix::agent` class:
 * [`zabbix_package_source`](#-zabbix--agent--zabbix_package_source)
 * [`manage_resources`](#-zabbix--agent--manage_resources)
 * [`monitored_by_proxy`](#-zabbix--agent--monitored_by_proxy)
+* [`monitored_by_group`](#-zabbix--agent--monitored_by_group)
 * [`agent_use_ip`](#-zabbix--agent--agent_use_ip)
 * [`zbx_groups`](#-zabbix--agent--zbx_groups)
 * [`zbx_group_create`](#-zabbix--agent--zbx_group_create)
@@ -1534,6 +1535,14 @@ When this is monitored by an proxy, please fill in the name of this proxy.
 If the proxy is also installed via this module, please fill in the FQDN
 
 Default value: `$zabbix::params::monitored_by_proxy`
+
+##### <a name="-zabbix--agent--monitored_by_group"></a>`monitored_by_group`
+
+Data type: `Any`
+
+When this is monitored by a proxy group, please fill in the name of this proxy group.
+
+Default value: `$zabbix::params::monitored_by_group`
 
 ##### <a name="-zabbix--agent--agent_use_ip"></a>`agent_use_ip`
 
@@ -3677,6 +3686,7 @@ The following parameters are available in the `zabbix::resources::agent` class:
 * [`templates`](#-zabbix--resources--agent--templates)
 * [`macros`](#-zabbix--resources--agent--macros)
 * [`proxy`](#-zabbix--resources--agent--proxy)
+* [`proxygroup`](#-zabbix--resources--agent--proxygroup)
 * [`interfacetype`](#-zabbix--resources--agent--interfacetype)
 * [`interfacedetails`](#-zabbix--resources--agent--interfacedetails)
 * [`tls_connect`](#-zabbix--resources--agent--tls_connect)
@@ -3753,6 +3763,14 @@ Default value: `undef`
 Data type: `Any`
 
 Whether it is monitored by an proxy or not.
+
+Default value: `undef`
+
+##### <a name="-zabbix--resources--agent--proxygroup"></a>`proxygroup`
+
+Data type: `Any`
+
+Whether it is monitored by a proxy group or not.
 
 Default value: `undef`
 
@@ -6123,6 +6141,10 @@ The port that the zabbix agent is listening on.
 ##### `proxy`
 
 Whether it is monitored by an proxy or not.
+
+##### `proxygroup`
+
+Whether it is monitored by a proxy group or not.
 
 ##### `templates`
 

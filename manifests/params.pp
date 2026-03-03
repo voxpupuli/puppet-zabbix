@@ -350,6 +350,7 @@ class zabbix::params {
   $agent_zbx_templates                      = ['Template OS Linux', 'Template App SSH Service']
   $apache_status                            = false
   $monitored_by_proxy                       = undef
+  $monitored_by_group                       = undef
   # provided by puppet/systemd
   if $facts['systemd'] {
     $agent_logtype                          = 'system'

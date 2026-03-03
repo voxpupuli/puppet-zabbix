@@ -20,6 +20,8 @@
 # @param monitored_by_proxy
 #   When this is monitored by an proxy, please fill in the name of this proxy.
 #   If the proxy is also installed via this module, please fill in the FQDN
+# @param monitored_by_group
+#   When this is monitored by a proxy group, please fill in the name of this proxy group.
 # @param agent_use_ip
 #   When true, when creating hosts via the zabbix-api, it will configure that
 #   connection should me made via ip, not fqdn.
@@ -157,6 +159,7 @@ class zabbix::agent (
   Boolean $manage_repo                                 = $zabbix::params::manage_repo,
   Boolean $manage_resources                            = $zabbix::params::manage_resources,
   $monitored_by_proxy                                  = $zabbix::params::monitored_by_proxy,
+  $monitored_by_group                                  = $zabbix::params::monitored_by_group,
   $agent_use_ip                                        = $zabbix::params::agent_use_ip,
   Variant[String[1],Array[String[1]]] $zbx_groups      = $zabbix::params::agent_zbx_groups,
   $zbx_group_create                                    = $zabbix::params::agent_zbx_group_create,
@@ -266,6 +269,7 @@ class zabbix::agent (
       interfacetype    => $zbx_interface_type,
       interfacedetails => $zbx_interface_details,
       proxy            => $use_proxy,
+      proxygroup       => $monitored_by_group,
       tls_accept       => $tlsaccept,
       tls_connect      => $tlsconnect,
       tls_issuer       => $tlscertissuer,

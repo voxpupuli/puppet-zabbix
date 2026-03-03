@@ -8,6 +8,7 @@
 # @param templates List of templates which should be attached to this host.
 # @param macros Array of hashes (macros) which should be attached to this host.
 # @param proxy Whether it is monitored by an proxy or not.
+# @param proxygroup Whether it is monitored by a proxy group or not.
 # @param interfacetype Internally used identifier for the host interface.
 # @param interfacedetails Hash with interface details for SNMP when interface type is 2.
 # @param tls_connect How the server must connect to the agent
@@ -24,6 +25,7 @@ class zabbix::resources::agent (
   $templates                          = undef,
   $macros                             = undef,
   $proxy                              = undef,
+  $proxygroup                         = undef,
   $interfacetype                      = 1,
   Variant[Array, Hash] $interfacedetails = [],
   Optional[Enum['unencrypted','psk','cert']] $tls_connect = undef,
@@ -40,6 +42,7 @@ class zabbix::resources::agent (
     templates        => $templates,
     macros           => $macros,
     proxy            => $proxy,
+    proxygroup       => $proxygroup,
     interfacetype    => $interfacetype,
     interfacedetails => $interfacedetails,
     tls_connect      => $tls_connect,
