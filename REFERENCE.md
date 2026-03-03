@@ -1442,6 +1442,7 @@ The following parameters are available in the `zabbix::agent` class:
 * [`additional_service_params`](#-zabbix--agent--additional_service_params)
 * [`service_type`](#-zabbix--agent--service_type)
 * [`include_dir`](#-zabbix--agent--include_dir)
+* [`include_dir_force`](#-zabbix--agent--include_dir_force)
 * [`include_dir_purge`](#-zabbix--agent--include_dir_purge)
 * [`unsafeuserparameters`](#-zabbix--agent--unsafeuserparameters)
 * [`userparameter`](#-zabbix--agent--userparameter)
@@ -2078,6 +2079,14 @@ Data type: `Any`
 You may include individual files or all files in a directory in the configuration file.
 
 Default value: `$zabbix::params::agent_include`
+
+##### <a name="-zabbix--agent--include_dir_force"></a>`include_dir_force`
+
+Data type: `Any`
+
+force purge of include dir, needed if it contains sub directories.
+
+Default value: `$zabbix::params::agent_include_force`
 
 ##### <a name="-zabbix--agent--include_dir_purge"></a>`include_dir_purge`
 
