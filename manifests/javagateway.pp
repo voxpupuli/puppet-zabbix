@@ -27,7 +27,7 @@ class zabbix::javagateway (
   # Fix for pid file. Is different in Zabbix (4, 5) and 6
   $real_pidfile = $zabbix_version ? {
     /^[45]\.[024]/ => pick($pidfile, '/var/run/zabbix/zabbix_java.pid'),
-    /^[6]\.[024]/  => pick($pidfile, '/var/run/zabbix/zabbix_java_gateway.pid'),
+    /^[67]\.[024]/  => pick($pidfile, '/var/run/zabbix/zabbix_java_gateway.pid'),
   }
   # Only include the repo class if it has not yet been included
   unless defined(Class['Zabbix::Repo']) {
