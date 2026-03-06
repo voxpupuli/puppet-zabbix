@@ -67,6 +67,10 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
 
     tls_accept = @resource[:tls_accept].nil? ? 1 : @resource[:tls_accept]
     tls_connect = @resource[:tls_connect].nil? ? 1 : @resource[:tls_connect]
+    tls_psk = {
+      tls_psk_identity: @resource[:tls_psk_identity].nil? ? nil : @resource[:tls_psk_identity],
+      tls_psk: @resource[:tls_psk].nil? ? nil : @resource[:tls_psk]
+    }
 
     # Now we create the host
     zbx.hosts.create(
@@ -88,7 +92,8 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
       tls_connect: tls_connect,
       tls_accept: tls_accept,
       tls_issuer: @resource[:tls_issuer].nil? ? '' : @resource[:tls_issuer],
-      tls_subject: @resource[:tls_subject].nil? ? '' : @resource[:tls_subject]
+      tls_subject: @resource[:tls_subject].nil? ? '' : @resource[:tls_subject],
+      **tls_psk.compact
     )
   end
 
@@ -127,6 +132,16 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
       templateids << template_id
     end
     templateids
+  end
+
+  def set_psk
+    return unless (!@property_hash[:update_psk].nil? && @property_hash[:update_psk].is_a?(TrueClass)) || (!@resource[:update_psk].nil? && @resource[:update_psk].is_a?(TrueClass))
+
+    zbx.hosts.create_or_update(
+      host: @resource[:hostname],
+      tls_psk_identity: @resource[:tls_psk_identity].nil? ? nil : @resource[:tls_psk_identity],
+      tls_psk: @resource[:tls_psk]&.unwrap
+    )
   end
 
   #
@@ -239,6 +254,8 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
 
   def tls_connect=(int)
     @property_hash[:tls_connect] = int
+    @property_hash[:update_psk] = true
+
     zbx.hosts.create_or_update(
       host: @resource[:hostname],
       tls_connect: @property_hash[:tls_connect].nil? ? 1 : @property_hash[:tls_connect]
@@ -247,6 +264,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
 
   def tls_accept=(int)
     @property_hash[:tls_accept] = int
+    @property_hash[:update_psk] = true
 
     zbx.hosts.create_or_update(
       host: @resource[:hostname],
@@ -268,5 +286,15 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
       host: @resource[:hostname],
       tls_subject: @property_hash[:tls_subject].nil? ? '' : @property_hash[:tls_subject]
     )
+  end
+
+  def tls_psk_identity=(string)
+    @property_hash[:tls_psk_identity] = string
+    set_psk
+  end
+
+  def tls_psk=(string)
+    @property_hash[:tls_psk] = string
+    set_psk
   end
 end

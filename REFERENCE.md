@@ -3683,6 +3683,9 @@ The following parameters are available in the `zabbix::resources::agent` class:
 * [`tls_accept`](#-zabbix--resources--agent--tls_accept)
 * [`tls_issuer`](#-zabbix--resources--agent--tls_issuer)
 * [`tls_subject`](#-zabbix--resources--agent--tls_subject)
+* [`tls_psk`](#-zabbix--resources--agent--tls_psk)
+* [`tls_psk_identity`](#-zabbix--resources--agent--tls_psk_identity)
+* [`update_psk`](#-zabbix--resources--agent--update_psk)
 
 ##### <a name="-zabbix--resources--agent--hostname"></a>`hostname`
 
@@ -3801,6 +3804,30 @@ Default value: `undef`
 Data type: `Optional[String[1]]`
 
 Subject of the certificate that is allowed to talk with the server
+
+Default value: `undef`
+
+##### <a name="-zabbix--resources--agent--tls_psk"></a>`tls_psk`
+
+Data type: `Optional[Sensitive[String[32]]]`
+
+The pre-shared key string used for the connection
+
+Default value: `undef`
+
+##### <a name="-zabbix--resources--agent--tls_psk_identity"></a>`tls_psk_identity`
+
+Data type: `Optional[String[1]]`
+
+The identity string associated with the pre-shared key
+
+Default value: `undef`
+
+##### <a name="-zabbix--resources--agent--update_psk"></a>`update_psk`
+
+Data type: `Optional[Boolean]`
+
+Force the update of PSK and identity, required for key rotation
 
 Default value: `undef`
 
@@ -6140,6 +6167,14 @@ How the server connect to the client (unencrypted, psk or cert)
 
 Certificate issuer.
 
+##### `tls_psk`
+
+PSK Key.
+
+##### `tls_psk_identity`
+
+PSK identity.
+
 ##### `tls_subject`
 
 Certificate subject.
@@ -6157,6 +6192,7 @@ The following parameters are available in the `zabbix_host` type.
 * [`group_create`](#-zabbix_host--group_create)
 * [`hostname`](#-zabbix_host--hostname)
 * [`provider`](#-zabbix_host--provider)
+* [`update_psk`](#-zabbix_host--update_psk)
 
 ##### <a name="-zabbix_host--group_create"></a>`group_create`
 
@@ -6172,6 +6208,14 @@ FQDN of the machine.
 
 The specific backend to use for this `zabbix_host` resource. You will seldom need to specify this --- Puppet will
 usually discover the appropriate provider for your platform.
+
+##### <a name="-zabbix_host--update_psk"></a>`update_psk`
+
+Valid values: `true`, `false`
+
+Forcefully update the maschines PSK and PSK identity.
+
+Default value: `false`
 
 ### <a name="zabbix_hostgroup"></a>`zabbix_hostgroup`
 
