@@ -14,6 +14,9 @@
 # @param tls_accept How the agent can connect to the server
 # @param tls_issuer Issuer of the certificate that is allowed to talk with the serve
 # @param tls_subject Subject of the certificate that is allowed to talk with the server
+# @param tls_psk The pre-shared key string used for the connection
+# @param tls_psk_identity The identity string associated with the pre-shared key
+# @param update_psk Force the update of PSK and identity, required for key rotation
 class zabbix::resources::agent (
   $hostname                           = undef,
   $ipaddress                          = undef,
@@ -30,6 +33,9 @@ class zabbix::resources::agent (
   Optional[Enum['unencrypted','psk','cert']] $tls_accept  = undef,
   Optional[String[1]] $tls_issuer                         = undef,
   Optional[String[1]] $tls_subject                        = undef,
+  Optional[Sensitive[String[32]]] $tls_psk                = undef,
+  Optional[String[1]] $tls_psk_identity                   = undef,
+  Optional[Boolean] $update_psk                           = undef,
 ) {
   @@zabbix_host { $hostname:
     ipaddress        => $ipaddress,
@@ -46,5 +52,8 @@ class zabbix::resources::agent (
     tls_accept       => $tls_accept,
     tls_issuer       => $tls_issuer,
     tls_subject      => $tls_subject,
+    tls_psk_identity => $tls_psk_identity,
+    tls_psk          => $tls_psk,
+    update_psk       => $update_psk,
   }
 }

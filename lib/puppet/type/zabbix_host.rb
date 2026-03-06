@@ -33,8 +33,23 @@ Puppet::Type.newtype(:zabbix_host) do
     end
   end
 
+  validate do
+    raise Puppet::ParseError, _("'tls_psk' and 'tls_psk_identity' are required for 'tls_accept' and/or 'tls_connect' set to PSK") if ((!self[:tls_accept].nil? && munge_encryption(self[:tls_accept]) == 2) || (!self[:tls_connect].nil? && munge_encryption(self[:tls_connect]) == 2)) && (self[:tls_psk].nil? || self[:tls_psk_identity].nil?)
+  end
+
   newparam(:hostname, namevar: true) do
     desc 'FQDN of the machine.'
+  end
+
+  newparam(:update_psk) do
+    desc 'Forcefully update the maschines PSK and PSK identity.'
+
+    newvalues(true, false)
+    defaultto false
+
+    munge do |value|
+      @resource.munge_boolean(value)
+    end
   end
 
   newproperty(:id) do
@@ -149,6 +164,14 @@ Puppet::Type.newtype(:zabbix_host) do
 
   newproperty(:tls_subject) do
     desc 'Certificate subject.'
+  end
+
+  newproperty(:tls_psk_identity) do
+    desc 'PSK identity.'
+  end
+
+  newproperty(:tls_psk) do
+    desc 'PSK Key.'
   end
 
   autorequire(:file) { '/etc/zabbix/api.conf' }

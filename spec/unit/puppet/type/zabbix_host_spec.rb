@@ -27,6 +27,10 @@ describe Puppet::Type.type(:zabbix_host) do
       templates
       macros
       use_ip
+      tls_connect
+      tls_accept
+      tls_psk
+      tls_psk_identity
     ].each do |param|
       it "has a #{param} property" do
         expect(described_class.attrtype(param)).to eq(:property)
@@ -135,6 +139,100 @@ describe Puppet::Type.type(:zabbix_host) do
 
     describe 'use_ip' do
       it_behaves_like 'boolean property', :use_ip, nil
+    end
+
+    describe 'tls_connect' do
+      [1, 'unencrypted', 4, 'cert'].each do |val|
+        it "accepts #{val}" do
+          expect do
+            described_class.new(name: 'host', tls_connect: val)
+          end.not_to raise_error
+        end
+      end
+
+      [2, 'psk'].each do |val|
+        it "accepts #{val} (with required PSK params)" do
+          expect do
+            described_class.new(name: 'host', tls_connect: val, tls_psk: 'key', tls_psk_identity: 'id')
+          end.not_to raise_error
+        end
+      end
+    end
+
+    describe 'tls_accept' do
+      [1, 'unencrypted', 4, 'cert'].each do |val|
+        it "accepts #{val}" do
+          expect do
+            described_class.new(name: 'host', tls_accept: val)
+          end.not_to raise_error
+        end
+      end
+
+      [2, 'psk'].each do |val|
+        it "accepts #{val} (with required PSK params)" do
+          expect do
+            described_class.new(name: 'host', tls_accept: val, tls_psk: 'key', tls_psk_identity: 'id')
+          end.not_to raise_error
+        end
+      end
+    end
+
+    describe 'tls_psk_identity' do
+      it_behaves_like 'validated property', :tls_psk_identity, nil, %w[myID PSK001]
+    end
+
+    describe 'tls_psk' do
+      it_behaves_like 'validated property', :tls_psk, nil, %w[1234567890ABCDEF]
+    end
+  end
+
+  describe 'when validating tls logic' do
+    context 'with tls_connect set to psk' do
+      it 'raises an error if tls_psk is missing' do
+        expect do
+          described_class.new(
+            name: 'checklist_host',
+            tls_connect: 'psk',
+            tls_psk_identity: 'myID'
+          )
+        end.to raise_error(Puppet::Error, %r{'tls_psk' and 'tls_psk_identity' are required})
+      end
+
+      it 'raises an error if tls_psk_identity is missing' do
+        expect do
+          described_class.new(
+            name: 'checklist_host',
+            tls_connect: 'psk',
+            tls_psk: 'secret123'
+          )
+        end.to raise_error(Puppet::Error, %r{'tls_psk' and 'tls_psk_identity' are required})
+      end
+    end
+
+    context 'with tls_accept set to psk' do
+      it 'raises an error if tls_psk or identity is missing' do
+        expect do
+          described_class.new(
+            name: 'checklist_host',
+            tls_accept: 'psk',
+            tls_psk: 'secret123'
+          )
+        end.to raise_error(Puppet::Error, %r{'tls_psk' and 'tls_psk_identity' are required})
+      end
+    end
+
+    context 'with valid psk configuration' do
+      it 'accepts psk when identity and key are present' do
+        expect do
+          described_class.new(
+            name: 'checklist_host',
+            tls_connect: 'psk',
+            tls_accept: 'psk',
+            tls_psk: 'secret123',
+            tls_psk_identity: 'myID'
+          )
+        end.not_to raise_error
+      end
     end
   end
 end
