@@ -337,6 +337,42 @@ describe 'zabbix_host type' do
           expect(test5['tls_subject']).to eq('MyClientCertificate')
         end
       end
+
+      it_behaves_like 'an idempotent resource' do
+        let(:manifest) do
+          <<-EOS
+          zabbix_host { 'test6.example.com':
+            ipaddress        => '127.0.0.6',
+            use_ip           => true,
+            port             => 10050,
+            groups           => ['Virtual machines'],
+            templates        => #{template},
+            macros           => [],
+            tls_accept       => 'psk',
+            tls_connect      => 'psk',
+            tls_psk_identity => 'MyPSKIdentity',
+            tls_psk          => 'abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789',
+            update_psk       => true,
+          }
+          EOS
+        end
+      end
+
+      context 'test6.example.com' do
+        let(:test6) { result_hosts.select { |h| h['host'] == 'test6.example.com' }.first }
+
+        it 'is created' do
+          expect(test6['host']).to eq('test6.example.com')
+        end
+
+        it 'has tls_connect set to psk (2)' do
+          expect(test6['tls_connect']).to eq('2')
+        end
+
+        it 'has tls_accept set to psk (2)' do
+          expect(test6['tls_accept']).to eq('2')
+        end
+      end
     end
   end
 end
