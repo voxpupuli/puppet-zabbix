@@ -12,7 +12,7 @@ describe 'zabbix::web' do
 
   let :params do
     {
-      zabbix_url: 'zabbix.example.com'
+      zabbix_url: 'zabbix.example.com',
     }
   end
 

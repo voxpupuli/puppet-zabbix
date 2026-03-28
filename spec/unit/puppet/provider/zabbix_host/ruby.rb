@@ -6,7 +6,7 @@ require 'fakefs/spec_helpers'
 describe Puppet::Type.type(:zabbix_host).provider(:ruby) do
   let(:resource) do
     Puppet::Type.type(:zabbix_host).new(
-      hostname: 'test1.example.com'
+      hostname: 'test1.example.com',
     )
   end
   let(:provider) { resource.provider }

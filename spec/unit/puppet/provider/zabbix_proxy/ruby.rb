@@ -5,7 +5,7 @@ require 'spec_helper'
 describe Puppet::Type.type(:zabbix_proxy).provider(:ruby) do
   let(:resource) do
     Puppet::Type.type(:zabbix_proxy).new(
-      name: 'Testproxy'
+      name: 'Testproxy',
     )
   end
   let(:provider) { resource.provider }

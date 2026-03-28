@@ -32,7 +32,7 @@ describe 'zabbix::server' do
         describe 'with enabled selinux' do
           let :params do
             {
-              manage_selinux: true
+              manage_selinux: true,
             }
           end
 
@@ -54,7 +54,7 @@ describe 'zabbix::server' do
       describe 'with disabled selinux' do
         let :params do
           {
-            manage_selinux: false
+            manage_selinux: false,
           }
         end
 
@@ -66,7 +66,7 @@ describe 'zabbix::server' do
           {
             database_type: 'postgresql',
             server_configfile_path: '/etc/zabbix/zabbix_server.conf',
-            include_dir: '/etc/zabbix/zabbix_server.conf.d'
+            include_dir: '/etc/zabbix/zabbix_server.conf.d',
           }
         end
 
@@ -78,7 +78,7 @@ describe 'zabbix::server' do
       describe 'with database_type as mysql' do
         let :params do
           {
-            database_type: 'mysql'
+            database_type: 'mysql',
           }
         end
 
@@ -137,7 +137,7 @@ describe 'zabbix::server' do
       context 'when declaring manage_firewall is true' do
         let :params do
           {
-            manage_firewall: true
+            manage_firewall: true,
           }
         end
 
@@ -147,7 +147,7 @@ describe 'zabbix::server' do
       context 'when declaring manage_firewall is false' do
         let :params do
           {
-            manage_firewall: false
+            manage_firewall: false,
           }
         end
 
@@ -157,7 +157,7 @@ describe 'zabbix::server' do
       context 'when declaring manage_startup_script is true' do
         let :params do
           {
-            manage_startup_script: true
+            manage_startup_script: true,
           }
         end
 
@@ -181,7 +181,7 @@ describe 'zabbix::server' do
       context 'when declaring manage_service is true' do
         let :params do
           {
-            manage_service: true
+            manage_service: true,
           }
         end
 
@@ -192,7 +192,7 @@ describe 'zabbix::server' do
       context 'when declaring manage_service is false' do
         let :params do
           {
-            manage_service: false
+            manage_service: false,
           }
         end
 
@@ -275,7 +275,7 @@ describe 'zabbix::server' do
             tlscipherpsk: 'kECDHEPSK+AES128:kPSK+AES128',
             tlscipherpsk13: 'TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256',
             tlscipherall: 'TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256',
-            tlscipherall13: 'EECDH+aRSA+AES128:RSA+aRSA+AES128:kECDHEPSK+AES128:kPSK+AES128'
+            tlscipherall13: 'EECDH+aRSA+AES128:RSA+aRSA+AES128:kECDHEPSK+AES128:kPSK+AES128',
           }
         end
 
@@ -358,7 +358,7 @@ describe 'zabbix::server' do
         let :params do
           {
             smsdevices: ['/dev/ttyS0'],
-            zabbix_version: '7.0'
+            zabbix_version: '7.0',
           }
         end
 
@@ -369,7 +369,7 @@ describe 'zabbix::server' do
         let :params do
           {
             smsdevices: ['/dev/ttyS0'],
-            zabbix_version: '7.2'
+            zabbix_version: '7.2',
           }
         end
 
@@ -380,7 +380,7 @@ describe 'zabbix::server' do
         describe 'as system' do
           let :params do
             {
-              logtype: 'system'
+              logtype: 'system',
             }
           end
 
@@ -392,7 +392,7 @@ describe 'zabbix::server' do
         describe 'as console' do
           let :params do
             {
-              logtype: 'console'
+              logtype: 'console',
             }
           end
 
@@ -404,7 +404,7 @@ describe 'zabbix::server' do
         describe 'as file' do
           let :params do
             {
-              logtype: 'file'
+              logtype: 'file',
             }
           end
 

@@ -5,7 +5,7 @@ require 'spec_helper'
 describe Puppet::Type.type(:zabbix_hostgroup).provider(:ruby) do
   let(:resource) do
     Puppet::Type.type(:zabbix_hostgroup).new(
-      name: 'Testgroup'
+      name: 'Testgroup',
     )
   end
   let(:provider) { resource.provider }
