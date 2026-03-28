@@ -8,6 +8,7 @@ group :test do
   gem 'puppet_metadata', '~> 6.0',  :require => false
   gem 'fakefs',                     :require => false
   gem 'zabbixapi',                  :require => false
+  gem 'rexml',                      :require => false
 end
 
 group :development do
