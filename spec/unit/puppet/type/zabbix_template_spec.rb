@@ -7,7 +7,7 @@ describe Puppet::Type.type(:zabbix_template) do
   let(:resource) do
     Puppet::Type.type(:zabbix_template).new(
       template_name: 'MyTemplate',
-      template_source: '/path/to/template.xml'
+      template_source: '/path/to/template.xml',
     )
   end
   let(:provider_class) { Puppet::Type.type(:zabbix_template).provider(:ruby) }
@@ -108,6 +108,7 @@ describe Puppet::Type.type(:zabbix_template) do
 
     describe '.source_xml' do
       include FakeFS::SpecHelpers
+
       it 'returns content of :template_source as string' do
         mock_template_source_file = '/path/to/template.xml'
         mock_file_content = <<-EOS

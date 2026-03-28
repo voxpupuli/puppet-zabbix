@@ -33,7 +33,7 @@ describe 'zabbix::proxy' do
       describe 'when manage_repo is true and zabbix version is unset' do
         let :params do
           {
-            manage_repo: true
+            manage_repo: true,
           }
         end
 
@@ -60,7 +60,7 @@ describe 'zabbix::proxy' do
       describe 'when database_type is postgresql' do
         let :params do
           {
-            database_type: 'postgresql'
+            database_type: 'postgresql',
           }
         end
 
@@ -72,7 +72,7 @@ describe 'zabbix::proxy' do
       describe 'when database_type is mysql' do
         let :params do
           {
-            database_type: 'mysql'
+            database_type: 'mysql',
           }
         end
 
@@ -85,7 +85,7 @@ describe 'zabbix::proxy' do
         let :params do
           {
             manage_resources: true,
-            listenip: '192.168.1.1'
+            listenip: '192.168.1.1',
           }
         end
 
@@ -97,7 +97,7 @@ describe 'zabbix::proxy' do
         let :params do
           {
             database_type: 'postgresql',
-            manage_database: true
+            manage_database: true,
           }
         end
 
@@ -113,7 +113,7 @@ describe 'zabbix::proxy' do
         let(:params) do
           {
             database_type: 'mysql',
-            manage_database: true
+            manage_database: true,
           }
         end
 
@@ -129,7 +129,7 @@ describe 'zabbix::proxy' do
       context 'when manage_database is true' do
         let(:params) do
           {
-            manage_database: true
+            manage_database: true,
           }
         end
 
@@ -146,7 +146,7 @@ describe 'zabbix::proxy' do
       context 'when declaring manage_firewall is true' do
         let(:params) do
           {
-            manage_firewall: true
+            manage_firewall: true,
           }
         end
 
@@ -156,7 +156,7 @@ describe 'zabbix::proxy' do
       context 'when declaring manage_firewall is false' do
         let(:params) do
           {
-            manage_firewall: false
+            manage_firewall: false,
           }
         end
 
@@ -168,7 +168,7 @@ describe 'zabbix::proxy' do
       context 'when declaring manage_service is true' do
         let :params do
           {
-            manage_service: true
+            manage_service: true,
           }
         end
 
@@ -181,7 +181,7 @@ describe 'zabbix::proxy' do
       context 'when declaring manage_service is false' do
         let :params do
           {
-            manage_service: false
+            manage_service: false,
           }
         end
 
@@ -265,7 +265,7 @@ describe 'zabbix::proxy' do
             tlscipherpsk: 'kECDHEPSK+AES128:kPSK+AES128',
             tlscipherpsk13: 'TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256',
             tlscipherall: 'TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256',
-            tlscipherall13: 'EECDH+aRSA+AES128:RSA+aRSA+AES128:kECDHEPSK+AES128:kPSK+AES128'
+            tlscipherall13: 'EECDH+aRSA+AES128:RSA+aRSA+AES128:kECDHEPSK+AES128:kPSK+AES128',
           }
         end
 
@@ -347,7 +347,7 @@ describe 'zabbix::proxy' do
           {
             socketdir: '/var/run/zabbix',
             startodbcpollers: 1,
-            zabbix_version: '6.0'
+            zabbix_version: '6.0',
           }
         end
 
@@ -359,7 +359,7 @@ describe 'zabbix::proxy' do
         describe 'as system' do
           let :params do
             {
-              logtype: 'system'
+              logtype: 'system',
             }
           end
 
@@ -371,7 +371,7 @@ describe 'zabbix::proxy' do
         describe 'as console' do
           let :params do
             {
-              logtype: 'console'
+              logtype: 'console',
             }
           end
 
@@ -383,7 +383,7 @@ describe 'zabbix::proxy' do
         describe 'as file' do
           let :params do
             {
-              logtype: 'file'
+              logtype: 'file',
             }
           end
 
@@ -396,7 +396,7 @@ describe 'zabbix::proxy' do
       context 'tlsaccept with one string value' do
         let :params do
           {
-            tlsaccept: 'cert'
+            tlsaccept: 'cert',
           }
         end
 
@@ -406,7 +406,7 @@ describe 'zabbix::proxy' do
       context 'tlsaccept with one value array' do
         let :params do
           {
-            tlsaccept: %w[cert]
+            tlsaccept: %w[cert],
           }
         end
 
@@ -416,7 +416,7 @@ describe 'zabbix::proxy' do
       context 'tlsaccept with two value array' do
         let :params do
           {
-            tlsaccept: %w[unencrypted cert]
+            tlsaccept: %w[unencrypted cert],
           }
         end
 

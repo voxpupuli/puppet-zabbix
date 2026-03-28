@@ -10,7 +10,7 @@ describe 'zabbix::agent' do
     {
       server: '192.168.1.1',
       serveractive: '192.168.1.1',
-      agent_configfile_path: '/etc/zabbix/zabbix_agentd.conf'
+      agent_configfile_path: '/etc/zabbix/zabbix_agentd.conf',
     }
   end
 
@@ -72,31 +72,31 @@ describe 'zabbix::agent' do
             is_expected.to contain_package(package_name).with(
               ensure: '4.4.5',
               provider: 'chocolatey',
-              tag: 'zabbix'
+              tag: 'zabbix',
             )
           end
         else
 
           if facts[:os]['family'] == 'Gentoo'
             it do
-              is_expected.to contain_package(package_name).
-                with_ensure('present').
-                with_tag('zabbix')
+              is_expected.to contain_package(package_name)
+                .with_ensure('present')
+                .with_tag('zabbix')
             end
           else
             it do
-              is_expected.to contain_package(package_name).
-                with_ensure('present').
-                with_tag('zabbix').
-                that_requires('Class[zabbix::repo]')
+              is_expected.to contain_package(package_name)
+                .with_ensure('present')
+                .with_tag('zabbix')
+                .that_requires('Class[zabbix::repo]')
             end
           end
 
           it do
-            is_expected.to contain_service(service_name).
-              with_ensure('running').
-              with_enable(true).
-              with_service_provider(facts[:os]['family'] == 'AIX' ? 'init' : nil)
+            is_expected.to contain_service(service_name)
+              .with_ensure('running')
+              .with_enable(true)
+              .with_service_provider((facts[:os]['family'] == 'AIX') ? 'init' : nil)
           end
 
           it { is_expected.not_to contain_zabbix__startup(service_name) }
@@ -108,7 +108,7 @@ describe 'zabbix::agent' do
       context 'when declaring manage_repo is true' do
         let :params do
           {
-            manage_repo: true
+            manage_repo: true,
           }
         end
 
@@ -132,7 +132,7 @@ describe 'zabbix::agent' do
       context 'when declaring manage_resources is true' do
         let :params do
           {
-            manage_resources: true
+            manage_resources: true,
           }
         end
 
@@ -142,7 +142,7 @@ describe 'zabbix::agent' do
       context 'configuration file with hostnameitem' do
         let :params do
           {
-            hostnameitem: 'system.hostname'
+            hostnameitem: 'system.hostname',
           }
         end
 
@@ -153,7 +153,7 @@ describe 'zabbix::agent' do
         let :params do
           {
             hostname: 'test',
-            hostnameitem: 'system.hostname'
+            hostnameitem: 'system.hostname',
           }
         end
 
@@ -164,7 +164,7 @@ describe 'zabbix::agent' do
       context 'configuration file with hostinterfaceitem' do
         let :params do
           {
-            hostinterfaceitem: 'system.hostname'
+            hostinterfaceitem: 'system.hostname',
           }
         end
 
@@ -174,7 +174,7 @@ describe 'zabbix::agent' do
       context 'configuration file with hostinterface' do
         let :params do
           {
-            hostinterface: 'testinterface'
+            hostinterface: 'testinterface',
           }
         end
 
@@ -185,7 +185,7 @@ describe 'zabbix::agent' do
         let :params do
           {
             server: '192.168.1.1',
-            manage_firewall: true
+            manage_firewall: true,
           }
         end
 
@@ -196,7 +196,7 @@ describe 'zabbix::agent' do
         let :params do
           {
             server: '192.168.1.1',
-            manage_firewall: false
+            manage_firewall: false,
           }
         end
 
@@ -207,7 +207,7 @@ describe 'zabbix::agent' do
         let :params do
           {
             server: '192.168.1.1,10.11.12.13',
-            manage_firewall: true
+            manage_firewall: true,
           }
         end
 
@@ -219,7 +219,7 @@ describe 'zabbix::agent' do
         let :params do
           {
             server: '192.168.1.1,10.11.12.13',
-            manage_firewall: false
+            manage_firewall: false,
           }
         end
 
@@ -233,7 +233,7 @@ describe 'zabbix::agent' do
 
         let :params do
           {
-            manage_startup_script: true
+            manage_startup_script: true,
           }
         end
 
@@ -253,11 +253,11 @@ describe 'zabbix::agent' do
         end
 
         it do
-          is_expected.to contain_service(service_name).
-            with_ensure('running').
-            with_enable(true).
-            with_service_provider(facts[:os]['family'] == 'AIX' ? 'init' : nil).
-            that_requires(["Package[#{package_name}]", "Zabbix::Startup[#{service_name}]"])
+          is_expected.to contain_service(service_name)
+            .with_ensure('running')
+            .with_enable(true)
+            .with_service_provider((facts[:os]['family'] == 'AIX') ? 'init' : nil)
+            .that_requires(["Package[#{package_name}]", "Zabbix::Startup[#{service_name}]"])
         end
 
         it { is_expected.to contain_zabbix__startup(service_name).that_requires("Package[#{package_name}]") }
@@ -266,7 +266,7 @@ describe 'zabbix::agent' do
       context 'when declaring zabbix_alias' do
         let :params do
           {
-            zabbix_alias: %w[testname]
+            zabbix_alias: %w[testname],
           }
         end
 
@@ -276,7 +276,7 @@ describe 'zabbix::agent' do
       context 'when declaring zabbix_alias as array' do
         let :params do
           {
-            zabbix_alias: %w[name1 name2]
+            zabbix_alias: %w[name1 name2],
           }
         end
 
@@ -327,7 +327,7 @@ describe 'zabbix::agent' do
               tlscipherpsk: 'kECDHEPSK+AES128:kPSK+AES128',
               tlscipherpsk13: 'TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256',
               tlscipherall: 'TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256',
-              tlscipherall13: 'EECDH+aRSA+AES128:RSA+aRSA+AES128:kECDHEPSK+AES128:kPSK+AES128'
+              tlscipherall13: 'EECDH+aRSA+AES128:RSA+aRSA+AES128:kECDHEPSK+AES128:kPSK+AES128',
             }
           end
 
@@ -376,7 +376,7 @@ describe 'zabbix::agent' do
         if facts[:kernel] == 'Linux'
           let :params do
             {
-              tlsaccept: %w[cert]
+              tlsaccept: %w[cert],
             }
           end
 
@@ -388,7 +388,7 @@ describe 'zabbix::agent' do
         if facts[:kernel] == 'Linux'
           let :params do
             {
-              tlsaccept: %w[unencrypted cert]
+              tlsaccept: %w[unencrypted cert],
             }
           end
 
@@ -399,7 +399,7 @@ describe 'zabbix::agent' do
       context 'without ListenIP' do
         let :params do
           {
-            listenip: '*'
+            listenip: '*',
           }
         end
 
@@ -410,15 +410,15 @@ describe 'zabbix::agent' do
         let :params do
           {
             service_ensure: 'stopped',
-            service_enable: false
+            service_enable: false,
           }
         end
 
         it do
-          is_expected.to contain_service(service_name).
-            with_ensure('stopped').
-            with_enable(false).
-            that_requires("Package[#{package_name}]")
+          is_expected.to contain_service(service_name)
+            .with_ensure('stopped')
+            .with_enable(false)
+            .that_requires("Package[#{package_name}]")
         end
       end
 
@@ -426,7 +426,7 @@ describe 'zabbix::agent' do
         describe 'as system' do
           let :params do
             {
-              logtype: 'system'
+              logtype: 'system',
             }
           end
 
@@ -438,7 +438,7 @@ describe 'zabbix::agent' do
         describe 'as console' do
           let :params do
             {
-              logtype: 'console'
+              logtype: 'console',
             }
           end
 
@@ -450,7 +450,7 @@ describe 'zabbix::agent' do
         describe 'as file' do
           let :params do
             {
-              logtype: 'file'
+              logtype: 'file',
             }
           end
 
@@ -466,16 +466,16 @@ describe 'zabbix::agent' do
             {
               manage_choco: false,
               zabbix_package_source: 'C:\\path\\to\\zabbix_installer.msi',
-              zabbix_package_provider: 'windows'
+              zabbix_package_provider: 'windows',
             }
           end
 
           it do
-            is_expected.to contain_package(package_name).
-              with_ensure('present').
-              with_tag('zabbix').
-              with_provider('windows').
-              with_source('C:\\path\\to\\zabbix_installer.msi')
+            is_expected.to contain_package(package_name)
+              .with_ensure('present')
+              .with_tag('zabbix')
+              .with_provider('windows')
+              .with_source('C:\\path\\to\\zabbix_installer.msi')
           end
         end
       end
@@ -499,7 +499,7 @@ describe 'zabbix::agent' do
             maxlinespersecond: 1, allowroot: 1, zabbix_user: 'root',
             loadmodulepath: '/tmp', allowkey: 'system.run[*]',
             denykey: 'system.run[*]', enableremotecommands: 1,
-            logremotecommands: 1
+            logremotecommands: 1,
           }
         end
 
@@ -509,7 +509,7 @@ describe 'zabbix::agent' do
           is_expected.not_to contain_file(config_path).with_content(
             %r{^(LogRemoteCommands|StartAgents|MaxLinesPerSecond
                  |AllowRoot|User|LoadModulePath|
-                 EnableRemoteCommands|LogRemoteCommands)}
+                 EnableRemoteCommands|LogRemoteCommands)},
           )
         end
       end

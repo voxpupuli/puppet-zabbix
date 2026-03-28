@@ -33,10 +33,10 @@ module Serverspec::Type
         method: 'user.login',
         params: {
           user: @user,
-          password: @pass
+          password: @pass,
         },
         auth: nil,
-        id: 0
+        id: 0,
       }.to_json
       do_request(data)['result']
     end
@@ -47,7 +47,7 @@ module Serverspec::Type
         method: method,
         params: params,
         auth: token,
-        id: 0
+        id: 0,
       }.to_json
       do_request(data)
     end
