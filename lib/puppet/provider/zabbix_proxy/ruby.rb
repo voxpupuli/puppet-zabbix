@@ -6,7 +6,7 @@ Puppet::Type.type(:zabbix_proxy).provide(:ruby, parent: Puppet::Provider::Zabbix
   confine feature: :zabbixapi
 
   def initialize(value = {})
-    super(value)
+    super
     @property_flush = {}
   end
 
@@ -32,8 +32,8 @@ Puppet::Type.type(:zabbix_proxy).provide(:ruby, parent: Puppet::Provider::Zabbix
       params: {
         proxyids: proxyids,
         output: 'extend',
-        selectInterface: %w[interfaceid type main ip port useip]
-      }.compact
+        selectInterface: %w[interfaceid type main ip port useip],
+      }.compact,
     )
   end
 
@@ -48,8 +48,8 @@ Puppet::Type.type(:zabbix_proxy).provide(:ruby, parent: Puppet::Provider::Zabbix
       # Proxy Interface object properties
       interfaceid: p['interface'].is_a?(Hash) ? p['interface']['interfaceid'] : nil,
       ipaddress: p['interface'].is_a?(Hash) ? p['interface']['ip'] : nil,
-      use_ip: if p['interface'].is_a?(Hash) then p['interface']['useip'] == '1' ? :true : :false end,
-      port: p['interface'].is_a?(Hash) ? p['interface']['port'].to_i : nil
+      use_ip: if p['interface'].is_a?(Hash) then (p['interface']['useip'] == '1') ? :true : :false end,
+      port: p['interface'].is_a?(Hash) ? p['interface']['port'].to_i : nil,
     }
   end
 
@@ -60,13 +60,13 @@ Puppet::Type.type(:zabbix_proxy).provide(:ruby, parent: Puppet::Provider::Zabbix
       useip = if @resource[:use_ip].nil?
                 1
               else
-                @resource[:use_ip] == :true ? 1 : 0
+                (@resource[:use_ip] == :true) ? 1 : 0
               end
       interface = {
         ip: @resource[:ipaddress] || '127.0.0.1',
         dns: @resource[:hostname],
         useip: useip,
-        port: @resource[:port] || 10_051
+        port: @resource[:port] || 10_051,
       }
     else
       interface = nil
@@ -76,8 +76,8 @@ Puppet::Type.type(:zabbix_proxy).provide(:ruby, parent: Puppet::Provider::Zabbix
       {
         host: @resource[:hostname],
         status: self.class.mode_to_status(mode),
-        interface: interface
-      }.compact
+        interface: interface,
+      }.compact,
     )
     @property_flush[:created] = true
   end
@@ -115,23 +115,23 @@ Puppet::Type.type(:zabbix_proxy).provide(:ruby, parent: Puppet::Provider::Zabbix
     useip = if @resource[:use_ip].nil?
               1 # Default to true
             else
-              @resource[:use_ip] == :true ? 1 : 0
+              (@resource[:use_ip] == :true) ? 1 : 0
             end
 
     interface = {
       ip: @resource[:ipaddress] || @property_hash[:ipaddress] || '127.0.0.1',
       dns: @resource[:hostname], # This is the namevar and will always exist
       useip: useip,
-      port: @resource[:port] || @property_hash[:port] || 10_051
+      port: @resource[:port] || @property_hash[:port] || 10_051,
     }
 
     zbx.proxies.update(
       {
         proxyid: @property_hash[:proxyid],
         status: self.class.mode_to_status(:passive),
-        interface: interface
+        interface: interface,
       },
-      true
+      true,
     )
   end
 
@@ -140,9 +140,9 @@ Puppet::Type.type(:zabbix_proxy).provide(:ruby, parent: Puppet::Provider::Zabbix
     zbx.proxies.update(
       {
         proxyid: @property_hash[:proxyid],
-        status: self.class.mode_to_status(:active)
+        status: self.class.mode_to_status(:active),
       },
-      true
+      true,
     )
   end
 
@@ -150,22 +150,22 @@ Puppet::Type.type(:zabbix_proxy).provide(:ruby, parent: Puppet::Provider::Zabbix
     useip = if @resource[:use_ip].nil?
               nil # Don't provide a default. Keep use_ip unmanaged.
             else
-              @resource[:use_ip] == :true ? 1 : 0
+              (@resource[:use_ip] == :true) ? 1 : 0
             end
 
     interface = {
       interfaceid: @property_hash[:interfaceid],
       ip: @resource[:ipaddress],
       useip: useip,
-      port: @resource[:port]
+      port: @resource[:port],
     }.compact
 
     zbx.proxies.update(
       {
         proxyid: @property_hash[:proxyid],
-        interface: interface
+        interface: interface,
       },
-      true
+      true,
     )
   end
 

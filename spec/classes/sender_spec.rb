@@ -29,7 +29,7 @@ describe 'zabbix::sender' do
       context 'when declaring manage_repo is true' do
         let :params do
           {
-            manage_repo: true
+            manage_repo: true,
           }
         end
 

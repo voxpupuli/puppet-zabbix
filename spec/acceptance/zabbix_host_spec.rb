@@ -142,7 +142,7 @@ describe 'zabbix_host type' do
           selectParentTemplates: ['host'],
           selectInterfaces: %w[dns ip main port type useip details],
           selectGroups: ['name'],
-          output: ['host', 'tls_accept', 'tls_connect', 'tls_issuer', 'tls_subject', '']
+          output: ['host', 'tls_accept', 'tls_connect', 'tls_issuer', 'tls_subject', ''],
         ).result
       end
 

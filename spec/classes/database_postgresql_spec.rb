@@ -40,7 +40,7 @@ describe 'zabbix::database::postgresql' do
                 database_name: 'zabbix-server',
                 database_user: 'zabbix-server',
                 database_password: 'zabbix-server',
-                zabbix_type: 'server'
+                zabbix_type: 'server',
               )
             end
             let(:expected_environment) do
@@ -71,7 +71,7 @@ describe 'zabbix::database::postgresql' do
                 database_name: 'zabbix-proxy',
                 database_user: 'zabbix-proxy',
                 database_password: 'zabbix-proxy',
-                zabbix_type: 'proxy'
+                zabbix_type: 'proxy',
               )
             end
             let(:expected_environment) do

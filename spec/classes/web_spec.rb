@@ -10,7 +10,7 @@ describe 'zabbix::web' do
 
   let :params do
     {
-      zabbix_url: 'zabbix.example.com'
+      zabbix_url: 'zabbix.example.com',
     }
   end
 
@@ -52,7 +52,7 @@ describe 'zabbix::web' do
         describe 'with enforcing selinux' do
           let :params do
             {
-              manage_selinux: true
+              manage_selinux: true,
             }
           end
 
@@ -69,7 +69,7 @@ describe 'zabbix::web' do
         describe 'with false selinux' do
           let :params do
             {
-              manage_selinux: false
+              manage_selinux: false,
             }
           end
 
@@ -84,7 +84,7 @@ describe 'zabbix::web' do
             super().merge(zabbix_version: zabbix_version)
           end
 
-          packages = facts[:os]['family'] == 'RedHat' ? %w[zabbix-web zabbix-web-pgsql] : %w[zabbix-frontend-php php-pgsql]
+          packages = (facts[:os]['family'] == 'RedHat') ? %w[zabbix-web zabbix-web-pgsql] : %w[zabbix-frontend-php php-pgsql]
           packages.each do |package|
             it { is_expected.to contain_package(package) }
           end
@@ -96,7 +96,7 @@ describe 'zabbix::web' do
             super().merge(database_type: 'mysql')
           end
 
-          packages = facts[:os]['family'] == 'RedHat' ? %w[zabbix-web-mysql zabbix-web] : %w[zabbix-frontend-php php-mysql]
+          packages = (facts[:os]['family'] == 'RedHat') ? %w[zabbix-web-mysql zabbix-web] : %w[zabbix-frontend-php php-mysql]
           packages.each do |package|
             it { is_expected.to contain_package(package) }
           end
@@ -124,28 +124,28 @@ describe 'zabbix::web' do
         describe 'when manage_resources is true' do
           let :params do
             super().merge(
-              manage_resources: true
+              manage_resources: true,
             )
           end
 
           it do
-            is_expected.to contain_class('zabbix::resources::web').
-              with_zabbix_url('zabbix.example.com').
-              with_zabbix_user('Admin').
-              with_zabbix_pass('zabbix').
-              with_apache_use_ssl(false)
+            is_expected.to contain_class('zabbix::resources::web')
+              .with_zabbix_url('zabbix.example.com')
+              .with_zabbix_user('Admin')
+              .with_zabbix_pass('zabbix')
+              .with_apache_use_ssl(false)
           end
 
           it do
-            is_expected.to contain_file('/etc/zabbix/api.conf').
-              with_ensure('file').
-              with_owner('root').
-              with_group('root').
-              with_mode('0400').
-              with_content(%r{zabbix_url     = zabbix\.example\.com}).
-              with_content(%r{zabbix_user    = Admin}).
-              with_content(%r{zabbix_pass    = zabbix}).
-              with_content(%r{apache_use_ssl = false})
+            is_expected.to contain_file('/etc/zabbix/api.conf')
+              .with_ensure('file')
+              .with_owner('root')
+              .with_group('root')
+              .with_mode('0400')
+              .with_content(%r{zabbix_url     = zabbix\.example\.com})
+              .with_content(%r{zabbix_user    = Admin})
+              .with_content(%r{zabbix_pass    = zabbix})
+              .with_content(%r{apache_use_ssl = false})
           end
 
           it { is_expected.to contain_package('zabbixapi').with_provider('puppet_gem') }
@@ -188,7 +188,7 @@ describe 'zabbix::web' do
               zabbix_server: 'localhost',
               zabbix_listenport: '3306',
               zabbix_server_name: 'localhost',
-              zabbix_version: '6.0'
+              zabbix_version: '6.0',
             )
           end
 
@@ -205,7 +205,7 @@ describe 'zabbix::web' do
               ldap_cacert: '/etc/zabbix/ssl/ca.crt',
               ldap_clientcert: '/etc/zabbix/ssl/client.crt',
               ldap_clientkey: '/etc/zabbix/ssl/client.key',
-              ldap_reqcert: 'allow'
+              ldap_reqcert: 'allow',
             )
           end
 
@@ -229,9 +229,9 @@ describe 'zabbix::web' do
                   'digestAlgorithm' => 'http://www.w3.org/2001/04/xmldsig-more#sha384',
                   'singleLogoutService' => {
                     'responseUrl' => '',
-                  }
-                }
-              }
+                  },
+                },
+              },
             )
           end
 
@@ -244,13 +244,13 @@ describe 'zabbix::web' do
         describe 'with restriction to api access' do
           let :params do
             super().merge(
-              zabbix_api_access: ['127.0.0.1']
+              zabbix_api_access: ['127.0.0.1'],
             )
           end
 
           it {
             is_expected.to contain_concat__fragment('zabbix.example.com-directories').with(
-              content: %r{^\s+Require host 127\.0\.0\.1$}
+              content: %r{^\s+Require host 127\.0\.0\.1$},
             )
           }
         end
@@ -258,13 +258,13 @@ describe 'zabbix::web' do
         describe 'with vhost custom fragment' do
           let :params do
             super().merge(
-              apache_vhost_custom_fragment: 'CGIPassAuth On'
+              apache_vhost_custom_fragment: 'CGIPassAuth On',
             )
           end
 
           it {
             is_expected.to contain_concat__fragment('zabbix.example.com-custom_fragment').with(
-              content: %r{^\s+CGIPassAuth On$}
+              content: %r{^\s+CGIPassAuth On$},
             )
           }
         end
@@ -272,7 +272,7 @@ describe 'zabbix::web' do
         describe 'with custom vhost params' do
           let :params do
             super().merge(
-              apache_vhost_custom_params: { mdomain: true }
+              apache_vhost_custom_params: { mdomain: true },
             )
           end
 

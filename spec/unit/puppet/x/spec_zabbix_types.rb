@@ -19,8 +19,7 @@ shared_examples 'generic ensurable' do |*allowed|
 
   context 'class' do
     it do
-      expect(described_class.propertybyname(:ensure).ancestors).
-        to include(Puppet::Property::Ensure)
+      expect(described_class.propertybyname(:ensure).ancestors).to include(Puppet::Property::Ensure)
     end
   end
 
@@ -55,8 +54,7 @@ shared_examples 'validated property' do |param, default, allowed, disallowed|
   context 'allowed' do
     allowed.each do |value|
       it "supports #{value} as a value" do
-        expect { described_class.new(:name => 'nobody', param => value) }.
-          not_to raise_error
+        expect { described_class.new(:name => 'nobody', param => value) }.not_to raise_error
       end
     end
   end
@@ -64,8 +62,7 @@ shared_examples 'validated property' do |param, default, allowed, disallowed|
   context 'disallowed' do
     disallowed&.each do |value|
       it "rejects #{value} as a value" do
-        expect { described_class.new(:name => 'nobody', param => :value) }.
-          to raise_error(Puppet::Error)
+        expect { described_class.new(:name => 'nobody', param => :value) }.to raise_error(Puppet::Error)
       end
     end
   end

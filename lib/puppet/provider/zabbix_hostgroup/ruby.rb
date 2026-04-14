@@ -10,7 +10,7 @@ Puppet::Type.type(:zabbix_hostgroup).provide(:ruby, parent: Puppet::Provider::Za
     api_hostgroups.map do |group_name, _id|
       new(
         ensure: :present,
-        name: group_name
+        name: group_name,
       )
     end
   end

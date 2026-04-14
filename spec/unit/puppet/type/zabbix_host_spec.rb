@@ -41,7 +41,7 @@ describe Puppet::Type.type(:zabbix_host) do
       'true' => true,
       'false' => false,
       :true => true,
-      :false => false
+      :false => false,
     }.each do |key, value|
       it "munges #{key.inspect} to #{value}" do
         expect(described_class.new(name: 'nobody').munge_boolean(key)).to eq value
