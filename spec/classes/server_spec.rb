@@ -100,7 +100,7 @@ describe 'zabbix::server' do
             database_password: 'zabbix-server',
             database_host: 'localhost',
             database_name: 'zabbix-server',
-            zabbix_version: zabbix_version.to_s
+            zabbix_version: zabbix_version.to_s,
           }
         end
 
@@ -120,7 +120,7 @@ describe 'zabbix::server' do
             database_password: 'zabbix-server',
             database_host: 'localhost',
             database_name: 'zabbix-server',
-            zabbix_version: zabbix_version.to_s
+            zabbix_version: zabbix_version.to_s,
           }
         end
 

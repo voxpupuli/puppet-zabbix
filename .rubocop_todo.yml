@@ -27,29 +27,9 @@ Naming/MethodParameterName:
   Exclude:
     - 'lib/puppet/provider/zabbix_proxy/ruby.rb'
 
-# Offense count: 3
-# This cop supports unsafe autocorrection (--autocorrect-all).
-RSpec/BeEq:
-  Exclude:
-    - 'spec/acceptance/zabbix_proxy_spec.rb'
-    - 'spec/unit/puppet/type/zabbix_template_spec.rb'
-
-# Offense count: 39
+# Offense count: 45
 RSpec/LeakyLocalVariable:
-  Exclude:
-    - 'spec/acceptance/zabbix_host_spec.rb'
-    - 'spec/acceptance/zabbix_hostgroup_spec.rb'
-    - 'spec/acceptance/zabbix_proxy_spec.rb'
-    - 'spec/acceptance/zabbix_template_spec.rb'
-    - 'spec/classes/agent_spec.rb'
-    - 'spec/classes/database_mysql_spec.rb'
-    - 'spec/classes/database_postgresql_spec.rb'
-    - 'spec/classes/proxy_spec.rb'
-    - 'spec/classes/repo_spec.rb'
-    - 'spec/classes/sender_spec.rb'
-    - 'spec/classes/server_spec.rb'
-    - 'spec/defines/userparameters_spec.rb'
-    - 'spec/unit/puppet/type/zabbix_template_spec.rb'
+  Enabled: false
 
 # Offense count: 4
 # Configuration parameters: .

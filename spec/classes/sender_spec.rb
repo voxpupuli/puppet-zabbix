@@ -30,7 +30,7 @@ describe 'zabbix::sender' do
         let :params do
           {
             manage_repo: true,
-            zabbix_version: zabbix_version.to_s
+            zabbix_version: zabbix_version.to_s,
           }
         end
 

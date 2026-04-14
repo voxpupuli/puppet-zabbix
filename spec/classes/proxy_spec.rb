@@ -98,7 +98,7 @@ describe 'zabbix::proxy' do
           {
             database_type: 'postgresql',
             manage_database: true,
-            zabbix_version: zabbix_version.to_s
+            zabbix_version: zabbix_version.to_s,
           }
         end
 
@@ -115,7 +115,7 @@ describe 'zabbix::proxy' do
           {
             database_type: 'mysql',
             manage_database: true,
-            zabbix_version: zabbix_version.to_s
+            zabbix_version: zabbix_version.to_s,
           }
         end
 
@@ -349,7 +349,7 @@ describe 'zabbix::proxy' do
           {
             socketdir: '/var/run/zabbix',
             startodbcpollers: 1,
-            zabbix_version: zabbix_version.to_s
+            zabbix_version: zabbix_version.to_s,
           }
         end
 

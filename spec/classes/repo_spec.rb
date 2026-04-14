@@ -44,7 +44,7 @@ describe 'zabbix::repo' do
             let :params do
               {
                 zabbix_version: zabbix_version.to_s,
-                manage_repo: true
+                manage_repo: true,
               }
             end
 

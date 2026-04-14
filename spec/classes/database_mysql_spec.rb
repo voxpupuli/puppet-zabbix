@@ -38,7 +38,7 @@ describe 'zabbix::database::mysql' do
               database_host: 'rspec.puppet.com',
               database_port: 3306,
               zabbix_type: 'server',
-              zabbix_version: zabbix_version
+              zabbix_version: zabbix_version,
             }
           end
 
@@ -56,7 +56,7 @@ describe 'zabbix::database::mysql' do
               database_password: 'zabbix-server',
               database_host: 'rspec.puppet.com',
               zabbix_type: 'server',
-              zabbix_version: zabbix_version
+              zabbix_version: zabbix_version,
             }
           end
 
@@ -77,7 +77,7 @@ describe 'zabbix::database::mysql' do
               database_host: 'rspec.puppet.com',
               database_port: 3306,
               zabbix_type: 'proxy',
-              zabbix_version: zabbix_version
+              zabbix_version: zabbix_version,
             }
           end
 
@@ -95,7 +95,7 @@ describe 'zabbix::database::mysql' do
               database_password: 'zabbix-proxy',
               database_host: 'rspec.puppet.com',
               zabbix_type: 'proxy',
-              zabbix_version: zabbix_version
+              zabbix_version: zabbix_version,
             }
           end
 
