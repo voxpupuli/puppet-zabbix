@@ -290,6 +290,9 @@ class zabbix::web (
             handler => 'proxy:unix:/var/run/php-fpm/zabbix.sock|fcgi://localhost',
           },
         ],
+        # Pass authentication headers used by plugins
+        # https://github.com/grafana/grafana-zabbix/issues/2545
+        custom_fragment  => 'CGIPassAuth On',
       }
       $proxy_directory = {
         path => 'fcgi://localhost:9000',
