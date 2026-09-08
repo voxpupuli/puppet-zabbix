@@ -9,6 +9,8 @@
 #   you can use this parameter to add the database_path to the above mentioned
 #   path.
 # @param zabbix_version This is the zabbix version. Example: 7.0
+# @param manage_php
+#   If set, version of PHP to install on systems where default one is not supported (actually only EL8).
 # @param manage_repo When true (default) this module will manage the Zabbix repository.
 # @param manage_database When true, it will configure the database and execute the sql scripts.
 # @param zabbix_package_state The state of the package that needs to be installed: present or latest.
@@ -175,6 +177,7 @@ class zabbix::server (
   $zabbix_version                                                             = $zabbix::params::zabbix_version,
   $zabbix_package_state                                                       = $zabbix::params::zabbix_package_state,
   Boolean $manage_firewall                                                    = $zabbix::params::manage_firewall,
+  Optional[String] $manage_php                                                = undef,
   Boolean $manage_repo                                                        = $zabbix::params::manage_repo,
   Boolean $manage_database                                                    = $zabbix::params::manage_database,
   Boolean $manage_service                                                     = $zabbix::params::manage_service,
@@ -347,10 +350,15 @@ class zabbix::server (
     }
   }
 
+  # If necessary, install correct PHP version
+  class { 'zabbix::php':
+    manage_php => $manage_php,
+  }
+
   # Installing the packages
   package { "zabbix-server-${db}":
     ensure  => $zabbix_package_state,
-    require => Class['zabbix::repo'],
+    require => [Class['zabbix::repo'], Class['zabbix::php']],
     tag     => 'zabbix',
   }
 
