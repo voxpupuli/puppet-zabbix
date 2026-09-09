@@ -32,6 +32,8 @@
 #   you can use this parameter to add the database_path to the above mentioned
 #   path.
 # @param manage_database When true, it will configure the database and execute the sql scripts.
+# @param manage_php
+#   If set, version of PHP to install on systems where default one is not supported (actually only EL8).
 # @param manage_repo When true (default) this module will manage the Zabbix repository.
 # @param manage_firewall When true, it will create iptables rules.
 # @param manage_service
@@ -230,6 +232,7 @@ class zabbix (
   $default_vhost                                                              = $zabbix::params::default_vhost,
   $manage_vhost                                                               = $zabbix::params::manage_vhost,
   $manage_firewall                                                            = $zabbix::params::manage_firewall,
+  Optional[String] $manage_php                                                = undef,
   $manage_repo                                                                = $zabbix::params::manage_repo,
   $manage_resources                                                           = $zabbix::params::manage_resources,
   $manage_service                                                             = $zabbix::params::manage_service,
@@ -406,6 +409,7 @@ class zabbix (
     zabbix_version            => $zabbix_version,
     zabbix_package_state      => $zabbix_package_state,
     manage_firewall           => $manage_firewall,
+    manage_php                => $manage_php,
     manage_repo               => $manage_repo,
     manage_database           => $manage_database,
     manage_service            => $manage_service,

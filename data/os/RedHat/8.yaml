@@ -1,0 +1,4 @@
+---
+# https://www.zabbix.com/documentation/6.0/en/manual/installation/upgrade_notes_6045
+# "(...) requires PHP 7.3 or later, regardless of whether you are using SAML authentication."
+zabbix::manage_php: '7.3'

@@ -14,6 +14,7 @@
 * [`zabbix::database::sqlite`](#zabbix--database--sqlite): Class to handle sqlite database installations zabbix will automatically create a sqlite schema if one does not already exist.
 * [`zabbix::javagateway`](#zabbix--javagateway): This will install and configure the zabbix-agent deamon
 * [`zabbix::params`](#zabbix--params): This class manages zabbix server parameters
+* [`zabbix::php`](#zabbix--php): Install a version of PHP supported by Zabbix on system where the default one is too old
 * [`zabbix::proxy`](#zabbix--proxy): This will install and configure the zabbix-proxy deamon
 * [`zabbix::repo`](#zabbix--repo): If enabled, this will install the repository used for installing zabbix
 * [`zabbix::resources::agent`](#zabbix--resources--agent): This will create resources into puppetdb for automatically configuring agent into zabbix front-end.
@@ -95,6 +96,7 @@ The following parameters are available in the `zabbix` class:
 * [`database_type`](#-zabbix--database_type)
 * [`database_path`](#-zabbix--database_path)
 * [`manage_database`](#-zabbix--manage_database)
+* [`manage_php`](#-zabbix--manage_php)
 * [`manage_repo`](#-zabbix--manage_repo)
 * [`manage_firewall`](#-zabbix--manage_firewall)
 * [`manage_service`](#-zabbix--manage_service)
@@ -326,6 +328,14 @@ Data type: `Any`
 When true, it will configure the database and execute the sql scripts.
 
 Default value: `$zabbix::params::manage_database`
+
+##### <a name="-zabbix--manage_php"></a>`manage_php`
+
+Data type: `Optional[String]`
+
+If set, version of PHP to install on systems where default one is not supported (actually only EL8).
+
+Default value: `undef`
 
 ##### <a name="-zabbix--manage_repo"></a>`manage_repo`
 
@@ -2451,6 +2461,24 @@ Default value: `$zabbix::params::javagateway_timeout`
 
 This class manages zabbix server parameters
 
+### <a name="zabbix--php"></a>`zabbix::php`
+
+Install a version of PHP supported by Zabbix on system where the default one is too old
+
+#### Parameters
+
+The following parameters are available in the `zabbix::php` class:
+
+* [`manage_php`](#-zabbix--php--manage_php)
+
+##### <a name="-zabbix--php--manage_php"></a>`manage_php`
+
+Data type: `Optional[String]`
+
+If set, version of PHP to install on systems where default one is not supported (actually only EL8).
+
+Default value: `undef`
+
 ### <a name="zabbix--proxy"></a>`zabbix::proxy`
 
 This will install and configure the zabbix-proxy deamon
@@ -3969,6 +3997,7 @@ The following parameters are available in the `zabbix::server` class:
 * [`database_type`](#-zabbix--server--database_type)
 * [`database_path`](#-zabbix--server--database_path)
 * [`zabbix_version`](#-zabbix--server--zabbix_version)
+* [`manage_php`](#-zabbix--server--manage_php)
 * [`manage_repo`](#-zabbix--server--manage_repo)
 * [`manage_database`](#-zabbix--server--manage_database)
 * [`zabbix_package_state`](#-zabbix--server--zabbix_package_state)
@@ -4107,6 +4136,14 @@ Data type: `Any`
 This is the zabbix version. Example: 7.0
 
 Default value: `$zabbix::params::zabbix_version`
+
+##### <a name="-zabbix--server--manage_php"></a>`manage_php`
+
+Data type: `Optional[String]`
+
+If set, version of PHP to install on systems where default one is not supported (actually only EL8).
+
+Default value: `undef`
 
 ##### <a name="-zabbix--server--manage_repo"></a>`manage_repo`
 
