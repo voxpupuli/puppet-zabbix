@@ -21,7 +21,7 @@ describe 'zabbix::proxy' do
         }
       end
 
-      zabbix_version = '6.0'
+      zabbix_version = ENV.fetch('BEAKER_FACTER_zabbix_version', '7.0')
 
       it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf.d').with_ensure('directory') }
       it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf.d').with_require('File[/etc/zabbix/zabbix_proxy.conf]') }
@@ -37,7 +37,7 @@ describe 'zabbix::proxy' do
           }
         end
 
-        it { is_expected.to contain_class('zabbix::repo').with_zabbix_version(zabbix_version) }
+        it { is_expected.to contain_class('zabbix::repo').with_zabbix_version('6.0') }
         it { is_expected.to contain_package('zabbix-proxy-pgsql').with_require('Class[Zabbix::Repo]') }
 
         case facts[:os]['family']
@@ -97,7 +97,8 @@ describe 'zabbix::proxy' do
         let :params do
           {
             database_type: 'postgresql',
-            manage_database: true
+            manage_database: true,
+            zabbix_version: zabbix_version.to_s
           }
         end
 
@@ -113,7 +114,8 @@ describe 'zabbix::proxy' do
         let(:params) do
           {
             database_type: 'mysql',
-            manage_database: true
+            manage_database: true,
+            zabbix_version: zabbix_version.to_s
           }
         end
 
@@ -342,12 +344,12 @@ describe 'zabbix::proxy' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^TLSCipherAll13=EECDH\+aRSA\+AES128:RSA\+aRSA\+AES128:kECDHEPSK\+AES128:kPSK\+AES128$} }
       end
 
-      context 'with zabbix_proxy.conf and version 6.0' do
+      context "with zabbix_proxy.conf and version #{zabbix_version}" do
         let :params do
           {
             socketdir: '/var/run/zabbix',
             startodbcpollers: 1,
-            zabbix_version: '6.0'
+            zabbix_version: zabbix_version.to_s
           }
         end
 

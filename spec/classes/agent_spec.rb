@@ -3,6 +3,8 @@
 require 'spec_helper'
 
 describe 'zabbix::agent' do
+  zabbix_version = ENV.fetch('BEAKER_FACTER_zabbix_version', '7.0')
+
   let :node do
     'agent.example.com'
   end
@@ -41,8 +43,6 @@ describe 'zabbix::agent' do
                     end
       let(:facts) { facts }
 
-      zabbix_version = '6.0'
-
       case facts[:os]['family']
       when 'Gentoo'
         package_name = 'zabbix'
@@ -68,6 +68,11 @@ describe 'zabbix::agent' do
 
         # Make sure package will be installed, service running and ensure of directory.
         if facts[:os]['name'] == 'windows'
+          let :params do
+            {
+              zabbix_version: '4.4.5',
+            }
+          end
           it do
             is_expected.to contain_package(package_name).with(
               ensure: '4.4.5',
@@ -108,7 +113,8 @@ describe 'zabbix::agent' do
       context 'when declaring manage_repo is true' do
         let :params do
           {
-            manage_repo: true
+            manage_repo: true,
+            zabbix_version: zabbix_version.to_s,
           }
         end
 
