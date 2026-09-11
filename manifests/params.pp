@@ -190,6 +190,7 @@ class zabbix::params {
   $saml_sp_cert                             = undef
   $saml_idp_cert                            = undef
   $saml_settings                            = {}
+  $web_database_verifyhost                  = false
 
   # Zabbix-server
   $server_alertscriptspath                  = '/etc/zabbix/alertscripts'

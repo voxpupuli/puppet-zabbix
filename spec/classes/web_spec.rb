@@ -241,6 +241,25 @@ describe 'zabbix::web' do
           it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$SSO\['SETTINGS'\] = \[ \n  "strict" => true,\n  "baseurl" => "http://example.com/sp/",\n  "security" => \[\n    "signatureAlgorithm" => "http://www.w3.org/2001/04/xmldsig-more#rsa-sha384",\n    "digestAlgorithm" => "http://www.w3.org/2001/04/xmldsig-more#sha384",\n    "singleLogoutService" => \[\n      "responseUrl" => ""\n    \]\n  \]\n\];}) }
         end
 
+        describe 'with database TLS settings defined' do
+          let :params do
+            super().merge(
+              database_tlscafile: '/etc/zabbix/web/ssl/tls.ca',
+              database_tlscertfile: '/etc/zabbix/web/ssl/tls.cert',
+              database_tlskeyfile: '/etc/zabbix/web/ssl/tls.key',
+              database_tlscipher: 'cipher-list',
+              database_verifyhost: true,
+            )
+          end
+
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['ENCRYPTION'\] = 'true'}) }
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['KEY_FILE'\] = '/etc/zabbix/web/ssl/tls.key'}) }
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['CERT_FILE'\] = '/etc/zabbix/web/ssl/tls.cert'}) }
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['CA_FILE'\] = '/etc/zabbix/web/ssl/tls.ca'}) }
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['VERIFY_HOST'\] = 'true'}) }
+          it { is_expected.to contain_file('/etc/zabbix/web/zabbix.conf.php').with_content(%r{^\$DB\['CIPHER_LIST'\] = 'cipher-list'}) }
+        end
+
         describe 'with restriction to api access' do
           let :params do
             super().merge(
