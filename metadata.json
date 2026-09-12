@@ -57,11 +57,43 @@
   ],
   "operatingsystem_support": [
     {
-      "operatingsystem": "RedHat",
+      "operatingsystem": "AIX",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "AlmaLinux",
       "operatingsystemrelease": [
         "8",
         "9"
       ]
+    },
+    {
+      "operatingsystem": "Archlinux"
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "11",
+        "12"
+      ]
+    },
+    {
+      "operatingsystem": "FreeBSD",
+      "operatingsystemrelease": [
+        "13",
+        "14"
+      ]
+    },
+    {
+      "operatingsystem": "Gentoo"
     },
     {
       "operatingsystem": "OracleLinux",
@@ -71,13 +103,14 @@
       ]
     },
     {
-      "operatingsystem": "CentOS",
+      "operatingsystem": "Raspbian",
       "operatingsystemrelease": [
-        "9"
+        "9",
+        "10"
       ]
     },
     {
-      "operatingsystem": "AlmaLinux",
+      "operatingsystem": "RedHat",
       "operatingsystemrelease": [
         "8",
         "9"
@@ -96,45 +129,12 @@
         "20.04",
         "22.04"
       ]
-    },
-    {
-      "operatingsystem": "Debian",
-      "operatingsystemrelease": [
-        "11",
-        "12"
-      ]
-    },
-    {
-      "operatingsystem": "Archlinux"
-    },
-    {
-      "operatingsystem": "Gentoo"
-    },
-    {
-      "operatingsystem": "Raspbian",
-      "operatingsystemrelease": [
-        "9",
-        "10"
-      ]
-    },
+    },    
     {
       "operatingsystem": "windows",
       "operatingsystemrelease": [
         "2016",
         "2019"
-      ]
-    },
-    {
-      "operatingsystem": "AIX",
-      "operatingsystemrelease": [
-        "7"
-      ]
-    },
-    {
-      "operatingsystem": "FreeBSD",
-      "operatingsystemrelease": [
-        "13",
-        "14"
       ]
     }
   ]
