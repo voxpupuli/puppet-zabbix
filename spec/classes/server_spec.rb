@@ -23,9 +23,7 @@ describe 'zabbix::server' do
         it { is_expected.to contain_service('zabbix-server').with_ensure('running') }
         it { is_expected.not_to contain_zabbix__startup('zabbix-server') }
 
-        it { is_expected.to contain_apt__source('zabbix') }      if facts[:os]['family'] == 'Debian'
-        it { is_expected.to contain_apt__key('zabbix-A1848F5') } if facts[:os]['family'] == 'Debian'
-        it { is_expected.to contain_apt__key('zabbix-FBABD5F') } if facts[:os]['family'] == 'Debian'
+        it { is_expected.to contain_apt__source('zabbix') } if facts[:os]['family'] == 'Debian'
       end
 
       if facts[:os]['family'] == 'RedHat'

@@ -61,9 +61,7 @@ describe 'zabbix::agent' do
       # service = facts[:os]['family'] == 'Gentoo' ? 'zabbix-agentd' : 'zabbix-agent'
 
       context 'with all defaults' do
-        it { is_expected.to contain_selinux__module('zabbix-agent') }            if facts[:os]['family'] == 'RedHat'
-        it { is_expected.to contain_apt__key('zabbix-A1848F5') }                 if facts[:os]['family'] == 'Debian'
-        it { is_expected.to contain_apt__key('zabbix-FBABD5F') }                 if facts[:os]['family'] == 'Debian'
+        it { is_expected.to contain_selinux__module('zabbix-agent') } if facts[:os]['family'] == 'RedHat'
         it { is_expected.to contain_file(include_dir).with_ensure('directory') }
 
         # Make sure package will be installed, service running and ensure of directory.

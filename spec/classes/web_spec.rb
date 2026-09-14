@@ -40,8 +40,6 @@ describe 'zabbix::web' do
           it { is_expected.to contain_class('Zabbix::Repo') }
           it { is_expected.to contain_file('/etc/zabbix/web').with_ensure('directory') }
 
-          it { is_expected.to contain_apt__key('zabbix-A1848F5') }                         if facts[:os]['family'] == 'Debian'
-          it { is_expected.to contain_apt__key('zabbix-FBABD5F') }                         if facts[:os]['family'] == 'Debian'
           it { is_expected.to contain_apt__source('zabbix') }                              if facts[:os]['family'] == 'Debian'
           it { is_expected.to contain_yumrepo('zabbix') }                                  if facts[:os]['family'] == 'RedHat'
           it { is_expected.to contain_yumrepo('zabbix-nonsupported') }                     if facts[:os]['family'] == 'RedHat'
