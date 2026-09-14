@@ -25,6 +25,8 @@ class zabbix::database::postgresql (
 
   if $database_schema_path != false and $database_schema_path != '' {
     $schema_path = $database_schema_path
+  } elsif versioncmp($zabbix_version, '8.0') >= 0 {
+    $schema_path = '/usr/share/zabbix/sql-scripts/postgresql/'
   } else {
     $schema_path = '/usr/share/zabbix-sql-scripts/postgresql/'
   }
