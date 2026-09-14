@@ -65,7 +65,7 @@ Puppet::Type.newtype(:zabbix_host) do
     desc 'Additional interface details.'
 
     def insync?(is)
-      is.to_s == should.to_s
+      is.sort.to_s == should.sort.to_s
     end
   end
 
@@ -119,6 +119,10 @@ Puppet::Type.newtype(:zabbix_host) do
 
   newproperty(:proxy) do
     desc 'Whether it is monitored by an proxy or not.'
+  end
+
+  newproperty(:proxygroup) do
+    desc 'Whether it is monitored by a proxy group or not.'
   end
 
   newproperty(:tls_connect) do
