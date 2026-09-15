@@ -3,6 +3,12 @@
 Puppet::Type.newtype(:zabbix_host) do
   @doc = 'Manage zabbix hosts'
 
+  encryptions = {
+    unencrypted: 0b001,
+    psk: 0b010,
+    cert: 0b100
+  }
+
   ensurable do
     desc 'The basic property that the resource should be in.'
     defaultvalues
@@ -22,6 +28,8 @@ Puppet::Type.newtype(:zabbix_host) do
 
   def munge_encryption(value)
     case value
+    when Array
+      value.uniq.reduce(0b0) { |acc, elem| acc | (encryptions[elem.to_sym].nil? ? 0b0 : encryptions[elem.to_sym]) }
     when 1, 'unencrypted', :unencrypted
       1
     when 2, 'psk', :psk
@@ -29,12 +37,27 @@ Puppet::Type.newtype(:zabbix_host) do
     when 4, 'cert', :cert
       4
     else
-      raise(Puppet::Error, 'munge_encryption only takes unencrypted, psk or cert')
+      raise(Puppet::Error, 'munge_encryption only takes unencrypted, psk or cert or array of these values')
     end
+  end
+
+  validate do
+    raise Puppet::ParseError, _("'tls_psk' and 'tls_psk_identity' are required for 'tls_accept' and/or 'tls_connect' set to PSK") if ((!self[:tls_accept].nil? && (munge_encryption(self[:tls_accept]) & encryptions[:psk]) == encryptions[:psk]) || (!self[:tls_connect].nil? && munge_encryption(self[:tls_connect]) == 2)) && (self[:tls_psk].nil? || self[:tls_psk_identity].nil?)
   end
 
   newparam(:hostname, namevar: true) do
     desc 'FQDN of the machine.'
+  end
+
+  newparam(:update_psk) do
+    desc 'Forcefully update the PSK and PSK identity.'
+
+    newvalues(true, false)
+    defaultto false
+
+    munge do |value|
+      @resource.munge_boolean(value)
+    end
   end
 
   newproperty(:id) do
@@ -149,6 +172,14 @@ Puppet::Type.newtype(:zabbix_host) do
 
   newproperty(:tls_subject) do
     desc 'Certificate subject.'
+  end
+
+  newproperty(:tls_psk_identity) do
+    desc 'PSK identity.'
+  end
+
+  newproperty(:tls_psk) do
+    desc 'PSK Key.'
   end
 
   autorequire(:file) { '/etc/zabbix/api.conf' }
