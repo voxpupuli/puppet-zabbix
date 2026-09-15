@@ -15,7 +15,7 @@ describe 'zabbix::server' do
     context "on #{os}" do
       let(:facts) { facts }
 
-      zabbix_version = '6.0'
+      zabbix_version = ENV.fetch('BEAKER_FACTER_zabbix_version', '7.0')
 
       describe 'with default settings' do
         it { is_expected.to contain_class('zabbix::repo') }
@@ -99,7 +99,8 @@ describe 'zabbix::server' do
             database_user: 'zabbix-server',
             database_password: 'zabbix-server',
             database_host: 'localhost',
-            database_name: 'zabbix-server'
+            database_name: 'zabbix-server',
+            zabbix_version: zabbix_version.to_s
           }
         end
 
@@ -118,7 +119,8 @@ describe 'zabbix::server' do
             database_user: 'zabbix-server',
             database_password: 'zabbix-server',
             database_host: 'localhost',
-            database_name: 'zabbix-server'
+            database_name: 'zabbix-server',
+            zabbix_version: zabbix_version.to_s
           }
         end
 

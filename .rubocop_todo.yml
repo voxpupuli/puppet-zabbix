@@ -45,6 +45,11 @@ RSpec/EmptyExampleGroup:
 RSpec/MessageSpies:
   EnforcedStyle: receive
 
+# Offense count: 1
+RSpec/MultipleDescribes:
+  Exclude:
+    - 'spec/acceptance/agent_spec.rb'
+
 # Offense count: 2
 RSpec/RepeatedExampleGroupDescription:
   Exclude:

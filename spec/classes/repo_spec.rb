@@ -10,6 +10,8 @@ describe 'zabbix::repo' do
         facts
       end
 
+      zabbix_version = ENV.fetch('BEAKER_FACTER_zabbix_version', '7.0')
+
       case facts[:os]['family']
       when 'Archlinux', 'FreeBSD', 'Gentoo', 'AIX'
         # rubocop:disable RSpec/RepeatedExample
@@ -39,7 +41,14 @@ describe 'zabbix::repo' do
               facts.deep_merge(os: { architecture: arch })
             end
 
-            it { is_expected.to contain_apt__source('zabbix').with_location("http://repo.zabbix.com/zabbix/6.0/#{facts[:os]['name'].downcase}-arm64/") }
+            let :params do
+              {
+                zabbix_version: zabbix_version.to_s,
+                manage_repo: true
+              }
+            end
+
+            it { is_expected.to contain_apt__source('zabbix').with_location("http://repo.zabbix.com/zabbix/#{zabbix_version}/#{facts[:os]['name'].downcase}-arm64/") }
           end
         end
       when 'RedHat'
@@ -93,7 +102,7 @@ describe 'zabbix::repo' do
 
         major = facts[:os]['release']['major']
 
-        context "on RedHat #{major} and Zabbix 6.0" do
+        context "on RedHat #{major} and Zabbix '6.0'" do
           let :params do
             {
               zabbix_version: '6.0',

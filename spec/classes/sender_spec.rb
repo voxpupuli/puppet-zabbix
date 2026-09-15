@@ -15,7 +15,7 @@ describe 'zabbix::sender' do
         facts
       end
 
-      zabbix_version = '6.0'
+      zabbix_version = ENV.fetch('BEAKER_FACTER_zabbix_version', '7.0')
 
       context 'with all defaults' do
         it { is_expected.to contain_class('zabbix::sender') }
@@ -29,7 +29,8 @@ describe 'zabbix::sender' do
       context 'when declaring manage_repo is true' do
         let :params do
           {
-            manage_repo: true
+            manage_repo: true,
+            zabbix_version: zabbix_version.to_s
           }
         end
 
