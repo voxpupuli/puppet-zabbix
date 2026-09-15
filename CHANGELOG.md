@@ -4,6 +4,56 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v11.1.0](https://github.com/voxpupuli/puppet-zabbix/tree/v11.1.0) (2026-09-15)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v11.0.0...v11.1.0)
+
+**Implemented enhancements:**
+
+- Installation failed on Amazonlinux 2 [\#597](https://github.com/voxpupuli/puppet-zabbix/issues/597)
+- refactor: create test matrix with GH metadata [\#1038](https://github.com/voxpupuli/puppet-zabbix/pull/1038) ([d1nuc0m](https://github.com/d1nuc0m))
+- Allow specifying `custom_fragment` to `apache::vhost` [\#1032](https://github.com/voxpupuli/puppet-zabbix/pull/1032) ([Lightning-](https://github.com/Lightning-))
+- Add support for FreeBSD 14 [\#958](https://github.com/voxpupuli/puppet-zabbix/pull/958) ([smortex](https://github.com/smortex))
+
+**Fixed bugs:**
+
+- Frontend require different php version [\#974](https://github.com/voxpupuli/puppet-zabbix/issues/974)
+- Yum Repo doesn't stick to zabbix\_version [\#451](https://github.com/voxpupuli/puppet-zabbix/issues/451)
+- "Cannot Load Such File -- zabbixapi" despite installation [\#54](https://github.com/voxpupuli/puppet-zabbix/issues/54)
+- zabbixapi gem not loaded when using ruby1.8 [\#22](https://github.com/voxpupuli/puppet-zabbix/issues/22)
+- feat: manage PHP dependencies when necessary [\#1036](https://github.com/voxpupuli/puppet-zabbix/pull/1036) ([d1nuc0m](https://github.com/d1nuc0m))
+
+**Closed issues:**
+
+- Module dependencies need updating [\#1030](https://github.com/voxpupuli/puppet-zabbix/issues/1030)
+- selectInterface in V11 is using Zabbix 6.4 [\#1027](https://github.com/voxpupuli/puppet-zabbix/issues/1027)
+- Zabbix repo change with 7.2 [\#995](https://github.com/voxpupuli/puppet-zabbix/issues/995)
+- Wrong GPG key is populated in DNF/YUM repo file [\#982](https://github.com/voxpupuli/puppet-zabbix/issues/982)
+- Remove Operating System [\#954](https://github.com/voxpupuli/puppet-zabbix/issues/954)
+- AIX init script "status" should exit 3 when Zabbix not running [\#942](https://github.com/voxpupuli/puppet-zabbix/issues/942)
+- puppet aio dependency in acceptanse test [\#923](https://github.com/voxpupuli/puppet-zabbix/issues/923)
+- Some Zabbix packages \(3.0 for RHEL 8\) signed with another GPG key \(again\) [\#631](https://github.com/voxpupuli/puppet-zabbix/issues/631)
+- zabbix server not start after fresh installation [\#602](https://github.com/voxpupuli/puppet-zabbix/issues/602)
+- Why is the module still depending on a deprecated module: puppetlabs/pe\_gem [\#532](https://github.com/voxpupuli/puppet-zabbix/issues/532)
+- CentOS6 PHP Compatibility issues and deprecated packages [\#438](https://github.com/voxpupuli/puppet-zabbix/issues/438)
+- Specifying version 3.0.7 results in failed install due to db import script error [\#351](https://github.com/voxpupuli/puppet-zabbix/issues/351)
+- Zabbix::Proxy install Postgres 9.6  [\#311](https://github.com/voxpupuli/puppet-zabbix/issues/311)
+- LogType parameter being set in conf for zabbix \<3.0 [\#294](https://github.com/voxpupuli/puppet-zabbix/issues/294)
+- Zabbix's new apt key has to be updated [\#285](https://github.com/voxpupuli/puppet-zabbix/issues/285)
+- web.pp does not install on Ubuntu 16.04 [\#282](https://github.com/voxpupuli/puppet-zabbix/issues/282)
+- zabbix-agent and zabbix-server won't start on Ubuntu 14.04 [\#267](https://github.com/voxpupuli/puppet-zabbix/issues/267)
+- current release candidate can't restart zabbix agent service [\#253](https://github.com/voxpupuli/puppet-zabbix/issues/253)
+- Fails to install on Debian 8.3 [\#193](https://github.com/voxpupuli/puppet-zabbix/issues/193)
+- Add Windows Support [\#175](https://github.com/voxpupuli/puppet-zabbix/issues/175)
+- Could not evaluate: uninitialized constant Puppet::Provider::Zabbix::ZabbixApi [\#106](https://github.com/voxpupuli/puppet-zabbix/issues/106)
+
+**Merged pull requests:**
+
+- refactor: sort OS in metadata.json [\#1039](https://github.com/voxpupuli/puppet-zabbix/pull/1039) ([d1nuc0m](https://github.com/d1nuc0m))
+- fix: pass authorization headers in httpd [\#1035](https://github.com/voxpupuli/puppet-zabbix/pull/1035) ([d1nuc0m](https://github.com/d1nuc0m))
+- Update module dependencies [\#1031](https://github.com/voxpupuli/puppet-zabbix/pull/1031) ([rjd1](https://github.com/rjd1))
+- fix java gateway on Zabbix 7 [\#1019](https://github.com/voxpupuli/puppet-zabbix/pull/1019) ([fraenki](https://github.com/fraenki))
+
 ## [v11.0.0](https://github.com/voxpupuli/puppet-zabbix/tree/v11.0.0) (2025-08-27)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v10.0.0...v11.0.0)
@@ -289,7 +339,7 @@ These should not affect the functionality of the module.
 
 - Allow to delete a zabbix\_proxy [\#653](https://github.com/voxpupuli/puppet-zabbix/pull/653) ([baurmatt](https://github.com/baurmatt))
 - Add logtype parameter for zabbix server \(issue \#394\) [\#650](https://github.com/voxpupuli/puppet-zabbix/pull/650) ([dpavlotzky](https://github.com/dpavlotzky))
-- Add zabbix.com repository for Raspbian Linux [\#648](https://github.com/voxpupuli/puppet-zabbix/pull/648) ([emetriqChris](https://github.com/emetriqChris))
+- Add zabbix.com repository for Raspbian Linux [\#648](https://github.com/voxpupuli/puppet-zabbix/pull/648) ([ghost](https://github.com/ghost))
 - Explicitly use 'ensure =\> file' for normal file resources [\#626](https://github.com/voxpupuli/puppet-zabbix/pull/626) ([baurmatt](https://github.com/baurmatt))
 
 **Closed issues:**
