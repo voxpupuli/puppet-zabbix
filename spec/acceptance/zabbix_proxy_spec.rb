@@ -177,7 +177,7 @@ describe 'zabbix_proxy type', unless: (zabbix_version >= '7.0' or default[:platf
       let(:proxy1) { result_proxies.select { |h| h['host'] == 'ZabbixProxy1' }.first }
 
       it "doesn't exist" do
-        expect(proxy1).to eq(nil)
+        expect(proxy1).to be_nil
       end
     end
 
@@ -185,7 +185,7 @@ describe 'zabbix_proxy type', unless: (zabbix_version >= '7.0' or default[:platf
       let(:proxy2) { result_proxies.select { |h| h['host'] == 'ZabbixProxy2' }.first }
 
       it "doesn't exist" do
-        expect(proxy2).to eq(nil)
+        expect(proxy2).to be_nil
       end
     end
   end

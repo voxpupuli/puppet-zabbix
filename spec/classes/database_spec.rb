@@ -39,7 +39,7 @@ describe 'zabbix::database' do
             zabbix_type: 'server',
             zabbix_web_ip: '127.0.0.2',
             zabbix_server_ip: '127.0.0.1',
-            database_host_ip: '127.0.0.3'
+            database_host_ip: '127.0.0.3',
           }
         end
 
@@ -64,7 +64,7 @@ describe 'zabbix::database' do
             database_user: 'zabbix-server',
             zabbix_type: 'server',
             zabbix_web_ip: '127.0.0.1',
-            zabbix_server_ip: '127.0.0.1'
+            zabbix_server_ip: '127.0.0.1',
           }
         end
 
@@ -90,7 +90,7 @@ describe 'zabbix::database' do
             zabbix_type: 'server',
             zabbix_web_ip: '127.0.0.1',
             zabbix_server_ip: '127.0.0.1',
-            database_host_ip: '127.0.0.2'
+            database_host_ip: '127.0.0.2',
           }
         end
 
@@ -114,7 +114,7 @@ describe 'zabbix::database' do
             database_name: 'zabbix-proxy',
             database_user: 'zabbix-proxy',
             zabbix_type: 'proxy',
-            zabbix_proxy_ip: '127.0.0.1'
+            zabbix_proxy_ip: '127.0.0.1',
           }
         end
 
@@ -131,7 +131,7 @@ describe 'zabbix::database' do
             database_type: 'postgresql',
             database_name: 'zabbix-server',
             database_user: 'zabbix-server',
-            zabbix_type: 'server'
+            zabbix_type: 'server',
           }
         end
 
@@ -145,7 +145,7 @@ describe 'zabbix::database' do
             database_name: 'zabbix-server',
             database_user: 'zabbix-server',
             zabbix_type: 'server',
-            database_tablespace: 'zabbix'
+            database_tablespace: 'zabbix',
           }
         end
 
@@ -160,7 +160,7 @@ describe 'zabbix::database' do
             database_user: 'zabbix-server',
             zabbix_type: 'server',
             zabbix_web: 'node1.example.com',
-            zabbix_server: 'node0.example.com'
+            zabbix_server: 'node0.example.com',
           }
         end
 
@@ -183,7 +183,7 @@ describe 'zabbix::database' do
             database_user: 'zabbix-server',
             zabbix_type: 'server',
             zabbix_web: 'node0.example.com',
-            zabbix_server: 'node0.example.com'
+            zabbix_server: 'node0.example.com',
           }
         end
 
@@ -205,7 +205,7 @@ describe 'zabbix::database' do
             database_name: 'zabbix-proxy',
             database_user: 'zabbix-proxy',
             zabbix_type: 'proxy',
-            zabbix_proxy: 'node0.example.com'
+            zabbix_proxy: 'node0.example.com',
           }
         end
 
@@ -221,7 +221,7 @@ describe 'zabbix::database' do
             database_user: 'zabbix-server',
             zabbix_type: 'proxy',
             zabbix_web: 'node0.example.com',
-            zabbix_server: 'node1.example.com'
+            zabbix_server: 'node1.example.com',
           }
         end
 

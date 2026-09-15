@@ -19,7 +19,7 @@ describe 'zabbix::startup', type: :define do # rubocop:disable RSpec/MultipleDes
           context 'it works' do
             let :params do
               {
-                agent_configfile_path: '/something'
+                agent_configfile_path: '/something',
               }
             end
 
@@ -28,14 +28,14 @@ describe 'zabbix::startup', type: :define do # rubocop:disable RSpec/MultipleDes
               it do
                 is_expected.to contain_file('/etc/init.d/zabbix-agent').with(
                   ensure: 'file',
-                  content: %r{DAEMON_OPTS="-c /something"}
+                  content: %r{DAEMON_OPTS="-c /something"},
                 )
               end
             when 'RedHat'
               it do
                 is_expected.to contain_file('/etc/init.d/zabbix-agent').with(
                   ensure: 'file',
-                  content: %r{OPTS="/something"}
+                  content: %r{OPTS="/something"},
                 )
               end
             when 'windows'
@@ -65,7 +65,7 @@ describe 'zabbix::startup', type: :define do # rubocop:disable RSpec/MultipleDes
               {
                 agent_configfile_path: '/something',
                 pidfile: '/somethingelse',
-                additional_service_params: '--foreground'
+                additional_service_params: '--foreground',
               }
             end
 
@@ -76,7 +76,7 @@ describe 'zabbix::startup', type: :define do # rubocop:disable RSpec/MultipleDes
             it do
               is_expected.to contain_file('/etc/systemd/system/zabbix-agent.service').with(
                 ensure: 'file',
-                mode: '0444'
+                mode: '0444',
               )
             end
 
@@ -105,7 +105,7 @@ describe 'zabbix::startup', type: :define do
               {
                 server_configfile_path: '/something',
                 database_type: 'mysql',
-                manage_database: true
+                manage_database: true,
               }
             end
 
@@ -114,14 +114,14 @@ describe 'zabbix::startup', type: :define do
               it do
                 is_expected.to contain_file('/etc/init.d/zabbix-server').with(
                   ensure: 'file',
-                  content: %r{DAEMON_OPTS="-c /something"}
+                  content: %r{DAEMON_OPTS="-c /something"},
                 )
               end
             when 'RedHat'
               it do
                 is_expected.to contain_file('/etc/init.d/zabbix-server').with(
                   ensure: 'file',
-                  content: %r{OPTS="/something"}
+                  content: %r{OPTS="/something"},
                 )
               end
             else
@@ -151,7 +151,7 @@ describe 'zabbix::startup', type: :define do
               pidfile: '/somethingelse',
               database_type: 'mysql',
               additional_service_params: '--foreground',
-              manage_database: true
+              manage_database: true,
             }
           end
 
@@ -162,7 +162,7 @@ describe 'zabbix::startup', type: :define do
           it do
             is_expected.to contain_file('/etc/systemd/system/zabbix-server.service').with(
               ensure: 'file',
-              mode: '0444'
+              mode: '0444',
             )
           end
 
@@ -176,7 +176,7 @@ describe 'zabbix::startup', type: :define do
                 server_configfile_path: '/something',
                 pidfile: '/somethingelse',
                 database_type: 'postgresql',
-                manage_database: true
+                manage_database: true,
               }
             end
 

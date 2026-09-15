@@ -28,7 +28,7 @@ describe 'zabbix::repo' do
         context 'when repo_location is "https://example.com/foo"' do
           let :params do
             {
-              repo_location: 'https://example.com/foo'
+              repo_location: 'https://example.com/foo',
             }
           end
 
@@ -44,7 +44,7 @@ describe 'zabbix::repo' do
             let :params do
               {
                 zabbix_version: zabbix_version.to_s,
-                manage_repo: true
+                manage_repo: true,
               }
             end
 
@@ -61,7 +61,7 @@ describe 'zabbix::repo' do
         context 'when repo_location is "https://example.com/foo"' do
           let :params do
             {
-              repo_location: 'https://example.com/foo'
+              repo_location: 'https://example.com/foo',
             }
           end
 
@@ -71,7 +71,7 @@ describe 'zabbix::repo' do
         context 'when repo_gpg_key_location is "https://example.com/bar"' do
           let :params do
             {
-              repo_gpg_key_location: 'https://example.com/bar'
+              repo_gpg_key_location: 'https://example.com/bar',
             }
           end
 
@@ -82,7 +82,7 @@ describe 'zabbix::repo' do
         context 'when unsupported_repo_location is "https://example.com/foo"' do
           let :params do
             {
-              unsupported_repo_location: 'https://example.com/foo'
+              unsupported_repo_location: 'https://example.com/foo',
             }
           end
 
@@ -92,7 +92,7 @@ describe 'zabbix::repo' do
         context 'when unsupported_repo_gpg_key_location is "https://example.com/bar"' do
           let :params do
             {
-              unsupported_repo_gpg_key_location: 'https://example.com/bar'
+              unsupported_repo_gpg_key_location: 'https://example.com/bar',
             }
           end
 
@@ -106,7 +106,7 @@ describe 'zabbix::repo' do
           let :params do
             {
               zabbix_version: '6.0',
-              manage_repo: true
+              manage_repo: true,
             }
           end
 
@@ -125,7 +125,7 @@ describe 'zabbix::repo' do
           let :params do
             {
               zabbix_version: '7.0',
-              manage_repo: true
+              manage_repo: true,
             }
           end
 

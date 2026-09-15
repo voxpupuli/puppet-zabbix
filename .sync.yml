@@ -4,6 +4,7 @@ Gemfile:
     ':test':
       - gem: 'fakefs'
       - gem: 'zabbixapi'
+      - gem: 'rexml'
 spec/spec_helper.rb:
   spec_overrides:
     - "require 'support/acceptance/supported_versions'"
