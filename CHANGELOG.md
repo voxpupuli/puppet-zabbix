@@ -4,6 +4,28 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v11.1.0](https://github.com/voxpupuli/puppet-zabbix/tree/v11.1.0) (2026-09-17)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v11.0.0...v11.1.0)
+
+**Implemented enhancements:**
+
+- refactor: create test matrix with GH metadata [\#1038](https://github.com/voxpupuli/puppet-zabbix/pull/1038) ([d1nuc0m](https://github.com/d1nuc0m))
+- Allow specifying `custom_fragment` to `apache::vhost` [\#1032](https://github.com/voxpupuli/puppet-zabbix/pull/1032) ([Lightning-](https://github.com/Lightning-))
+- Update module dependencies [\#1031](https://github.com/voxpupuli/puppet-zabbix/pull/1031) ([rjd1](https://github.com/rjd1))
+- Add support for FreeBSD 14 [\#958](https://github.com/voxpupuli/puppet-zabbix/pull/958) ([smortex](https://github.com/smortex))
+
+**Fixed bugs:**
+
+- Frontend requires different php version [\#974](https://github.com/voxpupuli/puppet-zabbix/issues/974)
+- Installation failed on Amazonlinux 2 [\#597](https://github.com/voxpupuli/puppet-zabbix/issues/597)
+- Yum Repo doesn't stick to zabbix\_version [\#451](https://github.com/voxpupuli/puppet-zabbix/issues/451)
+- "Cannot Load Such File -- zabbixapi" despite installation [\#54](https://github.com/voxpupuli/puppet-zabbix/issues/54)
+- zabbixapi gem not loaded when using ruby1.8 [\#22](https://github.com/voxpupuli/puppet-zabbix/issues/22)
+- manage PHP dependencies when necessary [\#1036](https://github.com/voxpupuli/puppet-zabbix/pull/1036) ([d1nuc0m](https://github.com/d1nuc0m))
+- pass authorization headers in httpd [\#1035](https://github.com/voxpupuli/puppet-zabbix/pull/1035) ([d1nuc0m](https://github.com/d1nuc0m))
+- fix java gateway on Zabbix 7 [\#1019](https://github.com/voxpupuli/puppet-zabbix/pull/1019) ([fraenki](https://github.com/fraenki))
+
 ## [v11.0.0](https://github.com/voxpupuli/puppet-zabbix/tree/v11.0.0) (2025-08-27)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v10.0.0...v11.0.0)
@@ -289,7 +311,7 @@ These should not affect the functionality of the module.
 
 - Allow to delete a zabbix\_proxy [\#653](https://github.com/voxpupuli/puppet-zabbix/pull/653) ([baurmatt](https://github.com/baurmatt))
 - Add logtype parameter for zabbix server \(issue \#394\) [\#650](https://github.com/voxpupuli/puppet-zabbix/pull/650) ([dpavlotzky](https://github.com/dpavlotzky))
-- Add zabbix.com repository for Raspbian Linux [\#648](https://github.com/voxpupuli/puppet-zabbix/pull/648) ([emetriqChris](https://github.com/emetriqChris))
+- Add zabbix.com repository for Raspbian Linux [\#648](https://github.com/voxpupuli/puppet-zabbix/pull/648) ([ghost](https://github.com/ghost))
 - Explicitly use 'ensure =\> file' for normal file resources [\#626](https://github.com/voxpupuli/puppet-zabbix/pull/626) ([baurmatt](https://github.com/baurmatt))
 
 **Closed issues:**
