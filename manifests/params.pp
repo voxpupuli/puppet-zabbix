@@ -311,6 +311,7 @@ class zabbix::params {
   $agent_hostnameitem                       = 'system.hostname'
   $agent_hostinterface                      = undef
   $agent_hostinterfaceitem                  = undef
+  $agent_include_force                      = true
   $agent_include_purge                      = true
   $agent_listenip                           = undef
   $agent_listenport                         = '10050'
