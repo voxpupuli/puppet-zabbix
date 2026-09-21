@@ -11,7 +11,10 @@ pm = dynamic
 pm.max_children = 50
 pm.start_servers = 5
 pm.min_spare_servers = 5
-pm.max_spare_servers = 35
+pm.max_spare_servers = <%= $zabbix::web::fpm_max_spare_servers %>
+<% if $zabbix::web::fpm_max_requests { %>
+pm.max_requests = <%= $zabbix::web::fpm_max_requests %>
+<% } %>
 
 php_value[session.save_handler] = files
 php_value[session.save_path]    = /var/lib/php/session/
