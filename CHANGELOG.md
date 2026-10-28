@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v11.2.0](https://github.com/voxpupuli/puppet-zabbix/tree/v11.2.0) (2026-10-28)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v11.1.0...v11.2.0)
+
+**Implemented enhancements:**
+
+- puppet/systemd: Allow 11.x [\#1047](https://github.com/voxpupuli/puppet-zabbix/pull/1047) ([bastelfreak](https://github.com/bastelfreak))
+
 ## [v11.1.0](https://github.com/voxpupuli/puppet-zabbix/tree/v11.1.0) (2026-09-17)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-zabbix/compare/v11.0.0...v11.1.0)
