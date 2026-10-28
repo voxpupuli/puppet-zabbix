@@ -2363,7 +2363,7 @@ This will install and configure the zabbix-agent deamon
 
 #### Examples
 
-##### 
+#####
 
 ```puppet
 class { 'zabbix::javagateway':
@@ -3965,7 +3965,7 @@ This will install and configure the zabbix-server deamon
 
 #### Examples
 
-##### 
+#####
 
 ```puppet
 When running everything on a single node, please check
@@ -5041,7 +5041,7 @@ This class can be used when you use hiera or The Foreman. With this tools you ca
 
 #### Examples
 
-##### 
+#####
 
 ```puppet
 zabbix::userparameter::data:
@@ -5787,13 +5787,13 @@ This manage the zabbix related service startup script.
 
 #### Examples
 
-##### 
+#####
 
 ```puppet
 zabbix::startup { 'agent': }
 ```
 
-##### 
+#####
 
 ```puppet
 zabbix::startup { 'server': }
@@ -5893,7 +5893,7 @@ This will upload an Zabbix Template (XML format)
 
 #### Examples
 
-##### 
+#####
 
 ```puppet
 zabbix::template { 'Template App MySQL':
@@ -6002,7 +6002,7 @@ This will install an userparameters file with keys for items that can be checked
 
 #### Examples
 
-##### 
+#####
 
 ```puppet
 zabbix::userparameters { 'mysql':
@@ -6010,7 +6010,7 @@ zabbix::userparameters { 'mysql':
 }
 ```
 
-##### 
+#####
 
 ```puppet
 zabbix::userparameters { 'mysql':
@@ -6436,4 +6436,3 @@ Alias of `Enum['postgresql', 'mysql', 'sqlite']`
 Type for size values in bytes (also allows k/K and m/M as appendix)
 
 Alias of `Optional[Pattern[/^\d+[k|K|m|M]?$/]]`
-
