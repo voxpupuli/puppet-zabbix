@@ -18,6 +18,9 @@ class zabbix::zabbixapi (
         Package['public_suffix'] -> Package['zabbixapi']
       }
     }
+    /^[7]\.[024]/: {
+      $zabbixapi_version = '7.0.0-alpha4'
+    }
     default: {
       fail("Zabbix ${zabbix_version} is not supported!")
     }
