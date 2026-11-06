@@ -13,7 +13,7 @@ $DB['PORT']     = '0';
 <% end -%>
 $DB['DATABASE'] = '<%= @database_name %>';
 $DB['USER']     = '<%= @database_user %>';
-$DB['PASSWORD'] = '<%= @database_password %>';
+$DB['PASSWORD'] = '<%= @database_password_unsensitive %>';
 
 // SCHEMA is relevant only for IBM_DB2 and PostgreSQL database
 <% if @database_schema -%>

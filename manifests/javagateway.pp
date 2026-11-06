@@ -14,15 +14,15 @@
 #  }
 # @author Werner Dijkerman ikben@werner-dijkerman.nl
 class zabbix::javagateway (
-  $zabbix_version           = $zabbix::params::zabbix_version,
-  $zabbix_package_state     = $zabbix::params::zabbix_package_state,
-  Boolean $manage_firewall  = $zabbix::params::manage_firewall,
-  Boolean $manage_repo      = $zabbix::params::manage_repo,
-  $pidfile                  = $zabbix::params::javagateway_pidfile,
-  $listenip                 = $zabbix::params::javagateway_listenip,
-  $listenport               = $zabbix::params::javagateway_listenport,
-  $startpollers             = $zabbix::params::javagateway_startpollers,
-  $timeout                  = $zabbix::params::javagateway_timeout,
+  $zabbix_version          = $zabbix::params::zabbix_version,
+  $zabbix_package_state    = $zabbix::params::zabbix_package_state,
+  Boolean $manage_firewall = $zabbix::params::manage_firewall,
+  Boolean $manage_repo     = $zabbix::params::manage_repo,
+  $pidfile                 = $zabbix::params::javagateway_pidfile,
+  $listenip                = $zabbix::params::javagateway_listenip,
+  $listenport              = $zabbix::params::javagateway_listenport,
+  $startpollers            = $zabbix::params::javagateway_startpollers,
+  $timeout                 = $zabbix::params::javagateway_timeout,
 ) inherits zabbix::params {
   # Fix for pid file. Is different in Zabbix (4, 5) and 6
   $real_pidfile = $zabbix_version ? {
