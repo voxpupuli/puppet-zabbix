@@ -9,7 +9,7 @@
 #     * zabbix_pass [String]: API password
 # @param apache_use_ssl Whether to use ssl or not.
 class zabbix::resources::web (
-  String[1] $zabbix_url,
+  String[1]         $zabbix_url,
   Variant[
       String[1],
       Struct[{
@@ -17,7 +17,8 @@ class zabbix::resources::web (
           zabbix_pass => String[1],
       }]
   ] $zabbix_auth,
-  Boolean   $apache_use_ssl,
+  Boolean           $apache_use_ssl,
+  Optional[Boolean] $ignore_version,
 ) {
   file { '/etc/zabbix/api.conf':
     ensure  => file,
@@ -29,6 +30,7 @@ class zabbix::resources::web (
         zabbix_url     => $zabbix_url,
         zabbix_auth    => $zabbix_auth,
         apache_use_ssl => $apache_use_ssl,
+        ignore_version => $ignore_version,
       }
     ),
   }

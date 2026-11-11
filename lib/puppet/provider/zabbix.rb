@@ -60,7 +60,7 @@ class Puppet::Provider::Zabbix < Puppet::Provider
 
     ZabbixApi.connect(
       url: "#{protocol}://#{api_config['default']['zabbix_url']}/api_jsonrpc.php",
-      ignore_version: true,
+      ignore_version: api_config['default']['ignore_version'].nil? ? false : api_config['default']['ignore_version'],
       **auth
     )
   end
