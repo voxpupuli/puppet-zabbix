@@ -21,7 +21,7 @@ describe 'zabbix::userparameters', type: :define do
         package_name = 'zabbix'
         service_name = 'zabbix-agentd'
       when 'FreeBSD'
-        package_name = 'zabbix6-agent'
+        package_name = 'zabbix7-agent'
         service_name = 'zabbix_agentd'
       else
         package_name = 'zabbix-agent'

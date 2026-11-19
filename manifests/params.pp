@@ -58,14 +58,14 @@ class zabbix::params {
     'FreeBSD': {
       $manage_repo              = false
       $manage_choco             = false
-      $zabbix_package_agent     = 'zabbix6-agent'
-      $agent_configfile_path    = '/usr/local/etc/zabbix6/zabbix_agentd.conf'
+      $zabbix_package_agent     = 'zabbix7-agent'
+      $agent_configfile_path    = '/usr/local/etc/zabbix7/zabbix_agentd.conf'
       $agent_config_owner       = 'zabbix'
       $agent_zabbix_user        = 'zabbix'
       $agent_config_group       = 'zabbix'
       $agent_pidfile            = '/var/run/zabbix/zabbix_agentd.pid'
       $agent_servicename        = 'zabbix_agentd'
-      $agent_include            = '/usr/local/etc/zabbix6/zabbix_agentd.d'
+      $agent_include            = '/usr/local/etc/zabbix7/zabbix_agentd.d'
       $server_zabbix_user       = 'zabbix'
       $zabbix_package_provider  = undef
       $agent_loadmodulepath     = '/usr/local/lib/zabbix/modules'
@@ -131,7 +131,7 @@ class zabbix::params {
   if downcase($facts['kernel']) == 'windows' {
     $zabbix_version = '4.4.5' # FIXME
   } else {
-    $zabbix_version = '6.0'
+    $zabbix_version = '7.0'
   }
 
   $zabbix_package_state                     = 'present'
