@@ -37,7 +37,7 @@ describe 'zabbix::proxy' do
           }
         end
 
-        it { is_expected.to contain_class('zabbix::repo').with_zabbix_version('6.0') }
+        it { is_expected.to contain_class('zabbix::repo').with_zabbix_version('7.0') }
         it { is_expected.to contain_package('zabbix-proxy-pgsql').with_require('Class[Zabbix::Repo]') }
 
         case facts[:os]['family']
@@ -197,7 +197,6 @@ describe 'zabbix::proxy' do
           {
             allowroot: '0',
             cachesize: '32M',
-            configfrequency: '3600',
             database_host: 'localhost',
             database_name: 'zabbix-proxy',
             database_password: 'zabbix-proxy',
@@ -214,7 +213,6 @@ describe 'zabbix::proxy' do
             externalscripts: '/usr/lib/zabbix/externalscripts',
             fping6location: '/usr/sbin/fping6',
             fpinglocation: '60',
-            heartbeatfrequency: '60',
             historycachesize: '16M',
             historytextcachesize: '8M',
             hostname: 'rspec.puppet.com',
@@ -260,8 +258,7 @@ describe 'zabbix::proxy' do
             vmwarecachesize: '8M',
             vmwarefrequency: '60',
             zabbix_server_host: '192.168.1.1',
-            zabbix_server_port: '10051',
-            zabbix_version: '5.0',
+            zabbix_version: '7.0',
             tlsciphercert: 'EECDH+aRSA+AES128:RSA+aRSA+AES128',
             tlsciphercert13: 'EECDH+aRSA+AES128:RSA+aRSA+AES128',
             tlscipherpsk: 'kECDHEPSK+AES128:kPSK+AES128',
@@ -273,7 +270,6 @@ describe 'zabbix::proxy' do
 
         it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^ProxyMode=0$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^Server=192.168.1.1$} }
-        it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^ServerPort=10051$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^Hostname=rspec.puppet.com$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^ListenPort=10051$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^LogFile=/var/log/zabbix/proxy_server.log$} }
@@ -294,8 +290,6 @@ describe 'zabbix::proxy' do
         it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^DBTLSCipher13=TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^ProxyLocalBuffer=0$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^ProxyOfflineBuffer=1$} }
-        it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^HeartbeatFrequency=60$} }
-        it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^ConfigFrequency=3600$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^DataSenderFrequency=1$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartPollers=15$} }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_proxy.conf').with_content %r{^StartIPMIPollers=15$} }

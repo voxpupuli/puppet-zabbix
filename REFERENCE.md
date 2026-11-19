@@ -1344,7 +1344,7 @@ This will install and configure the zabbix-agent deamon
 
 ```puppet
 class { 'zabbix::agent':
-  zabbix_version => '6.0',
+  zabbix_version => '7.0',
   server         => '192.168.1.1',
 }
 ```
@@ -2367,7 +2367,7 @@ This will install and configure the zabbix-agent deamon
 
 ```puppet
 class { 'zabbix::javagateway':
-  zabbix_version => '6.0',
+  zabbix_version => '7.0',
 }
 ```
 
@@ -2490,7 +2490,6 @@ This will install and configure the zabbix-proxy deamon
 ```puppet
 class { 'zabbix::proxy':
   zabbix_server_host => '192.168.1.1',
-  zabbix_server_port => '10051',
 }
 ```
 
@@ -2499,7 +2498,6 @@ class { 'zabbix::proxy':
 ```puppet
 class { 'zabbix::proxy':
   zabbix_server_host => '192.168.1.1',
-  zabbix_server_port => '10051',
   database_type      => 'mysql',
 }
 ```
@@ -2562,7 +2560,6 @@ The following parameters are available in the `zabbix::proxy` class:
 * [`proxy_service_name`](#-zabbix--proxy--proxy_service_name)
 * [`mode`](#-zabbix--proxy--mode)
 * [`zabbix_server_host`](#-zabbix--proxy--zabbix_server_host)
-* [`zabbix_server_port`](#-zabbix--proxy--zabbix_server_port)
 * [`hostname`](#-zabbix--proxy--hostname)
 * [`listenport`](#-zabbix--proxy--listenport)
 * [`sourceip`](#-zabbix--proxy--sourceip)
@@ -2591,8 +2588,6 @@ The following parameters are available in the `zabbix::proxy` class:
 * [`database_tlscipher13`](#-zabbix--proxy--database_tlscipher13)
 * [`localbuffer`](#-zabbix--proxy--localbuffer)
 * [`offlinebuffer`](#-zabbix--proxy--offlinebuffer)
-* [`heartbeatfrequency`](#-zabbix--proxy--heartbeatfrequency)
-* [`configfrequency`](#-zabbix--proxy--configfrequency)
 * [`proxyconfigfrequency`](#-zabbix--proxy--proxyconfigfrequency)
 * [`datasenderfrequency`](#-zabbix--proxy--datasenderfrequency)
 * [`startpollers`](#-zabbix--proxy--startpollers)
@@ -2802,14 +2797,6 @@ Data type: `Any`
 Hostname or the ipaddress of the zabbix-server.
 
 Default value: `$zabbix::params::proxy_zabbix_server_host`
-
-##### <a name="-zabbix--proxy--zabbix_server_port"></a>`zabbix_server_port`
-
-Data type: `Any`
-
-Port on which the server is listening.
-
-Default value: `$zabbix::params::proxy_zabbix_server_port`
 
 ##### <a name="-zabbix--proxy--hostname"></a>`hostname`
 
@@ -3038,27 +3025,11 @@ Proxy will keep data for N hours in case if no connectivity with Zabbix Server
 
 Default value: `$zabbix::params::proxy_offlinebuffer`
 
-##### <a name="-zabbix--proxy--heartbeatfrequency"></a>`heartbeatfrequency`
-
-Data type: `Any`
-
-Unique nodeid in distributed setup.
-
-Default value: `$zabbix::params::proxy_heartbeatfrequency`
-
-##### <a name="-zabbix--proxy--configfrequency"></a>`configfrequency`
-
-Data type: `Any`
-
-How often proxy retrieves configuration data from Zabbix Server in seconds.
-
-Default value: `$zabbix::params::proxy_configfrequency`
-
 ##### <a name="-zabbix--proxy--proxyconfigfrequency"></a>`proxyconfigfrequency`
 
 Data type: `Optional[Integer[1,604800]]`
 
-How often proxy retrieves configuration data from Zabbix Server in seconds (Zabbix 6.4).
+How often proxy retrieves configuration data from Zabbix Server in seconds.
 
 Default value: `$zabbix::params::proxy_proxyconfigfrequency`
 

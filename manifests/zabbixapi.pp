@@ -8,15 +8,8 @@ class zabbix::zabbixapi (
 ) inherits zabbix::params {
   # Determine correct zabbixapi version.
   case $zabbix_version {
-    /^[56]\.[024]/: {
-      $zabbixapi_version = '5.0.0-alpha1'
-      if versioncmp($facts['ruby']['version'] , '3') < 0 {
-        package { 'public_suffix':
-          ensure   => '5.1.1',
-          provider => $puppetgem,
-        }
-        Package['public_suffix'] -> Package['zabbixapi']
-      }
+    /^7\.0/: {
+      $zabbixapi_version = '7.0.0-beta2'
     }
     default: {
       fail("Zabbix ${zabbix_version} is not supported!")

@@ -27,36 +27,16 @@ class zabbix::repo (
     case $facts['os']['family'] {
       'RedHat': {
         $majorrelease = $facts['os']['release']['major']
-        if versioncmp($zabbix_version, '7.0') >= 0 {
-          $_gpgkey_zabbix = $repo_gpg_key_location ? {
-            undef   => 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-B5333005',
-            default => "${repo_gpg_key_location}/RPM-GPG-KEY-ZABBIX-B5333005",
-          }
-          if versioncmp(fact('os.release.major'), '9') >= 0 {
-            $_gpgkey_nonsupported = $unsupported_repo_gpg_key_location ? {
-              undef   => 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-08EFA7DD',
-              default => "${unsupported_repo_gpg_key_location}/RPM-GPG-KEY-ZABBIX-08EFA7DD",
-            }
-          } else {
-            $_gpgkey_nonsupported = $unsupported_repo_gpg_key_location ? {
-              undef   => 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-B5333005',
-              default => "${unsupported_repo_gpg_key_location}/RPM-GPG-KEY-ZABBIX-B5333005",
-            }
-          }
-        } elsif versioncmp(fact('os.release.major'), '9') >= 0 {
-          $_gpgkey_zabbix = $repo_gpg_key_location ? {
-            undef   => 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-08EFA7DD',
-            default => "${repo_gpg_key_location}/RPM-GPG-KEY-ZABBIX-08EFA7DD",
-          }
+        $_gpgkey_zabbix = $repo_gpg_key_location ? {
+          undef   => 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-B5333005',
+          default => "${repo_gpg_key_location}/RPM-GPG-KEY-ZABBIX-B5333005",
+        }
+        if versioncmp(fact('os.release.major'), '9') >= 0 {
           $_gpgkey_nonsupported = $unsupported_repo_gpg_key_location ? {
             undef   => 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-08EFA7DD',
             default => "${unsupported_repo_gpg_key_location}/RPM-GPG-KEY-ZABBIX-08EFA7DD",
           }
         } else {
-          $_gpgkey_zabbix = $repo_gpg_key_location ? {
-            undef   => 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-A14FE591',
-            default => "${repo_gpg_key_location}/RPM-GPG-KEY-ZABBIX-A14FE591",
-          }
           $_gpgkey_nonsupported = $unsupported_repo_gpg_key_location ? {
             undef   => 'https://repo.zabbix.com/RPM-GPG-KEY-ZABBIX-79EA5ED4',
             default => "${unsupported_repo_gpg_key_location}/RPM-GPG-KEY-ZABBIX-79EA5ED4",
