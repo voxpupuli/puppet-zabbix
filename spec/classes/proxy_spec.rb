@@ -37,7 +37,7 @@ describe 'zabbix::proxy' do
           }
         end
 
-        it { is_expected.to contain_class('zabbix::repo').with_zabbix_version('6.0') }
+        it { is_expected.to contain_class('zabbix::repo').with_zabbix_version('7.0') }
         it { is_expected.to contain_package('zabbix-proxy-pgsql').with_require('Class[Zabbix::Repo]') }
 
         case facts[:os]['family']
@@ -261,7 +261,7 @@ describe 'zabbix::proxy' do
             vmwarefrequency: '60',
             zabbix_server_host: '192.168.1.1',
             zabbix_server_port: '10051',
-            zabbix_version: '5.0',
+            zabbix_version: '7.0',
             tlsciphercert: 'EECDH+aRSA+AES128:RSA+aRSA+AES128',
             tlsciphercert13: 'EECDH+aRSA+AES128:RSA+aRSA+AES128',
             tlscipherpsk: 'kECDHEPSK+AES128:kPSK+AES128',

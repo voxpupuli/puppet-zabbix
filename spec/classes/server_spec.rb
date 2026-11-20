@@ -269,7 +269,7 @@ describe 'zabbix::server' do
             valuecachesize: '4M',
             vmwarecachesize: '8M',
             vmwarefrequency: '60',
-            zabbix_version: '6.0',
+            zabbix_version: '7.0',
             tlsciphercert: 'EECDH+aRSA+AES128:RSA+aRSA+AES128',
             tlsciphercert13: 'EECDH+aRSA+AES128:RSA+aRSA+AES128',
             tlscipherpsk: 'kECDHEPSK+AES128:kPSK+AES128',

@@ -124,7 +124,7 @@
 #  agent_configfile_path)
 # @example Basic installation:
 #  class { 'zabbix::agent':
-#    zabbix_version => '6.0',
+#    zabbix_version => '7.0',
 #    server         => '192.168.1.1',
 #  }
 #
