@@ -48,13 +48,20 @@ class Puppet::Provider::Zabbix < Puppet::Provider
   # Create the api connection
   def self.create_connection
     protocol = (api_config['default']['apache_use_ssl'] == 'true') ? 'https' : 'http'
-    ZabbixApi.connect(
-      url: "#{protocol}://#{api_config['default']['zabbix_url']}/api_jsonrpc.php",
+
+    auth = api_config['default']['zabbix_token'].nil? ? {
       user: api_config['default']['zabbix_user'],
       password: api_config['default']['zabbix_pass'],
       http_user: api_config['default']['zabbix_user'],
-      http_password: api_config['default']['zabbix_pass'],
-      ignore_version: true,
+      http_password: api_config['default']['zabbix_pass']
+    } : {
+      token: api_config['default']['zabbix_token']
+    }
+
+    ZabbixApi.connect(
+      url: "#{protocol}://#{api_config['default']['zabbix_url']}/api_jsonrpc.php",
+      ignore_version: api_config['default']['ignore_version'].nil? ? false : api_config['default']['ignore_version'],
+      **auth
     )
   end
 
