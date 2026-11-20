@@ -193,7 +193,7 @@ describe Puppet::Type.type(:zabbix_host) do
           described_class.new(
             name: 'checklist_host',
             tls_connect: 'psk',
-            tls_psk_identity: 'myID'
+            tls_psk_identity: 'myID',
           )
         end.to raise_error(Puppet::Error, %r{'tls_psk' and 'tls_psk_identity' are required})
       end
@@ -203,7 +203,7 @@ describe Puppet::Type.type(:zabbix_host) do
           described_class.new(
             name: 'checklist_host',
             tls_connect: 'psk',
-            tls_psk: 'secret123'
+            tls_psk: 'secret123',
           )
         end.to raise_error(Puppet::Error, %r{'tls_psk' and 'tls_psk_identity' are required})
       end
@@ -215,7 +215,7 @@ describe Puppet::Type.type(:zabbix_host) do
           described_class.new(
             name: 'checklist_host',
             tls_accept: 'psk',
-            tls_psk: 'secret123'
+            tls_psk: 'secret123',
           )
         end.to raise_error(Puppet::Error, %r{'tls_psk' and 'tls_psk_identity' are required})
       end
@@ -229,7 +229,7 @@ describe Puppet::Type.type(:zabbix_host) do
             tls_connect: 'psk',
             tls_accept: 'psk',
             tls_psk: 'secret123',
-            tls_psk_identity: 'myID'
+            tls_psk_identity: 'myID',
           )
         end.not_to raise_error
       end

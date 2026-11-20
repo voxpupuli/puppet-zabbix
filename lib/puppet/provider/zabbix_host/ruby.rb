@@ -69,7 +69,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
     tls_connect = @resource[:tls_connect].nil? ? 1 : @resource[:tls_connect]
     tls_psk = {
       tls_psk_identity: @resource[:tls_psk_identity].nil? ? nil : @resource[:tls_psk_identity],
-      tls_psk: @resource[:tls_psk]&.unwrap
+      tls_psk: @resource[:tls_psk]&.unwrap,
     }
 
     # Now we create the host
@@ -140,7 +140,7 @@ Puppet::Type.type(:zabbix_host).provide(:ruby, parent: Puppet::Provider::Zabbix)
     zbx.hosts.create_or_update(
       host: @resource[:hostname],
       tls_psk_identity: @resource[:tls_psk_identity].nil? ? nil : @resource[:tls_psk_identity],
-      tls_psk: @resource[:tls_psk]&.unwrap
+      tls_psk: @resource[:tls_psk]&.unwrap,
     )
   end
 

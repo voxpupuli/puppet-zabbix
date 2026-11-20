@@ -32,7 +32,7 @@ describe 'zabbix_host' do
       expect do
         Puppet::Type.type(:zabbix_host).new(
           name: 'psk-test.example.com',
-          tls_connect: 'psk'
+          tls_connect: 'psk',
         )
       end.to raise_error(Puppet::Error, %r{tls_psk.*tls_psk_identity.*required}i)
     end
@@ -43,7 +43,7 @@ describe 'zabbix_host' do
       expect do
         Puppet::Type.type(:zabbix_host).new(
           name: 'psk-test2.example.com',
-          tls_accept: 'psk'
+          tls_accept: 'psk',
         )
       end.to raise_error(Puppet::Error, %r{tls_psk.*tls_psk_identity.*required}i)
     end
@@ -56,7 +56,7 @@ describe 'zabbix_host' do
           name: 'psk-test3.example.com',
           tls_connect: 'psk',
           tls_psk: 'abcdef0123456789abcdef0123456789',
-          tls_psk_identity: 'my_psk_id'
+          tls_psk_identity: 'my_psk_id',
         )
       end.not_to raise_error
     end
@@ -67,7 +67,7 @@ describe 'zabbix_host' do
       expect do
         Puppet::Type.type(:zabbix_host).new(
           name: 'nopsk-test.example.com',
-          tls_connect: 'unencrypted'
+          tls_connect: 'unencrypted',
         )
       end.not_to raise_error
     end

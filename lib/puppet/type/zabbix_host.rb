@@ -6,7 +6,7 @@ Puppet::Type.newtype(:zabbix_host) do
   encryptions = {
     unencrypted: 0b001,
     psk: 0b010,
-    cert: 0b100
+    cert: 0b100,
   }
 
   ensurable do
@@ -42,7 +42,7 @@ Puppet::Type.newtype(:zabbix_host) do
   end
 
   validate do
-    raise Puppet::ParseError, _("'tls_psk' and 'tls_psk_identity' are required for 'tls_accept' and/or 'tls_connect' set to PSK") if ((!self[:tls_accept].nil? && (munge_encryption(self[:tls_accept]) & encryptions[:psk]) == encryptions[:psk]) || (!self[:tls_connect].nil? && munge_encryption(self[:tls_connect]) == 2)) && (self[:tls_psk].nil? || self[:tls_psk_identity].nil?)
+    raise Puppet::ParseError, _("'tls_psk' and 'tls_psk_identity' are required for 'tls_accept' and/or 'tls_connect' set to PSK") if ((!self[:tls_accept].nil? && munge_encryption(self[:tls_accept]).allbits?(encryptions[:psk])) || (!self[:tls_connect].nil? && munge_encryption(self[:tls_connect]) == 2)) && (self[:tls_psk].nil? || self[:tls_psk_identity].nil?)
   end
 
   newparam(:hostname, namevar: true) do
