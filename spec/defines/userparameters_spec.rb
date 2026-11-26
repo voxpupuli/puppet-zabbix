@@ -33,6 +33,7 @@ describe 'zabbix::userparameters', type: :define do
 
         it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.d/mysqld.conf').with_ensure('present') }
         it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.d/mysqld.conf').with_content %r{^UserParameter=mysql.ping,mysqladmin -uroot ping | grep -c alive$} }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.d/mysqld.conf').that_requires("Package[#{package_name}]") }
         it { is_expected.to contain_class('zabbix::params') }
         it { is_expected.to contain_class('zabbix::repo') }
         it { is_expected.to compile.with_all_deps }
@@ -42,6 +43,20 @@ describe 'zabbix::userparameters', type: :define do
         it { is_expected.to contain_package(package_name) }
         it { is_expected.to contain_service(service_name) }
         it { is_expected.not_to contain_zabbix__startup(service_name) }
+      end
+
+      context 'with a source' do
+        let(:params) { { source: 'puppet:///modules/zabbix/mysqld.conf' } }
+
+        it { is_expected.to compile.with_all_deps }
+        it { is_expected.to contain_file('/etc/zabbix/zabbix_agentd.d/mysqld.conf').that_requires("Package[#{package_name}]") }
+      end
+
+      context 'with a script' do
+        let(:params) { { script: 'puppet:///modules/zabbix/mysqld.rb', script_ext: '.rb' } }
+
+        it { is_expected.to compile.with_all_deps }
+        it { is_expected.to contain_file('/usr/bin/mysqld.rb').that_requires("Package[#{package_name}]") }
       end
 
       context 'with ensure => absent' do
