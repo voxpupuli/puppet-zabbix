@@ -439,7 +439,7 @@ Take a look at the [REFERENCE.md](https://github.com/voxpupuli/puppet-zabbix/blo
 This module supports Zabbix 7.0. The upstream supported versions are documented [here](https://www.zabbix.com/life_cycle_and_release_policy)
 Please have a look into the metadata.json for all supported operating systems.
 
-This module requires OpenVox 8.19.0 or newer and supports the OpenVox 8 and 9 release series. Puppet is not supported.
+This module is tested with the OpenVox major versions listed in metadata.json.
 
 Please be aware, that when manage_resources is enabled, it can increase an puppet run on the zabbix-server a lot when you have a lot of hosts.
 
