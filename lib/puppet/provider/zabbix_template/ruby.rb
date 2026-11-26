@@ -24,17 +24,14 @@ Puppet::Type.type(:zabbix_template).provide(:ruby, parent: Puppet::Provider::Zab
           deleteMissing: (@resource[:delete_missing_graphs].nil? ? false : @resource[:delete_missing_graphs]),
           updateExisting: true,
         },
-        # groups parameter was removed on Zabbix 6.2
-        ((@resource[:zabbix_version] =~ %r{5\.[24]|6\.0}) ? :groups : nil) => {
-          createMissing: true,
-        },
+        # `groups` was removed in Zabbix 6.2; the module supports 7.0 only.
         # new template_groups parameter on Zabbix >= 6.2
-        ((@resource[:zabbix_version] =~ %r{6\.[24]|7\.[024]}) ? :template_groups : nil) => {
+        template_groups: {
           createMissing: true,
           updateExisting: true,
         },
         # new host_groups parameter on Zabbix >= 6.2
-        ((@resource[:zabbix_version] =~ %r{6\.[24]|7\.[024]}) ? :host_groups : nil) => {
+        host_groups: {
           createMissing: true,
           updateExisting: true,
         },
