@@ -13,5 +13,4 @@ spec/spec_helper.rb:
     - parameter_documentation
 .github/workflows/ci.yml:
   with:
-    beaker_facter: 'zabbix_version:Zabbix:6.0,7.0'
-    unit_runs_on: 'cern-self-hosted'
+    beaker_facter: 'zabbix_version:Zabbix:7.0'

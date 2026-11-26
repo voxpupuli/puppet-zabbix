@@ -24,7 +24,6 @@
 # @param proxy_service_name The service name of Zabbix proxy.
 # @param mode Proxy operating mode.
 # @param zabbix_server_host Hostname or the ipaddress of the zabbix-server.
-# @param zabbix_server_port Port on which the server is listening.
 # @param hostname Hostname for the proxy. Default is $::fqdn or this parameter.
 # @param listenport Listen port for trapper.
 # @param sourceip Source ip address for outgoing connections.
@@ -57,9 +56,7 @@
 # @param database_tlscipher13 The list of encryption ciphersuites that Zabbix server permits for TLSv1.3 protocol.
 # @param localbuffer Proxy will keep data locally for N hours, even if the data have already been synced with the server
 # @param offlinebuffer Proxy will keep data for N hours in case if no connectivity with Zabbix Server
-# @param heartbeatfrequency Unique nodeid in distributed setup.
-# @param configfrequency How often proxy retrieves configuration data from Zabbix Server in seconds.
-# @param proxyconfigfrequency How often proxy retrieves configuration data from Zabbix Server in seconds (Zabbix 6.4).
+# @param proxyconfigfrequency How often proxy retrieves configuration data from Zabbix Server in seconds.
 # @param datasenderfrequency Proxy will send collected data to the Server every N seconds.
 # @param startpollers Number of pre-forked instances of pollers.
 # @param startpreprocessors Number of pre-forked instances of preprocessing workers
@@ -146,12 +143,10 @@
 # @example When you want to run everything on one machine, you can use the following:
 #  class { 'zabbix::proxy':
 #    zabbix_server_host => '192.168.1.1',
-#    zabbix_server_port => '10051',
 #  }
 # @example When you want to use mysql:
 #  class { 'zabbix::proxy':
 #    zabbix_server_host => '192.168.1.1',
-#    zabbix_server_port => '10051',
 #    database_type      => 'mysql',
 #  }
 # @example The following is an example of running the proxy on 2 servers:
@@ -206,7 +201,6 @@ class zabbix::proxy (
   $proxy_service_name                                                         = $zabbix::params::proxy_service_name,
   $mode                                                                       = $zabbix::params::proxy_mode,
   $zabbix_server_host                                                         = $zabbix::params::proxy_zabbix_server_host,
-  $zabbix_server_port                                                         = $zabbix::params::proxy_zabbix_server_port,
   $hostname                                                                   = $zabbix::params::proxy_hostname,
   $listenport                                                                 = $zabbix::params::proxy_listenport,
   $sourceip                                                                   = $zabbix::params::proxy_sourceip,
@@ -235,8 +229,6 @@ class zabbix::proxy (
   Optional[String[1]] $database_tlscipher13                                   = $zabbix::params::proxy_database_tlscipher13,
   $localbuffer                                                                = $zabbix::params::proxy_localbuffer,
   $offlinebuffer                                                              = $zabbix::params::proxy_offlinebuffer,
-  $heartbeatfrequency                                                         = $zabbix::params::proxy_heartbeatfrequency,
-  $configfrequency                                                            = $zabbix::params::proxy_configfrequency,
   Optional[Integer[1,604800]] $proxyconfigfrequency                           = $zabbix::params::proxy_proxyconfigfrequency,
   $datasenderfrequency                                                        = $zabbix::params::proxy_datasenderfrequency,
   $startpollers                                                               = $zabbix::params::proxy_startpollers,

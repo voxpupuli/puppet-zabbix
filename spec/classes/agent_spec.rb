@@ -22,7 +22,7 @@ describe 'zabbix::agent' do
                     when 'windows'
                       'C:/ProgramData/zabbix/zabbix_agentd.conf'
                     when 'FreeBSD'
-                      '/usr/local/etc/zabbix6/zabbix_agentd.conf'
+                      '/usr/local/etc/zabbix7/zabbix_agentd.conf'
                     else
                       '/etc/zabbix/zabbix_agentd.conf'
                     end
@@ -37,7 +37,7 @@ describe 'zabbix::agent' do
                     when 'windows'
                       'C:/ProgramData/zabbix/zabbix_agentd.d'
                     when 'FreeBSD'
-                      '/usr/local/etc/zabbix6/zabbix_agentd.d'
+                      '/usr/local/etc/zabbix7/zabbix_agentd.d'
                     else
                       '/etc/zabbix/zabbix_agentd.d'
                     end
@@ -51,7 +51,7 @@ describe 'zabbix::agent' do
         package_name = 'zabbix-agent'
         service_name = 'Zabbix Agent'
       when 'FreeBSD'
-        package_name = 'zabbix6-agent'
+        package_name = 'zabbix7-agent'
         service_name = 'zabbix_agentd'
       else
         package_name = 'zabbix-agent'

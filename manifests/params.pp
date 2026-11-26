@@ -58,14 +58,14 @@ class zabbix::params {
     'FreeBSD': {
       $manage_repo              = false
       $manage_choco             = false
-      $zabbix_package_agent     = 'zabbix6-agent'
-      $agent_configfile_path    = '/usr/local/etc/zabbix6/zabbix_agentd.conf'
+      $zabbix_package_agent     = 'zabbix7-agent'
+      $agent_configfile_path    = '/usr/local/etc/zabbix7/zabbix_agentd.conf'
       $agent_config_owner       = 'zabbix'
       $agent_zabbix_user        = 'zabbix'
       $agent_config_group       = 'zabbix'
       $agent_pidfile            = '/var/run/zabbix/zabbix_agentd.pid'
       $agent_servicename        = 'zabbix_agentd'
-      $agent_include            = '/usr/local/etc/zabbix6/zabbix_agentd.d'
+      $agent_include            = '/usr/local/etc/zabbix7/zabbix_agentd.d'
       $server_zabbix_user       = 'zabbix'
       $zabbix_package_provider  = undef
       $agent_loadmodulepath     = '/usr/local/lib/zabbix/modules'
@@ -131,7 +131,7 @@ class zabbix::params {
   if downcase($facts['kernel']) == 'windows' {
     $zabbix_version = '4.4.5' # FIXME
   } else {
-    $zabbix_version = '6.0'
+    $zabbix_version = '7.0'
   }
 
   $zabbix_package_state                     = 'present'
@@ -371,7 +371,6 @@ class zabbix::params {
   $proxy_allowroot                          = '0'
   $proxy_cachesize                          = '32M'
   $proxy_configfile_path                    = '/etc/zabbix/zabbix_proxy.conf'
-  $proxy_configfrequency                    = '3600'
   $proxy_proxyconfigfrequency               = undef
   $proxy_database_host                      = 'localhost'
   $proxy_database_name                      = 'zabbix_proxy'
@@ -384,7 +383,6 @@ class zabbix::params {
   $proxy_debuglevel                         = '3'
   $proxy_enableremotecommands               = 0
   $proxy_externalscripts                    = '/usr/lib/zabbix/externalscripts'
-  $proxy_heartbeatfrequency                 = '60'
   $proxy_historycachesize                   = '8M'
   $proxy_historyindexcachesize              = undef
   $proxy_historytextcachesize               = '16M'
@@ -469,7 +467,6 @@ class zabbix::params {
   $proxy_vmwareperffrequency                = undef
   $proxy_vmwaretimeout                      = undef
   $proxy_zabbix_server_host                 = undef
-  $proxy_zabbix_server_port                 = '10051'
   $proxy_zbx_templates                      = ['Template App Zabbix Proxy']
   $proxy_socketdir                          = '/var/run/zabbix'
 
