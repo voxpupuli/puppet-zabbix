@@ -10,7 +10,7 @@
 [![Apache-2 License](https://img.shields.io/github/license/voxpupuli/puppet-zabbix.svg)](LICENSE)
 [![Donated by Werner Dijkerman](https://img.shields.io/badge/donated%20by-Werner%20Dijkerman-fb7047.svg)](#transfer-notice)
 
-#### Table of Contents
+## Table of Contents
 
 1. [Overview](#overview)
 2. [Upgrade](#upgrade)
