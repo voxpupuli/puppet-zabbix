@@ -5,6 +5,9 @@ Gemfile:
       - gem: 'fakefs'
       - gem: 'zabbixapi'
       - gem: 'rexml'
+spec/spec_helper.rb:
+  spec_overrides:
+    - "require 'support/acceptance/supported_versions'"
 .puppet-lint.rc:
   enabled_lint_checks:
     - parameter_documentation
