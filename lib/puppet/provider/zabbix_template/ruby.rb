@@ -9,11 +9,7 @@ Puppet::Type.type(:zabbix_template).provide(:ruby, parent: Puppet::Provider::Zab
     zbx.configurations.import(
       format: 'xml',
       rules: {
-        # application parameter was removed on Zabbix 5.4
-        ((@resource[:zabbix_version] =~ %r{[45]\.[02]}) ? :applications : nil) => {
-          deleteMissing: (@resource[:delete_missing_applications].nil? ? false : @resource[:delete_missing_applications]),
-          createMissing: true,
-        },
+        # application parameter was removed on Zabbix 5.4; the module supports 7.0 only.
         discoveryRules: {
           createMissing: true,
           deleteMissing: (@resource[:delete_missing_drules].nil? ? false : @resource[:delete_missing_drules]),
@@ -53,11 +49,7 @@ Puppet::Type.type(:zabbix_template).provide(:ruby, parent: Puppet::Provider::Zab
           createMissing: true,
           updateExisting: true,
         },
-        # screens parameter was removed on Zabbix 5.4
-        ((@resource[:zabbix_version] =~ %r{[45]\.[02]}) ? :screens : nil) => {
-          createMissing: true,
-          updateExisting: true,
-        },
+        # screens parameter was removed on Zabbix 5.4; the module supports 7.0 only.
         templateLinkage: {
           createMissing: true,
         },
@@ -66,7 +58,7 @@ Puppet::Type.type(:zabbix_template).provide(:ruby, parent: Puppet::Provider::Zab
           updateExisting: true,
         },
         # templateScreen was renamed to templateDashboards on Zabbix >= 5.2
-        ((@resource[:zabbix_version] =~ %r{5\.0}) ? :templateScreens : :templateDashboards) => {
+        templateDashboards: {
           createMissing: true,
           deleteMissing: (@resource[:delete_missing_templatescreens].nil? ? false : @resource[:delete_missing_templatescreens]),
           updateExisting: true,
