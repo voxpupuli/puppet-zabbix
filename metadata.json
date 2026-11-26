@@ -81,14 +81,12 @@
     {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
-        "11",
         "12"
       ]
     },
     {
       "operatingsystem": "FreeBSD",
       "operatingsystemrelease": [
-        "13",
         "14"
       ]
     },
@@ -100,13 +98,6 @@
       "operatingsystemrelease": [
         "8",
         "9"
-      ]
-    },
-    {
-      "operatingsystem": "Raspbian",
-      "operatingsystemrelease": [
-        "9",
-        "10"
       ]
     },
     {
@@ -126,7 +117,6 @@
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "20.04",
         "22.04"
       ]
     },
