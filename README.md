@@ -444,7 +444,7 @@ This module is tested with the OpenVox major versions listed in metadata.json.
 Please be aware, that when manage_resources is enabled, it can increase an puppet run on the zabbix-server a lot when you have a lot of hosts.
 
 ## Contributors
-Take a look at the [CONTRIBUTING.md](https://github.com/voxpupuli/puppet-zabbix/blob/master/.github/CONTRIBUTING.md)
+Take a look at the [CONTRIBUTING.md](https://github.com/voxpupuli/.github/blob/master/CONTRIBUTING.md)
 
 Contributors List:
 * https://github.com/voxpupuli/puppet-zabbix/graphs/contributors
