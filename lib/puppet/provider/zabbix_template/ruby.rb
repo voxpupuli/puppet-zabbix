@@ -9,11 +9,7 @@ Puppet::Type.type(:zabbix_template).provide(:ruby, parent: Puppet::Provider::Zab
     zbx.configurations.import(
       format: 'xml',
       rules: {
-        # application parameter was removed on Zabbix 5.4
-        ((@resource[:zabbix_version] =~ %r{[45]\.[02]}) ? :applications : nil) => {
-          deleteMissing: (@resource[:delete_missing_applications].nil? ? false : @resource[:delete_missing_applications]),
-          createMissing: true,
-        },
+        # application parameter was removed on Zabbix 5.4; the module supports 7.0 only.
         discoveryRules: {
           createMissing: true,
           deleteMissing: (@resource[:delete_missing_drules].nil? ? false : @resource[:delete_missing_drules]),
@@ -24,8 +20,16 @@ Puppet::Type.type(:zabbix_template).provide(:ruby, parent: Puppet::Provider::Zab
           deleteMissing: (@resource[:delete_missing_graphs].nil? ? false : @resource[:delete_missing_graphs]),
           updateExisting: true,
         },
-        groups: {
+        # `groups` was removed in Zabbix 6.2; the module supports 7.0 only.
+        # new template_groups parameter on Zabbix >= 6.2
+        template_groups: {
           createMissing: true,
+          updateExisting: true,
+        },
+        # new host_groups parameter on Zabbix >= 6.2
+        host_groups: {
+          createMissing: true,
+          updateExisting: true,
         },
         httptests: {
           createMissing: true,
@@ -45,11 +49,7 @@ Puppet::Type.type(:zabbix_template).provide(:ruby, parent: Puppet::Provider::Zab
           createMissing: true,
           updateExisting: true,
         },
-        # screens parameter was removed on Zabbix 5.4
-        ((@resource[:zabbix_version] =~ %r{[45]\.[02]}) ? :screens : nil) => {
-          createMissing: true,
-          updateExisting: true,
-        },
+        # screens parameter was removed on Zabbix 5.4; the module supports 7.0 only.
         templateLinkage: {
           createMissing: true,
         },
@@ -57,8 +57,8 @@ Puppet::Type.type(:zabbix_template).provide(:ruby, parent: Puppet::Provider::Zab
           createMissing: true,
           updateExisting: true,
         },
-        # templateDashboards was renamed to templateScreen on Zabbix >= 5.2
-        ((@resource[:zabbix_version] =~ %r{5\.[24]|6\.0}) ? :templateDashboards : :templateScreens) => {
+        # templateScreen was renamed to templateDashboards on Zabbix >= 5.2
+        templateDashboards: {
           createMissing: true,
           deleteMissing: (@resource[:delete_missing_templatescreens].nil? ? false : @resource[:delete_missing_templatescreens]),
           updateExisting: true,
