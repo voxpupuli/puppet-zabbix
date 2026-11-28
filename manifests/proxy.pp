@@ -421,21 +421,22 @@ class zabbix::proxy (
 
   # Controlling the 'zabbix-proxy' service
   if $manage_service {
+    $database_class = $manage_database ? {
+      true  => [Class['zabbix::database']],
+      false => [],
+    }
+
     service { $proxy_service_name:
       ensure     => running,
       hasstatus  => true,
       hasrestart => true,
       enable     => true,
-      subscribe  => [
-        File[$proxy_configfile_path],
-        Class['zabbix::database'],
-      ],
+      subscribe  => [File[$proxy_configfile_path]] + $database_class,
       require    => [
         Package["zabbix-proxy-${db}"],
         File[$include_dir],
         File[$proxy_configfile_path],
-        Class['zabbix::database'],
-      ],
+      ] + $database_class,
     }
   }
 

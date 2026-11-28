@@ -145,6 +145,18 @@ describe 'zabbix::proxy' do
         it { is_expected.to contain_class('zabbix::database').with_zabbix_proxy_ip('127.0.0.1') }
       end
 
+      context 'when manage_database is false' do
+        let(:params) do
+          {
+            manage_database: false,
+          }
+        end
+
+        it { is_expected.to compile.with_all_deps }
+        it { is_expected.not_to contain_class('zabbix::database') }
+        it { is_expected.to contain_service('zabbix-proxy').with_subscribe(['File[/etc/zabbix/zabbix_proxy.conf]']) }
+      end
+
       context 'when declaring manage_firewall is true' do
         let(:params) do
           {
