@@ -22,8 +22,7 @@ describe 'zabbix::repo' do
         it { is_expected.to contain_class('zabbix::params') }
         it { is_expected.to contain_class('zabbix::repo') }
 
-        it { is_expected.to contain_apt__key('zabbix-A1848F5') } if facts[:os]['family'] == 'Debian'
-        it { is_expected.to contain_apt__key('zabbix-FBABD5F') } if facts[:os]['family'] == 'Debian'
+        it { is_expected.to contain_apt__source('zabbix').with_key({ 'name' => 'zabbix.asc', 'source' => 'https://repo.zabbix.com/zabbix-official-repo.key' }) }
 
         context 'when repo_location is "https://example.com/foo"' do
           let :params do

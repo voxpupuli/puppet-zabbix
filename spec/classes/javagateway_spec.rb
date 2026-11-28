@@ -26,9 +26,6 @@ describe 'zabbix::javagateway' do
         it { is_expected.to contain_service('zabbix-java-gateway').with_ensure('running') }
         it { is_expected.to contain_service('zabbix-java-gateway').with_enable('true') }
         it { is_expected.to contain_service('zabbix-java-gateway').with_require(['Package[zabbix-java-gateway]', 'File[/etc/zabbix/zabbix_java_gateway.conf]']) }
-
-        it { is_expected.to contain_apt__key('zabbix-A1848F5') }          if facts[:os]['family'] == 'Debian'
-        it { is_expected.to contain_apt__key('zabbix-FBABD5F') }          if facts[:os]['family'] == 'Debian'
       end
 
       context 'when declaring manage_repo is true' do
