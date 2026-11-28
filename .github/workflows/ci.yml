@@ -50,4 +50,4 @@ jobs:
       beaker_staging_url: ${{ inputs.beaker_staging_url }}
       beaker_collection: ${{ inputs.beaker_collection }}
       beaker_staging_version: ${{ inputs.beaker_staging_version }}
-      beaker_facter: 'zabbix_version:Zabbix:7.0'
+      beaker_facter: 'zabbix_version:Zabbix:7.0,8.0'

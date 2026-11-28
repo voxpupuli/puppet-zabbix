@@ -10,4 +10,4 @@ Gemfile:
     - parameter_documentation
 .github/workflows/ci.yml:
   with:
-    beaker_facter: 'zabbix_version:Zabbix:7.0'
+    beaker_facter: 'zabbix_version:Zabbix:7.0,8.0'
