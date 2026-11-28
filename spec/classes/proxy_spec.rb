@@ -51,7 +51,7 @@ describe 'zabbix::proxy' do
 
       describe 'with enabled selinux', if: facts[:os]['family'] == 'RedHat' do
         let :facts do
-          super().merge(selinux: true)
+          facts.deep_merge(os: { selinux: { enabled: true } })
         end
 
         it { is_expected.to contain_selboolean('zabbix_can_network').with('value' => 'on', 'persistent' => true) }
