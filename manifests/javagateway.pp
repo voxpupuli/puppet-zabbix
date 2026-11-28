@@ -24,9 +24,7 @@ class zabbix::javagateway (
   $startpollers             = $zabbix::params::javagateway_startpollers,
   $timeout                  = $zabbix::params::javagateway_timeout,
 ) inherits zabbix::params {
-  $real_pidfile = $zabbix_version ? {
-    /^7\.0/  => pick($pidfile, '/var/run/zabbix/zabbix_java_gateway.pid'),
-  }
+  $real_pidfile = pick($pidfile, '/var/run/zabbix/zabbix_java_gateway.pid')
   # Only include the repo class if it has not yet been included
   unless defined(Class['Zabbix::Repo']) {
     class { 'zabbix::repo':
