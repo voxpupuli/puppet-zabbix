@@ -11,17 +11,19 @@
 # @param database_path Path to the database executable
 # @author Werner Dijkerman <ikben@werner-dijkerman.nl>
 class zabbix::database::mysql (
-  $zabbix_type                                        = '',
-  $zabbix_version                                     = $zabbix::params::zabbix_version,
-  $database_schema_path                               = '',
-  $database_name                                      = '',
-  $database_user                                      = '',
-  $database_password                                  = '',
-  $database_host                                      = '',
-  Optional[Stdlib::Port::Unprivileged] $database_port = undef,
-  $database_path                                      = $zabbix::params::database_path,
+  $zabbix_type                                          = '',
+  $zabbix_version                                       = $zabbix::params::zabbix_version,
+  $database_schema_path                                 = '',
+  $database_name                                        = '',
+  $database_user                                        = '',
+  Variant[Sensitive[String], String] $database_password = '', # lint:ignore:params_empty_string_assignment
+  $database_host                                        = '',
+  Optional[Stdlib::Port::Unprivileged] $database_port   = undef,
+  $database_path                                        = $zabbix::params::database_path,
 ) inherits zabbix::params {
   assert_private()
+
+  $database_password_unsensitive = $database_password.unwrap
 
   if ($database_schema_path == false) or ($database_schema_path == '') {
     $schema_path = '/usr/share/zabbix-sql-scripts/mysql/'
@@ -38,10 +40,10 @@ class zabbix::database::mysql (
 
   case $zabbix_type {
     'proxy': {
-      $zabbix_proxy_create_sql = "cd ${schema_path} && mysql -h '${database_host}' -u '${database_user}' -p'${database_password}' ${port}-D '${database_name}' < proxy.sql && touch /etc/zabbix/.schema.done"
+      $zabbix_proxy_create_sql = "cd ${schema_path} && mysql -h '${database_host}' -u '${database_user}' -p'${database_password_unsensitive}' ${port}-D '${database_name}' < proxy.sql && touch /etc/zabbix/.schema.done"
     }
     default: {
-      $zabbix_server_create_sql = "cd ${schema_path} && if [ -f server.sql.gz ]; then gunzip -f server.sql.gz ; fi && mysql -h '${database_host}' -u '${database_user}' -p'${database_password}' ${port}-D '${database_name}' < server.sql && touch /etc/zabbix/.schema.done"
+      $zabbix_server_create_sql = "cd ${schema_path} && if [ -f server.sql.gz ]; then gunzip -f server.sql.gz ; fi && mysql -h '${database_host}' -u '${database_user}' -p'${database_password_unsensitive}' ${port}-D '${database_name}' < server.sql && touch /etc/zabbix/.schema.done"
     }
   }
 
@@ -49,7 +51,11 @@ class zabbix::database::mysql (
   case $zabbix_type {
     'proxy'  : {
       exec { 'zabbix_proxy_create.sql':
-        command  => $zabbix_proxy_create_sql,
+        command  => if $database_password =~ Sensitive {
+          Sensitive($zabbix_proxy_create_sql)
+        } else {
+          $zabbix_proxy_create_sql
+        },
         path     => "/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:${database_path}",
         unless   => 'test -f /etc/zabbix/.schema.done',
         provider => 'shell',
