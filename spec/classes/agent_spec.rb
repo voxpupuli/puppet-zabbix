@@ -61,7 +61,6 @@ describe 'zabbix::agent' do
       # service = facts[:os]['family'] == 'Gentoo' ? 'zabbix-agentd' : 'zabbix-agent'
 
       context 'with all defaults' do
-        it { is_expected.to contain_selinux__module('zabbix-agent') } if facts[:os]['family'] == 'RedHat'
         it { is_expected.to contain_file(include_dir).with_ensure('directory') }
 
         # Make sure package will be installed, service running and ensure of directory.
@@ -106,6 +105,12 @@ describe 'zabbix::agent' do
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to contain_class('zabbix::params') }
         end
+      end
+
+      describe 'with enabled selinux', if: facts[:os]['family'] == 'RedHat' do
+        let(:facts) { facts.deep_merge(os: { selinux: { enabled: true } }) }
+
+        it { is_expected.to contain_selinux__module('zabbix-agent') }
       end
 
       context 'when declaring manage_repo is true' do
